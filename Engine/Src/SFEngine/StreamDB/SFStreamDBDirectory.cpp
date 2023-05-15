@@ -186,7 +186,8 @@ namespace SF
 			m_FindRequested = false;
 			if (!RequestStreamListInternal())
 			{
-				m_ResultMessage = Message::PlayInstance::GetStreamListRes::Create(GetHeap(), 0, ResultCode::NO_DATA_EXIST,
+                m_ResultMessage = MessageData::NewMessage(GetHeap(), Message::PlayInstance::GetStreamListRes::MID, 1024);
+				Message::PlayInstance::GetStreamListRes::Create(m_ResultMessage->GetMessageHeader(), 0, ResultCode::NO_DATA_EXIST,
 					ArrayView<const char*>());
 			}
 			else
@@ -195,7 +196,8 @@ namespace SF
 				for (auto& itString : m_TopicList)
 					TopicList.push_back(itString.data());
 
-				m_ResultMessage = Message::PlayInstance::GetStreamListRes::Create(GetHeap(), 0, ResultCode::SUCCESS,
+                m_ResultMessage = MessageData::NewMessage(GetHeap(), Message::PlayInstance::GetStreamListRes::MID, 1024);
+                Message::PlayInstance::GetStreamListRes::Create(m_ResultMessage->GetMessageHeader(), 0, ResultCode::SUCCESS,
 					TopicList);
 			}
 		}

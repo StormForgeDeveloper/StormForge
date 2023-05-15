@@ -160,7 +160,6 @@ namespace SF {
 			virtual Result OnRecv(MessageHeader* pMsg) override;
 
 			// Send message to connected entity
-			virtual Result Send(const SharedPointerT<MessageData>& pMsg) override;
             virtual Result SendMsg(const MessageHeader* pMsg) override;
 
             virtual Result SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0) override;

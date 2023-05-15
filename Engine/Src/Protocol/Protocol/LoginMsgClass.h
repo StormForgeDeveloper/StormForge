@@ -68,7 +68,7 @@ namespace SF
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword );
 
 			}; // class LoginCmd : public MessageBase
 
@@ -119,7 +119,7 @@ namespace SF
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
 
 			}; // class LoginRes : public MessageBase
 
@@ -169,7 +169,7 @@ namespace SF
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken );
 
 			}; // class LoginByFacebookCmd : public MessageBase
 
@@ -220,7 +220,7 @@ namespace SF
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
 
 			}; // class LoginByFacebookRes : public MessageBase
 
@@ -268,7 +268,7 @@ namespace SF
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken );
 
 			}; // class LoginBySteamCmd : public MessageBase
 
@@ -319,7 +319,7 @@ namespace SF
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
 
 			}; // class LoginBySteamRes : public MessageBase
 
@@ -363,7 +363,7 @@ namespace SF
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone );
 
 			}; // class CreateRandomUserCmd : public MessageBase
 
@@ -412,7 +412,7 @@ namespace SF
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
 
 			}; // class CreateRandomUserRes : public MessageBase
 
@@ -458,7 +458,7 @@ namespace SF
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount );
 
 			}; // class UpdateMyScoreCmd : public MessageBase
 
@@ -501,7 +501,7 @@ namespace SF
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
 
 			}; // class UpdateMyScoreRes : public MessageBase
 
@@ -547,7 +547,7 @@ namespace SF
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount );
 
 			}; // class GetRankingListCmd : public MessageBase
 
@@ -590,7 +590,7 @@ namespace SF
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
 
 			}; // class GetRankingListRes : public MessageBase
 
@@ -632,7 +632,7 @@ namespace SF
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Array<uint8_t>& InTestData );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<uint8_t>& InTestData );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Array<uint8_t>& InTestData );
 
 			}; // class DataTestCmd : public MessageBase
 
@@ -675,7 +675,7 @@ namespace SF
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData );
 
 			}; // class DataTestRes : public MessageBase
 
@@ -714,7 +714,7 @@ namespace SF
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static size_t CalculateMessageSize(  );
-				static MessageData* Create( IHeap& memHeap );
+				static Result Create( MessageHeader* messageBuffer );
 
 			}; // class HeartbeatC2SEvt : public MessageBase
 
@@ -756,7 +756,7 @@ namespace SF
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const char* InFileName );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InFileName );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InFileName );
 
 			}; // class DebugPrintALLRankingCmd : public MessageBase
 
@@ -797,7 +797,7 @@ namespace SF
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class DebugPrintALLRankingRes : public MessageBase
 

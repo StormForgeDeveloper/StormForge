@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -228,23 +228,21 @@ namespace ProtocolCompiler
             
             DefaultHRESULT(); NewLine();
 
-            MatchIndent(); OutStream.WriteLine(" MessageDataPtr pMessage;");
-            MatchIndent(); OutStream.WriteLine(" protocolCheckPtr(m_Endpoint);");
+            MatchIndent(); OutStream.WriteLine($"size_t messageSize = SF::Message::{Group.Name}::{Name}{typeName}::CalculateMessageSize({ParamArgument(parameters)});");
+            MatchIndent(); OutStream.WriteLine("SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);");
+            MatchIndent(); OutStream.WriteLine("protocolCheckPtr(m_Endpoint);");
             NewLine();
 
             if (parameters != null && parameters.Length > 0)
             {
-                MatchIndent(); OutStream.WriteLine(" pMessage = SF::Message::{0}::{1}{2}::Create(GetSystemHeap(), {3});", Group.Name, Name, typeName, ParamArgument(parameters));
+                MatchIndent(); OutStream.WriteLine($"protocolCheck(SF::Message::{Group.Name}::{Name}{typeName}::Create(messageBuffer, {ParamArgument(parameters)}));");
             }
             else
             {
-                MatchIndent(); OutStream.WriteLine(" pMessage = SF::Message::{0}::{1}{2}::Create(GetSystemHeap());", Group.Name, Name, typeName);
+                MatchIndent(); OutStream.WriteLine($"protocolCheck(SF::Message::{Group.Name}::{Name}{typeName}::Create(messageBuffer));");
             }
 
-            MatchIndent(); OutStream.WriteLine(" protocolCheckPtr(*pMessage);");
-            NewLine();
-
-            MatchIndent(); OutStream.WriteLine(" return m_Endpoint->Send( pMessage );");
+            MatchIndent(); OutStream.WriteLine("return m_Endpoint->SendMsg(messageBuffer);");
             NewLine();
             
             CloseSection();

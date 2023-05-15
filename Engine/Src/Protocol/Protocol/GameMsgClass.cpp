@@ -29,7 +29,7 @@ namespace SF
 			const MessageID HeartbeatC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 0);
 			Result HeartbeatC2SEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -42,7 +42,7 @@ namespace SF
 
 			Result HeartbeatC2SEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				HeartbeatC2SEvt parser;
@@ -55,7 +55,7 @@ namespace SF
 
 			Result HeartbeatC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) HeartbeatC2SEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -74,26 +74,21 @@ namespace SF
 			}; // size_t HeartbeatC2SEvt::CalculateMessageSize(  )
 
 
-			MessageData* HeartbeatC2SEvt::Create( IHeap& memHeap )
+			Result HeartbeatC2SEvt::Create( MessageHeader* messageBuffer )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::HeartbeatC2SEvt::MID, __uiMessageSize ) );
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
 
 				return hr;
-			}; // MessageData* HeartbeatC2SEvt::Create( IHeap& memHeap )
+			}; // Result HeartbeatC2SEvt::Create( MessageHeader* messageBuffer )
 
 			Result HeartbeatC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -108,7 +103,7 @@ namespace SF
 			const MessageID JoinGameServerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 1);
 			Result JoinGameServerCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -129,7 +124,7 @@ namespace SF
 
 			Result JoinGameServerCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				JoinGameServerCmd parser;
@@ -146,7 +141,7 @@ namespace SF
 
 			Result JoinGameServerCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) JoinGameServerCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -169,18 +164,9 @@ namespace SF
 			}; // size_t JoinGameServerCmd::CalculateMessageSize( const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 
 
-			MessageData* JoinGameServerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			Result JoinGameServerCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -189,10 +175,13 @@ namespace SF
 					+ SerializedSizeOf(InLoginEntityUID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinGameServerCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -201,7 +190,7 @@ namespace SF
 				protocolCheck(*output << InLoginEntityUID);
 
 				return hr;
-			}; // MessageData* JoinGameServerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			}; // Result JoinGameServerCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 
 			Result JoinGameServerCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -215,7 +204,7 @@ namespace SF
 			const MessageID JoinGameServerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 1);
 			Result JoinGameServerRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -240,7 +229,7 @@ namespace SF
 
 			Result JoinGameServerRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				JoinGameServerRes parser;
@@ -260,7 +249,7 @@ namespace SF
 
 			Result JoinGameServerRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) JoinGameServerRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -286,18 +275,9 @@ namespace SF
 			}; // size_t JoinGameServerRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket )
 
 
-			MessageData* JoinGameServerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket )
+			Result JoinGameServerRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -309,10 +289,13 @@ namespace SF
 					+ SerializedSizeOf(InMatchingTicket)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinGameServerRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -324,7 +307,7 @@ namespace SF
 				protocolCheck(*output << InMatchingTicket);
 
 				return hr;
-			}; // MessageData* JoinGameServerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket )
+			}; // Result JoinGameServerRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket )
 
 			Result JoinGameServerRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -339,7 +322,7 @@ namespace SF
 			const MessageID GetComplitionStateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 2);
 			Result GetComplitionStateCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -357,7 +340,7 @@ namespace SF
 
 			Result GetComplitionStateCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GetComplitionStateCmd parser;
@@ -371,7 +354,7 @@ namespace SF
 
 			Result GetComplitionStateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GetComplitionStateCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -391,33 +374,27 @@ namespace SF
 			}; // size_t GetComplitionStateCmd::CalculateMessageSize( const uint64_t &InTransactionID )
 
 
-			MessageData* GetComplitionStateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
+			Result GetComplitionStateCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetComplitionStateCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 
 				return hr;
-			}; // MessageData* GetComplitionStateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
+			}; // Result GetComplitionStateCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID )
 
 			Result GetComplitionStateCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -431,7 +408,7 @@ namespace SF
 			const MessageID GetComplitionStateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 2);
 			Result GetComplitionStateRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -452,7 +429,7 @@ namespace SF
 
 			Result GetComplitionStateRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GetComplitionStateRes parser;
@@ -468,7 +445,7 @@ namespace SF
 
 			Result GetComplitionStateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GetComplitionStateRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -490,18 +467,9 @@ namespace SF
 			}; // size_t GetComplitionStateRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
 
 
-			MessageData* GetComplitionStateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
+			Result GetComplitionStateRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -509,10 +477,13 @@ namespace SF
 					+ SerializedSizeOf(InComplitionState)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetComplitionStateRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -520,7 +491,7 @@ namespace SF
 				protocolCheck(*output << InComplitionState);
 
 				return hr;
-			}; // MessageData* GetComplitionStateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
+			}; // Result GetComplitionStateRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
 
 			Result GetComplitionStateRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -535,7 +506,7 @@ namespace SF
 			const MessageID SetComplitionStateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 3);
 			Result SetComplitionStateCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -555,7 +526,7 @@ namespace SF
 
 			Result SetComplitionStateCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				SetComplitionStateCmd parser;
@@ -570,7 +541,7 @@ namespace SF
 
 			Result SetComplitionStateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) SetComplitionStateCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -591,35 +562,29 @@ namespace SF
 			}; // size_t SetComplitionStateCmd::CalculateMessageSize( const uint64_t &InTransactionID, const char* InComplitionState )
 
 
-			MessageData* SetComplitionStateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InComplitionState )
+			Result SetComplitionStateCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InComplitionState )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InComplitionState)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SetComplitionStateCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InComplitionState);
 
 				return hr;
-			}; // MessageData* SetComplitionStateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InComplitionState )
+			}; // Result SetComplitionStateCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InComplitionState )
 
 			Result SetComplitionStateCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -633,7 +598,7 @@ namespace SF
 			const MessageID SetComplitionStateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 3);
 			Result SetComplitionStateRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -652,7 +617,7 @@ namespace SF
 
 			Result SetComplitionStateRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				SetComplitionStateRes parser;
@@ -667,7 +632,7 @@ namespace SF
 
 			Result SetComplitionStateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) SetComplitionStateRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -688,35 +653,29 @@ namespace SF
 			}; // size_t SetComplitionStateRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* SetComplitionStateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result SetComplitionStateRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SetComplitionStateRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* SetComplitionStateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result SetComplitionStateRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result SetComplitionStateRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -731,7 +690,7 @@ namespace SF
 			const MessageID RegisterGCMCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 4);
 			Result RegisterGCMCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -751,7 +710,7 @@ namespace SF
 
 			Result RegisterGCMCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				RegisterGCMCmd parser;
@@ -766,7 +725,7 @@ namespace SF
 
 			Result RegisterGCMCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) RegisterGCMCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -787,35 +746,29 @@ namespace SF
 			}; // size_t RegisterGCMCmd::CalculateMessageSize( const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 
 
-			MessageData* RegisterGCMCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InGCMRegisteredID )
+			Result RegisterGCMCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InGCMRegisteredID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RegisterGCMCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InGCMRegisteredID);
 
 				return hr;
-			}; // MessageData* RegisterGCMCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InGCMRegisteredID )
+			}; // Result RegisterGCMCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 
 			Result RegisterGCMCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -829,7 +782,7 @@ namespace SF
 			const MessageID RegisterGCMRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 4);
 			Result RegisterGCMRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -848,7 +801,7 @@ namespace SF
 
 			Result RegisterGCMRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				RegisterGCMRes parser;
@@ -863,7 +816,7 @@ namespace SF
 
 			Result RegisterGCMRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) RegisterGCMRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -884,35 +837,29 @@ namespace SF
 			}; // size_t RegisterGCMRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* RegisterGCMRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result RegisterGCMRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RegisterGCMRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* RegisterGCMRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result RegisterGCMRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result RegisterGCMRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -927,7 +874,7 @@ namespace SF
 			const MessageID UnregisterGCMCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 5);
 			Result UnregisterGCMCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -947,7 +894,7 @@ namespace SF
 
 			Result UnregisterGCMCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				UnregisterGCMCmd parser;
@@ -962,7 +909,7 @@ namespace SF
 
 			Result UnregisterGCMCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) UnregisterGCMCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -983,35 +930,29 @@ namespace SF
 			}; // size_t UnregisterGCMCmd::CalculateMessageSize( const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 
 
-			MessageData* UnregisterGCMCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InGCMRegisteredID )
+			Result UnregisterGCMCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InGCMRegisteredID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::UnregisterGCMCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InGCMRegisteredID);
 
 				return hr;
-			}; // MessageData* UnregisterGCMCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InGCMRegisteredID )
+			}; // Result UnregisterGCMCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 
 			Result UnregisterGCMCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -1025,7 +966,7 @@ namespace SF
 			const MessageID UnregisterGCMRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 5);
 			Result UnregisterGCMRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -1044,7 +985,7 @@ namespace SF
 
 			Result UnregisterGCMRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				UnregisterGCMRes parser;
@@ -1059,7 +1000,7 @@ namespace SF
 
 			Result UnregisterGCMRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) UnregisterGCMRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -1080,35 +1021,29 @@ namespace SF
 			}; // size_t UnregisterGCMRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* UnregisterGCMRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result UnregisterGCMRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::UnregisterGCMRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* UnregisterGCMRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result UnregisterGCMRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result UnregisterGCMRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -1123,7 +1058,7 @@ namespace SF
 			const MessageID InviteFriendCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 6);
 			Result InviteFriendCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -1142,7 +1077,7 @@ namespace SF
 
 			Result InviteFriendCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				InviteFriendCmd parser;
@@ -1157,7 +1092,7 @@ namespace SF
 
 			Result InviteFriendCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) InviteFriendCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -1178,35 +1113,29 @@ namespace SF
 			}; // size_t InviteFriendCmd::CalculateMessageSize( const uint64_t &InTransactionID, const AccountID &InFriendID )
 
 
-			MessageData* InviteFriendCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InFriendID )
+			Result InviteFriendCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const AccountID &InFriendID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InFriendID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::InviteFriendCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InFriendID);
 
 				return hr;
-			}; // MessageData* InviteFriendCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InFriendID )
+			}; // Result InviteFriendCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const AccountID &InFriendID )
 
 			Result InviteFriendCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -1220,7 +1149,7 @@ namespace SF
 			const MessageID InviteFriendRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 6);
 			Result InviteFriendRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -1239,7 +1168,7 @@ namespace SF
 
 			Result InviteFriendRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				InviteFriendRes parser;
@@ -1254,7 +1183,7 @@ namespace SF
 
 			Result InviteFriendRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) InviteFriendRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -1275,35 +1204,29 @@ namespace SF
 			}; // size_t InviteFriendRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* InviteFriendRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result InviteFriendRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::InviteFriendRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* InviteFriendRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result InviteFriendRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result InviteFriendRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -1318,7 +1241,7 @@ namespace SF
 			const MessageID AcceptFriendRequestCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 7);
 			Result AcceptFriendRequestCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -1338,7 +1261,7 @@ namespace SF
 
 			Result AcceptFriendRequestCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				AcceptFriendRequestCmd parser;
@@ -1354,7 +1277,7 @@ namespace SF
 
 			Result AcceptFriendRequestCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) AcceptFriendRequestCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -1376,18 +1299,9 @@ namespace SF
 			}; // size_t AcceptFriendRequestCmd::CalculateMessageSize( const uint64_t &InTransactionID, const AccountID &InInviterID, const PlayerPlatformID &InInviterPlatformId )
 
 
-			MessageData* AcceptFriendRequestCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InInviterID, const PlayerPlatformID &InInviterPlatformId )
+			Result AcceptFriendRequestCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const AccountID &InInviterID, const PlayerPlatformID &InInviterPlatformId )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -1395,10 +1309,13 @@ namespace SF
 					+ SerializedSizeOf(InInviterPlatformId)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::AcceptFriendRequestCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -1406,7 +1323,7 @@ namespace SF
 				protocolCheck(*output << InInviterPlatformId);
 
 				return hr;
-			}; // MessageData* AcceptFriendRequestCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InInviterID, const PlayerPlatformID &InInviterPlatformId )
+			}; // Result AcceptFriendRequestCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const AccountID &InInviterID, const PlayerPlatformID &InInviterPlatformId )
 
 			Result AcceptFriendRequestCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -1420,7 +1337,7 @@ namespace SF
 			const MessageID AcceptFriendRequestRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 7);
 			Result AcceptFriendRequestRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -1440,7 +1357,7 @@ namespace SF
 
 			Result AcceptFriendRequestRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				AcceptFriendRequestRes parser;
@@ -1456,7 +1373,7 @@ namespace SF
 
 			Result AcceptFriendRequestRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) AcceptFriendRequestRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -1478,18 +1395,9 @@ namespace SF
 			}; // size_t AcceptFriendRequestRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend )
 
 
-			MessageData* AcceptFriendRequestRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend )
+			Result AcceptFriendRequestRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -1497,10 +1405,13 @@ namespace SF
 					+ SerializedSizeOf(InNewFriend)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::AcceptFriendRequestRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -1508,7 +1419,7 @@ namespace SF
 				protocolCheck(*output << InNewFriend);
 
 				return hr;
-			}; // MessageData* AcceptFriendRequestRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend )
+			}; // Result AcceptFriendRequestRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend )
 
 			Result AcceptFriendRequestRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -1523,7 +1434,7 @@ namespace SF
 			const MessageID FriendRequestAcceptedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 8);
 			Result FriendRequestAcceptedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -1541,7 +1452,7 @@ namespace SF
 
 			Result FriendRequestAcceptedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				FriendRequestAcceptedS2CEvt parser;
@@ -1555,7 +1466,7 @@ namespace SF
 
 			Result FriendRequestAcceptedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) FriendRequestAcceptedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -1575,33 +1486,27 @@ namespace SF
 			}; // size_t FriendRequestAcceptedS2CEvt::CalculateMessageSize( const FriendInformation &InAccepter )
 
 
-			MessageData* FriendRequestAcceptedS2CEvt::Create( IHeap& memHeap, const FriendInformation &InAccepter )
+			Result FriendRequestAcceptedS2CEvt::Create( MessageHeader* messageBuffer, const FriendInformation &InAccepter )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InAccepter)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FriendRequestAcceptedS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InAccepter);
 
 				return hr;
-			}; // MessageData* FriendRequestAcceptedS2CEvt::Create( IHeap& memHeap, const FriendInformation &InAccepter )
+			}; // Result FriendRequestAcceptedS2CEvt::Create( MessageHeader* messageBuffer, const FriendInformation &InAccepter )
 
 			Result FriendRequestAcceptedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -1616,7 +1521,7 @@ namespace SF
 			const MessageID RemoveFriendCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 9);
 			Result RemoveFriendCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -1635,7 +1540,7 @@ namespace SF
 
 			Result RemoveFriendCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				RemoveFriendCmd parser;
@@ -1650,7 +1555,7 @@ namespace SF
 
 			Result RemoveFriendCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) RemoveFriendCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -1671,35 +1576,29 @@ namespace SF
 			}; // size_t RemoveFriendCmd::CalculateMessageSize( const uint64_t &InTransactionID, const AccountID &InFriendID )
 
 
-			MessageData* RemoveFriendCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InFriendID )
+			Result RemoveFriendCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const AccountID &InFriendID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InFriendID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RemoveFriendCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InFriendID);
 
 				return hr;
-			}; // MessageData* RemoveFriendCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InFriendID )
+			}; // Result RemoveFriendCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const AccountID &InFriendID )
 
 			Result RemoveFriendCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -1713,7 +1612,7 @@ namespace SF
 			const MessageID RemoveFriendRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 9);
 			Result RemoveFriendRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -1733,7 +1632,7 @@ namespace SF
 
 			Result RemoveFriendRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				RemoveFriendRes parser;
@@ -1749,7 +1648,7 @@ namespace SF
 
 			Result RemoveFriendRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) RemoveFriendRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -1771,18 +1670,9 @@ namespace SF
 			}; // size_t RemoveFriendRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InFriendID )
 
 
-			MessageData* RemoveFriendRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InFriendID )
+			Result RemoveFriendRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InFriendID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -1790,10 +1680,13 @@ namespace SF
 					+ SerializedSizeOf(InFriendID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RemoveFriendRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -1801,7 +1694,7 @@ namespace SF
 				protocolCheck(*output << InFriendID);
 
 				return hr;
-			}; // MessageData* RemoveFriendRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InFriendID )
+			}; // Result RemoveFriendRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InFriendID )
 
 			Result RemoveFriendRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -1816,7 +1709,7 @@ namespace SF
 			const MessageID FriendRemovedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 10);
 			Result FriendRemovedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -1834,7 +1727,7 @@ namespace SF
 
 			Result FriendRemovedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				FriendRemovedS2CEvt parser;
@@ -1848,7 +1741,7 @@ namespace SF
 
 			Result FriendRemovedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) FriendRemovedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -1868,33 +1761,27 @@ namespace SF
 			}; // size_t FriendRemovedS2CEvt::CalculateMessageSize( const AccountID &InFriendID )
 
 
-			MessageData* FriendRemovedS2CEvt::Create( IHeap& memHeap, const AccountID &InFriendID )
+			Result FriendRemovedS2CEvt::Create( MessageHeader* messageBuffer, const AccountID &InFriendID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InFriendID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FriendRemovedS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InFriendID);
 
 				return hr;
-			}; // MessageData* FriendRemovedS2CEvt::Create( IHeap& memHeap, const AccountID &InFriendID )
+			}; // Result FriendRemovedS2CEvt::Create( MessageHeader* messageBuffer, const AccountID &InFriendID )
 
 			Result FriendRemovedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -1909,7 +1796,7 @@ namespace SF
 			const MessageID GetFriendListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 11);
 			Result GetFriendListCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -1929,7 +1816,7 @@ namespace SF
 
 			Result GetFriendListCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GetFriendListCmd parser;
@@ -1945,7 +1832,7 @@ namespace SF
 
 			Result GetFriendListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GetFriendListCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -1967,18 +1854,9 @@ namespace SF
 			}; // size_t GetFriendListCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount )
 
 
-			MessageData* GetFriendListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount )
+			Result GetFriendListCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -1986,10 +1864,13 @@ namespace SF
 					+ SerializedSizeOf(InCount)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetFriendListCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -1997,7 +1878,7 @@ namespace SF
 				protocolCheck(*output << InCount);
 
 				return hr;
-			}; // MessageData* GetFriendListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount )
+			}; // Result GetFriendListCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount )
 
 			Result GetFriendListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -2011,7 +1892,7 @@ namespace SF
 			const MessageID GetFriendListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 11);
 			Result GetFriendListRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -2037,7 +1918,7 @@ namespace SF
 
 			Result GetFriendListRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GetFriendListRes parser;
@@ -2056,7 +1937,7 @@ namespace SF
 
 			Result GetFriendListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GetFriendListRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -2081,18 +1962,9 @@ namespace SF
 			}; // size_t GetFriendListRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList )
 
 
-			MessageData* GetFriendListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList )
+			Result GetFriendListRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -2103,10 +1975,13 @@ namespace SF
 					+ SerializedSizeOf(InFriendList)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetFriendListRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -2117,7 +1992,7 @@ namespace SF
 				protocolCheck(*output << InFriendList);
 
 				return hr;
-			}; // MessageData* GetFriendListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList )
+			}; // Result GetFriendListRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList )
 
 			Result GetFriendListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -2132,7 +2007,7 @@ namespace SF
 			const MessageID GetNotificationListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 12);
 			Result GetNotificationListCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -2150,7 +2025,7 @@ namespace SF
 
 			Result GetNotificationListCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GetNotificationListCmd parser;
@@ -2164,7 +2039,7 @@ namespace SF
 
 			Result GetNotificationListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GetNotificationListCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -2184,33 +2059,27 @@ namespace SF
 			}; // size_t GetNotificationListCmd::CalculateMessageSize( const uint64_t &InTransactionID )
 
 
-			MessageData* GetNotificationListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
+			Result GetNotificationListCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetNotificationListCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 
 				return hr;
-			}; // MessageData* GetNotificationListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
+			}; // Result GetNotificationListCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID )
 
 			Result GetNotificationListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -2224,7 +2093,7 @@ namespace SF
 			const MessageID GetNotificationListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 12);
 			Result GetNotificationListRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -2243,7 +2112,7 @@ namespace SF
 
 			Result GetNotificationListRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GetNotificationListRes parser;
@@ -2258,7 +2127,7 @@ namespace SF
 
 			Result GetNotificationListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GetNotificationListRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -2279,35 +2148,29 @@ namespace SF
 			}; // size_t GetNotificationListRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* GetNotificationListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result GetNotificationListRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetNotificationListRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* GetNotificationListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result GetNotificationListRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result GetNotificationListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -2322,7 +2185,7 @@ namespace SF
 			const MessageID DeleteNotificationCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 13);
 			Result DeleteNotificationCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -2341,7 +2204,7 @@ namespace SF
 
 			Result DeleteNotificationCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				DeleteNotificationCmd parser;
@@ -2356,7 +2219,7 @@ namespace SF
 
 			Result DeleteNotificationCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) DeleteNotificationCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -2377,35 +2240,29 @@ namespace SF
 			}; // size_t DeleteNotificationCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 
 
-			MessageData* DeleteNotificationCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
+			Result DeleteNotificationCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InNotificationID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::DeleteNotificationCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InNotificationID);
 
 				return hr;
-			}; // MessageData* DeleteNotificationCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
+			}; // Result DeleteNotificationCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 
 			Result DeleteNotificationCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -2419,7 +2276,7 @@ namespace SF
 			const MessageID DeleteNotificationRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 13);
 			Result DeleteNotificationRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -2439,7 +2296,7 @@ namespace SF
 
 			Result DeleteNotificationRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				DeleteNotificationRes parser;
@@ -2455,7 +2312,7 @@ namespace SF
 
 			Result DeleteNotificationRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) DeleteNotificationRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -2477,18 +2334,9 @@ namespace SF
 			}; // size_t DeleteNotificationRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 
 
-			MessageData* DeleteNotificationRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
+			Result DeleteNotificationRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -2496,10 +2344,13 @@ namespace SF
 					+ SerializedSizeOf(InNotificationID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::DeleteNotificationRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -2507,7 +2358,7 @@ namespace SF
 				protocolCheck(*output << InNotificationID);
 
 				return hr;
-			}; // MessageData* DeleteNotificationRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
+			}; // Result DeleteNotificationRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 
 			Result DeleteNotificationRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -2522,7 +2373,7 @@ namespace SF
 			const MessageID SetNotificationReadCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 14);
 			Result SetNotificationReadCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -2541,7 +2392,7 @@ namespace SF
 
 			Result SetNotificationReadCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				SetNotificationReadCmd parser;
@@ -2556,7 +2407,7 @@ namespace SF
 
 			Result SetNotificationReadCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) SetNotificationReadCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -2577,35 +2428,29 @@ namespace SF
 			}; // size_t SetNotificationReadCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 
 
-			MessageData* SetNotificationReadCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
+			Result SetNotificationReadCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InNotificationID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SetNotificationReadCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InNotificationID);
 
 				return hr;
-			}; // MessageData* SetNotificationReadCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
+			}; // Result SetNotificationReadCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 
 			Result SetNotificationReadCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -2619,7 +2464,7 @@ namespace SF
 			const MessageID SetNotificationReadRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 14);
 			Result SetNotificationReadRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -2639,7 +2484,7 @@ namespace SF
 
 			Result SetNotificationReadRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				SetNotificationReadRes parser;
@@ -2655,7 +2500,7 @@ namespace SF
 
 			Result SetNotificationReadRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) SetNotificationReadRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -2677,18 +2522,9 @@ namespace SF
 			}; // size_t SetNotificationReadRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 
 
-			MessageData* SetNotificationReadRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
+			Result SetNotificationReadRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -2696,10 +2532,13 @@ namespace SF
 					+ SerializedSizeOf(InNotificationID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SetNotificationReadRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -2707,7 +2546,7 @@ namespace SF
 				protocolCheck(*output << InNotificationID);
 
 				return hr;
-			}; // MessageData* SetNotificationReadRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
+			}; // Result SetNotificationReadRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 
 			Result SetNotificationReadRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -2722,7 +2561,7 @@ namespace SF
 			const MessageID AcceptNotificationCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 15);
 			Result AcceptNotificationCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -2741,7 +2580,7 @@ namespace SF
 
 			Result AcceptNotificationCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				AcceptNotificationCmd parser;
@@ -2756,7 +2595,7 @@ namespace SF
 
 			Result AcceptNotificationCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) AcceptNotificationCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -2777,35 +2616,29 @@ namespace SF
 			}; // size_t AcceptNotificationCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 
 
-			MessageData* AcceptNotificationCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
+			Result AcceptNotificationCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InNotificationID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::AcceptNotificationCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InNotificationID);
 
 				return hr;
-			}; // MessageData* AcceptNotificationCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
+			}; // Result AcceptNotificationCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 
 			Result AcceptNotificationCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -2819,7 +2652,7 @@ namespace SF
 			const MessageID AcceptNotificationRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 15);
 			Result AcceptNotificationRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -2839,7 +2672,7 @@ namespace SF
 
 			Result AcceptNotificationRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				AcceptNotificationRes parser;
@@ -2855,7 +2688,7 @@ namespace SF
 
 			Result AcceptNotificationRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) AcceptNotificationRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -2877,18 +2710,9 @@ namespace SF
 			}; // size_t AcceptNotificationRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 
 
-			MessageData* AcceptNotificationRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
+			Result AcceptNotificationRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -2896,10 +2720,13 @@ namespace SF
 					+ SerializedSizeOf(InNotificationID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::AcceptNotificationRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -2907,7 +2734,7 @@ namespace SF
 				protocolCheck(*output << InNotificationID);
 
 				return hr;
-			}; // MessageData* AcceptNotificationRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
+			}; // Result AcceptNotificationRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 
 			Result AcceptNotificationRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -2932,7 +2759,7 @@ namespace SF
 			} // const VariableTable& NotifyS2CEvt::GetParameters() const
 			Result NotifyS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -2957,7 +2784,7 @@ namespace SF
 
 			Result NotifyS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				NotifyS2CEvt parser;
@@ -2975,7 +2802,7 @@ namespace SF
 
 			Result NotifyS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) NotifyS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -3013,25 +2840,19 @@ namespace SF
 				return __uiMessageSize;
 			}; // size_t NotifyS2CEvt::CalculateMessageSize( const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const VariableTable &InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
 
-			MessageData* NotifyS2CEvt::Create( IHeap& memHeap, const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const Array<uint8_t>& InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
+			Result NotifyS2CEvt::Create( MessageHeader* messageBuffer, const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const Array<uint8_t>& InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InNotificationID, InNotificationType, InParameters, InIsRead, InTimeStamp);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::NotifyS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InNotificationID);
@@ -3041,20 +2862,11 @@ namespace SF
 				protocolCheck(*output << InTimeStamp);
 
 				return hr;
-			}; // MessageData* NotifyS2CEvt::Create( IHeap& memHeap, const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const Array<uint8_t>& InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
+			}; // Result NotifyS2CEvt::Create( MessageHeader* messageBuffer, const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const Array<uint8_t>& InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
 
-			MessageData* NotifyS2CEvt::Create( IHeap& memHeap, const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const VariableTable &InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
+			Result NotifyS2CEvt::Create( MessageHeader* messageBuffer, const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const VariableTable &InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint16_t serializedSizeOfInParameters = static_cast<uint16_t>(SerializedSizeOf(InParameters)); 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
@@ -3066,10 +2878,13 @@ namespace SF
 					+ SerializedSizeOf(InTimeStamp)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::NotifyS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InNotificationID);
@@ -3080,7 +2895,7 @@ namespace SF
 				protocolCheck(*output << InTimeStamp);
 
 				return hr;
-			}; // MessageData* NotifyS2CEvt::Create( IHeap& memHeap, const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const VariableTable &InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
+			}; // Result NotifyS2CEvt::Create( MessageHeader* messageBuffer, const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const VariableTable &InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
 
 			Result NotifyS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -3095,7 +2910,7 @@ namespace SF
 			const MessageID FindPlayerByPlatformIdCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 17);
 			Result FindPlayerByPlatformIdCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -3114,7 +2929,7 @@ namespace SF
 
 			Result FindPlayerByPlatformIdCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				FindPlayerByPlatformIdCmd parser;
@@ -3129,7 +2944,7 @@ namespace SF
 
 			Result FindPlayerByPlatformIdCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByPlatformIdCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -3150,35 +2965,29 @@ namespace SF
 			}; // size_t FindPlayerByPlatformIdCmd::CalculateMessageSize( const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId )
 
 
-			MessageData* FindPlayerByPlatformIdCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId )
+			Result FindPlayerByPlatformIdCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPlatformPlayerId)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FindPlayerByPlatformIdCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InPlatformPlayerId);
 
 				return hr;
-			}; // MessageData* FindPlayerByPlatformIdCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId )
+			}; // Result FindPlayerByPlatformIdCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId )
 
 			Result FindPlayerByPlatformIdCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -3192,7 +3001,7 @@ namespace SF
 			const MessageID FindPlayerByPlatformIdRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 17);
 			Result FindPlayerByPlatformIdRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -3213,7 +3022,7 @@ namespace SF
 
 			Result FindPlayerByPlatformIdRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				FindPlayerByPlatformIdRes parser;
@@ -3230,7 +3039,7 @@ namespace SF
 
 			Result FindPlayerByPlatformIdRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByPlatformIdRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -3253,18 +3062,9 @@ namespace SF
 			}; // size_t FindPlayerByPlatformIdRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId )
 
 
-			MessageData* FindPlayerByPlatformIdRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId )
+			Result FindPlayerByPlatformIdRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -3273,10 +3073,13 @@ namespace SF
 					+ SerializedSizeOf(InPlayerPlatformId)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FindPlayerByPlatformIdRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -3285,7 +3088,7 @@ namespace SF
 				protocolCheck(*output << InPlayerPlatformId);
 
 				return hr;
-			}; // MessageData* FindPlayerByPlatformIdRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId )
+			}; // Result FindPlayerByPlatformIdRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId )
 
 			Result FindPlayerByPlatformIdRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -3300,7 +3103,7 @@ namespace SF
 			const MessageID FindPlayerByCharacterNameCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 18);
 			Result FindPlayerByCharacterNameCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -3320,7 +3123,7 @@ namespace SF
 
 			Result FindPlayerByCharacterNameCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				FindPlayerByCharacterNameCmd parser;
@@ -3335,7 +3138,7 @@ namespace SF
 
 			Result FindPlayerByCharacterNameCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByCharacterNameCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -3356,35 +3159,29 @@ namespace SF
 			}; // size_t FindPlayerByCharacterNameCmd::CalculateMessageSize( const uint64_t &InTransactionID, const char* InCharacterName )
 
 
-			MessageData* FindPlayerByCharacterNameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName )
+			Result FindPlayerByCharacterNameCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InCharacterName )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InCharacterName)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FindPlayerByCharacterNameCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InCharacterName);
 
 				return hr;
-			}; // MessageData* FindPlayerByCharacterNameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName )
+			}; // Result FindPlayerByCharacterNameCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InCharacterName )
 
 			Result FindPlayerByCharacterNameCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -3398,7 +3195,7 @@ namespace SF
 			const MessageID FindPlayerByCharacterNameRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 18);
 			Result FindPlayerByCharacterNameRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -3418,7 +3215,7 @@ namespace SF
 
 			Result FindPlayerByCharacterNameRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				FindPlayerByCharacterNameRes parser;
@@ -3434,7 +3231,7 @@ namespace SF
 
 			Result FindPlayerByCharacterNameRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByCharacterNameRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -3456,18 +3253,9 @@ namespace SF
 			}; // size_t FindPlayerByCharacterNameRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId )
 
 
-			MessageData* FindPlayerByCharacterNameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId )
+			Result FindPlayerByCharacterNameRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -3475,10 +3263,13 @@ namespace SF
 					+ SerializedSizeOf(InPlayerId)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FindPlayerByCharacterNameRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -3486,7 +3277,7 @@ namespace SF
 				protocolCheck(*output << InPlayerId);
 
 				return hr;
-			}; // MessageData* FindPlayerByCharacterNameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId )
+			}; // Result FindPlayerByCharacterNameRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId )
 
 			Result FindPlayerByCharacterNameRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -3501,7 +3292,7 @@ namespace SF
 			const MessageID FindPlayerByPlatformUserNameCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 19);
 			Result FindPlayerByPlatformUserNameCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -3522,7 +3313,7 @@ namespace SF
 
 			Result FindPlayerByPlatformUserNameCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				FindPlayerByPlatformUserNameCmd parser;
@@ -3538,7 +3329,7 @@ namespace SF
 
 			Result FindPlayerByPlatformUserNameCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByPlatformUserNameCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -3560,18 +3351,9 @@ namespace SF
 			}; // size_t FindPlayerByPlatformUserNameCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName )
 
 
-			MessageData* FindPlayerByPlatformUserNameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName )
+			Result FindPlayerByPlatformUserNameCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -3579,10 +3361,13 @@ namespace SF
 					+ SerializedSizeOf(InPlatformUserName)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FindPlayerByPlatformUserNameCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -3590,7 +3375,7 @@ namespace SF
 				protocolCheck(*output << InPlatformUserName);
 
 				return hr;
-			}; // MessageData* FindPlayerByPlatformUserNameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName )
+			}; // Result FindPlayerByPlatformUserNameCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName )
 
 			Result FindPlayerByPlatformUserNameCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -3604,7 +3389,7 @@ namespace SF
 			const MessageID FindPlayerByPlatformUserNameRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 19);
 			Result FindPlayerByPlatformUserNameRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -3625,7 +3410,7 @@ namespace SF
 
 			Result FindPlayerByPlatformUserNameRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				FindPlayerByPlatformUserNameRes parser;
@@ -3642,7 +3427,7 @@ namespace SF
 
 			Result FindPlayerByPlatformUserNameRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByPlatformUserNameRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -3665,18 +3450,9 @@ namespace SF
 			}; // size_t FindPlayerByPlatformUserNameRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId )
 
 
-			MessageData* FindPlayerByPlatformUserNameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId )
+			Result FindPlayerByPlatformUserNameRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -3685,10 +3461,13 @@ namespace SF
 					+ SerializedSizeOf(InPlayerPlatformId)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FindPlayerByPlatformUserNameRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -3697,7 +3476,7 @@ namespace SF
 				protocolCheck(*output << InPlayerPlatformId);
 
 				return hr;
-			}; // MessageData* FindPlayerByPlatformUserNameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId )
+			}; // Result FindPlayerByPlatformUserNameRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId )
 
 			Result FindPlayerByPlatformUserNameRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -3712,7 +3491,7 @@ namespace SF
 			const MessageID FindPlayerByEMailCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 20);
 			Result FindPlayerByEMailCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -3732,7 +3511,7 @@ namespace SF
 
 			Result FindPlayerByEMailCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				FindPlayerByEMailCmd parser;
@@ -3747,7 +3526,7 @@ namespace SF
 
 			Result FindPlayerByEMailCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByEMailCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -3768,35 +3547,29 @@ namespace SF
 			}; // size_t FindPlayerByEMailCmd::CalculateMessageSize( const uint64_t &InTransactionID, const char* InPlayerEMail )
 
 
-			MessageData* FindPlayerByEMailCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InPlayerEMail )
+			Result FindPlayerByEMailCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InPlayerEMail )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPlayerEMail)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FindPlayerByEMailCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InPlayerEMail);
 
 				return hr;
-			}; // MessageData* FindPlayerByEMailCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InPlayerEMail )
+			}; // Result FindPlayerByEMailCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InPlayerEMail )
 
 			Result FindPlayerByEMailCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -3810,7 +3583,7 @@ namespace SF
 			const MessageID FindPlayerByEMailRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 20);
 			Result FindPlayerByEMailRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -3830,7 +3603,7 @@ namespace SF
 
 			Result FindPlayerByEMailRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				FindPlayerByEMailRes parser;
@@ -3846,7 +3619,7 @@ namespace SF
 
 			Result FindPlayerByEMailRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByEMailRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -3868,18 +3641,9 @@ namespace SF
 			}; // size_t FindPlayerByEMailRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 
 
-			MessageData* FindPlayerByEMailRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
+			Result FindPlayerByEMailRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -3887,10 +3651,13 @@ namespace SF
 					+ SerializedSizeOf(InPlayer)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FindPlayerByEMailRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -3898,7 +3665,7 @@ namespace SF
 				protocolCheck(*output << InPlayer);
 
 				return hr;
-			}; // MessageData* FindPlayerByEMailRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
+			}; // Result FindPlayerByEMailRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 
 			Result FindPlayerByEMailRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -3913,7 +3680,7 @@ namespace SF
 			const MessageID FindPlayerByPlayerIDCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 21);
 			Result FindPlayerByPlayerIDCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -3932,7 +3699,7 @@ namespace SF
 
 			Result FindPlayerByPlayerIDCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				FindPlayerByPlayerIDCmd parser;
@@ -3947,7 +3714,7 @@ namespace SF
 
 			Result FindPlayerByPlayerIDCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByPlayerIDCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -3968,35 +3735,29 @@ namespace SF
 			}; // size_t FindPlayerByPlayerIDCmd::CalculateMessageSize( const uint64_t &InTransactionID, const AccountID &InPlayerID )
 
 
-			MessageData* FindPlayerByPlayerIDCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID )
+			Result FindPlayerByPlayerIDCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const AccountID &InPlayerID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPlayerID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FindPlayerByPlayerIDCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InPlayerID);
 
 				return hr;
-			}; // MessageData* FindPlayerByPlayerIDCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID )
+			}; // Result FindPlayerByPlayerIDCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const AccountID &InPlayerID )
 
 			Result FindPlayerByPlayerIDCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -4010,7 +3771,7 @@ namespace SF
 			const MessageID FindPlayerByPlayerIDRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 21);
 			Result FindPlayerByPlayerIDRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -4030,7 +3791,7 @@ namespace SF
 
 			Result FindPlayerByPlayerIDRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				FindPlayerByPlayerIDRes parser;
@@ -4046,7 +3807,7 @@ namespace SF
 
 			Result FindPlayerByPlayerIDRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByPlayerIDRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -4068,18 +3829,9 @@ namespace SF
 			}; // size_t FindPlayerByPlayerIDRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 
 
-			MessageData* FindPlayerByPlayerIDRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
+			Result FindPlayerByPlayerIDRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -4087,10 +3839,13 @@ namespace SF
 					+ SerializedSizeOf(InPlayer)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FindPlayerByPlayerIDRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -4098,7 +3853,7 @@ namespace SF
 				protocolCheck(*output << InPlayer);
 
 				return hr;
-			}; // MessageData* FindPlayerByPlayerIDRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
+			}; // Result FindPlayerByPlayerIDRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 
 			Result FindPlayerByPlayerIDRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -4113,7 +3868,7 @@ namespace SF
 			const MessageID RequestPlayerStatusUpdateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 22);
 			Result RequestPlayerStatusUpdateCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -4135,7 +3890,7 @@ namespace SF
 
 			Result RequestPlayerStatusUpdateCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				RequestPlayerStatusUpdateCmd parser;
@@ -4150,7 +3905,7 @@ namespace SF
 
 			Result RequestPlayerStatusUpdateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) RequestPlayerStatusUpdateCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -4171,35 +3926,29 @@ namespace SF
 			}; // size_t RequestPlayerStatusUpdateCmd::CalculateMessageSize( const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID )
 
 
-			MessageData* RequestPlayerStatusUpdateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID )
+			Result RequestPlayerStatusUpdateCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InTargetPlayerID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RequestPlayerStatusUpdateCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InTargetPlayerID);
 
 				return hr;
-			}; // MessageData* RequestPlayerStatusUpdateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID )
+			}; // Result RequestPlayerStatusUpdateCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID )
 
 			Result RequestPlayerStatusUpdateCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -4213,7 +3962,7 @@ namespace SF
 			const MessageID RequestPlayerStatusUpdateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 22);
 			Result RequestPlayerStatusUpdateRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -4232,7 +3981,7 @@ namespace SF
 
 			Result RequestPlayerStatusUpdateRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				RequestPlayerStatusUpdateRes parser;
@@ -4247,7 +3996,7 @@ namespace SF
 
 			Result RequestPlayerStatusUpdateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) RequestPlayerStatusUpdateRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -4268,35 +4017,29 @@ namespace SF
 			}; // size_t RequestPlayerStatusUpdateRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* RequestPlayerStatusUpdateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result RequestPlayerStatusUpdateRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RequestPlayerStatusUpdateRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* RequestPlayerStatusUpdateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result RequestPlayerStatusUpdateRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result RequestPlayerStatusUpdateRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -4311,7 +4054,7 @@ namespace SF
 			const MessageID NotifyPlayerStatusUpdatedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 23);
 			Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -4331,7 +4074,7 @@ namespace SF
 
 			Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				NotifyPlayerStatusUpdatedS2CEvt parser;
@@ -4347,7 +4090,7 @@ namespace SF
 
 			Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) NotifyPlayerStatusUpdatedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -4369,18 +4112,9 @@ namespace SF
 			}; // size_t NotifyPlayerStatusUpdatedS2CEvt::CalculateMessageSize( const AccountID &InPlayerID, const uint32_t &InLatestActiveTime, const uint8_t &InIsInGame )
 
 
-			MessageData* NotifyPlayerStatusUpdatedS2CEvt::Create( IHeap& memHeap, const AccountID &InPlayerID, const uint32_t &InLatestActiveTime, const uint8_t &InIsInGame )
+			Result NotifyPlayerStatusUpdatedS2CEvt::Create( MessageHeader* messageBuffer, const AccountID &InPlayerID, const uint32_t &InLatestActiveTime, const uint8_t &InIsInGame )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayerID)
@@ -4388,10 +4122,13 @@ namespace SF
 					+ SerializedSizeOf(InIsInGame)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::NotifyPlayerStatusUpdatedS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayerID);
@@ -4399,7 +4136,7 @@ namespace SF
 				protocolCheck(*output << InIsInGame);
 
 				return hr;
-			}; // MessageData* NotifyPlayerStatusUpdatedS2CEvt::Create( IHeap& memHeap, const AccountID &InPlayerID, const uint32_t &InLatestActiveTime, const uint8_t &InIsInGame )
+			}; // Result NotifyPlayerStatusUpdatedS2CEvt::Create( MessageHeader* messageBuffer, const AccountID &InPlayerID, const uint32_t &InLatestActiveTime, const uint8_t &InIsInGame )
 
 			Result NotifyPlayerStatusUpdatedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -4414,7 +4151,7 @@ namespace SF
 			const MessageID GetRankingListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 24);
 			Result GetRankingListCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -4435,7 +4172,7 @@ namespace SF
 
 			Result GetRankingListCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GetRankingListCmd parser;
@@ -4452,7 +4189,7 @@ namespace SF
 
 			Result GetRankingListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GetRankingListCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -4475,18 +4212,9 @@ namespace SF
 			}; // size_t GetRankingListCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 
 
-			MessageData* GetRankingListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
+			Result GetRankingListCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -4495,10 +4223,13 @@ namespace SF
 					+ SerializedSizeOf(InCount)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetRankingListCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -4507,7 +4238,7 @@ namespace SF
 				protocolCheck(*output << InCount);
 
 				return hr;
-			}; // MessageData* GetRankingListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
+			}; // Result GetRankingListCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 
 			Result GetRankingListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -4521,7 +4252,7 @@ namespace SF
 			const MessageID GetRankingListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 24);
 			Result GetRankingListRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -4544,7 +4275,7 @@ namespace SF
 
 			Result GetRankingListRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GetRankingListRes parser;
@@ -4560,7 +4291,7 @@ namespace SF
 
 			Result GetRankingListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GetRankingListRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -4582,18 +4313,9 @@ namespace SF
 			}; // size_t GetRankingListRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 
 
-			MessageData* GetRankingListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+			Result GetRankingListRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -4601,10 +4323,13 @@ namespace SF
 					+ SerializedSizeOf(InRanking)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetRankingListRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -4612,7 +4337,7 @@ namespace SF
 				protocolCheck(*output << InRanking);
 
 				return hr;
-			}; // MessageData* GetRankingListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+			}; // Result GetRankingListRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 
 			Result GetRankingListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -4627,7 +4352,7 @@ namespace SF
 			const MessageID GetUserGamePlayerInfoCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 25);
 			Result GetUserGamePlayerInfoCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -4645,7 +4370,7 @@ namespace SF
 
 			Result GetUserGamePlayerInfoCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GetUserGamePlayerInfoCmd parser;
@@ -4659,7 +4384,7 @@ namespace SF
 
 			Result GetUserGamePlayerInfoCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GetUserGamePlayerInfoCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -4679,33 +4404,27 @@ namespace SF
 			}; // size_t GetUserGamePlayerInfoCmd::CalculateMessageSize( const uint64_t &InTransactionID )
 
 
-			MessageData* GetUserGamePlayerInfoCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
+			Result GetUserGamePlayerInfoCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetUserGamePlayerInfoCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 
 				return hr;
-			}; // MessageData* GetUserGamePlayerInfoCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
+			}; // Result GetUserGamePlayerInfoCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID )
 
 			Result GetUserGamePlayerInfoCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -4729,7 +4448,7 @@ namespace SF
 			} // const VariableTable& GetUserGamePlayerInfoRes::GetAttributes() const
 			Result GetUserGamePlayerInfoRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -4752,7 +4471,7 @@ namespace SF
 
 			Result GetUserGamePlayerInfoRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GetUserGamePlayerInfoRes parser;
@@ -4768,7 +4487,7 @@ namespace SF
 
 			Result GetUserGamePlayerInfoRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GetUserGamePlayerInfoRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -4802,25 +4521,19 @@ namespace SF
 				return __uiMessageSize;
 			}; // size_t GetUserGamePlayerInfoRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
 
-			MessageData* GetUserGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes )
+			Result GetUserGamePlayerInfoRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InResult, InAttributes);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetUserGamePlayerInfoRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -4828,20 +4541,11 @@ namespace SF
 				protocolCheck(*output << InAttributes);
 
 				return hr;
-			}; // MessageData* GetUserGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes )
+			}; // Result GetUserGamePlayerInfoRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes )
 
-			MessageData* GetUserGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
+			Result GetUserGamePlayerInfoRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
@@ -4851,10 +4555,13 @@ namespace SF
 					+ serializedSizeOfInAttributes
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetUserGamePlayerInfoRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -4863,7 +4570,7 @@ namespace SF
 				protocolCheck(*output << InAttributes);
 
 				return hr;
-			}; // MessageData* GetUserGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
+			}; // Result GetUserGamePlayerInfoRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
 
 			Result GetUserGamePlayerInfoRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -4878,7 +4585,7 @@ namespace SF
 			const MessageID GetGamePlayerInfoCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 26);
 			Result GetGamePlayerInfoCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -4897,7 +4604,7 @@ namespace SF
 
 			Result GetGamePlayerInfoCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GetGamePlayerInfoCmd parser;
@@ -4912,7 +4619,7 @@ namespace SF
 
 			Result GetGamePlayerInfoCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GetGamePlayerInfoCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -4933,35 +4640,29 @@ namespace SF
 			}; // size_t GetGamePlayerInfoCmd::CalculateMessageSize( const uint64_t &InTransactionID, const AccountID &InPlayerID )
 
 
-			MessageData* GetGamePlayerInfoCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID )
+			Result GetGamePlayerInfoCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const AccountID &InPlayerID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPlayerID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetGamePlayerInfoCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InPlayerID);
 
 				return hr;
-			}; // MessageData* GetGamePlayerInfoCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID )
+			}; // Result GetGamePlayerInfoCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const AccountID &InPlayerID )
 
 			Result GetGamePlayerInfoCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -4985,7 +4686,7 @@ namespace SF
 			} // const VariableTable& GetGamePlayerInfoRes::GetAttributes() const
 			Result GetGamePlayerInfoRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -5009,7 +4710,7 @@ namespace SF
 
 			Result GetGamePlayerInfoRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GetGamePlayerInfoRes parser;
@@ -5026,7 +4727,7 @@ namespace SF
 
 			Result GetGamePlayerInfoRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GetGamePlayerInfoRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -5062,25 +4763,19 @@ namespace SF
 				return __uiMessageSize;
 			}; // size_t GetGamePlayerInfoRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const VariableTable &InAttributes )
 
-			MessageData* GetGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const Array<uint8_t>& InAttributes )
+			Result GetGamePlayerInfoRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const Array<uint8_t>& InAttributes )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InResult, InPlayerID, InAttributes);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetGamePlayerInfoRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -5089,20 +4784,11 @@ namespace SF
 				protocolCheck(*output << InAttributes);
 
 				return hr;
-			}; // MessageData* GetGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const Array<uint8_t>& InAttributes )
+			}; // Result GetGamePlayerInfoRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const Array<uint8_t>& InAttributes )
 
-			MessageData* GetGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const VariableTable &InAttributes )
+			Result GetGamePlayerInfoRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const VariableTable &InAttributes )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
@@ -5113,10 +4799,13 @@ namespace SF
 					+ serializedSizeOfInAttributes
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetGamePlayerInfoRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -5126,7 +4815,7 @@ namespace SF
 				protocolCheck(*output << InAttributes);
 
 				return hr;
-			}; // MessageData* GetGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const VariableTable &InAttributes )
+			}; // Result GetGamePlayerInfoRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const VariableTable &InAttributes )
 
 			Result GetGamePlayerInfoRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -5141,7 +4830,7 @@ namespace SF
 			const MessageID LevelUpS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 27);
 			Result LevelUpS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -5160,7 +4849,7 @@ namespace SF
 
 			Result LevelUpS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				LevelUpS2CEvt parser;
@@ -5175,7 +4864,7 @@ namespace SF
 
 			Result LevelUpS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) LevelUpS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -5196,35 +4885,29 @@ namespace SF
 			}; // size_t LevelUpS2CEvt::CalculateMessageSize( const uint64_t &InCurrentTotalExp, const uint32_t &InCurrentLevel )
 
 
-			MessageData* LevelUpS2CEvt::Create( IHeap& memHeap, const uint64_t &InCurrentTotalExp, const uint32_t &InCurrentLevel )
+			Result LevelUpS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InCurrentTotalExp, const uint32_t &InCurrentLevel )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InCurrentTotalExp)
 					+ SerializedSizeOf(InCurrentLevel)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::LevelUpS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InCurrentTotalExp);
 				protocolCheck(*output << InCurrentLevel);
 
 				return hr;
-			}; // MessageData* LevelUpS2CEvt::Create( IHeap& memHeap, const uint64_t &InCurrentTotalExp, const uint32_t &InCurrentLevel )
+			}; // Result LevelUpS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InCurrentTotalExp, const uint32_t &InCurrentLevel )
 
 			Result LevelUpS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -5239,7 +4922,7 @@ namespace SF
 			const MessageID SetNickNameCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 28);
 			Result SetNickNameCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -5260,7 +4943,7 @@ namespace SF
 
 			Result SetNickNameCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				SetNickNameCmd parser;
@@ -5276,7 +4959,7 @@ namespace SF
 
 			Result SetNickNameCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) SetNickNameCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -5298,18 +4981,9 @@ namespace SF
 			}; // size_t SetNickNameCmd::CalculateMessageSize( const uint64_t &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree )
 
 
-			MessageData* SetNickNameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree )
+			Result SetNickNameCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -5317,10 +4991,13 @@ namespace SF
 					+ SerializedSizeOf(InIsCostFree)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SetNickNameCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -5328,7 +5005,7 @@ namespace SF
 				protocolCheck(*output << InIsCostFree);
 
 				return hr;
-			}; // MessageData* SetNickNameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree )
+			}; // Result SetNickNameCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree )
 
 			Result SetNickNameCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -5342,7 +5019,7 @@ namespace SF
 			const MessageID SetNickNameRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 28);
 			Result SetNickNameRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -5363,7 +5040,7 @@ namespace SF
 
 			Result SetNickNameRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				SetNickNameRes parser;
@@ -5380,7 +5057,7 @@ namespace SF
 
 			Result SetNickNameRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) SetNickNameRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -5403,18 +5080,9 @@ namespace SF
 			}; // size_t SetNickNameRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 
 
-			MessageData* SetNickNameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
+			Result SetNickNameRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -5423,10 +5091,13 @@ namespace SF
 					+ SerializedSizeOf(InTotalGameMoney)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SetNickNameRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -5435,7 +5106,7 @@ namespace SF
 				protocolCheck(*output << InTotalGameMoney);
 
 				return hr;
-			}; // MessageData* SetNickNameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
+			}; // Result SetNickNameRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 
 			Result SetNickNameRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -5450,7 +5121,7 @@ namespace SF
 			const MessageID CreatePartyCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 29);
 			Result CreatePartyCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -5468,7 +5139,7 @@ namespace SF
 
 			Result CreatePartyCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				CreatePartyCmd parser;
@@ -5482,7 +5153,7 @@ namespace SF
 
 			Result CreatePartyCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) CreatePartyCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -5502,33 +5173,27 @@ namespace SF
 			}; // size_t CreatePartyCmd::CalculateMessageSize( const uint64_t &InTransactionID )
 
 
-			MessageData* CreatePartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
+			Result CreatePartyCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreatePartyCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 
 				return hr;
-			}; // MessageData* CreatePartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
+			}; // Result CreatePartyCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID )
 
 			Result CreatePartyCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -5542,7 +5207,7 @@ namespace SF
 			const MessageID CreatePartyRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 29);
 			Result CreatePartyRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -5562,7 +5227,7 @@ namespace SF
 
 			Result CreatePartyRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				CreatePartyRes parser;
@@ -5578,7 +5243,7 @@ namespace SF
 
 			Result CreatePartyRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) CreatePartyRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -5600,18 +5265,9 @@ namespace SF
 			}; // size_t CreatePartyRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID )
 
 
-			MessageData* CreatePartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID )
+			Result CreatePartyRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -5619,10 +5275,13 @@ namespace SF
 					+ SerializedSizeOf(InPartyUID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreatePartyRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -5630,7 +5289,7 @@ namespace SF
 				protocolCheck(*output << InPartyUID);
 
 				return hr;
-			}; // MessageData* CreatePartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID )
+			}; // Result CreatePartyRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID )
 
 			Result CreatePartyRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -5645,7 +5304,7 @@ namespace SF
 			const MessageID JoinPartyCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 30);
 			Result JoinPartyCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -5665,7 +5324,7 @@ namespace SF
 
 			Result JoinPartyCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				JoinPartyCmd parser;
@@ -5681,7 +5340,7 @@ namespace SF
 
 			Result JoinPartyCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) JoinPartyCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -5703,18 +5362,9 @@ namespace SF
 			}; // size_t JoinPartyCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID )
 
 
-			MessageData* JoinPartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID )
+			Result JoinPartyCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -5722,10 +5372,13 @@ namespace SF
 					+ SerializedSizeOf(InInviterID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinPartyCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -5733,7 +5386,7 @@ namespace SF
 				protocolCheck(*output << InInviterID);
 
 				return hr;
-			}; // MessageData* JoinPartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID )
+			}; // Result JoinPartyCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID )
 
 			Result JoinPartyCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -5747,7 +5400,7 @@ namespace SF
 			const MessageID JoinPartyRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 30);
 			Result JoinPartyRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -5772,7 +5425,7 @@ namespace SF
 
 			Result JoinPartyRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				JoinPartyRes parser;
@@ -5790,7 +5443,7 @@ namespace SF
 
 			Result JoinPartyRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) JoinPartyRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -5814,18 +5467,9 @@ namespace SF
 			}; // size_t JoinPartyRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData )
 
 
-			MessageData* JoinPartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData )
+			Result JoinPartyRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -5835,10 +5479,13 @@ namespace SF
 					+ SerializedSizeOf(InChatHistoryData)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinPartyRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -5848,7 +5495,7 @@ namespace SF
 				protocolCheck(*output << InChatHistoryData);
 
 				return hr;
-			}; // MessageData* JoinPartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData )
+			}; // Result JoinPartyRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData )
 
 			Result JoinPartyRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -5863,7 +5510,7 @@ namespace SF
 			const MessageID PartyPlayerJoinedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 31);
 			Result PartyPlayerJoinedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -5882,7 +5529,7 @@ namespace SF
 
 			Result PartyPlayerJoinedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				PartyPlayerJoinedS2CEvt parser;
@@ -5897,7 +5544,7 @@ namespace SF
 
 			Result PartyPlayerJoinedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) PartyPlayerJoinedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -5918,35 +5565,29 @@ namespace SF
 			}; // size_t PartyPlayerJoinedS2CEvt::CalculateMessageSize( const uint64_t &InPartyUID, const PlayerInformation &InJoinedPlayer )
 
 
-			MessageData* PartyPlayerJoinedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const PlayerInformation &InJoinedPlayer )
+			Result PartyPlayerJoinedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPartyUID, const PlayerInformation &InJoinedPlayer )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPartyUID)
 					+ SerializedSizeOf(InJoinedPlayer)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyPlayerJoinedS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPartyUID);
 				protocolCheck(*output << InJoinedPlayer);
 
 				return hr;
-			}; // MessageData* PartyPlayerJoinedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const PlayerInformation &InJoinedPlayer )
+			}; // Result PartyPlayerJoinedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPartyUID, const PlayerInformation &InJoinedPlayer )
 
 			Result PartyPlayerJoinedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -5961,7 +5602,7 @@ namespace SF
 			const MessageID PartyLeaderChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 32);
 			Result PartyLeaderChangedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -5980,7 +5621,7 @@ namespace SF
 
 			Result PartyLeaderChangedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				PartyLeaderChangedS2CEvt parser;
@@ -5995,7 +5636,7 @@ namespace SF
 
 			Result PartyLeaderChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) PartyLeaderChangedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -6016,35 +5657,29 @@ namespace SF
 			}; // size_t PartyLeaderChangedS2CEvt::CalculateMessageSize( const uint64_t &InPartyUID, const AccountID &InNewLeaderID )
 
 
-			MessageData* PartyLeaderChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InNewLeaderID )
+			Result PartyLeaderChangedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPartyUID, const AccountID &InNewLeaderID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPartyUID)
 					+ SerializedSizeOf(InNewLeaderID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyLeaderChangedS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPartyUID);
 				protocolCheck(*output << InNewLeaderID);
 
 				return hr;
-			}; // MessageData* PartyLeaderChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InNewLeaderID )
+			}; // Result PartyLeaderChangedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPartyUID, const AccountID &InNewLeaderID )
 
 			Result PartyLeaderChangedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -6059,7 +5694,7 @@ namespace SF
 			const MessageID LeavePartyCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 33);
 			Result LeavePartyCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -6079,7 +5714,7 @@ namespace SF
 
 			Result LeavePartyCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				LeavePartyCmd parser;
@@ -6095,7 +5730,7 @@ namespace SF
 
 			Result LeavePartyCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) LeavePartyCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -6117,18 +5752,9 @@ namespace SF
 			}; // size_t LeavePartyCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID )
 
 
-			MessageData* LeavePartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID )
+			Result LeavePartyCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -6136,10 +5762,13 @@ namespace SF
 					+ SerializedSizeOf(InPlayerID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::LeavePartyCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -6147,7 +5776,7 @@ namespace SF
 				protocolCheck(*output << InPlayerID);
 
 				return hr;
-			}; // MessageData* LeavePartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID )
+			}; // Result LeavePartyCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID )
 
 			Result LeavePartyCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -6161,7 +5790,7 @@ namespace SF
 			const MessageID LeavePartyRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 33);
 			Result LeavePartyRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -6180,7 +5809,7 @@ namespace SF
 
 			Result LeavePartyRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				LeavePartyRes parser;
@@ -6195,7 +5824,7 @@ namespace SF
 
 			Result LeavePartyRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) LeavePartyRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -6216,35 +5845,29 @@ namespace SF
 			}; // size_t LeavePartyRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* LeavePartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result LeavePartyRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::LeavePartyRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* LeavePartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result LeavePartyRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result LeavePartyRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -6259,7 +5882,7 @@ namespace SF
 			const MessageID PartyPlayerLeftS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 34);
 			Result PartyPlayerLeftS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -6278,7 +5901,7 @@ namespace SF
 
 			Result PartyPlayerLeftS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				PartyPlayerLeftS2CEvt parser;
@@ -6293,7 +5916,7 @@ namespace SF
 
 			Result PartyPlayerLeftS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) PartyPlayerLeftS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -6314,35 +5937,29 @@ namespace SF
 			}; // size_t PartyPlayerLeftS2CEvt::CalculateMessageSize( const uint64_t &InPartyUID, const AccountID &InLeftPlayerID )
 
 
-			MessageData* PartyPlayerLeftS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InLeftPlayerID )
+			Result PartyPlayerLeftS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPartyUID, const AccountID &InLeftPlayerID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPartyUID)
 					+ SerializedSizeOf(InLeftPlayerID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyPlayerLeftS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPartyUID);
 				protocolCheck(*output << InLeftPlayerID);
 
 				return hr;
-			}; // MessageData* PartyPlayerLeftS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InLeftPlayerID )
+			}; // Result PartyPlayerLeftS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPartyUID, const AccountID &InLeftPlayerID )
 
 			Result PartyPlayerLeftS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -6357,7 +5974,7 @@ namespace SF
 			const MessageID PartyKickPlayerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 35);
 			Result PartyKickPlayerCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -6378,7 +5995,7 @@ namespace SF
 
 			Result PartyKickPlayerCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				PartyKickPlayerCmd parser;
@@ -6395,7 +6012,7 @@ namespace SF
 
 			Result PartyKickPlayerCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) PartyKickPlayerCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -6418,18 +6035,9 @@ namespace SF
 			}; // size_t PartyKickPlayerCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 
 
-			MessageData* PartyKickPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
+			Result PartyKickPlayerCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -6438,10 +6046,13 @@ namespace SF
 					+ SerializedSizeOf(InPlayerToKick)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyKickPlayerCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -6450,7 +6061,7 @@ namespace SF
 				protocolCheck(*output << InPlayerToKick);
 
 				return hr;
-			}; // MessageData* PartyKickPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
+			}; // Result PartyKickPlayerCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 
 			Result PartyKickPlayerCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -6464,7 +6075,7 @@ namespace SF
 			const MessageID PartyKickPlayerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 35);
 			Result PartyKickPlayerRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -6483,7 +6094,7 @@ namespace SF
 
 			Result PartyKickPlayerRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				PartyKickPlayerRes parser;
@@ -6498,7 +6109,7 @@ namespace SF
 
 			Result PartyKickPlayerRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) PartyKickPlayerRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -6519,35 +6130,29 @@ namespace SF
 			}; // size_t PartyKickPlayerRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* PartyKickPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result PartyKickPlayerRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyKickPlayerRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* PartyKickPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result PartyKickPlayerRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result PartyKickPlayerRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -6562,7 +6167,7 @@ namespace SF
 			const MessageID PartyPlayerKickedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 36);
 			Result PartyPlayerKickedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -6581,7 +6186,7 @@ namespace SF
 
 			Result PartyPlayerKickedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				PartyPlayerKickedS2CEvt parser;
@@ -6596,7 +6201,7 @@ namespace SF
 
 			Result PartyPlayerKickedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) PartyPlayerKickedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -6617,35 +6222,29 @@ namespace SF
 			}; // size_t PartyPlayerKickedS2CEvt::CalculateMessageSize( const uint64_t &InPartyUID, const AccountID &InKickedPlayerID )
 
 
-			MessageData* PartyPlayerKickedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InKickedPlayerID )
+			Result PartyPlayerKickedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPartyUID, const AccountID &InKickedPlayerID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPartyUID)
 					+ SerializedSizeOf(InKickedPlayerID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyPlayerKickedS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPartyUID);
 				protocolCheck(*output << InKickedPlayerID);
 
 				return hr;
-			}; // MessageData* PartyPlayerKickedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InKickedPlayerID )
+			}; // Result PartyPlayerKickedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPartyUID, const AccountID &InKickedPlayerID )
 
 			Result PartyPlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -6660,7 +6259,7 @@ namespace SF
 			const MessageID PartyInviteCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 37);
 			Result PartyInviteCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -6679,7 +6278,7 @@ namespace SF
 
 			Result PartyInviteCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				PartyInviteCmd parser;
@@ -6694,7 +6293,7 @@ namespace SF
 
 			Result PartyInviteCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) PartyInviteCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -6715,35 +6314,29 @@ namespace SF
 			}; // size_t PartyInviteCmd::CalculateMessageSize( const uint64_t &InTransactionID, const AccountID &InInviteTargetID )
 
 
-			MessageData* PartyInviteCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InInviteTargetID )
+			Result PartyInviteCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const AccountID &InInviteTargetID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InInviteTargetID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyInviteCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InInviteTargetID);
 
 				return hr;
-			}; // MessageData* PartyInviteCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InInviteTargetID )
+			}; // Result PartyInviteCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const AccountID &InInviteTargetID )
 
 			Result PartyInviteCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -6757,7 +6350,7 @@ namespace SF
 			const MessageID PartyInviteRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 37);
 			Result PartyInviteRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -6776,7 +6369,7 @@ namespace SF
 
 			Result PartyInviteRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				PartyInviteRes parser;
@@ -6791,7 +6384,7 @@ namespace SF
 
 			Result PartyInviteRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) PartyInviteRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -6812,35 +6405,29 @@ namespace SF
 			}; // size_t PartyInviteRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* PartyInviteRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result PartyInviteRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyInviteRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* PartyInviteRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result PartyInviteRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result PartyInviteRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -6855,7 +6442,7 @@ namespace SF
 			const MessageID PartyInviteRequestedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 38);
 			Result PartyInviteRequestedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -6876,7 +6463,7 @@ namespace SF
 
 			Result PartyInviteRequestedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				PartyInviteRequestedS2CEvt parser;
@@ -6892,7 +6479,7 @@ namespace SF
 
 			Result PartyInviteRequestedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) PartyInviteRequestedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -6914,18 +6501,9 @@ namespace SF
 			}; // size_t PartyInviteRequestedS2CEvt::CalculateMessageSize( const AccountID &InInviterID, const char* InInviterName, const uint64_t &InPartyToJoinUID )
 
 
-			MessageData* PartyInviteRequestedS2CEvt::Create( IHeap& memHeap, const AccountID &InInviterID, const char* InInviterName, const uint64_t &InPartyToJoinUID )
+			Result PartyInviteRequestedS2CEvt::Create( MessageHeader* messageBuffer, const AccountID &InInviterID, const char* InInviterName, const uint64_t &InPartyToJoinUID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InInviterID)
@@ -6933,10 +6511,13 @@ namespace SF
 					+ SerializedSizeOf(InPartyToJoinUID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyInviteRequestedS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InInviterID);
@@ -6944,7 +6525,7 @@ namespace SF
 				protocolCheck(*output << InPartyToJoinUID);
 
 				return hr;
-			}; // MessageData* PartyInviteRequestedS2CEvt::Create( IHeap& memHeap, const AccountID &InInviterID, const char* InInviterName, const uint64_t &InPartyToJoinUID )
+			}; // Result PartyInviteRequestedS2CEvt::Create( MessageHeader* messageBuffer, const AccountID &InInviterID, const char* InInviterName, const uint64_t &InPartyToJoinUID )
 
 			Result PartyInviteRequestedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -6959,7 +6540,7 @@ namespace SF
 			const MessageID PartyQuickChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 39);
 			Result PartyQuickChatMessageCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -6978,7 +6559,7 @@ namespace SF
 
 			Result PartyQuickChatMessageCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				PartyQuickChatMessageCmd parser;
@@ -6993,7 +6574,7 @@ namespace SF
 
 			Result PartyQuickChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) PartyQuickChatMessageCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -7014,35 +6595,29 @@ namespace SF
 			}; // size_t PartyQuickChatMessageCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InQuickChatID )
 
 
-			MessageData* PartyQuickChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InQuickChatID )
+			Result PartyQuickChatMessageCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InQuickChatID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InQuickChatID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyQuickChatMessageCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InQuickChatID);
 
 				return hr;
-			}; // MessageData* PartyQuickChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InQuickChatID )
+			}; // Result PartyQuickChatMessageCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InQuickChatID )
 
 			Result PartyQuickChatMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -7056,7 +6631,7 @@ namespace SF
 			const MessageID PartyQuickChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 39);
 			Result PartyQuickChatMessageRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -7075,7 +6650,7 @@ namespace SF
 
 			Result PartyQuickChatMessageRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				PartyQuickChatMessageRes parser;
@@ -7090,7 +6665,7 @@ namespace SF
 
 			Result PartyQuickChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) PartyQuickChatMessageRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -7111,35 +6686,29 @@ namespace SF
 			}; // size_t PartyQuickChatMessageRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* PartyQuickChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result PartyQuickChatMessageRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyQuickChatMessageRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* PartyQuickChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result PartyQuickChatMessageRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result PartyQuickChatMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -7154,7 +6723,7 @@ namespace SF
 			const MessageID PartyQuickChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 40);
 			Result PartyQuickChatMessageS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -7173,7 +6742,7 @@ namespace SF
 
 			Result PartyQuickChatMessageS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				PartyQuickChatMessageS2CEvt parser;
@@ -7188,7 +6757,7 @@ namespace SF
 
 			Result PartyQuickChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) PartyQuickChatMessageS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -7209,35 +6778,29 @@ namespace SF
 			}; // size_t PartyQuickChatMessageS2CEvt::CalculateMessageSize( const AccountID &InSenderID, const uint32_t &InQuickChatID )
 
 
-			MessageData* PartyQuickChatMessageS2CEvt::Create( IHeap& memHeap, const AccountID &InSenderID, const uint32_t &InQuickChatID )
+			Result PartyQuickChatMessageS2CEvt::Create( MessageHeader* messageBuffer, const AccountID &InSenderID, const uint32_t &InQuickChatID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InSenderID)
 					+ SerializedSizeOf(InQuickChatID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyQuickChatMessageS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InSenderID);
 				protocolCheck(*output << InQuickChatID);
 
 				return hr;
-			}; // MessageData* PartyQuickChatMessageS2CEvt::Create( IHeap& memHeap, const AccountID &InSenderID, const uint32_t &InQuickChatID )
+			}; // Result PartyQuickChatMessageS2CEvt::Create( MessageHeader* messageBuffer, const AccountID &InSenderID, const uint32_t &InQuickChatID )
 
 			Result PartyQuickChatMessageS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -7252,7 +6815,7 @@ namespace SF
 			const MessageID PartyChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 41);
 			Result PartyChatMessageCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -7272,7 +6835,7 @@ namespace SF
 
 			Result PartyChatMessageCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				PartyChatMessageCmd parser;
@@ -7287,7 +6850,7 @@ namespace SF
 
 			Result PartyChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) PartyChatMessageCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -7308,35 +6871,29 @@ namespace SF
 			}; // size_t PartyChatMessageCmd::CalculateMessageSize( const uint64_t &InTransactionID, const char* InChatMessage )
 
 
-			MessageData* PartyChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChatMessage )
+			Result PartyChatMessageCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InChatMessage )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InChatMessage)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyChatMessageCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InChatMessage);
 
 				return hr;
-			}; // MessageData* PartyChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChatMessage )
+			}; // Result PartyChatMessageCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InChatMessage )
 
 			Result PartyChatMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -7350,7 +6907,7 @@ namespace SF
 			const MessageID PartyChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 41);
 			Result PartyChatMessageRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -7369,7 +6926,7 @@ namespace SF
 
 			Result PartyChatMessageRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				PartyChatMessageRes parser;
@@ -7384,7 +6941,7 @@ namespace SF
 
 			Result PartyChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) PartyChatMessageRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -7405,35 +6962,29 @@ namespace SF
 			}; // size_t PartyChatMessageRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* PartyChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result PartyChatMessageRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyChatMessageRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* PartyChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result PartyChatMessageRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result PartyChatMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -7448,7 +6999,7 @@ namespace SF
 			const MessageID PartyChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 42);
 			Result PartyChatMessageS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -7470,7 +7021,7 @@ namespace SF
 
 			Result PartyChatMessageS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				PartyChatMessageS2CEvt parser;
@@ -7486,7 +7037,7 @@ namespace SF
 
 			Result PartyChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) PartyChatMessageS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -7508,18 +7059,9 @@ namespace SF
 			}; // size_t PartyChatMessageS2CEvt::CalculateMessageSize( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
 
 
-			MessageData* PartyChatMessageS2CEvt::Create( IHeap& memHeap, const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
+			Result PartyChatMessageS2CEvt::Create( MessageHeader* messageBuffer, const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InSenderID)
@@ -7527,10 +7069,13 @@ namespace SF
 					+ SerializedSizeOf(InChatMessage)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyChatMessageS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InSenderID);
@@ -7538,7 +7083,7 @@ namespace SF
 				protocolCheck(*output << InChatMessage);
 
 				return hr;
-			}; // MessageData* PartyChatMessageS2CEvt::Create( IHeap& memHeap, const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
+			}; // Result PartyChatMessageS2CEvt::Create( MessageHeader* messageBuffer, const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
 
 			Result PartyChatMessageS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -7553,7 +7098,7 @@ namespace SF
 			const MessageID JoinGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 43);
 			Result JoinGameInstanceCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -7572,7 +7117,7 @@ namespace SF
 
 			Result JoinGameInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				JoinGameInstanceCmd parser;
@@ -7587,7 +7132,7 @@ namespace SF
 
 			Result JoinGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) JoinGameInstanceCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -7608,35 +7153,29 @@ namespace SF
 			}; // size_t JoinGameInstanceCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InInsUID )
 
 
-			MessageData* JoinGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InInsUID )
+			Result JoinGameInstanceCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InInsUID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InInsUID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinGameInstanceCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InInsUID);
 
 				return hr;
-			}; // MessageData* JoinGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InInsUID )
+			}; // Result JoinGameInstanceCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InInsUID )
 
 			Result JoinGameInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -7650,7 +7189,7 @@ namespace SF
 			const MessageID JoinGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 43);
 			Result JoinGameInstanceRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -7672,7 +7211,7 @@ namespace SF
 
 			Result JoinGameInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				JoinGameInstanceRes parser;
@@ -7689,7 +7228,7 @@ namespace SF
 
 			Result JoinGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) JoinGameInstanceRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -7712,18 +7251,9 @@ namespace SF
 			}; // size_t JoinGameInstanceRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const char* InServerPublicAddress )
 
 
-			MessageData* JoinGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const char* InServerPublicAddress )
+			Result JoinGameInstanceRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const char* InServerPublicAddress )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -7732,10 +7262,13 @@ namespace SF
 					+ SerializedSizeOf(InServerPublicAddress)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinGameInstanceRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -7744,7 +7277,7 @@ namespace SF
 				protocolCheck(*output << InServerPublicAddress);
 
 				return hr;
-			}; // MessageData* JoinGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const char* InServerPublicAddress )
+			}; // Result JoinGameInstanceRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const char* InServerPublicAddress )
 
 			Result JoinGameInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -7759,7 +7292,7 @@ namespace SF
 			const MessageID LeaveGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 44);
 			Result LeaveGameInstanceCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -7778,7 +7311,7 @@ namespace SF
 
 			Result LeaveGameInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				LeaveGameInstanceCmd parser;
@@ -7793,7 +7326,7 @@ namespace SF
 
 			Result LeaveGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) LeaveGameInstanceCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -7814,35 +7347,29 @@ namespace SF
 			}; // size_t LeaveGameInstanceCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InInsUID )
 
 
-			MessageData* LeaveGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InInsUID )
+			Result LeaveGameInstanceCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InInsUID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InInsUID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::LeaveGameInstanceCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InInsUID);
 
 				return hr;
-			}; // MessageData* LeaveGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InInsUID )
+			}; // Result LeaveGameInstanceCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InInsUID )
 
 			Result LeaveGameInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -7856,7 +7383,7 @@ namespace SF
 			const MessageID LeaveGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 44);
 			Result LeaveGameInstanceRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -7875,7 +7402,7 @@ namespace SF
 
 			Result LeaveGameInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				LeaveGameInstanceRes parser;
@@ -7890,7 +7417,7 @@ namespace SF
 
 			Result LeaveGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) LeaveGameInstanceRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -7911,35 +7438,29 @@ namespace SF
 			}; // size_t LeaveGameInstanceRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* LeaveGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result LeaveGameInstanceRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::LeaveGameInstanceRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* LeaveGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result LeaveGameInstanceRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result LeaveGameInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -7954,7 +7475,7 @@ namespace SF
 			const MessageID SearchGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 45);
 			Result SearchGameInstanceCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -7975,7 +7496,7 @@ namespace SF
 
 			Result SearchGameInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				SearchGameInstanceCmd parser;
@@ -7991,7 +7512,7 @@ namespace SF
 
 			Result SearchGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) SearchGameInstanceCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -8013,18 +7534,9 @@ namespace SF
 			}; // size_t SearchGameInstanceCmd::CalculateMessageSize( const uint64_t &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID )
 
 
-			MessageData* SearchGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID )
+			Result SearchGameInstanceCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -8032,10 +7544,13 @@ namespace SF
 					+ SerializedSizeOf(InZoneTableID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SearchGameInstanceCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -8043,7 +7558,7 @@ namespace SF
 				protocolCheck(*output << InZoneTableID);
 
 				return hr;
-			}; // MessageData* SearchGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID )
+			}; // Result SearchGameInstanceCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID )
 
 			Result SearchGameInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -8057,7 +7572,7 @@ namespace SF
 			const MessageID SearchGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 45);
 			Result SearchGameInstanceRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -8077,7 +7592,7 @@ namespace SF
 
 			Result SearchGameInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				SearchGameInstanceRes parser;
@@ -8093,7 +7608,7 @@ namespace SF
 
 			Result SearchGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) SearchGameInstanceRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -8115,18 +7630,9 @@ namespace SF
 			}; // size_t SearchGameInstanceRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances )
 
 
-			MessageData* SearchGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances )
+			Result SearchGameInstanceRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -8134,10 +7640,13 @@ namespace SF
 					+ SerializedSizeOf(InGameInstances)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SearchGameInstanceRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -8145,7 +7654,7 @@ namespace SF
 				protocolCheck(*output << InGameInstances);
 
 				return hr;
-			}; // MessageData* SearchGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances )
+			}; // Result SearchGameInstanceRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances )
 
 			Result SearchGameInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -8160,7 +7669,7 @@ namespace SF
 			const MessageID GetCharacterDataInGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 46);
 			Result GetCharacterDataInGameInstanceCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -8180,7 +7689,7 @@ namespace SF
 
 			Result GetCharacterDataInGameInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GetCharacterDataInGameInstanceCmd parser;
@@ -8196,7 +7705,7 @@ namespace SF
 
 			Result GetCharacterDataInGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterDataInGameInstanceCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -8218,18 +7727,9 @@ namespace SF
 			}; // size_t GetCharacterDataInGameInstanceCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID )
 
 
-			MessageData* GetCharacterDataInGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID )
+			Result GetCharacterDataInGameInstanceCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -8237,10 +7737,13 @@ namespace SF
 					+ SerializedSizeOf(InPlayerID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterDataInGameInstanceCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -8248,7 +7751,7 @@ namespace SF
 				protocolCheck(*output << InPlayerID);
 
 				return hr;
-			}; // MessageData* GetCharacterDataInGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID )
+			}; // Result GetCharacterDataInGameInstanceCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID )
 
 			Result GetCharacterDataInGameInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -8272,7 +7775,7 @@ namespace SF
 			} // const VariableTable& GetCharacterDataInGameInstanceRes::GetGameInstances() const
 			Result GetCharacterDataInGameInstanceRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -8296,7 +7799,7 @@ namespace SF
 
 			Result GetCharacterDataInGameInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GetCharacterDataInGameInstanceRes parser;
@@ -8313,7 +7816,7 @@ namespace SF
 
 			Result GetCharacterDataInGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterDataInGameInstanceRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -8349,25 +7852,19 @@ namespace SF
 				return __uiMessageSize;
 			}; // size_t GetCharacterDataInGameInstanceRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances )
 
-			MessageData* GetCharacterDataInGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const Array<uint8_t>& InGameInstances )
+			Result GetCharacterDataInGameInstanceRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const Array<uint8_t>& InGameInstances )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InResult, InPlayerID, InGameInstances);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterDataInGameInstanceRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -8376,20 +7873,11 @@ namespace SF
 				protocolCheck(*output << InGameInstances);
 
 				return hr;
-			}; // MessageData* GetCharacterDataInGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const Array<uint8_t>& InGameInstances )
+			}; // Result GetCharacterDataInGameInstanceRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const Array<uint8_t>& InGameInstances )
 
-			MessageData* GetCharacterDataInGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances )
+			Result GetCharacterDataInGameInstanceRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint16_t serializedSizeOfInGameInstances = static_cast<uint16_t>(SerializedSizeOf(InGameInstances)); 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
@@ -8400,10 +7888,13 @@ namespace SF
 					+ serializedSizeOfInGameInstances
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterDataInGameInstanceRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -8413,7 +7904,7 @@ namespace SF
 				protocolCheck(*output << InGameInstances);
 
 				return hr;
-			}; // MessageData* GetCharacterDataInGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances )
+			}; // Result GetCharacterDataInGameInstanceRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances )
 
 			Result GetCharacterDataInGameInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -8428,7 +7919,7 @@ namespace SF
 			const MessageID RequestGameMatchCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 47);
 			Result RequestGameMatchCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -8448,7 +7939,7 @@ namespace SF
 
 			Result RequestGameMatchCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				RequestGameMatchCmd parser;
@@ -8464,7 +7955,7 @@ namespace SF
 
 			Result RequestGameMatchCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) RequestGameMatchCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -8486,18 +7977,9 @@ namespace SF
 			}; // size_t RequestGameMatchCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole )
 
 
-			MessageData* RequestGameMatchCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole )
+			Result RequestGameMatchCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -8505,10 +7987,13 @@ namespace SF
 					+ SerializedSizeOf(InRequestRole)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RequestGameMatchCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -8516,7 +8001,7 @@ namespace SF
 				protocolCheck(*output << InRequestRole);
 
 				return hr;
-			}; // MessageData* RequestGameMatchCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole )
+			}; // Result RequestGameMatchCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole )
 
 			Result RequestGameMatchCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -8530,7 +8015,7 @@ namespace SF
 			const MessageID RequestGameMatchRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 47);
 			Result RequestGameMatchRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -8551,7 +8036,7 @@ namespace SF
 
 			Result RequestGameMatchRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				RequestGameMatchRes parser;
@@ -8568,7 +8053,7 @@ namespace SF
 
 			Result RequestGameMatchRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) RequestGameMatchRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -8591,18 +8076,9 @@ namespace SF
 			}; // size_t RequestGameMatchRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 
 
-			MessageData* RequestGameMatchRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
+			Result RequestGameMatchRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -8611,10 +8087,13 @@ namespace SF
 					+ SerializedSizeOf(InTotalGameMoney)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RequestGameMatchRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -8623,7 +8102,7 @@ namespace SF
 				protocolCheck(*output << InTotalGameMoney);
 
 				return hr;
-			}; // MessageData* RequestGameMatchRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
+			}; // Result RequestGameMatchRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 
 			Result RequestGameMatchRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -8638,7 +8117,7 @@ namespace SF
 			const MessageID GameMatchedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 48);
 			Result GameMatchedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -8675,7 +8154,7 @@ namespace SF
 
 			Result GameMatchedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GameMatchedS2CEvt parser;
@@ -8702,7 +8181,7 @@ namespace SF
 
 			Result GameMatchedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GameMatchedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -8735,18 +8214,9 @@ namespace SF
 			}; // size_t GameMatchedS2CEvt::CalculateMessageSize( const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData, const uint32_t &InStamina, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 
 
-			MessageData* GameMatchedS2CEvt::Create( IHeap& memHeap, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData, const uint32_t &InStamina, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
+			Result GameMatchedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData, const uint32_t &InStamina, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InInsUID)
@@ -8765,10 +8235,13 @@ namespace SF
 					+ SerializedSizeOf(InTotalGameMoney)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GameMatchedS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InInsUID);
@@ -8787,7 +8260,7 @@ namespace SF
 				protocolCheck(*output << InTotalGameMoney);
 
 				return hr;
-			}; // MessageData* GameMatchedS2CEvt::Create( IHeap& memHeap, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData, const uint32_t &InStamina, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
+			}; // Result GameMatchedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData, const uint32_t &InStamina, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 
 			Result GameMatchedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -8802,7 +8275,7 @@ namespace SF
 			const MessageID GameMatchFailedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 49);
 			Result GameMatchFailedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -8820,7 +8293,7 @@ namespace SF
 
 			Result GameMatchFailedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GameMatchFailedS2CEvt parser;
@@ -8834,7 +8307,7 @@ namespace SF
 
 			Result GameMatchFailedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GameMatchFailedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -8854,33 +8327,27 @@ namespace SF
 			}; // size_t GameMatchFailedS2CEvt::CalculateMessageSize( const Result &InFailedReason )
 
 
-			MessageData* GameMatchFailedS2CEvt::Create( IHeap& memHeap, const Result &InFailedReason )
+			Result GameMatchFailedS2CEvt::Create( MessageHeader* messageBuffer, const Result &InFailedReason )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InFailedReason)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GameMatchFailedS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InFailedReason);
 
 				return hr;
-			}; // MessageData* GameMatchFailedS2CEvt::Create( IHeap& memHeap, const Result &InFailedReason )
+			}; // Result GameMatchFailedS2CEvt::Create( MessageHeader* messageBuffer, const Result &InFailedReason )
 
 			Result GameMatchFailedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -8895,7 +8362,7 @@ namespace SF
 			const MessageID GameMatchingStartedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 50);
 			Result GameMatchingStartedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -8908,7 +8375,7 @@ namespace SF
 
 			Result GameMatchingStartedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GameMatchingStartedS2CEvt parser;
@@ -8921,7 +8388,7 @@ namespace SF
 
 			Result GameMatchingStartedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GameMatchingStartedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -8940,26 +8407,21 @@ namespace SF
 			}; // size_t GameMatchingStartedS2CEvt::CalculateMessageSize(  )
 
 
-			MessageData* GameMatchingStartedS2CEvt::Create( IHeap& memHeap )
+			Result GameMatchingStartedS2CEvt::Create( MessageHeader* messageBuffer )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GameMatchingStartedS2CEvt::MID, __uiMessageSize ) );
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
 
 				return hr;
-			}; // MessageData* GameMatchingStartedS2CEvt::Create( IHeap& memHeap )
+			}; // Result GameMatchingStartedS2CEvt::Create( MessageHeader* messageBuffer )
 
 			Result GameMatchingStartedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -8974,7 +8436,7 @@ namespace SF
 			const MessageID CancelGameMatchCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 51);
 			Result CancelGameMatchCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -8992,7 +8454,7 @@ namespace SF
 
 			Result CancelGameMatchCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				CancelGameMatchCmd parser;
@@ -9006,7 +8468,7 @@ namespace SF
 
 			Result CancelGameMatchCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) CancelGameMatchCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -9026,33 +8488,27 @@ namespace SF
 			}; // size_t CancelGameMatchCmd::CalculateMessageSize( const uint64_t &InTransactionID )
 
 
-			MessageData* CancelGameMatchCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
+			Result CancelGameMatchCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CancelGameMatchCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 
 				return hr;
-			}; // MessageData* CancelGameMatchCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
+			}; // Result CancelGameMatchCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID )
 
 			Result CancelGameMatchCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -9066,7 +8522,7 @@ namespace SF
 			const MessageID CancelGameMatchRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 51);
 			Result CancelGameMatchRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -9085,7 +8541,7 @@ namespace SF
 
 			Result CancelGameMatchRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				CancelGameMatchRes parser;
@@ -9100,7 +8556,7 @@ namespace SF
 
 			Result CancelGameMatchRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) CancelGameMatchRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -9121,35 +8577,29 @@ namespace SF
 			}; // size_t CancelGameMatchRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* CancelGameMatchRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result CancelGameMatchRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CancelGameMatchRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* CancelGameMatchRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result CancelGameMatchRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result CancelGameMatchRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -9164,7 +8614,7 @@ namespace SF
 			const MessageID GameMatchingCanceledS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 52);
 			Result GameMatchingCanceledS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -9177,7 +8627,7 @@ namespace SF
 
 			Result GameMatchingCanceledS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GameMatchingCanceledS2CEvt parser;
@@ -9190,7 +8640,7 @@ namespace SF
 
 			Result GameMatchingCanceledS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GameMatchingCanceledS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -9209,26 +8659,21 @@ namespace SF
 			}; // size_t GameMatchingCanceledS2CEvt::CalculateMessageSize(  )
 
 
-			MessageData* GameMatchingCanceledS2CEvt::Create( IHeap& memHeap )
+			Result GameMatchingCanceledS2CEvt::Create( MessageHeader* messageBuffer )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GameMatchingCanceledS2CEvt::MID, __uiMessageSize ) );
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
 
 				return hr;
-			}; // MessageData* GameMatchingCanceledS2CEvt::Create( IHeap& memHeap )
+			}; // Result GameMatchingCanceledS2CEvt::Create( MessageHeader* messageBuffer )
 
 			Result GameMatchingCanceledS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -9243,7 +8688,7 @@ namespace SF
 			const MessageID BuyShopItemPrepareCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 53);
 			Result BuyShopItemPrepareCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -9262,7 +8707,7 @@ namespace SF
 
 			Result BuyShopItemPrepareCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				BuyShopItemPrepareCmd parser;
@@ -9277,7 +8722,7 @@ namespace SF
 
 			Result BuyShopItemPrepareCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) BuyShopItemPrepareCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -9298,35 +8743,29 @@ namespace SF
 			}; // size_t BuyShopItemPrepareCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InShopItemID )
 
 
-			MessageData* BuyShopItemPrepareCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InShopItemID )
+			Result BuyShopItemPrepareCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InShopItemID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InShopItemID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::BuyShopItemPrepareCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InShopItemID);
 
 				return hr;
-			}; // MessageData* BuyShopItemPrepareCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InShopItemID )
+			}; // Result BuyShopItemPrepareCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InShopItemID )
 
 			Result BuyShopItemPrepareCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -9340,7 +8779,7 @@ namespace SF
 			const MessageID BuyShopItemPrepareRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 53);
 			Result BuyShopItemPrepareRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -9362,7 +8801,7 @@ namespace SF
 
 			Result BuyShopItemPrepareRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				BuyShopItemPrepareRes parser;
@@ -9379,7 +8818,7 @@ namespace SF
 
 			Result BuyShopItemPrepareRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) BuyShopItemPrepareRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -9402,18 +8841,9 @@ namespace SF
 			}; // size_t BuyShopItemPrepareRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID )
 
 
-			MessageData* BuyShopItemPrepareRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID )
+			Result BuyShopItemPrepareRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -9422,10 +8852,13 @@ namespace SF
 					+ SerializedSizeOf(InPurchaseID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::BuyShopItemPrepareRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -9434,7 +8867,7 @@ namespace SF
 				protocolCheck(*output << InPurchaseID);
 
 				return hr;
-			}; // MessageData* BuyShopItemPrepareRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID )
+			}; // Result BuyShopItemPrepareRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID )
 
 			Result BuyShopItemPrepareRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -9449,7 +8882,7 @@ namespace SF
 			const MessageID BuyShopItemCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 54);
 			Result BuyShopItemCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -9478,7 +8911,7 @@ namespace SF
 
 			Result BuyShopItemCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				BuyShopItemCmd parser;
@@ -9497,7 +8930,7 @@ namespace SF
 
 			Result BuyShopItemCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) BuyShopItemCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -9522,18 +8955,9 @@ namespace SF
 			}; // size_t BuyShopItemCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken )
 
 
-			MessageData* BuyShopItemCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken )
+			Result BuyShopItemCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -9544,10 +8968,13 @@ namespace SF
 					+ SerializedSizeOf(InPurchaseToken)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::BuyShopItemCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -9558,7 +8985,7 @@ namespace SF
 				protocolCheck(*output << InPurchaseToken);
 
 				return hr;
-			}; // MessageData* BuyShopItemCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken )
+			}; // Result BuyShopItemCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken )
 
 			Result BuyShopItemCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -9572,7 +8999,7 @@ namespace SF
 			const MessageID BuyShopItemRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 54);
 			Result BuyShopItemRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -9592,7 +9019,7 @@ namespace SF
 
 			Result BuyShopItemRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				BuyShopItemRes parser;
@@ -9608,7 +9035,7 @@ namespace SF
 
 			Result BuyShopItemRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) BuyShopItemRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -9630,18 +9057,9 @@ namespace SF
 			}; // size_t BuyShopItemRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID )
 
 
-			MessageData* BuyShopItemRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID )
+			Result BuyShopItemRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -9649,10 +9067,13 @@ namespace SF
 					+ SerializedSizeOf(InShopItemID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::BuyShopItemRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -9660,7 +9081,7 @@ namespace SF
 				protocolCheck(*output << InShopItemID);
 
 				return hr;
-			}; // MessageData* BuyShopItemRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID )
+			}; // Result BuyShopItemRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID )
 
 			Result BuyShopItemRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -9675,7 +9096,7 @@ namespace SF
 			const MessageID CreateOrJoinChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 55);
 			Result CreateOrJoinChatChannelCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -9697,7 +9118,7 @@ namespace SF
 
 			Result CreateOrJoinChatChannelCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				CreateOrJoinChatChannelCmd parser;
@@ -9713,7 +9134,7 @@ namespace SF
 
 			Result CreateOrJoinChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) CreateOrJoinChatChannelCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -9735,18 +9156,9 @@ namespace SF
 			}; // size_t CreateOrJoinChatChannelCmd::CalculateMessageSize( const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
 
 
-			MessageData* CreateOrJoinChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
+			Result CreateOrJoinChatChannelCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -9754,10 +9166,13 @@ namespace SF
 					+ SerializedSizeOf(InPasscode)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreateOrJoinChatChannelCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -9765,7 +9180,7 @@ namespace SF
 				protocolCheck(*output << InPasscode);
 
 				return hr;
-			}; // MessageData* CreateOrJoinChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
+			}; // Result CreateOrJoinChatChannelCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
 
 			Result CreateOrJoinChatChannelCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -9779,7 +9194,7 @@ namespace SF
 			const MessageID CreateOrJoinChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 55);
 			Result CreateOrJoinChatChannelRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -9800,7 +9215,7 @@ namespace SF
 
 			Result CreateOrJoinChatChannelRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				CreateOrJoinChatChannelRes parser;
@@ -9817,7 +9232,7 @@ namespace SF
 
 			Result CreateOrJoinChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) CreateOrJoinChatChannelRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -9840,18 +9255,9 @@ namespace SF
 			}; // size_t CreateOrJoinChatChannelRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
 
 
-			MessageData* CreateOrJoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
+			Result CreateOrJoinChatChannelRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -9860,10 +9266,13 @@ namespace SF
 					+ SerializedSizeOf(InChannelLeaderID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreateOrJoinChatChannelRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -9872,7 +9281,7 @@ namespace SF
 				protocolCheck(*output << InChannelLeaderID);
 
 				return hr;
-			}; // MessageData* CreateOrJoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
+			}; // Result CreateOrJoinChatChannelRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
 
 			Result CreateOrJoinChatChannelRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -9887,7 +9296,7 @@ namespace SF
 			const MessageID JoinChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 56);
 			Result JoinChatChannelCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -9909,7 +9318,7 @@ namespace SF
 
 			Result JoinChatChannelCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				JoinChatChannelCmd parser;
@@ -9926,7 +9335,7 @@ namespace SF
 
 			Result JoinChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) JoinChatChannelCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -9949,18 +9358,9 @@ namespace SF
 			}; // size_t JoinChatChannelCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode )
 
 
-			MessageData* JoinChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode )
+			Result JoinChatChannelCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -9969,10 +9369,13 @@ namespace SF
 					+ SerializedSizeOf(InPasscode)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinChatChannelCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -9981,7 +9384,7 @@ namespace SF
 				protocolCheck(*output << InPasscode);
 
 				return hr;
-			}; // MessageData* JoinChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode )
+			}; // Result JoinChatChannelCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode )
 
 			Result JoinChatChannelCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -9995,7 +9398,7 @@ namespace SF
 			const MessageID JoinChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 56);
 			Result JoinChatChannelRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -10016,7 +9419,7 @@ namespace SF
 
 			Result JoinChatChannelRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				JoinChatChannelRes parser;
@@ -10033,7 +9436,7 @@ namespace SF
 
 			Result JoinChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) JoinChatChannelRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -10056,18 +9459,9 @@ namespace SF
 			}; // size_t JoinChatChannelRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
 
 
-			MessageData* JoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
+			Result JoinChatChannelRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -10076,10 +9470,13 @@ namespace SF
 					+ SerializedSizeOf(InChannelLeaderID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinChatChannelRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -10088,7 +9485,7 @@ namespace SF
 				protocolCheck(*output << InChannelLeaderID);
 
 				return hr;
-			}; // MessageData* JoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
+			}; // Result JoinChatChannelRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
 
 			Result JoinChatChannelRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -10103,7 +9500,7 @@ namespace SF
 			const MessageID ChatChannelPlayerJoinedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 57);
 			Result ChatChannelPlayerJoinedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -10122,7 +9519,7 @@ namespace SF
 
 			Result ChatChannelPlayerJoinedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				ChatChannelPlayerJoinedS2CEvt parser;
@@ -10137,7 +9534,7 @@ namespace SF
 
 			Result ChatChannelPlayerJoinedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelPlayerJoinedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -10158,35 +9555,29 @@ namespace SF
 			}; // size_t ChatChannelPlayerJoinedS2CEvt::CalculateMessageSize( const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer )
 
 
-			MessageData* ChatChannelPlayerJoinedS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer )
+			Result ChatChannelPlayerJoinedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InChatUID)
 					+ SerializedSizeOf(InJoinedPlayer)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelPlayerJoinedS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InChatUID);
 				protocolCheck(*output << InJoinedPlayer);
 
 				return hr;
-			}; // MessageData* ChatChannelPlayerJoinedS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer )
+			}; // Result ChatChannelPlayerJoinedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer )
 
 			Result ChatChannelPlayerJoinedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -10201,7 +9592,7 @@ namespace SF
 			const MessageID ChatChannelLeaderChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 58);
 			Result ChatChannelLeaderChangedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -10220,7 +9611,7 @@ namespace SF
 
 			Result ChatChannelLeaderChangedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				ChatChannelLeaderChangedS2CEvt parser;
@@ -10235,7 +9626,7 @@ namespace SF
 
 			Result ChatChannelLeaderChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelLeaderChangedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -10256,35 +9647,29 @@ namespace SF
 			}; // size_t ChatChannelLeaderChangedS2CEvt::CalculateMessageSize( const uint64_t &InChatUID, const AccountID &InNewLeaderID )
 
 
-			MessageData* ChatChannelLeaderChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const AccountID &InNewLeaderID )
+			Result ChatChannelLeaderChangedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InChatUID, const AccountID &InNewLeaderID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InChatUID)
 					+ SerializedSizeOf(InNewLeaderID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelLeaderChangedS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InChatUID);
 				protocolCheck(*output << InNewLeaderID);
 
 				return hr;
-			}; // MessageData* ChatChannelLeaderChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const AccountID &InNewLeaderID )
+			}; // Result ChatChannelLeaderChangedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InChatUID, const AccountID &InNewLeaderID )
 
 			Result ChatChannelLeaderChangedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -10299,7 +9684,7 @@ namespace SF
 			const MessageID LeaveChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 59);
 			Result LeaveChatChannelCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -10319,7 +9704,7 @@ namespace SF
 
 			Result LeaveChatChannelCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				LeaveChatChannelCmd parser;
@@ -10335,7 +9720,7 @@ namespace SF
 
 			Result LeaveChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) LeaveChatChannelCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -10357,18 +9742,9 @@ namespace SF
 			}; // size_t LeaveChatChannelCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID )
 
 
-			MessageData* LeaveChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID )
+			Result LeaveChatChannelCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -10376,10 +9752,13 @@ namespace SF
 					+ SerializedSizeOf(InPlayerID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::LeaveChatChannelCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -10387,7 +9766,7 @@ namespace SF
 				protocolCheck(*output << InPlayerID);
 
 				return hr;
-			}; // MessageData* LeaveChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID )
+			}; // Result LeaveChatChannelCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID )
 
 			Result LeaveChatChannelCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -10401,7 +9780,7 @@ namespace SF
 			const MessageID LeaveChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 59);
 			Result LeaveChatChannelRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -10420,7 +9799,7 @@ namespace SF
 
 			Result LeaveChatChannelRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				LeaveChatChannelRes parser;
@@ -10435,7 +9814,7 @@ namespace SF
 
 			Result LeaveChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) LeaveChatChannelRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -10456,35 +9835,29 @@ namespace SF
 			}; // size_t LeaveChatChannelRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* LeaveChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result LeaveChatChannelRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::LeaveChatChannelRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* LeaveChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result LeaveChatChannelRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result LeaveChatChannelRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -10499,7 +9872,7 @@ namespace SF
 			const MessageID ChatChannelPlayerLeftS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 60);
 			Result ChatChannelPlayerLeftS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -10518,7 +9891,7 @@ namespace SF
 
 			Result ChatChannelPlayerLeftS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				ChatChannelPlayerLeftS2CEvt parser;
@@ -10533,7 +9906,7 @@ namespace SF
 
 			Result ChatChannelPlayerLeftS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelPlayerLeftS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -10554,35 +9927,29 @@ namespace SF
 			}; // size_t ChatChannelPlayerLeftS2CEvt::CalculateMessageSize( const uint64_t &InChatUID, const AccountID &InLeftPlayerID )
 
 
-			MessageData* ChatChannelPlayerLeftS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const AccountID &InLeftPlayerID )
+			Result ChatChannelPlayerLeftS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InChatUID, const AccountID &InLeftPlayerID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InChatUID)
 					+ SerializedSizeOf(InLeftPlayerID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelPlayerLeftS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InChatUID);
 				protocolCheck(*output << InLeftPlayerID);
 
 				return hr;
-			}; // MessageData* ChatChannelPlayerLeftS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const AccountID &InLeftPlayerID )
+			}; // Result ChatChannelPlayerLeftS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InChatUID, const AccountID &InLeftPlayerID )
 
 			Result ChatChannelPlayerLeftS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -10597,7 +9964,7 @@ namespace SF
 			const MessageID ChatChannelKickPlayerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 61);
 			Result ChatChannelKickPlayerCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -10618,7 +9985,7 @@ namespace SF
 
 			Result ChatChannelKickPlayerCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				ChatChannelKickPlayerCmd parser;
@@ -10635,7 +10002,7 @@ namespace SF
 
 			Result ChatChannelKickPlayerCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelKickPlayerCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -10658,18 +10025,9 @@ namespace SF
 			}; // size_t ChatChannelKickPlayerCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 
 
-			MessageData* ChatChannelKickPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
+			Result ChatChannelKickPlayerCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -10678,10 +10036,13 @@ namespace SF
 					+ SerializedSizeOf(InPlayerToKick)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelKickPlayerCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -10690,7 +10051,7 @@ namespace SF
 				protocolCheck(*output << InPlayerToKick);
 
 				return hr;
-			}; // MessageData* ChatChannelKickPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
+			}; // Result ChatChannelKickPlayerCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 
 			Result ChatChannelKickPlayerCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -10704,7 +10065,7 @@ namespace SF
 			const MessageID ChatChannelKickPlayerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 61);
 			Result ChatChannelKickPlayerRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -10723,7 +10084,7 @@ namespace SF
 
 			Result ChatChannelKickPlayerRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				ChatChannelKickPlayerRes parser;
@@ -10738,7 +10099,7 @@ namespace SF
 
 			Result ChatChannelKickPlayerRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelKickPlayerRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -10759,35 +10120,29 @@ namespace SF
 			}; // size_t ChatChannelKickPlayerRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* ChatChannelKickPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result ChatChannelKickPlayerRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelKickPlayerRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* ChatChannelKickPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result ChatChannelKickPlayerRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result ChatChannelKickPlayerRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -10802,7 +10157,7 @@ namespace SF
 			const MessageID ChatChannelPlayerKickedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 62);
 			Result ChatChannelPlayerKickedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -10821,7 +10176,7 @@ namespace SF
 
 			Result ChatChannelPlayerKickedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				ChatChannelPlayerKickedS2CEvt parser;
@@ -10836,7 +10191,7 @@ namespace SF
 
 			Result ChatChannelPlayerKickedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelPlayerKickedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -10857,35 +10212,29 @@ namespace SF
 			}; // size_t ChatChannelPlayerKickedS2CEvt::CalculateMessageSize( const uint64_t &InChatUID, const AccountID &InKickedPlayerID )
 
 
-			MessageData* ChatChannelPlayerKickedS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const AccountID &InKickedPlayerID )
+			Result ChatChannelPlayerKickedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InChatUID, const AccountID &InKickedPlayerID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InChatUID)
 					+ SerializedSizeOf(InKickedPlayerID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelPlayerKickedS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InChatUID);
 				protocolCheck(*output << InKickedPlayerID);
 
 				return hr;
-			}; // MessageData* ChatChannelPlayerKickedS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const AccountID &InKickedPlayerID )
+			}; // Result ChatChannelPlayerKickedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InChatUID, const AccountID &InKickedPlayerID )
 
 			Result ChatChannelPlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -10910,7 +10259,7 @@ namespace SF
 			} // const VariableTable& ChatChannelChatMessageCmd::GetChatMetaData() const
 			Result ChatChannelChatMessageCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -10935,7 +10284,7 @@ namespace SF
 
 			Result ChatChannelChatMessageCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				ChatChannelChatMessageCmd parser;
@@ -10952,7 +10301,7 @@ namespace SF
 
 			Result ChatChannelChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelChatMessageCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -10988,25 +10337,19 @@ namespace SF
 				return __uiMessageSize;
 			}; // size_t ChatChannelChatMessageCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InChatUID, const VariableTable &InChatMetaData, const char* InChatMessage )
 
-			MessageData* ChatChannelChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
+			Result ChatChannelChatMessageCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InChatUID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InChatUID, InChatMetaData, InChatMessage);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelChatMessageCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -11015,20 +10358,11 @@ namespace SF
 				protocolCheck(*output << InChatMessage);
 
 				return hr;
-			}; // MessageData* ChatChannelChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
+			}; // Result ChatChannelChatMessageCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InChatUID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 
-			MessageData* ChatChannelChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const VariableTable &InChatMetaData, const char* InChatMessage )
+			Result ChatChannelChatMessageCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InChatUID, const VariableTable &InChatMetaData, const char* InChatMessage )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
@@ -11039,10 +10373,13 @@ namespace SF
 					+ SerializedSizeOf(InChatMessage)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelChatMessageCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -11052,7 +10389,7 @@ namespace SF
 				protocolCheck(*output << InChatMessage);
 
 				return hr;
-			}; // MessageData* ChatChannelChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const VariableTable &InChatMetaData, const char* InChatMessage )
+			}; // Result ChatChannelChatMessageCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InChatUID, const VariableTable &InChatMetaData, const char* InChatMessage )
 
 			Result ChatChannelChatMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -11066,7 +10403,7 @@ namespace SF
 			const MessageID ChatChannelChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 63);
 			Result ChatChannelChatMessageRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -11085,7 +10422,7 @@ namespace SF
 
 			Result ChatChannelChatMessageRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				ChatChannelChatMessageRes parser;
@@ -11100,7 +10437,7 @@ namespace SF
 
 			Result ChatChannelChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelChatMessageRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -11121,35 +10458,29 @@ namespace SF
 			}; // size_t ChatChannelChatMessageRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* ChatChannelChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result ChatChannelChatMessageRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelChatMessageRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* ChatChannelChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result ChatChannelChatMessageRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result ChatChannelChatMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -11174,7 +10505,7 @@ namespace SF
 			} // const VariableTable& ChatChannelChatMessageS2CEvt::GetChatMetaData() const
 			Result ChatChannelChatMessageS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -11198,7 +10529,7 @@ namespace SF
 
 			Result ChatChannelChatMessageS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				ChatChannelChatMessageS2CEvt parser;
@@ -11214,7 +10545,7 @@ namespace SF
 
 			Result ChatChannelChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelChatMessageS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -11248,25 +10579,19 @@ namespace SF
 				return __uiMessageSize;
 			}; // size_t ChatChannelChatMessageS2CEvt::CalculateMessageSize( const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
 
-			MessageData* ChatChannelChatMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
+			Result ChatChannelChatMessageS2CEvt::Create( MessageHeader* messageBuffer, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InSenderID, InChatMetaData, InChatMessage);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelChatMessageS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InSenderID);
@@ -11274,20 +10599,11 @@ namespace SF
 				protocolCheck(*output << InChatMessage);
 
 				return hr;
-			}; // MessageData* ChatChannelChatMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
+			}; // Result ChatChannelChatMessageS2CEvt::Create( MessageHeader* messageBuffer, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 
-			MessageData* ChatChannelChatMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
+			Result ChatChannelChatMessageS2CEvt::Create( MessageHeader* messageBuffer, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
@@ -11297,10 +10613,13 @@ namespace SF
 					+ SerializedSizeOf(InChatMessage)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelChatMessageS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InSenderID);
@@ -11309,7 +10628,7 @@ namespace SF
 				protocolCheck(*output << InChatMessage);
 
 				return hr;
-			}; // MessageData* ChatChannelChatMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
+			}; // Result ChatChannelChatMessageS2CEvt::Create( MessageHeader* messageBuffer, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
 
 			Result ChatChannelChatMessageS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -11334,7 +10653,7 @@ namespace SF
 			} // const VariableTable& WhisperMessageCmd::GetChatMetaData() const
 			Result WhisperMessageCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -11361,7 +10680,7 @@ namespace SF
 
 			Result WhisperMessageCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				WhisperMessageCmd parser;
@@ -11379,7 +10698,7 @@ namespace SF
 
 			Result WhisperMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) WhisperMessageCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -11417,25 +10736,19 @@ namespace SF
 				return __uiMessageSize;
 			}; // size_t WhisperMessageCmd::CalculateMessageSize( const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage )
 
-			MessageData* WhisperMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
+			Result WhisperMessageCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InReceiverID, InReceiverName, InChatMetaData, InChatMessage);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::WhisperMessageCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -11445,20 +10758,11 @@ namespace SF
 				protocolCheck(*output << InChatMessage);
 
 				return hr;
-			}; // MessageData* WhisperMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
+			}; // Result WhisperMessageCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 
-			MessageData* WhisperMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage )
+			Result WhisperMessageCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
@@ -11470,10 +10774,13 @@ namespace SF
 					+ SerializedSizeOf(InChatMessage)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::WhisperMessageCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -11484,7 +10791,7 @@ namespace SF
 				protocolCheck(*output << InChatMessage);
 
 				return hr;
-			}; // MessageData* WhisperMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage )
+			}; // Result WhisperMessageCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage )
 
 			Result WhisperMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -11498,7 +10805,7 @@ namespace SF
 			const MessageID WhisperMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 65);
 			Result WhisperMessageRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -11517,7 +10824,7 @@ namespace SF
 
 			Result WhisperMessageRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				WhisperMessageRes parser;
@@ -11532,7 +10839,7 @@ namespace SF
 
 			Result WhisperMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) WhisperMessageRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -11553,35 +10860,29 @@ namespace SF
 			}; // size_t WhisperMessageRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* WhisperMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result WhisperMessageRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::WhisperMessageRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* WhisperMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result WhisperMessageRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result WhisperMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -11606,7 +10907,7 @@ namespace SF
 			} // const VariableTable& WhisperMessageS2CEvt::GetChatMetaData() const
 			Result WhisperMessageS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -11630,7 +10931,7 @@ namespace SF
 
 			Result WhisperMessageS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				WhisperMessageS2CEvt parser;
@@ -11646,7 +10947,7 @@ namespace SF
 
 			Result WhisperMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) WhisperMessageS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -11680,25 +10981,19 @@ namespace SF
 				return __uiMessageSize;
 			}; // size_t WhisperMessageS2CEvt::CalculateMessageSize( const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
 
-			MessageData* WhisperMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
+			Result WhisperMessageS2CEvt::Create( MessageHeader* messageBuffer, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InSenderID, InChatMetaData, InChatMessage);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::WhisperMessageS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InSenderID);
@@ -11706,20 +11001,11 @@ namespace SF
 				protocolCheck(*output << InChatMessage);
 
 				return hr;
-			}; // MessageData* WhisperMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
+			}; // Result WhisperMessageS2CEvt::Create( MessageHeader* messageBuffer, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 
-			MessageData* WhisperMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
+			Result WhisperMessageS2CEvt::Create( MessageHeader* messageBuffer, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
@@ -11729,10 +11015,13 @@ namespace SF
 					+ SerializedSizeOf(InChatMessage)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::WhisperMessageS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InSenderID);
@@ -11741,7 +11030,7 @@ namespace SF
 				protocolCheck(*output << InChatMessage);
 
 				return hr;
-			}; // MessageData* WhisperMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
+			}; // Result WhisperMessageS2CEvt::Create( MessageHeader* messageBuffer, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
 
 			Result WhisperMessageS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -11776,7 +11065,7 @@ namespace SF
 			} // const VariableTable& CreateCharacterCmd::GetPrivateData() const
 			Result CreateCharacterCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -11804,7 +11093,7 @@ namespace SF
 
 			Result CreateCharacterCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				CreateCharacterCmd parser;
@@ -11821,7 +11110,7 @@ namespace SF
 
 			Result CreateCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) CreateCharacterCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -11860,25 +11149,19 @@ namespace SF
 				return __uiMessageSize;
 			}; // size_t CreateCharacterCmd::CalculateMessageSize( const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InPublicData, const VariableTable &InPrivateData )
 
-			MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InPrivateData )
+			Result CreateCharacterCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InPrivateData )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InCharacterName, InPublicData, InPrivateData);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreateCharacterCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -11887,20 +11170,11 @@ namespace SF
 				protocolCheck(*output << InPrivateData);
 
 				return hr;
-			}; // MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InPrivateData )
+			}; // Result CreateCharacterCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InPrivateData )
 
-			MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InPublicData, const VariableTable &InPrivateData )
+			Result CreateCharacterCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InPublicData, const VariableTable &InPrivateData )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint16_t serializedSizeOfInPublicData = static_cast<uint16_t>(SerializedSizeOf(InPublicData)); 
 				uint16_t serializedSizeOfInPrivateData = static_cast<uint16_t>(SerializedSizeOf(InPrivateData)); 
@@ -11913,10 +11187,13 @@ namespace SF
 					+ serializedSizeOfInPrivateData
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreateCharacterCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -11927,7 +11204,7 @@ namespace SF
 				protocolCheck(*output << InPrivateData);
 
 				return hr;
-			}; // MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InPublicData, const VariableTable &InPrivateData )
+			}; // Result CreateCharacterCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InPublicData, const VariableTable &InPrivateData )
 
 			Result CreateCharacterCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -11941,7 +11218,7 @@ namespace SF
 			const MessageID CreateCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 67);
 			Result CreateCharacterRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -11961,7 +11238,7 @@ namespace SF
 
 			Result CreateCharacterRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				CreateCharacterRes parser;
@@ -11977,7 +11254,7 @@ namespace SF
 
 			Result CreateCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) CreateCharacterRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -11999,18 +11276,9 @@ namespace SF
 			}; // size_t CreateCharacterRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID )
 
 
-			MessageData* CreateCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID )
+			Result CreateCharacterRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -12018,10 +11286,13 @@ namespace SF
 					+ SerializedSizeOf(InCharacterID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreateCharacterRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -12029,7 +11300,7 @@ namespace SF
 				protocolCheck(*output << InCharacterID);
 
 				return hr;
-			}; // MessageData* CreateCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID )
+			}; // Result CreateCharacterRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID )
 
 			Result CreateCharacterRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -12044,7 +11315,7 @@ namespace SF
 			const MessageID DeleteCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 68);
 			Result DeleteCharacterCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -12063,7 +11334,7 @@ namespace SF
 
 			Result DeleteCharacterCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				DeleteCharacterCmd parser;
@@ -12078,7 +11349,7 @@ namespace SF
 
 			Result DeleteCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) DeleteCharacterCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -12099,35 +11370,29 @@ namespace SF
 			}; // size_t DeleteCharacterCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 
 
-			MessageData* DeleteCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID )
+			Result DeleteCharacterCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InCharacterID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::DeleteCharacterCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InCharacterID);
 
 				return hr;
-			}; // MessageData* DeleteCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID )
+			}; // Result DeleteCharacterCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 
 			Result DeleteCharacterCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -12141,7 +11406,7 @@ namespace SF
 			const MessageID DeleteCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 68);
 			Result DeleteCharacterRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -12160,7 +11425,7 @@ namespace SF
 
 			Result DeleteCharacterRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				DeleteCharacterRes parser;
@@ -12175,7 +11440,7 @@ namespace SF
 
 			Result DeleteCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) DeleteCharacterRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -12196,35 +11461,29 @@ namespace SF
 			}; // size_t DeleteCharacterRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* DeleteCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result DeleteCharacterRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::DeleteCharacterRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* DeleteCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result DeleteCharacterRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result DeleteCharacterRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -12239,7 +11498,7 @@ namespace SF
 			const MessageID GetCharacterListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 69);
 			Result GetCharacterListCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -12257,7 +11516,7 @@ namespace SF
 
 			Result GetCharacterListCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GetCharacterListCmd parser;
@@ -12271,7 +11530,7 @@ namespace SF
 
 			Result GetCharacterListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterListCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -12291,33 +11550,27 @@ namespace SF
 			}; // size_t GetCharacterListCmd::CalculateMessageSize( const uint64_t &InTransactionID )
 
 
-			MessageData* GetCharacterListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
+			Result GetCharacterListCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterListCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 
 				return hr;
-			}; // MessageData* GetCharacterListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
+			}; // Result GetCharacterListCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID )
 
 			Result GetCharacterListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -12331,7 +11584,7 @@ namespace SF
 			const MessageID GetCharacterListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 69);
 			Result GetCharacterListRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -12351,7 +11604,7 @@ namespace SF
 
 			Result GetCharacterListRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GetCharacterListRes parser;
@@ -12367,7 +11620,7 @@ namespace SF
 
 			Result GetCharacterListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterListRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -12389,18 +11642,9 @@ namespace SF
 			}; // size_t GetCharacterListRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InCharacters )
 
 
-			MessageData* GetCharacterListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InCharacters )
+			Result GetCharacterListRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InCharacters )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -12408,10 +11652,13 @@ namespace SF
 					+ SerializedSizeOf(InCharacters)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterListRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -12419,7 +11666,7 @@ namespace SF
 				protocolCheck(*output << InCharacters);
 
 				return hr;
-			}; // MessageData* GetCharacterListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InCharacters )
+			}; // Result GetCharacterListRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InCharacters )
 
 			Result GetCharacterListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -12434,7 +11681,7 @@ namespace SF
 			const MessageID GetCharacterDataCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 70);
 			Result GetCharacterDataCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -12453,7 +11700,7 @@ namespace SF
 
 			Result GetCharacterDataCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GetCharacterDataCmd parser;
@@ -12468,7 +11715,7 @@ namespace SF
 
 			Result GetCharacterDataCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterDataCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -12489,35 +11736,29 @@ namespace SF
 			}; // size_t GetCharacterDataCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 
 
-			MessageData* GetCharacterDataCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID )
+			Result GetCharacterDataCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InCharacterID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterDataCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InCharacterID);
 
 				return hr;
-			}; // MessageData* GetCharacterDataCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID )
+			}; // Result GetCharacterDataCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 
 			Result GetCharacterDataCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -12551,7 +11792,7 @@ namespace SF
 			} // const VariableTable& GetCharacterDataRes::GetEquipData() const
 			Result GetCharacterDataRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -12578,7 +11819,7 @@ namespace SF
 
 			Result GetCharacterDataRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GetCharacterDataRes parser;
@@ -12595,7 +11836,7 @@ namespace SF
 
 			Result GetCharacterDataRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterDataRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -12634,25 +11875,19 @@ namespace SF
 				return __uiMessageSize;
 			}; // size_t GetCharacterDataRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InPrivateData, const VariableTable &InEquipData )
 
-			MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InPrivateData, const Array<uint8_t>& InEquipData )
+			Result GetCharacterDataRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InPrivateData, const Array<uint8_t>& InEquipData )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InResult, InPrivateData, InEquipData);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterDataRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -12661,20 +11896,11 @@ namespace SF
 				protocolCheck(*output << InEquipData);
 
 				return hr;
-			}; // MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InPrivateData, const Array<uint8_t>& InEquipData )
+			}; // Result GetCharacterDataRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InPrivateData, const Array<uint8_t>& InEquipData )
 
-			MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InPrivateData, const VariableTable &InEquipData )
+			Result GetCharacterDataRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InPrivateData, const VariableTable &InEquipData )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint16_t serializedSizeOfInPrivateData = static_cast<uint16_t>(SerializedSizeOf(InPrivateData)); 
 				uint16_t serializedSizeOfInEquipData = static_cast<uint16_t>(SerializedSizeOf(InEquipData)); 
@@ -12687,10 +11913,13 @@ namespace SF
 					+ serializedSizeOfInEquipData
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterDataRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -12701,7 +11930,7 @@ namespace SF
 				protocolCheck(*output << InEquipData);
 
 				return hr;
-			}; // MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InPrivateData, const VariableTable &InEquipData )
+			}; // Result GetCharacterDataRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InPrivateData, const VariableTable &InEquipData )
 
 			Result GetCharacterDataRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -12716,7 +11945,7 @@ namespace SF
 			const MessageID SelectCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 71);
 			Result SelectCharacterCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -12735,7 +11964,7 @@ namespace SF
 
 			Result SelectCharacterCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				SelectCharacterCmd parser;
@@ -12750,7 +11979,7 @@ namespace SF
 
 			Result SelectCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) SelectCharacterCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -12771,35 +12000,29 @@ namespace SF
 			}; // size_t SelectCharacterCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 
 
-			MessageData* SelectCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID )
+			Result SelectCharacterCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InCharacterID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SelectCharacterCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InCharacterID);
 
 				return hr;
-			}; // MessageData* SelectCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID )
+			}; // Result SelectCharacterCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 
 			Result SelectCharacterCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -12823,7 +12046,7 @@ namespace SF
 			} // const VariableTable& SelectCharacterRes::GetAttributes() const
 			Result SelectCharacterRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -12847,7 +12070,7 @@ namespace SF
 
 			Result SelectCharacterRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				SelectCharacterRes parser;
@@ -12864,7 +12087,7 @@ namespace SF
 
 			Result SelectCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) SelectCharacterRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -12900,25 +12123,19 @@ namespace SF
 				return __uiMessageSize;
 			}; // size_t SelectCharacterRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const VariableTable &InAttributes )
 
-			MessageData* SelectCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const Array<uint8_t>& InAttributes )
+			Result SelectCharacterRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const Array<uint8_t>& InAttributes )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InResult, InCharacterID, InAttributes);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SelectCharacterRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -12927,20 +12144,11 @@ namespace SF
 				protocolCheck(*output << InAttributes);
 
 				return hr;
-			}; // MessageData* SelectCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const Array<uint8_t>& InAttributes )
+			}; // Result SelectCharacterRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const Array<uint8_t>& InAttributes )
 
-			MessageData* SelectCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const VariableTable &InAttributes )
+			Result SelectCharacterRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const VariableTable &InAttributes )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
@@ -12951,10 +12159,13 @@ namespace SF
 					+ serializedSizeOfInAttributes
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SelectCharacterRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -12964,7 +12175,7 @@ namespace SF
 				protocolCheck(*output << InAttributes);
 
 				return hr;
-			}; // MessageData* SelectCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const VariableTable &InAttributes )
+			}; // Result SelectCharacterRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const VariableTable &InAttributes )
 
 			Result SelectCharacterRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -12979,7 +12190,7 @@ namespace SF
 			const MessageID RequestServerNoticeUpdateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 72);
 			Result RequestServerNoticeUpdateCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -12997,7 +12208,7 @@ namespace SF
 
 			Result RequestServerNoticeUpdateCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				RequestServerNoticeUpdateCmd parser;
@@ -13011,7 +12222,7 @@ namespace SF
 
 			Result RequestServerNoticeUpdateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) RequestServerNoticeUpdateCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -13031,33 +12242,27 @@ namespace SF
 			}; // size_t RequestServerNoticeUpdateCmd::CalculateMessageSize( const uint64_t &InTransactionID )
 
 
-			MessageData* RequestServerNoticeUpdateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
+			Result RequestServerNoticeUpdateCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RequestServerNoticeUpdateCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 
 				return hr;
-			}; // MessageData* RequestServerNoticeUpdateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
+			}; // Result RequestServerNoticeUpdateCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID )
 
 			Result RequestServerNoticeUpdateCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -13071,7 +12276,7 @@ namespace SF
 			const MessageID RequestServerNoticeUpdateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 72);
 			Result RequestServerNoticeUpdateRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -13090,7 +12295,7 @@ namespace SF
 
 			Result RequestServerNoticeUpdateRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				RequestServerNoticeUpdateRes parser;
@@ -13105,7 +12310,7 @@ namespace SF
 
 			Result RequestServerNoticeUpdateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) RequestServerNoticeUpdateRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -13126,35 +12331,29 @@ namespace SF
 			}; // size_t RequestServerNoticeUpdateRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* RequestServerNoticeUpdateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			Result RequestServerNoticeUpdateRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RequestServerNoticeUpdateRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* RequestServerNoticeUpdateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result RequestServerNoticeUpdateRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result RequestServerNoticeUpdateRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -13169,7 +12368,7 @@ namespace SF
 			const MessageID ServerNoticeS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 73);
 			Result ServerNoticeS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -13189,7 +12388,7 @@ namespace SF
 
 			Result ServerNoticeS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				ServerNoticeS2CEvt parser;
@@ -13204,7 +12403,7 @@ namespace SF
 
 			Result ServerNoticeS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) ServerNoticeS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -13225,35 +12424,29 @@ namespace SF
 			}; // size_t ServerNoticeS2CEvt::CalculateMessageSize( const int8_t &InNoticeCategory, const char* InServerNoticeMessage )
 
 
-			MessageData* ServerNoticeS2CEvt::Create( IHeap& memHeap, const int8_t &InNoticeCategory, const char* InServerNoticeMessage )
+			Result ServerNoticeS2CEvt::Create( MessageHeader* messageBuffer, const int8_t &InNoticeCategory, const char* InServerNoticeMessage )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InNoticeCategory)
 					+ SerializedSizeOf(InServerNoticeMessage)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ServerNoticeS2CEvt::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InNoticeCategory);
 				protocolCheck(*output << InServerNoticeMessage);
 
 				return hr;
-			}; // MessageData* ServerNoticeS2CEvt::Create( IHeap& memHeap, const int8_t &InNoticeCategory, const char* InServerNoticeMessage )
+			}; // Result ServerNoticeS2CEvt::Create( MessageHeader* messageBuffer, const int8_t &InNoticeCategory, const char* InServerNoticeMessage )
 
 			Result ServerNoticeS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -13278,7 +12471,7 @@ namespace SF
 			} // const VariableTable& CallFunctionCmd::GetParameters() const
 			Result CallFunctionCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -13301,7 +12494,7 @@ namespace SF
 
 			Result CallFunctionCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				CallFunctionCmd parser;
@@ -13317,7 +12510,7 @@ namespace SF
 
 			Result CallFunctionCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) CallFunctionCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -13351,25 +12544,19 @@ namespace SF
 				return __uiMessageSize;
 			}; // size_t CallFunctionCmd::CalculateMessageSize( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters )
 
-			MessageData* CallFunctionCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const Array<uint8_t>& InParameters )
+			Result CallFunctionCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const Array<uint8_t>& InParameters )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InFunctionName, InParameters);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CallFunctionCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -13377,20 +12564,11 @@ namespace SF
 				protocolCheck(*output << InParameters);
 
 				return hr;
-			}; // MessageData* CallFunctionCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const Array<uint8_t>& InParameters )
+			}; // Result CallFunctionCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const Array<uint8_t>& InParameters )
 
-			MessageData* CallFunctionCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters )
+			Result CallFunctionCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint16_t serializedSizeOfInParameters = static_cast<uint16_t>(SerializedSizeOf(InParameters)); 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
@@ -13400,10 +12578,13 @@ namespace SF
 					+ serializedSizeOfInParameters
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CallFunctionCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -13412,7 +12593,7 @@ namespace SF
 				protocolCheck(*output << InParameters);
 
 				return hr;
-			}; // MessageData* CallFunctionCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters )
+			}; // Result CallFunctionCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters )
 
 			Result CallFunctionCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -13436,7 +12617,7 @@ namespace SF
 			} // const VariableTable& CallFunctionRes::GetResults() const
 			Result CallFunctionRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -13459,7 +12640,7 @@ namespace SF
 
 			Result CallFunctionRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				CallFunctionRes parser;
@@ -13475,7 +12656,7 @@ namespace SF
 
 			Result CallFunctionRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) CallFunctionRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -13509,25 +12690,19 @@ namespace SF
 				return __uiMessageSize;
 			}; // size_t CallFunctionRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults )
 
-			MessageData* CallFunctionRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults )
+			Result CallFunctionRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InResult, InResults);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CallFunctionRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -13535,20 +12710,11 @@ namespace SF
 				protocolCheck(*output << InResults);
 
 				return hr;
-			}; // MessageData* CallFunctionRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults )
+			}; // Result CallFunctionRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults )
 
-			MessageData* CallFunctionRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults )
+			Result CallFunctionRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				uint16_t serializedSizeOfInResults = static_cast<uint16_t>(SerializedSizeOf(InResults)); 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
@@ -13558,10 +12724,13 @@ namespace SF
 					+ serializedSizeOfInResults
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CallFunctionRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
@@ -13570,7 +12739,7 @@ namespace SF
 				protocolCheck(*output << InResults);
 
 				return hr;
-			}; // MessageData* CallFunctionRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults )
+			}; // Result CallFunctionRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults )
 
 			Result CallFunctionRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{

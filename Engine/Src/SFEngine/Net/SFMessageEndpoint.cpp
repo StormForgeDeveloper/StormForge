@@ -68,16 +68,6 @@ namespace SF {
 		return m_EndpointAddress.MessageServer == messageEndpoint.MessageServer && m_EndpointAddress.Channel == messageEndpoint.Channel;
 	}
 
-	Result MessageEndpointStreamDB::Send(const SharedPointerT<MessageData>& messageData)
-	{
-        if (!messageData.IsValid())
-        {
-            return ResultCode::INVALID_POINTER;
-        }
-
-        return SendMsg(messageData->GetMessageHeader());
-	}
-
     Result MessageEndpointStreamDB::SendMsg(const MessageHeader* messageData)
     {
         if (m_TargetEndpoint == nullptr)

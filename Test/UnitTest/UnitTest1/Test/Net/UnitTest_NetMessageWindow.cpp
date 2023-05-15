@@ -34,7 +34,8 @@ const uint32_t TEST_COUNT = 4000 * TestScale;
 
 MessageDataPtr NewMessage(IHeap& memoryManager, uint32_t sequenceID)
 {
-	MessageData* pResult = Message::Login::LoginCmd::Create(memoryManager, 0, StringCrc32("Conspiracy"), "11", "11");
+    MessageData* pResult = MessageData::NewMessage(memoryManager, Message::Login::LoginCmd::MID, 2048);
+    Message::Login::LoginCmd::Create(pResult->GetMessageHeader(), 0, StringCrc32("Conspiracy"), "11", "11");
 	pResult->AssignSequence(sequenceID);
 
 	return MessageDataPtr(pResult);
@@ -42,7 +43,8 @@ MessageDataPtr NewMessage(IHeap& memoryManager, uint32_t sequenceID)
 
 MessageDataPtr NewMessage(IHeap& memoryManager)
 {
-	MessageData* pResult = Message::Login::LoginCmd::Create(memoryManager, 0, StringCrc32("Conspiracy"), "11", "11");
+    MessageData* pResult = MessageData::NewMessage(memoryManager, Message::Login::LoginCmd::MID, 2048);
+    Message::Login::LoginCmd::Create(pResult->GetMessageHeader(), 0, StringCrc32("Conspiracy"), "11", "11");
 
 	return MessageDataPtr(pResult);
 }

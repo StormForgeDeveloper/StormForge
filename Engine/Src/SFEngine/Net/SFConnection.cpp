@@ -67,17 +67,6 @@ namespace SF {
 			return messageEndpoint.Channel == portString && messageEndpoint.MessageServer == netAddress.Address;
 		}
 
-		Result MessageEndpointConnection::Send(const SharedPointerT<MessageData>& messageData)
-		{
-			auto pConnection = m_pConnection.AsSharedPtr<Connection>();
-			if (pConnection != nullptr)
-			{
-				return pConnection->Send(messageData);
-			}
-
-			return ResultCode::INVALID_STATE;
-		}
-
         Result MessageEndpointConnection::SendMsg(const MessageHeader* messageData)
         {
             auto pConnection = m_pConnection.AsSharedPtr<Connection>();
@@ -88,7 +77,6 @@ namespace SF {
 
             return ResultCode::INVALID_STATE;
         }
-
 
 
 		////////////////////////////////////////////////////////////////////////////////

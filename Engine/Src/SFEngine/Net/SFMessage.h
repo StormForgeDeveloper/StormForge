@@ -272,6 +272,8 @@ namespace SF {
     } // Message
 } // SF
 
-
-
+#define SFNET_ALLOC_MESSAGE_FROM_STACK(messageBufferVar, messageSize) \
+		MessageHeader* messageBufferVar = reinterpret_cast<MessageHeader*>(alloca(messageSize));\
+        memset(messageBufferVar, 0, sizeof(MessageHeader)); \
+        messageBufferVar->Length = messageSize;
 

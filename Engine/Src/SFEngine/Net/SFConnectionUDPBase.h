@@ -148,7 +148,6 @@ namespace Net {
 		virtual Result Disconnect(const char* reason) override;
 
 		// Send message to connected entity
-		virtual Result Send(const SharedPointerT<MessageData> &pMsg ) override;
         virtual Result SendMsg(const MessageHeader* pMsg) override;
         Result SendRaw(const MessageHeader* pMsg);
 

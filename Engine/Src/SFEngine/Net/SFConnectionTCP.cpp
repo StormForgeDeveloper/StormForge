@@ -482,7 +482,6 @@ namespace Net {
 	Result ConnectionTCP::OnRecv( uint uiBuffSize, uint8_t* pBuff )
 	{
 		Result hr = ResultCode::SUCCESS;
-		SharedPointerT<MessageData> pMsg;
 
 		if( uiBuffSize == 0 )
 		{
@@ -528,7 +527,6 @@ namespace Net {
 				}
 
 				hr = OnRecv(pMsgHdr);
-				pMsg = nullptr;
 				netCheck( hr );
 
 				uiBuffSize -= pMsgHdr->Length;
@@ -721,60 +719,6 @@ namespace Net {
 
         return hr;
     }
-
-	// Send message to connected entity
-	Result ConnectionTCP::Send(const SharedPointerT<MessageData> &pMsg )
-	{
-		MessageID msgID;
-        ScopeContext hr([this, &msgID](Result hr)
-            {
-                if (hr)
-                {
-                    if (msgID.IDs.Type == MSGTYPE_NETCONTROL)
-                    {
-                        SFLog(Net, Debug6, "TCP Ctrl CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
-                    }
-                    else
-                    {
-                        SFLog(Net, Debug5, "TCP Send CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
-                    }
-                }
-            });
-
-		if (GetConnectionState() == ConnectionState::DISCONNECTED)
-			return hr = ResultCode::IO_NOT_CONNECTED;
-
-		MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
-		msgID = pMsgHeader->msgID;
-
-		if ((pMsgHeader->msgID.IDs.Type != MSGTYPE_NETCONTROL && GetConnectionState() == ConnectionState::DISCONNECTING)
-			|| GetConnectionState() == ConnectionState::DISCONNECTED)
-		{
-			// Send fail by connection closed
-            return hr;
-		}
-
-		if( pMsg->GetMessageSize() > (uint)Const::INTER_PACKET_SIZE_MAX )
-		{
-			netCheck( ResultCode::IO_BADPACKET_TOOBIG );
-		}
-
-		Protocol::PrintDebugMessage("Send", pMsgHeader);
-
-        // TODO: traffic control has been lost. fix it
-		//if( !pMsgHeader->msgID.IDs.Reliability
-		//	&& (m_lGuarantedSent - m_lGuarantedAck) > Const::GUARANT_PENDING_MAX)
-		//{
-		//	// Drop if there are too many reliable packets
-  //          netCheck( ResultCode::IO_SEND_FAIL );
-		//}
-
-		//m_lGuarantedSent.fetch_add(1, std::memory_order_relaxed);
-
-        netCheck(SendRaw(pMsg->GetMessageHeader()));
-
-		return hr;
-	}
 
     Result ConnectionTCP::SendMsg(const MessageHeader* pMsgHeader)
     {

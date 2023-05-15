@@ -205,9 +205,9 @@ namespace ProtocolCompiler
         {
             string param = ParamInString(parameter, bUseOriginalType);
             if (param.Length > 0)
-                return "IHeap& memHeap, " + param;
+                return "MessageHeader* messageBuffer, " + param;
             else
-                return "IHeap& memHeap";
+                return "MessageHeader* messageBuffer";
         }
 
         // Make message ID macro string 
@@ -386,10 +386,10 @@ namespace ProtocolCompiler
             }
 
             // Build function
-            MatchIndent(); OutStream.WriteLine("static MessageData* Create( {0} );", BuilderParamString(parameters));
+            MatchIndent(); OutStream.WriteLine("static Result Create( {0} );", BuilderParamString(parameters));
             if (bHasInternalTypeOverride)
             {
-                MatchIndent(); OutStream.WriteLine("static MessageData* Create( {0} );", BuilderParamString(parameters, bUseOriginalType:true));
+                MatchIndent(); OutStream.WriteLine("static Result Create( {0} );", BuilderParamString(parameters, bUseOriginalType:true));
             }
             NewLine();
 
@@ -889,18 +889,18 @@ namespace ProtocolCompiler
 
             string strClassName = MsgClassName(Name, typeName);
             bool bHasParameters = parameters != null && parameters.Length > 0;
-            OpenSection("MessageData*", strClassName + string.Format("::Create( {0} )", BuilderParamString(parameters, bUseOriginalType: bUseOriginalType)));
+            OpenSection("Result", strClassName + string.Format("::Create( {0} )", BuilderParamString(parameters, bUseOriginalType: bUseOriginalType)));
 
-            MatchIndent(); OutStream.WriteLine("MessageData *pNewMsg = nullptr;");
+            MatchIndent(); OutStream.WriteLine("Result hr;");
 
-            OpenSection("ScopeContext", "hr([&pNewMsg](Result hr) -> MessageData*");
-            MatchIndent(); OutStream.WriteLine("if(!hr && pNewMsg != nullptr)");
-                OpenSection();
-                MatchIndent(); OutStream.WriteLine("IHeap::Delete(pNewMsg);");
-            MatchIndent(); OutStream.WriteLine("return nullptr;");
-            CloseSection();
-            MatchIndent(); OutStream.WriteLine("return pNewMsg;");
-            CloseSection("});");
+            //OpenSection("ScopeContext", "hr([&](Result hr) -> MessageData*");
+            //MatchIndent(); OutStream.WriteLine("if(!hr && pNewMsg != nullptr)");
+            //    OpenSection();
+            //    MatchIndent(); OutStream.WriteLine("IHeap::Delete(pNewMsg);");
+            //MatchIndent(); OutStream.WriteLine("return nullptr;");
+            //CloseSection();
+            //MatchIndent(); OutStream.WriteLine("return pNewMsg;");
+            //CloseSection("});");
 
             NewLine();
 
@@ -940,13 +940,16 @@ namespace ProtocolCompiler
                 NewLine();
             }
 
-            MatchIndent(); OutStream.WriteLine("protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, {0}::{1}{2}::MID, __uiMessageSize ) );", Group.Name, Name, typeName);
+            MatchIndent(); OutStream.WriteLine("if (messageBuffer->Length < __uiMessageSize)");
+            MatchIndent(1); OutStream.WriteLine("return ResultCode::UNEXPECTED;");
+            MatchIndent(); OutStream.WriteLine("else");
+            MatchIndent(1); OutStream.WriteLine("messageBuffer->Length = __uiMessageSize;");
+            NewLine();
 
             if (bHasParameters)
             {
-                MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());");
-                MatchIndent(); OutStream.WriteLine("BufferView.resize(0);");
-                MatchIndent(); OutStream.WriteLine("OutputMemoryStream outputStream(BufferView);");
+                MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));");
+                MatchIndent(); OutStream.WriteLine("OutputMemoryStream outputStream(payloadView);");
                 MatchIndent(); OutStream.WriteLine("IOutputStream* output = outputStream.ToOutputStream();");
                 NewLine();
 

@@ -87,7 +87,7 @@ namespace Net {
 
 		const NetAddress& GetLocalAddress() const { return m_LocalAddress; }
 
-		Result SendMsg(const sockaddr_storage& dest, SharedPointerT<MessageData>& pMsg);
+		Result SendMsg(const sockaddr_storage& dest, MessageHeader* pMsg);
 
 		// called when incoming message occur
 		Result OnRecv(const sockaddr_storage& remoteAddr, uint uiBuffSize, uint8_t* pBuff);

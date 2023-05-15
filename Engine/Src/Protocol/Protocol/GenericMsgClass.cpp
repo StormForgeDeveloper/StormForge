@@ -29,7 +29,7 @@ namespace SF
 			const MessageID GenericFailureCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GENERIC, 0);
 			Result GenericFailureCmd::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -48,7 +48,7 @@ namespace SF
 
 			Result GenericFailureCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GenericFailureCmd parser;
@@ -63,7 +63,7 @@ namespace SF
 
 			Result GenericFailureCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GenericFailureCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -84,35 +84,29 @@ namespace SF
 			}; // size_t GenericFailureCmd::CalculateMessageSize( const RouteContext &InRouteContext, const uint64_t &InTransactionID )
 
 
-			MessageData* GenericFailureCmd::Create( IHeap& memHeap, const RouteContext &InRouteContext, const uint64_t &InTransactionID )
+			Result GenericFailureCmd::Create( MessageHeader* messageBuffer, const RouteContext &InRouteContext, const uint64_t &InTransactionID )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InRouteContext)
 					+ SerializedSizeOf(InTransactionID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Generic::GenericFailureCmd::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InRouteContext);
 				protocolCheck(*output << InTransactionID);
 
 				return hr;
-			}; // MessageData* GenericFailureCmd::Create( IHeap& memHeap, const RouteContext &InRouteContext, const uint64_t &InTransactionID )
+			}; // Result GenericFailureCmd::Create( MessageHeader* messageBuffer, const RouteContext &InRouteContext, const uint64_t &InTransactionID )
 
 			Result GenericFailureCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -126,7 +120,7 @@ namespace SF
 			const MessageID GenericFailureRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GENERIC, 0);
 			Result GenericFailureRes::ParseMessage(const MessageHeader* pHeader)
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				protocolCheckPtr(pHeader);
@@ -146,7 +140,7 @@ namespace SF
 
 			Result GenericFailureRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 
 				GenericFailureRes parser;
@@ -162,7 +156,7 @@ namespace SF
 
 			Result GenericFailureRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
- 				ScopeContext hr;
+ 				Result hr;
 
 				protocolCheckMem(pMessageBase = new(memHeap) GenericFailureRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
@@ -184,18 +178,9 @@ namespace SF
 			}; // size_t GenericFailureRes::CalculateMessageSize( const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult )
 
 
-			MessageData* GenericFailureRes::Create( IHeap& memHeap, const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult )
+			Result GenericFailureRes::Create( MessageHeader* messageBuffer, const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult )
 			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
+ 				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InRouteContext)
@@ -203,10 +188,13 @@ namespace SF
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Generic::GenericFailureRes::MID, __uiMessageSize ) );
-				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
-				BufferView.resize(0);
-				OutputMemoryStream outputStream(BufferView);
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InRouteContext);
@@ -214,7 +202,7 @@ namespace SF
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* GenericFailureRes::Create( IHeap& memHeap, const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result GenericFailureRes::Create( MessageHeader* messageBuffer, const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult )
 
 			Result GenericFailureRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{

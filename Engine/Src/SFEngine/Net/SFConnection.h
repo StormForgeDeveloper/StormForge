@@ -168,9 +168,6 @@ namespace Net {
 		void AddStateAction(ConnectionState state, ConnectionAction* action);
 		void RemoveStateAction(ConnectionState state, ConnectionAction* action);
 
-		// Only CONNECTED state is supported
-		void SetStateTimeout(ConnectionState state, DurationMS timeout);
-
 	public:
 
 		// Constructor
@@ -375,7 +372,6 @@ namespace Net {
 		virtual Result InitConnection(const PeerInfo &local, const PeerInfo &remote);
 
 		// Send message to connected entity
-		virtual Result Send(const SharedPointerT<MessageData> &pMsg) = 0;
         virtual Result SendMsg(const MessageHeader* pMsg) = 0;
         virtual Result SendCollection(const MessageCollection* pCollection);
 
@@ -430,7 +426,6 @@ namespace Net {
 		}
 
 		virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) override;
-		virtual Result Send(const SharedPointerT<MessageData>& messageData) override;
         virtual Result SendMsg(const MessageHeader* messageData) override;
     };
 

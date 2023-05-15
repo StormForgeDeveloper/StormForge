@@ -45,7 +45,6 @@ namespace SF {
 		virtual Result Terminate();
 
 		virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) override;
-		virtual Result Send(const SharedPointerT<MessageData>& messageData) override;
         virtual Result SendMsg(const MessageHeader* messageData) override;
 	};
 

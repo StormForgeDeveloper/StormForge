@@ -57,7 +57,7 @@ namespace ProtocolCompiler
         {
             OutStream.WriteLine("////////////////////////////////////////////////////////////////////////////////");
             OutStream.WriteLine("// ");
-            OutStream.WriteLine("// CopyRight (c) 2017 StromForge");
+            OutStream.WriteLine("// CopyRight (c) StromForge");
             OutStream.WriteLine("// ");
             OutStream.WriteLine("// Author : Generated");
             OutStream.WriteLine("// ");
@@ -80,7 +80,7 @@ namespace ProtocolCompiler
         {
             OutStream.WriteLine("////////////////////////////////////////////////////////////////////////////////");
             OutStream.WriteLine("// ");
-            OutStream.WriteLine("// CopyRight (c) 2017 StromForge");
+            OutStream.WriteLine("// CopyRight (c) StromForge");
             OutStream.WriteLine("// ");
             OutStream.WriteLine("// Author : Generated");
             OutStream.WriteLine("// ");
@@ -114,11 +114,7 @@ namespace ProtocolCompiler
         {
             Name = "_sizeof",
             TypeName = "uint16",
-            //IsArray = false,
-            //IsArraySpecified = false,
         };
-
-
 
         string ParamInStringNative(Parameter[] parameter)
         {
@@ -425,9 +421,12 @@ namespace ProtocolCompiler
             if (parameter == null)
                 return strParams.ToString();
 
+            bool bFirst = true;
             foreach (Parameter param in parameter)
             {
-                strParams.Append(strComma);
+                if (!bFirst)
+                    strParams.Append(strComma);
+                bFirst = false;
 
                 string paramElementTypeName = SystemTypeInfo.ElementTypeNameFor(from, param);
                 string paramTypeNameOnly = SystemTypeInfo.TypeNameOnlyFor(from, param);
@@ -568,7 +567,7 @@ namespace ProtocolCompiler
         {
 
             ParameterMode = TypeUsage.CPP;
-            string createParamString = "pConnection->GetHeap()";
+            string createParamString = "";
             if (parameters.Length > 0)
                 createParamString += CallCreateNativeParameterString(TypeUsage.CPPForSharp, "", parameters);
 
@@ -584,10 +583,12 @@ namespace ProtocolCompiler
 
             PrepareSendFunctionParametersCPP("", parameters);
 
-            MatchIndent(); OutStream.WriteLine("MessageDataPtr pMessage = SF::Message::{0}::{1}{2}::Create({3});", Group.Name, baseMsg.Name, msgTypeName, createParamString);
-            MatchIndent(); OutStream.WriteLine("if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;");
-            MatchIndent(); OutStream.WriteLine("auto res = pConnection->Send(pMessage);");
-            MatchIndent(); OutStream.WriteLine("return (uint32_t)res;");
+            MatchIndent(); OutStream.WriteLine($"size_t messageSize = SF::Message::{Group.Name}::{baseMsg.Name}{msgTypeName}::CalculateMessageSize({createParamString});");
+            MatchIndent(); OutStream.WriteLine("SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);");
+            string combineString = parameters.Length > 0 ? ", " : "";
+            MatchIndent(); OutStream.WriteLine($"Result hr = SF::Message::{Group.Name}::{baseMsg.Name}{msgTypeName}::Create(pMessage{combineString}{createParamString});");
+            MatchIndent(); OutStream.WriteLine("if (hr) hr = pConnection->SendMsg(pMessage);");
+            MatchIndent(); OutStream.WriteLine("return (uint32_t)hr;");
 
             CloseSection();
 

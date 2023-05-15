@@ -316,7 +316,7 @@ namespace ProtocolCompiler
         public void DefaultHRESULT()
         {
             MatchIndent();
-            OutStream.WriteLine("ScopeContext hr;");
+            OutStream.WriteLine("Result hr;");
         }
 
         public void ReturnHR()

@@ -25,15 +25,14 @@ namespace SF
  	// Cmd: Generic failure message
 	Result NetPolicyGeneric::GenericFailureCmd( const RouteContext &InRouteContext, const uint64_t &InTransactionID )
 	{
- 		ScopeContext hr;
+ 		Result hr;
 
-		 MessageDataPtr pMessage;
-		 protocolCheckPtr(m_Endpoint);
+		size_t messageSize = SF::Message::Generic::GenericFailureCmd::CalculateMessageSize(InRouteContext, InTransactionID);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Generic::GenericFailureCmd::Create(GetSystemHeap(), InRouteContext, InTransactionID);
-		 protocolCheckPtr(*pMessage);
-
-		 return m_Endpoint->Send( pMessage );
+		protocolCheck(SF::Message::Generic::GenericFailureCmd::Create(messageBuffer, InRouteContext, InTransactionID));
+		return m_Endpoint->SendMsg(messageBuffer);
 
 	}; // Result NetPolicyGeneric::GenericFailureCmd( const RouteContext &InRouteContext, const uint64_t &InTransactionID )
 
@@ -41,15 +40,14 @@ namespace SF
 	// Cmd: Generic failure message
 	Result NetSvrPolicyGeneric::GenericFailureRes( const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult )
 	{
- 		ScopeContext hr;
+ 		Result hr;
 
-		 MessageDataPtr pMessage;
-		 protocolCheckPtr(m_Endpoint);
+		size_t messageSize = SF::Message::Generic::GenericFailureRes::CalculateMessageSize(InRouteContext, InTransactionID, InResult);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Generic::GenericFailureRes::Create(GetSystemHeap(), InRouteContext, InTransactionID, InResult);
-		 protocolCheckPtr(*pMessage);
-
-		 return m_Endpoint->Send( pMessage );
+		protocolCheck(SF::Message::Generic::GenericFailureRes::Create(messageBuffer, InRouteContext, InTransactionID, InResult));
+		return m_Endpoint->SendMsg(messageBuffer);
 
 	}; // Result NetSvrPolicyGeneric::GenericFailureRes( const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult )
 

@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2017 StromForge
+// CopyRight (c) StromForge
 // 
 // Author : Generated
 // 
@@ -24,10 +24,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginCmd( intptr_t InNativeConnectionHandl
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::LoginCmd::Create(pConnection->GetHeap(), InTransactionID, InGameID,InID,InPassword);
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
+	size_t messageSize = SF::Message::Login::LoginCmd::CalculateMessageSize( InTransactionID, InGameID,InID,InPassword);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Login::LoginCmd::Create(pMessage,  InTransactionID, InGameID,InID,InPassword);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (uint32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint32_t InGameID, const char* InID, const char* InPassword )
 
 
@@ -36,10 +37,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginByFacebookCmd( intptr_t InNativeConne
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::LoginByFacebookCmd::Create(pConnection->GetHeap(), InTransactionID, InGameID, InUID,InFaceBookName,InEMail,InFacebookToken);
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
+	size_t messageSize = SF::Message::Login::LoginByFacebookCmd::CalculateMessageSize( InTransactionID, InGameID, InUID,InFaceBookName,InEMail,InFacebookToken);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Login::LoginByFacebookCmd::Create(pMessage,  InTransactionID, InGameID, InUID,InFaceBookName,InEMail,InFacebookToken);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (uint32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginByFacebookCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint32_t InGameID, uint64_t InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
 
 
@@ -48,10 +50,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginBySteamCmd( intptr_t InNativeConnecti
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::LoginBySteamCmd::Create(pConnection->GetHeap(), InTransactionID, InGameID, InSteamUserID,InSteamUserName,InSteamUserToken);
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
+	size_t messageSize = SF::Message::Login::LoginBySteamCmd::CalculateMessageSize( InTransactionID, InGameID, InSteamUserID,InSteamUserName,InSteamUserToken);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Login::LoginBySteamCmd::Create(pMessage,  InTransactionID, InGameID, InSteamUserID,InSteamUserName,InSteamUserToken);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (uint32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginBySteamCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint32_t InGameID, uint64_t InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken )
 
 
@@ -60,10 +63,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginCreateRandomUserCmd( intptr_t InNativeConn
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::CreateRandomUserCmd::Create(pConnection->GetHeap(), InTransactionID, InGameID,InCellPhone);
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
+	size_t messageSize = SF::Message::Login::CreateRandomUserCmd::CalculateMessageSize( InTransactionID, InGameID,InCellPhone);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Login::CreateRandomUserCmd::Create(pMessage,  InTransactionID, InGameID,InCellPhone);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (uint32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginCreateRandomUserCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint32_t InGameID, const char* InCellPhone )
 
 
@@ -72,10 +76,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginUpdateMyScoreCmd( intptr_t InNativeConnect
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::UpdateMyScoreCmd::Create(pConnection->GetHeap(), InTransactionID, InRankingScore,(RankingType) InRankingType, InCount);
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
+	size_t messageSize = SF::Message::Login::UpdateMyScoreCmd::CalculateMessageSize( InTransactionID, InRankingScore,(RankingType) InRankingType, InCount);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Login::UpdateMyScoreCmd::Create(pMessage,  InTransactionID, InRankingScore,(RankingType) InRankingType, InCount);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (uint32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginUpdateMyScoreCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InRankingScore, int InRankingType, uint16_t InCount )
 
 
@@ -84,10 +89,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginGetRankingListCmd( intptr_t InNativeConnec
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::GetRankingListCmd::Create(pConnection->GetHeap(), InTransactionID,(RankingType) InRankingType, InBaseRanking, InCount);
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
+	size_t messageSize = SF::Message::Login::GetRankingListCmd::CalculateMessageSize( InTransactionID,(RankingType) InRankingType, InBaseRanking, InCount);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Login::GetRankingListCmd::Create(pMessage,  InTransactionID,(RankingType) InRankingType, InBaseRanking, InCount);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (uint32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginGetRankingListCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, int InRankingType, uint8_t InBaseRanking, uint8_t InCount )
 
 
@@ -96,10 +102,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginDataTestCmd( intptr_t InNativeConnectionHa
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::DataTestCmd::Create(pConnection->GetHeap(), InTransactionID,SF::ArrayView<uint8_t>(_sizeOfInTestData, _sizeOfInTestData, const_cast<uint8_t*>(InTestData)));
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
+	size_t messageSize = SF::Message::Login::DataTestCmd::CalculateMessageSize( InTransactionID,SF::ArrayView<uint8_t>(_sizeOfInTestData, _sizeOfInTestData, const_cast<uint8_t*>(InTestData)));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Login::DataTestCmd::Create(pMessage,  InTransactionID,SF::ArrayView<uint8_t>(_sizeOfInTestData, _sizeOfInTestData, const_cast<uint8_t*>(InTestData)));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (uint32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginDataTestCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint16_t _sizeOfInTestData,const uint8_t* InTestData )
 
 
@@ -108,10 +115,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginHeartbeatC2SEvt( intptr_t InNativeConnecti
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::HeartbeatC2SEvt::Create(pConnection->GetHeap());
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
+	size_t messageSize = SF::Message::Login::HeartbeatC2SEvt::CalculateMessageSize();
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Login::HeartbeatC2SEvt::Create(pMessage);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (uint32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginHeartbeatC2SEvt( intptr_t InNativeConnectionHandle )
 
 
@@ -121,10 +129,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginDebugPrintALLRankingCmd( intptr_t InNative
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::DebugPrintALLRankingCmd::Create(pConnection->GetHeap(), InTransactionID,InFileName);
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
+	size_t messageSize = SF::Message::Login::DebugPrintALLRankingCmd::CalculateMessageSize( InTransactionID,InFileName);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Login::DebugPrintALLRankingCmd::Create(pMessage,  InTransactionID,InFileName);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (uint32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginDebugPrintALLRankingCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, const char* InFileName )
 
 
@@ -135,10 +144,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginRes( intptr_t InNativeConnectionHandl
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::LoginRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID,InErrorReason);
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
+	size_t messageSize = SF::Message::Login::LoginRes::CalculateMessageSize( InTransactionID, InResult,InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID,InErrorReason);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Login::LoginRes::Create(pMessage,  InTransactionID, InResult,InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID,InErrorReason);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (uint32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InGameServerPublicAddress, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID, const char* InErrorReason )
 
 
@@ -148,10 +158,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginByFacebookRes( intptr_t InNativeConne
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::LoginByFacebookRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID,InErrorReason);
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
+	size_t messageSize = SF::Message::Login::LoginByFacebookRes::CalculateMessageSize( InTransactionID, InResult,InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID,InErrorReason);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Login::LoginByFacebookRes::Create(pMessage,  InTransactionID, InResult,InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID,InErrorReason);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (uint32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginByFacebookRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InGameServerPublicAddress, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID, const char* InErrorReason )
 
 
@@ -161,10 +172,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginBySteamRes( intptr_t InNativeConnecti
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::LoginBySteamRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID,InErrorReason);
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
+	size_t messageSize = SF::Message::Login::LoginBySteamRes::CalculateMessageSize( InTransactionID, InResult,InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID,InErrorReason);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Login::LoginBySteamRes::Create(pMessage,  InTransactionID, InResult,InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID,InErrorReason);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (uint32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginBySteamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InGameServerPublicAddress, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID, const char* InErrorReason )
 
 
@@ -174,10 +186,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginCreateRandomUserRes( intptr_t InNativeConn
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::CreateRandomUserRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID);
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
+	size_t messageSize = SF::Message::Login::CreateRandomUserRes::CalculateMessageSize( InTransactionID, InResult,InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Login::CreateRandomUserRes::Create(pMessage,  InTransactionID, InResult,InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (uint32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginCreateRandomUserRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InGameServerPublicAddress, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID )
 
 
@@ -187,10 +200,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginUpdateMyScoreRes( intptr_t InNativeConnect
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::UpdateMyScoreRes::Create(pConnection->GetHeap(), InTransactionID, InResult,SF::ArrayView<TotalRankingPlayerInformation>(_sizeOfInRanking, _sizeOfInRanking, const_cast<TotalRankingPlayerInformation*>(InRanking)));
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
+	size_t messageSize = SF::Message::Login::UpdateMyScoreRes::CalculateMessageSize( InTransactionID, InResult,SF::ArrayView<TotalRankingPlayerInformation>(_sizeOfInRanking, _sizeOfInRanking, const_cast<TotalRankingPlayerInformation*>(InRanking)));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Login::UpdateMyScoreRes::Create(pMessage,  InTransactionID, InResult,SF::ArrayView<TotalRankingPlayerInformation>(_sizeOfInRanking, _sizeOfInRanking, const_cast<TotalRankingPlayerInformation*>(InRanking)));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (uint32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginUpdateMyScoreRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint16_t _sizeOfInRanking,const TotalRankingPlayerInformation* InRanking )
 
 
@@ -200,10 +214,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginGetRankingListRes( intptr_t InNativeConnec
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::GetRankingListRes::Create(pConnection->GetHeap(), InTransactionID, InResult,SF::ArrayView<TotalRankingPlayerInformation>(_sizeOfInRanking, _sizeOfInRanking, const_cast<TotalRankingPlayerInformation*>(InRanking)));
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
+	size_t messageSize = SF::Message::Login::GetRankingListRes::CalculateMessageSize( InTransactionID, InResult,SF::ArrayView<TotalRankingPlayerInformation>(_sizeOfInRanking, _sizeOfInRanking, const_cast<TotalRankingPlayerInformation*>(InRanking)));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Login::GetRankingListRes::Create(pMessage,  InTransactionID, InResult,SF::ArrayView<TotalRankingPlayerInformation>(_sizeOfInRanking, _sizeOfInRanking, const_cast<TotalRankingPlayerInformation*>(InRanking)));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (uint32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginGetRankingListRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint16_t _sizeOfInRanking,const TotalRankingPlayerInformation* InRanking )
 
 
@@ -213,10 +228,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginDataTestRes( intptr_t InNativeConnectionHa
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::DataTestRes::Create(pConnection->GetHeap(), InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInTestData, _sizeOfInTestData, const_cast<uint8_t*>(InTestData)));
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
+	size_t messageSize = SF::Message::Login::DataTestRes::CalculateMessageSize( InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInTestData, _sizeOfInTestData, const_cast<uint8_t*>(InTestData)));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Login::DataTestRes::Create(pMessage,  InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInTestData, _sizeOfInTestData, const_cast<uint8_t*>(InTestData)));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (uint32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginDataTestRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint16_t _sizeOfInTestData,const uint8_t* InTestData )
 
 
@@ -226,10 +242,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginDebugPrintALLRankingRes( intptr_t InNative
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::DebugPrintALLRankingRes::Create(pConnection->GetHeap(), InTransactionID, InResult);
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
+	size_t messageSize = SF::Message::Login::DebugPrintALLRankingRes::CalculateMessageSize( InTransactionID, InResult);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Login::DebugPrintALLRankingRes::Create(pMessage,  InTransactionID, InResult);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (uint32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginDebugPrintALLRankingRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
 
 

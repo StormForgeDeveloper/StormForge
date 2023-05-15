@@ -266,7 +266,7 @@ namespace Net {
 
 
 	// Send message to connection with network device
-	Result RawUDP::SendMsg(const sockaddr_storage& dest, SharedPointerT<MessageData>& pMsg)
+	Result RawUDP::SendMsg(const sockaddr_storage& dest, MessageHeader* pMsg)
 	{
 		Result hr = ResultCode::SUCCESS, hrErr = ResultCode::SUCCESS;
 

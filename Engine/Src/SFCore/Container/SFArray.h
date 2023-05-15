@@ -111,8 +111,7 @@ namespace SF {
                     SetLinkedBuffer(src.size(), static_cast<DataType*>(src.data()));
                 }
             }
-            ArrayView(uint maxDataCount, uint dataCount, DataType* pDataPtr);
-			//ArrayView(size_t dataCount, DataType* pDataPtr);
+            ArrayView(size_t maxDataCount, size_t dataCount, DataType* pDataPtr);
 			constexpr ArrayView(size_t dataCount, DataType* pDataPtr);
 			template<size_t dataCount>
 			constexpr ArrayView(DataType(&pDataPtr)[dataCount])
