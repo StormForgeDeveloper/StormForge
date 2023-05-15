@@ -103,6 +103,7 @@ namespace SF
 					+ SerializedSizeOf(InPassword)
 				);
 
+				messageBuffer->msgID = LoginCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -218,6 +219,7 @@ namespace SF
 					+ SerializedSizeOf(InErrorReason)
 				);
 
+				messageBuffer->msgID = LoginRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -334,6 +336,7 @@ namespace SF
 					+ SerializedSizeOf(InFacebookToken)
 				);
 
+				messageBuffer->msgID = LoginByFacebookCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -451,6 +454,7 @@ namespace SF
 					+ SerializedSizeOf(InErrorReason)
 				);
 
+				messageBuffer->msgID = LoginByFacebookRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -562,6 +566,7 @@ namespace SF
 					+ SerializedSizeOf(InSteamUserToken)
 				);
 
+				messageBuffer->msgID = LoginBySteamCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -678,6 +683,7 @@ namespace SF
 					+ SerializedSizeOf(InErrorReason)
 				);
 
+				messageBuffer->msgID = LoginBySteamRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -780,6 +786,7 @@ namespace SF
 					+ SerializedSizeOf(InCellPhone)
 				);
 
+				messageBuffer->msgID = CreateRandomUserCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -889,6 +896,7 @@ namespace SF
 					+ SerializedSizeOf(InLoginEntityUID)
 				);
 
+				messageBuffer->msgID = CreateRandomUserRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -993,6 +1001,7 @@ namespace SF
 					+ SerializedSizeOf(InCount)
 				);
 
+				messageBuffer->msgID = UpdateMyScoreCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1093,6 +1102,7 @@ namespace SF
 					+ SerializedSizeOf(InRanking)
 				);
 
+				messageBuffer->msgID = UpdateMyScoreRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1194,6 +1204,7 @@ namespace SF
 					+ SerializedSizeOf(InCount)
 				);
 
+				messageBuffer->msgID = GetRankingListCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1294,6 +1305,7 @@ namespace SF
 					+ SerializedSizeOf(InRanking)
 				);
 
+				messageBuffer->msgID = GetRankingListRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1390,6 +1402,7 @@ namespace SF
 					+ SerializedSizeOf(InTestData)
 				);
 
+				messageBuffer->msgID = DataTestCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1488,6 +1501,7 @@ namespace SF
 					+ SerializedSizeOf(InTestData)
 				);
 
+				messageBuffer->msgID = DataTestRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1569,6 +1583,7 @@ namespace SF
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 				);
 
+				messageBuffer->msgID = HeartbeatC2SEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1656,6 +1671,7 @@ namespace SF
 					+ SerializedSizeOf(InFileName)
 				);
 
+				messageBuffer->msgID = DebugPrintALLRankingCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1747,6 +1763,7 @@ namespace SF
 					+ SerializedSizeOf(InResult)
 				);
 
+				messageBuffer->msgID = DebugPrintALLRankingRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else

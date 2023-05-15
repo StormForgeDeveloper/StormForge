@@ -940,6 +940,7 @@ namespace ProtocolCompiler
                 NewLine();
             }
 
+            MatchIndent(); OutStream.WriteLine($"messageBuffer->msgID = {strClassName}::MID;");
             MatchIndent(); OutStream.WriteLine("if (messageBuffer->Length < __uiMessageSize)");
             MatchIndent(1); OutStream.WriteLine("return ResultCode::UNEXPECTED;");
             MatchIndent(); OutStream.WriteLine("else");

@@ -93,6 +93,7 @@ namespace SF
 					+ SerializedSizeOf(InTransactionID)
 				);
 
+				messageBuffer->msgID = GenericFailureCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -188,6 +189,7 @@ namespace SF
 					+ SerializedSizeOf(InResult)
 				);
 
+				messageBuffer->msgID = GenericFailureRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else

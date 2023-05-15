@@ -483,15 +483,18 @@ namespace Net {
 	{
 		Result hr = ResultCode::SUCCESS;
 
-		if( uiBuffSize == 0 )
+		if (uiBuffSize == 0)
 		{
-			IncZeroRecvCount();
-			if( GetZeroRecvCount() > (uint32_t)Const::CONNECTION_ZEROPACKET_MAX )
-			{
-				SFLog(Net, Debug3, "TCP RecvBuf, too many zero size packet, {0}", GetZeroRecvCount());
-				//ResetZeroRecvCount();
-				Disconnect("Too many zero packets");
-			}
+            if (!m_NetIOAdapter.GetIsIORegistered())
+            {
+                IncZeroRecvCount();
+                if (GetZeroRecvCount() > (uint32_t)Const::CONNECTION_ZEROPACKET_MAX)
+                {
+                    SFLog(Net, Debug3, "TCP RecvBuf, too many zero size packet, {0}", GetZeroRecvCount());
+                    //ResetZeroRecvCount();
+                    Disconnect("Too many zero packets");
+                }
+            }
 			return hr;
 		}
 
