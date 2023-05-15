@@ -88,7 +88,7 @@ namespace Net {
         static constexpr int MUDP_HEARTBEAT_START_TIME      = 1000 * 60;
         static constexpr int MUDP_HEARTBEAT_TIMEOUT         = 1000 * 60 * 10;
 
-		constexpr int GUARANT_PENDING_MAX                   = 1024;
+		constexpr int GUARANT_PENDING_MAX                   = 512;
 		// If send queue has less than this count, the message will be sent quickly. per connection
 		constexpr uint AGRESSIVE_SEND_COUNT                 = 20;
 

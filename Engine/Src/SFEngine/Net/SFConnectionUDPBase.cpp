@@ -659,6 +659,14 @@ namespace Net {
             }
             else
             {
+                if (m_SendGuaQueue.size() > Const::GUARANT_PENDING_MAX)
+                {
+                    // too many pending messages, disconnect
+                    SFLog(Net, Error, "Reliable queue overflow RemoteIp:{0}", GetRemoteInfo().PeerAddress);
+                    Disconnect("Reliable queue overflow");
+                    return hr;
+                }
+
                 SFLog(Net, Debug6, "SENDGuaQueued : CID:{0}, msg:{1}, seq:{2}, len:{3}",
                     GetCID(),
                     msgID,
