@@ -127,25 +127,25 @@ namespace SF
 	// Reserve buffer. The pointer it returns is reserved for writing, after done writing, Call SetReadyForRead to mark the buffer is ready for read
 	CircularBufferQueue::ItemWritePtr CircularBufferQueue::AllocateWrite(size_t requesteSize)
 	{
-		// We are allocating memory here, so using lock free doesn't effective because it doesn't guaranteed that writing order in allocated memory space.
-		// Head allocation should be happened in order
-		MutexScopeLock ticketScope(m_HeadLock);
-
 		// We only support 8 byte aligned allocation
 		size_t bufferSize = AlignUp(requesteSize, 8);
+        uintptr_t expectedSize = (uintptr_t)(sizeof(BufferItem) + bufferSize);
 
 		uintptr_t startPos = (const uintptr_t)m_Buffer;
         uintptr_t endPos = (uintptr_t)m_Buffer + (uintptr_t)m_BufferSize;
 
+        // We are allocating memory here, so using lock free doesn't effective because it doesn't guaranteed that writing order in allocated memory space.
+        // Head allocation should be happened in order
+        MutexScopeLock ticketScope(m_HeadLock);
+
         // TODO: since we have mutex lock, this loop might not be necessary.
-		do
+		while(true)
 		{
 			BufferItem* pHead = m_HeadPos.load(std::memory_order_relaxed); // We just need to access this like a simple volatile type
             BufferItem* pTail = m_TailPos.load(std::memory_order_acquire);
 			BufferItem* pNextHead = nullptr;
 
 			// We want to put BufferItem structure at the end of allocation for next allocation
-            uintptr_t expectedSize = (uintptr_t)(sizeof(BufferItem) + bufferSize);
             uintptr_t expectedEnd = (uintptr_t)pHead + expectedSize;
 			if ((uintptr_t)pHead >= (uintptr_t)pTail) // if head is place at the right side
 			{
@@ -156,7 +156,7 @@ namespace SF
 						return ItemWritePtr();// out of memory
 
                     ItemState expectedState = ItemState::Free;
-					while (!pHead->State.compare_exchange_weak(expectedState, ItemState::Dummy, std::memory_order_relaxed, std::memory_order_acquire))
+                    if (!pHead->State.compare_exchange_strong(expectedState, ItemState::Dummy, std::memory_order_relaxed, std::memory_order_acquire))
 					{
 						if (expectedState != ItemState::Free)
 						{
@@ -213,7 +213,7 @@ namespace SF
 			// all condition checks have passed
 			// Let's change memory values
             ItemState expectedState = ItemState::Free;
-			while (!pHead->State.compare_exchange_weak(expectedState, ItemState::Reserved, std::memory_order_relaxed, std::memory_order_acquire))
+			if (!pHead->State.compare_exchange_strong(expectedState, ItemState::Reserved, std::memory_order_relaxed, std::memory_order_acquire))
 			{
 				if (expectedState != ItemState::Free)
 				{
@@ -228,12 +228,12 @@ namespace SF
 			// prepare next head
 			pNextHead->State.store(ItemState::Free, std::memory_order_relaxed);// using relaxed here because the write in SetReadyForRead is the most important state writing
 			pNextHead->NextPos = 0;
-			m_HeadPos.store(pNextHead, std::memory_order_relaxed);
+			m_HeadPos.store(pNextHead, std::memory_order_release);
 
 			// we've done
 			return ItemWritePtr(this, pHead);
 
-		} while (true);
+		}
 
 		return ItemWritePtr();
 	}
@@ -266,17 +266,13 @@ namespace SF
 	// mark the buffer for read
 	CircularBufferQueue::ItemReadPtr CircularBufferQueue::DequeueRead()
 	{
-		MutexScopeLock ticketScope(m_HeadLock);
-
-		BufferItem* pHead = m_HeadPos.load(std::memory_order_relaxed);
+		BufferItem* pHead = m_HeadPos.load(std::memory_order_acquire);
 
 		if (pHead == nullptr)
 			return ItemReadPtr();
 
-		//auto startPos = (uintptr_t)m_Buffer;
-		//auto endPos = (uintptr_t)m_Buffer + (uintptr_t)m_BufferSize;
-
-		BufferItem* pTail = m_TailPos.load(std::memory_order_relaxed);
+        MutexScopeLock ticketScope(m_TailLock);
+        BufferItem* pTail = m_TailPos.load(std::memory_order_relaxed);
 		if (pTail == pHead) // queue is empty
 			return ItemReadPtr();
 
@@ -298,6 +294,7 @@ namespace SF
             return ItemReadPtr();
         }
 
+        // we have critical section, but it is only for head and tail position
         std::atomic_thread_fence(std::memory_order_acquire);
 
         //assert(pTail->State == ItemState::Reading);

@@ -542,13 +542,12 @@ namespace Net {
                     msgID,
                     uiMsgLen);
 
-
                 {
                     MutexScopeLock scopeLock(m_GatheringBufferLock);
 
                     netCheck(PrepareGatheringBuffer(pMsgHeader->Length));
 
-                    MessageHeader* pCopiedMessage = m_GatheringBuffer->AddMessage(pMsgHeader);// , NewSeqNone()));
+                    MessageHeader* pCopiedMessage = m_GatheringBuffer->AddMessage(pMsgHeader);
                     netCheckMem(pCopiedMessage);
                     pCopiedMessage->msgID.SetSequence(NewSeqNone());
                     pCopiedMessage->UpdateChecksumNEncrypt();
@@ -598,7 +597,7 @@ namespace Net {
 
         netCheckPtr(pMsgHeader);
 
-        if (pMsgHeader->Length > (uint)Const::INTER_PACKET_SIZE_MAX)
+        if (pMsgHeader->Length > (uint)Const::PACKET_SIZE_MAX)
         {
             netCheck(ResultCode::IO_BADPACKET_TOOBIG);
         }

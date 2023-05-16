@@ -122,6 +122,7 @@ namespace SF {
 			// Using malloc to avoid recursive memory allocation
 			void* pBuffer = STDMemoryManager::SystemAllignedAlloc(sizeof(STDMemoryManager), sizeof(int));
 			stm_Instance = new(pBuffer) STDMemoryManager;
+            stm_Instance->AddReference(); // We are not going to release this
             stm_Instance->SetIgnoreMemmoryLeak(true);
 		}
 

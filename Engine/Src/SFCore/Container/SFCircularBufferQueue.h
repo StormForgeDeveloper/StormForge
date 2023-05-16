@@ -210,6 +210,9 @@ namespace SF
 		// HeadPos lock
 		CriticalSection m_HeadLock;
 
+        // Tail pos lock
+        CriticalSection m_TailLock;
+
 		// Read position
 		std::atomic<BufferItem*> m_TailPos;
 
