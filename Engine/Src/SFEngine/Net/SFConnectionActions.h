@@ -145,17 +145,36 @@ namespace Net {
 	};
 
 
-	class ConnectionStateAction_TimeoutHeartbeat : public ConnectionAction
-	{
-	public:
-		virtual Result Run() override;
-	};
+    //// Heartbeat time
+    //inline DurationMS Connection::GetHeartbeatTry()
+    //{
+    //    return m_ulHeartbeatTry;
+    //}
 
-	class ConnectionStateAction_SendHeartbeat : public ConnectionAction
-	{
-	public:
-		virtual Result Run() override;
-	};
+    //inline void Connection::SetHeartbeatTry(DurationMS ulHeartbeatTry)
+    //{
+    //    m_ulHeartbeatTry = ulHeartbeatTry;
+    //}
+
+    class ConnectionStateAction_Heartbeat : public ConnectionAction
+    {
+    private:
+
+        TimeStampMS m_HeartbeatReceivedTime{};
+        TimeStampMS m_HeartbeatSendTime{};
+        DurationMS m_HeartbeatRetry{};
+
+    public:
+
+        ConnectionStateAction_Heartbeat(DurationMS heartbeatRetry);
+
+        // heartbeat time
+        void SetHeartbeatRetry(DurationMS heartbeatTry) { m_HeartbeatRetry = heartbeatTry; }
+
+        void OnHeartbeatPacket();
+
+        virtual Result Run() override;
+    };
 
 	class ConnectionStateAction_StateTimeout : public ConnectionAction
 	{

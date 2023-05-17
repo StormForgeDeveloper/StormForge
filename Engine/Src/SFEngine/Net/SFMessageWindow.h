@@ -37,7 +37,7 @@ namespace Net {
 		static constexpr uint32_t MESSAGE_QUEUE_SIZE			= 128;
 		static constexpr uint32_t MESSAGE_ACCEPTABLE_SEQUENCE_RANGE			= MESSAGE_QUEUE_SIZE >> 1;
 		static constexpr uint32_t SYNC_MASK_BITS_MAX			= 64; // we uses 64bit mask bits for packet
-        static constexpr uint32_t RELIABLE_MESSAGE_BUFFER_SIZE = 512 * 1024;
+        static constexpr uint32_t RELIABLE_MESSAGE_BUFFER_SIZE = 256 * 1024;
 
 
 		enum class ItemState

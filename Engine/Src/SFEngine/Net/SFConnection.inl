@@ -145,18 +145,6 @@ uint16_t Connection::NewSeqNone()
 	return (uint16_t)(m_usSeqNone.fetch_add(1,std::memory_order_relaxed) + 1);
 }
 
-
-// Heartbeat time
-inline DurationMS Connection::GetHeartbeatTry()
-{
-	return m_ulHeartbeatTry;
-}
-
-inline void Connection::SetHeartbeatTry(DurationMS ulHeartbeatTry )
-{
-	m_ulHeartbeatTry = ulHeartbeatTry;
-}
-
 inline DurationMS Connection::GetConnectingTimeOut()
 {
 	return m_ulConnectingTimeOut;

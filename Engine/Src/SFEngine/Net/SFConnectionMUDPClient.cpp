@@ -102,7 +102,9 @@ namespace Net {
 
 	Result ConnectionMUDPClient::MyNetSocketIOAdapter::OnWriteReady()
 	{
-		return ProcessSendQueue();
+        assert(false);
+        return ResultCode::NOT_IMPLEMENTED;
+		//return ProcessSendQueue();
 	}
 
 	// Send message to connection with network device
@@ -313,8 +315,6 @@ namespace Net {
 
 		AddStateAction(ConnectionState::CONNECTING, &m_TimeoutConnecting);
 		AddStateAction(ConnectionState::CONNECTING, &m_SendConnect);
-        AddStateAction(ConnectionState::CONNECTED, &m_TimeoutHeartbeat);
-		AddStateAction(ConnectionState::CONNECTED, &m_SendHeartbeat);
 		
 		AddStateAction(ConnectionState::DISCONNECTING, &m_TimeoutDisconnecting);
 		AddStateAction(ConnectionState::DISCONNECTING, &m_SendDisconnect);
@@ -403,14 +403,14 @@ namespace Net {
 	}
 
 
-	Result ConnectionMUDPClient::EnqueueBufferUDP(IOBUFFER_WRITE *pSendBuffer)
-	{
-		auto pActiveIO = m_NetIOAdapterManager.GetActiveNetIOAdapter();
-		if (pActiveIO != nullptr)
-			return pActiveIO->EnqueueBuffer(pSendBuffer);
-		else
-			return ResultCode::UNEXPECTED;
-	}
+	//Result ConnectionMUDPClient::EnqueueBufferUDP(IOBUFFER_WRITE *pSendBuffer)
+	//{
+	//	auto pActiveIO = m_NetIOAdapterManager.GetActiveNetIOAdapter();
+	//	if (pActiveIO != nullptr)
+	//		return pActiveIO->EnqueueBuffer(pSendBuffer);
+	//	else
+	//		return ResultCode::UNEXPECTED;
+	//}
 
 
 	// Pending recv New one

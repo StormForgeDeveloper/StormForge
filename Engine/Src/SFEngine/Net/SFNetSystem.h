@@ -115,7 +115,7 @@ namespace Net {
 		
 		virtual NetIOSystem& GetNetIOSystem() override { return m_NetIOSystem == nullptr ? NetSystemService::GetNetIOSystem() : *m_NetIOSystem; }
 		
-		virtual WriteBufferQueue* GetWriteBufferQueue() override;
+		//virtual WriteBufferQueue* GetWriteBufferQueue() override;
 
         virtual Net::IOBUFFER_WRITE* AllocateWriteBuffer() override;
         virtual size_t GetWriteBufferSize() override { return m_GatheringBufferSize; }
@@ -136,11 +136,11 @@ namespace Net {
 		virtual Result Accept(SF_SOCKET sockListen, IOBUFFER_ACCEPT* pAccept) override;
 		virtual Result HandleAcceptedSocket(SF_SOCKET sockListen, IOBUFFER_ACCEPT* pAccept, sockaddr_storage& remoteAddr) override;
 
-		virtual Result Recv(SF_SOCKET sock, IOBUFFER_READ* pBuffer) override;
-		virtual Result RecvFrom(SF_SOCKET sock, IOBUFFER_READ* pBuffer) override;
+		virtual Result Recv(SocketIO* sock, IOBUFFER_READ* pBuffer) override;
+		virtual Result RecvFrom(SocketIO* sock, IOBUFFER_READ* pBuffer) override;
 
-		virtual Result Send(SF_SOCKET sock, IOBUFFER_WRITE* pBuffer) override;
-		virtual Result SendTo(SF_SOCKET sock, IOBUFFER_WRITE* pBuffer) override;
+		virtual Result Send(SocketIO* sock, IOBUFFER_WRITE* pBuffer) override;
+		virtual Result SendTo(SocketIO* sock, IOBUFFER_WRITE* pBuffer) override;
 	};
 
 

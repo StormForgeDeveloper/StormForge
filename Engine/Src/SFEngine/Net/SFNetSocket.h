@@ -89,7 +89,7 @@ namespace Net {
 		std::atomic<IOStatus> m_IOStatus;
 
 
-		WriteBufferQueue* m_pWriteQueues{};
+		//WriteBufferQueue* m_pWriteQueues{};
 
 		// Assigned IO worker thread index
 		int m_AssignedIOWorker = -1;
@@ -143,12 +143,12 @@ namespace Net {
 		SF_SOCKET GetIOSocket() const { return m_IOSocket; }
 
 		// Write queue
-		WriteBufferQueue* GetWriteQueue() { return m_pWriteQueues; }
-		void SetWriteQueue(WriteBufferQueue* writeQueue)
-		{
-			Assert(writeQueue != nullptr && m_pWriteQueues == nullptr);
-			m_pWriteQueues = writeQueue;
-		}
+		//WriteBufferQueue* GetWriteQueue() { return m_pWriteQueues; }
+		//void SetWriteQueue(WriteBufferQueue* writeQueue)
+		//{
+		//	Assert(writeQueue != nullptr && m_pWriteQueues == nullptr);
+		//	m_pWriteQueues = writeQueue;
+		//}
 
 
 
@@ -167,7 +167,7 @@ namespace Net {
 
 		// Send message to connection with network device
 		virtual Result WriteBuffer(IOBUFFER_WRITE *pSendBuffer) = 0;
-		virtual Result EnqueueBuffer(IOBUFFER_WRITE *pSendBuffer);
+		//virtual Result EnqueueBuffer(IOBUFFER_WRITE *pSendBuffer);
 
 
 		virtual Result Accept(IOBUFFER_ACCEPT* &pAcceptInfo) { return ResultCode::NOT_IMPLEMENTED; };
@@ -180,7 +180,7 @@ namespace Net {
 		virtual Result OnIORecvCompleted(Result hrRes, IOBUFFER_READ* &pIOBuffer) = 0;
 
 		virtual Result OnWriteReady() = 0;
-		virtual Result ProcessSendQueue();
+		//virtual Result ProcessSendQueue();
 		// called when send completed
 		virtual Result OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE *pIOBuffer);
 

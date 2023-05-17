@@ -97,7 +97,9 @@ namespace Net {
 
 	Result RawUDP::MyNetSocketIOAdapter::OnWriteReady()
 	{
-		return ProcessSendQueue();
+		//return ProcessSendQueue();
+        assert(false);
+        return ResultCode::NOT_IMPLEMENTED;
 	}
 
 	// Send message to connection with network device

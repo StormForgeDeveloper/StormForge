@@ -75,25 +75,25 @@ namespace Net {
 	};
 
 
+    // TODO: Send thread is under renovation
+	//class EPOLLSendWorker : public Thread
+	//{
+	//public:
 
-	class EPOLLSendWorker : public Thread
-	{
-	public:
+	//private:
+	//	// Epoll handle
+	//	
+	//	WriteBufferQueue m_WriteQueue;
 
-	private:
-		// Epoll handle
-		
-		WriteBufferQueue m_WriteQueue;
+	//public:
+	//	// Constructor/destructor
+	//	EPOLLSendWorker();
+	//	~EPOLLSendWorker();
 
-	public:
-		// Constructor/destructor
-		EPOLLSendWorker();
-		~EPOLLSendWorker();
+	//	WriteBufferQueue& GetWriteQueue() { return m_WriteQueue; }
 
-		WriteBufferQueue& GetWriteQueue() { return m_WriteQueue; }
-
-		virtual void Run() override;
-	};
+	//	virtual void Run() override;
+	//};
 
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -111,7 +111,7 @@ namespace Net {
 		DynamicArray<EPOLLWorker*> m_WorkerTCP;
 
 		// workers for UDP
-		EPOLLSendWorker* m_UDPSendWorker;
+		//EPOLLSendWorker* m_UDPSendWorker;
 		DynamicArray<EPOLLWorker*> m_WorkerUDP;
 
 	public:

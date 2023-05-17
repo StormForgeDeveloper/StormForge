@@ -58,11 +58,10 @@ namespace Net {
 		: Connection(heap, ioHandler)
 		, m_SendReliableWindow(GetHeap())
 		, m_uiMaxGuarantedRetryAtOnce(Const::UDP_SVR_RETRY_ONETIME_MAX)
+        , m_SendGuaQueue(GetHeap())
 		, m_pWriteQueuesUDP(nullptr)
 	{
-		SetHeartbeatTry( Const::UDP_HEARTBEAT_TIME);
-
-		SetWriteQueueUDP(Service::NetSystem->GetWriteBufferQueue());
+		//SetWriteQueueUDP(Service::NetSystem->GetWriteBufferQueue());
 		SetUseAddressMap(true);
 
 		SetNetCtrlAction(NetCtrlCode_Ack, &m_HandleAck);
@@ -83,9 +82,21 @@ namespace Net {
 	{
 		m_RecvReliableWindow.Reset();
 		m_SendReliableWindow.ClearWindow();
+        m_SendGuaQueue.Reset();
 
-		m_SubFrameCollectionBuffer = nullptr;
+        m_SubFrameCollectionBuffer.reset();
 	}
+
+    void ConnectionUDPBase::Dispose()
+    {
+        super::Dispose();
+
+        m_RecvReliableWindow.Reset();
+        m_SendReliableWindow.ClearWindow();
+        m_SendGuaQueue.Reset();
+
+        m_SubFrameCollectionBuffer.reset();
+    }
 
 	void ConnectionUDPBase::SetWriteQueueUDP(WriteBufferQueue* writeQueue)
 	{
@@ -108,19 +119,40 @@ namespace Net {
         MsgNetCtrlBuffer netCtrlBuffer{};
         netCheck(MakeNetCtrl(&netCtrlBuffer.Header, uiCtrlCode, uiSequence, returnMsgID, parameter0));
 
-        {
-            MutexScopeLock scopeLock(m_GatheringBufferLock);
-
-            netCheck(PrepareGatheringBuffer(netCtrlBuffer.Header.Length));
-
-            netCheckMem(m_GatheringBuffer->AddMessage(&netCtrlBuffer.Header));
-        }
+        netCheck(SendRaw(&netCtrlBuffer.Header));
 
         return hr;
 	}
 
+
 	Result ConnectionUDPBase::SendFlush()
 	{
+        Result hr;
+        MutexScopeLock scopeLock(m_GatheringBufferLock);
+
+        while (true)
+        {
+            // use nolock version because we already have m_GatheringBufferLock
+            CircularBufferQueue::ItemReadPtr itemReadPtr = m_GatheringBufferQueue.DequeueReadNoLock();
+            if (!itemReadPtr)
+                break;
+
+            MessageHeader* pMsgHeader = reinterpret_cast<MessageHeader*>(itemReadPtr.data());
+
+            netCheck(PrepareGatheringBuffer(pMsgHeader->Length));
+
+            netCheckMem(m_GatheringBuffer->AddMessage(pMsgHeader));
+
+            itemReadPtr.Reset();
+        }
+
+        SendFlushGatheringBufferInternal();
+
+		return hr;
+	}
+
+    Result ConnectionUDPBase::SendFlushGatheringBufferInternal()
+    {
         Net::SocketIO* pIOHandler = GetNetIOHandler();
         ScopeContext hr([this, &pIOHandler](Result hr)
             {
@@ -128,44 +160,33 @@ namespace Net {
                     pIOHandler->DecPendingSendCount();
             });
 
-        MutexScopeLock scopeLock(m_GatheringBufferLock);
-
         if (m_GatheringBuffer == nullptr)
             return hr;
 
-		if (pIOHandler != nullptr)
+        if (pIOHandler != nullptr)
         {
-			if (pIOHandler->GetIsIORegistered() && GetConnectionState() != ConnectionState::DISCONNECTED
-				&& m_GatheringBuffer->Payload.size() > m_uiMinGatherSizeForFlush)
-			{
+            if (pIOHandler->GetIsIORegistered() && GetConnectionState() != ConnectionState::DISCONNECTED
+                && m_GatheringBuffer->Payload.size() > m_uiMinGatherSizeForFlush)
+            {
                 SFUniquePtr<PacketData> pSendBuffer(m_GatheringBuffer.release());
 
-				pIOHandler->IncPendingSendCount();
+                pIOHandler->IncPendingSendCount();
 
                 pSendBuffer->SetupSendUDP(GetSocket(), GetRemoteSockAddr(),
                     (uint)pSendBuffer->Payload.size(), pSendBuffer->Payload.data());
 
-				if (NetSystem::IsProactorSystem())
-				{
-					if (GetNetIOHandler() != nullptr)
-					{
-						netCheck(GetNetIOHandler()->WriteBuffer(pSendBuffer.get()));
-					}
-				}
-				else
-				{
-					netCheck(EnqueueBufferUDP(pSendBuffer.get()));
-				}
+                netCheckPtr(GetNetIOHandler());
+                netCheck(GetNetIOHandler()->WriteBuffer(pSendBuffer.get()));
 
-				pSendBuffer.release();
-			}
+                pSendBuffer.release();
+            }
 
-		}
+        }
 
-		return hr;
-	}
+        return hr;
+    }
 
-    Result ConnectionUDPBase::AllocSendBuffer()
+    Result ConnectionUDPBase::AllocSendGatherBuffer()
     {
         assert(m_GatheringBuffer == nullptr);
         m_GatheringBuffer.reset(PacketData::NewPacketData());
@@ -193,15 +214,15 @@ namespace Net {
 
         if (m_GatheringBuffer == nullptr)
         {
-            netCheck(AllocSendBuffer());
+            netCheck(AllocSendGatherBuffer());
         }
 
         if (!m_GatheringBuffer->CanAdd(uiRequiredSize))
         {
-            SendFlush();
+            SendFlushGatheringBufferInternal();
             if (m_GatheringBuffer == nullptr) // we have exception case not flushing out
             {
-                netCheck(AllocSendBuffer());
+                netCheck(AllocSendGatherBuffer());
             }
         }
 
@@ -277,6 +298,8 @@ namespace Net {
 		{
 			netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 		}
+
+        MutexScopeLock scopeLock(m_SubframeLock);
 
 		if (pCurrentFrame->Offset == 0) // first frame
 		{
@@ -359,8 +382,9 @@ namespace Net {
 
 		m_RecvReliableWindow.Reset();
 		m_SendReliableWindow.ClearWindow();
+        m_SendGuaQueue.Reset();
 
-		m_SubFrameCollectionBuffer = nullptr;
+		m_SubFrameCollectionBuffer.reset();
 
 		return ResultCode::SUCCESS;
 	}
@@ -380,16 +404,16 @@ namespace Net {
 		return Connection::Disconnect(reason);
 	}
 
-	Result ConnectionUDPBase::EnqueueBufferUDP(IOBUFFER_WRITE *pSendBuffer)
-	{
-		if (GetWriteQueueUDP() == nullptr)
-		{
-			Assert(false);
-			return ResultCode::UNEXPECTED;
-		}
+	//Result ConnectionUDPBase::EnqueueBufferUDP(IOBUFFER_WRITE *pSendBuffer)
+	//{
+	//	if (GetWriteQueueUDP() == nullptr)
+	//	{
+	//		Assert(false);
+	//		return ResultCode::UNEXPECTED;
+	//	}
 
-		return GetWriteQueueUDP()->Enqueue(pSendBuffer);
-	}
+	//	return GetWriteQueueUDP()->Enqueue(pSendBuffer);
+	//}
 
 	// Process network control message
 	Result ConnectionUDPBase::ProcNetCtrl(const MsgNetCtrlBuffer* pNetCtrl)
@@ -510,7 +534,7 @@ namespace Net {
             return hr;
         }
 
-        if (!msgID.IDs.Reliability && pMsgHeader->Length > (uint)Const::INTER_PACKET_SIZE_MAX)
+        if (!msgID.IDs.Reliability && pMsgHeader->Length > (uint)Const::PACKET_SIZE_MAX)
         {
             SFLog(Net, Warning, "Too big packet: msg:{0}, seq:{1}, len:{2}",
                 msgID,
@@ -523,7 +547,7 @@ namespace Net {
         Protocol::PrintDebugMessage("Send", pMsgHeader);
 
         if (!msgID.IDs.Reliability
-            && m_SendGuaQueue.size() > Const::GUARANT_PENDING_MAX)
+            && m_SendGuaQueue.size() > Const::GUARANTEED_PENDING_MAX)
         {
             // Drop if there is too many reliable packets are pending
             netCheck(ResultCode::IO_SEND_FAIL);
@@ -538,24 +562,43 @@ namespace Net {
         {
             if (!msgID.IDs.Reliability)
             {
-                SFLog(Net, Debug4, "SEND : msg:{0}, len:{1}",
-                    msgID,
-                    uiMsgLen);
+                SFLog(Net, Debug4, "SEND : msg:{0}, len:{1}", msgID, uiMsgLen);
 
+                CircularBufferQueue::ItemWritePtr itemWritePtr = m_GatheringBufferQueue.AllocateWrite(pMsgHeader->Length);
+                if (!itemWritePtr)
                 {
-                    MutexScopeLock scopeLock(m_GatheringBufferLock);
-
-                    netCheck(PrepareGatheringBuffer(pMsgHeader->Length));
-
-                    MessageHeader* pCopiedMessage = m_GatheringBuffer->AddMessage(pMsgHeader);
-                    netCheckMem(pCopiedMessage);
-                    pCopiedMessage->msgID.SetSequence(NewSeqNone());
-                    pCopiedMessage->UpdateChecksumNEncrypt();
+                    // OOM? try flush out and try again
+                    SendFlush();
+                    itemWritePtr = m_GatheringBufferQueue.AllocateWrite(pMsgHeader->Length);
                 }
+
+                if (!itemWritePtr)
+                {
+                    netCheck(ResultCode::OUT_OF_RESERVED_MEMORY);
+                }
+
+                memcpy(itemWritePtr.data(), pMsgHeader, pMsgHeader->Length);
+
+                MessageHeader* pCopiedMessage = reinterpret_cast<MessageHeader*>(itemWritePtr.data());
+                pCopiedMessage->msgID.SetSequence(NewSeqNone());
+                pCopiedMessage->UpdateChecksumNEncrypt();
+
+                itemWritePtr.Reset();
+
+                //{
+                //    MutexScopeLock scopeLock(m_GatheringBufferLock);
+
+                //    netCheck(PrepareGatheringBuffer(pMsgHeader->Length));
+
+                //    MessageHeader* pCopiedMessage = m_GatheringBuffer->AddMessage(pMsgHeader);
+                //    netCheckMem(pCopiedMessage);
+                //    pCopiedMessage->msgID.SetSequence(NewSeqNone());
+                //    pCopiedMessage->UpdateChecksumNEncrypt();
+                //}
             }
             else
             {
-                if (m_SendGuaQueue.size() > Const::GUARANT_PENDING_MAX)
+                if (m_SendGuaQueue.size() > Const::GUARANTEED_PENDING_MAX)
                 {
                     // too many pending messages, disconnect
                     SFLog(Net, Error, "Reliable queue overflow RemoteIp:{0}", GetRemoteInfo().PeerAddress);
@@ -602,13 +645,30 @@ namespace Net {
             netCheck(ResultCode::IO_BADPACKET_TOOBIG);
         }
 
+        CircularBufferQueue::ItemWritePtr itemWritePtr = m_GatheringBufferQueue.AllocateWrite(pMsgHeader->Length);
+        if (!itemWritePtr)
         {
-            MutexScopeLock scopeLock(m_GatheringBufferLock);
-
-            netCheck(PrepareGatheringBuffer(pMsgHeader->Length));
-
-            netCheckMem(m_GatheringBuffer->AddMessage(pMsgHeader));
+            // OOM? try flush out and try again
+            SendFlush();
+            itemWritePtr = m_GatheringBufferQueue.AllocateWrite(pMsgHeader->Length);
         }
+
+        if (!itemWritePtr)
+        {
+            netCheck(ResultCode::OUT_OF_RESERVED_MEMORY);
+        }
+
+        memcpy(itemWritePtr.data(), pMsgHeader, pMsgHeader->Length);
+
+        itemWritePtr.Reset();
+
+        //{
+        //    MutexScopeLock scopeLock(m_GatheringBufferLock);
+
+        //    netCheck(PrepareGatheringBuffer(pMsgHeader->Length));
+
+        //    netCheckMem(m_GatheringBuffer->AddMessage(pMsgHeader));
+        //}
 
         return hr;
     }

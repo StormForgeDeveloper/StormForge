@@ -65,6 +65,8 @@ namespace Net {
 	// UDP/TCP write overlapped
 	struct IOBUFFER_WRITE : public IOBUFFER_RWBASE
 	{
+        uint SendBufferSize = 0;
+
 		// Constructor
 		IOBUFFER_WRITE();
 		~IOBUFFER_WRITE();

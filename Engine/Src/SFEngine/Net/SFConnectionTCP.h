@@ -74,6 +74,7 @@ namespace SF {
 			MyNetSocketIOAdapter m_NetIOAdapter;
 
             // send buffer queue size
+            CriticalSection m_SendBufferQueueDequeueLock;
             CircularBufferQueue m_SendBufferQueue;
 
             // TODO: refactor to traffic control unit
@@ -113,10 +114,11 @@ namespace SF {
 		protected:
 
 			Result SendRaw(const MessageHeader* pMsgHeader);
+            Result ProcessSendQueue();
 
 		public:
 			// Constructor
-			ConnectionTCP(IHeap& heap, size_t sendBufferSize = 256 * 1024);
+			ConnectionTCP(IHeap& heap);
 			virtual ~ConnectionTCP();
 
 
@@ -190,8 +192,6 @@ namespace SF {
 			ConnectionMessageAction_HandleTimeSyncRtn m_HandleTimeSyncRtn;
 			ConnectionStateAction_TimeoutConnecting m_TimeoutConnecting;
 			ConnectionStateAction_SendConnect m_SendConnect;
-			ConnectionStateAction_TimeoutHeartbeat m_TimeoutHeartbeat;
-			ConnectionStateAction_SendHeartbeat m_SendHeartbeat;
 			ConnectionStateAction_TimeoutDisconnecting m_TimeoutDisconnecting;
 			ConnectionStateAction_SendDisconnect m_SendDisconnect;
 
@@ -220,7 +220,6 @@ namespace SF {
 
 		private:
 			ConnectionStateAction_TimeoutConnecting m_TimeoutConnecting;
-			ConnectionStateAction_TimeoutHeartbeat m_TimeoutHeartbeat;
 			ConnectionStateAction_TimeoutDisconnecting m_TimeoutDisconnecting;
 			ConnectionStateAction_SendDisconnect m_SendDisconnect;
 
@@ -247,8 +246,6 @@ namespace SF {
 		private:
 			ConnectionStateAction_TimeoutConnecting m_TimeoutConnecting;
 			ConnectionStateAction_SendConnect m_SendConnect;
-			ConnectionStateAction_TimeoutHeartbeat m_TimeoutHeartbeat;
-			ConnectionStateAction_SendHeartbeat m_SendHeartbeat;
 			ConnectionStateAction_TimeoutDisconnecting m_TimeoutDisconnecting;
 			ConnectionStateAction_SendDisconnect m_SendDisconnect;
 

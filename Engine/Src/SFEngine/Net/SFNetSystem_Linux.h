@@ -49,7 +49,7 @@ namespace Net {
 	struct IOBUFFER_RWBASE : public IOBUFFER
 	{
 		// transferred buffer size
-		uint32_t TransferredSize;
+        uint32_t TransferredSize{};
 
 		union {
 			// UDP Read from
@@ -69,7 +69,7 @@ namespace Net {
 		SF_SOCKET SockWrite;
 
 		// Sending raw buffer, always has send buffer data pointer and size
-		uint RawSendSize;
+		uint SendBufferSize;
 		uint8_t* pRawSendBuffer;
 
 		// Constructor

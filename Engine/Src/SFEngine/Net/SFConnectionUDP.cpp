@@ -56,7 +56,6 @@ namespace Net {
 		: ConnectionUDP(heap, ioHandler)
 	{
 		// limit server net retry maximum
-		SetHeartbeatTry( Const::SVR_HEARTBEAT_TIME_PEER );
 		SetMaxGuarantedRetry( Const::UDP_CLI_RETRY_ONETIME_MAX );
 	}
 
@@ -95,7 +94,6 @@ namespace Net {
 		: ConnectionUDP(heap, ioHandler)
 	{
 		// limit server net retry maximum
-		SetHeartbeatTry( Const::SVR_HEARTBEAT_TIME_UDP );
 		SetMaxGuarantedRetry( Const::UDP_CLI_RETRY_ONETIME_MAX );
 	}
 
@@ -181,8 +179,9 @@ namespace Net {
 	Result ConnectionUDPClient::MyNetSocketIOAdapter::OnWriteReady()
 	{
 		// We will not need this feature
-		return ProcessSendQueue();
-
+		//return ProcessSendQueue();
+        assert(false);
+        return ResultCode::NOT_IMPLEMENTED;
 	}
 
 
@@ -235,8 +234,6 @@ namespace Net {
 
 		AddStateAction(ConnectionState::CONNECTING, &m_TimeoutConnecting);
 		AddStateAction(ConnectionState::CONNECTING, &m_SendConnect);
-		AddStateAction(ConnectionState::CONNECTED, &m_TimeoutHeartbeat);
-		AddStateAction(ConnectionState::CONNECTED, &m_SendHeartbeat);
 
 		AddStateAction(ConnectionState::DISCONNECTING, &m_TimeoutDisconnecting);
 		AddStateAction(ConnectionState::DISCONNECTING, &m_SendDisconnect);
@@ -385,7 +382,8 @@ namespace Net {
         bool bWriteIsReady = m_bWriteIsReady.exchange(false, std::memory_order_consume);
         if (bWriteIsReady) // if write ready is triggered this tick
         {
-            m_NetIOAdapter.ProcessSendQueue();
+            SendFlush();
+            //m_NetIOAdapter.ProcessSendQueue();
         }
 
         return hr;

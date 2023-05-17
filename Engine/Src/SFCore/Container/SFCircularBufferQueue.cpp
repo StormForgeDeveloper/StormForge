@@ -263,15 +263,20 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
+    CircularBufferQueue::ItemReadPtr CircularBufferQueue::DequeueRead()
+    {
+        MutexScopeLock ticketScope(m_TailLock);
+        return std::forward<ItemReadPtr>(DequeueReadNoLock());
+    }
+
 	// mark the buffer for read
-	CircularBufferQueue::ItemReadPtr CircularBufferQueue::DequeueRead()
+	CircularBufferQueue::ItemReadPtr CircularBufferQueue::DequeueReadNoLock()
 	{
 		BufferItem* pHead = m_HeadPos.load(std::memory_order_acquire);
 
 		if (pHead == nullptr)
 			return ItemReadPtr();
 
-        MutexScopeLock ticketScope(m_TailLock);
         BufferItem* pTail = m_TailPos.load(std::memory_order_relaxed);
 		if (pTail == pHead) // queue is empty
 			return ItemReadPtr();
@@ -350,8 +355,7 @@ namespace SF
 #endif
 
         // TailPos and item state should be synchronized, so need to lock them together
-        // TODO: this lock make below compare_exchange_weak useless. need to improve that
-        MutexScopeLock ticketScope(m_HeadLock);
+        MutexScopeLock ticketScope(m_TailLock);
 
         ItemState expected = expectedState;
         bool bExchanged = pBuffer->State.compare_exchange_strong(expected,

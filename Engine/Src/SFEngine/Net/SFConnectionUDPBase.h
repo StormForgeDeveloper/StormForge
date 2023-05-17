@@ -13,6 +13,7 @@
 #pragma once
 
 #include "Container/SFCircularPageQueue.h"
+#include "Container/SFCircularBufferQueue.h"
 #include "ResultCode/SFResultCodeEngine.h"
 #include "Net/SFNetDef.h"
 #include "Net/SFNetCtrl.h"
@@ -48,14 +49,26 @@ namespace Net {
 		// Maximum guaranteed retry at once
 		uint				m_uiMaxGuarantedRetryAtOnce;
 
+
+        // Guaranteed sending wait queue
+        MsgQueue m_SendGuaQueue;
+
+        // send message buffer queue
+        // messages will be queue up here and pass to gathering buffer for send on connection tick.
+        // If circular buffer is full, then net flush will be called on sender thread
+        StaticCircularBufferQueue<Const::UDP_CONNECTION_SENDBUFFER_SIZE> m_GatheringBufferQueue;
+
+        // Gathering buffer lock
         CriticalSection m_GatheringBufferLock;
+
         // packet gathering buffer
         SFUniquePtr<PacketData> m_GatheringBuffer;
 
         // Minimum gathered size for flush
         uint m_uiMinGatherSizeForFlush = 0;
 
-		// subframe message
+		// subframe message 
+        CriticalSection m_SubframeLock;
 		SFUniquePtr<MessageHeader> m_SubFrameCollectionBuffer;
 
 		// UDP send queue
@@ -89,7 +102,7 @@ namespace Net {
 		WriteBufferQueue* GetWriteQueueUDP() { return m_pWriteQueuesUDP; }
 
 		// Send packet buffer to connection with network device
-		virtual Result EnqueueBufferUDP(IOBUFFER_WRITE *pSendBuffer);
+		//virtual Result EnqueueBufferUDP(IOBUFFER_WRITE *pSendBuffer);
 
 		virtual Result ProcNetCtrl(const MsgNetCtrlBuffer* pNetCtrl) override;
 
@@ -100,6 +113,8 @@ namespace Net {
 		// Constructor
 		ConnectionUDPBase(IHeap& heap, SocketIO* ioHandler);
 		virtual ~ConnectionUDPBase();
+
+        virtual void Dispose() override;
 
 		void SetSendBoost(int value) { m_SendBoost = value; }
 		int GetSendBoost() { return m_SendBoost; }
@@ -119,16 +134,22 @@ namespace Net {
 		virtual Result SendPending(uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t parameter0 = 0) override;
 		Result SendFlush();
 
-		// Prepare gathering buffer
-        Result AllocSendBuffer();
-		Result PrepareGatheringBuffer(uint uiRequiredSize);
+        // Access to send guaranteed queue
+        MsgQueue& GetSendGuaQueue() { return m_SendGuaQueue; }
 
+    protected:
+        // Prepare gathering buffer
+        Result AllocSendGatherBuffer();
+        Result PrepareGatheringBuffer(uint uiRequiredSize);
+
+        Result SendFlushGatheringBufferInternal();
 
 		// frame sequence
 		Result SendFrameSequenceMessage(const MessageHeader* pMsg);
 		Result OnFrameSequenceMessage(const MessageHeader* pMsg);
 
-		// Initialize connection
+    public:
+        // Initialize connection
 		virtual Result InitConnection(const PeerInfo &local, const PeerInfo &remote) override;
 
 		// Close connection

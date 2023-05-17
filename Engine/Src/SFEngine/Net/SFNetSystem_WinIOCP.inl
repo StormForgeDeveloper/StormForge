@@ -28,7 +28,8 @@ void IOBUFFER_WRITE::InitForIO(SF_SOCKET sockWrite)
 
 void IOBUFFER_WRITE::InitBuff( uint uiBuffSize, uint8_t* pBuff )
 {
-	TransferredSize = uiBuffSize;
+    TransferredSize = 0;
+    SendBufferSize = uiBuffSize;
 	wsaBuff.len = uiBuffSize;
 	wsaBuff.buf = (char*)pBuff;
 }

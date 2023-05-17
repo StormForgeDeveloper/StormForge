@@ -97,7 +97,9 @@ namespace Net {
 
 	Result NetUDP::MyNetSocketIOAdapter::OnWriteReady()
 	{
-		return ProcessSendQueue();
+		//return ProcessSendQueue();
+        assert(false);
+        return ResultCode::NOT_IMPLEMENTED;
 	}
 
 	// Send message to connection with network device
@@ -274,14 +276,7 @@ namespace Net {
 		netMem(pOverlapped = new(GetSystemHeap()) IOBUFFER_WRITE);
 		pOverlapped->SetupSendUDP(m_NetIOAdapter.GetIOSocket(), dest, (uint)sendSize, pBuff);
 
-		if (NetSystem::IsProactorSystem())
-		{
-			netChk(m_NetIOAdapter.WriteBuffer(pOverlapped));
-		}
-		else
-		{
-			netChk(m_NetIOAdapter.EnqueueBuffer(pOverlapped));
-		}
+    	netChk(m_NetIOAdapter.WriteBuffer(pOverlapped));
 
 	Proc_End:
 

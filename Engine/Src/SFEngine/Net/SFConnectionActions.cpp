@@ -490,40 +490,45 @@ namespace Net {
 		return hr;
 	}
 
+    ConnectionStateAction_Heartbeat::ConnectionStateAction_Heartbeat(DurationMS heartbeatRetry)
+        : m_HeartbeatReceivedTime(Util::Time.GetTimeMs())
+        , m_HeartbeatSendTime(Util::Time.GetTimeMs())
+        , m_HeartbeatRetry(heartbeatRetry)
+    {
+    }
 
-	Result ConnectionStateAction_TimeoutHeartbeat::Run()
-	{
-		Result hr;
+    void ConnectionStateAction_Heartbeat::OnHeartbeatPacket()
+    {
+        SFLog(Net, Debug, "Connection heartbeat Received CID:{0}, sockType:{1}, remote:{2}", GetCID(), GetSocketType(), GetConnection()->GetRemoteInfo().PeerAddress);
 
-		auto socketType = GetSocketType();
+        m_HeartbeatReceivedTime = Util::Time.GetTimeMs();
+    }
 
-		if (Util::TimeSince(GetNetCtrlTime()) > Const::HEARTBEAT_TIMEOUT) // connection time out
-		{
-			SFLog(Net, Debug, "Connection heartbeat Timeout CID:{0}, sockType:{1}", GetCID(), socketType);
-			netCheck(Disconnect("Connection TimeOut"));
-			netCheck(CloseConnection("Heartbeat timeout"));
-		}
+    Result ConnectionStateAction_Heartbeat::Run()
+    {
+        Result hr;
+        MessageID msgIDDummy;
+        msgIDDummy.ID = PACKET_NETCTRL_NONE;
 
-		return hr;
-	}
+        DurationMS timeSinceLatestReceived = Util::TimeSince(m_HeartbeatReceivedTime);
+        DurationMS timeSinceLatestSend = Util::TimeSince(m_HeartbeatSendTime);
 
-	Result ConnectionStateAction_SendHeartbeat::Run()
-	{
-		Result hr;
-		MessageID msgIDDummy;
-		msgIDDummy.ID = PACKET_NETCTRL_NONE;
+        if (timeSinceLatestReceived > (Const::HEARTBEAT_TIMEOUT * 60)) // connection time out
+        {
+            SFLog(Net, Debug, "Connection heartbeat Timeout CID:{0}, sockType:{1}, remote:{2}", GetCID(), GetSocketType(), GetConnection()->GetRemoteInfo().PeerAddress);
+            netCheck(Disconnect("Connection TimeOut"));
+            netCheck(CloseConnection("Heartbeat timeout"));
+        }
+        // send heartbeat
+        else if (timeSinceLatestSend > m_HeartbeatRetry) // heartbeat time
+        {
+            SFLog(Net, Debug, "Sending heartbeat CID:{0}, sockType:{1}, remote:{2}", GetCID(), GetSocketType(), GetConnection()->GetRemoteInfo().PeerAddress);
+            m_HeartbeatSendTime = Util::Time.GetTimeMs();
+            netCheck(GetConnection()->SendPending(PACKET_NETCTRL_HEARTBEAT, 0, msgIDDummy));
+        }
 
-		auto socketType = GetSocketType();
-
-		if (Util::TimeSince(GetNetCtrlTryTime()) > GetConnection()->GetHeartbeatTry()) // heartbeat time
-		{
-			SFLog(Net, Debug3, "Sending heartbeat CID:{0}, sockType:{1}", GetCID(), socketType);
-			UpdateNetCtrlTryTime();
-			netCheck(GetConnection()->SendPending(PACKET_NETCTRL_HEARTBEAT, 0, msgIDDummy));
-		}
-
-		return hr;
-	}
+        return hr;
+    }
 
 
 	Result ConnectionStateAction_StateTimeout::Run()

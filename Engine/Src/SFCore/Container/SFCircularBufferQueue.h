@@ -194,6 +194,76 @@ namespace SF
             }
         };
 
+
+        class ItemIterator : public ItemPtr
+        {
+        public:
+            ItemIterator() {}
+            ItemIterator(CircularBufferQueue* pContainer, BufferItem* pItem)
+                : ItemPtr(pContainer, pItem)
+            {
+                assert(pItem == nullptr || pItem->State.load(std::memory_order_relaxed) == ItemState::Filled);
+            }
+            ItemIterator(ItemReadPtr&& src)
+                : ItemPtr(std::forward<ItemPtr>(src))
+            {
+            }
+            ~ItemIterator()
+            {
+                Reset();
+            }
+
+            using ItemPtr::IsValid;
+            using ItemPtr::data;
+            using ItemPtr::GetDataSize;
+            using ItemPtr::GetBufferItem;
+
+            void Reset()
+            {
+                if (m_pContainer && m_pItem)
+                {
+                    m_pContainer = nullptr;
+                    m_pItem = nullptr;
+                }
+            }
+
+            Result StartRead()
+            {
+                ItemState expected = ItemState::Filled;
+                bool bExchanged = m_pItem->State.compare_exchange_strong(expected, ItemState::Reading, std::memory_order_release, std::memory_order_acquire);
+                if (!bExchanged)
+                {
+                    assert(expected == ItemState::Dummy);
+                    return ResultCode::FAIL;
+                }
+                return ResultCode::SUCCESS;
+            }
+
+            void CancelRead()
+            {
+                m_pContainer->CancelRead(m_pItem);
+            }
+
+            ItemIterator& operator ++()
+            {
+                if (!IsValid())
+                    return *this;
+
+                m_pItem = m_pContainer->PeekNext(m_pItem);
+
+                return *this;
+            }
+
+            ItemIterator& operator = (ItemIterator&& src)
+            {
+                Reset();
+                *((ItemPtr*)this) = std::forward<ItemPtr>(src);
+                return *this;
+            }
+        };
+
+
+
 	private:
 
 		IHeap& m_Heap;
@@ -266,6 +336,7 @@ namespace SF
 		Result ReleaseWrite(BufferItem* pBuffer);
 
         ItemReadPtr DequeueRead();
+        ItemReadPtr DequeueReadNoLock();
 		void CancelRead(BufferItem* item);
         Result ReleaseRead(BufferItem* pBuffer)
         {
@@ -277,7 +348,8 @@ namespace SF
         }
 
 		// low level access. don't change state, just sneak peek tail item. 
-		// NOTE: NOT thread safe. caller should guarantee thread safety   
+		// NOTE: NOT thread safe. caller should guarantee thread safety
+        ItemIterator TailIterator() { return ItemIterator(this, PeekTail()); }
 		BufferItem* PeekTail();
 		BufferItem* PeekNext(BufferItem* item);
 

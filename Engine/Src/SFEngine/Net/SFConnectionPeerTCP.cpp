@@ -61,13 +61,10 @@ namespace Net {
 		: ConnectionTCP(heap)
 	{
 		//GetRecvBuffer()->SetupRecvTCP( GetCID() );
-		SetHeartbeatTry(Const::SVR_HEARTBEAT_TIME_PEER);
 		SetConnectingTimeOut(Const::SVR_CONNECTION_TIMEOUT);
 
 		AddStateAction(ConnectionState::CONNECTING, &m_TimeoutConnecting);
 		AddStateAction(ConnectionState::CONNECTING, &m_SendConnect);
-		AddStateAction(ConnectionState::CONNECTED, &m_TimeoutHeartbeat);
-		AddStateAction(ConnectionState::CONNECTED, &m_SendHeartbeat);
 		AddStateAction(ConnectionState::DISCONNECTING, &m_TimeoutDisconnecting);
 		AddStateAction(ConnectionState::DISCONNECTING, &m_SendDisconnect);
 	}

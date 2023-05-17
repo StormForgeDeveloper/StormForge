@@ -299,79 +299,79 @@ namespace Net {
 
 
 
-	// Constructor/destructor
-	EPOLLSendWorker::EPOLLSendWorker()
-		: m_WriteQueue(Service::NetSystem->GetHeap())
-	{
-	}
+	//// Constructor/destructor
+	//EPOLLSendWorker::EPOLLSendWorker()
+	//	: m_WriteQueue(Service::NetSystem->GetHeap())
+	//{
+	//}
 
-	EPOLLSendWorker::~EPOLLSendWorker()
-	{
-		m_WriteQueue.Reset();
-	}
+	//EPOLLSendWorker::~EPOLLSendWorker()
+	//{
+	//	m_WriteQueue.Reset();
+	//}
 
-	void EPOLLSendWorker::Run()
-	{
-		Result hr = ResultCode::SUCCESS;
-		IOBUFFER_WRITE* pSendBuffer = nullptr;
-		DurationMS tickInterval(0);
+	//void EPOLLSendWorker::Run()
+	//{
+	//	Result hr = ResultCode::SUCCESS;
+	//	IOBUFFER_WRITE* pSendBuffer = nullptr;
+	//	DurationMS tickInterval(0);
 
-		while (1)
-		{
-			hr = ResultCode::SUCCESS;
+	//	while (1)
+	//	{
+	//		hr = ResultCode::SUCCESS;
 
-			// Check exit event
-			if (CheckKillEvent(tickInterval))
-				break;
-
-
-			if (pSendBuffer == nullptr) m_WriteQueue.Dequeue(pSendBuffer);
-
-			if (pSendBuffer == nullptr)
-			{
-				tickInterval = DurationMS(1);
-				continue;
-			}
-			else
-			{
-				tickInterval = DurationMS(0);
-			}
-
-			switch (pSendBuffer->Operation)
-			{
-			case IOBUFFER_OPERATION::OP_TCPWRITE:
-				Assert(false); // TCP packets will be sent by RW workers
-				break;
-			case IOBUFFER_OPERATION::OP_UDPWRITE:
-				hr = Service::NetSystem->SendTo(pSendBuffer->SockWrite, pSendBuffer);
-				switch ((uint32_t)hr)
-				{
-				case (uint32_t)ResultCode::IO_TRY_AGAIN:
-					continue; // try again
-					break;
-				case (uint32_t)ResultCode::SUCCESS:
-					break;
-				default:
-					SFLog(Net, Info, "ERROR UDP send failed {0:X8}", hr);
-					// send fail
-					break;
-				}
-				break;
-			default:
-				Assert(false);// This thread isn't designed to work on other stuffs
-				break;
-			}
+	//		// Check exit event
+	//		if (CheckKillEvent(tickInterval))
+	//			break;
 
 
-			Util::SafeDelete(pSendBuffer);
-			pSendBuffer = nullptr;
-			
+	//		if (pSendBuffer == nullptr) m_WriteQueue.Dequeue(pSendBuffer);
 
-		} // while(1)
+	//		if (pSendBuffer == nullptr)
+	//		{
+	//			tickInterval = DurationMS(1);
+	//			continue;
+	//		}
+	//		else
+	//		{
+	//			tickInterval = DurationMS(0);
+	//		}
+
+	//		switch (pSendBuffer->Operation)
+	//		{
+	//		case IOBUFFER_OPERATION::OP_TCPWRITE:
+	//			Assert(false); // TCP packets will be sent by RW workers
+	//			break;
+	//		case IOBUFFER_OPERATION::OP_UDPWRITE:
+	//			hr = Service::NetSystem->SendTo(pSendBuffer->SockWrite, pSendBuffer);
+	//			switch ((uint32_t)hr)
+	//			{
+	//			case (uint32_t)ResultCode::IO_TRY_AGAIN:
+	//				continue; // try again
+	//				break;
+	//			case (uint32_t)ResultCode::SUCCESS:
+	//				break;
+	//			default:
+	//				SFLog(Net, Info, "ERROR UDP send failed {0:X8}", hr);
+	//				// send fail
+	//				break;
+	//			}
+	//			break;
+	//		default:
+	//			Assert(false);// This thread isn't designed to work on other stuffs
+	//			break;
+	//		}
 
 
-		Util::SafeDelete(pSendBuffer);
-	}
+	//		Util::SafeDelete(pSendBuffer);
+	//		pSendBuffer = nullptr;
+	//		
+
+	//	} // while(1)
+
+
+	//	Util::SafeDelete(pSendBuffer);
+	//}
 
 
 
@@ -387,7 +387,7 @@ namespace Net {
 		: m_ListenWorker(nullptr)
 		, m_iTCPAssignIndex(0)
 		, m_WorkerTCP(Service::NetSystem->GetHeap())
-		, m_UDPSendWorker(nullptr)
+//		, m_UDPSendWorker(nullptr)
 		, m_WorkerUDP(Service::NetSystem->GetHeap())
 	{
 	}
@@ -403,8 +403,8 @@ namespace Net {
 		m_ListenWorker = new(Service::NetSystem->GetHeap()) EPOLLWorker(false);
 		m_ListenWorker->Start();
 
-		m_UDPSendWorker = new(Service::NetSystem->GetHeap()) EPOLLSendWorker;
-		m_UDPSendWorker->Start();
+		//m_UDPSendWorker = new(Service::NetSystem->GetHeap()) EPOLLSendWorker;
+		//m_UDPSendWorker->Start();
 
 		m_iTCPAssignIndex = 0;
 
@@ -455,12 +455,12 @@ namespace Net {
 		m_WorkerTCP.Clear();
 
 
-		if (m_UDPSendWorker)
-		{
-			m_UDPSendWorker->Stop(true);
-			Service::NetSystem->GetHeap().Delete(m_UDPSendWorker);
-		}
-		m_UDPSendWorker = nullptr;
+		//if (m_UDPSendWorker)
+		//{
+		//	m_UDPSendWorker->Stop(true);
+		//	Service::NetSystem->GetHeap().Delete(m_UDPSendWorker);
+		//}
+		//m_UDPSendWorker = nullptr;
 
 		// 
 		int hEpoll = 0;
@@ -502,13 +502,13 @@ namespace Net {
 	}
 
 
-	WriteBufferQueue* EPOLLSystem::GetWriteBufferQueue()
-	{
-		if (m_UDPSendWorker == nullptr)
-			return nullptr;
+	//WriteBufferQueue* EPOLLSystem::GetWriteBufferQueue()
+	//{
+	//	if (m_UDPSendWorker == nullptr)
+	//		return nullptr;
 
-		return &m_UDPSendWorker->GetWriteQueue();
-	}
+	//	return &m_UDPSendWorker->GetWriteQueue();
+	//}
 
 
 	//Result EPOLLSystem::RegisterSharedSocket(SocketType sockType, SocketIO* cbInstance)
@@ -554,7 +554,7 @@ namespace Net {
 			if (cbInstance->GetWriteQueue() == nullptr)
 			{
 				Assert(cbInstance->GetIOSockType() == SocketType::DataGram);
-				cbInstance->SetWriteQueue( &m_UDPSendWorker->GetWriteQueue() );
+				//cbInstance->SetWriteQueue( &m_UDPSendWorker->GetWriteQueue() );
 			}
 
 			if (m_WorkerUDP.size() < 1)

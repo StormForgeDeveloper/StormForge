@@ -26,7 +26,8 @@ void IOBUFFER_WRITE::InitForIO(SF_SOCKET sockWrite)
 
 void IOBUFFER_WRITE::InitBuff(uint uiBuffSize, uint8_t* pBuff)
 {
-	RawSendSize = uiBuffSize;
+    TransferredSize = 0;
+    SendBufferSize = uiBuffSize;
 	pRawSendBuffer = pBuff;
 }
 

@@ -75,26 +75,26 @@ namespace Net {
 		Result HandleRW(SF_SOCKET sock, unsigned int events, SocketIO* pCallBack);
 	};
 
+    // TODO: Send thread is under renovation
+	//class KQUEUESendWorker : public Thread
+	//{
+	//public:
 
-	class KQUEUESendWorker : public Thread
-	{
-	public:
+	//private:
+	//	// KQUEUE handle
+	//	
+	//	WriteBufferQueue m_WriteQueue;
 
-	private:
-		// KQUEUE handle
-		
-		WriteBufferQueue m_WriteQueue;
+	//public:
+	//	// Constructor/destructor
+	//	KQUEUESendWorker();
 
-	public:
-		// Constructor/destructor
-		KQUEUESendWorker();
+	//	~KQUEUESendWorker();
 
-		~KQUEUESendWorker();
+	//	WriteBufferQueue& GetWriteQueue() { return m_WriteQueue; }
 
-		WriteBufferQueue& GetWriteQueue() { return m_WriteQueue; }
-
-		virtual void Run() override;
-	};
+	//	virtual void Run() override;
+	//};
 
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -113,7 +113,7 @@ namespace Net {
 		DynamicArray<KQUEUEWorker*> m_WorkerTCP;
 
 		// workers for UDP
-		KQUEUESendWorker* m_UDPSendWorker;
+		//KQUEUESendWorker* m_UDPSendWorker;
 		DynamicArray<KQUEUEWorker*> m_WorkerUDP;
 
 	public:
@@ -124,7 +124,7 @@ namespace Net {
 		virtual void Terminate() override;
 
 		virtual Result MakeSocketNonBlocking(SF_SOCKET sfd) override;
-		virtual WriteBufferQueue* GetWriteBufferQueue() override;
+		//virtual WriteBufferQueue* GetWriteBufferQueue() override;
 		//Result RegisterSharedSocket(SocketType sockType, SocketIO* cbInstance) override;
 
 		// Register the socket to KQUEUE

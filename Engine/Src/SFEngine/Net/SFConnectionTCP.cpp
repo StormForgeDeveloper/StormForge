@@ -194,7 +194,9 @@ namespace Net {
     {
         if (m_Owner.m_SendBufferQueue.IsManagedAddress(pIOBuffer))
         {
-            m_Owner.m_SendBufferQueue.ForceReleaseRead(CircularBufferQueue::BufferItem::FromDataPtr(pIOBuffer));
+            MutexScopeLock scopeLock(m_Owner.m_SendBufferQueueDequeueLock);
+
+            m_Owner.m_SendBufferQueue.ReleaseRead(CircularBufferQueue::BufferItem::FromDataPtr(pIOBuffer));
             DecPendingSendCount();
             return ResultCode::SUCCESS;
         }
@@ -244,23 +246,18 @@ namespace Net {
 	//
 
 	// Constructor
-	ConnectionTCP::ConnectionTCP(IHeap& heap, size_t sendBufferSize)
+	ConnectionTCP::ConnectionTCP(IHeap& heap)
 		: Connection(heap, &m_NetIOAdapter)
 		, m_NetIOAdapter(*this)
-        , m_SendBufferQueue(heap, sendBufferSize)
-		//, m_lGuarantedSent(0)
-		//, m_lGuarantedAck(0)
+        , m_SendBufferQueue(heap, Const::TCP_CONNECTION_SENDBUFFER_SIZE)
 		, m_uiRecvTemUsed(0)
-		//, m_WriteBuffer(GetHeap())
 		, m_uiSendNetCtrlCount(0)
 		, m_IsClientConnection(false)
 		, m_IsTCPSocketConnectionEstablished(true)
 	{
 		m_bufRecvTem.resize(Const::PACKET_SIZE_MAX * 2);
 
-		SetHeartbeatTry(Const::TCP_HEARTBEAT_START_TIME);
-
-		m_NetIOAdapter.SetWriteQueue(new(GetHeap()) WriteBufferQueue(GetHeap()));
+		//m_NetIOAdapter.SetWriteQueue(new(GetHeap()) WriteBufferQueue(GetHeap()));
 
 		SetNetCtrlAction(NetCtrlCode_Ack, &m_HandleAck);
 		SetNetCtrlAction(NetCtrlCode_Nack, &m_HandleNack);
@@ -281,7 +278,7 @@ namespace Net {
 			m_NetIOAdapter.CloseSocket();
 		}
 
-		if (m_NetIOAdapter.GetWriteQueue()) IHeap::Delete(m_NetIOAdapter.GetWriteQueue());
+		//if (m_NetIOAdapter.GetWriteQueue()) IHeap::Delete(m_NetIOAdapter.GetWriteQueue());
 	}
 
 
@@ -677,7 +674,6 @@ namespace Net {
             return hr = ResultCode::IO_SEND_FAIL;
         }
 
-        CircularBufferQueue::BufferItem* pSendBufferItem = itemWritePtr.GetBufferItem();
         IOBUFFER_WRITE* pSendBuffer = new(itemWritePtr.data()) IOBUFFER_WRITE;
 
         assert(pSendBuffer == itemWritePtr.data());
@@ -697,27 +693,43 @@ namespace Net {
         // Release before handover to buffer send
         itemWritePtr.Reset();
 
-        m_NetIOAdapter.IncPendingSendCount();
+        // kick send queue processing
+        m_bWriteIsReady.store(true, std::memory_order_release);
 
-        if (NetSystem::IsProactorSystem())
+        return hr;
+    }
+
+    Result ConnectionTCP::ProcessSendQueue()
+    {
+        Result hr;
+
+        MutexScopeLock scopeLock(m_SendBufferQueueDequeueLock);
+
+        CircularBufferQueue::ItemIterator itemPtr = m_SendBufferQueue.TailIterator();
+        for (; itemPtr; ++itemPtr)
         {
+            if (!itemPtr.StartRead())
+                break;
+
+            IOBUFFER_WRITE* pSendBuffer = reinterpret_cast<IOBUFFER_WRITE*>(itemPtr.data());
+
+            // WriteBuffer will trigger OnIOSendCompleted if transfer is completed, and the item will be released
             hr = m_NetIOAdapter.WriteBuffer(pSendBuffer);
-        }
-        else
-        {
-            hr = m_NetIOAdapter.EnqueueBuffer(pSendBuffer);
-            m_NetIOAdapter.ProcessSendQueue();
-        }
+            if (!hr)
+            {
+                // need to try again
+                itemPtr.CancelRead();
+                break;
+            }
 
-        if (!hr)
-        {
-            SFLog(Net, Warning, "ConnectionTCP::SendRaw, Send failure hr:{0}", hr);
-            m_SendBufferQueue.ForceReleaseRead(pSendBufferItem);
-            m_NetIOAdapter.DecPendingSendCount();
+            // The read mode will be cleared in OnIOSendCompleted
+
+            m_NetIOAdapter.IncPendingSendCount();
         }
 
         return hr;
     }
+
 
     Result ConnectionTCP::SendMsg(const MessageHeader* pMsgHeader)
     {
@@ -760,7 +772,7 @@ namespace Net {
 
         // TODO: fix me
         //if (!pMsgHeader->msgID.IDs.Reliability
-        //    && (m_lGuarantedSent - m_lGuarantedAck) > Const::GUARANT_PENDING_MAX)
+        //    && (m_lGuarantedSent - m_lGuarantedAck) > Const::GUARANTEED_PENDING_MAX)
         //{
         //    // Drop if there are too many reliable packets
         //    netCheck(ResultCode::IO_SEND_FAIL);
@@ -814,7 +826,8 @@ namespace Net {
         bool bWriteIsReady = m_bWriteIsReady.exchange(false, std::memory_order_consume);
         if (bWriteIsReady) // if write ready is triggered this tick
         {
-            m_NetIOAdapter.ProcessSendQueue();
+            ProcessSendQueue();
+            //m_NetIOAdapter.ProcessSendQueue();
         }
 
         return hr;
@@ -839,8 +852,6 @@ namespace Net {
 
 		AddStateAction(ConnectionState::CONNECTING, &m_TimeoutConnecting);
 		AddStateAction(ConnectionState::CONNECTING, &m_SendConnect);
-		AddStateAction(ConnectionState::CONNECTED, &m_TimeoutHeartbeat);
-		AddStateAction(ConnectionState::CONNECTED, &m_SendHeartbeat);
 		AddStateAction(ConnectionState::DISCONNECTING, &m_TimeoutDisconnecting);
 		AddStateAction(ConnectionState::DISCONNECTING, &m_SendDisconnect);
 	}
@@ -871,12 +882,9 @@ namespace Net {
 	ConnectionTCPServer::ConnectionTCPServer(IHeap& heap)
 		: ConnectionTCP(heap)
 	{
-		SetHeartbeatTry(Const::SVR_HEARTBEAT_TIME_PEER);
-
-		Assert(GetMyNetIOAdapter().GetWriteQueue() != nullptr);
+		//Assert(GetMyNetIOAdapter().GetWriteQueue() != nullptr);
 
 		AddStateAction(ConnectionState::CONNECTING, &m_TimeoutConnecting);
-		AddStateAction(ConnectionState::CONNECTED, &m_TimeoutHeartbeat);
 		AddStateAction(ConnectionState::DISCONNECTING, &m_TimeoutDisconnecting);
 		AddStateAction(ConnectionState::DISCONNECTING, &m_SendDisconnect);
 	}

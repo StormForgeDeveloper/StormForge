@@ -254,6 +254,7 @@ namespace SF
 
 		// tick time
 		TimeStampMS m_TickTime;
+        TimeStampMS m_PreviousTickTime;
 
 		// Move frame
 		uint32_t m_MoveFrame{};

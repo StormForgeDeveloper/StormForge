@@ -95,8 +95,7 @@ namespace Net {
 		// Event queue
 		CircularPageQueueAtomic<uint64_t>	m_EventQueue;
 
-		// heartbeat time
-		DurationMS	m_ulHeartbeatTry;
+		// connecting state time
 		DurationMS	m_ulConnectingTimeOut;
 
 		// Sequence 
@@ -120,10 +119,10 @@ namespace Net {
 		// Message endpoint adapter
 		mutable SharedPointerT<MessageEndpoint> m_MessageEndpoint;
 
-	protected:
+        // sending heartbeat + timeout check
+        ConnectionStateAction_Heartbeat m_Heartbeat;
 
-		// Guaranteed sending wait queue
-		MsgQueue m_SendGuaQueue;
+	protected:
 
 		// NetCtrl control time
 		TimeStampMS m_ulNetCtrlTime;
@@ -232,9 +231,6 @@ namespace Net {
 		// Get Recv queue
         RecvMessageQueue& GetRecvMessageQueue() { return m_RecvMessageQueue; }
 
-        // Access to send guaranteed queue
-		MsgQueue& GetSendGuaQueue() { return m_SendGuaQueue; }
-
 
 		bool GetUsePeerIDMap() { return m_UsePeerIDMap; }
 		void SetUsePeerIDMap(bool enable) { m_UsePeerIDMap = enable; }
@@ -246,27 +242,19 @@ namespace Net {
 		ThreadID GetRunningThreadID() const { return m_RunningThreadID; }
 		void SetRunningThreadID(ThreadID threadID) { m_RunningThreadID = threadID; }
 
-
 		// Get zero recv count
 		inline uint32_t GetZeroRecvCount();
 		inline void IncZeroRecvCount();
 		inline void ResetZeroRecvCount();
 
-
 		// Sequence generation
 		inline uint16_t NewSeqNone();
-
-		// heartbeat time
-		DurationMS GetHeartbeatTry();
-		void SetHeartbeatTry(DurationMS ulHeartbeatTry);
 
 		DurationMS GetConnectingTimeOut();
 		void SetConnectingTimeOut(DurationMS ulConnectingTimeOut);
 
-
 		TimeStampMS GetNetCtrlTime() { return m_ulNetCtrlTime; }
 		TimeStampMS GetNetCtrlTryTime() { return m_ulNetCtrlTryTime; }
-
 
 		// Update net ctrl time
 		void UpdateNetCtrlTime();
@@ -321,7 +309,7 @@ namespace Net {
 
 		void OnTimeSyncRtn(DurationMS roundTripTime);
 
-
+        // called when a heartbeat packet  arrives
 		void OnHeartbeatPacket();
 
 

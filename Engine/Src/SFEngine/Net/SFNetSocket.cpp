@@ -43,7 +43,7 @@ namespace Net {
 	SocketIO::SocketIO(IHeap& heap)
 		: m_Heap(heap)
 		, m_IOStatus(IOStatus::None)
-		, m_pWriteQueues(nullptr)
+		//, m_pWriteQueues(nullptr)
 		, m_PendingRecvCount(0)
 		, m_PendingSendCount(0)
 	{
@@ -120,53 +120,53 @@ namespace Net {
 		}
 	}
 
-	Result SocketIO::ProcessSendQueue()
-	{
-		Result hr = ResultCode::SUCCESS;
-		IOBUFFER_WRITE* pSendBuffer = nullptr;
+	//Result SocketIO::ProcessSendQueue()
+	//{
+	//	Result hr = ResultCode::SUCCESS;
+	//	IOBUFFER_WRITE* pSendBuffer = nullptr;
 
-		auto writeQueue = m_pWriteQueues;
-		if(writeQueue == nullptr) return ResultCode::INVALID_POINTER;
+	//	auto writeQueue = m_pWriteQueues;
+	//	if(writeQueue == nullptr) return ResultCode::INVALID_POINTER;
 
-		while (1)
-		{
-			hr = writeQueue->GetFront(pSendBuffer);
-			if (!(hr))
-			{
-				hr = ResultCode::SUCCESS;
-				break;
-			}
+	//	while (1)
+	//	{
+	//		hr = writeQueue->GetFront(pSendBuffer);
+	//		if (!(hr))
+	//		{
+	//			hr = ResultCode::SUCCESS;
+	//			break;
+	//		}
 
-			hr = WriteBuffer(pSendBuffer);
-			switch ((uint32_t)hr)
-			{
-			case (uint32_t)ResultCode::SUCCESS:
-				writeQueue->Dequeue(pSendBuffer);
-				break;
-			case (uint32_t)ResultCode::IO_IO_PENDING:
-				break;
-			case (uint32_t)ResultCode::IO_WOULDBLOCK:  // WOULDBLOCK in linux can be try again
-			case (uint32_t)ResultCode::IO_TRY_AGAIN:
-			default:
-				goto Proc_End;
-				break;
-			}
-		}
+	//		hr = WriteBuffer(pSendBuffer);
+	//		switch ((uint32_t)hr)
+	//		{
+	//		case (uint32_t)ResultCode::SUCCESS:
+	//			writeQueue->Dequeue(pSendBuffer);
+	//			break;
+	//		case (uint32_t)ResultCode::IO_IO_PENDING:
+	//			break;
+	//		case (uint32_t)ResultCode::IO_WOULDBLOCK:  // WOULDBLOCK in linux can be try again
+	//		case (uint32_t)ResultCode::IO_TRY_AGAIN:
+	//		default:
+	//			goto Proc_End;
+	//			break;
+	//		}
+	//	}
 
-	Proc_End:
+	//Proc_End:
 
-		return hr;
-	}
+	//	return hr;
+	//}
 
 
 
-	Result SocketIO::EnqueueBuffer(IOBUFFER_WRITE *pSendBuffer)
-	{
-		auto writeQueue = m_pWriteQueues;
-		if (writeQueue == nullptr) return ResultCode::INVALID_POINTER;
+	//Result SocketIO::EnqueueBuffer(IOBUFFER_WRITE *pSendBuffer)
+	//{
+	//	auto writeQueue = m_pWriteQueues;
+	//	if (writeQueue == nullptr) return ResultCode::INVALID_POINTER;
 
-		return writeQueue->Enqueue(pSendBuffer);
-	}
+	//	return writeQueue->Enqueue(pSendBuffer);
+	//}
 
 
 
@@ -284,7 +284,7 @@ namespace Net {
 
 		pIOBuffer->SetupRecvUDP(GetUserSocketID());
 
-		hrErr = Service::NetSystem->RecvFrom(GetIOSocket(), pIOBuffer);
+		hrErr = Service::NetSystem->RecvFrom(this, pIOBuffer);
 		hr = hrErr;
 		switch ((uint32_t)hrErr)
 		{
@@ -325,16 +325,27 @@ namespace Net {
 
 		netChkPtr(pSendBuffer);
 
-		hrErr = Service::NetSystem->SendTo(GetIOSocket(), pSendBuffer);
+		hrErr = Service::NetSystem->SendTo(this, pSendBuffer);
 		hr = hrErr;
 		switch ((uint32_t)hrErr)
 		{
 		case (uint32_t)ResultCode::SUCCESS:
 		case (uint32_t)ResultCode::IO_IO_PENDING:
-		case (uint32_t)ResultCode::IO_WOULDBLOCK:
 			hr = ResultCode::SUCCESS;
 			break;
-		case (uint32_t)ResultCode::IO_TRY_AGAIN:
+        case (uint32_t)ResultCode::IO_WOULDBLOCK:
+        case (uint32_t)ResultCode::IO_TRY_AGAIN:
+            if (NetSystem::IsProactorSystem())
+            {
+                // Those are success with proactor system. The system will buffer the request and give notification when it is done
+                hr = ResultCode::SUCCESS;
+            }
+            else
+            {
+                // Reactor pattern doesn't have internal buffering. You need to retry send again
+                hr = ResultCode::IO_TRY_AGAIN;
+            }
+            break;
 		case (uint32_t)ResultCode::IO_CONNABORTED:
 		case (uint32_t)ResultCode::IO_CONNRESET:
 		case (uint32_t)ResultCode::IO_NETRESET:
@@ -436,7 +447,7 @@ namespace Net {
 		case (uint32_t)ResultCode::SUCCESS:
 		case (uint32_t)ResultCode::IO_WOULDBLOCK:
 		case (uint32_t)ResultCode::IO_IO_PENDING:
-			// successed
+			// succeeded
 			break;
 		case (uint32_t)ResultCode::IO_TRY_AGAIN:
 			//SFLog(Net, Info, "TCP accept busy, try again {0} accepts are queued", m_PendingAccept.load(std::memory_order_relaxed));
@@ -514,7 +525,7 @@ namespace Net {
 		netChkPtr(pIOBuffer);
 		pIOBuffer->SetupRecvTCP(GetUserSocketID());
 
-		hrErr = Service::NetSystem->Recv(GetIOSocket(), pIOBuffer);
+		hrErr = Service::NetSystem->Recv(this, pIOBuffer);
 		hr = hrErr;
 		switch ((uint32_t)hrErr)
 		{
@@ -556,16 +567,27 @@ namespace Net {
 
 		netChkPtr(pSendBuffer);
 
-		hrErr = Service::NetSystem->Send(GetIOSocket(), pSendBuffer);
+		hrErr = Service::NetSystem->Send(this, pSendBuffer);
 		hr = hrErr;
 		switch ((uint32_t)hrErr)
 		{
 		case (uint32_t)ResultCode::SUCCESS:
 		case (uint32_t)ResultCode::IO_IO_PENDING:
+            // consider them as success
+            hr = ResultCode::SUCCESS;
+            break;
 		case (uint32_t)ResultCode::IO_WOULDBLOCK:
 		case (uint32_t)ResultCode::IO_TRY_AGAIN:
-			// consider them as success
-			hr = ResultCode::SUCCESS;
+            if (NetSystem::IsProactorSystem())
+            {
+                // those are success with proactor system. The system will buffer the request and give notification when it is done
+                hr = ResultCode::SUCCESS;
+            }
+            else
+            {
+                // Partial success. Reactor pattern doesn't have internal buffering. You need to retry whole or partial send again
+                hr = ResultCode::IO_TRY_AGAIN;
+            }
 			break;
 		case (uint32_t)ResultCode::IO_CONNABORTED:
 		case (uint32_t)ResultCode::IO_CONNRESET:

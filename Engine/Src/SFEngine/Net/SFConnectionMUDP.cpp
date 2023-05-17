@@ -80,13 +80,7 @@ namespace SF {
             pHeader->Length = sizeof(MsgNetCtrlBuffer); // PrepareGatheringBuffer guarantees it has space
             netCheck(MakeNetCtrl(pHeader, PACKET_NETCTRL_SYNCRELIABLE, uiSequence, 0, uiSyncMask));
 
-            {
-                MutexScopeLock scopeLock(m_GatheringBufferLock);
-
-                netCheck(PrepareGatheringBuffer(pHeader->Length));
-
-                netCheckMem(m_GatheringBuffer->AddMessage(pHeader));
-            }
+            netCheck(SendRaw(pHeader));
 
             return hr;
 		}

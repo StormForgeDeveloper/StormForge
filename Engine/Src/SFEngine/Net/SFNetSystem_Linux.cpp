@@ -129,7 +129,7 @@ namespace Net {
 	IOBUFFER_WRITE::IOBUFFER_WRITE()
 	{
 		SockWrite = INVALID_SOCKET;
-		RawSendSize = 0;
+        SendBufferSize = 0;
 		pRawSendBuffer = nullptr;
 	}
 
@@ -199,10 +199,10 @@ namespace Net {
 	//
 
 
-	WriteBufferQueue* NetSystem::GetWriteBufferQueue()
-	{
-		return GetNetIOSystem().GetWriteBufferQueue();
-	}
+	//WriteBufferQueue* NetSystem::GetWriteBufferQueue()
+	//{
+	//	return GetNetIOSystem().GetWriteBufferQueue();
+	//}
 
 
 	///////////////////////////////////////////////////////////////////////////////
@@ -387,9 +387,9 @@ namespace Net {
 	}
 
 
-	Result NetSystem::Recv(SF_SOCKET sock, IOBUFFER_READ* pBuffer)
+	Result NetSystem::Recv(Net::SocketIO* sock, IOBUFFER_READ* pBuffer)
 	{
-		ssize_t recvSize = recv(sock, pBuffer->GetPayloadPtr(), IOBUFFER_READ::MaxPacketSize, MSG_DONTWAIT);
+		ssize_t recvSize = recv(sock->GetIOSocket(), pBuffer->GetPayloadPtr(), IOBUFFER_READ::MaxPacketSize, MSG_DONTWAIT);
 		if (recvSize < 0)
 		{
 			return GetLastNetSystemResult();
@@ -404,11 +404,11 @@ namespace Net {
 		return ResultCode::SUCCESS;
 	}
 
-	Result NetSystem::RecvFrom(SF_SOCKET sock, IOBUFFER_READ* pBuffer)
+	Result NetSystem::RecvFrom(Net::SocketIO* sock, IOBUFFER_READ* pBuffer)
 	{
 		Assert(pBuffer->iSockLen == sizeof(pBuffer->NetAddr.From));
 
-		ssize_t recvSize = recvfrom(sock, pBuffer->GetPayloadPtr(), IOBUFFER_READ::MaxPacketSize, MSG_DONTWAIT,
+		ssize_t recvSize = recvfrom(sock->GetIOSocket(), pBuffer->GetPayloadPtr(), IOBUFFER_READ::MaxPacketSize, MSG_DONTWAIT,
 			(sockaddr*)&pBuffer->NetAddr.From, &pBuffer->iSockLen);
 		if (recvSize < 0)
 		{
@@ -424,24 +424,43 @@ namespace Net {
 		return ResultCode::SUCCESS;
 	}
 
+    // https://stackoverflow.com/questions/64488670/how-to-write-to-a-nonblocking-socket-when-using-epoll
+    //send / to() will send as many bytes as it can, returning how many bytes it was actually able to give the kernel to send.
+    //If you are using a TCP socket, call send() in a loop until EITHER all of your bytes have been sent OR EAGAIN / EWOULDBLOCK is reported.In the latter case, stop the loop and cache the remaining bytes somewhere.
+    //If you are using a UDP socket, send / to() can only send whole datagrams, so don't use a loop at all, and if EAGAIN/EWOULDBLOCK is reported then cache the entire datagram.
+    //Whenever epoll indicates a socket is writable, send any cached bytes / datagrams for that socket as needed, removing only successful bytes / datgrams from the cache, until EITHER the cache is cleared OR EAGAIN / EWOULDBLOCK is reported.Leave unsent bytes / datagrams in the cache.
+    //Whenever you need to send new TCP bytes, or a new UDP datagram, if the socket's cache is not empty then append the bytes/datagram to the end of the cache and move on, otherwise attempt to send the bytes/datagram immediately, caching if EAGAIN/EWOULDBLOCK is reported, as described above.
 
-	Result NetSystem::Send(SF_SOCKET sock, IOBUFFER_WRITE* pBuffer)
+    Result NetSystem::Send(Net::SocketIO* sock, IOBUFFER_WRITE* pBuffer)
 	{
-		ssize_t sendSize = send(sock, pBuffer->pRawSendBuffer, pBuffer->RawSendSize, MSG_DONTWAIT | MSG_NOSIGNAL);
-		if (sendSize < 0)
+        Result hr;
+        if (pBuffer->SendBufferSize == pBuffer->TransferredSize)
+            return ResultCode::SUCCESS;
+
+		ssize_t sentSize = send(sock->GetIOSocket(), pBuffer->pRawSendBuffer + pBuffer->TransferredSize, pBuffer->SendBufferSize - pBuffer->TransferredSize, MSG_DONTWAIT | MSG_NOSIGNAL);
+		if (sentSize < 0)
 		{
 			return GetLastNetSystemResult();
 		}
 
-		pBuffer->TransferredSize = static_cast<uint32_t>(sendSize);
-
-		return ResultCode::SUCCESS;
+		pBuffer->TransferredSize += static_cast<uint32_t>(sentSize);
+        if (pBuffer->TransferredSize >= pBuffer->SendBufferSize)
+        {
+            hr = ResultCode::SUCCESS;
+            sock->OnIOSendCompleted(hr, pBuffer);
+            return hr;
+        }
+        else
+        {
+            // We have remain data to send, try again with updated offset
+            return ResultCode::IO_TRY_AGAIN;
+        }
 	}
 
-	Result NetSystem::SendTo(SF_SOCKET sock, IOBUFFER_WRITE* pBuffer)
+	Result NetSystem::SendTo(Net::SocketIO* sock, IOBUFFER_WRITE* pBuffer)
 	{
 		const sockaddr_storage& dstAddress = pBuffer->NetAddr.To;
-		ssize_t sendSize = sendto(sock, pBuffer->pRawSendBuffer, pBuffer->RawSendSize, MSG_DONTWAIT | MSG_NOSIGNAL,
+		ssize_t sendSize = sendto(sock->GetIOSocket(), pBuffer->pRawSendBuffer, pBuffer->SendBufferSize, MSG_DONTWAIT | MSG_NOSIGNAL,
 			(sockaddr*)&dstAddress, GetSockAddrSize(dstAddress));
 
 		if (sendSize < 0)
@@ -450,8 +469,17 @@ namespace Net {
 		}
 
 		pBuffer->TransferredSize = static_cast<uint32_t>(sendSize);
-
-		return ResultCode::SUCCESS;
+        if (pBuffer->TransferredSize >= pBuffer->SendBufferSize)
+        {
+            Result hr = ResultCode::SUCCESS;
+            sock->OnIOSendCompleted(hr, pBuffer);
+            return hr;
+        }
+        else
+        {
+            // We have remain data to send, try again with updated offset
+            return ResultCode::IO_TRY_AGAIN;
+        }
 	}
 
 

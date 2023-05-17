@@ -474,10 +474,10 @@ namespace Net {
 	//	Network system
 	//
 
-	WriteBufferQueue* NetSystem::GetWriteBufferQueue()
-	{
-		return nullptr;
-	}
+	//WriteBufferQueue* NetSystem::GetWriteBufferQueue()
+	//{
+	//	return nullptr;
+	//}
 
 
 	///////////////////////////////////////////////////////////////////////////////
@@ -660,10 +660,10 @@ namespace Net {
 	}
 
 
-	Result NetSystem::Recv(SF_SOCKET sock, IOBUFFER_READ* pBuffer)
+	Result NetSystem::Recv(SocketIO* sock, IOBUFFER_READ* pBuffer)
 	{
 		INT iErr = 0;
-		iErr = WSARecv(sock, &pBuffer->wsaBuff, 1, &pBuffer->dwNumberOfByte, &pBuffer->dwFlags, pBuffer, NULL);
+		iErr = WSARecv(sock->GetIOSocket(), &pBuffer->wsaBuff, 1, &pBuffer->dwNumberOfByte, &pBuffer->dwFlags, pBuffer, NULL);
 		if (iErr == SOCKET_ERROR)
 		{
 			return GetLastNetSystemResult();
@@ -672,10 +672,10 @@ namespace Net {
 		return ResultCode::SUCCESS;
 	}
 
-	Result NetSystem::RecvFrom(SF_SOCKET sock, IOBUFFER_READ* pBuffer)
+	Result NetSystem::RecvFrom(SocketIO* sock, IOBUFFER_READ* pBuffer)
 	{
 		INT iErr = 0;
-		iErr = WSARecvFrom(sock, &pBuffer->wsaBuff, 1, NULL, &pBuffer->dwFlags, (sockaddr*)&pBuffer->NetAddr.From, &pBuffer->iSockLen, pBuffer, NULL);
+		iErr = WSARecvFrom(sock->GetIOSocket(), &pBuffer->wsaBuff, 1, NULL, &pBuffer->dwFlags, (sockaddr*)&pBuffer->NetAddr.From, &pBuffer->iSockLen, pBuffer, NULL);
 		if (iErr == SOCKET_ERROR)
 		{
 			return GetLastNetSystemResult();
@@ -684,9 +684,9 @@ namespace Net {
 		return ResultCode::SUCCESS;
 	}
 
-	Result NetSystem::Send(SF_SOCKET sock, IOBUFFER_WRITE* pBuffer)
+	Result NetSystem::Send(SocketIO* sock, IOBUFFER_WRITE* pBuffer)
 	{
-		INT iErr = WSASend(sock, &pBuffer->wsaBuff, 1, nullptr, 0, pBuffer, NULL);
+		INT iErr = WSASend(sock->GetIOSocket(), &pBuffer->wsaBuff, 1, (LPDWORD)&pBuffer->TransferredSize, 0, pBuffer, NULL);
 		if (iErr == SOCKET_ERROR)
 		{
 			return GetLastNetSystemResult();
@@ -695,10 +695,10 @@ namespace Net {
 		return ResultCode::SUCCESS;
 	}
 
-	Result NetSystem::SendTo(SF_SOCKET sock, IOBUFFER_WRITE* pBuffer)
+	Result NetSystem::SendTo(SocketIO* sock, IOBUFFER_WRITE* pBuffer)
 	{
 		const sockaddr_storage& dstAddress = pBuffer->NetAddr.To;
-		INT iErr = WSASendTo(sock, &pBuffer->wsaBuff, 1, nullptr, 0, 
+		INT iErr = WSASendTo(sock->GetIOSocket(), &pBuffer->wsaBuff, 1, (LPDWORD)&pBuffer->TransferredSize, 0,
 			(sockaddr*)&dstAddress, GetSockAddrSize(dstAddress),
 			pBuffer, NULL);
 

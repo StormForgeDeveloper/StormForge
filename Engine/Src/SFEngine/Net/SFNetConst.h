@@ -39,7 +39,6 @@ namespace Net {
 
         static constexpr int CONMGR_THREAD_INTERVAL         = 1;		// Connection manager thread interval
 
-
 		static constexpr int CLI_RECV_BUFFER_SIZE			= 1024*16;
         static constexpr int CLI_SEND_BUFFER_SIZE           = 1024 * 8;
 
@@ -50,8 +49,6 @@ namespace Net {
 		static constexpr int CLI_CONNECTION_MAX				= 10;
 
         static constexpr int CLI_OVERBUFFER_COUNT           = 128; // 66*;
-
-        static constexpr int CLI_GUARANTEDRETRY_ATONCE_MAX  = 4;
 
 		static constexpr int CLI_PEERPUNCH_TIME				= 500;
 		static constexpr int CLI_PEERPUNCH_COUNT			= 10;
@@ -78,9 +75,11 @@ namespace Net {
 
         static constexpr int TCP_ACCEPT_PENDING_MAX         = 10;
         static constexpr int TCP_ACCEPT_TRYALLOC_MAX        = 1000;
+        static constexpr int TCP_CONNECTION_SENDBUFFER_SIZE = 32 * 1024; // 256
 
         static constexpr int UDP_CLI_RETRY_ONETIME_MAX      = 64;
         static constexpr int UDP_SVR_RETRY_ONETIME_MAX      = 64;
+        static constexpr int UDP_CONNECTION_SENDBUFFER_SIZE = 32 * 1024; // 256
 
         static constexpr int CONNECTION_ZEROPACKET_MAX      = 20;
         static constexpr int CONNECTION_RETRY               = 700;
@@ -88,7 +87,7 @@ namespace Net {
         static constexpr int MUDP_HEARTBEAT_START_TIME      = 1000 * 60;
         static constexpr int MUDP_HEARTBEAT_TIMEOUT         = 1000 * 60 * 10;
 
-		constexpr int GUARANT_PENDING_MAX                   = 512;
+		constexpr int GUARANTEED_PENDING_MAX                   = 256;
 		// If send queue has less than this count, the message will be sent quickly. per connection
 		constexpr uint AGRESSIVE_SEND_COUNT                 = 20;
 

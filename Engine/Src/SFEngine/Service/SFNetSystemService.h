@@ -71,7 +71,7 @@ namespace SF {
 			virtual void Terminate() {}
 
 			virtual Result MakeSocketNonBlocking(SF_SOCKET sfd) { return ResultCode::FAIL; }
-			virtual Net::WriteBufferQueue* GetWriteBufferQueue() { return nullptr; }
+			//virtual Net::WriteBufferQueue* GetWriteBufferQueue() { return nullptr; }
 
 								// Register the socket to KQUEUE
 			virtual Result RegisterToNETIO(Net::SocketIO* cbInstance) { return ResultCode::FAIL; }
@@ -109,11 +109,11 @@ namespace SF {
 		virtual Result Accept(SF_SOCKET sockListen, Net::IOBUFFER_ACCEPT* pAccept) { unused(sockListen, pAccept); return ResultCode::SUCCESS_FALSE; }
 		virtual Result HandleAcceptedSocket(SF_SOCKET sockListen, Net::IOBUFFER_ACCEPT* pAccept, sockaddr_storage& remoteAddr) { unused(sockListen, pAccept, remoteAddr); return ResultCode::SUCCESS_FALSE; }
 
-		virtual Result Recv(SF_SOCKET sock, Net::IOBUFFER_READ* pBuffer) { unused(sock, pBuffer); return ResultCode::SUCCESS_FALSE; }
-		virtual Result RecvFrom(SF_SOCKET sock, Net::IOBUFFER_READ* pBuffer) { unused(sock, pBuffer); return ResultCode::SUCCESS_FALSE; }
+		virtual Result Recv(Net::SocketIO* sock, Net::IOBUFFER_READ* pBuffer) { unused(sock, pBuffer); return ResultCode::SUCCESS_FALSE; }
+		virtual Result RecvFrom(Net::SocketIO* sock, Net::IOBUFFER_READ* pBuffer) { unused(sock, pBuffer); return ResultCode::SUCCESS_FALSE; }
 
-		virtual Result Send(SF_SOCKET sock, Net::IOBUFFER_WRITE* pBuffer) { unused(sock, pBuffer); return ResultCode::SUCCESS_FALSE; }
-		virtual Result SendTo(SF_SOCKET sock, Net::IOBUFFER_WRITE* pBuffer) { unused(sock, pBuffer); return ResultCode::SUCCESS_FALSE; }
+		virtual Result Send(Net::SocketIO* sock, Net::IOBUFFER_WRITE* pBuffer) { unused(sock, pBuffer); return ResultCode::SUCCESS_FALSE; }
+		virtual Result SendTo(Net::SocketIO* sock, Net::IOBUFFER_WRITE* pBuffer) { unused(sock, pBuffer); return ResultCode::SUCCESS_FALSE; }
 	};
 
 

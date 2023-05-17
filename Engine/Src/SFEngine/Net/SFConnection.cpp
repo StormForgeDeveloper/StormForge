@@ -96,7 +96,6 @@ namespace SF {
 			, m_RecvMessageDelegatesByMsgId(GetHeap())
 			, m_IOHandler(ioHandler)
 			, m_EventQueue(GetHeap())
-			, m_ulHeartbeatTry(1000)
 			, m_ulConnectingTimeOut(Const::CONNECTION_TIMEOUT)
 			, m_usSeqNone(0)
 			, m_ulZeroLengthRecvCount(0)
@@ -104,7 +103,7 @@ namespace SF {
 			, m_UseAddressMap(false)
 			, m_UsePeerIDMap(false)
 			, m_RunningThreadID(ThisThread::GetThreadID())
-			, m_SendGuaQueue(GetHeap())
+            , m_Heartbeat(DurationMS(10 * 1000)) // heartbeat send time, Const::HEARTBEAT_TIMEOUT for timeout
 			, m_ulNetCtrlTime(DurationMS(0))
 			, m_ulNetCtrlTryTime(DurationMS(0))
 		{
@@ -114,7 +113,9 @@ namespace SF {
 			{
 				new((void*)&m_ActionsByState[iState]) ConnectionActionArray(GetHeap());
 			}
-		}
+
+            AddStateAction(ConnectionState::CONNECTED, &m_Heartbeat);
+        }
 
 		Connection::~Connection()
 		{
@@ -122,7 +123,6 @@ namespace SF {
 
 			// Not need with abstract class
             m_RecvMessageQueue.Reset();
-			m_SendGuaQueue.Reset();
 			m_EventQueue.Reset();
 
 			// Release state tick action array
@@ -160,7 +160,6 @@ namespace SF {
 			m_ConnectionState = ConnectionState::DISCONNECTED;
 			// Not need with abstract class
             m_RecvMessageQueue.Reset();
-			m_SendGuaQueue.Reset();
 			m_EventQueue.Reset();
 
 			EngineObject::Dispose();
@@ -179,7 +178,6 @@ namespace SF {
 		Result Connection::ClearQueues()
 		{
             m_RecvMessageQueue.Reset();
-            m_SendGuaQueue.Reset();
 
 			// When the queue is cleared these synchronization variables need to be cleared
 			m_usSeqNone = 0;
@@ -204,7 +202,7 @@ namespace SF {
 
 		void Connection::OnHeartbeatPacket()
 		{
-			m_ulNetCtrlTime = Util::Time.GetTimeMs();
+            m_Heartbeat.OnHeartbeatPacket();
 		}
 
 		Result Connection::ProcConnectionStateAction()
@@ -493,7 +491,7 @@ namespace SF {
 				if (reason == nullptr)
 					reason = "Unknown";
 
-				auto previsouState = GetConnectionState();
+				ConnectionState previsouState = GetConnectionState();
 
 				SetConnectionState(ConnectionState::DISCONNECTING);
 
