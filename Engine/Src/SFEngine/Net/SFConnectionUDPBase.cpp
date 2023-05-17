@@ -305,7 +305,7 @@ namespace Net {
 		{
             m_SubFrameCollectionBuffer.reset(reinterpret_cast<MessageHeader*>(GetSystemHeap().Alloc(pCurrentFrame->TotalSize)));
 
-			memcpy(m_SubFrameCollectionBuffer->GetDataPtr(), dataPtr, pCurrentFrame->ChunkSize);
+			memcpy(m_SubFrameCollectionBuffer.get(), dataPtr, pCurrentFrame->ChunkSize);
             assert(m_SubFrameCollectionBuffer->Length != 0 && m_SubFrameCollectionBuffer->Length != 0xcdcd);
 		}
 		else
@@ -322,7 +322,7 @@ namespace Net {
 				netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 			}
 
-			memcpy(reinterpret_cast<uint8_t*>(m_SubFrameCollectionBuffer->GetDataPtr()) + pCurrentFrame->Offset, dataPtr, pCurrentFrame->ChunkSize);
+			memcpy(reinterpret_cast<uint8_t*>(m_SubFrameCollectionBuffer.get()) + pCurrentFrame->Offset, dataPtr, pCurrentFrame->ChunkSize);
 		}
 
 		int receivedSize = pCurrentFrame->Offset + pCurrentFrame->ChunkSize;
