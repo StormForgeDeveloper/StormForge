@@ -71,9 +71,6 @@ namespace Net {
         CriticalSection m_SubframeLock;
 		SFUniquePtr<MessageHeader> m_SubFrameCollectionBuffer;
 
-		// UDP send queue
-		WriteBufferQueue*			m_pWriteQueuesUDP;
-
         // Include packet header for all packets. MUDP uses this to add peer id
         bool m_bIncludePacketHeader = false;
 
@@ -99,11 +96,6 @@ namespace Net {
 		
 		CriticalSection& GetUpdateLock() { return m_UpdateLock; }
 
-		WriteBufferQueue* GetWriteQueueUDP() { return m_pWriteQueuesUDP; }
-
-		// Send packet buffer to connection with network device
-		//virtual Result EnqueueBufferUDP(IOBUFFER_WRITE *pSendBuffer);
-
 		virtual Result ProcNetCtrl(const MsgNetCtrlBuffer* pNetCtrl) override;
 
 		Result OnGuaranteedMessageRecv(const MessageHeader* pMsg);
@@ -120,7 +112,7 @@ namespace Net {
 		int GetSendBoost() { return m_SendBoost; }
 		void DecSendBoost() { if (m_SendBoost > 0) m_SendBoost--; }
 
-		void SetWriteQueueUDP(WriteBufferQueue* writeQueue);
+		//void SetWriteQueueUDP(WriteBufferQueue* writeQueue);
 
 		// Set maximum guaranteed retry count
 		uint GetMaxGuarantedRetryAtOnce() { return m_uiMaxGuarantedRetryAtOnce; }

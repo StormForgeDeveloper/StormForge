@@ -75,11 +75,11 @@ namespace Net {
 
         static constexpr int TCP_ACCEPT_PENDING_MAX         = 10;
         static constexpr int TCP_ACCEPT_TRYALLOC_MAX        = 1000;
-        static constexpr int TCP_CONNECTION_SENDBUFFER_SIZE = 32 * 1024; // 256
+        static constexpr int TCP_CONNECTION_SENDBUFFER_SIZE = 256 * 1024; // 256
 
         static constexpr int UDP_CLI_RETRY_ONETIME_MAX      = 64;
         static constexpr int UDP_SVR_RETRY_ONETIME_MAX      = 64;
-        static constexpr int UDP_CONNECTION_SENDBUFFER_SIZE = 32 * 1024; // 256
+        static constexpr int UDP_CONNECTION_SENDBUFFER_SIZE = 256 * 1024; // 256
 
         static constexpr int CONNECTION_ZEROPACKET_MAX      = 20;
         static constexpr int CONNECTION_RETRY               = 700;

@@ -551,12 +551,6 @@ namespace Net {
 		}
 		else
 		{
-			if (cbInstance->GetWriteQueue() == nullptr)
-			{
-				Assert(cbInstance->GetIOSockType() == SocketType::DataGram);
-				//cbInstance->SetWriteQueue( &m_UDPSendWorker->GetWriteQueue() );
-			}
-
 			if (m_WorkerUDP.size() < 1)
 			{
 				Result hr = m_ListenWorker->RegisterSocket(cbInstance);

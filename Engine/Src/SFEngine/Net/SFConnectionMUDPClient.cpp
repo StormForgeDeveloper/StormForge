@@ -102,9 +102,8 @@ namespace Net {
 
 	Result ConnectionMUDPClient::MyNetSocketIOAdapter::OnWriteReady()
 	{
-        assert(false);
-        return ResultCode::NOT_IMPLEMENTED;
-		//return ProcessSendQueue();
+        m_Owner.SendFlush();
+        return ResultCode::SUCCESS;
 	}
 
 	// Send message to connection with network device

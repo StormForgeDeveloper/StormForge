@@ -59,9 +59,7 @@ namespace Net {
 		, m_SendReliableWindow(GetHeap())
 		, m_uiMaxGuarantedRetryAtOnce(Const::UDP_SVR_RETRY_ONETIME_MAX)
         , m_SendGuaQueue(GetHeap())
-		, m_pWriteQueuesUDP(nullptr)
 	{
-		//SetWriteQueueUDP(Service::NetSystem->GetWriteBufferQueue());
 		SetUseAddressMap(true);
 
 		SetNetCtrlAction(NetCtrlCode_Ack, &m_HandleAck);
@@ -97,13 +95,6 @@ namespace Net {
 
         m_SubFrameCollectionBuffer.reset();
     }
-
-	void ConnectionUDPBase::SetWriteQueueUDP(WriteBufferQueue* writeQueue)
-	{
-		Assert(NetSystem::IsProactorSystem() || writeQueue != nullptr);
-
-		m_pWriteQueuesUDP = writeQueue;
-	}
 
     // Make Ack packet and enqueue to SendNetCtrlqueue
     Result ConnectionUDPBase::SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0)
@@ -176,9 +167,18 @@ namespace Net {
                     (uint)pSendBuffer->Payload.size(), pSendBuffer->Payload.data());
 
                 netCheckPtr(GetNetIOHandler());
-                netCheck(GetNetIOHandler()->WriteBuffer(pSendBuffer.get()));
 
-                pSendBuffer.release();
+                // Ignore send failure, we can drop them, and reliability logic will kicked in
+                Result sendRes = GetNetIOHandler()->WriteBuffer(pSendBuffer.get());
+                if (sendRes)
+                {
+                    pSendBuffer.release();
+                }
+                else
+                {
+                    SFLog(Net, Warning, "UDP send failure hr:{0}, to:{1}, size:{2}", sendRes, GetRemoteInfo().PeerAddress, pSendBuffer->SendBufferSize);
+                    pSendBuffer.reset();
+                }
             }
 
         }
@@ -346,10 +346,6 @@ namespace Net {
 		Result hr = ResultCode::SUCCESS;
 
         m_GatheringBuffer = nullptr;
-        //m_WriteItem.Reset();
-        //m_CircularWriteBuffer.Reset();
-
-		//m_RecvGuaQueue.ClearQueue();
 
 		netCheck(Connection::InitConnection( local, remote ) );
 
@@ -403,17 +399,6 @@ namespace Net {
 
 		return Connection::Disconnect(reason);
 	}
-
-	//Result ConnectionUDPBase::EnqueueBufferUDP(IOBUFFER_WRITE *pSendBuffer)
-	//{
-	//	if (GetWriteQueueUDP() == nullptr)
-	//	{
-	//		Assert(false);
-	//		return ResultCode::UNEXPECTED;
-	//	}
-
-	//	return GetWriteQueueUDP()->Enqueue(pSendBuffer);
-	//}
 
 	// Process network control message
 	Result ConnectionUDPBase::ProcNetCtrl(const MsgNetCtrlBuffer* pNetCtrl)
@@ -584,17 +569,6 @@ namespace Net {
                 pCopiedMessage->UpdateChecksumNEncrypt();
 
                 itemWritePtr.Reset();
-
-                //{
-                //    MutexScopeLock scopeLock(m_GatheringBufferLock);
-
-                //    netCheck(PrepareGatheringBuffer(pMsgHeader->Length));
-
-                //    MessageHeader* pCopiedMessage = m_GatheringBuffer->AddMessage(pMsgHeader);
-                //    netCheckMem(pCopiedMessage);
-                //    pCopiedMessage->msgID.SetSequence(NewSeqNone());
-                //    pCopiedMessage->UpdateChecksumNEncrypt();
-                //}
             }
             else
             {
@@ -661,14 +635,6 @@ namespace Net {
         memcpy(itemWritePtr.data(), pMsgHeader, pMsgHeader->Length);
 
         itemWritePtr.Reset();
-
-        //{
-        //    MutexScopeLock scopeLock(m_GatheringBufferLock);
-
-        //    netCheck(PrepareGatheringBuffer(pMsgHeader->Length));
-
-        //    netCheckMem(m_GatheringBuffer->AddMessage(pMsgHeader));
-        //}
 
         return hr;
     }
@@ -811,9 +777,6 @@ namespace Net {
 			});
 
 		netCheck(super::TickUpdate());
-
-		// It is in state action
-		//netCheck(UpdateSendQueue());
 
 		return hr;
 	}

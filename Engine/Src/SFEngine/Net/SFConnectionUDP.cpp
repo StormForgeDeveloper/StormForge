@@ -69,15 +69,12 @@ namespace Net {
 	// Initialize packet synchronization
 	Result ConnectionUDPServerPeer::InitSynchronization()
 	{
-		Result hr = ResultCode::SUCCESS;
+		Result hr;
 
-		netChk(ConnectionUDP::InitSynchronization() );
+		netCheck(ConnectionUDP::InitSynchronization() );
 
 		m_RecvReliableWindow.Reset();
 		m_SendReliableWindow.ClearWindow();
-
-	Proc_End:
-
 
 		return hr;
 	}
@@ -162,26 +159,13 @@ namespace Net {
 			Util::SafeDelete(pIOBuffer);
 		}
 
-
 		return hr;
-
 	}
-
-    //Result ConnectionUDPClient::MyNetSocketIOAdapter::OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE* pIOBuffer)
-    //{
-    //    Result hr;
-
-    //    netCheck(super::OnIOSendCompleted(hrRes, pIOBuffer));
-
-    //    return hr;
-    //}
 
 	Result ConnectionUDPClient::MyNetSocketIOAdapter::OnWriteReady()
 	{
-		// We will not need this feature
-		//return ProcessSendQueue();
-        assert(false);
-        return ResultCode::NOT_IMPLEMENTED;
+        m_Owner.SendFlush();
+        return ResultCode::SUCCESS;
 	}
 
 
@@ -244,8 +228,6 @@ namespace Net {
 	ConnectionUDPClient::~ConnectionUDPClient()
 	{
 		ClearQueues();
-
-		//if (GetWriteQueue()) GetHeap().Delete(GetWriteQueue());
 	}
 
 	void ConnectionUDPClient::Dispose()
@@ -360,7 +342,7 @@ namespace Net {
 	{
 		SetConnectionState(ConnectionState::CONNECTING);
 
-		UpdateConnectionTime();// m_tConnectionTime = Util::Time.GetTimeMs();
+		UpdateConnectionTime();
 
 		SetRemoteAddress( socAddr );
 
@@ -383,20 +365,10 @@ namespace Net {
         if (bWriteIsReady) // if write ready is triggered this tick
         {
             SendFlush();
-            //m_NetIOAdapter.ProcessSendQueue();
         }
 
         return hr;
     }
 
-	// Update Send buffer Queue, TCP and UDP client connection
-	//Result ConnectionUDPClient::UpdateSendBufferQueue()
-	//{
-	//	return m_NetIOAdapter.ProcessSendQueue();
-	//}
-
-
 } // namespace Net
 } // namespace SF
-
-

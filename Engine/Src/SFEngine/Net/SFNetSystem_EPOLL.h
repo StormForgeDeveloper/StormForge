@@ -122,7 +122,7 @@ namespace Net {
 		virtual void Terminate() override;
 
 		virtual Result MakeSocketNonBlocking(SF_SOCKET sfd) override;
-		virtual WriteBufferQueue* GetWriteBufferQueue() override;
+		//virtual WriteBufferQueue* GetWriteBufferQueue() override;
 		//Result RegisterSharedSocket(SocketType sockType, SocketIO* cbInstance);
 
 		// Register the socket to EPOLL
