@@ -239,11 +239,8 @@ namespace Net {
 		uint32_t remainSize = pSrcMsgHeader->Length;
 		unsigned offset = 0;
 
-		assert(pSrcMsgHeader->msgID.IDSeq.Sequence == 0);
-
-		SFLog(Net, Debug2, "SEND Spliting : CID:{0}, seq:{1}, msg:{2}, len:{3}",
+		SFLog(Net, Debug2, "SEND Spliting : CID:{0}, msg:{1}, len:{2}",
 			GetCID(),
-			pSrcMsgHeader->msgID.IDSeq.Sequence,
 			pSrcMsgHeader->msgID,
 			pSrcMsgHeader->Length);
 
@@ -271,6 +268,11 @@ namespace Net {
 				pSubframeMessage->GetMessageHeader()->msgID.IDSeq.Sequence,
 				pSubframeMessage->GetMessageHeader()->msgID,
 				pSubframeMessage->GetMessageHeader()->Length);
+
+            if (iSequence == 0)
+            {
+                ((MessageHeader*)(pCurrentFrame + 1))->msgID.IDSeq.Sequence = 0;
+            }
 
 			pSubframeMessage->UpdateChecksumNEncrypt();
 
@@ -580,13 +582,10 @@ namespace Net {
                     return hr;
                 }
 
-                SFLog(Net, Debug6, "SENDGuaQueued : CID:{0}, msg:{1}, seq:{2}, len:{3}",
+                SFLog(Net, Debug6, "SENDGuaQueued : CID:{0}, msg:{1}, len:{2}",
                     GetCID(),
                     msgID,
-                    msgID.IDSeq.Sequence,
                     uiMsgLen);
-
-                AssertRel(pMsgHeader->msgID.IDSeq.Sequence == 0);
 
                 if (pMsgHeader->Length > (uint)Const::INTER_PACKET_SIZE_MAX)
                 {
@@ -595,6 +594,8 @@ namespace Net {
                 else
                 {
                     MessageDataPtr msgDataPtr = MessageData::NewMessage(GetSystemHeap(), pMsgHeader);
+                    // For relay message the message could have sequence which need to be cleared
+                    msgDataPtr->GetMessageHeader()->msgID.IDSeq.Sequence = 0;
                     msgDataPtr->UpdateChecksumNEncrypt();
 
                     netCheck(m_SendGuaQueue.Enqueue(std::forward<MessageDataPtr>(msgDataPtr)));
