@@ -152,6 +152,7 @@ namespace SF {
 		const SharedPointerT<MessageData>& GetMessagePtr() const { return m_pIMsg; }
 
         const MessageHeader* GetMessageHeader() const { return m_pHeader; }
+        void SetMessageHeader(const MessageHeader* pHeader) { m_pHeader = pHeader; }
 
 		// Get Parsing Result
 		Result GetParsingResult() const { return m_hrParsing; }
