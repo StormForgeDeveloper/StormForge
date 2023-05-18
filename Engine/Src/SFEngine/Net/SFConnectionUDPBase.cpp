@@ -431,7 +431,7 @@ namespace Net {
 
 	Result ConnectionUDPBase::OnGuaranteedMessageRecv(const MessageHeader* pHeader)
 	{
-		Result hr = ResultCode::SUCCESS;
+		Result hr;
 
 		MessageID msgID = pHeader->msgID;
 		uint seq = pHeader->msgID.IDSeq.Sequence;

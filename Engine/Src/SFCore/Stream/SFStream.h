@@ -213,9 +213,9 @@ namespace SF
             }
             else
             {
+                pDst = (DataType*)(GetBufferPtr() + GetPosition());
                 for (uint iData = 0; iData < readCount; iData++)
                 {
-                    pDst = (DataType*)(GetBufferPtr() + GetPosition());
                     readSize = SerializedSizeOf(*pDst);
                     if (!Skip(readSize))
                         return ResultCode::IO_BADPACKET_SIZE;// sizeCheck
