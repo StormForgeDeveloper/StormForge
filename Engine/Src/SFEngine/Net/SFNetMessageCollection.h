@@ -135,6 +135,9 @@ namespace SF {
         // purge all message buffer
         void Reset();
 
+        // collection count
+        SF_FORCEINLINE size_t GetCollectionCount() const { return m_MessageCollections.size(); }
+
         // Add message
         Result AddMessage(const MessageHeader* pMessage);
 
