@@ -275,6 +275,11 @@ namespace SF {
 				return GetLastResultCode();
 			}
 
+            if (dwRead == 0)
+            {
+                return ResultCode::END_OF_FILE;
+            }
+
 			read = dwRead;
 			m_IOOffset += dwRead;
 

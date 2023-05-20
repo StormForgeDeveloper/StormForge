@@ -98,14 +98,27 @@ static int Process()
 
 					SF::String str(readBuffer.data() + iPos);
 					str = str.Trim();
+                    if (str.EndsWith(','))
+                    {
+                        str = str.TrimEnd(",");
+                    }
 					if (str.StartsWith('\"') && str.EndsWith('\"'))
 					{
 						str = str.TrimStart(trimStartEnd);
 						str = str.TrimEnd(trimStartEnd);
 					}
 
-					if (str.length() > 0)
-						stringDB.AddString(str);
+                    if (str.length() > 0)
+                    {
+                        if (str.IndexOf('\"') >= 0)
+                        {
+                            stringDB.AddString(str);
+                        }
+                        else
+                        {
+                            stringDB.AddString(str);
+                        }
+                    }
 
 					if (res == SF::ResultCode::END_OF_STREAM)
 						break;

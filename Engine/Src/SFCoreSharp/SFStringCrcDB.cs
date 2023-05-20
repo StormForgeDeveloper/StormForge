@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -22,6 +22,11 @@ namespace SF
             return new Result((int)NativeLoadStringTable(fileName));
         }
 
+        public static Result LoadStringTable(byte[] memoryBuffer)
+        {
+            return new Result((int)NativeLoadStringTableFromMemory(memoryBuffer.Length, memoryBuffer));
+        }
+
 
 
         #region Native interfaces 
@@ -35,6 +40,9 @@ namespace SF
 
         [DllImport(NativeDLLName, EntryPoint = "SFStringCrc_LoadStringTable", CharSet = CharSet.Auto)]
         static extern UInt32 NativeLoadStringTable([MarshalAs(UnmanagedType.LPStr)] string strFileName);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFStringCrc_LoadStringTableFromMemory", CharSet = CharSet.Auto)]
+        static extern UInt32 NativeLoadStringTableFromMemory(Int32 dataSize, [MarshalAs(UnmanagedType.LPArray, SizeParamIndex = 0)] byte[] buffer);
 
 
         #endregion

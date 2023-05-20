@@ -1092,11 +1092,15 @@ namespace SF
 		DurationMS deltaTime = newUpdateTimeStamp - m_TickTime;
 		uint32_t deltaFrames = deltaTime.count() / ActorMovement::DeltaMSPerFrame;
 
-		if (deltaFrames > 0 && (m_MoveFrame % 200) == 0)
-			SFLog(Net, Debug4, "OnlineClient::UpdateMovement deltaFrames:{0}, moveFrame:{1:X}, serverFrame:{2:X}", deltaFrames, m_MoveFrame, m_ServerMoveFrame);
+        if (deltaFrames > 0 && (m_MoveFrame % 200) == 0)
+        {
+            SFLog(Net, Debug4, "OnlineClient::UpdateMovement deltaFrames:{0}, moveFrame:{1:X}, serverFrame:{2:X}", deltaFrames, m_MoveFrame, m_ServerMoveFrame);
+        }
 
-		if (deltaFrames == 0)
-			return 0;
+        if (deltaFrames == 0)
+        {
+            return 0;
+        }
 
 		m_TickTime += DurationMS(deltaFrames * ActorMovement::DeltaMSPerFrame);
 

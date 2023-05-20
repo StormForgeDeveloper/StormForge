@@ -42,10 +42,16 @@ SFDLL_EXPORT uint32_t SFStringCrc_LoadStringTable(const char* strFileName)
 	return (uint32_t)SF::Service::StringDB->LoadStringTable(stream);
 }
 
+SFDLL_EXPORT uint32_t SFStringCrc_LoadStringTableFromMemory(size_t bufferSize, intptr_t bufferPtr)
+{
+    InputMemoryStream stream(ArrayView<uint8_t>(bufferSize, (uint8_t*)bufferPtr));
+    return (uint32_t)SF::Service::StringDB->LoadStringTable(stream);
+}
+
 SFDLL_EXPORT uint32_t SFStringCrc_SaveStringTable(const char* strFileName)
 {
-	FileOutputStream stream(strFileName);
-	return (uint32_t)SF::Service::StringDB->SaveStringTable(stream);
+    FileOutputStream stream(strFileName);
+    return (uint32_t)SF::Service::StringDB->SaveStringTable(stream);
 }
 
 SFDLL_EXPORT void SFStringCrc_AddString(const char* str)
