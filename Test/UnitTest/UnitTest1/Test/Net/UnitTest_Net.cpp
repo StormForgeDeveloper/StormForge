@@ -26,6 +26,7 @@
 #include "ResultCode/SFResultCodeLibrary.h"
 #include "ResultCode/SFResultCodeEngine.h"
 #include "UnitTest_Net.h"
+#include "Protocol/PlayInstanceMsgClass.h"
 
 using ::testing::EmptyTestEventListener;
 using ::testing::InitGoogleTest;
@@ -53,6 +54,48 @@ TEST_F(NetTest, NetAddress)
         EXPECT_TRUE(result);
     }
 }
+
+TEST_F(NetTest, MessageCollection)
+{
+    MessageCollectionArray collectionArray;
+    UniquePtr<MessageCollection> pBuffer(new MessageCollection);
+
+    uint8_t buffer[2048];
+    MessageHeader* pMessage = reinterpret_cast<MessageHeader*>(buffer);
+    pMessage->Length = sizeof(buffer);
+    Result hr = Message::PlayInstance::PlayerStateChangedS2CEvt::Create(pMessage,
+        EntityUID(),
+        1,
+        "Test1",
+        2,
+        Vector4(0,0,1),
+        ArrayView<uint8_t>());
+    EXPECT_TRUE(hr);
+    hr = pBuffer->AddMessage(pMessage);
+    EXPECT_TRUE(hr);
+
+    pMessage->Length = sizeof(buffer);
+    hr = Message::PlayInstance::ActorMovementS2CEvt::Create(pMessage,
+        EntityUID(),
+        ActorMovement());
+    EXPECT_TRUE(hr);
+    hr = pBuffer->AddMessage(pMessage);
+    EXPECT_TRUE(hr);
+
+    auto itMsg = pBuffer->begin();
+    EXPECT_TRUE(itMsg);
+    const MessageHeader* pMessageRead = itMsg;
+    EXPECT_TRUE(pMessageRead->msgID == Message::PlayInstance::PlayerStateChangedS2CEvt::MID);
+
+    ++itMsg;
+    EXPECT_TRUE(itMsg);
+    pMessageRead = itMsg;
+    EXPECT_TRUE(itMsg->msgID == Message::PlayInstance::ActorMovementS2CEvt::MID);
+
+    ++itMsg;
+    EXPECT_FALSE(itMsg);
+}
+
 
 
 //

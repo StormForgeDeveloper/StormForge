@@ -39,6 +39,9 @@ namespace SF
             return ResultCode::OUT_OF_MEMORY;
 
         memcpy(reinterpret_cast<uint8_t*>(this + 1) + UsedSize, pMessage, pMessage->Length);
+
+        SFLog(Net, Debug8, "MessageCollection::AddMessage msgid:{0}, size:{1}, Offset:{2}", pMessage->msgID, pMessage->Length, UsedSize);
+
         UsedSize += pMessage->Length;
 
         return ResultCode::SUCCESS;
@@ -107,6 +110,8 @@ namespace SF
                 return ResultCode::OUT_OF_MEMORY;
             }
         }
+
+        SFLog(Net, Debug, "MessageCollectionArray::AddMessage msgid:{0}, numCollection:{1}", pMessage->msgID, m_MessageCollections.size());
 
         return ResultCode::SUCCESS;
     }

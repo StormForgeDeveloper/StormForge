@@ -49,14 +49,22 @@ namespace SF {
             return *this;
         }
 
+        uint GetCurPos() const { return CurPos; }
+
         const MessageHeader* get() const
         {
             if (CurPos >= Buffer.size())
+            {
                 return nullptr;
+            }
 
-            const MessageHeader* pHeader = reinterpret_cast<const MessageHeader*>(Buffer.data());
+            const MessageHeader* pHeader = reinterpret_cast<const MessageHeader*>(Buffer.data() + CurPos);
             if ((CurPos + pHeader->Length) > Buffer.size())
+            {
+                // Likely broken
+                assert(false);
                 return nullptr;
+            }
 
             return pHeader;
 
