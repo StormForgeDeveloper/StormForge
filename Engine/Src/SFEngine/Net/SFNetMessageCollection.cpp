@@ -111,7 +111,7 @@ namespace SF
             }
         }
 
-        SFLog(Net, Debug, "MessageCollectionArray::AddMessage msgid:{0}, numCollection:{1}", pMessage->msgID, m_MessageCollections.size());
+        SFLog(Net, Debug8, "MessageCollectionArray::AddMessage msgid:{0}, numCollection:{1}", pMessage->msgID, m_MessageCollections.size());
 
         return ResultCode::SUCCESS;
     }
