@@ -1,4 +1,4 @@
-// UnitTest_TexturePng.cpp : Defines the entry point for the console application.
+// UnitTest_Asset.cpp : Defines the entry point for the console application.
 //
 
 #include "UnitTest1PCH.h"
