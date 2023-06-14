@@ -38,12 +38,12 @@ if not exist %VK_SDK_PATH% (
 )
 
 
-set FBX_SDK_INSTALL_FILE_WIN=fbx20201_fbxsdk_vs2017_win.exe
-if not exist %FBX_SDK_INSTALL_FILE_WIN% (
-	echo downloading FBXSDK
-    call %TOOL_PATH%\httpget +url:https://www.autodesk.com/content/dam/autodesk/www/adn/fbx/2020-1/fbx20201_fbxsdk_vs2017_win.exe
-	%FBX_SDK_INSTALL_FILE_WIN% /D=%FBX_SDK_PATH%
-)
+rem set FBX_SDK_INSTALL_FILE_WIN=fbx20201_fbxsdk_vs2017_win.exe
+rem if not exist %FBX_SDK_INSTALL_FILE_WIN% (
+rem 	echo downloading FBXSDK
+rem     call %TOOL_PATH%\httpget +url:https://www.autodesk.com/content/dam/autodesk/www/adn/fbx/2020-1/fbx20201_fbxsdk_vs2017_win.exe
+rem 	%FBX_SDK_INSTALL_FILE_WIN% /D=%FBX_SDK_PATH%
+rem )
 
 
 cd %~dp0
@@ -66,15 +66,5 @@ if not exist "Test/UnitTest/UnitTest1/Test/LogServer/LocalData/serveraddress.txt
 
 powershell .\download_dependencies.ps1
 
-
-@echo ==============================================================
-@echo Register FBX_SDK_PATH to environment path
-@echo Register test host names 
-@echo Kafka: SFTestKafka.com
-@echo host file location
-@echo   - Windows 10 – “C:\Windows\System32\drivers\etc\hosts”
-@echo   - Linux – “/etc/hosts”
-@echo   - Mac OS X – “/private/etc/hosts”
-@echo ==============================================================
 
 pause

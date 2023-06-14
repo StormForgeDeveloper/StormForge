@@ -326,6 +326,14 @@ set(SUBOnline_FILES
 	Online/SFOnlineClient.cpp
 	Online/SFOnlineClientComponent.h
 	Online/SFOnlineClientComponent.cpp
+	Online/SFOnlineSession.h
+	Online/SFOnlineSession.cpp
+	Online/SFOnlineSessionComponent.h
+	Online/SFOnlineSessionComponent.cpp
+	Online/SFOnlineSessionGame.h
+	Online/SFOnlineSessionGame.cpp
+	Online/SFOnlineSessionGameplay.h
+	Online/SFOnlineSessionGameplay.cpp
 	Online/SFOnlineActor.h
 	Online/SFOnlineActor.cpp
     Online/SFOnlineAPIClient.h

@@ -70,14 +70,6 @@ namespace SF {
 	inline Result operator >> (IInputStream& input, MatchingQueueTicket& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const MatchingQueueTicket& data) { return output.Write(&data, sizeof(data)); }
 
-	inline size_t SerializedSizeOf(const ClusterMembership& Value) { return sizeof(Value); }
-	inline Result operator >> (IInputStream& input, ClusterMembership& data) { return input.Read(&data, sizeof(data)); }
-	inline Result operator << (IOutputStream& output, const ClusterMembership& data) { return output.Write(&data, sizeof(data)); }
-
-	inline size_t SerializedSizeOf(const ClusterType& Value) { return sizeof(Value); }
-	inline Result operator >> (IInputStream& input, ClusterType& data) { return input.Read(&data, sizeof(data)); }
-	inline Result operator << (IOutputStream& output, const ClusterType& data) { return output.Write(&data, sizeof(data)); }
-
 	inline size_t SerializedSizeOf(const ClusterID& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, ClusterID& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const ClusterID& data) { return output.Write(&data, sizeof(data)); }

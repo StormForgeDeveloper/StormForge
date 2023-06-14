@@ -140,8 +140,6 @@ namespace SF
 		//Result Read(FriendInformation& data);
 		//Result Read(TotalRankingPlayerInformation& data);
 		//Result Read(MatchingQueueTicket& data);
-		//Result Read(ClusterMembership& data);
-		//Result Read(ClusterType& data);
 
 		//Result Read(VariableBox& data);
 		//Result Read(NamedVariableBox& data);

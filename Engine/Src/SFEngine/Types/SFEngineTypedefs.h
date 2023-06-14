@@ -140,26 +140,6 @@ namespace SF {
 		return oldValue;
 	}
 
-
-	// Clustering model
-	enum class ClusterType : uint32_t
-	{
-		Replication,		// Replica with master. master - write, others - read
-		FreeReplication,	// Replica without master. plat relationship
-		Ring,				// Circular queue cluster
-		Shard,				// Sharded. only shares status
-	};
-
-	// Cluster Member ship mode
-	enum class ClusterMembership : uint32_t
-	{
-		Master,
-		Slave,
-		//StatusWatcher,	// Service status watcher
-		//Watcher,			// Service data watcher, Only effect with replica model
-	};
-
-
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//	Entity unique ID in local

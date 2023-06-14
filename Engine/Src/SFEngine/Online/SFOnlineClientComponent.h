@@ -13,7 +13,6 @@
 
 #include "SFTypedefs.h"
 #include "Component/SFComponent.h"
-#include "Container/SFStaticLinkedList.h"
 
 
 namespace SF
