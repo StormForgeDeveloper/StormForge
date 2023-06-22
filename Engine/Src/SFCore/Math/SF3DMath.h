@@ -294,7 +294,33 @@ namespace SF {
 
 	};
 
+    template<class VectorType>
+    struct Box
+    {
+        VectorType Min;
+        VectorType Max;
 
+        Box() {}
+        Box(const Box& src)
+            : Min(src.Min)
+            , Max(src.Max)
+        {}
+        Box(const VectorType& vMin, const VectorType& vMax)
+            : Min(vMin)
+            , Max(vMax)
+        {}
+
+        SF_FORCEINLINE VectorType GetMid() const { return (Min + Max) / 2; }
+        SF_FORCEINLINE bool IsInside(const VectorType& testPos) const
+        {
+            return Min <= testPos && testPos <= Max;
+        }
+    };
+
+
+    using Box4 = Box<Vector4>;
+    using Box2i = Box<Vector2i>;
+    using Box3i = Box<Vector3i>;
 }
 
 

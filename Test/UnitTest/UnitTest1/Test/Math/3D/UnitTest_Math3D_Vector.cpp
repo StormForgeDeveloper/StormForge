@@ -74,5 +74,7 @@ TEST_F(MathTest, SSE_Vector4_Simple)
 }
 
 
+TEST_F(MathTest, Vector4_RandomCompare)
+{
 
-
+}

@@ -82,19 +82,47 @@ namespace SF {
 		Vector4SSE(const Vector4SSE& u) : Packed(u.Packed) { }
 		Vector4SSE(const __m128& u) : Packed(u) { }
 
-		bool operator==(const Vector4SSE & u) const
+        SF_FORCEINLINE bool operator==(const Vector4SSE & u) const
 		{
 			__m128i vcmp = _mm_castps_si128(_mm_cmpneq_ps(Packed, u.Packed));
-			uint16_t test = uint16_t(_mm_movemask_epi8(vcmp));
+            int test = _mm_movemask_epi8(vcmp);
 			return test == 0;
 		}
 
-		bool operator!=(const Vector4SSE& op) const
+        SF_FORCEINLINE bool operator!=(const Vector4SSE& op) const
 		{
 			__m128i vcmp = _mm_castps_si128(_mm_cmpneq_ps(Packed, op.Packed));
-			uint16_t test = uint16_t(_mm_movemask_epi8(vcmp));
+            int test = _mm_movemask_epi8(vcmp);
 			return test != 0;
 		}
+
+        SF_FORCEINLINE bool operator>(const Vector4SSE& op) const
+        {
+            __m128i vcmp = _mm_castps_si128(_mm_cmpngt_ps(Packed, op.Packed));
+            int test = _mm_movemask_epi8(vcmp);
+            return test != 0;
+        }
+
+        SF_FORCEINLINE bool operator>=(const Vector4SSE& op) const
+        {
+            __m128i vcmp = _mm_castps_si128(_mm_cmpnge_ps(Packed, op.Packed));
+            int test = _mm_movemask_epi8(vcmp);
+            return test != 0;
+        }
+
+        SF_FORCEINLINE bool operator<(const Vector4SSE& op) const
+        {
+            __m128i vcmp = _mm_castps_si128(_mm_cmpnlt_ps(Packed, op.Packed));
+            int test = _mm_movemask_epi8(vcmp);
+            return test != 0;
+        }
+
+        SF_FORCEINLINE bool operator<=(const Vector4SSE& op) const
+        {
+            __m128i vcmp = _mm_castps_si128(_mm_cmpnle_ps(Packed, op.Packed));
+            int test = _mm_movemask_epi8(vcmp);
+            return test != 0;
+        }
 
 
 		Vector4SSE operator*(const Matrix4SSE & M) const;
@@ -113,7 +141,7 @@ namespace SF {
 		Vector4SSE operator*(const Vector4SSE & u) const;
 		Vector4SSE operator/(const Vector4SSE & u) const;
 
-		Vector4SSE operator - () const { return Vector4SSE(-x, -y, -z, -w); }
+        SF_FORCEINLINE Vector4SSE operator - () const { return Vector4SSE(-x, -y, -z, -w); }
 
 		Vector4SSE & operator=(const Vector4SSE & src);
 

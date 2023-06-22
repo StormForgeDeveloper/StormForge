@@ -194,6 +194,26 @@ namespace SF {
 		bool operator==(const Vector4Soft<T> & u) const { return (u.x == x && u.y == y && u.z == z && u.w == w) ? true : false; }
 		bool operator!=(const Vector4Soft<T>& rhs) const { return !(*this == rhs); }
 
+        SF_FORCEINLINE bool operator>(const Vector4Soft& u) const
+        {
+            return x > u.x && y > u.y && z > u.z && w > u.w;
+        }
+
+        SF_FORCEINLINE bool operator>=(const Vector4Soft& u) const
+        {
+            return x >= u.x && y >= u.y && z >= u.z && w >= u.w;
+        }
+
+        SF_FORCEINLINE bool operator<(const Vector4Soft& u) const
+        {
+            return x < u.x && y < u.y && z < u.z && w < u.w;
+        }
+
+        SF_FORCEINLINE bool operator<=(const Vector4Soft& u) const
+        {
+            return x <= u.x && y <= u.y && z <= u.z && w <= u.w;
+        }
+
 
 		Vector4Soft<T> operator*(const Matrix3Soft<T> & M) const;
 		Vector4Soft<T> & operator*=(const Matrix3Soft<T> & M);
