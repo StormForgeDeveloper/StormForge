@@ -72,7 +72,7 @@ void IOBUFFER_READ::InitForIO()
 void IOBUFFER_READ::InitRecv( uint64_t iCID )
 {
 	InitForIO();
-	wsaBuff.len = Const::INTER_PACKET_SIZE_MAX;
+	wsaBuff.len = MaxPacketSize;
 	wsaBuff.buf = (CHAR*)GetPayloadPtr();
 #ifdef DEBUG
 	memset(wsaBuff.buf,0xCE, wsaBuff.len);

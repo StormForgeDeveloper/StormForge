@@ -238,7 +238,7 @@ namespace Net {
 
 			if (pRecvBuffer == nullptr)
 			{
-				pRecvBuffer = new IOBUFFER_READ;
+				pRecvBuffer = new(GetSystemHeap()) IOBUFFER_READ;
 				hr = pRecvBuffer->SetPendingTrue();
 				if (!hr)
 				{
@@ -491,7 +491,7 @@ namespace Net {
 		if (GetPendingRecvCount() > 0)
 			return ResultCode::SUCCESS;
 
-		pRecvBuffer = new IOBUFFER_READ;
+		pRecvBuffer = new(GetSystemHeap()) IOBUFFER_READ;
 		hr = pRecvBuffer->SetPendingTrue();
 		if (!(hr))
 			return ResultCode::SUCCESS;

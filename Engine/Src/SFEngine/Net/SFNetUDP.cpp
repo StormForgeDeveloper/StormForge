@@ -87,7 +87,8 @@ namespace Net {
 		if (pIOBuffer != nullptr)
 		{
 			pIOBuffer->SetPendingFalse();
-			Util::SafeDelete(pIOBuffer);
+            // We bulk allocated the buffer
+			//Util::SafeDelete(pIOBuffer);
 		}
 
 

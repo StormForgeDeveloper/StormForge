@@ -101,28 +101,22 @@ namespace Net {
 
 		std::atomic<bool> bIsPending;
 
+        uint8_t Payload[MaxPacketSize];
+
 		// constructor
 		IOBUFFER_READ();
 		~IOBUFFER_READ();
 
-        void* operator new(size_t size) {
-            return GetSystemHeap().Alloc(size + MaxPacketSize);
-        }
-        void operator delete(void* pPtr)
+        SF_FORCEINLINE uint8_t* GetPayloadPtr()
         {
-            GetSystemHeap().Free(pPtr);
-        }
-
-        SF_FORCEINLINE uint8_t* GetPayloadPtr() const
-        {
-            return const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(this + 1));
+            return Payload;
         }
 
 		// Initialize for IO
 		inline void InitForIO();
 		inline void InitRecv(uint64_t iCID);
 
-		// Setup recving mode
+		// Setup receiving mode
 		inline void SetupRecvUDP(uint64_t iCID);
 		inline void SetupRecvTCP(uint64_t iCID);
 

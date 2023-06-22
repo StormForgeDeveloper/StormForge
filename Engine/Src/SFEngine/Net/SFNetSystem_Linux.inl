@@ -65,7 +65,7 @@ void IOBUFFER_READ::InitRecv(uint64_t iCID)
 {
 	InitForIO();
 #ifdef DEBUG
-	memset(GetPayloadPtr(), 0xCE, Const::INTER_PACKET_SIZE_MAX);
+	memset(GetPayloadPtr(), 0xCE, MaxPacketSize);
 #endif
 	CID = iCID;
 }
