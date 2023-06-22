@@ -74,7 +74,22 @@ TEST_F(MathTest, SSE_Vector4_Simple)
 }
 
 
-TEST_F(MathTest, Vector4_RandomCompare)
+TEST_F(MathTest, Vector4_Box)
 {
+    Box4 volumeBox(Vector4(192.203003f, 3.44500017f, 61.1220016f), Vector4(194.203003f, 5.44500017f, 63.1220016f));
+    EXPECT_FALSE(volumeBox.IsInside(Vector4(190.345169f, 4.50027466f, 59.0060959f)));
+
+    EXPECT_TRUE(volumeBox.IsInside(volumeBox.Min));
+    EXPECT_TRUE(volumeBox.IsInside(volumeBox.Max));
+    EXPECT_TRUE(volumeBox.IsInside(volumeBox.GetMid()));
+
+    EXPECT_FALSE(volumeBox.IsInside(Vector4(192.f, 3.f, 61.f)));
+    EXPECT_FALSE(volumeBox.IsInside(Vector4(193.f, 3.f, 61.f)));
+    EXPECT_FALSE(volumeBox.IsInside(Vector4(193.f, 4.f, 61.f)));
+    EXPECT_TRUE(volumeBox.IsInside(Vector4(193.f, 4.f, 62.f)));
+    EXPECT_FALSE(volumeBox.IsInside(Vector4(195.f, 4.f, 62.f)));
+    EXPECT_FALSE(volumeBox.IsInside(Vector4(193.f, 6.f, 62.f)));
+    EXPECT_FALSE(volumeBox.IsInside(Vector4(193.f, 4.f, 64.f)));
+    EXPECT_FALSE(volumeBox.IsInside(Vector4(195.f, 6.f, 64.f)));
 
 }

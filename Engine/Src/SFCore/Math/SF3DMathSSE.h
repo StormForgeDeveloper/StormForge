@@ -100,28 +100,28 @@ namespace SF {
         {
             __m128i vcmp = _mm_castps_si128(_mm_cmpngt_ps(Packed, op.Packed));
             int test = _mm_movemask_epi8(vcmp);
-            return test != 0;
+            return test == 0;
         }
 
         SF_FORCEINLINE bool operator>=(const Vector4SSE& op) const
         {
             __m128i vcmp = _mm_castps_si128(_mm_cmpnge_ps(Packed, op.Packed));
             int test = _mm_movemask_epi8(vcmp);
-            return test != 0;
+            return test == 0;
         }
 
         SF_FORCEINLINE bool operator<(const Vector4SSE& op) const
         {
             __m128i vcmp = _mm_castps_si128(_mm_cmpnlt_ps(Packed, op.Packed));
             int test = _mm_movemask_epi8(vcmp);
-            return test != 0;
+            return test == 0;
         }
 
         SF_FORCEINLINE bool operator<=(const Vector4SSE& op) const
         {
             __m128i vcmp = _mm_castps_si128(_mm_cmpnle_ps(Packed, op.Packed));
             int test = _mm_movemask_epi8(vcmp);
-            return test != 0;
+            return test == 0;
         }
 
 
