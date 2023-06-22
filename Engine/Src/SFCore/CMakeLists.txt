@@ -233,6 +233,10 @@ set(SUBMath_FILES
 	Math/SF3DMath.h
 	Math/SF3DMathSoft.h
 	Math/SF3DMathSSE.h
+	Math/SF3DMathSSE.inl
+	Math/SF3DMath_vectorSSE.inl
+	Math/SF3DMath_matrixSSE.inl
+	Math/SF3DMath_quaternionSSE.inl
 	Math/SFAngle.h
 	Math/SFMath.h
 	Math/SFMathConsts.h
