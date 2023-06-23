@@ -313,16 +313,6 @@ namespace SF {
         SF_FORCEINLINE VectorType GetMid() const { return (Min + Max) / 2; }
         SF_FORCEINLINE bool IsInside(const VectorType& testPos) const
         {
-            //__m128 vcmp1 = _mm_cmpnle_ps(Min.Packed, testPos.Packed);
-            //__m128i vccast1 = _mm_castps_si128(vcmp1);
-            //int test1 = _mm_movemask_epi8(vccast1);
-
-            //__m128 vcmp21 = _mm_cmpnle_ps(testPos.Packed, Max.Packed);
-            //__m128i vcmp2 = _mm_castps_si128(vcmp21);
-            //int test2 = _mm_movemask_epi8(vcmp2);
-
-            //return test1 == 0 && test2 == 0;
-
             return Min <= testPos && testPos <= Max;
         }
     };
