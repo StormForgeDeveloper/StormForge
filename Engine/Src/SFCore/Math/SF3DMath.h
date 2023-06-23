@@ -322,6 +322,3 @@ namespace SF {
     using Box2i = Box<Vector2i>;
     using Box3i = Box<Vector3i>;
 }
-
-
-
