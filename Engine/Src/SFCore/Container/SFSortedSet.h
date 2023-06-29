@@ -61,6 +61,8 @@ namespace SF {
 			KeyType operator * () { return GetKey(); }
 			KeyType operator * () const { return GetKey(); }
 
+            KeyType operator -> () { return GetKey(); }
+
 			operator KeyType() { return GetKey(); }
 			operator KeyType() const { return GetKey(); }
 
