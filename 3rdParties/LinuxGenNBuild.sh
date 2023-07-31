@@ -75,6 +75,13 @@ fi
 popd
 
 
+pushd src/flatbuffer
+
+./download.sh
+
+popd
+
+
 
 echo Done
 

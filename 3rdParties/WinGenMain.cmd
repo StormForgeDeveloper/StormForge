@@ -7,7 +7,6 @@ call FindVC.cmd
 if not exist %CMAKE_SYSTEM_NAME% mkdir %CMAKE_SYSTEM_NAME%
 if not exist %CMAKE_SYSTEM_NAME%\Debug mkdir %CMAKE_SYSTEM_NAME%\Debug
 if not exist %CMAKE_SYSTEM_NAME%\Release mkdir %CMAKE_SYSTEM_NAME%\Release
-if not exist %CMAKE_SYSTEM_NAME%\RelWithDebInfo mkdir %CMAKE_SYSTEM_NAME%\RelWithDebInfo
 
 rem for %%I in (.) do set SF_FOLDER=%%~nxI\..
 set SF_FOLDER=%~dp0..
