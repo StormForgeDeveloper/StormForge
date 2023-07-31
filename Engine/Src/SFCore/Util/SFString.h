@@ -1116,6 +1116,7 @@ namespace SF {
 		SF_FORCEINLINE CharType* data() { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
 		SF_FORCEINLINE const CharType* data() const { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
 		SF_FORCEINLINE operator const CharType*() const { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
+        SF_FORCEINLINE const CharType* c_str() const { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
 
 		bool operator == (const CharType* src) const
 		{
