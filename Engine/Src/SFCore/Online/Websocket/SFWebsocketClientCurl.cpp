@@ -567,6 +567,10 @@ namespace SF
         curl_off_t fragmentOffset = 0; // no fragmentation
         uint flags = CURLWS_BINARY;
 
+        MutexScopeLock scopeLock(m_ContextLock);
+        if (m_Curl == nullptr)
+            return ResultCode::IO_DISCONNECTED;
+
         CURLcode result = curl_ws_send(m_Curl, messageData.data(), messageData.size(), &sentSize, fragmentOffset, flags);
         if (result == CURLE_OK)
         {

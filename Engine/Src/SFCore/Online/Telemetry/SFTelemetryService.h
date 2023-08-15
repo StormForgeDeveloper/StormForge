@@ -46,7 +46,9 @@ namespace SF
 
         virtual TelemetryEvent& Set(const char* name, bool value) = 0;
         virtual TelemetryEvent& Set(const char* name, int value) = 0;
+        virtual TelemetryEvent& Set(const char* name, uint value) = 0;
         virtual TelemetryEvent& Set(const char* name, int64_t value) = 0;
+        virtual TelemetryEvent& Set(const char* name, uint64_t value) = 0;
         virtual TelemetryEvent& Set(const char* name, float value) = 0;
         virtual TelemetryEvent& Set(const char* name, const char* value) = 0;
         virtual TelemetryEvent& Set(const String& name, int value) = 0;

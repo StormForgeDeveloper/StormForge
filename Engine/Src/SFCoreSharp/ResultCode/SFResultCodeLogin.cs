@@ -35,6 +35,12 @@ namespace SF {
 		// The user is blocked 
 		public const int LOGIN_ACCOUNT_BLOCKED =                            unchecked((int)0xE7150006); 
 
+		// The user is not exist 
+		public const int LOGIN_ACCOUNT_DOES_NOT_EXIST =                     unchecked((int)0xE7150007); 
+
+		// The user's platform login is invalid 
+		public const int LOGIN_INVALID_PLATFORM_LOGIN =                     unchecked((int)0xE7150008); 
+
 	}
 }
 

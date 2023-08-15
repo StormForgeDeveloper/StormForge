@@ -52,6 +52,20 @@ namespace SF
                 { \"name\" : \"ItemId\", \"type\" : \"long\" }\n\
             ]\n\
         }\n";
+    static const char FishingFinishedSchema[] =
+        "{\n\
+            \"type\" : \"record\",\n\
+            \"namespace\" : \"BR\",\n\
+            \"name\" : \"FishingFinished\",\n\
+            \"fields\" : [\n\
+                { \"name\" : \"UserId\", \"type\" : \"long\" },\n\
+                { \"name\" : \"FishId\", \"type\" : \"int\" },\n\
+                { \"name\" : \"ExpGain\", \"type\" : \"long\" },\n\
+                { \"name\" : \"SelectedRewardGroupId0\", \"type\" : \"int\" },\n\
+                { \"name\" : \"SelectedRewardGroupId1\", \"type\" : \"int\" },\n\
+                { \"name\" : \"SelectedRewardGroupId2\", \"type\" : \"int\" }\n\
+            ]\n\
+        }\n";
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -97,6 +111,7 @@ namespace SF
         m_TelemetryPtr->RegisterEventSchema("Login", loginSchema);
         m_TelemetryPtr->RegisterEventSchema("SignUp", signUpSchema);
         m_TelemetryPtr->RegisterEventSchema("UseItem", useItemSchema);
+        m_TelemetryPtr->RegisterEventSchema("FishingFinished", FishingFinishedSchema);
 
         Service::Telemetry = m_TelemetryPtr.get();
 

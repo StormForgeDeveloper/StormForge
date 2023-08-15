@@ -155,9 +155,21 @@ namespace SF
         return *this;
     }
 
+    TelemetryEvent& TelemetryEventAvro::Set(const char* name, uint value)
+    {
+        m_AvroValue.SetValue(name, (int)value);
+        return *this;
+    }
+
     TelemetryEvent& TelemetryEventAvro::Set(const char* name, int64_t value)
     {
         m_AvroValue.SetValue(name, value);
+        return *this;
+    }
+
+    TelemetryEvent& TelemetryEventAvro::Set(const char* name, uint64_t value)
+    {
+        m_AvroValue.SetValue(name, (int64_t)value);
         return *this;
     }
 

@@ -85,7 +85,9 @@ namespace SF
 
         virtual TelemetryEvent& Set(const char* name, bool value) override;
         virtual TelemetryEvent& Set(const char* name, int value) override;
+        virtual TelemetryEvent& Set(const char* name, uint value) override;
         virtual TelemetryEvent& Set(const char* name, int64_t value) override;
+        virtual TelemetryEvent& Set(const char* name, uint64_t value) override;
         virtual TelemetryEvent& Set(const char* name, float value) override;
         virtual TelemetryEvent& Set(const char* name, const char* value) override;
         virtual TelemetryEvent& Set(const String& name, int value) override;

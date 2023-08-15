@@ -190,6 +190,26 @@ namespace SF
             get => (Platform)(PlatformData);
             set => PlatformData = (byte)value;
         }
+
+        bool Parse(string playformIdString)
+        {
+            if (string.IsNullOrEmpty(playformIdString))
+                return false;
+
+            string[] subStrings = playformIdString.Split(':');
+            if (subStrings.Length != 2)
+                return false;
+
+            if (!byte.TryParse(subStrings[0], out PlatformData))
+                return false;
+
+            if (!UInt64.TryParse(subStrings[1], out PlayerID))
+                return false;
+
+            return true;
+        }
+
+        public override string ToString() { return $"{PlatformData}:{PlayerID}"; }
     }
 
 
