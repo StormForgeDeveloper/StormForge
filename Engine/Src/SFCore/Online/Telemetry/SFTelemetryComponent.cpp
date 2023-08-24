@@ -21,7 +21,7 @@
 namespace SF
 {
 
-    static const char loginSchema[] =
+    static const char LoginSchema[] =
         "{\n\
             \"type\" : \"record\",\n\
             \"namespace\" : \"BR\",\n\
@@ -32,7 +32,7 @@ namespace SF
                 { \"name\" : \"PlatformPlayerId\", \"type\" : \"long\" }\n\
             ]\n\
         }\n";
-    static const char signUpSchema[] =
+    static const char SignUpSchema[] =
         "{\n\
             \"type\" : \"record\",\n\
             \"namespace\" : \"BR\",\n\
@@ -43,7 +43,7 @@ namespace SF
                 { \"name\" : \"PlatformPlayerId\", \"type\" : \"long\" }\n\
             ]\n\
         }\n";
-    static const char useItemSchema[] =
+    static const char UseItemSchema[] =
         "{\n\
             \"type\" : \"record\",\n\
             \"namespace\" : \"BR\",\n\
@@ -59,6 +59,7 @@ namespace SF
             \"name\" : \"FishingFinished\",\n\
             \"fields\" : [\n\
                 { \"name\" : \"UserId\", \"type\" : \"long\" },\n\
+                { \"name\" : \"CharacterId\", \"type\" : \"long\" },\n\
                 { \"name\" : \"FishId\", \"type\" : \"int\" },\n\
                 { \"name\" : \"ExpGain\", \"type\" : \"long\" },\n\
                 { \"name\" : \"SelectedRewardGroupId0\", \"type\" : \"int\" },\n\
@@ -107,10 +108,10 @@ namespace SF
         if (!hr)
             return hr;
 
-        // Registering default shcema
-        m_TelemetryPtr->RegisterEventSchema("Login", loginSchema);
-        m_TelemetryPtr->RegisterEventSchema("SignUp", signUpSchema);
-        m_TelemetryPtr->RegisterEventSchema("UseItem", useItemSchema);
+        // Registering default schema
+        m_TelemetryPtr->RegisterEventSchema("Login", LoginSchema);
+        m_TelemetryPtr->RegisterEventSchema("SignUp", SignUpSchema);
+        m_TelemetryPtr->RegisterEventSchema("UseItem", UseItemSchema);
         m_TelemetryPtr->RegisterEventSchema("FishingFinished", FishingFinishedSchema);
 
         Service::Telemetry = m_TelemetryPtr.get();
