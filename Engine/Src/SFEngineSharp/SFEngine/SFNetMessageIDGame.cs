@@ -38,15 +38,15 @@ namespace SF.Net
 
 
 		// Cmd: player complition statues
-		public static int GetComplitionStateCmd { get { return CSSFNetMessageID_GameGetComplitionStateCmd(); } }
+		public static int GetAchievementStatsCmd { get { return CSSFNetMessageID_GameGetAchievementStatsCmd(); } }
 
-		public static int GetComplitionStateRes { get { return CSSFNetMessageID_GameGetComplitionStateRes(); } }
+		public static int GetAchievementStatsRes { get { return CSSFNetMessageID_GameGetAchievementStatsRes(); } }
 
 
 		// Cmd: Player complition state
-		public static int SetComplitionStateCmd { get { return CSSFNetMessageID_GameSetComplitionStateCmd(); } }
+		public static int Dummy1Cmd { get { return CSSFNetMessageID_GameDummy1Cmd(); } }
 
-		public static int SetComplitionStateRes { get { return CSSFNetMessageID_GameSetComplitionStateRes(); } }
+		public static int Dummy1Res { get { return CSSFNetMessageID_GameDummy1Res(); } }
 
 
 		// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
@@ -423,22 +423,22 @@ namespace SF.Net
 
 
 		// Cmd: player complition statues
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGetComplitionStateCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGetComplitionStateCmd();
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGetAchievementStatsCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameGetAchievementStatsCmd();
 
 
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGetComplitionStateRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGetComplitionStateRes();
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGetAchievementStatsRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameGetAchievementStatsRes();
 
 
 
 		// Cmd: Player complition state
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameSetComplitionStateCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameSetComplitionStateCmd();
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameDummy1Cmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameDummy1Cmd();
 
 
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameSetComplitionStateRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameSetComplitionStateRes();
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameDummy1Res", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameDummy1Res();
 
 
 

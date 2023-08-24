@@ -411,6 +411,28 @@ namespace SF
                     valuePtr += Marshal.SizeOf<UInt64>() + Marshal.SizeOf<byte>();
                     return item;
                 }),
+
+            new TypeInfo(typeof(AchievementStat), "AchievementStat",
+                (writer, value) =>
+                {
+                    var item = (AchievementStat)value;
+                    writer.Write(item.AchievementStatId);
+                    writer.Write(item.StatValue);
+                },
+                (reader) =>
+                {
+                    var item = new AchievementStat();
+                    item.AchievementStatId = reader.ReadUInt32();
+                    item.StatValue = reader.ReadInt32();
+                    return item;
+                },
+                (ref IntPtr valuePtr) =>
+                {
+                    var item = Marshal.PtrToStructure(valuePtr, typeof(AchievementStat));
+                    valuePtr += Marshal.SizeOf(item);
+                    return item;
+                }),
+
         };
 
         static Dictionary<Type, TypeInfo> TypeInfoByType;

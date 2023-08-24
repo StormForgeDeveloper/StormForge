@@ -49,31 +49,37 @@ C++: Cast message to JoinGameServerRes to access values
 		- OutMatchingTicket: MatchingQueueTicket type. Matching queue ticket
 
 
-## GetComplitionState Request
+## GetAchievementStats Request
 player complition statues
 
 1. Command interface
 
-        Result GetComplitionStateCmd(const uint64_t &InTransactionID)
+        Result GetAchievementStatsCmd(const uint64_t &InTransactionID, const uint32_t &InCharacterID, const uint32_t &InAchievementStatIDFrom, const uint32_t &InAchievementStatIDTo)
 
 		- OutTransactionID: TransactionID type. 
 
+		- OutCharacterID: uint32 type. Character Id to request
+
+		- OutAchievementStatIDFrom: uint32 type. Beginning of achievementStat Id range to query
+
+		- OutAchievementStatIDTo: uint32 type. End of achievementStat Id range to query
+
 2. Result interface
 
-C++: Cast message to GetComplitionStateRes to access values
+C++: Cast message to GetAchievementStatsRes to access values
 
 
 		- OutTransactionID: TransactionID type. 
 		- OutResult: Result type. 
-		- OutComplitionState: String type. Complition state string
+		- OutAchievementStats: AchievementStat type. Achievement stat array
 
 
-## SetComplitionState Request
+## Dummy1 Request
 Player complition state
 
 1. Command interface
 
-        Result SetComplitionStateCmd(const uint64_t &InTransactionID, const char* InComplitionState)
+        Result Dummy1Cmd(const uint64_t &InTransactionID, const char* InComplitionState)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -81,7 +87,7 @@ Player complition state
 
 2. Result interface
 
-C++: Cast message to SetComplitionStateRes to access values
+C++: Cast message to Dummy1Res to access values
 
 
 		- OutTransactionID: TransactionID type. 

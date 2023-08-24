@@ -54,6 +54,23 @@ namespace SF
     IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(PlayerPlatformID);
 
 
+    Result _ToString(ToStringContext& context, const AchievementStat& value)
+    {
+        if (!_IToA(context, (int)value.AchievementStatId))
+            return ResultCode::FAIL;
+
+        if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":"))
+            return ResultCode::FAIL;
+
+        if (!_IToA(context, value.StatValue))
+            return ResultCode::FAIL;
+
+
+        return ResultCode::SUCCESS;
+    }
+
+    IMPLEMENT_BOXING_TEMPLETE_BYVALUE(AchievementStat);
+
 
 
 } // namespace SF

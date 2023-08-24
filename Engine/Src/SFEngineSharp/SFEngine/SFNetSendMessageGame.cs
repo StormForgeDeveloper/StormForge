@@ -62,26 +62,26 @@ namespace SF.Net
 		} // public int  JoinGameServerCmd( System.UInt64 InTransactionID, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID )
 
 		// Cmd: player complition statues
-		public int  GetComplitionStateCmd( System.UInt64 InTransactionID )
+		public int  GetAchievementStatsCmd( System.UInt64 InTransactionID, System.UInt32 InCharacterID, System.UInt32 InAchievementStatIDFrom, System.UInt32 InAchievementStatIDTo )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_GameGetComplitionStateCmd(m_Connection.NativeHandle, InTransactionID);
+			result = CSSFNetAdapter_GameGetAchievementStatsCmd(m_Connection.NativeHandle, InTransactionID, InCharacterID, InAchievementStatIDFrom, InAchievementStatIDTo);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetComplitionStateCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetAchievementStatsCmd);
 			return result;
-		} // public int  GetComplitionStateCmd( System.UInt64 InTransactionID )
+		} // public int  GetAchievementStatsCmd( System.UInt64 InTransactionID, System.UInt32 InCharacterID, System.UInt32 InAchievementStatIDFrom, System.UInt32 InAchievementStatIDTo )
 
 		// Cmd: Player complition state
-		public int  SetComplitionStateCmd( System.UInt64 InTransactionID, System.String InComplitionState )
+		public int  Dummy1Cmd( System.UInt64 InTransactionID, System.String InComplitionState )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_GameSetComplitionStateCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InComplitionState + "\0"));
+			result = CSSFNetAdapter_GameDummy1Cmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InComplitionState + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SetComplitionStateCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.Dummy1Cmd);
 			return result;
-		} // public int  SetComplitionStateCmd( System.UInt64 InTransactionID, System.String InComplitionState )
+		} // public int  Dummy1Cmd( System.UInt64 InTransactionID, System.String InComplitionState )
 
 		// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
 		public int  RegisterGCMCmd( System.UInt64 InTransactionID, System.String InGCMRegisteredID )
@@ -634,13 +634,13 @@ namespace SF.Net
 
 
 		// Cmd: player complition statues
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetComplitionStateCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGetComplitionStateCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID );
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetAchievementStatsCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameGetAchievementStatsCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InCharacterID, System.UInt32 InAchievementStatIDFrom, System.UInt32 InAchievementStatIDTo );
 
 
 		// Cmd: Player complition state
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameSetComplitionStateCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameSetComplitionStateCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, [MarshalAs(UnmanagedType.LPArray)] byte[] InComplitionState );
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameDummy1Cmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameDummy1Cmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, [MarshalAs(UnmanagedType.LPArray)] byte[] InComplitionState );
 
 
 		// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
@@ -916,27 +916,27 @@ namespace SF.Net
 
 
 		// Cmd: player complition statues
-		public int  GetComplitionStateRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InComplitionState )
+		public int  GetAchievementStatsRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.AchievementStat[] InAchievementStats )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_GameGetComplitionStateRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InComplitionState + "\0"));
+			result = CSSFNetAdapter_GameGetAchievementStatsRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InAchievementStats.Length, InAchievementStats);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetComplitionStateRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetAchievementStatsRes);
 			return result;
-		} // public int  GetComplitionStateRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InComplitionState )
+		} // public int  GetAchievementStatsRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.AchievementStat[] InAchievementStats )
 
 
 		// Cmd: Player complition state
-		public int  SetComplitionStateRes( System.UInt64 InTransactionID, System.Int32 InResult )
+		public int  Dummy1Res( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_GameSetComplitionStateRes(m_Connection.NativeHandle, InTransactionID, InResult);
+			result = CSSFNetAdapter_GameDummy1Res(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SetComplitionStateRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.Dummy1Res);
 			return result;
-		} // public int  SetComplitionStateRes( System.UInt64 InTransactionID, System.Int32 InResult )
+		} // public int  Dummy1Res( System.UInt64 InTransactionID, System.Int32 InResult )
 
 
 		// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
@@ -1823,14 +1823,14 @@ namespace SF.Net
 
 
 		// Cmd: player complition statues
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetComplitionStateRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGetComplitionStateRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, [MarshalAs(UnmanagedType.LPArray)] byte[] InComplitionState );
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetAchievementStatsRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameGetAchievementStatsRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInAchievementStats,SF.AchievementStat[] InAchievementStats );
 
 
 
 		// Cmd: Player complition state
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameSetComplitionStateRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameSetComplitionStateRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameDummy1Res", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameDummy1Res(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
 
 
 

@@ -34,11 +34,11 @@ namespace SF
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::JoinGameServerCmd::MID.IDSeq.MsgID,&Message::Game::JoinGameServerCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::JoinGameServerRes::MID.IDSeq.MsgID,&Message::Game::JoinGameServerRes::TraceOut));
 			// Cmd: player complition statues
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetComplitionStateCmd::MID.IDSeq.MsgID,&Message::Game::GetComplitionStateCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetComplitionStateRes::MID.IDSeq.MsgID,&Message::Game::GetComplitionStateRes::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetAchievementStatsCmd::MID.IDSeq.MsgID,&Message::Game::GetAchievementStatsCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetAchievementStatsRes::MID.IDSeq.MsgID,&Message::Game::GetAchievementStatsRes::TraceOut));
 			// Cmd: Player complition state
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::SetComplitionStateCmd::MID.IDSeq.MsgID,&Message::Game::SetComplitionStateCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::SetComplitionStateRes::MID.IDSeq.MsgID,&Message::Game::SetComplitionStateRes::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::Dummy1Cmd::MID.IDSeq.MsgID,&Message::Game::Dummy1Cmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::Dummy1Res::MID.IDSeq.MsgID,&Message::Game::Dummy1Res::TraceOut));
 			// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RegisterGCMCmd::MID.IDSeq.MsgID,&Message::Game::RegisterGCMCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RegisterGCMRes::MID.IDSeq.MsgID,&Message::Game::RegisterGCMRes::TraceOut));

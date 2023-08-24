@@ -47,29 +47,29 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameJoinGameServerCmd( intptr_t InNativeConnect
 
 
 // Cmd: player complition statues
-SFDLL_EXPORT int  CSSFNetAdapter_GameGetComplitionStateCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID )
+SFDLL_EXPORT int  CSSFNetAdapter_GameGetAchievementStatsCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint32_t InCharacterID, uint32_t InAchievementStatIDFrom, uint32_t InAchievementStatIDTo )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::Game::GetComplitionStateCmd::CalculateMessageSize( InTransactionID);
+	size_t messageSize = SF::Message::Game::GetAchievementStatsCmd::CalculateMessageSize( InTransactionID, InCharacterID, InAchievementStatIDFrom, InAchievementStatIDTo);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::Game::GetComplitionStateCmd::Create(pMessage,  InTransactionID);
+	Result hr = SF::Message::Game::GetAchievementStatsCmd::Create(pMessage,  InTransactionID, InCharacterID, InAchievementStatIDFrom, InAchievementStatIDTo);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameGetComplitionStateCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameGetAchievementStatsCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint32_t InCharacterID, uint32_t InAchievementStatIDFrom, uint32_t InAchievementStatIDTo )
 
 
 // Cmd: Player complition state
-SFDLL_EXPORT int  CSSFNetAdapter_GameSetComplitionStateCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, const char* InComplitionState )
+SFDLL_EXPORT int  CSSFNetAdapter_GameDummy1Cmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, const char* InComplitionState )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::Game::SetComplitionStateCmd::CalculateMessageSize( InTransactionID,InComplitionState);
+	size_t messageSize = SF::Message::Game::Dummy1Cmd::CalculateMessageSize( InTransactionID,InComplitionState);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::Game::SetComplitionStateCmd::Create(pMessage,  InTransactionID,InComplitionState);
+	Result hr = SF::Message::Game::Dummy1Cmd::Create(pMessage,  InTransactionID,InComplitionState);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameSetComplitionStateCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, const char* InComplitionState )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameDummy1Cmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, const char* InComplitionState )
 
 
 // Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
@@ -713,30 +713,30 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameJoinGameServerRes( intptr_t InNativeConnect
 
 
 // Cmd: player complition statues
-SFDLL_EXPORT int  CSSFNetAdapter_GameGetComplitionStateRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InComplitionState )
+SFDLL_EXPORT int  CSSFNetAdapter_GameGetAchievementStatsRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint16_t _sizeOfInAchievementStats,const AchievementStat* InAchievementStats )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::Game::GetComplitionStateRes::CalculateMessageSize( InTransactionID, InResult,InComplitionState);
+	size_t messageSize = SF::Message::Game::GetAchievementStatsRes::CalculateMessageSize( InTransactionID, InResult,SF::ArrayView<AchievementStat>(_sizeOfInAchievementStats, _sizeOfInAchievementStats, const_cast<AchievementStat*>(InAchievementStats)));
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::Game::GetComplitionStateRes::Create(pMessage,  InTransactionID, InResult,InComplitionState);
+	Result hr = SF::Message::Game::GetAchievementStatsRes::Create(pMessage,  InTransactionID, InResult,SF::ArrayView<AchievementStat>(_sizeOfInAchievementStats, _sizeOfInAchievementStats, const_cast<AchievementStat*>(InAchievementStats)));
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameGetComplitionStateRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InComplitionState )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameGetAchievementStatsRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint16_t _sizeOfInAchievementStats,const AchievementStat* InAchievementStats )
 
 
 
 // Cmd: Player complition state
-SFDLL_EXPORT int  CSSFNetAdapter_GameSetComplitionStateRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
+SFDLL_EXPORT int  CSSFNetAdapter_GameDummy1Res( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::Game::SetComplitionStateRes::CalculateMessageSize( InTransactionID, InResult);
+	size_t messageSize = SF::Message::Game::Dummy1Res::CalculateMessageSize( InTransactionID, InResult);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::Game::SetComplitionStateRes::Create(pMessage,  InTransactionID, InResult);
+	Result hr = SF::Message::Game::Dummy1Res::Create(pMessage,  InTransactionID, InResult);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameSetComplitionStateRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameDummy1Res( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
 
 
 

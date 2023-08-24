@@ -37,9 +37,9 @@ namespace SF
 		// Cmd: Player connected from a login server and moved to game server
 		Result JoinGameServerCmd( const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
 		// Cmd: player complition statues
-		Result GetComplitionStateCmd( const uint64_t &InTransactionID );
+		Result GetAchievementStatsCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID, const uint32_t &InAchievementStatIDFrom, const uint32_t &InAchievementStatIDTo );
 		// Cmd: Player complition state
-		Result SetComplitionStateCmd( const uint64_t &InTransactionID, const char* InComplitionState );
+		Result Dummy1Cmd( const uint64_t &InTransactionID, const char* InComplitionState );
 		// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
 		Result RegisterGCMCmd( const uint64_t &InTransactionID, const char* InGCMRegisteredID );
 		// Cmd: Unregister Google notification service ID
@@ -152,9 +152,9 @@ namespace SF
 		// Cmd: Player connected from a login server and moved to game server
 		Result JoinGameServerRes( const uint64_t &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket );
 		// Cmd: player complition statues
-		Result GetComplitionStateRes( const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState );
+		Result GetAchievementStatsRes( const uint64_t &InTransactionID, const Result &InResult, const Array<AchievementStat>& InAchievementStats );
 		// Cmd: Player complition state
-		Result SetComplitionStateRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result Dummy1Res( const uint64_t &InTransactionID, const Result &InResult );
 		// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
 		Result RegisterGCMRes( const uint64_t &InTransactionID, const Result &InResult );
 		// Cmd: Unregister Google notification service ID

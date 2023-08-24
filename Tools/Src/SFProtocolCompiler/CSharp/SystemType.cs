@@ -245,6 +245,7 @@ namespace SF
             new TypeMap( "PerformanceCounterInfo", false, typeof(PerformanceCounterInfo) ),
             new TypeMap( "PerformanceCounterInstanceInfo", false, typeof(PerformanceCounterInstanceInfo) ),
             new TypeMap( "RelayPlayerInfo", false, typeof(RelayPlayerInfo) ),
+            new TypeMap( "AchievementStat", false, typeof(AchievementStat), InUseGenericVariableBuilderInterface:true ),
         };
 
         static Dictionary<string, TypeMap> MapToCSharp = new Dictionary<string, TypeMap>();
@@ -304,8 +305,8 @@ namespace SF
             }
             catch (Exception exp)
             {
-                Console.WriteLine("Can't find cpp type {0}", paramTypeName);
-                throw exp;
+                Console.WriteLine("Can't find cpp type {0}, error:{1}", paramTypeName, exp.Message);
+                throw;
             }
         }
 

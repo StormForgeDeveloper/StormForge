@@ -22,15 +22,18 @@
 			</Res>
 		</Command>
 
-		<Command Name="GetComplitionState" Reliable="true" Crypto="No" Trace="Debug1" Desc="player complition statues">
+		<Command Name="GetAchievementStats" Reliable="true" Crypto="No" Trace="Debug1" Desc="player complition statues">
 			<Cmd>
+				<Params TypeName="uint32" Name="CharacterID" Desc="Character Id to request"/>
+				<Params TypeName="uint32" Name="AchievementStatIDFrom" Desc="Beginning of achievementStat Id range to query"/>
+				<Params TypeName="uint32" Name="AchievementStatIDTo" Desc="End of achievementStat Id range to query"/>
 			</Cmd>
 			<Res>
-				<Params TypeName="String" Name="ComplitionState" Desc="Complition state string"/>
+				<Params TypeName="AchievementStat" IsArray="true"  Name="AchievementStats" Desc="Achievement stat array"/>
 			</Res>
 		</Command>
 
-		<Command Name="SetComplitionState" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player complition state">
+		<Command Name="Dummy1" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player complition state">
 			<Cmd>
 				<Params TypeName="String" Name="ComplitionState" Desc="Complition state to set"/>
 			</Cmd>

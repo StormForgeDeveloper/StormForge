@@ -40,29 +40,29 @@ SFDLL_EXPORT int  CSSFNetMessageID_GameJoinGameServerRes()
 
 
 // Cmd: player complition statues
-SFDLL_EXPORT int  CSSFNetMessageID_GameGetComplitionStateCmd()
+SFDLL_EXPORT int  CSSFNetMessageID_GameGetAchievementStatsCmd()
 {
- 	return SF::Message::Game::GetComplitionStateCmd::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_GameGetComplitionStateCmd()
+ 	return SF::Message::Game::GetAchievementStatsCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameGetAchievementStatsCmd()
 
 
-SFDLL_EXPORT int  CSSFNetMessageID_GameGetComplitionStateRes()
+SFDLL_EXPORT int  CSSFNetMessageID_GameGetAchievementStatsRes()
 {
- 	return SF::Message::Game::GetComplitionStateRes::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_GameGetComplitionStateRes()
+ 	return SF::Message::Game::GetAchievementStatsRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameGetAchievementStatsRes()
 
 
 // Cmd: Player complition state
-SFDLL_EXPORT int  CSSFNetMessageID_GameSetComplitionStateCmd()
+SFDLL_EXPORT int  CSSFNetMessageID_GameDummy1Cmd()
 {
- 	return SF::Message::Game::SetComplitionStateCmd::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_GameSetComplitionStateCmd()
+ 	return SF::Message::Game::Dummy1Cmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameDummy1Cmd()
 
 
-SFDLL_EXPORT int  CSSFNetMessageID_GameSetComplitionStateRes()
+SFDLL_EXPORT int  CSSFNetMessageID_GameDummy1Res()
 {
- 	return SF::Message::Game::SetComplitionStateRes::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_GameSetComplitionStateRes()
+ 	return SF::Message::Game::Dummy1Res::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameDummy1Res()
 
 
 // Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time

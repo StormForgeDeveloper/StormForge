@@ -79,6 +79,20 @@ namespace SF {
     }
 
 
+#pragma pack(push, 1)
+    struct AchievementStat
+    {
+        uint32_t AchievementStatId;
+        int32_t StatValue;
+    };
+
+    SF_FORCEINLINE bool operator == (const AchievementStat& op1, const AchievementStat& op2)
+    {
+        return op1.AchievementStatId == op2.AchievementStatId
+            && op1.StatValue == op2.StatValue;
+    }
+
+#pragma pack(pop)
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	//

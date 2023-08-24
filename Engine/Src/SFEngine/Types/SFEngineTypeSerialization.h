@@ -95,6 +95,11 @@ namespace SF {
     inline Result operator >> (IInputStream& input, PlayerPlatformID& data) { return input.Read(&data, sizeof(data)); }
     inline Result operator << (IOutputStream& output, const PlayerPlatformID& data) { return output.Write(&data, sizeof(data)); }
 
+    static_assert(sizeof(AchievementStat) == 8, "Size mismatch!");
+    inline size_t SerializedSizeOf(const AchievementStat& Value) { return sizeof(Value); }
+    inline Result operator >> (IInputStream& input, AchievementStat& data) { return input.Read(&data, sizeof(data)); }
+    inline Result operator << (IOutputStream& output, const AchievementStat& data) { return output.Write(&data, sizeof(data)); }
+
 };
 
 

@@ -213,6 +213,15 @@ namespace SF
     }
 
 
+    [Struct]
+    [StructLayout(LayoutKind.Sequential, Pack = 4)]
+    public struct AchievementStat
+    {
+        public UInt32 AchievementStatId;
+        public Int32 StatValue;
+    }
+
+
 
     public static class GameTypes
     {

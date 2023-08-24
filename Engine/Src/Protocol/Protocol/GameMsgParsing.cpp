@@ -40,15 +40,15 @@ namespace SF
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::JoinGameServerRes::MID.IDSeq.MsgID,&Message::Game::JoinGameServerRes::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::JoinGameServerRes::MID.IDSeq.MsgID,&Message::Game::JoinGameServerRes::ParseMessageToMessageBase));
 			// Cmd: player complition statues
-			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetComplitionStateCmd::MID.IDSeq.MsgID,&Message::Game::GetComplitionStateCmd::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetComplitionStateCmd::MID.IDSeq.MsgID,&Message::Game::GetComplitionStateCmd::ParseMessageToMessageBase));
-			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetComplitionStateRes::MID.IDSeq.MsgID,&Message::Game::GetComplitionStateRes::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetComplitionStateRes::MID.IDSeq.MsgID,&Message::Game::GetComplitionStateRes::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetAchievementStatsCmd::MID.IDSeq.MsgID,&Message::Game::GetAchievementStatsCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetAchievementStatsCmd::MID.IDSeq.MsgID,&Message::Game::GetAchievementStatsCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetAchievementStatsRes::MID.IDSeq.MsgID,&Message::Game::GetAchievementStatsRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetAchievementStatsRes::MID.IDSeq.MsgID,&Message::Game::GetAchievementStatsRes::ParseMessageToMessageBase));
 			// Cmd: Player complition state
-			MessageParseToVariableMap.insert(std::make_pair(Message::Game::SetComplitionStateCmd::MID.IDSeq.MsgID,&Message::Game::SetComplitionStateCmd::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::SetComplitionStateCmd::MID.IDSeq.MsgID,&Message::Game::SetComplitionStateCmd::ParseMessageToMessageBase));
-			MessageParseToVariableMap.insert(std::make_pair(Message::Game::SetComplitionStateRes::MID.IDSeq.MsgID,&Message::Game::SetComplitionStateRes::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::SetComplitionStateRes::MID.IDSeq.MsgID,&Message::Game::SetComplitionStateRes::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::Dummy1Cmd::MID.IDSeq.MsgID,&Message::Game::Dummy1Cmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::Dummy1Cmd::MID.IDSeq.MsgID,&Message::Game::Dummy1Cmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::Dummy1Res::MID.IDSeq.MsgID,&Message::Game::Dummy1Res::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::Dummy1Res::MID.IDSeq.MsgID,&Message::Game::Dummy1Res::ParseMessageToMessageBase));
 			// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::RegisterGCMCmd::MID.IDSeq.MsgID,&Message::Game::RegisterGCMCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::RegisterGCMCmd::MID.IDSeq.MsgID,&Message::Game::RegisterGCMCmd::ParseMessageToMessageBase));

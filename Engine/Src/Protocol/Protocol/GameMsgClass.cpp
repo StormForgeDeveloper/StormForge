@@ -322,8 +322,8 @@ namespace SF
 			}; // Result JoinGameServerRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: player complition statues
-			const MessageID GetComplitionStateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 2);
-			Result GetComplitionStateCmd::ParseMessage(const MessageHeader* pHeader)
+			const MessageID GetAchievementStatsCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 2);
+			Result GetAchievementStatsCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
 
@@ -336,56 +336,68 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_CharacterID);
+				protocolCheck(*input >> m_AchievementStatIDFrom);
+				protocolCheck(*input >> m_AchievementStatIDTo);
 
 				return hr;
 
-			}; // Result GetComplitionStateCmd::ParseMessage(const MessageHeader* pHeader)
+			}; // Result GetAchievementStatsCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetComplitionStateCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			Result GetAchievementStatsCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				Result hr;
 
 
-				GetComplitionStateCmd parser;
+				GetAchievementStatsCmd parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("CharacterID", parser.GetCharacterID());
+				variableBuilder.SetVariable("AchievementStatIDFrom", parser.GetAchievementStatIDFrom());
+				variableBuilder.SetVariable("AchievementStatIDTo", parser.GetAchievementStatIDTo());
 
 				return hr;
 
-			}; // Result GetComplitionStateCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			}; // Result GetAchievementStatsCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetComplitionStateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			Result GetAchievementStatsCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				Result hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetComplitionStateCmd(pHeader));
+				protocolCheckMem(pMessageBase = new(memHeap) GetAchievementStatsCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetComplitionStateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			}; // Result GetAchievementStatsCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t GetComplitionStateCmd::CalculateMessageSize( const uint64_t &InTransactionID )
+			size_t GetAchievementStatsCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InCharacterID, const uint32_t &InAchievementStatIDFrom, const uint32_t &InAchievementStatIDTo )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InCharacterID)
+					+ SerializedSizeOf(InAchievementStatIDFrom)
+					+ SerializedSizeOf(InAchievementStatIDTo)
 				);
 
 				return __uiMessageSize;
-			}; // size_t GetComplitionStateCmd::CalculateMessageSize( const uint64_t &InTransactionID )
+			}; // size_t GetAchievementStatsCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InCharacterID, const uint32_t &InAchievementStatIDFrom, const uint32_t &InAchievementStatIDTo )
 
 
-			Result GetComplitionStateCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID )
+			Result GetAchievementStatsCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InCharacterID, const uint32_t &InAchievementStatIDFrom, const uint32_t &InAchievementStatIDTo )
 			{
  				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InCharacterID)
+					+ SerializedSizeOf(InAchievementStatIDFrom)
+					+ SerializedSizeOf(InAchievementStatIDTo)
 				);
 
-				messageBuffer->msgID = GetComplitionStateCmd::MID;
+				messageBuffer->msgID = GetAchievementStatsCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -396,21 +408,24 @@ namespace SF
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InCharacterID);
+				protocolCheck(*output << InAchievementStatIDFrom);
+				protocolCheck(*output << InAchievementStatIDTo);
 
 				return hr;
-			}; // Result GetComplitionStateCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID )
+			}; // Result GetAchievementStatsCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InCharacterID, const uint32_t &InAchievementStatIDFrom, const uint32_t &InAchievementStatIDTo )
 
-			Result GetComplitionStateCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			Result GetAchievementStatsCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
- 				GetComplitionStateCmd parser;
+ 				GetAchievementStatsCmd parser;
 				parser.ParseMessage(pHeader);
-				SFLog(Net, Debug1, "Game::GetComplitionState, {0}:{1} , TransactionID:{2}",
-						prefix, pHeader->Length, parser.GetTransactionID()); 
+				SFLog(Net, Debug1, "Game::GetAchievementStats, {0}:{1} , TransactionID:{2}, CharacterID:{3}, AchievementStatIDFrom:{4}, AchievementStatIDTo:{5}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetCharacterID(), parser.GetAchievementStatIDFrom(), parser.GetAchievementStatIDTo()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetComplitionStateCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			}; // Result GetAchievementStatsCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID GetComplitionStateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 2);
-			Result GetComplitionStateRes::ParseMessage(const MessageHeader* pHeader)
+			const MessageID GetAchievementStatsRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 2);
+			Result GetAchievementStatsRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
 
@@ -425,63 +440,65 @@ namespace SF
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
 				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_ComplitionState, ArrayLen));
+				AchievementStat* AchievementStatsPtr = nullptr;
+				protocolCheck(input->ReadLink(AchievementStatsPtr, ArrayLen));
+				m_AchievementStats.SetLinkedBuffer(ArrayLen, AchievementStatsPtr);
 
 				return hr;
 
-			}; // Result GetComplitionStateRes::ParseMessage(const MessageHeader* pHeader)
+			}; // Result GetAchievementStatsRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetComplitionStateRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			Result GetAchievementStatsRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				Result hr;
 
 
-				GetComplitionStateRes parser;
+				GetAchievementStatsRes parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("ComplitionState", parser.GetComplitionState());
+				variableBuilder.SetVariableArray("AchievementStats", "AchievementStat", parser.GetAchievementStats());
 
 				return hr;
 
-			}; // Result GetComplitionStateRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			}; // Result GetAchievementStatsRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetComplitionStateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			Result GetAchievementStatsRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				Result hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetComplitionStateRes(pHeader));
+				protocolCheckMem(pMessageBase = new(memHeap) GetAchievementStatsRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetComplitionStateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			}; // Result GetAchievementStatsRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t GetComplitionStateRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
+			size_t GetAchievementStatsRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<AchievementStat>& InAchievementStats )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InComplitionState)
+					+ SerializedSizeOf(InAchievementStats)
 				);
 
 				return __uiMessageSize;
-			}; // size_t GetComplitionStateRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
+			}; // size_t GetAchievementStatsRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<AchievementStat>& InAchievementStats )
 
 
-			Result GetComplitionStateRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
+			Result GetAchievementStatsRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<AchievementStat>& InAchievementStats )
 			{
  				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InComplitionState)
+					+ SerializedSizeOf(InAchievementStats)
 				);
 
-				messageBuffer->msgID = GetComplitionStateRes::MID;
+				messageBuffer->msgID = GetAchievementStatsRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -493,23 +510,23 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
-				protocolCheck(*output << InComplitionState);
+				protocolCheck(*output << InAchievementStats);
 
 				return hr;
-			}; // Result GetComplitionStateRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
+			}; // Result GetAchievementStatsRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<AchievementStat>& InAchievementStats )
 
-			Result GetComplitionStateRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			Result GetAchievementStatsRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
- 				GetComplitionStateRes parser;
+ 				GetAchievementStatsRes parser;
 				parser.ParseMessage(pHeader);
-				SFLog(Net, Debug1, "Game::GetComplitionState, {0}:{1} , TransactionID:{2}, Result:{3:X8}, ComplitionState:{4,60}",
-						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetComplitionState()); 
+				SFLog(Net, Debug1, "Game::GetAchievementStats, {0}:{1} , TransactionID:{2}, Result:{3:X8}, AchievementStats:{4,30}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetAchievementStats()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetComplitionStateRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			}; // Result GetAchievementStatsRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Player complition state
-			const MessageID SetComplitionStateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 3);
-			Result SetComplitionStateCmd::ParseMessage(const MessageHeader* pHeader)
+			const MessageID Dummy1Cmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 3);
+			Result Dummy1Cmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
 
@@ -527,14 +544,14 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetComplitionStateCmd::ParseMessage(const MessageHeader* pHeader)
+			}; // Result Dummy1Cmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result SetComplitionStateCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			Result Dummy1Cmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				Result hr;
 
 
-				SetComplitionStateCmd parser;
+				Dummy1Cmd parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
@@ -542,21 +559,21 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetComplitionStateCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			}; // Result Dummy1Cmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result SetComplitionStateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			Result Dummy1Cmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				Result hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) SetComplitionStateCmd(pHeader));
+				protocolCheckMem(pMessageBase = new(memHeap) Dummy1Cmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result SetComplitionStateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			}; // Result Dummy1Cmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t SetComplitionStateCmd::CalculateMessageSize( const uint64_t &InTransactionID, const char* InComplitionState )
+			size_t Dummy1Cmd::CalculateMessageSize( const uint64_t &InTransactionID, const char* InComplitionState )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -564,10 +581,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t SetComplitionStateCmd::CalculateMessageSize( const uint64_t &InTransactionID, const char* InComplitionState )
+			}; // size_t Dummy1Cmd::CalculateMessageSize( const uint64_t &InTransactionID, const char* InComplitionState )
 
 
-			Result SetComplitionStateCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InComplitionState )
+			Result Dummy1Cmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InComplitionState )
 			{
  				Result hr;
 
@@ -576,7 +593,7 @@ namespace SF
 					+ SerializedSizeOf(InComplitionState)
 				);
 
-				messageBuffer->msgID = SetComplitionStateCmd::MID;
+				messageBuffer->msgID = Dummy1Cmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -590,19 +607,19 @@ namespace SF
 				protocolCheck(*output << InComplitionState);
 
 				return hr;
-			}; // Result SetComplitionStateCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InComplitionState )
+			}; // Result Dummy1Cmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InComplitionState )
 
-			Result SetComplitionStateCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			Result Dummy1Cmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
- 				SetComplitionStateCmd parser;
+ 				Dummy1Cmd parser;
 				parser.ParseMessage(pHeader);
-				SFLog(Net, Debug1, "Game::SetComplitionState, {0}:{1} , TransactionID:{2}, ComplitionState:{3,60}",
+				SFLog(Net, Debug1, "Game::Dummy1, {0}:{1} , TransactionID:{2}, ComplitionState:{3,60}",
 						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetComplitionState()); 
 				return ResultCode::SUCCESS;
-			}; // Result SetComplitionStateCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			}; // Result Dummy1Cmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID SetComplitionStateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 3);
-			Result SetComplitionStateRes::ParseMessage(const MessageHeader* pHeader)
+			const MessageID Dummy1Res::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 3);
+			Result Dummy1Res::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
 
@@ -619,14 +636,14 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetComplitionStateRes::ParseMessage(const MessageHeader* pHeader)
+			}; // Result Dummy1Res::ParseMessage(const MessageHeader* pHeader)
 
-			Result SetComplitionStateRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			Result Dummy1Res::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				Result hr;
 
 
-				SetComplitionStateRes parser;
+				Dummy1Res parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
@@ -634,21 +651,21 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetComplitionStateRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			}; // Result Dummy1Res::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result SetComplitionStateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			Result Dummy1Res::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				Result hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) SetComplitionStateRes(pHeader));
+				protocolCheckMem(pMessageBase = new(memHeap) Dummy1Res(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result SetComplitionStateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			}; // Result Dummy1Res::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t SetComplitionStateRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
+			size_t Dummy1Res::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -656,10 +673,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t SetComplitionStateRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
+			}; // size_t Dummy1Res::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
-			Result SetComplitionStateRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
+			Result Dummy1Res::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				Result hr;
 
@@ -668,7 +685,7 @@ namespace SF
 					+ SerializedSizeOf(InResult)
 				);
 
-				messageBuffer->msgID = SetComplitionStateRes::MID;
+				messageBuffer->msgID = Dummy1Res::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -682,16 +699,16 @@ namespace SF
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // Result SetComplitionStateRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result Dummy1Res::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result SetComplitionStateRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			Result Dummy1Res::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
- 				SetComplitionStateRes parser;
+ 				Dummy1Res parser;
 				parser.ParseMessage(pHeader);
-				SFLog(Net, Debug1, "Game::SetComplitionState, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
+				SFLog(Net, Debug1, "Game::Dummy1, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
 						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result SetComplitionStateRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			}; // Result Dummy1Res::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
 			const MessageID RegisterGCMCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 4);

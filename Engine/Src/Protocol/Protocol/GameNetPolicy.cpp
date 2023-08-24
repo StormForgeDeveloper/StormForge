@@ -49,31 +49,31 @@ namespace SF
 
 	}; // Result NetPolicyGame::JoinGameServerCmd( const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 	// Cmd: player complition statues
-	Result NetPolicyGame::GetComplitionStateCmd( const uint64_t &InTransactionID )
+	Result NetPolicyGame::GetAchievementStatsCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID, const uint32_t &InAchievementStatIDFrom, const uint32_t &InAchievementStatIDTo )
 	{
  		Result hr;
 
-		size_t messageSize = SF::Message::Game::GetComplitionStateCmd::CalculateMessageSize(InTransactionID);
+		size_t messageSize = SF::Message::Game::GetAchievementStatsCmd::CalculateMessageSize(InTransactionID, InCharacterID, InAchievementStatIDFrom, InAchievementStatIDTo);
 		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
 		protocolCheckPtr(m_Endpoint);
 
-		protocolCheck(SF::Message::Game::GetComplitionStateCmd::Create(messageBuffer, InTransactionID));
+		protocolCheck(SF::Message::Game::GetAchievementStatsCmd::Create(messageBuffer, InTransactionID, InCharacterID, InAchievementStatIDFrom, InAchievementStatIDTo));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyGame::GetComplitionStateCmd( const uint64_t &InTransactionID )
+	}; // Result NetPolicyGame::GetAchievementStatsCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID, const uint32_t &InAchievementStatIDFrom, const uint32_t &InAchievementStatIDTo )
 	// Cmd: Player complition state
-	Result NetPolicyGame::SetComplitionStateCmd( const uint64_t &InTransactionID, const char* InComplitionState )
+	Result NetPolicyGame::Dummy1Cmd( const uint64_t &InTransactionID, const char* InComplitionState )
 	{
  		Result hr;
 
-		size_t messageSize = SF::Message::Game::SetComplitionStateCmd::CalculateMessageSize(InTransactionID, InComplitionState);
+		size_t messageSize = SF::Message::Game::Dummy1Cmd::CalculateMessageSize(InTransactionID, InComplitionState);
 		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
 		protocolCheckPtr(m_Endpoint);
 
-		protocolCheck(SF::Message::Game::SetComplitionStateCmd::Create(messageBuffer, InTransactionID, InComplitionState));
+		protocolCheck(SF::Message::Game::Dummy1Cmd::Create(messageBuffer, InTransactionID, InComplitionState));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyGame::SetComplitionStateCmd( const uint64_t &InTransactionID, const char* InComplitionState )
+	}; // Result NetPolicyGame::Dummy1Cmd( const uint64_t &InTransactionID, const char* InComplitionState )
 	// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
 	Result NetPolicyGame::RegisterGCMCmd( const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 	{
@@ -714,31 +714,31 @@ namespace SF
 
 	}; // Result NetSvrPolicyGame::JoinGameServerRes( const uint64_t &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket )
 	// Cmd: player complition statues
-	Result NetSvrPolicyGame::GetComplitionStateRes( const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
+	Result NetSvrPolicyGame::GetAchievementStatsRes( const uint64_t &InTransactionID, const Result &InResult, const Array<AchievementStat>& InAchievementStats )
 	{
  		Result hr;
 
-		size_t messageSize = SF::Message::Game::GetComplitionStateRes::CalculateMessageSize(InTransactionID, InResult, InComplitionState);
+		size_t messageSize = SF::Message::Game::GetAchievementStatsRes::CalculateMessageSize(InTransactionID, InResult, InAchievementStats);
 		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
 		protocolCheckPtr(m_Endpoint);
 
-		protocolCheck(SF::Message::Game::GetComplitionStateRes::Create(messageBuffer, InTransactionID, InResult, InComplitionState));
+		protocolCheck(SF::Message::Game::GetAchievementStatsRes::Create(messageBuffer, InTransactionID, InResult, InAchievementStats));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyGame::GetComplitionStateRes( const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
+	}; // Result NetSvrPolicyGame::GetAchievementStatsRes( const uint64_t &InTransactionID, const Result &InResult, const Array<AchievementStat>& InAchievementStats )
 	// Cmd: Player complition state
-	Result NetSvrPolicyGame::SetComplitionStateRes( const uint64_t &InTransactionID, const Result &InResult )
+	Result NetSvrPolicyGame::Dummy1Res( const uint64_t &InTransactionID, const Result &InResult )
 	{
  		Result hr;
 
-		size_t messageSize = SF::Message::Game::SetComplitionStateRes::CalculateMessageSize(InTransactionID, InResult);
+		size_t messageSize = SF::Message::Game::Dummy1Res::CalculateMessageSize(InTransactionID, InResult);
 		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
 		protocolCheckPtr(m_Endpoint);
 
-		protocolCheck(SF::Message::Game::SetComplitionStateRes::Create(messageBuffer, InTransactionID, InResult));
+		protocolCheck(SF::Message::Game::Dummy1Res::Create(messageBuffer, InTransactionID, InResult));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyGame::SetComplitionStateRes( const uint64_t &InTransactionID, const Result &InResult )
+	}; // Result NetSvrPolicyGame::Dummy1Res( const uint64_t &InTransactionID, const Result &InResult )
 	// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
 	Result NetSvrPolicyGame::RegisterGCMRes( const uint64_t &InTransactionID, const Result &InResult )
 	{

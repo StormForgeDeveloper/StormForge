@@ -163,7 +163,7 @@ namespace SF
 			}; // class JoinGameServerRes : public MessageBase
 
 			// Cmd: player complition statues
-			class GetComplitionStateCmd : public MessageBase
+			class GetAchievementStatsCmd : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -177,19 +177,25 @@ namespace SF
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
 				uint64_t m_TransactionID{};
+				uint32_t m_CharacterID{};
+				uint32_t m_AchievementStatIDFrom{};
+				uint32_t m_AchievementStatIDTo{};
 			public:
-				GetComplitionStateCmd()
+				GetAchievementStatsCmd()
 					{}
 
-				GetComplitionStateCmd( const MessageDataPtr &pMsg )
+				GetAchievementStatsCmd( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
 
-				GetComplitionStateCmd( const MessageHeader* pHeader )
+				GetAchievementStatsCmd( const MessageHeader* pHeader )
 					: MessageBase(pHeader)
 					{}
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const uint32_t& GetCharacterID() const	{ return m_CharacterID; };
+				const uint32_t& GetAchievementStatIDFrom() const	{ return m_AchievementStatIDFrom; };
+				const uint32_t& GetAchievementStatIDTo() const	{ return m_AchievementStatIDTo; };
 
 				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
@@ -197,12 +203,12 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID );
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InCharacterID, const uint32_t &InAchievementStatIDFrom, const uint32_t &InAchievementStatIDTo );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InCharacterID, const uint32_t &InAchievementStatIDFrom, const uint32_t &InAchievementStatIDTo );
 
-			}; // class GetComplitionStateCmd : public MessageBase
+			}; // class GetAchievementStatsCmd : public MessageBase
 
-			class GetComplitionStateRes : public MessageBase
+			class GetAchievementStatsRes : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -217,22 +223,22 @@ namespace SF
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
-				const char* m_ComplitionState{};
+				ArrayView<AchievementStat> m_AchievementStats;
 			public:
-				GetComplitionStateRes()
+				GetAchievementStatsRes()
 					{}
 
-				GetComplitionStateRes( const MessageDataPtr &pMsg )
+				GetAchievementStatsRes( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
 
-				GetComplitionStateRes( const MessageHeader* pHeader )
+				GetAchievementStatsRes( const MessageHeader* pHeader )
 					: MessageBase(pHeader)
 					{}
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
-				const char* GetComplitionState() const	{ return m_ComplitionState; };
+				const Array<AchievementStat>& GetAchievementStats() const	{ return m_AchievementStats; };
 
 				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
@@ -240,13 +246,13 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState );
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<AchievementStat>& InAchievementStats );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<AchievementStat>& InAchievementStats );
 
-			}; // class GetComplitionStateRes : public MessageBase
+			}; // class GetAchievementStatsRes : public MessageBase
 
 			// Cmd: Player complition state
-			class SetComplitionStateCmd : public MessageBase
+			class Dummy1Cmd : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -262,14 +268,14 @@ namespace SF
 				uint64_t m_TransactionID{};
 				const char* m_ComplitionState{};
 			public:
-				SetComplitionStateCmd()
+				Dummy1Cmd()
 					{}
 
-				SetComplitionStateCmd( const MessageDataPtr &pMsg )
+				Dummy1Cmd( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
 
-				SetComplitionStateCmd( const MessageHeader* pHeader )
+				Dummy1Cmd( const MessageHeader* pHeader )
 					: MessageBase(pHeader)
 					{}
 
@@ -285,9 +291,9 @@ namespace SF
 				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const char* InComplitionState );
 				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InComplitionState );
 
-			}; // class SetComplitionStateCmd : public MessageBase
+			}; // class Dummy1Cmd : public MessageBase
 
-			class SetComplitionStateRes : public MessageBase
+			class Dummy1Res : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -303,14 +309,14 @@ namespace SF
 				uint64_t m_TransactionID{};
 				Result m_Result{};
 			public:
-				SetComplitionStateRes()
+				Dummy1Res()
 					{}
 
-				SetComplitionStateRes( const MessageDataPtr &pMsg )
+				Dummy1Res( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
 
-				SetComplitionStateRes( const MessageHeader* pHeader )
+				Dummy1Res( const MessageHeader* pHeader )
 					: MessageBase(pHeader)
 					{}
 
@@ -326,7 +332,7 @@ namespace SF
 				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult );
 
-			}; // class SetComplitionStateRes : public MessageBase
+			}; // class Dummy1Res : public MessageBase
 
 			// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
 			class RegisterGCMCmd : public MessageBase
