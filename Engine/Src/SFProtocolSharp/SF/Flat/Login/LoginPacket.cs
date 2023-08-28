@@ -46,6 +46,7 @@ public struct LoginPacket : IFlatbufferObject
   public static void AddPayloadData(FlatBufferBuilder builder, int payloadDataOffset) { builder.AddOffset(2, payloadDataOffset, 0); }
   public static Offset<SF.Flat.Login.LoginPacket> EndLoginPacket(FlatBufferBuilder builder) {
     int o = builder.EndTable();
+    builder.Required(o, 8);  // payload_data
     return new Offset<SF.Flat.Login.LoginPacket>(o);
   }
   public static void FinishLoginPacketBuffer(FlatBufferBuilder builder, Offset<SF.Flat.Login.LoginPacket> offset) { builder.Finish(offset.Value); }
@@ -60,7 +61,7 @@ static public class LoginPacketVerify
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyField(tablePos, 4 /*RequestId*/, 4 /*uint*/, 4, false)
       && verifier.VerifyField(tablePos, 6 /*PayloadDataType*/, 1 /*SF.Flat.Login.PayloadData*/, 1, false)
-      && verifier.VerifyUnion(tablePos, 6, 8 /*PayloadData*/, SF.Flat.Login.PayloadDataVerify.Verify, false)
+      && verifier.VerifyUnion(tablePos, 6, 8 /*PayloadData*/, SF.Flat.Login.PayloadDataVerify.Verify, true)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

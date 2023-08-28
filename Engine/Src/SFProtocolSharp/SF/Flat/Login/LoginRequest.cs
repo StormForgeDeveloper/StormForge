@@ -58,6 +58,9 @@ public struct LoginRequest : IFlatbufferObject
   public static void AddGameId(FlatBufferBuilder builder, StringOffset gameIdOffset) { builder.AddOffset(2, gameIdOffset.Value, 0); }
   public static Offset<SF.Flat.Login.LoginRequest> EndLoginRequest(FlatBufferBuilder builder) {
     int o = builder.EndTable();
+    builder.Required(o, 4);  // name
+    builder.Required(o, 6);  // password
+    builder.Required(o, 8);  // game_id
     return new Offset<SF.Flat.Login.LoginRequest>(o);
   }
 }
@@ -68,9 +71,9 @@ static public class LoginRequestVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyString(tablePos, 4 /*Name*/, false)
-      && verifier.VerifyString(tablePos, 6 /*Password*/, false)
-      && verifier.VerifyString(tablePos, 8 /*GameId*/, false)
+      && verifier.VerifyString(tablePos, 4 /*Name*/, true)
+      && verifier.VerifyString(tablePos, 6 /*Password*/, true)
+      && verifier.VerifyString(tablePos, 8 /*GameId*/, true)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

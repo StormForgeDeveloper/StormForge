@@ -140,7 +140,7 @@ struct LoginPacket FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_REQUEST_ID, 4) &&
            VerifyField<uint8_t>(verifier, VT_PAYLOAD_DATA_TYPE, 1) &&
-           VerifyOffset(verifier, VT_PAYLOAD_DATA) &&
+           VerifyOffsetRequired(verifier, VT_PAYLOAD_DATA) &&
            VerifyPayloadData(verifier, payload_data(), payload_data_type()) &&
            verifier.EndTable();
   }
@@ -186,6 +186,7 @@ struct LoginPacketBuilder {
   ::flatbuffers::Offset<LoginPacket> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<LoginPacket>(end);
+    fbb_.Required(o, LoginPacket::VT_PAYLOAD_DATA);
     return o;
   }
 };
@@ -212,7 +213,7 @@ struct GenericError FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffset(verifier, VT_REASON) &&
+           VerifyOffsetRequired(verifier, VT_REASON) &&
            verifier.VerifyString(reason()) &&
            verifier.EndTable();
   }
@@ -232,6 +233,7 @@ struct GenericErrorBuilder {
   ::flatbuffers::Offset<GenericError> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<GenericError>(end);
+    fbb_.Required(o, GenericError::VT_REASON);
     return o;
   }
 };
@@ -271,11 +273,11 @@ struct LoginRequest FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffset(verifier, VT_NAME) &&
+           VerifyOffsetRequired(verifier, VT_NAME) &&
            verifier.VerifyString(name()) &&
-           VerifyOffset(verifier, VT_PASSWORD) &&
+           VerifyOffsetRequired(verifier, VT_PASSWORD) &&
            verifier.VerifyString(password()) &&
-           VerifyOffset(verifier, VT_GAME_ID) &&
+           VerifyOffsetRequired(verifier, VT_GAME_ID) &&
            verifier.VerifyString(game_id()) &&
            verifier.EndTable();
   }
@@ -301,6 +303,9 @@ struct LoginRequestBuilder {
   ::flatbuffers::Offset<LoginRequest> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<LoginRequest>(end);
+    fbb_.Required(o, LoginRequest::VT_NAME);
+    fbb_.Required(o, LoginRequest::VT_PASSWORD);
+    fbb_.Required(o, LoginRequest::VT_GAME_ID);
     return o;
   }
 };
@@ -425,11 +430,11 @@ struct LoginWithSteamRequest FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Ta
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_APP_ID, 8) &&
            VerifyField<uint64_t>(verifier, VT_STEAM_ID, 8) &&
-           VerifyOffset(verifier, VT_STEAM_PLAYER_NAME) &&
+           VerifyOffsetRequired(verifier, VT_STEAM_PLAYER_NAME) &&
            verifier.VerifyString(steam_player_name()) &&
-           VerifyOffset(verifier, VT_STEAM_USER_TOKEN) &&
+           VerifyOffsetRequired(verifier, VT_STEAM_USER_TOKEN) &&
            verifier.VerifyString(steam_user_token()) &&
-           VerifyOffset(verifier, VT_GAME_ID) &&
+           VerifyOffsetRequired(verifier, VT_GAME_ID) &&
            verifier.VerifyString(game_id()) &&
            VerifyField<uint64_t>(verifier, VT_UID, 8) &&
            verifier.EndTable();
@@ -465,6 +470,9 @@ struct LoginWithSteamRequestBuilder {
   ::flatbuffers::Offset<LoginWithSteamRequest> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<LoginWithSteamRequest>(end);
+    fbb_.Required(o, LoginWithSteamRequest::VT_STEAM_PLAYER_NAME);
+    fbb_.Required(o, LoginWithSteamRequest::VT_STEAM_USER_TOKEN);
+    fbb_.Required(o, LoginWithSteamRequest::VT_GAME_ID);
     return o;
   }
 };

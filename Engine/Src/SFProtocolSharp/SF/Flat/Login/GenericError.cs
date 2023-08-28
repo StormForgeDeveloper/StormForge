@@ -38,6 +38,7 @@ public struct GenericError : IFlatbufferObject
   public static void AddReason(FlatBufferBuilder builder, StringOffset reasonOffset) { builder.AddOffset(0, reasonOffset.Value, 0); }
   public static Offset<SF.Flat.Login.GenericError> EndGenericError(FlatBufferBuilder builder) {
     int o = builder.EndTable();
+    builder.Required(o, 4);  // reason
     return new Offset<SF.Flat.Login.GenericError>(o);
   }
 }
@@ -48,7 +49,7 @@ static public class GenericErrorVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyString(tablePos, 4 /*Reason*/, false)
+      && verifier.VerifyString(tablePos, 4 /*Reason*/, true)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

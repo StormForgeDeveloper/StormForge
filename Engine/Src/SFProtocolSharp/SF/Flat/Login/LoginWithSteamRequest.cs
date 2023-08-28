@@ -70,6 +70,9 @@ public struct LoginWithSteamRequest : IFlatbufferObject
   public static void AddUid(FlatBufferBuilder builder, ulong uid) { builder.AddUlong(5, uid, 0); }
   public static Offset<SF.Flat.Login.LoginWithSteamRequest> EndLoginWithSteamRequest(FlatBufferBuilder builder) {
     int o = builder.EndTable();
+    builder.Required(o, 8);  // steam_player_name
+    builder.Required(o, 10);  // steam_user_token
+    builder.Required(o, 12);  // game_id
     return new Offset<SF.Flat.Login.LoginWithSteamRequest>(o);
   }
 }
@@ -82,9 +85,9 @@ static public class LoginWithSteamRequestVerify
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyField(tablePos, 4 /*AppId*/, 8 /*ulong*/, 8, false)
       && verifier.VerifyField(tablePos, 6 /*SteamId*/, 8 /*ulong*/, 8, false)
-      && verifier.VerifyString(tablePos, 8 /*SteamPlayerName*/, false)
-      && verifier.VerifyString(tablePos, 10 /*SteamUserToken*/, false)
-      && verifier.VerifyString(tablePos, 12 /*GameId*/, false)
+      && verifier.VerifyString(tablePos, 8 /*SteamPlayerName*/, true)
+      && verifier.VerifyString(tablePos, 10 /*SteamUserToken*/, true)
+      && verifier.VerifyString(tablePos, 12 /*GameId*/, true)
       && verifier.VerifyField(tablePos, 14 /*Uid*/, 8 /*ulong*/, 8, false)
       && verifier.VerifyTableEnd(tablePos);
   }
