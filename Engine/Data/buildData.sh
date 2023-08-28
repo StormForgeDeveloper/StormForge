@@ -1,23 +1,21 @@
 #!/bin/bash
 
-
-
-
-
-
-cd Protocol
+pushd Protocol
 
 make -f makefile.mak $1
 
-cd ..
+popd
 
-#cp ./Temp/Lib/Protocol/CSharp/*.cs ../../../../../Conspiracy/trunk/Client/Conspiracy/Conspiracy/Net/Message
-
-cd ResultCode
+pushd ProtocolDef
 
 make -f makefile.mak $1
 
-cd ..
+popd
 
 
+pushd ResultCode
+
+make -f makefile.mak $1
+
+popd
 

@@ -1,0 +1,86 @@
+ 
+namespace SF.Flat.Telemetry;
+
+union PayloadData
+{
+    GenericError,
+    PostEventRequest, PostEventResult
+}
+
+table TelemetryPacket
+{
+	request_id:uint32;
+    payload_data:PayloadData;
+}
+
+table GenericError {
+
+	reason:string(required);
+}
+
+table EventAttributeString
+{
+    value:string(required);
+}
+
+table EventAttributeInt
+{
+    value:int;
+}
+
+table EventAttributeUInt
+{
+    value:uint;
+}
+
+table EventAttributeInt64
+{
+    value:int64;
+}
+
+table EventAttributeUInt64
+{
+    value:uint64;
+}
+
+table EventAttributeFloat
+{
+    value:float;
+}
+
+table EventAttributeDouble
+{
+    value:double;
+}
+
+table EventAttributeBool
+{
+    value:bool;
+}
+
+union EventAttribute
+{
+    EventAttributeString, EventAttributeBool,
+    EventAttributeFloat, EventAttributeDouble,
+    EventAttributeInt, EventAttributeUInt,
+    EventAttributeInt64, EventAttributeUInt64
+}
+
+table PostEventRequest {
+
+	event_name:string(required);
+    time_stamp:uint64;
+    app_id:uint32;
+    machine_id:uint32;
+    event_id:uint32;
+    account_id:uint32;
+    is_play_event:bool;
+    session_id:[ubyte](required);
+	attributes:[EventAttribute];
+}
+
+table PostEventResult {
+
+}
+
+root_type TelemetryPacket;

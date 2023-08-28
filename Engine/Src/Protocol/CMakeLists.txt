@@ -1,6 +1,8 @@
 
 
 set(SFPROTOCOL_LIB_FILES
+  	SFProtocolPCH.h
+
   	Protocol/SFGenericMessageClass.cpp
 	
 	Protocol/GameMsgClass.cpp
@@ -43,7 +45,9 @@ set(SFPROTOCOL_LIB_FILES
 	Protocol/SFGenericMessageClass.h
 	Protocol/SFProtocolHelper.h
 	Protocol/SFProtocol.h
-  	SFProtocolPCH.h
+	
+	SFFLat/Login_generated.h
+
   )
 
 

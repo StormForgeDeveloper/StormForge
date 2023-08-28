@@ -55,9 +55,11 @@ namespace SF
 	public:
 
 		static constexpr size_t MessageBufferPadding = LWS_PRE; // Message buffer padding for libWebsocket
-		static constexpr uint64_t AsyncLib = LWS_SERVER_OPTION_LIBEVENT;
-		//static constexpr uint64_t AsyncLib = LWS_SERVER_OPTION_LIBUV;
-
+#if 0 // SF_PLATFORM == SF_PLATFORM_WINDOWS 
+        static constexpr uint64_t AsyncLib = LWS_SERVER_OPTION_LIBUV;
+#else
+        static constexpr uint64_t AsyncLib = LWS_SERVER_OPTION_LIBEVENT;
+#endif
 		struct WSSessionData
 		{
             CriticalSection* SendBufferLock{};

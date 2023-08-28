@@ -108,7 +108,7 @@ namespace SF
 		//	 "; client_no_context_takeover"
 		//	 "; client_max_window_bits"
 		//	});
-		m_Extensions.push_back({ nullptr, nullptr, nullptr /* terminator */ });
+		//m_Extensions.push_back({ nullptr, nullptr, nullptr /* terminator */ });
 
 		m_FlowControlMin = size_t(m_SendBufferSize * 0.3);
 		m_FlowControlMax = size_t(m_SendBufferSize * 0.7);
