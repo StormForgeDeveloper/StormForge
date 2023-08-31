@@ -27,13 +27,14 @@ namespace SF
         extern LogChannel Telemetry;
     };
 
-    class TelemetryBR;
+    class TelemetryService;
+    using TelemetryClient = TelemetryService;
 
     // Event creation wrapper
     class TelemetryEvent
     {
     protected:
-        TelemetryEvent(IHeap& heap, TelemetryBR* pClient, uint32_t eventId, const char* eventName);
+        TelemetryEvent(IHeap& heap, TelemetryClient* pClient, uint32_t eventId, const char* eventName);
 
     public:
         virtual ~TelemetryEvent();
@@ -60,7 +61,7 @@ namespace SF
 
     protected:
         IHeap& m_Heap;
-        TelemetryBR* m_pClient{};
+        TelemetryClient* m_pClient{};
         bool m_bSent = false;
         uint32_t m_EventId{};
         String m_EventName;
@@ -84,11 +85,10 @@ namespace SF
         virtual Result RegisterEventSchema(const char* eventName, const char* eventSchema) { return ResultCode::NOT_IMPLEMENTED; }
         virtual TelemetryEvent* CreateTelemetryEvent(const char* eventName) { return nullptr; }
 
-
+        virtual void EnqueueEvent(TelemetryEvent* pEvent) {}
 
     private:
     };
-
 
 
 	namespace Service

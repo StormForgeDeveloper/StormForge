@@ -4,17 +4,17 @@
 // 
 // Author : KyungKun Ko
 //
-// Description : TelemetryComponent warper
+// Description : Telemetry component Avro version
 //	
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "SFCorePCH.h"
-#include "Online/Telemetry/SFTelemetryComponent.h"
+#include "Online/Telemetry/SFTelemetryAvroComponent.h"
 #include "Online/Websocket/SFWebsocketComponent.h"
 #include "Online/Telemetry/SFTelemetryService.h"
 #include "Util/SFStringFormat.h"
-#include "Online/Telemetry/SFTelemetryBR.h"
+#include "Online/Telemetry/SFTelemetryClientAvro.h"
 
 
 
@@ -68,12 +68,13 @@ namespace SF
             ]\n\
         }\n";
 
+
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
-	//	class TelemetryComponent
+	//	class TelemetryAvroComponent
 	//
 
-	TelemetryComponent::TelemetryComponent(const String& address, uint64_t clientId, const String& authTicket, bool bUseEventCacheFile)
+	TelemetryAvroComponent::TelemetryAvroComponent(const String& address, uint64_t clientId, const String& authTicket, bool bUseEventCacheFile)
         : LibraryComponent(TypeName)
         , m_Address(address)
         , m_ClientId(clientId)
@@ -84,16 +85,16 @@ namespace SF
 
 	}
 
-	TelemetryComponent::~TelemetryComponent()
+	TelemetryAvroComponent::~TelemetryAvroComponent()
 	{
 
 	}
 
-	Result TelemetryComponent::InitializeComponent()
+	Result TelemetryAvroComponent::InitializeComponent()
 	{
         super::InitializeComponent();
 
-        m_TelemetryPtr.reset(new(GetSystemHeap()) TelemetryBR());
+        m_TelemetryPtr.reset(new(GetSystemHeap()) TelemetryClientAvro());
 
         int iSplitter = m_Address.IndexOfAnyFromEnd(",:");
         if (iSplitter < 0)
@@ -119,7 +120,7 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
-    void TelemetryComponent::DeinitializeComponent()
+    void TelemetryAvroComponent::DeinitializeComponent()
     {
         Service::Telemetry = nullptr;
 

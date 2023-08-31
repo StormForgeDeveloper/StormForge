@@ -12,7 +12,6 @@
 #include "SFCorePCH.h"
 
 #include "Online/Telemetry/SFTelemetryService.h"
-#include "Online/Telemetry/SFTelemetryBR.h"
 #include "Util/SFStringFormat.h"
 
 
@@ -39,7 +38,7 @@ namespace SF
     //	class TelemetryEvent
     //
 
-    TelemetryEvent::TelemetryEvent(IHeap& heap, TelemetryBR* pClient, uint32_t eventId, const char* eventName)
+    TelemetryEvent::TelemetryEvent(IHeap& heap, TelemetryClient* pClient, uint32_t eventId, const char* eventName)
         : m_Heap(heap)
         , m_pClient(pClient)
         , m_EventId(eventId)

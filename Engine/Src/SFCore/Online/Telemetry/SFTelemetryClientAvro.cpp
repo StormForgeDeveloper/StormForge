@@ -11,7 +11,7 @@
 
 #include "SFCorePCH.h"
 
-#include "Online/Telemetry/SFTelemetryBR.h"
+#include "Online/Telemetry/SFTelemetryClientAvro.h"
 #include "Util/SFStringFormat.h"
 #include "Util/SFLog.h"
 
@@ -26,7 +26,7 @@ namespace SF
     //	class TelemetryEventBson
     //
 
- //   TelemetryEventBson::TelemetryEventBson(IHeap& heap, TelemetryBR* pClient, uint32_t eventId, const char* eventName)
+ //   TelemetryEventBson::TelemetryEventBson(IHeap& heap, TelemetryClientAvro* pClient, uint32_t eventId, const char* eventName)
 	//	: TelemetryEvent(heap, pClient, eventId, eventName)
 	//{
 	//	bson_init(&m_Bson);
@@ -42,11 +42,11 @@ namespace SF
  //       if (m_pClient == nullptr)
  //           return m_BinData;
 
- //       Set(TelemetryBR::KeyName_ClientId, m_pClient->GetClientId().data());
- //       Set(TelemetryBR::KeyName_MachineId, m_pClient->GetMachineId().data());
- //       Set(TelemetryBR::KeyName_SessionId, m_pClient->GetSessionId().data());
- //       Set(TelemetryBR::KeyName_EventId, (int32_t)m_EventId);
- //       Set(TelemetryBR::KeyName_EventName, GetEventName().data());
+ //       Set(TelemetryClientAvro::KeyName_ClientId, m_pClient->GetClientId().data());
+ //       Set(TelemetryClientAvro::KeyName_MachineId, m_pClient->GetMachineId().data());
+ //       Set(TelemetryClientAvro::KeyName_SessionId, m_pClient->GetSessionId().data());
+ //       Set(TelemetryClientAvro::KeyName_EventId, (int32_t)m_EventId);
+ //       Set(TelemetryClientAvro::KeyName_EventName, GetEventName().data());
 
 	//	m_BinData.SetLinkedBuffer(size_t(m_Bson.len), bson_get_data(&m_Bson));
 
@@ -108,7 +108,7 @@ namespace SF
     //	class TelemetryEventAvro
     //
 
-    TelemetryEventAvro::TelemetryEventAvro(IHeap& heap, TelemetryBR* pClient, uint32_t eventId, const char* eventName, const AvroSchema& eventSchema)
+    TelemetryEventAvro::TelemetryEventAvro(IHeap& heap, TelemetryClientAvro* pClient, uint32_t eventId, const char* eventName, const AvroSchema& eventSchema)
         : TelemetryEvent(heap, pClient, eventId, eventName)
         , m_AvroSchema(eventSchema)
         , m_AvroValue(eventSchema)
@@ -140,7 +140,7 @@ namespace SF
     {
         super::SetPlayEvent(bPlayEvent);
 
-        m_AvroValue.SetValue(TelemetryBR::FieldName_IsPlayEvent, bPlayEvent);
+        m_AvroValue.SetValue(TelemetryClientAvro::FieldName_IsPlayEvent, bPlayEvent);
     }
 
     TelemetryEvent& TelemetryEventAvro::Set(const char* name, bool value)
@@ -214,21 +214,21 @@ namespace SF
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
-	//	class TelemetryBR
+	//	class TelemetryClientAvro
 	//
 
-	TelemetryBR::TelemetryBR()
+	TelemetryClientAvro::TelemetryClientAvro()
 		: m_Client(GetSystemHeap())
 		, m_EventQueue(GetSystemHeap())
 	{
 	}
 
-	TelemetryBR::~TelemetryBR()
+	TelemetryClientAvro::~TelemetryClientAvro()
 	{
 		Terminate();
 	}
 
-	Result TelemetryBR::Initialize(const String& serverAddress, int port, const uint64_t& applicationId, const String& authKey, bool bUseEventFileCache)
+	Result TelemetryClientAvro::Initialize(const String& serverAddress, int port, const uint64_t& applicationId, const String& authKey, bool bUseEventFileCache)
 	{
 		Result hr;
 
@@ -268,7 +268,7 @@ namespace SF
 				}
 			});
 
-		hr = m_Client.Initialize(serverAddress, port, TelemetryBR::KeyName_Protocol);
+		hr = m_Client.Initialize(serverAddress, port, TelemetryClientAvro::KeyName_Protocol);
 		if (!hr)
 			return hr;
 
@@ -344,7 +344,7 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
-	void TelemetryBR::Terminate()
+	void TelemetryClientAvro::Terminate()
 	{
 		if (m_Thread != nullptr)
 		{
@@ -362,7 +362,7 @@ namespace SF
 		m_EventQueue.SaveDelta();
 	}
 
-    Result TelemetryBR::RegisterEventSchema(const char* eventName, const char* eventSchema)
+    Result TelemetryClientAvro::RegisterEventSchema(const char* eventName, const char* eventSchema)
     {
         Result hr;
 
@@ -387,7 +387,7 @@ namespace SF
         return hr;
     }
 
-	TelemetryEvent* TelemetryBR::CreateTelemetryEvent(const char* eventName)
+	TelemetryEvent* TelemetryClientAvro::CreateTelemetryEvent(const char* eventName)
 	{
         Result hr;
 		if (eventName == nullptr)
@@ -437,7 +437,7 @@ namespace SF
 		return newEvent;
 	}
 
-	void TelemetryBR::EnqueueEvent(TelemetryEvent* pInEvent)
+	void TelemetryClientAvro::EnqueueEvent(TelemetryEvent* pInEvent)
 	{
         auto* pEvent = static_cast<TelemetryEventAvro*>(pInEvent);
         if (pEvent == nullptr)
@@ -470,7 +470,7 @@ namespace SF
             SF::AvroReader avroReader(dataView);
 
             auto headerVersion = avroReader.ReadInt64();
-            if (headerVersion != TelemetryBR::HeaderVersion)
+            if (headerVersion != TelemetryClientAvro::HeaderVersion)
             {
                 return;
             }

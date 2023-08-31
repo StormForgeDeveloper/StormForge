@@ -29,7 +29,7 @@
 
 namespace SF
 {
-	class TelemetryBR;
+	class TelemetryClientAvro;
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -40,8 +40,8 @@ namespace SF
     //class TelemetryEventBson : public TelemetryEvent
     //{
     //protected:
-    //    TelemetryEventBson(IHeap& heap, TelemetryBR* pClient, uint32_t eventId, const char* eventName);
-    //    friend class TelemetryBR;
+    //    TelemetryEventBson(IHeap& heap, TelemetryClientAvro* pClient, uint32_t eventId, const char* eventName);
+    //    friend class TelemetryClientAvro;
 
     //public:
     //    ~TelemetryEventBson();
@@ -70,8 +70,8 @@ namespace SF
         using super = TelemetryEvent;
 
     protected:
-        TelemetryEventAvro(IHeap& heap, TelemetryBR* pClient, uint32_t eventId, const char* eventName, const AvroSchema& eventSchema);
-        friend class TelemetryBR;
+        TelemetryEventAvro(IHeap& heap, TelemetryClientAvro* pClient, uint32_t eventId, const char* eventName, const AvroSchema& eventSchema);
+        friend class TelemetryClientAvro;
 
         SF_FORCEINLINE AvroValue& GetAvroValue() { return m_AvroValue; }
 
@@ -104,10 +104,10 @@ namespace SF
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
-	//	class TelemetryBR
+	//	class TelemetryClientAvro
 	//
 
-    class TelemetryBR : public TelemetryService
+    class TelemetryClientAvro : public TelemetryService
     {
     public:
 
@@ -134,8 +134,8 @@ namespace SF
 
     public:
 
-		TelemetryBR();
-        virtual ~TelemetryBR();
+		TelemetryClientAvro();
+        virtual ~TelemetryClientAvro();
 
 		SF_FORCEINLINE IHeap& GetHeap() const { return GetSystemHeap(); }
 
@@ -163,7 +163,7 @@ namespace SF
 
 	private:
 
-		void EnqueueEvent(TelemetryEvent* pEvent);
+		virtual void EnqueueEvent(TelemetryEvent* pEvent) override;
 		friend class TelemetryEvent;
 
 	private:

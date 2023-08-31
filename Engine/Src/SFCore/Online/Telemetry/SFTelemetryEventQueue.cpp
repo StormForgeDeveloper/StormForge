@@ -13,7 +13,7 @@
 #include "SFCorePCH.h"
 
 #include "Online/Telemetry/SFTelemetryEventQueue.h"
-#include "Online/Telemetry/SFTelemetryBR.h"
+#include "Online/Telemetry/SFTelemetryService.h"
 #include "IO/SFFileUtil.h"
 #include "Util/SFPath.h"
 

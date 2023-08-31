@@ -4,7 +4,7 @@
 // 
 // Author : KyungKun Ko
 //
-// Description : StreamDB warper
+// Description : Telemetry component FLatbuffer version
 //	
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -17,18 +17,16 @@
 #include "Util/SFString.h"
 #include "Task/SFTask.h"
 
-
-
 namespace SF
 {
-    class TelemetryBR;
+    class TelemetryClientFlat;
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
-	//	class TelemetryComponent
+	//	class TelemetryFlatComponent
 	//
 
-    class TelemetryComponent : public LibraryComponent
+    class TelemetryFlatComponent : public LibraryComponent
     {
     public:
 
@@ -37,8 +35,8 @@ namespace SF
 
     public:
 
-        TelemetryComponent(const String& address, uint64_t clientId, const String& authTicket, bool bUseEventCacheFile);
-        virtual ~TelemetryComponent();
+        TelemetryFlatComponent(const String& address, uint64_t clientId, const String& authTicket, bool bUseEventCacheFile);
+        virtual ~TelemetryFlatComponent();
 
 
         virtual const StringCrc64& GetTypeName() const override { return TypeName; }
@@ -54,7 +52,7 @@ namespace SF
         String m_AuthTicket;
         bool m_bUseEventCacheFile = true;
 
-        SFUniquePtr<TelemetryBR> m_TelemetryPtr;
+        SFUniquePtr<TelemetryClientFlat> m_TelemetryPtr;
     };
 
 
