@@ -211,7 +211,7 @@ namespace SF
 			m_Owner.m_AccountId = packet.GetAccID();
 			m_Owner.m_AuthTicket = packet.GetTicket();
 
-            Service::Telemetry->SetAccountId(m_Owner.m_AccountId);
+            Service::Telemetry->SetAccountID(m_Owner.m_AccountId);
 
 			SFLog(Net, Info, "Logged in: {0},{1}, accountId:{2}", m_Owner.m_GameAddress, m_Owner.m_GameAddress, m_Owner.m_AccountId);
 

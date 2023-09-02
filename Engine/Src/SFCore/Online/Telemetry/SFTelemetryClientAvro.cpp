@@ -426,7 +426,7 @@ namespace SF
             hr = avroValue.SetValue(FieldName_MachineId, GetMachineId());
             if (!hr)
                 return nullptr;
-            hr = avroValue.SetValue(FieldName_AccountId, (int64_t)GetAccountId());
+            hr = avroValue.SetValue(FieldName_AccountId, (int64_t)GetAccountID());
             if (!hr)
                 return nullptr;
             hr = avroValue.SetValue(FieldName_EventName, eventName);

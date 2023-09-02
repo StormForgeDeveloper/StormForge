@@ -128,10 +128,6 @@ namespace SF
         SF_FORCEINLINE const String& GetAuthKey() const { return m_AuthKey; }
         SF_FORCEINLINE const String& GetMachineId() const { return m_MachineId; }
         SF_FORCEINLINE const Guid& GetSessionId() const { return m_SessionId; }
-        SF_FORCEINLINE const uint64_t& GetAccountId() const { return m_AccountId; }
-
-        virtual void SetAccountId(uint64_t accountId) override { m_AccountId = accountId; }
-
 
         // register event schema
         // Need to be called before sending event with the name
@@ -154,7 +150,6 @@ namespace SF
 
 		String m_MachineId;
         Guid m_SessionId;
-        uint64_t m_AccountId{};
 
 		Atomic<uint32_t> m_EventId;
 		Atomic<uint32_t> m_SentEventId;

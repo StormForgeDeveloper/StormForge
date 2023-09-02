@@ -350,6 +350,8 @@ namespace SF
 
 		auto newEvent = new(GetSystemHeap()) TelemetryEventFlat(GetSystemHeap(), this, eventId, eventName);
 
+        newEvent->SetAccountID(GetAccountID());
+
 		return newEvent;
 	}
 
@@ -373,7 +375,7 @@ namespace SF
             packetBuilder.CreateString(pEvent->GetEventName().data()), Util::Time.GetRawUTCMs().time_since_epoch().count(),
             packetBuilder.CreateString(GetApplicationId().data()),
             packetBuilder.CreateString(GetMachineId().data()),
-            eventId, GetAccountId(), pEvent->IsPlayEvent(),
+            eventId, pInEvent->GetAccountID(), pEvent->IsPlayEvent(),
             sessionIdOffset, attributesOffset
             );
 
@@ -386,6 +388,8 @@ namespace SF
         packetBuilder.FinishSizePrefixed(packetOffset);
 
         ArrayView<uint8_t> packetBufferView(packetBuilder.GetSize(), (uint8_t*)packetBuilder.GetBufferPointer());
+
+        SFLog(Telemetry, Debug3, "Enqueue event event:{0}:{1}, sz:{2}", eventId, pEvent->GetEventName(), packetBuilder.GetSize());
 
 		m_EventQueue.EnqueueEvent(pEvent->GetEventId(), ArrayView<const uint8_t>(packetBufferView));
 	}

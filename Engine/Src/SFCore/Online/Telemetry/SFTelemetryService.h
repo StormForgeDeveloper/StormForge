@@ -45,6 +45,9 @@ namespace SF
         virtual void SetPlayEvent(bool bPlayEvent) { m_bPlayEvent = bPlayEvent; }
         bool IsPlayEvent() const { return m_bPlayEvent; }
 
+        virtual void SetAccountID(uint64_t accountId) { m_AccountId = accountId; }
+        uint64_t GetAccountID() const { return m_AccountId; }
+
         virtual TelemetryEvent& Set(const char* name, bool value) = 0;
         virtual TelemetryEvent& Set(const char* name, int value) = 0;
         virtual TelemetryEvent& Set(const char* name, uint value) = 0;
@@ -64,6 +67,7 @@ namespace SF
         TelemetryClient* m_pClient{};
         bool m_bSent = false;
         uint32_t m_EventId{};
+        uint64_t m_AccountId{};
         String m_EventName;
         bool m_bPlayEvent{};
     };
@@ -80,7 +84,8 @@ namespace SF
         TelemetryService();
         virtual ~TelemetryService();
 
-        virtual void SetAccountId(uint64_t accountId) {}
+        void SetAccountID(uint64_t accountId) { m_AccountId = accountId; }
+        uint64_t GetAccountID() const { return m_AccountId; }
 
         virtual Result RegisterEventSchema(const char* eventName, const char* eventSchema) { return ResultCode::NOT_IMPLEMENTED; }
         virtual TelemetryEvent* CreateTelemetryEvent(const char* eventName) { return nullptr; }
@@ -88,6 +93,8 @@ namespace SF
         virtual void EnqueueEvent(TelemetryEvent* pEvent) {}
 
     private:
+
+        uint64_t m_AccountId{};
     };
 
 
