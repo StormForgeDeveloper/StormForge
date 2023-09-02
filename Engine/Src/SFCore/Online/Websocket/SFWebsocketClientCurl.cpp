@@ -340,6 +340,21 @@ namespace SF
 
         m_ReceiveBuffer.reserve(8 * 1024);
 
+        // set up parameters
+        bool bSSLAddr = m_Url.StartsWith("wss://");
+        if (bSSLAddr || m_Url.StartsWith("ws://"))
+        {
+            m_UseSSL = bSSLAddr;
+        }
+
+        const char* strPrefix = "?";
+        for (auto& parameter : m_Parameters)
+        {
+            m_Url.Append(strPrefix);
+            m_Url.Append(parameter);
+            strPrefix = "&";
+        }
+
         TryConnect();
 
 		if (IsUseTickThread())
@@ -390,20 +405,6 @@ namespace SF
     {
         MutexScopeLock scopeLock(m_ContextLock);
         CURLcode result;
-
-        bool bSSLAddr = m_Url.StartsWith("wss://");
-        if (bSSLAddr || m_Url.StartsWith("ws://"))
-        {
-            m_UseSSL = bSSLAddr;
-        }
-
-        const char* strPrefix = "?";
-        for (auto& parameter : m_Parameters)
-        {
-            m_Url.Append(strPrefix);
-            m_Url.Append(parameter);
-            strPrefix = "&";
-        }
 
         SFLog(Websocket, Info, "Connecting websocket server: {0}", m_Url);
 
