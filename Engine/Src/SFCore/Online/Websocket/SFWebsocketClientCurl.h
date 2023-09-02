@@ -49,7 +49,7 @@ namespace SF
 		WebsocketClientCurl(IHeap& heap);
 		~WebsocketClientCurl();
 
-		SF_FORCEINLINE bool IsInitialized() const { return !m_ServerAddress.IsNullOrEmpty(); }
+		SF_FORCEINLINE bool IsInitialized() const { return !m_Url.IsNullOrEmpty(); }
         SF_FORCEINLINE bool IsConnected() const { return m_ConnectionState == ConnectionState::Connected; }
 
 		SF_FORCEINLINE void SetUseTickThread(bool useTickThread) { m_UseTickThread = useTickThread; }
@@ -61,9 +61,7 @@ namespace SF
         void AddHeader(const char* headerKey, const char* headerString);
         void AddParameter(const char* headerKey, const char* headerString);
 
-        void SetServerPath(const String& path) { m_ServerPath = path; }
-
-		virtual Result Initialize(const String& serverAddress, int port, const String& protocol);
+		virtual Result Initialize(const String& url, const String& protocol = "");
 		virtual void Terminate();
 
 		//static void CallbackTryConnect(struct lws_sorted_usec_list* pSortedUsecList);
@@ -109,9 +107,6 @@ namespace SF
 
         CriticalSection m_ContextLock;
 
-        String m_ServerAddress;
-        String m_ServerPath;
-        int m_Port{};
         String m_Url;
         String m_Protocol;
         bool m_UseSSL = false;

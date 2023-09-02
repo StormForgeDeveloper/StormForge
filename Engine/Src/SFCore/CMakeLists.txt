@@ -326,12 +326,16 @@ source_group(Service FILES
 set(SUBOnline_FILES
 	Online/StreamDB/SFStreamDB.h
 	Online/StreamDB/SFStreamDB.cpp
-	Online/Telemetry/SFTelemetryBR.h
-	Online/Telemetry/SFTelemetryBR.cpp
+	Online/Telemetry/SFTelemetryClientAvro.h
+	Online/Telemetry/SFTelemetryClientAvro.cpp
+	Online/Telemetry/SFTelemetryAvroComponent.h
+	Online/Telemetry/SFTelemetryAvroComponent.cpp
 	Online/Telemetry/SFTelemetryService.h
 	Online/Telemetry/SFTelemetryService.cpp
-	Online/Telemetry/SFTelemetryComponent.h
-	Online/Telemetry/SFTelemetryComponent.cpp
+	Online/Telemetry/SFTelemetryClientFlat.h
+	Online/Telemetry/SFTelemetryClientFlat.cpp
+	Online/Telemetry/SFTelemetryFlatComponent.h
+	Online/Telemetry/SFTelemetryFlatComponent.cpp
 	Online/Telemetry/SFTelemetryEventQueue.h
 	Online/Telemetry/SFTelemetryEventQueue.cpp
 	Online/Websocket/SFWebsocket.h

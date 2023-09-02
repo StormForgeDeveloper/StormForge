@@ -32,9 +32,9 @@ namespace SF
             NativeHandle = NativeCreateOnlineAPIClient();
         }
 
-        public Result Connect(string serverAddress, int port, string accessKey)
+        public Result Connect(string url, string accessKey)
         {
-            var res = NativeConnect(NativeHandle, serverAddress, port, accessKey);
+            var res = NativeConnect(NativeHandle, url, accessKey);
             return new Result((int)res);
         }
 
@@ -107,7 +107,7 @@ namespace SF
         static extern IntPtr NativeCreateOnlineAPIClient();
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineAPIClient_NativeConnect", CharSet = CharSet.Auto)]
-        static extern Int32 NativeConnect(IntPtr nativeHandle, [MarshalAs(UnmanagedType.LPStr)] string serverAddress, int port, [MarshalAs(UnmanagedType.LPStr)] string accessKey);
+        static extern Int32 NativeConnect(IntPtr nativeHandle, [MarshalAs(UnmanagedType.LPStr)] string url, [MarshalAs(UnmanagedType.LPStr)] string accessKey);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineAPIClient_NativeDisconnect", CharSet = CharSet.Auto)]
         static extern void NativeDisconnect(IntPtr nativeHandle);

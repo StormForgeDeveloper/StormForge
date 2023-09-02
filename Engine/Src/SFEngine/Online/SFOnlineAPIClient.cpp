@@ -39,14 +39,13 @@ namespace SF
         Disconnect();
 	}
 
-	Result OnlineAPIClient::Connect(const String& serverAddress, int port, const String& accessKey)
+	Result OnlineAPIClient::Connect(const String& url, const String& accessKey)
 	{
 		Result hr;
 
         //Disconnect();
 
-        m_ServerAddress = serverAddress;
-        m_Port = port;
+        m_Url = url;
         m_AccessKey = accessKey;
         m_MachineUID = Util::GetMachineUniqueId();
 
@@ -57,7 +56,6 @@ namespace SF
 
         m_Client.AddParameter("AccessKey", m_AccessKey);
         m_Client.AddParameter("MachineUID", m_MachineUID);
-        m_Client.SetServerPath("/BRAPI");
 
         m_Client.SetOnConnectedCallback([this]()
             {
@@ -67,7 +65,7 @@ namespace SF
                 }
             });
 
-		hr = m_Client.Initialize(serverAddress, port, "ws");
+		hr = m_Client.Initialize(m_Url, "ws");
 		if (!hr)
 			return hr;
 
@@ -80,12 +78,12 @@ namespace SF
         if (IsConnected())
             return ResultCode::SUCCESS;
 
-        if (m_ServerAddress.IsNullOrEmpty())
+        if (m_Url.IsNullOrEmpty())
             return ResultCode::NOT_INITIALIZED;
 
         Disconnect();
 
-        hr = m_Client.Initialize(m_ServerAddress, m_Port, "ws");
+        hr = m_Client.Initialize(m_Url, "ws");
         if (!hr)
             return hr;
 

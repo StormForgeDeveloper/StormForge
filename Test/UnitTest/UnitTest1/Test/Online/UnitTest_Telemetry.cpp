@@ -18,7 +18,7 @@
 #include "Util/SFTimeUtil.h"
 #include "UnitTest_Telemetry.h"
 
-#include "Online/Telemetry/SFTelemetryBR.h"
+#include "Online/Telemetry/SFTelemetryClientAvro.h"
 
 
 using ::testing::EmptyTestEventListener;

@@ -26,6 +26,7 @@ namespace SF {
 		Warning,
 		Factal,
 		Info,
+        Log = Info,
 
 		// Module additional traces
 		Custom1,
@@ -151,6 +152,7 @@ namespace SF {
 		constexpr LogOutputType Warning = LogOutputType::Warning;
 		constexpr LogOutputType Factal = LogOutputType::Factal;
 		constexpr LogOutputType Info = LogOutputType::Info;
+        constexpr LogOutputType Log = LogOutputType::Log;
 
 		// Module additional traces
 		constexpr LogOutputType Custom1 = LogOutputType::Custom1;

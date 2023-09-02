@@ -33,7 +33,7 @@ namespace SF
 	{
 	}
 
-    void OnlineSession::RegisterMessageHandlers()
+    void OnlineSessionGame::RegisterMessageHandlers()
     {
         super::InitializeObject();
     }

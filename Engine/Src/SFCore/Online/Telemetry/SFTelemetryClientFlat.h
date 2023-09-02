@@ -18,13 +18,10 @@
 #include "Task/SFTask.h"
 #include "Util/SFLog.h"
 #include "Online/Telemetry/SFTelemetryService.h"
-#include "Online/Websocket/SFWebsocketClient.h"
 #include "Online/Websocket/SFWebsocketClientCurl.h"
 #include "Online/Telemetry/SFTelemetryEventQueue.h"
 #include "Util/SFGuid.h"
-#include "Avro/SFAvro.h"
-#include "bson/bson.h"
-
+#include "SFFLat/Telemetry_generated.h"
 
 
 namespace SF
@@ -37,22 +34,26 @@ namespace SF
 
     class TelemetryClientFlat;
 
+    using FlatTelemetryPacketBuilder = SF::Flat::Telemetry::TelemetryPacketBuilder;
+    using FlatTelemetryPacket = SF::Flat::Telemetry::TelemetryPacket;
+    using FlatPostEventRequest = SF::Flat::Telemetry::PostEventRequest;
+    using FlatPostEventResult = SF::Flat::Telemetry::PostEventResult;
+
+
     // Event creation wrapper for Avro data
     class TelemetryEventFlat : public TelemetryEvent
     {
         using super = TelemetryEvent;
 
     protected:
-        TelemetryEventFlat(IHeap& heap, TelemetryClientFlat* pClient, uint32_t eventId, const char* eventName, const AvroSchema& eventSchema);
+        TelemetryEventFlat(IHeap& heap, TelemetryClientFlat* pClient, uint32_t eventId, const char* eventName);
         friend class TelemetryClientFlat;
 
-        SF_FORCEINLINE AvroValue& GetAvroValue() { return m_AvroValue; }
+        SF_FORCEINLINE ::flatbuffers::FlatBufferBuilder& GetPacketBuilder() { return m_FlatBufferBuilder; }
+        SF_FORCEINLINE std::vector<::flatbuffers::Offset<SF::Flat::Telemetry::EventAttribute>>& GetAttributeOffesets() { return m_Attributes; }
 
     public:
         ~TelemetryEventFlat();
-
-        SF_FORCEINLINE const AvroSchema& GetAvroSchema() const { return m_AvroSchema; }
-        SF_FORCEINLINE const AvroValue& GetAvroValue() const { return m_AvroValue; }
 
         virtual void SetPlayEvent(bool bPlayEvent) override;
 
@@ -69,8 +70,11 @@ namespace SF
         virtual TelemetryEvent& Set(const String& name, const String& value) override;
 
     private:
-        AvroSchema m_AvroSchema;
-        AvroValue m_AvroValue;
+
+        // Flat buffer builder
+        ::flatbuffers::FlatBufferBuilder m_FlatBufferBuilder;
+
+        std::vector<::flatbuffers::Offset<SF::Flat::Telemetry::EventAttribute>> m_Attributes;
     };
 
 
@@ -88,12 +92,8 @@ namespace SF
         static constexpr size_t MaxSerializationBufferSize = 6 * 1024;
 
 		static constexpr char KeyName_AppId[] = "appid";
-        static constexpr char KeyName_AuthKey[] = "authkey";
-		static constexpr char KeyName_MachineId[] = "machineid";
-		static constexpr char KeyName_SessionId[] = "sessionid";
-		static constexpr char KeyName_EventId[] = "EventId";
-		static constexpr char KeyName_Protocol[] = "SFTelemetry";
-		static constexpr char KeyName_EventName[] = "EventName";
+        static constexpr char KeyName_AccessKey[] = "AccessKey";
+        static constexpr char KeyName_Protocol[] = "SFTelemetry";
 
         static constexpr char FieldName_IsPlayEvent[] = "IsPlayEvent";
         static constexpr char FieldName_EventId[] = "EventId";
@@ -112,14 +112,19 @@ namespace SF
 
 		SF_FORCEINLINE IHeap& GetHeap() const { return GetSystemHeap(); }
 
-        virtual Result Initialize(const String& serverAddress, int port, const uint64_t& applicationId, const String& authKey, bool bUseEventFileCache);
-
+        virtual Result Initialize(const String& url, const uint64_t& applicationId, const String& authKey, bool bUseEventFileCache);
 		void Terminate();
+
+        virtual Result RegisterEventSchema(const char* eventName, const char* eventSchema) override
+        {
+            // Nothing to do
+            return ResultCode::SUCCESS;
+        }
 
         SF_FORCEINLINE bool IsInitialized() const { return m_Client.IsInitialized(); }
 		SF_FORCEINLINE bool IsConnected() const { return m_Client.IsConnected(); }
 
-        SF_FORCEINLINE const uint64_t& GetApplicationId() const { return m_ApplicationId; }
+        SF_FORCEINLINE const String& GetApplicationId() const { return m_ApplicationId; }
         SF_FORCEINLINE const String& GetAuthKey() const { return m_AuthKey; }
         SF_FORCEINLINE const String& GetMachineId() const { return m_MachineId; }
         SF_FORCEINLINE const Guid& GetSessionId() const { return m_SessionId; }
@@ -130,18 +135,20 @@ namespace SF
 
         // register event schema
         // Need to be called before sending event with the name
-        virtual Result RegisterEventSchema(const char* eventName, const char* eventSchema) override;
+        //virtual Result RegisterEventSchema(const char* eventName, const char* eventSchema) override;
 
         virtual TelemetryEvent* CreateTelemetryEvent(const char* eventName) override;
 
 	private:
 
 		void EnqueueEvent(TelemetryEvent* pEvent);
+        Result OnRecv(const Array<uint8_t>& recvData);
+
 		friend class TelemetryEvent;
 
 	private:
 
-        uint64_t m_ApplicationId;
+        String m_ApplicationId;
 		String m_AuthKey;
 
 		String m_MachineId;
@@ -157,8 +164,6 @@ namespace SF
 		TelemetryEventQueue m_EventQueue;
 
 		SFUniquePtr<Thread> m_Thread;
-
-        std::unordered_map<std::string, UniquePtr<AvroSchema>> m_EventSchemas;
 
         GuidGenerator<std::mt19937_64> m_GuidGen;
     };

@@ -58,7 +58,7 @@ table EventAttributeBool
     value:bool;
 }
 
-union EventAttribute
+union EventAttributeValue
 {
     EventAttributeString, EventAttributeBool,
     EventAttributeFloat, EventAttributeDouble,
@@ -66,14 +66,21 @@ union EventAttribute
     EventAttributeInt64, EventAttributeUInt64
 }
 
+table EventAttribute
+{
+    name:string(required);
+    value:EventAttributeValue(required);
+}
+
+
 table PostEventRequest {
 
 	event_name:string(required);
     time_stamp:uint64;
-    app_id:uint32;
-    machine_id:uint32;
+    app_id:string;
+    machine_id:string;
     event_id:uint32;
-    account_id:uint32;
+    account_id:uint64;
     is_play_event:bool;
     session_id:[ubyte](required);
 	attributes:[EventAttribute];

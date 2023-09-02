@@ -228,7 +228,7 @@ namespace SF
 		Terminate();
 	}
 
-	Result TelemetryClientAvro::Initialize(const String& serverAddress, int port, const uint64_t& applicationId, const String& authKey, bool bUseEventFileCache)
+	Result TelemetryClientAvro::Initialize(const String& url, const uint64_t& applicationId, const String& authKey, bool bUseEventFileCache)
 	{
 		Result hr;
 
@@ -268,7 +268,7 @@ namespace SF
 				}
 			});
 
-		hr = m_Client.Initialize(serverAddress, port, TelemetryClientAvro::KeyName_Protocol);
+		hr = m_Client.Initialize(url, TelemetryClientAvro::KeyName_Protocol);
 		if (!hr)
 			return hr;
 

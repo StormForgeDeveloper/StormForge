@@ -36,7 +36,7 @@ namespace SF
 
     public:
 
-        TelemetryAvroComponent(const String& address, uint64_t clientId, const String& authTicket, bool bUseEventCacheFile);
+        TelemetryAvroComponent(const String& url, uint64_t clientId, const String& authTicket, bool bUseEventCacheFile);
         virtual ~TelemetryAvroComponent();
 
 
@@ -48,7 +48,8 @@ namespace SF
 
     private:
 
-        String m_Address;
+        // Server url
+        String m_Url;
         uint64_t m_ClientId{};
         String m_AuthTicket;
         bool m_bUseEventCacheFile = true;

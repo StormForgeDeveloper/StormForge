@@ -18,22 +18,25 @@
 
 namespace SF
 {
+    namespace Log
+    {
+        LogChannel LogCurl("LogCurl", LogOutputType::Debug);
+    };
 
-	////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	//	class WebsocketClientCurl
-	//
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    //	class WebsocketClientCurl
+    //
 
 
-	WebsocketClientCurl::WebsocketClientCurl(IHeap& heap)
+    WebsocketClientCurl::WebsocketClientCurl(IHeap& heap)
         : m_ReceiveBuffer(heap)
         , m_RecvDeletates(heap)
-	{
-        m_ServerPath = "/";
-	}
+    {
+    }
 
-	WebsocketClientCurl::~WebsocketClientCurl()
-	{
+    WebsocketClientCurl::~WebsocketClientCurl()
+    {
         if (m_Headers)
         {
             curl_slist_free_all(m_Headers);
@@ -41,14 +44,44 @@ namespace SF
         }
     }
 
-    //curl_socket_t my_opensocketfunc(void* clientp, curlsocktype purpose, struct curl_sockaddr* address)
-    //{
-    //    return sock = socket(address->family, address->socktype, address->protocol);
-    //}
 
     class WebsocketClientCurlImpl
     {
     public:
+
+        static int WebsocketCurl_DebugFunc(CURL* handle,
+            curl_infotype type,
+            char* data,
+            size_t size,
+            void* userdata)
+        {
+            switch(type)
+            {
+            case CURLINFO_TEXT:
+                SFLog(LogCurl, Log, "CURLINFO_TEXT:{0}", data);
+                break;
+            case CURLINFO_HEADER_IN:
+                SFLog(LogCurl, Log, "CURLINFO_HEADER_IN");
+                break;
+            case CURLINFO_HEADER_OUT:
+                SFLog(LogCurl, Log, "CURLINFO_HEADER_OUT");
+                break;
+            case CURLINFO_DATA_IN:
+                SFLog(LogCurl, Log, "CURLINFO_DATA_IN");
+                break;
+            case CURLINFO_DATA_OUT:
+                SFLog(LogCurl, Log, "CURLINFO_DATA_OUT");
+                break;
+            case CURLINFO_SSL_DATA_IN:
+                SFLog(LogCurl, Log, "CURLINFO_SSL_DATA_IN");
+                break;
+            case CURLINFO_SSL_DATA_OUT:
+                SFLog(LogCurl, Log, "CURLINFO_SSL_DATA_OUT");
+                break;
+            }
+
+            return 0;
+        }
 
         static inline bool HeaderHasPrefix(const char* buffer, const size_t buflen, const char* prefix)
         {
@@ -167,7 +200,6 @@ namespace SF
                 {NULL, NULL}
             };
 
-
             // If we are being redirected, let curl do that for us.
             curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_status);
             if (300 <= http_status && http_status <= 399)
@@ -279,48 +311,6 @@ namespace SF
             return false;
         }
 
-        //static size_t _cws_send_data(char* buffer, size_t count, size_t nitems, void* data)
-        //{
-        //    WebsocketClientCurl* wsClient = reinterpret_cast<WebsocketClientCurl*>(data);
-        //    CURL* curl = wsClient->m_Curl;
-        //    auto& wsStatus = wsClient->m_CurlStatus;
-
-        //    size_t sentSize = nitems * count;
-        //    size_t sendSize = wsClient->send.len;
-
-        //    if (wsStatus.Redirection)
-        //    {
-        //        return sentSize;
-        //    }
-
-        //    if (sendSize == 0) {
-        //        wsClient->pause_flags |= CURLPAUSE_SEND;
-        //        return CURL_READFUNC_PAUSE;
-        //    }
-
-        //    if (sendSize > sentSize)
-        //        sendSize = sentSize;
-
-        //    memcpy(buffer, priv->send.buffer, sendSize);
-        //    if (sendSize < priv->send.len) {
-        //        /* optimization note: we could avoid memmove() by keeping a
-        //         * priv->send.position, then we just increment that offset.
-        //         *
-        //         * on next _cws_write(), check if priv->send.position > 0 and
-        //         * memmove() to make some space without realloc().
-        //         */
-        //        memmove(priv->send.buffer,
-        //            priv->send.buffer + sendSize,
-        //            priv->send.len - sendSize);
-        //    }
-        //    else {
-        //        free(priv->send.buffer);
-        //        priv->send.buffer = NULL;
-        //    }
-
-        //    priv->send.len -= sendSize;
-        //    return sendSize;
-        //}
 
     };
 
@@ -338,13 +328,12 @@ namespace SF
         m_Parameters.push_back(headerValue);
     }
 
-	Result WebsocketClientCurl::Initialize(const String& serverAddress, int port, const String& protocol)
+	Result WebsocketClientCurl::Initialize(const String& url, const String& protocol)
 	{
 		if (m_Curl) // probably initializing again
 			return ResultCode::SUCCESS_FALSE;
 
-        m_ServerAddress = serverAddress;
-        m_Port = port;
+        m_Url = url;
         m_Protocol = protocol;
 
         m_ReceiveBuffer.reserve(8 * 1024);
@@ -400,7 +389,12 @@ namespace SF
         MutexScopeLock scopeLock(m_ContextLock);
         CURLcode result;
 
-        m_Url.Format("{0}://{1}:{2}{3}", m_UseSSL ? "wss" : "ws", m_ServerAddress, m_Port, m_ServerPath);
+        bool bSSLAddr = m_Url.StartsWith("wss://");
+        if (bSSLAddr || m_Url.StartsWith("ws://"))
+        {
+            m_UseSSL = bSSLAddr;
+        }
+
         const char* strPrefix = "?";
         for (auto& parameter : m_Parameters)
         {
@@ -416,6 +410,9 @@ namespace SF
             CloseConnection();
 
         m_Curl = curl_easy_init();
+
+        curl_easy_setopt(m_Curl, CURLOPT_DEBUGFUNCTION, WebsocketClientCurlImpl::WebsocketCurl_DebugFunc);
+        curl_easy_setopt(m_Curl, CURLOPT_DEBUGDATA, this);
 
         if (!m_Protocol.IsNullOrEmpty())
         {
@@ -454,7 +451,7 @@ namespace SF
         result = curl_easy_perform(m_Curl);
         if (result != CURLE_OK)
         {
-            SFLog(Websocket, Info, "Websocket client initialization error : {0}:{1}, {2}:{3}", m_ServerAddress, m_Port, int(result), curl_easy_strerror(result));
+            SFLog(Websocket, Info, "Websocket client initialization error : {0}, {1}:{2}", m_Url, int(result), curl_easy_strerror(result));
         }
     }
 

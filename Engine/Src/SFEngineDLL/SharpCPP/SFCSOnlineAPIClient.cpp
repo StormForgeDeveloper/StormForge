@@ -45,17 +45,17 @@ SFDLL_EXPORT intptr_t SFOnlineAPIClient_NativeCreate()
 	return NativeObjectToIntptr(pOnlineAPIClient.get());
 }
 
-SFDLL_EXPORT int32_t SFOnlineAPIClient_NativeConnect(intptr_t nativeHandle, const char* serverAddress, int port, const char* accessKey)
+SFDLL_EXPORT int32_t SFOnlineAPIClient_NativeConnect(intptr_t nativeHandle, const char* url, const char* accessKey)
 {
 	if (nativeHandle == 0)
 		return ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineAPIClient = NativeToObject<OnlineAPIClient>(nativeHandle);
 
-	return (int32_t)pOnlineAPIClient->Connect(serverAddress, port, accessKey);
+	return (int32_t)pOnlineAPIClient->Connect(url, accessKey);
 }
 
-SFDLL_EXPORT void SFOnlineAPIClient_NativeDisconnect(intptr_t nativeHandle, const char* serverAddress, int port, const char* accessKey)
+SFDLL_EXPORT void SFOnlineAPIClient_NativeDisconnect(intptr_t nativeHandle)
 {
     if (nativeHandle == 0)
         return;

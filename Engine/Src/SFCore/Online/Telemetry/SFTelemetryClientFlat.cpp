@@ -32,10 +32,8 @@ namespace SF
     //	class TelemetryEventFlat
     //
 
-    TelemetryEventFlat::TelemetryEventFlat(IHeap& heap, TelemetryClientFlat* pClient, uint32_t eventId, const char* eventName, const AvroSchema& eventSchema)
+    TelemetryEventFlat::TelemetryEventFlat(IHeap& heap, TelemetryClientFlat* pClient, uint32_t eventId, const char* eventName)
         : TelemetryEvent(heap, pClient, eventId, eventName)
-        , m_AvroSchema(eventSchema)
-        , m_AvroValue(eventSchema)
     {
     }
 
@@ -46,78 +44,155 @@ namespace SF
     void TelemetryEventFlat::SetPlayEvent(bool bPlayEvent)
     {
         super::SetPlayEvent(bPlayEvent);
-
-        m_AvroValue.SetValue(TelemetryClientFlat::FieldName_IsPlayEvent, bPlayEvent);
     }
 
     TelemetryEvent& TelemetryEventFlat::Set(const char* name, bool value)
     {
-        m_AvroValue.SetValue(name, value);
+        auto nameOffset = m_FlatBufferBuilder.CreateString(name);
+
+        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
+            Flat::Telemetry::EventAttributeValue_EventAttributeBool,
+            SF::Flat::Telemetry::CreateEventAttributeBool(m_FlatBufferBuilder, value).Union());
+
+        m_Attributes.push_back(attributeOffset);
+
         return *this;
     }
 
     TelemetryEvent& TelemetryEventFlat::Set(const char* name, int value)
     {
-        m_AvroValue.SetValue(name, value);
+        auto nameOffset = m_FlatBufferBuilder.CreateString(name);
+
+        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
+            Flat::Telemetry::EventAttributeValue_EventAttributeInt,
+            SF::Flat::Telemetry::CreateEventAttributeInt(m_FlatBufferBuilder, value).Union());
+
+        m_Attributes.push_back(attributeOffset);
         return *this;
     }
 
     TelemetryEvent& TelemetryEventFlat::Set(const char* name, uint value)
     {
-        m_AvroValue.SetValue(name, (int)value);
+        auto nameOffset = m_FlatBufferBuilder.CreateString(name);
+
+        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
+            Flat::Telemetry::EventAttributeValue_EventAttributeUInt,
+            SF::Flat::Telemetry::CreateEventAttributeUInt(m_FlatBufferBuilder, value).Union());
+
+        m_Attributes.push_back(attributeOffset);
+
         return *this;
     }
 
     TelemetryEvent& TelemetryEventFlat::Set(const char* name, int64_t value)
     {
-        m_AvroValue.SetValue(name, value);
+        auto nameOffset = m_FlatBufferBuilder.CreateString(name);
+
+        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
+            Flat::Telemetry::EventAttributeValue_EventAttributeInt64,
+            SF::Flat::Telemetry::CreateEventAttributeInt64(m_FlatBufferBuilder, value).Union());
+
+        m_Attributes.push_back(attributeOffset);
+
         return *this;
     }
 
     TelemetryEvent& TelemetryEventFlat::Set(const char* name, uint64_t value)
     {
-        m_AvroValue.SetValue(name, (int64_t)value);
+        auto nameOffset = m_FlatBufferBuilder.CreateString(name);
+
+        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
+            Flat::Telemetry::EventAttributeValue_EventAttributeUInt64,
+            SF::Flat::Telemetry::CreateEventAttributeUInt64(m_FlatBufferBuilder, value).Union());
+
+        m_Attributes.push_back(attributeOffset);
+
         return *this;
     }
 
     TelemetryEvent& TelemetryEventFlat::Set(const char* name, float value)
     {
-        m_AvroValue.SetValue(name, value);
+        auto nameOffset = m_FlatBufferBuilder.CreateString(name);
+
+        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
+            Flat::Telemetry::EventAttributeValue_EventAttributeFloat,
+            SF::Flat::Telemetry::CreateEventAttributeFloat(m_FlatBufferBuilder, value).Union());
+
+        m_Attributes.push_back(attributeOffset);
+
         return *this;
     }
 
     TelemetryEvent& TelemetryEventFlat::Set(const char* name, const char* value)
     {
-        m_AvroValue.SetValue(name, value);
+        auto nameOffset = m_FlatBufferBuilder.CreateString(name);
+
+        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
+            SF::Flat::Telemetry::EventAttributeValue_EventAttributeString,
+            SF::Flat::Telemetry::CreateEventAttributeString(m_FlatBufferBuilder, m_FlatBufferBuilder.CreateString(value)).Union()
+        );
+
+        m_Attributes.push_back(attributeOffset);
+
         return *this;
     }
 
 
     TelemetryEvent& TelemetryEventFlat::Set(const String& name, int value)
     {
-        m_AvroValue.SetValue(name, value);
+        auto nameOffset = m_FlatBufferBuilder.CreateString(name);
+
+        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
+            SF::Flat::Telemetry::EventAttributeValue_EventAttributeInt,
+            SF::Flat::Telemetry::CreateEventAttributeInt(m_FlatBufferBuilder, value).Union()
+        );
+
+        m_Attributes.push_back(attributeOffset);
+
         return *this;
     }
 
     TelemetryEvent& TelemetryEventFlat::Set(const String& name, int64_t value)
     {
-        m_AvroValue.SetValue(name, value);
+        auto nameOffset = m_FlatBufferBuilder.CreateString(name);
+
+        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
+            SF::Flat::Telemetry::EventAttributeValue_EventAttributeInt64,
+            SF::Flat::Telemetry::CreateEventAttributeInt64(m_FlatBufferBuilder, value).Union()
+        );
+
+        m_Attributes.push_back(attributeOffset);
+
         return *this;
     }
 
     TelemetryEvent& TelemetryEventFlat::Set(const String& name, float value)
     {
-        m_AvroValue.SetValue(name, value);
+        auto nameOffset = m_FlatBufferBuilder.CreateString(name);
+
+        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
+            SF::Flat::Telemetry::EventAttributeValue_EventAttributeFloat,
+            SF::Flat::Telemetry::CreateEventAttributeFloat(m_FlatBufferBuilder, value).Union()
+        );
+
+        m_Attributes.push_back(attributeOffset);
+
         return *this;
     }
 
     TelemetryEvent& TelemetryEventFlat::Set(const String& name, const String& value)
     {
-        m_AvroValue.SetValue(name, value);
+        auto nameOffset = m_FlatBufferBuilder.CreateString(name);
+
+        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
+            SF::Flat::Telemetry::EventAttributeValue_EventAttributeString,
+            SF::Flat::Telemetry::CreateEventAttributeString(m_FlatBufferBuilder, m_FlatBufferBuilder.CreateString(value)).Union()
+        );
+
+        m_Attributes.push_back(attributeOffset);
+
         return *this;
     }
-
-
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -135,11 +210,11 @@ namespace SF
 		Terminate();
 	}
 
-	Result TelemetryClientFlat::Initialize(const String& serverAddress, int port, const uint64_t& applicationId, const String& authKey, bool bUseEventFileCache)
+	Result TelemetryClientFlat::Initialize(const String& url, const uint64_t& applicationId, const String& authKey, bool bUseEventFileCache)
 	{
 		Result hr;
 
-        m_ApplicationId = applicationId;
+        m_ApplicationId.Format("{0}", applicationId);
 		m_AuthKey = authKey;
 
 		m_MachineId = Util::GetMachineUniqueId();
@@ -158,24 +233,14 @@ namespace SF
         StrUtil::Format(appId, "{0}", m_ApplicationId);
 
         m_Client.AddParameter(KeyName_AppId, appId);
-        m_Client.AddParameter(KeyName_AuthKey, m_AuthKey);
-        m_Client.AddParameter(KeyName_MachineId, m_MachineId);
-        m_Client.AddParameter(KeyName_SessionId, sessionId);
+        m_Client.AddParameter(KeyName_AccessKey, m_AuthKey);
 
 		m_Client.OnRecvEvent().AddDelegate(uintptr_t(this), [&](const Array<uint8_t>& data)
 			{
-				uint32_t* pEventId = (uint32_t*)data.data();
-				if (pEventId == nullptr || data.size() < sizeof(uint32_t))
-					return;
-
-				for (uint Processed = 0; Processed < data.size(); Processed+=4, pEventId++)
-				{
-                    uint32_t eventId = *pEventId;
-					m_EventQueue.FreePostedEvents(eventId);
-				}
+                OnRecv(data);
 			});
 
-		hr = m_Client.Initialize(serverAddress, port, TelemetryClientFlat::KeyName_Protocol);
+		hr = m_Client.Initialize(url, KeyName_Protocol);
 		if (!hr)
 			return hr;
 
@@ -229,6 +294,7 @@ namespace SF
 							break;
 
 						SFLog(Telemetry, Debug3, "Posting event eventId:{0}, sz:{1}", curEventId, pEventItem->GetDataSize());
+
 						auto sendRes = m_Client.Send(ArrayView<uint8_t>(pEventItem->GetDataSize() - sizeof(curEventId), (uint8_t*)pEventItem->GetDataPtr() + sizeof(curEventId)));
 						if (sendRes)
 						{
@@ -269,31 +335,6 @@ namespace SF
 		m_EventQueue.SaveDelta();
 	}
 
-    Result TelemetryClientFlat::RegisterEventSchema(const char* eventName, const char* eventSchema)
-    {
-        Result hr;
-
-        auto newSchema = new AvroSchema;
-        hr = newSchema->Init(String(eventSchema));
-        if (!hr)
-        {
-            SFLog(Telemetry, Error, "RegisterEventSchema failed, hr:{0}", hr);
-            return hr;
-        }
-
-        newSchema->AppendFieldBool(FieldName_IsPlayEvent);
-        newSchema->AppendFieldInt(FieldName_EventId);
-        newSchema->AppendFieldBytes(FieldName_SessionId);
-        newSchema->AppendFieldInt64(FieldName_AppId);
-        newSchema->AppendFieldString(FieldName_MachineId);
-        newSchema->AppendFieldString(FieldName_EventName);
-        newSchema->AppendFieldInt64(FieldName_AccountId);
-
-        m_EventSchemas.insert(std::make_pair(eventName, newSchema));
-
-        return hr;
-    }
-
 	TelemetryEvent* TelemetryClientFlat::CreateTelemetryEvent(const char* eventName)
 	{
         Result hr;
@@ -303,43 +344,11 @@ namespace SF
 		if (!m_Client.IsInitialized())
 			return nullptr;
 
-        auto itSchema = m_EventSchemas.find(eventName);
-        if (itSchema == m_EventSchemas.end())
-        {
-            SFLog(Telemetry, Debug3, "Event schema not found call RegisterEventSchema first. event:{0}", eventName);
-            return nullptr;
-        }
-
 		uint32_t eventId = m_EventId.fetch_add(1, MemoryOrder::memory_order_release) + 1;
 		if (eventId == 0)
 			eventId = m_EventId.fetch_add(1, MemoryOrder::memory_order_release) + 1;
 
-		auto newEvent = new(GetSystemHeap()) TelemetryEventFlat(GetSystemHeap(), this, eventId, eventName, *itSchema->second);
-
-        if (newEvent)
-        {
-            AvroValue& avroValue = newEvent->GetAvroValue();
-
-            Guid sessionId = GetSessionId();
-            ArrayView<const uint8_t> sessionIdView(sizeof(Guid), (uint8_t*)sessionId.data);
-
-            hr = avroValue.SetValue(FieldName_SessionId, sessionIdView);
-            if (!hr)
-                return nullptr;
-            //hr = avroValue.SetValue(FieldName_EventId, (int)newEvent->GetEventId());
-            hr = avroValue.SetValue(FieldName_AppId, (int64_t)GetApplicationId());
-            if (!hr)
-                return nullptr;
-            hr = avroValue.SetValue(FieldName_MachineId, GetMachineId());
-            if (!hr)
-                return nullptr;
-            hr = avroValue.SetValue(FieldName_AccountId, (int64_t)GetAccountId());
-            if (!hr)
-                return nullptr;
-            hr = avroValue.SetValue(FieldName_EventName, eventName);
-            if (!hr)
-                return nullptr;
-        }
+		auto newEvent = new(GetSystemHeap()) TelemetryEventFlat(GetSystemHeap(), this, eventId, eventName);
 
 		return newEvent;
 	}
@@ -350,64 +359,69 @@ namespace SF
         if (pEvent == nullptr)
             return;
 
-        // Serialization buffer
-        DynamicArray<char> serializationBuffer;
+        uint32_t eventId = pEvent->GetEventId();
 
-        if (serializationBuffer.size() == 0)
-            serializationBuffer.resize(MaxSerializationBufferSize);
-
-        AvroWriter writer(serializationBuffer);
+        ::flatbuffers::FlatBufferBuilder& packetBuilder = pEvent->GetPacketBuilder();
 
         Guid sessionId = GetSessionId();
         ArrayView<const uint8_t> sessionIdView(sizeof(Guid), (uint8_t*)sessionId.data);
+        ::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> sessionIdOffset = packetBuilder.CreateVector(sessionIdView.data(), sessionIdView.size());
 
-        // avro streaming mode
-        writer.WriteInt64(HeaderVersion);
-        writer.WriteInt64(pEvent->GetEventId());
-        writer.WriteBytes(sessionIdView);
+        ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::Telemetry::EventAttribute>>> attributesOffset = packetBuilder.CreateVector(pEvent->GetAttributeOffesets());
 
-        writer.WriteString(pEvent->GetAvroSchema().GetSchemaString());
-        writer.WriteValue(pEvent->GetAvroValue());
+        ::flatbuffers::Offset<FlatPostEventRequest> payloadOffset = SF::Flat::Telemetry::CreatePostEventRequest(packetBuilder,
+            packetBuilder.CreateString(pEvent->GetEventName().data()), Util::Time.GetRawUTCMs().time_since_epoch().count(),
+            packetBuilder.CreateString(GetApplicationId().data()),
+            packetBuilder.CreateString(GetMachineId().data()),
+            eventId, GetAccountId(), pEvent->IsPlayEvent(),
+            sessionIdOffset, attributesOffset
+            );
 
-        serializationBuffer.resize(writer.WrittenSize());
+        
+        ::flatbuffers::Offset<FlatTelemetryPacket> packetOffset = SF::Flat::Telemetry::CreateTelemetryPacket(packetBuilder, eventId,
+            SF::Flat::Telemetry::PayloadData_PostEventRequest,
+            payloadOffset.Union());
 
-#if 0 // Test deserialization
-        {
-            ArrayView<char> dataView(serializationBuffer);
-            SF::AvroReader avroReader(dataView);
 
-            auto headerVersion = avroReader.ReadInt64();
-            if (headerVersion != TelemetryClientFlat::HeaderVersion)
-            {
-                return;
-            }
+        packetBuilder.FinishSizePrefixed(packetOffset);
 
-            auto testEventId = (uint32_t)avroReader.ReadInt64();
+        ArrayView<uint8_t> packetBufferView(packetBuilder.GetSize(), (uint8_t*)packetBuilder.GetBufferPointer());
 
-            Guid testSessionId;
-            ArrayView<uint8_t> guidDataView(sizeof(testSessionId.data), testSessionId.data);
-            avroReader.ReadBytes(guidDataView);
-            if (testSessionId != sessionId)
-            {
-                return;
-            }
-
-            String schemaString = avroReader.ReadString();
-            AvroSchema readSchema(schemaString);
-            AvroValue readValue(readSchema);
-            avroReader.ReadValue(readValue);
-            ArrayView<const uint8_t> readSessionId = readValue.GetFieldValue<ArrayView<const uint8_t>>(FieldName_SessionId);
-            Guid readSessionGuId = *(Guid*)readSessionId.data();
-            bool readIsPlayEvent = readValue.GetFieldValue<bool>(FieldName_IsPlayEvent);
-            String readMachineId = readValue.GetFieldValue<String>(FieldName_MachineId);
-            String readEventName = readValue.GetFieldValue<String>(FieldName_EventName);
-            int readClientId = readValue.GetFieldValue<int64_t>(FieldName_ClientId);
-            int readClientId2 = readValue.GetFieldValue<int>(FieldName_ClientId);
-        }
-#endif
-
-		m_EventQueue.EnqueueEvent(pEvent->GetEventId(), ArrayView<const uint8_t>(serializationBuffer));
+		m_EventQueue.EnqueueEvent(pEvent->GetEventId(), ArrayView<const uint8_t>(packetBufferView));
 	}
+
+    Result TelemetryClientFlat::OnRecv(const Array<uint8_t>& recvData)
+    {
+        Result hr;
+
+        // Probably heartbeat packet?
+        if (recvData.size() == 0)
+            return hr;
+
+        uint expectedSize = flatbuffers::GetSizePrefixedBufferLength(recvData.data());
+        if (recvData.size() != expectedSize)
+        {
+            SFLog(System, Warning, "Telemetry received unexpected data size: expected:{0}, received:{1}", expectedSize, recvData.size());
+            return ResultCode::INVALID_FORMAT;
+        }
+
+        const Flat::Telemetry::TelemetryPacket* requestPacket = Flat::Telemetry::GetSizePrefixedTelemetryPacket((const void*)recvData.data());
+        if (requestPacket == nullptr)
+        {
+            return ResultCode::INVALID_FORMAT;
+        }
+
+        uint32_t eventId = requestPacket->request_id();
+
+        m_EventQueue.FreePostedEvents(eventId);
+
+        if (!hr)
+        {
+            SFLog(System, Error, "ObjectDirectory: failed with hr:{0}", hr);
+        }
+
+        return hr;
+    }
 
 }
 

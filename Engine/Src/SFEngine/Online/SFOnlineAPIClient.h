@@ -52,7 +52,7 @@ namespace SF
 
 		SF_FORCEINLINE IHeap& GetHeap() const { return GetSystemHeap(); }
 
-        virtual Result Connect(const String& serverAddress, int port, const String& accessKey);
+        virtual Result Connect(const String& url, const String& accessKey);
         Result Reconnect();
 		void Disconnect();
 
@@ -69,8 +69,7 @@ namespace SF
         void OnRecv(const Array<uint8_t>& data);
 
 	private:
-        String m_ServerAddress;
-        int m_Port = 0;
+        String m_Url;
 		String m_AccessKey;
 		String m_MachineUID;
 
