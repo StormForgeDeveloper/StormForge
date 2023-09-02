@@ -78,6 +78,8 @@ namespace SF
             case CURLINFO_SSL_DATA_OUT:
                 SFLog(LogCurl, Log, "CURLINFO_SSL_DATA_OUT");
                 break;
+            default:
+                break;
             }
 
             return 0;

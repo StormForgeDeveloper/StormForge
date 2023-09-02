@@ -141,7 +141,8 @@ namespace SF
 
 	private:
 
-		void EnqueueEvent(TelemetryEvent* pEvent);
+		virtual void EnqueueEvent(TelemetryEvent* pEvent) override;
+
         Result OnRecv(const Array<uint8_t>& recvData);
 
 		friend class TelemetryEvent;
