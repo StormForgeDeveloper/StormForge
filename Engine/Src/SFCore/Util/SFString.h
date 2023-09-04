@@ -1088,7 +1088,7 @@ namespace SF {
 			if (IsNullOrEmpty()) return *this;
             if (count <= 0)
             {
-                count = int(length()) - (starIndex + 1);
+                count = int(length()) - starIndex;
                 if (count <= 0)
                 {
                     return TString(GetHeap());
