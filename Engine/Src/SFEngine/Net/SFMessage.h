@@ -188,6 +188,11 @@ namespace SF {
             return reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(this) + GetHeaderSize());
         }
 
+        SF_FORCEINLINE void* GetPayloadPtr() const
+        {
+            return reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(this) + GetHeaderSize());
+        }
+
         SF_FORCEINLINE ArrayView<uint8_t> GetPayload() const
         {
             uint headerSize = (uint)GetHeaderSize();

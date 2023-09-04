@@ -24,7 +24,7 @@ namespace Net {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	//	Network Packetes for Network Control definitions
+	//	Network Packets for Network Control definitions
 	//
 
 	enum NetCtrlIDs
@@ -40,6 +40,10 @@ namespace Net {
 		NetCtrlCode_TimeSync,
 		NetCtrlCode_SequenceFrame,
 		NetCtrlCode_TimeSyncRtn,
+
+        // Not actual netctrl, but use it for convenience
+        NetExt_QOS,
+        NetExt_Stun,
 		NetCtrlCode_Max,
 	};
 
@@ -55,6 +59,8 @@ namespace Net {
     static constexpr MessageID PACKET_NETCTRL_TIMESYNC_RTN = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_NONE, NetCtrlCode_TimeSyncRtn);
 	static constexpr MessageID PACKET_NETCTRL_SEQUENCE_FRAME   = MessageID(MSGTYPE_EVENT,      MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_NONE, NetCtrlCode_SequenceFrame);
 
+    static constexpr MessageID PACKET_NETEXT_QOS = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_NONE, NetExt_QOS);
+    static constexpr MessageID PACKET_NETEXT_STUN = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_NONE, NetExt_Stun);
 
 } // namespace Net
 } // namespace SF

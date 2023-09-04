@@ -89,6 +89,26 @@ namespace Net {
 		uint16_t TotalSize;
 	};
 
+#pragma pack(4)
+    struct MsgNetExtQOS
+    {
+        uint16_t Offset;
+        uint16_t ChunkSize;
+        uint16_t TotalSize;
+    };
+
+    struct MsgNetExtStun
+    {
+        NetAddress ReturnAddr;
+    };
+
+    struct STUNPacket
+    {
+        MessageHeader Header;
+        Net::MsgNetExtStun Payload;
+    };
+
+
 #pragma pack(pop)
 
 } // namespace Net

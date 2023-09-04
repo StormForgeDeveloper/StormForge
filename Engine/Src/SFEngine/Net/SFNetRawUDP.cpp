@@ -20,6 +20,7 @@
 #include "Util/SFStrUtil.h"
 #include "Util/SFTimeUtil.h"
 #include "Util/SFLog.h"
+#include "SFScopeContext.h"
 
 #include "Net/SFNetToString.h"
 #include "Net/SFNetConst.h"
@@ -268,72 +269,45 @@ namespace Net {
 
 
 	// Send message to connection with network device
-	Result RawUDP::SendMsg(const sockaddr_storage& dest, MessageHeader* pMsg)
+	Result RawUDP::SendMsg(const sockaddr_storage& dest, size_t sendSize, uint8_t* pBuff)
 	{
-		Result hr = ResultCode::SUCCESS, hrErr = ResultCode::SUCCESS;
+        IOBUFFER_WRITE* pOverlapped = nullptr;
 
-        // FIXME: no more pMsg interface
-        assert(false);
-	//	MessageID msgID = pMsg->GetMessageHeader()->msgID;
-	//	IOBUFFER_WRITE *pOverlapped = nullptr;
+        ScopeContext hr(
+            [this, &pOverlapped](Result hr)
+            {
+                if (!hr)
+                {
+                    //m_NetIOAdapter.DecPendingSendCount();
+                    if (pOverlapped)
+                    {
+                        pOverlapped->ClearBuffer();
+                        IHeap::Delete(pOverlapped);
+                    }
 
- //       constexpr bool bIncludePacketHeader = false;
-	//	netMem(pOverlapped = new(GetSystemHeap()) IOBUFFER_WRITE);
-	//	pOverlapped->SetupSendUDP(m_NetIOAdapter.GetIOSocket(), dest, bIncludePacketHeader, std::forward<SharedPointerT<MessageData>>(pMsg));
-	//	pMsg = nullptr;
+                    if (hr != Result(ResultCode::IO_IO_SEND_FAIL))
+                    {
+                        SFLog(Net, Error, "RawUDP Send Failed, hr:{0}", hr);
+                    }
+                    else
+                    {
+                        SFLog(Net, Debug3, "RawUDP Send Failed, hr:{0}", hr);
+                    }
+                }
+            });
 
-	//	if (NetSystem::IsProactorSystem())
-	//	{
-	//		netChk(m_NetIOAdapter.WriteBuffer(pOverlapped));
-	//	}
-	//	else
-	//	{
-	//		netChk(m_NetIOAdapter.EnqueueBuffer(pOverlapped));
-	//	}
+        //m_NetIOAdapter.IncPendingSendCount();
 
-	//Proc_End:
+		pOverlapped->SetupSendUDP(m_NetIOAdapter.GetIOSocket(), dest, (uint)sendSize, pBuff);
 
-	//	if (!hr)
-	//	{
-	//		if (pOverlapped)
-	//		{
-	//			pOverlapped->ClearBuffer();
-	//			pOverlapped->pMsgs = nullptr;
-	//			IHeap::Delete(pOverlapped);
-	//		}
-	//		else
-	//		{
-	//			pMsg = nullptr;
-	//		}
-
-	//		if (hr != Result(ResultCode::IO_IO_SEND_FAIL))
-	//		{
-	//			SFLog(Net, Error, "RawUDP Send Failed, err:{1:X8}, hr:{2:X8}", hrErr, hr);
-	//		}
-	//		else
-	//		{
-	//			SFLog(Net, Debug3, "RawUDP Send Failed, err:{1:X8}, hr:{2:X8}", hrErr, hr);
-	//			return ResultCode::SUCCESS;
-	//		}
-	//	}
-	//	else
-	//	{
-	//		if (msgID.IDs.Type == MSGTYPE_NETCONTROL)
-	//		{
-	//			SFLog(Net, Debug3, "RawUDP SendCtrl dest:{0}, msg:{1}", dest, msgID);
-	//		}
-	//		else
-	//		{
-	//			SFLog(Net, Debug3, "RawUDP Send dest:{0}, msg:{1}", dest, msgID);
-	//		}
-	//	}
+        netCheck(m_NetIOAdapter.WriteBuffer(pOverlapped));
 
 		return hr;
 	}
 
 
 	// called when incoming message occur
-	Result RawUDP::OnRecv(const sockaddr_storage& remoteAddr, uint uiBuffSize, uint8_t* pBuff)
+	Result RawUDP::OnRecv(const sockaddr_storage& remoteAddr, uint uiBuffSize, const uint8_t* pBuff)
 	{
 		Result hr;
 		SharedPointerT<MessageData> pMsg;
@@ -353,12 +327,10 @@ namespace Net {
 				netCheck(ResultCode::IO_BADPACKET_SIZE);
 			}
 
-			netCheckMem(pMsg = MessageData::NewMessage(GetHeap(), pMsgHeader->msgID.ID, pMsgHeader->Length, pBuff));
-
 			uiBuffSize -= pMsgHeader->Length;
 			pBuff += pMsgHeader->Length;
 
-			m_MessageHandler(remoteAddr, pMsg);
+			m_MessageHandler(remoteAddr, pMsgHeader);
 
 			netCheck(hr);
 		}
