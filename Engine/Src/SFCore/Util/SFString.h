@@ -1083,13 +1083,16 @@ namespace SF {
 
 
 		// Make a copy of sub string
-		StringType SubString(int starIndex, int count) const
+		StringType SubString(int starIndex, int count = -1) const
 		{
 			if (IsNullOrEmpty()) return *this;
-            if (count < 0)
+            if (count <= 0)
             {
-                assert(false);
-                return TString(GetHeap());
+                count = int(length()) - (starIndex + 1);
+                if (count <= 0)
+                {
+                    return TString(GetHeap());
+                }
             }
 
 			auto length = (int)GetBufferLength();
