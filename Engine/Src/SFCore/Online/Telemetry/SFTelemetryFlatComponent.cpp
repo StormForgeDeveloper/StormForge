@@ -43,19 +43,26 @@ namespace SF
 
 	Result TelemetryFlatComponent::InitializeComponent()
 	{
+        Result hr;
         super::InitializeComponent();
+
+        if (m_Url.IsNullOrEmpty())
+        {
+            SFLog(Telemetry, Info, "Telemetry is not configured");
+            return hr;
+        }
 
         m_TelemetryPtr.reset(new(GetSystemHeap()) TelemetryClientFlat());
 
         SFLog(Telemetry, Info, "Telemetry initialize: {0}, clientId:{1}", m_Url, m_ClientId);
 
-        Result hr = m_TelemetryPtr->Initialize(m_Url, m_ClientId, m_AuthTicket, m_bUseEventCacheFile);
+        hr = m_TelemetryPtr->Initialize(m_Url, m_ClientId, m_AuthTicket, m_bUseEventCacheFile);
         if (!hr)
             return hr;
 
         Service::Telemetry = m_TelemetryPtr.get();
 
-		return ResultCode::SUCCESS;
+		return hr;
 	}
 
     void TelemetryFlatComponent::DeinitializeComponent()
