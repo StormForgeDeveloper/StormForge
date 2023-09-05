@@ -65,8 +65,6 @@ namespace Net {
 		NetAddress m_LocalAddress;
 		sockaddr_storage m_LocalSockAddress;
 
-		IOBUFFER_READ *m_pRecvBuffers = nullptr;
-
 		MessageHandlerFunc m_MessageHandler;
 
 
@@ -93,13 +91,5 @@ namespace Net {
 		Result OnRecv(const sockaddr_storage& remoteAddr, uint uiBuffSize, const uint8_t* pBuff);
 	};
 
-
-
-
-
-
 } // namespace Net
 } // namespace SF
-
-
-

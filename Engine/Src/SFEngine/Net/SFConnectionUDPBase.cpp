@@ -678,7 +678,7 @@ namespace Net {
 		while (uiBuffSize && GetConnectionState() != ConnectionState::DISCONNECTED)
 		{
             pMsgHeader = reinterpret_cast<MessageHeader*>(pBuff);
-			if (uiBuffSize < pMsgHeader->GetHeaderSize() || uiBuffSize < pMsgHeader->Length)
+			if (uiBuffSize < pMsgHeader->GetHeaderSize() || uiBuffSize < pMsgHeader->Length || pMsgHeader->Length == 0)
 			{
 				SFLog(Net, Error, "Unexpected packet buffer size:{0}, size in header:{1}", uiBuffSize, pMsgHeader->Length);
 				netErr(ResultCode::IO_BADPACKET_SIZE);

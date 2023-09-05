@@ -21,6 +21,7 @@
 #include "Util/SFTimeUtil.h"
 #include "Util/SFLog.h"
 #include "SFScopeContext.h"
+#include "Net/SFNetPacketData.h"
 
 #include "Net/SFNetToString.h"
 #include "Net/SFNetConst.h"
@@ -68,6 +69,9 @@ namespace Net {
 
 				if (!(hr = m_Owner.OnRecv(pIOBuffer->NetAddr.From, pIOBuffer->TransferredSize, pIOBuffer->GetPayloadPtr())))
 					SFLog(Net, Debug3, "Read IO failed with hr={0:X8}", hr);
+
+                // turn off flag before reuse
+                pIOBuffer->SetPendingFalse();
 
 				PendingRecv(pIOBuffer);
 				pIOBuffer = nullptr;
@@ -128,14 +132,6 @@ namespace Net {
 	}
 
 
-
-
-
-
-
-
-
-
 	//////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//	class RawUDP
@@ -155,7 +151,6 @@ namespace Net {
 
 	RawUDP::~RawUDP()
 	{
-		IHeap::Delete(m_pRecvBuffers);
 	}
 
 	Result RawUDP::InitializeNet(const NetAddress& localAddress, MessageHandlerFunc &&Handler)
@@ -171,8 +166,9 @@ namespace Net {
 
 		m_MessageHandler = std::forward<MessageHandlerFunc>(Handler);
 
-		if (StrUtil::IsNullOrEmpty(localAddress.Address) == '\0')
+		if (StrUtil::IsNullOrEmpty(localAddress.Address))
 		{
+            // Default IPv6
 			netChk(Net::GetLocalAddressIPv6(myAddress));
 		}
 		else
@@ -230,12 +226,11 @@ namespace Net {
 		// Ready recv
 		if (NetSystem::IsProactorSystem())
 		{
-			if (m_pRecvBuffers) GetHeap().Delete(m_pRecvBuffers);
-			netMem(m_pRecvBuffers = new(GetHeap()) IOBUFFER_READ[Const::SVR_NUM_RECV_THREAD]);
-
 			for (int uiRecv = 0; uiRecv < Const::SVR_NUM_RECV_THREAD; uiRecv++)
 			{
-				m_NetIOAdapter.PendingRecv(&m_pRecvBuffers[uiRecv]);
+                IOBUFFER_READ* pRecvBuffer{};
+                netMem(pRecvBuffer = new(GetHeap()) IOBUFFER_READ);
+				m_NetIOAdapter.PendingRecv(pRecvBuffer);
 			}
 		}
 
@@ -259,6 +254,12 @@ namespace Net {
 
 		m_NetIOAdapter.CloseSocket();
 
+        while (!m_NetIOAdapter.CanDelete())
+        {
+            ThisThread::SleepFor(DurationMS(1000));
+            SFLog(Net, Info, "RawUDP Close wait net ");
+        }
+
 		// Clear handler pointer
 		m_MessageHandler = {};
 
@@ -271,20 +272,13 @@ namespace Net {
 	// Send message to connection with network device
 	Result RawUDP::SendMsg(const sockaddr_storage& dest, size_t sendSize, uint8_t* pBuff)
 	{
-        IOBUFFER_WRITE* pOverlapped = nullptr;
-
+        SFUniquePtr<PacketData> pSendBuffer(new(GetSystemHeap()) PacketData);
         ScopeContext hr(
-            [this, &pOverlapped](Result hr)
+            [this, &pSendBuffer](Result hr)
             {
                 if (!hr)
                 {
-                    //m_NetIOAdapter.DecPendingSendCount();
-                    if (pOverlapped)
-                    {
-                        pOverlapped->ClearBuffer();
-                        IHeap::Delete(pOverlapped);
-                    }
-
+                    m_NetIOAdapter.DecPendingSendCount();
                     if (hr != Result(ResultCode::IO_IO_SEND_FAIL))
                     {
                         SFLog(Net, Error, "RawUDP Send Failed, hr:{0}", hr);
@@ -296,11 +290,17 @@ namespace Net {
                 }
             });
 
-        //m_NetIOAdapter.IncPendingSendCount();
+        m_NetIOAdapter.IncPendingSendCount();
 
-		pOverlapped->SetupSendUDP(m_NetIOAdapter.GetIOSocket(), dest, (uint)sendSize, pBuff);
+        pSendBuffer->SetupSendUDP(m_NetIOAdapter.GetIOSocket(), dest, 0, nullptr);
 
-        netCheck(m_NetIOAdapter.WriteBuffer(pOverlapped));
+        pSendBuffer->Payload.resize(sendSize);
+        memcpy(pSendBuffer->Payload.data(), pBuff, sendSize);
+
+        pSendBuffer->PrepareBufferForIO();
+
+        netCheck(m_NetIOAdapter.WriteBuffer(pSendBuffer.get()));
+        pSendBuffer.release();
 
 		return hr;
 	}
@@ -321,7 +321,7 @@ namespace Net {
 		while (uiBuffSize)
 		{
             pMsgHeader = reinterpret_cast<const MessageHeader*>(pBuff);
-			if (uiBuffSize < pMsgHeader->GetHeaderSize() || uiBuffSize < pMsgHeader->Length)
+			if (uiBuffSize < pMsgHeader->GetHeaderSize() || uiBuffSize < pMsgHeader->Length || pMsgHeader->Length == 0)
 			{
 				SFLog(Net, Error, "Unexpected packet buffer size:{0}, size in header:{1}", uiBuffSize, pMsgHeader->Length);
 				netCheck(ResultCode::IO_BADPACKET_SIZE);

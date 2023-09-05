@@ -182,8 +182,6 @@ namespace Net {
 	// called when send completed
 	Result SocketIO::OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE *pIOBuffer)
 	{
-		//IHeap::Free(pIOBuffer->pSendBuff);
-		//pIOBuffer->pMsgs = nullptr;
 		IHeap::Delete(pIOBuffer);
 		DecPendingSendCount();
 		return ResultCode::SUCCESS;
@@ -200,7 +198,6 @@ namespace Net {
 		: SocketIO(heap)
 	{
 	}
-
 
 	// Pending recv New one
 	Result SocketIOUDP::PendingRecv(IOBUFFER_READ *pRecvBuffer)
