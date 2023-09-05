@@ -131,27 +131,27 @@ namespace Util {
 
     String Path::GetParentFileDirectory(const String& strFilePath)
     {
-        if (strFilePath == nullptr)
+        if (strFilePath.IsNullOrEmpty())
             return nullptr;
 
-        if (strFilePath.length() > 0)
+        String resultString = strFilePath.TrimEnd(DirectorySeparatorChars);
+
+        int iSeperator = StrUtil::IndexofAnyFromBack(resultString, DirectorySeparatorChars);
+
+        // No more parent
+        if (iSeperator < 0)
+            return nullptr;
+
+        if (iSeperator > 0)
         {
-            if (strFilePath.data()[strFilePath.length() - 1] == DirectorySeparatorChar)
-            {
-                strFilePath.TrimEnd(DirectorySeparatorCharString);
-            }
-            else if (strFilePath.data()[strFilePath.length() - 1] == AltDirectorySeparatorChar)
-            {
-                strFilePath.TrimEnd(AltDirectorySeparatorCharString);
-            }
+            resultString.Resize(iSeperator);
+        }
+        else
+        {
+            resultString.Resize(iSeperator + 1);
         }
 
-        auto pStr = strFilePath;
-        int iSeperator = StrUtil::IndexofAnyFromBack(strFilePath, DirectorySeparatorChars);
-        if (iSeperator < 0)
-            return strFilePath;
-
-        return String(strFilePath.GetHeap(), strFilePath, 0, iSeperator);
+        return resultString;
     }
 
 

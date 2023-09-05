@@ -1052,34 +1052,45 @@ namespace SF {
 			if (IsNullOrEmpty()) return *this;
 			if (chars == nullptr) return *this;
 
-			auto numChar = (int)StrUtil::StringLen(chars);
-
-			auto len = (int)GetLength();
-			auto strString = m_Buffer->GetBufferPointer();
-			int iStart = 0;
-			int iEnd = len - 1;
-
-			for (; iEnd > iStart; iEnd--)
-			{
-				auto curChar = strString[iEnd];
-				int iChar = 0;
-				for (; iChar < numChar; iChar++)
-				{
-					if (chars[iChar] == curChar) break;
-				}
-
-				if (iChar >= numChar) break;
-			}
-
-			if (iEnd < iStart)
-			{
-				return TString(GetHeap(), "");
-			}
-			else
-			{
-				return SubString(iStart, iEnd - iStart + 1);
-			}
+            StringType result = *this;
+            result.TrimEndInline(chars);
+            return result;
 		}
+
+        StringType TrimEndInline(const CharType* chars)
+        {
+            if (IsNullOrEmpty()) return *this;
+            if (chars == nullptr) return *this;
+
+            auto numChar = (int)StrUtil::StringLen(chars);
+
+            auto len = (int)GetLength();
+            auto strString = m_Buffer->GetBufferPointer();
+            int iEnd = len - 1;
+
+            for (; iEnd >= 0; iEnd--)
+            {
+                auto curChar = strString[iEnd];
+                int iChar = 0;
+                for (; iChar < numChar; iChar++)
+                {
+                    if (chars[iChar] == curChar) break;
+                }
+
+                if (iChar >= numChar) break;
+            }
+
+            if (iEnd < 0)
+            {
+                m_Buffer->Reset();
+            }
+            else
+            {
+                m_Buffer->Resize(iEnd + 1);
+            }
+
+            return *this;
+        }
 
 
 		// Make a copy of sub string
