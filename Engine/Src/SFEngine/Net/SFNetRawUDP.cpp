@@ -219,9 +219,7 @@ namespace Net {
 		m_NetIOAdapter.SetSocket(m_LocalAddress.SocketFamily, SocketType::DataGram, socket);
 		socket = INVALID_SOCKET;
 
-
 		netChk(Service::NetSystem->RegisterSocket(&m_NetIOAdapter));
-
 
 		// Ready recv
 		if (NetSystem::IsProactorSystem())
@@ -243,7 +241,7 @@ namespace Net {
 		if (socket != INVALID_SOCKET)
 			Service::NetSystem->CloseSocket(socket);
 
-		SFLog(Net, Info, "RawUDP: Opened {0}, hr={1:X8}", m_LocalAddress, hr);
+		SFLog(Net, Info, "RawUDP: Open {0}, hr={1:X8}", m_LocalAddress, hr);
 
 		return hr;
 	}

@@ -11,6 +11,7 @@
 
 #include "SFTypedefs.h"
 #include "Container/SFArray.h"
+#include "json/json.h"
 
 #pragma once
 
@@ -105,6 +106,7 @@ namespace Util {
 
 	// Peek key from console
 	//Result PeekKey( int &inputKey, NativeHandle hConsole = INVALID_NATIVE_HANDLE_VALUE);
+    Result LoadJsonFile(const char* jsonPath, Json::Value& outValue);
 
 	
 #include "SFUtility.inl"
