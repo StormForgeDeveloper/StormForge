@@ -292,7 +292,7 @@ namespace Net {
 		if (pMsg == nullptr)
 			return ResultCode::INVALID_POINTER;
 
-		auto pCurrentFrame = reinterpret_cast<MsgNetCtrlSequenceFrame*>(pMsg->GetDataPtr());
+        MsgNetCtrlSequenceFrame* pCurrentFrame = reinterpret_cast<MsgNetCtrlSequenceFrame*>(pMsg->GetDataPtr());
 
 		const uint8_t* dataPtr = reinterpret_cast<const uint8_t*>(pCurrentFrame + 1);
 
@@ -302,6 +302,9 @@ namespace Net {
 		}
 
         MutexScopeLock scopeLock(m_SubframeLock);
+
+        SFLog(Net, Log, "OnFrameSequenceMessage: MsgSeq:{0}, ChunkSize:{1}, Offset:{2}, TotalSize:{3}",
+            pMsg->msgID.IDSeq.Sequence, pCurrentFrame->ChunkSize, pCurrentFrame->Offset, pCurrentFrame->TotalSize);
 
 		if (pCurrentFrame->Offset == 0) // first frame
 		{
