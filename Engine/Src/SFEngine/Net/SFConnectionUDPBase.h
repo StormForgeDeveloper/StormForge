@@ -76,7 +76,11 @@ namespace Net {
 
 		int m_SendBoost = 0;
 
+        // Tick Update lock
 		CriticalSection		m_UpdateLock;
+
+        // Subframe packet serial
+        uint m_SubframePacketSerial{};
 
 	private:
 

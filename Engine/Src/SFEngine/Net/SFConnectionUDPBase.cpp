@@ -244,6 +244,7 @@ namespace Net {
 			pSrcMsgHeader->msgID,
 			pSrcMsgHeader->Length);
 
+        uint16_t subFrameSerial = uint16_t(++m_SubframePacketSerial);
 		const uint8_t* pCurSrc = reinterpret_cast<const uint8_t*>(pSrcMsgHeader);
 		for (uint iSequence = 0; remainSize > 0; iSequence++)
 		{
@@ -256,6 +257,7 @@ namespace Net {
 
 			// fill up frame header
 			pCurrentFrame = (MsgNetCtrlSequenceFrame*)pSubframeMessage->GetPayloadPtr();
+            pCurrentFrame->MainSequence = subFrameSerial;
 			pCurrentFrame->Offset = uint16_t(offset);
 			pCurrentFrame->ChunkSize = uint16_t(frameSize);
 			pCurrentFrame->TotalSize = uint16_t(pSrcMsgHeader->Length);
@@ -303,8 +305,8 @@ namespace Net {
 
         MutexScopeLock scopeLock(m_SubframeLock);
 
-        SFLog(Net, Log, "OnFrameSequenceMessage: MsgSeq:{0}, ChunkSize:{1}, Offset:{2}, TotalSize:{3}",
-            pMsg->msgID.IDSeq.Sequence, pCurrentFrame->ChunkSize, pCurrentFrame->Offset, pCurrentFrame->TotalSize);
+        SFLog(Net, Log, "OnFrameSequenceMessage: MsgSeq:{0}, MainSeq:{1}, ChunkSize:{2}, Offset:{3}, TotalSize:{4}",
+            pMsg->msgID.IDSeq.Sequence, pCurrentFrame->MainSequence, pCurrentFrame->ChunkSize, pCurrentFrame->Offset, pCurrentFrame->TotalSize);
 
 		if (pCurrentFrame->Offset == 0) // first frame
 		{
