@@ -69,7 +69,23 @@ namespace Net {
 
 		// subframe message 
         CriticalSection m_SubframeLock;
-		SFUniquePtr<MessageHeader> m_SubFrameCollectionBuffer;
+
+        // Received sub frame packet state
+        struct SubframeRecvState
+        {
+            uint SubframeId{};
+            uint BlockSize = MAX_SUBFRAME_SIZE;
+            uint TotalSize{};
+            // received block mask
+            uint ReceivedBlockMask{};
+            uint FullyReceivedBlockMask{};
+
+            MessageHeader* GetMessageHeader() { return reinterpret_cast<MessageHeader*>(this + 1); };
+        };
+        DynamicArray<SubframeRecvState*> m_ReceivedSubframeStates;
+
+        void ClearReceivedSubframeStates();
+
 
         // Include packet header for all packets. MUDP uses this to add peer id
         bool m_bIncludePacketHeader = false;
@@ -79,8 +95,9 @@ namespace Net {
         // Tick Update lock
 		CriticalSection		m_UpdateLock;
 
-        // Subframe packet serial
+        // Send Subframe packet serial
         uint m_SubframePacketSerial{};
+
 
 	private:
 

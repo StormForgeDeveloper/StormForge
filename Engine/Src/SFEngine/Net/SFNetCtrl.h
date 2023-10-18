@@ -84,7 +84,7 @@ namespace Net {
 #pragma pack(2)
 	struct MsgNetCtrlSequenceFrame
 	{
-        uint16_t MainSequence;
+        uint16_t SubframeId;
 		uint16_t Offset;
 		uint16_t ChunkSize;
 		uint16_t TotalSize;

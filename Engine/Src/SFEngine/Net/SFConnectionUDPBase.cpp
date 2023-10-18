@@ -82,7 +82,7 @@ namespace Net {
 		m_SendReliableWindow.ClearWindow();
         m_SendGuaQueue.Reset();
 
-        m_SubFrameCollectionBuffer.reset();
+        ClearReceivedSubframeStates();
 	}
 
     void ConnectionUDPBase::Dispose()
@@ -93,7 +93,17 @@ namespace Net {
         m_SendReliableWindow.ClearWindow();
         m_SendGuaQueue.Reset();
 
-        m_SubFrameCollectionBuffer.reset();
+        ClearReceivedSubframeStates();
+    }
+
+    void ConnectionUDPBase::ClearReceivedSubframeStates()
+    {
+        for (SubframeRecvState* pSubframeState : m_ReceivedSubframeStates)
+        {
+            GetSystemHeap().Free(pSubframeState);
+        }
+        m_ReceivedSubframeStates.Reset();
+
     }
 
     // Make Ack packet and enqueue to SendNetCtrlqueue
@@ -257,7 +267,7 @@ namespace Net {
 
 			// fill up frame header
 			pCurrentFrame = (MsgNetCtrlSequenceFrame*)pSubframeMessage->GetPayloadPtr();
-            pCurrentFrame->MainSequence = subFrameSerial;
+            pCurrentFrame->SubframeId = subFrameSerial;
 			pCurrentFrame->Offset = uint16_t(offset);
 			pCurrentFrame->ChunkSize = uint16_t(frameSize);
 			pCurrentFrame->TotalSize = uint16_t(pSrcMsgHeader->Length);
@@ -303,45 +313,68 @@ namespace Net {
 			netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 		}
 
+        // Since OnFrameSequenceMessage is called directly from network recv thread we need to lock them
         MutexScopeLock scopeLock(m_SubframeLock);
 
-        SFLog(Net, Log, "OnFrameSequenceMessage: MsgSeq:{0}, MainSeq:{1}, ChunkSize:{2}, Offset:{3}, TotalSize:{4}",
-            pMsg->msgID.IDSeq.Sequence, pCurrentFrame->MainSequence, pCurrentFrame->ChunkSize, pCurrentFrame->Offset, pCurrentFrame->TotalSize);
+        uint totalBlockCount = (pCurrentFrame->TotalSize + MAX_SUBFRAME_SIZE - 1) / MAX_SUBFRAME_SIZE;
+        uint blockIndex = pCurrentFrame->Offset / MAX_SUBFRAME_SIZE;
 
-		if (pCurrentFrame->Offset == 0) // first frame
-		{
-            m_SubFrameCollectionBuffer.reset(reinterpret_cast<MessageHeader*>(GetSystemHeap().Alloc(pCurrentFrame->TotalSize)));
+        SFLog(Net, Log, "OnFrameSequenceMessage: MsgSeq:{0}, MainSeq:{1}, ChunkSize:{2}, Offset:{3}, TotalSize:{4}, block:{5}/{6}",
+            pMsg->msgID.IDSeq.Sequence, pCurrentFrame->SubframeId, pCurrentFrame->ChunkSize, pCurrentFrame->Offset, pCurrentFrame->TotalSize, blockIndex, totalBlockCount);
 
-			memcpy(m_SubFrameCollectionBuffer.get(), dataPtr, pCurrentFrame->ChunkSize);
-            assert(m_SubFrameCollectionBuffer->Length != 0 && m_SubFrameCollectionBuffer->Length != 0xcdcd);
-		}
-		else
-		{
-			if (m_SubFrameCollectionBuffer == nullptr)
-			{
-				assert(m_SubFrameCollectionBuffer != nullptr);
-				netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
-			}
+        // Mostly the array size should be 0 or 1, rarely 2
+        SubframeRecvState* pCurSubframeState{};
+        for (SubframeRecvState* pSubframeState : m_ReceivedSubframeStates)
+        {
+            if (pSubframeState->SubframeId == pCurrentFrame->SubframeId)
+            {
+                pCurSubframeState = pSubframeState;
+                break;
+            }
+        }
 
-			if (m_SubFrameCollectionBuffer->Length != pCurrentFrame->TotalSize)
-			{
-				assert(false);
-				netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
-			}
+        if (pCurSubframeState == nullptr)
+        {
+            pCurSubframeState = reinterpret_cast<SubframeRecvState*>(GetSystemHeap().Alloc(sizeof(SubframeRecvState) + pCurrentFrame->TotalSize));
+            pCurSubframeState->SubframeId = pCurrentFrame->SubframeId;
+            pCurSubframeState->TotalSize = pCurrentFrame->TotalSize;
+            pCurSubframeState->ReceivedBlockMask = 0;
+            pCurSubframeState->FullyReceivedBlockMask = (1 << totalBlockCount) - 1;
 
-			memcpy(reinterpret_cast<uint8_t*>(m_SubFrameCollectionBuffer.get()) + pCurrentFrame->Offset, dataPtr, pCurrentFrame->ChunkSize);
-		}
+            // reset header section
+            memset(pCurSubframeState->GetMessageHeader(), 0, sizeof(MessageHeader));
+            m_ReceivedSubframeStates.push_back(pCurSubframeState);
+        }
 
-		int receivedSize = pCurrentFrame->Offset + pCurrentFrame->ChunkSize;
-		if (receivedSize > pCurrentFrame->TotalSize)
+        MessageHeader* messageHeader = pCurSubframeState->GetMessageHeader();
+
+		if (messageHeader->Length != 0 && messageHeader->Length != pCurrentFrame->TotalSize)
 		{
 			netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 		}
-		else if (receivedSize == pCurrentFrame->TotalSize)
-		{
-			// done
-            super::OnRecv(m_SubFrameCollectionBuffer.get());
-			m_SubFrameCollectionBuffer.reset();
+
+		memcpy(reinterpret_cast<uint8_t*>(messageHeader) + pCurrentFrame->Offset, dataPtr, pCurrentFrame->ChunkSize);
+
+        if (blockIndex >= (sizeof(SubframeRecvState::ReceivedBlockMask) * 8))
+        {
+            SFLog(Net, Error, "OnFrameSequenceMessage: MsgSeq:{0}, MainSeq:{1}, ChunkSize:{2}, Offset:{3}, TotalSize:{4}, Too big blockIndex:{5}",
+                pMsg->msgID.IDSeq.Sequence, pCurrentFrame->SubframeId, pCurrentFrame->ChunkSize, pCurrentFrame->Offset, pCurrentFrame->TotalSize, blockIndex);
+
+            netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
+        }
+
+        pCurSubframeState->ReceivedBlockMask |= (1 << blockIndex);
+
+        if ((pCurSubframeState->ReceivedBlockMask & pCurSubframeState->FullyReceivedBlockMask) == pCurSubframeState->FullyReceivedBlockMask)
+        {
+            SFLog(Net, Log, "OnFrameSequenceMessage: MsgSeq:{0}, MainSeq:{1}, ChunkSize:{2}, Offset:{3}, TotalSize:{4}, blockIndex:{5}/{6} finished",
+                pMsg->msgID.IDSeq.Sequence, pCurrentFrame->SubframeId, pCurrentFrame->ChunkSize, pCurrentFrame->Offset, pCurrentFrame->TotalSize, blockIndex, totalBlockCount);
+
+            // done
+            super::OnRecv(messageHeader);
+
+            m_ReceivedSubframeStates.RemoveItem(pCurSubframeState);
+            GetSystemHeap().Free(pCurSubframeState);
 		}
 
 		return hr;
@@ -358,7 +391,7 @@ namespace Net {
 
 		netCheck( ClearQueues() );
 
-		m_SubFrameCollectionBuffer = nullptr;
+        ClearReceivedSubframeStates();
 
 		return hr;
 	}
@@ -373,7 +406,7 @@ namespace Net {
 
 		hr = Connection::CloseConnection(reason);
 
-		m_SubFrameCollectionBuffer = nullptr;
+        ClearReceivedSubframeStates();
 
 		return hr;
 	}
@@ -387,9 +420,9 @@ namespace Net {
 		m_SendReliableWindow.ClearWindow();
         m_SendGuaQueue.Reset();
 
-		m_SubFrameCollectionBuffer.reset();
+        ClearReceivedSubframeStates();
 
-		return ResultCode::SUCCESS;
+        return ResultCode::SUCCESS;
 	}
 
 	// Disconnect connection

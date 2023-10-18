@@ -127,7 +127,7 @@ namespace SF {
 	enum
 	{
 		MAX_MESSAGE_SIZE = (1 << 14) - 1,
-		MAX_SUBFRAME_SIZE = 1200 - 64,
+		MAX_SUBFRAME_SIZE = 1200 - 128,
 
 		MSGTYPE_NONE			= 0,	
 
