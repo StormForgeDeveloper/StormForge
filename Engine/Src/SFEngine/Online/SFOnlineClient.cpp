@@ -975,7 +975,7 @@ namespace SF
 		ActorMovement newMove2 = newMove;
 		newMove2.MoveFrame = m_MoveFrame;
 
-		SFLog(Net, Debug2, "OnlineClient:SendMovement, {0}", newMove2);
+		SFLog(Net, Debug7, "OnlineClient:SendMovement, {0}", newMove2);
 
 		return GetSendMovementManager()->EnqueueMovement(newMove2);
 	}
