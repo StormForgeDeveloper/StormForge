@@ -40,6 +40,11 @@ namespace SF
 		};
 
 
+        EventDelegateList()
+            : m_DelegateArray(GetSystemHeap())
+        {
+        }
+
 		EventDelegateList(IHeap& heap)
 			: m_DelegateArray(heap)
 		{
@@ -171,6 +176,4 @@ namespace SF
 		DynamicArray<EventDelegate> m_DelegateArray;
 	};
 
-
 } // namespace SF
-

@@ -128,7 +128,7 @@ namespace SF
         return hr;
     }
 
-    String AudioEngineComponentOpenAL::GetDefaultDeviceName(bool bPlaybackDevice)
+    const char* AudioEngineComponentOpenAL::GetDefaultDeviceName(bool bPlaybackDevice)
     {
         const ALCchar* defaultDeviceName{};
         if (bPlaybackDevice)
@@ -241,6 +241,12 @@ namespace SF
     AudioListenerPtr AudioEngineComponentOpenAL::GetListener()
     {
         return m_Listener;
+    }
+
+    void AudioEngineComponentOpenAL::SetMasterPlaybackVolume(float volume)
+    {
+        m_MasterPlaybackVolume = volume;
+        alListenerf(AL_GAIN, volume);
     }
 
     void AudioEngineComponentOpenAL::RunOnAudioThread(std::function<void()>&& task)

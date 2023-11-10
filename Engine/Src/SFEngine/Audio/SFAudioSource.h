@@ -13,7 +13,7 @@
 
 #include "SFTypedefs.h"
 #include "Audio/SFAudioBuffer.h"
-
+#include "Math/SF3DMath.h"
 
 namespace SF
 {

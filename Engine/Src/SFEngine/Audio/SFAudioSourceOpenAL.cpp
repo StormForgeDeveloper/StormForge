@@ -243,7 +243,7 @@ namespace SF
         if (m_ALSource == 0 || audioBuffer == nullptr)
             return;
 
-        ALint processed, state;
+        ALint processed{}, state{};
 
         alGetSourcei(m_ALSource, AL_SOURCE_STATE, &state);
         alGetSourcei(m_ALSource, AL_BUFFERS_PROCESSED, &processed);
@@ -267,26 +267,26 @@ namespace SF
             ApplyLocationInternal();
         }
 
+
+        if (processed > 0)
+        {
+            ALuint bufferIds[NumBuffer]{};
+            assert(processed <= NumBuffer);
+            alSourceUnqueueBuffers(m_ALSource, processed, bufferIds);
+            m_QueuedALBufferCount -= processed;
+        }
+
         if (m_QueuedALBufferCount < NumBuffer)
         {
             int buffersToQueue = Math::Min<int>(NumBuffer - m_QueuedALBufferCount, (int)audioBuffer->GetAvailableBlockCount());
             for (int iBuffer = 0; iBuffer < buffersToQueue; iBuffer++)
             {
-                auto bufferId = m_ALBuffers[m_QueuedALBufferCount];
+                ALuint bufferId = m_ALBuffers[m_QueuedALBufferCount];
                 m_QueuedALBufferCount++;
 
                 SFUniquePtr<AudioDataBlock> dataBlock(audioBuffer->DequeueBlock());
                 QueueBuffer(bufferId, dataBlock.get());
             }
-        }
-        else if (processed > 0)
-        {
-            ALuint bufferId{};
-            alSourceUnqueueBuffers(m_ALSource, 1, &bufferId);
-
-            SFUniquePtr<AudioDataBlock> dataBlock(audioBuffer->DequeueBlock());
-            QueueBuffer(bufferId, dataBlock.get());
-
         }
 
         if (state != AL_PLAYING)

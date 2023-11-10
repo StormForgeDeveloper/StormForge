@@ -50,7 +50,7 @@ namespace SF
 
         // Implementation
         virtual Result GetDeviceList(bool bPlaybackDevice, Array<String>& outDevices) override;
-        virtual String GetDefaultDeviceName(bool bPlaybackDevice) override;
+        virtual const char* GetDefaultDeviceName(bool bPlaybackDevice) override;
 
         virtual Result SetPlaybackDevice(const char* deviceName) override;
 
@@ -70,6 +70,8 @@ namespace SF
         // Get Listener
         virtual AudioListenerPtr GetListener() override;
 
+        virtual void SetMasterPlaybackVolume(float volume) override;
+        virtual float GetMasterPlaybackVolume() override { return m_MasterPlaybackVolume; }
 
         virtual void RunOnAudioThread(std::function<void()>&& task) override;
         virtual void RunOnAudioThread(const std::function<void()>& task) override;
@@ -92,6 +94,9 @@ namespace SF
 
         CriticalSection m_RequestLock;
         CircularPageQueue<std::function<void()>> m_Requests;
+
+        // Master playback volume
+        float m_MasterPlaybackVolume = 1;
 	};
 
 }

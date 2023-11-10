@@ -104,7 +104,7 @@ namespace SF
         virtual ~AudioService() {}
 
         virtual Result GetDeviceList(bool bPlaybackDevice, Array<String>& outDevices) { return ResultCode::NOT_IMPLEMENTED; }
-        virtual String GetDefaultDeviceName(bool bPlaybackDevice) { return nullptr; }
+        virtual const char* GetDefaultDeviceName(bool bPlaybackDevice) { return nullptr; }
 
         virtual Result SetPlaybackDevice(const char* deviceName) { return ResultCode::NOT_IMPLEMENTED; }
 
@@ -123,6 +123,9 @@ namespace SF
 
         virtual AudioListenerPtr GetListener() { return nullptr; }
 
+        // Control playback volume
+        virtual void SetMasterPlaybackVolume(float volume) {}
+        virtual float GetMasterPlaybackVolume() { return 0; }
 
         // Queue actor to audio thread
         virtual void RunOnAudioThread(std::function<void()>&& task) {}
