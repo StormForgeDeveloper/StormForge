@@ -30,6 +30,8 @@ namespace SF
 
 		constexpr Result NO_DATA_EXIST((int32_t)0xC0001008L);
 
+        constexpr Result INVALID_NAME((int32_t)0xC0000009L);
+        constexpr Result INVALID_ENUM((int32_t)0xC000000aL);
 
 		void InitializeResultCodeSystem();
 	};

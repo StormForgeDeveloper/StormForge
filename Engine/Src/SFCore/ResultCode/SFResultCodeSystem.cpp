@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -32,6 +32,8 @@ namespace ResultCode {
 		codeMap.Insert((uint32_t)UNEXPECTED, {"UNEXPECTED", "UNEXPECTED"});
 		codeMap.Insert((uint32_t)INVALID_ARG, {"INVALID_ARG", "INVALID_ARG"});
 		codeMap.Insert((uint32_t)NO_DATA_EXIST, {"NO_DATA_EXIST", "NO_DATA_EXIST"});
+        codeMap.Insert((uint32_t)INVALID_NAME, { "INVALID_NAME", "INVALID_NAME" });
+        codeMap.Insert((uint32_t)INVALID_ENUM, { "INVALID_ENUM", "INVALID_ENUM" });
 
 	}//InitializeResultCode 
 }//namespace ResultCode 

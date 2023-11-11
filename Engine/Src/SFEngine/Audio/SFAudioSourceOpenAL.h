@@ -52,8 +52,8 @@ namespace SF
 
         // for internal access
 
-        void QueueBuffer(ALuint alBuffer, AudioDataBlock* dataBlock);
-
+        void QueueDataBlock(AudioDataBlock* dataBlock);
+        void QueueDummyDataBlock();
 
         void TickUpdate();
 
@@ -76,6 +76,7 @@ namespace SF
         ALenum m_ALFormat = AL_NONE;
 
         int m_QueuedALBufferCount = 0;
+        uint m_QueuedBufferSerial = 0;
 
         Vector4 m_Position = Vector4::Zero();
         Vector4 m_Velocity = Vector4::Zero();

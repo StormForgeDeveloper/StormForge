@@ -20,6 +20,12 @@
 
 namespace SF
 {
+    // For empty sound, for maximum audio sampling size
+    constexpr int DummyNumChannel = 2;
+    constexpr int DummySamplesPerSec = 48000 / 2; // only for half seconds
+    uint8_t AudioSourceOpenAL_DummyDataBlockBuffer[sizeof(AudioDataBlock) + sizeof(float) * DummyNumChannel * DummySamplesPerSec]{};
+
+
     AudioSourceOpenAL::AudioSourceOpenAL(uint numChannel, EAudioFormat dataFormat, uint samplesPerSec)
         : super(numChannel, dataFormat, samplesPerSec)
     {
@@ -146,6 +152,7 @@ namespace SF
         ApplySettingInternal();
 
         m_QueuedALBufferCount = 0;
+        m_QueuedBufferSerial = 0;
         if (m_ALBuffers[0] == 0)
         {
             alGenBuffers(NumBuffer, m_ALBuffers);
@@ -215,6 +222,8 @@ namespace SF
             alSourcef(m_ALSource, AL_REFERENCE_DISTANCE, GetReferenceDistance());
             break;
         }
+
+        AudioOpenAL::ClearALError();
     }
 
     void AudioSourceOpenAL::ApplyLocationInternal()
@@ -226,15 +235,53 @@ namespace SF
 
         //SFLog(System, Info, "Source:{0}", location);
         alSource3f(m_ALSource, AL_POSITION, location[0], location[1], location[2]);
+        ALenum alError = alGetError();
+        if (alError != AL_NO_ERROR)
+        {
+            SFLog(System, Error, "Error alSource3f. error:{0}", int(alError));
+        }
+
         alSource3f(m_ALSource, AL_VELOCITY, velocity[0], velocity[1], velocity[2]);
+        alError = alGetError();
+        if (alError != AL_NO_ERROR)
+        {
+            SFLog(System, Error, "Error alSource3f. error:{0}", int(alError));
+        }
     }
 
-    void AudioSourceOpenAL::QueueBuffer(ALuint alBuffer, AudioDataBlock* dataBlock)
+    void AudioSourceOpenAL::QueueDataBlock(AudioDataBlock* dataBlock)
     {
-        alBufferData(alBuffer, m_ALFormat, dataBlock->Data, (ALsizei)dataBlock->DataSize, (ALsizei)GetSamplesPerSec());
-        alSourceQueueBuffers(m_ALSource, 1, &alBuffer);
+        ALuint bufferId = m_ALBuffers[m_QueuedBufferSerial % NumBuffer];
+        m_QueuedBufferSerial++;
+        m_QueuedALBufferCount++;
+
+        alBufferData(bufferId, m_ALFormat, dataBlock->Data, (ALsizei)dataBlock->DataSize, (ALsizei)GetSamplesPerSec());
+        Result hr = AudioOpenAL::GetALError();
+        if (!hr)
+        {
+            SFLog(System, Error, "Error alBufferData. error:{0}", hr);
+        }
+
+        alSourceQueueBuffers(m_ALSource, 1, &bufferId);
+        hr = AudioOpenAL::GetALError();
+        if (!hr)
+        {
+            SFLog(System, Error, "Error alSourceQueueBuffers. error:{0}", hr);
+        }
     }
 
+    void AudioSourceOpenAL::QueueDummyDataBlock()
+    {
+        uint samplesPerSec = GetSamplesPerSec() / 2;
+        size_t sampleFrameSize = Audio::GetBytesPerSample(GetNumChannels(), GetAudioFormat());
+        size_t dataSizePerSec = samplesPerSec * sampleFrameSize;
+
+        assert(dataSizePerSec <= sizeof(AudioSourceOpenAL_DummyDataBlockBuffer));
+        AudioDataBlock* DummyBlock = reinterpret_cast<AudioDataBlock*>(AudioSourceOpenAL_DummyDataBlockBuffer);
+        DummyBlock->DataSize = dataSizePerSec;
+
+        QueueDataBlock(DummyBlock);
+    }
 
     void AudioSourceOpenAL::TickUpdate()
     {
@@ -243,16 +290,28 @@ namespace SF
         if (m_ALSource == 0 || audioBuffer == nullptr)
             return;
 
+        AudioOpenAL::ClearALError();
+
         ALint processed{}, state{};
 
         alGetSourcei(m_ALSource, AL_SOURCE_STATE, &state);
-        alGetSourcei(m_ALSource, AL_BUFFERS_PROCESSED, &processed);
-        //SFLog(System, Info, "source state:{0}, processed:{1}", state, processed);
-        if (alGetError() != AL_NO_ERROR)
+        ALenum alError = alGetError();
+        if (alError != AL_NO_ERROR)
         {
-            SFLog(System, Error, "Error checking source state:{0}", state);
+            SFLog(System, Error, "Error alGetSourcei AL_SOURCE_STATE. error:{0}", int(alError));
             return;
         }
+
+
+        alGetSourcei(m_ALSource, AL_BUFFERS_PROCESSED, &processed);
+        alError = alGetError();
+        if (alError != AL_NO_ERROR)
+        {
+            SFLog(System, Error, "Error alGetSourcei AL_BUFFERS_PROCESSED. error:{0}", int(alError));
+            return;
+        }
+
+        //SFLog(System, Info, "source state:{0}, processed:{1}", state, processed);
 
         if (GetPlayState() != AudioSource::EPlayState::Play || audioBuffer->GetAvailableBlockCount() == 0)
             return;
@@ -267,12 +326,17 @@ namespace SF
             ApplyLocationInternal();
         }
 
-
+        ALuint processedBufferIds[NumBuffer]{};
         if (processed > 0)
         {
-            ALuint bufferIds[NumBuffer]{};
             assert(processed <= NumBuffer);
-            alSourceUnqueueBuffers(m_ALSource, processed, bufferIds);
+            alSourceUnqueueBuffers(m_ALSource, processed, processedBufferIds);
+            alError = alGetError();
+            if (alError != AL_NO_ERROR)
+            {
+                SFLog(System, Error, "Error alSourceUnqueueBuffers:{0}", int(alError));
+            }
+
             m_QueuedALBufferCount -= processed;
         }
 
@@ -281,17 +345,26 @@ namespace SF
             int buffersToQueue = Math::Min<int>(NumBuffer - m_QueuedALBufferCount, (int)audioBuffer->GetAvailableBlockCount());
             for (int iBuffer = 0; iBuffer < buffersToQueue; iBuffer++)
             {
-                ALuint bufferId = m_ALBuffers[m_QueuedALBufferCount];
-                m_QueuedALBufferCount++;
-
                 SFUniquePtr<AudioDataBlock> dataBlock(audioBuffer->DequeueBlock());
-                QueueBuffer(bufferId, dataBlock.get());
+                QueueDataBlock(dataBlock.get());
             }
         }
+
+        // We have empty audio buffer, could be delay or not having play audio at the moment
+        //if (m_QueuedALBufferCount <= 1)
+        //{
+        //    // Queue empty data so that we don't hear noise
+        //    QueueDummyDataBlock();
+        //}
 
         if (state != AL_PLAYING)
         {
             alSourcePlay(m_ALSource);
+            alError = alGetError();
+            if (alError != AL_NO_ERROR)
+            {
+                SFLog(System, Error, "Error alSourcePlay:{0}", int(alError));
+            }
         }
     }
 }

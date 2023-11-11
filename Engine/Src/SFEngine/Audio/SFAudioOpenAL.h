@@ -25,6 +25,12 @@ namespace SF
         static constexpr int OALDevicePrefixLen = (int)countof(OALDevicePrefix) - 1;
 
         static ALCenum GetAudioFormat(uint numChannel, EAudioFormat format);
+
+        // Clear AL error state
+        static void ClearALError();
+
+        // Get AL error in Reulst code
+        static Result GetALError();
     };
 
 

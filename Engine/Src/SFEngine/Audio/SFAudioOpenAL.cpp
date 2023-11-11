@@ -70,4 +70,29 @@ namespace SF
         return alFormat;
     }
 
+
+    void AudioOpenAL::ClearALError()
+    {
+        ALenum alError = alGetError();
+        while (alError != AL_NO_ERROR)
+        {
+            alError = alGetError();
+        }
+    }
+
+    Result AudioOpenAL::GetALError()
+    {
+        ALenum alError = alGetError();
+        switch (alError)
+        {
+        case AL_NO_ERROR: return ResultCode::SUCCESS;
+        case AL_INVALID_NAME: return ResultCode::INVALID_NAME;
+        case AL_INVALID_ENUM: return ResultCode::INVALID_ENUM;
+        case AL_INVALID_VALUE: return ResultCode::INVALID_ARG;
+        case AL_INVALID_OPERATION: return ResultCode::INVALID_STATE;
+        case AL_OUT_OF_MEMORY: return ResultCode::OUT_OF_MEMORY;
+        default:
+            return ResultCode::UNEXPECTED;
+        }
+    }
 }
