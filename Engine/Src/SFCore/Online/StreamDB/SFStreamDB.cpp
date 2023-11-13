@@ -46,8 +46,6 @@ namespace SF
 	const int64_t StreamDB::OFFSET_INVALID = RdKafka::Topic::OFFSET_INVALID; /**< Invalid offset */
 
 
-
-
 	StreamDB::StreamDB()
 	{
 
@@ -102,8 +100,8 @@ namespace SF
 		RdKafka::ErrorCode errorCode = handle->metadata(false, GetTopicHandle().get(), &metadata, metadataTimeout);
 		if (errorCode != RdKafka::ErrorCode::ERR_NO_ERROR)
 		{
-			SFLog(Net, Error, "Kafka getting metadata has failed: {0}", RdKafka::err2str(errorCode));
-			return ResultCode::FAIL;
+			SFLog(Net, Error, "Kafka getting metadata has failed: {0}:{1}", int(errorCode), RdKafka::err2str(errorCode));
+			return ResultCode::STREAM_NOT_EXIST;
 		}
 
 		if (metadata == nullptr)
@@ -132,7 +130,8 @@ namespace SF
 
 			if ((*it)->err() != RdKafka::ERR_NO_ERROR)
 			{
-				SFLog(Net, Error, "Topic metadata error, topic:{0}, {1}", (*it)->topic(), err2str((*it)->err()));
+                errorCode = (*it)->err();
+				SFLog(Net, Error, "Topic metadata error, topic:{0}, {1}:{2}", (*it)->topic(), int(errorCode), err2str(errorCode));
 				continue;
 			}
 
@@ -304,7 +303,7 @@ namespace SF
 
 		if (err != RdKafka::ERR_NO_ERROR)
 		{
-			SFLog(Net, Error, "Kafka Failed to send data, topic:{0}, error:{1}", GetTopic(), RdKafka::err2str(err));
+			SFLog(Net, Error, "Kafka Failed to send data, topic:{0}, error:{1}{2}", GetTopic(), int(err), RdKafka::err2str(err));
 
 			if (err == RdKafka::ERR__QUEUE_FULL)
 			{
@@ -436,7 +435,9 @@ namespace SF
 
 		SetTopicHandle(topicHandle);
 
-		return UpdateTopicMetadata(m_Consumer.get());
+		hr = UpdateTopicMetadata(m_Consumer.get());
+
+        return hr;
 	}
 
 
@@ -454,7 +455,7 @@ namespace SF
 		RdKafka::ErrorCode resp = m_Consumer->start(GetTopicHandle().get(), GetPartition(), start_offset);
 		if (resp != RdKafka::ERR_NO_ERROR)
 		{
-			SFLog(Net, Debug, "Failed to start consumer: {0}", RdKafka::err2str(resp));
+			SFLog(Net, Debug, "Failed to start consumer: {0}:{1}", int(resp), RdKafka::err2str(resp));
 			return ResultCode::FAIL;
 		}
 
@@ -601,7 +602,7 @@ namespace SF
 		RdKafka::ErrorCode resp = m_Consumer->subscribe(topics);
 		if (resp != RdKafka::ERR_NO_ERROR)
 		{
-			SFLog(Net, Debug, "Failed to Subscribe consumer: {0}", RdKafka::err2str(resp));
+			SFLog(Net, Debug, "Failed to Subscribe consumer: {0}:{1}", int(resp), RdKafka::err2str(resp));
 			return ResultCode::FAIL;
 		}
 
@@ -624,7 +625,7 @@ namespace SF
 		RdKafka::ErrorCode resp = m_Consumer->unsubscribe();
 		if (resp != RdKafka::ERR_NO_ERROR)
 		{
-			SFLog(Net, Debug, "Failed to unsubscribe consumer: {0}", RdKafka::err2str(resp));
+			SFLog(Net, Debug, "Failed to unsubscribe consumer: {0}:{1}", int(resp), RdKafka::err2str(resp));
 			return ResultCode::FAIL;
 		}
 
@@ -690,7 +691,7 @@ namespace SF
 		RdKafka::ErrorCode resp = m_Consumer->commitAsync();
 		if (resp != RdKafka::ERR_NO_ERROR)
 		{
-			SFLog(Net, Debug, "Failed to unsubscribe consumer: {0}", RdKafka::err2str(resp));
+			SFLog(Net, Debug, "Failed to unsubscribe consumer: {0}:{1}", int(resp), RdKafka::err2str(resp));
 			return ResultCode::FAIL;
 		}
 
