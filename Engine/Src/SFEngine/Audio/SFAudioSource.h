@@ -77,6 +77,9 @@ namespace SF
         const AudioBufferPtr& CreateAudioBuffer(size_t bufferSize);
         const AudioBufferPtr& GetAudioBuffer() const { return m_AudioBufferPtr; }
 
+        // qeue zero sound block for waiting moment
+        virtual void QueueZeroSoundBlock(float duration) = 0;
+
     protected:
         void SetPlayState(EPlayState newState) { m_PlayState = newState; }
 
@@ -91,11 +94,22 @@ namespace SF
         // Audio play state
         EPlayState m_PlayState = EPlayState::Init;
 
+        // pitch
         float m_Pitch = 1.f;
-        float m_Volume = 1.0;
+
+        // player volume
+        float m_Volume = 1.0f;
+
+        // Attenuation model
         EAudioSourceAttenuation m_AttenuationModel = EAudioSourceAttenuation::None;
+
+        // reference distance
         float m_ReferenceDistance = 2;
+
+        // Maximum distance
         float m_MaxDistance = 10;
+
+        // roll off factor
         float m_RolloffFactor = 1;
 
         AudioBufferPtr m_AudioBufferPtr;

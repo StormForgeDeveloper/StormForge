@@ -49,11 +49,12 @@ namespace SF
         virtual Result Stop() override;
         virtual Result Pause() override;
 
+        virtual void QueueZeroSoundBlock(float duration) override;
+
 
         // for internal access
 
         void QueueDataBlock(AudioDataBlock* dataBlock);
-        void QueueDummyDataBlock();
 
         void TickUpdate();
 

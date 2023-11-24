@@ -270,15 +270,16 @@ namespace SF
         }
     }
 
-    void AudioSourceOpenAL::QueueDummyDataBlock()
+    void AudioSourceOpenAL::QueueZeroSoundBlock(float duration)
     {
         uint samplesPerSec = GetSamplesPerSec() / 2;
         size_t sampleFrameSize = Audio::GetBytesPerSample(GetNumChannels(), GetAudioFormat());
         size_t dataSizePerSec = samplesPerSec * sampleFrameSize;
+        size_t dataSizeToAdd = size_t(double(duration) * dataSizePerSec);
 
-        assert(dataSizePerSec <= sizeof(AudioSourceOpenAL_DummyDataBlockBuffer));
+        assert((sizeof(AudioDataBlock) + dataSizeToAdd) <= sizeof(AudioSourceOpenAL_DummyDataBlockBuffer));
         AudioDataBlock* DummyBlock = reinterpret_cast<AudioDataBlock*>(AudioSourceOpenAL_DummyDataBlockBuffer);
-        DummyBlock->DataSize = dataSizePerSec;
+        DummyBlock->DataSize = dataSizeToAdd;
 
         QueueDataBlock(DummyBlock);
     }
@@ -349,13 +350,6 @@ namespace SF
                 QueueDataBlock(dataBlock.get());
             }
         }
-
-        // We have empty audio buffer, could be delay or not having play audio at the moment
-        //if (m_QueuedALBufferCount <= 1)
-        //{
-        //    // Queue empty data so that we don't hear noise
-        //    QueueDummyDataBlock();
-        //}
 
         if (state != AL_PLAYING)
         {
