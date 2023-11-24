@@ -41,42 +41,11 @@ namespace Net {
 
         static constexpr int CONMGR_THREAD_INTERVAL         = 1;		// Connection manager thread interval
 
-		static constexpr int CLI_RECV_BUFFER_SIZE			= 1024*16;
-        static constexpr int CLI_SEND_BUFFER_SIZE           = 1024 * 8;
-
-		static constexpr int CLI_NUM_NETCTRL_THREAD			= 2;
-        static constexpr int CLI_NUM_RECV_THREAD            = 1;
-		static constexpr int CLI_CONNECTION_TASK_THREAD		= 1;
-        static constexpr int CLI_NUM_RECV                   = 4;
-		static constexpr int CLI_CONNECTION_MAX				= 10;
-
-        static constexpr int CLI_OVERBUFFER_COUNT           = 128; // 66*;
-
-		static constexpr int CLI_PEERPUNCH_TIME				= 500;
-		static constexpr int CLI_PEERPUNCH_COUNT			= 10;
-        static constexpr int CLI_CONMAP_BUCKET_SIZE         = 16;
-
 		static constexpr int SVR_RECV_BUFFER_SIZE			= 1024*8;
 		static constexpr int SVR_SEND_BUFFER_SIZE			= 1024*8;
-		static constexpr int SVR_INTERNAL_CONNECTION_MAX	= 256;
-		static constexpr int SVR_NUM_NETCONTROL_THREAD		= 4;
-		static constexpr int SVR_NUM_RECV_THREAD			= 4;
-		static constexpr int SVR_CONNECTION_AUTORECOVERY	= 10*1000;
-		static constexpr int SVR_OVERBUFFER_COUNT			= 8196;
-        static constexpr int SVR_MAX_CONNECT_SEND           = 5;
-
-#ifdef _DEBUG
-        static constexpr int SVR_PRIVATE_CONNECTION_POOLCACHE = 1;
-        static constexpr int SVR_PUBLIC_CONNECTION_POOLCACHE = 1;
-#else
-        static constexpr int SVR_PRIVATE_CONNECTION_POOLCACHE = 128;
-        static constexpr int SVR_PUBLIC_CONNECTION_POOLCACHE = 50 * 1024;
-#endif
-        static constexpr int SVR_PUBLIC_CONNECTION_BUCKET_SIZE = 100 * 1024;
-        static constexpr int SVR_PRIVATE_CONNECTION_BUCKET_SIZE = 256;
+		static constexpr int SVR_NUM_RECV_THREAD			= 4;        // Gradually deprecated
 
         static constexpr int TCP_ACCEPT_PENDING_MAX         = 10;
-        static constexpr int TCP_ACCEPT_TRYALLOC_MAX        = 1000;
         static constexpr int TCP_CONNECTION_SENDBUFFER_SIZE = 256 * 1024; // 256
 
         static constexpr int UDP_CLI_RETRY_ONETIME_MAX      = 64;
@@ -102,13 +71,6 @@ namespace Net {
 		constexpr DurationMS MUDP_SEND_RETRY_TIME           = DurationMS(2000);
 		constexpr DurationMS MUDP_SEND_RETRY_TIME_BOOSTED = DurationMS(200);
 		constexpr DurationMS CONNECTION_RETRY_TIME          = DurationMS(500);
-
-		constexpr DurationMS SVR_HEARTBEAT_TIME_UDP         = DurationMS(5 * 1000);
-
-		constexpr DurationMS UDP_HEARTBEAT_TIME             = DurationMS(20 * 1000);
-		constexpr DurationMS TCP_HEARTBEAT_START_TIME       = DurationMS(7 * 1000);
-
-		constexpr DurationMS SVR_HEARTBEAT_TIME_PEER        = DurationMS(30 * 1000);
 
 #if defined(_DEBUG) || defined(DEBUG)
 		constexpr DurationMS CONNECTION_TIMEOUT = DurationMS(2 * 60 * 1000);
