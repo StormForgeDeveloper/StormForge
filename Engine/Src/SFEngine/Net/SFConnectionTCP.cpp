@@ -554,11 +554,16 @@ namespace Net {
 						break;
 				}
 
-				pMsgHdr = (MessageHeader*)m_bufRecvTem.data();
+                pMsgHdr = (MessageHeader*)m_bufRecvTem.data();
 
-				// if Temporary buffer is too small then reallocate
-				if( m_bufRecvTem.size() < pMsgHdr->Length )
-					m_bufRecvTem.resize( pMsgHdr->Length );
+                // if Temporary buffer is too small then reallocate
+                if (m_bufRecvTem.size() < pMsgHdr->Length)
+                {
+                    m_bufRecvTem.resize(pMsgHdr->Length);
+
+                    // resize can move address
+                    pMsgHdr = (MessageHeader*)m_bufRecvTem.data();
+                }
 
 				// append remain body
 				if( pMsgHdr->Length < m_uiRecvTemUsed )
