@@ -91,7 +91,7 @@ namespace Net {
 	// UDP/TCP read overlapped
 	struct IOBUFFER_READ : public IOBUFFER_RWBASE
 	{
-        static constexpr size_t MaxPacketSize = Const::PACKET_BUFFER_SIZE_MAX;
+        static constexpr size_t MaxPacketSize = Const::READ_PACKET_BUFFER_SIZE_MAX;
 
         // Recv connection ID for error check
         uint64_t CID;

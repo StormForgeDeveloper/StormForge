@@ -37,7 +37,7 @@ namespace Net {
 
         static constexpr int INTER_PACKET_SIZE_MAX          = PACKET_SIZE_MAX; // Something can represent UDP frame max
         static constexpr int TCP_PACKET_SIZE_MAX = 50 * 1024;
-        static constexpr int PACKET_BUFFER_SIZE_MAX = std::max(TCP_PACKET_SIZE_MAX, INTER_PACKET_SIZE_MAX);
+        static constexpr int READ_PACKET_BUFFER_SIZE_MAX = 2048;
 
         static constexpr int CONMGR_THREAD_INTERVAL         = 1;		// Connection manager thread interval
 
