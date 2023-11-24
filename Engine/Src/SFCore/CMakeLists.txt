@@ -184,7 +184,6 @@ set(SUBUtil_FILES
 	Util/SFUniqueIDGenerator.h
 	Util/SFUtility.h
 	Util/SFRandom.inl
-	Util/SFTimeUtil.inl
 	Util/SFUtility.inl
 	Util/SFHashCRC32Table.inl
 	Util/SFStrUtil.inl

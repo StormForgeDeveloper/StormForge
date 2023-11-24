@@ -109,26 +109,27 @@ namespace SF {
 			std::function<void()> m_delOnExpired;
 
 		public:
-			inline TimeStampTimer();
-			inline ~TimeStampTimer();
+            inline TimeStampTimer() {}
+            inline ~TimeStampTimer() {}
 
 
 			// Set timer delegate
-			inline  void	SetTimerFunc(std::function<void()> funcOnExpired);
+            inline  void	SetTimerFunc(std::function<void()> funcOnExpired) { m_delOnExpired = funcOnExpired; }
 
 			// set timer
 			Result	SetTimer(DurationMS TimerDuration);
 
 			// clear timer
-			inline void	ClearTimer();
+			inline void	ClearTimer() { m_ulTimeToExpire = InvalidTime; }
 
 			TimeStampMS	GetTimerExpireTime() { return m_ulTimeToExpire; }
 
 			// check about timer is working
-			inline bool	IsTimerWorking() const;
+            inline bool	IsSet() const { return m_ulTimeToExpire != InvalidTime; }
+            inline bool	IsTimerWorking() const { return IsSet(); }
 
 			// Timer check update
-			bool	CheckTimer();
+            bool	CheckTimer();
 		};
 
 
@@ -206,27 +207,35 @@ namespace SF {
 
 
 
-
 		////////////////////////////////////////////////////////////////////////////////
 		//
 		//	Utility
 		//
 
-
-
 		DurationMS TimeMinNonZero(DurationMS timeMs, DurationMS timeMs2);
 		TimeStampMS TimeMinNonZero(TimeStampMS timeMs, TimeStampMS timeMs2);
 
-
-		inline DurationMS TimeSinceRaw(TimeStampMS timeMs) { auto timeCur = Time.GetRawTimeMs(); return (timeCur > timeMs) ? (timeCur - timeMs) : DurationMS(0); }
-		inline DurationMS TimeSince(TimeStampMS timeMs) { auto timeCur = Time.GetTimeMs(); return (timeCur > timeMs) ? (timeCur - timeMs) : DurationMS(0); }
-		inline DurationSec TimeSinceUTC(UTCTimeStampSec timeUTC) { auto timeCur = Time.GetTimeUTCSec(); return (timeCur > timeUTC) ? (timeCur - timeUTC) : DurationSec(0); }
-		inline DurationMS TimeSinceUTC(UTCTimeStampMS timeUTC) { auto timeCur = Time.GetRawUTCMs(); return (timeCur > timeUTC) ? (timeCur - timeUTC) : DurationSec(0); }
-
-
+		inline DurationMS TimeSinceRaw(TimeStampMS timeMs)
+        {
+            TimeStampMS timeCur = Time.GetRawTimeMs();
+            return (timeCur > timeMs) ? (timeCur - timeMs) : DurationMS(0);
+        }
+		inline DurationMS TimeSince(TimeStampMS timeMs)
+        {
+            TimeStampMS timeCur = Time.GetTimeMs();
+            return (timeCur > timeMs) ? (timeCur - timeMs) : DurationMS(0);
+        }
+		inline DurationSec TimeSinceUTC(UTCTimeStampSec timeUTC)
+        {
+            UTCTimeStampSec timeCur = Time.GetTimeUTCSec();
+            return (timeCur > timeUTC) ? (timeCur - timeUTC) : DurationSec(0);
+        }
+		inline DurationMS TimeSinceUTC(UTCTimeStampMS timeUTC)
+        {
+            UTCTimeStampMS timeCur = Time.GetRawUTCMs();
+            return (timeCur > timeUTC) ? (timeCur - timeUTC) : DurationSec(0);
+        }
 
 	} // namespace Util
 } // namespace SF
-
-#include "SFTimeUtil.inl"
 
