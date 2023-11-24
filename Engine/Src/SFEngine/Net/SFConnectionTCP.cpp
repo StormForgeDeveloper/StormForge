@@ -763,7 +763,7 @@ namespace Net {
             return hr;
         }
 
-        if (pMsgHeader->Length > (uint)Const::INTER_PACKET_SIZE_MAX)
+        if (pMsgHeader->Length > (uint)Const::TCP_PACKET_SIZE_MAX)
         {
             netCheck(ResultCode::IO_BADPACKET_TOOBIG);
         }
