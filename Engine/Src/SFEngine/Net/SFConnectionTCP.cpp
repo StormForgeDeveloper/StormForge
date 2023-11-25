@@ -250,7 +250,7 @@ namespace Net {
 		: Connection(heap, &m_NetIOAdapter)
 		, m_NetIOAdapter(*this)
         , m_SendBufferQueue(heap, Const::TCP_CONNECTION_SENDBUFFER_SIZE)
-		, m_uiRecvTemUsed(0)
+		, m_ReceivedDataSize(0)
 		, m_uiSendNetCtrlCount(0)
 		, m_IsClientConnection(false)
 		, m_IsTCPSocketConnectionEstablished(true)
@@ -331,7 +331,7 @@ namespace Net {
 
 
 		m_uiSendNetCtrlCount = 0;
-		m_uiRecvTemUsed = 0;
+		m_ReceivedDataSize = 0;
 
 		m_IsClientConnection = false;
 		m_IsTCPSocketConnectionEstablished = true; // accepted socket treated as if they are already connected
@@ -457,7 +457,7 @@ namespace Net {
 		Result hr = ResultCode::SUCCESS;
 
 		//socket
-		m_uiRecvTemUsed = 0;
+		m_ReceivedDataSize = 0;
 		ResetZeroRecvCount();
 
 		m_NetIOAdapter.CloseSocket();
@@ -499,100 +499,57 @@ namespace Net {
 
 			ResetZeroRecvCount();
 
-			if( m_uiRecvTemUsed == 0 )
+			// copy header portion first
+			if (m_ReceivedDataSize < sizeof(MessageHeader))
 			{
-				pMsgHdr = (MessageHeader*)pBuff;
-				if( uiBuffSize < sizeof(MessageHeader) || uiBuffSize < pMsgHdr->Length ) // too small to make packet
-				{
-					// send all data to recv temporary buffer and return
-					m_uiRecvTemUsed = uiBuffSize;
-					// relocate buffer if too small
-					if( m_bufRecvTem.size() < uiBuffSize )
-						m_bufRecvTem.resize( ((uiBuffSize+m_bufRecvTem.size()) / m_bufRecvTem.size()) * m_bufRecvTem.size() );
+				uint requiredSizeForHeader = (uint)sizeof(MessageHeader) - m_ReceivedDataSize;
 
-					memcpy( m_bufRecvTem.data(), pBuff, uiBuffSize );
+                uint copySize = std::min(uiBuffSize, requiredSizeForHeader);
 
-					uiBuffSize = 0;
-					break;
-				}
+                memcpy(m_bufRecvTem.data() + m_ReceivedDataSize, pBuff, copySize);
+                m_ReceivedDataSize += copySize;
+                uiBuffSize -= copySize;
+                pBuff += copySize;
 
-				if( pMsgHdr->Length < sizeof(MessageHeader) )
-				{
-					// too small invalid packet
-					netCheck( ResultCode::UNEXPECTED );
-				}
-
-				hr = OnRecv(pMsgHdr);
-				netCheck( hr );
-
-				uiBuffSize -= pMsgHdr->Length;
-				pBuff += pMsgHdr->Length;
-			}
-			else
-			{
-				uint uiCopySize = 0;
-
-				// copy header
-				if( m_uiRecvTemUsed < sizeof(MessageHeader) )
-				{
-					uiCopySize = (uint)sizeof(MessageHeader) - m_uiRecvTemUsed;
-					if( uiBuffSize < uiCopySize )
-					{
-						// buffer too small to make header. append data and return
-						memcpy( m_bufRecvTem.data() + m_uiRecvTemUsed, pBuff, uiBuffSize );
-						m_uiRecvTemUsed += uiBuffSize;
-						break;
-					}
-
-					memcpy( m_bufRecvTem.data() + m_uiRecvTemUsed, pBuff, uiCopySize );
-
-					uiBuffSize -= uiCopySize;
-					pBuff += uiCopySize;
-					m_uiRecvTemUsed += uiCopySize;
-
-					if( m_uiRecvTemUsed < sizeof(MessageHeader) )
-						break;
-				}
-
-                pMsgHdr = (MessageHeader*)m_bufRecvTem.data();
-
-                // if Temporary buffer is too small then reallocate
-                if (m_bufRecvTem.size() < pMsgHdr->Length)
-                {
-                    m_bufRecvTem.resize(pMsgHdr->Length);
-
-                    // resize can move address
-                    pMsgHdr = (MessageHeader*)m_bufRecvTem.data();
-                }
-
-				// append remain body
-				if( pMsgHdr->Length < m_uiRecvTemUsed )
-				{
-					netCheck( ResultCode::IO_BADPACKET_SIZE );
-				}
-
-				uiCopySize = pMsgHdr->Length - m_uiRecvTemUsed;
-				if( uiBuffSize < uiCopySize )
-				{
-					// buffer too small to make body. append data and return
-					memcpy( m_bufRecvTem.data() + m_uiRecvTemUsed, pBuff, uiBuffSize );
-
-					m_uiRecvTemUsed += uiBuffSize;
-
-					// remain data will be occur at next parts of packet
-					break;
-				}
-
-				// append remain body
-				memcpy( m_bufRecvTem.data() + m_uiRecvTemUsed, pBuff, uiCopySize );
-				uiBuffSize -= uiCopySize;
-				pBuff += uiCopySize;
-				m_uiRecvTemUsed = 0;
-
-				hr = OnRecv(pMsgHdr);
-				netCheck( hr );
+                // If we don't have enough data for header
+                if (m_ReceivedDataSize < sizeof(MessageHeader))
+                    break;
 			}
 
+            pMsgHdr = reinterpret_cast<MessageHeader*>(m_bufRecvTem.data());
+
+            // If packet length is smaller than header size, the packet is likely corrupted
+            if (pMsgHdr->Length < m_ReceivedDataSize)
+            {
+                netCheck(ResultCode::IO_BADPACKET_SIZE);
+            }
+
+            // if Temporary buffer is too small then reallocate
+            if (m_bufRecvTem.size() < pMsgHdr->Length)
+            {
+                m_bufRecvTem.resize(AlignUp(pMsgHdr->Length, 1024));
+
+                // resize can move address
+                pMsgHdr = reinterpret_cast<MessageHeader*>(m_bufRecvTem.data());
+            }
+
+			// Append remain payload
+			uint requiredDataSizeForTheMessage = pMsgHdr->Length - m_ReceivedDataSize;
+
+            uint copySize = std::min(uiBuffSize, requiredDataSizeForTheMessage);
+            memcpy(m_bufRecvTem.data() + m_ReceivedDataSize, pBuff, copySize);
+            m_ReceivedDataSize += copySize;
+            pBuff += copySize;
+            uiBuffSize -= copySize;
+
+            // Call recv callback if we have full message data
+            if (m_ReceivedDataSize == pMsgHdr->Length)
+            {
+                m_ReceivedDataSize = 0;
+
+                hr = OnRecv(pMsgHdr);
+                netCheck(hr);
+            }
 		}
 
 		return hr;

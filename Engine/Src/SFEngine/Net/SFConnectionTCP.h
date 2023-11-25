@@ -84,7 +84,7 @@ namespace SF {
 
 
 			// Temporary incoming buffer for fragmented incoming packet buffer
-			uint	m_uiRecvTemUsed;
+			uint	m_ReceivedDataSize;
 			std::vector<uint8_t>	m_bufRecvTem;
 
 			// Recv overlapped buffer. recv 
