@@ -36,6 +36,8 @@ namespace SF
     {
     public:
 
+        using super = EngineObject;
+
         static constexpr char KeyName_AccessKey[] = "AccessKey";
 		static constexpr char KeyName_MachineUID[] = "MachineUID";
 
@@ -66,6 +68,7 @@ namespace SF
 
     private:
 
+        virtual Result OnTick(EngineTaskTick tick) override;
         void OnRecv(const Array<uint8_t>& data);
 
 	private:

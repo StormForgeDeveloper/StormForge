@@ -44,6 +44,7 @@ namespace SF
 		Result hr;
 
         //Disconnect();
+        SetTickGroup(EngineTaskTick::SyncSystemTick);
 
         m_Url = url;
         m_AccessKey = accessKey;
@@ -64,6 +65,8 @@ namespace SF
                     Request((const char*)APIName);
                 }
             });
+
+        m_Client.SetReconnectOnDisconnected(true);
 
 		hr = m_Client.Initialize(m_Url, "ws");
 		if (!hr)
@@ -93,6 +96,14 @@ namespace SF
 	void OnlineAPIClient::Disconnect()
 	{
 		m_Client.Terminate();
+    }
+
+    Result OnlineAPIClient::OnTick(EngineTaskTick tick)
+    {
+        m_Client.TickUpdate();
+        super::OnTick(tick);
+
+        return ResultCode::SUCCESS;
     }
 
     void OnlineAPIClient::OnRecv(const Array<uint8_t>& data)
