@@ -221,11 +221,11 @@ namespace SF {
 		if (pTickTask == nullptr)
 			return false;
 
-		auto nextDiff = (INT)(TimeData.Components.NextTickTime - Util::Time.GetTimeMs()).count();
+		int nextDiff = (INT)(GetNextTickTime() - Util::Time.GetTimeMs()).count();
 		if (nextDiff <= 0)
 		{
 			// Do default rescheduling
-			auto nextTick = Util::Time.GetTimeMs() + GetTickInterval();
+			TimeStampMS nextTick = Util::Time.GetTimeMs() + GetTickInterval();
 			SetNextTickTime(nextTick);
 		}
 

@@ -25,9 +25,9 @@
 namespace SF {
 
 
-
-	// Shared object base
-	class TimerScheduler
+    /////////////////////////////////////////////////////////////////////////////////////////
+	// Timer schedule manager. Non-thread safe
+	class TimerManager
 	{
 	private:
 		// Minimum timer tick time when the action doesn't assigned a valid tick time
@@ -36,14 +36,8 @@ namespace SF {
 		// Assert on invalid tick time
 		bool m_AssertOnInvalidTickTime;
 
-		// timer map
+		// timer map. We don't use thread safety, however, DualSortedMap provides separation between read and write tree and safely add/removed during tick update.
 		DualSortedMap<uint64_t, SharedPointerT<TimerAction>> m_TimerMap;
-		ThreadID m_WorkingThreadID;
-
-		// objects needs reschedule
-		CircularPageQueue<SharedPointerT<TimerAction>> m_RescheduleQueue;
-
-		//std::atomic<int> m_IsWriteLocked;
 
 		std::function<bool(const uint64_t&, const SharedPointerT<TimerAction>&)> m_TimerTickActionUpdate;
 		bool TimerTickActionUpdate(const uint64_t& keyVal, const SharedPointerT<TimerAction>& pAction);
@@ -52,35 +46,32 @@ namespace SF {
 		std::function<bool(const uint64_t&, const SharedPointerT<TimerAction>&)> m_TimerTickActionGetNextTick;
 		bool TimerTickActionGetNextTick(const uint64_t& keyVal, const SharedPointerT<TimerAction>& pAction);
 
-		void UpdateRescheduleQueue();
 	public:
 
-		TimerScheduler(IHeap& heap);
+		TimerManager(IHeap& heap = GetSystemHeap(), uint failSafeTimerTickInterval = 30 * 1000);
 
 		void Clear();
 
 		void SetFailSafeTimerTickInterval(DurationMS timerTick)				{ m_FailSafeTimerTickInterval = timerTick; }
 		void SetAssertOnInvalidTickTime(bool assertOn)						{ m_AssertOnInvalidTickTime = assertOn; }
 
-		ThreadID GetWorkingThreadID() const { return m_WorkingThreadID; }
-		void UpdateWorkingThreadID(ThreadID threadID);
-
 		// Kick the task so that it updated asap
-		Result KickTickUpdate(TimerAction* pAction);
+		Result KickTickUpdate(const SharedPointerT<TimerAction>& pAction);
 
-		Result AddTimerAction(ThreadID threadID, TimerAction* pAction);
-		Result RemoveTimerAction(ThreadID threadID, TimerAction* pAction);
-		Result CommitChanges(ThreadID threadID);
+		Result AddTimerAction(const SharedPointerT<TimerAction>& pAction);
+		Result RemoveTimerAction(const SharedPointerT<TimerAction>& pAction);
+		Result CommitChanges();
 
-		Result Reschedul(ThreadID threadID, TimerAction* pAction);
+        // Reschedule action if it has different next tick time signature
+		Result Reschedule(const SharedPointerT<TimerAction>& pAction);
 
 		TimeStampMS GetNextTimeTick();
 
-		CounterType GetScheduledItemCount()								{ return m_TimerMap.GetWriteItemCount() + m_RescheduleQueue.size(); }
+		CounterType GetScheduledItemCount()								{ return m_TimerMap.GetWriteItemCount(); }
 
 		void ValidateTimerKeys();
 
-		void UpdateTick(ThreadID threadID);
+		void UpdateTick();
 	};
 
 

@@ -98,6 +98,7 @@ namespace SF
         {
             if (m_MessageCollections.size() >= m_MaxPacketBufferCount)
             {
+                SFLog(Net, Debug3, "MessageCollectionArray::MaxPacket msgid:{0}, numCollection:{1}", pMessage->msgID, m_MessageCollections.size());
                 return ResultCode::MAX_PACKET;
             }
 

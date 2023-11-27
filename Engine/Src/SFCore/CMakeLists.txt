@@ -377,11 +377,14 @@ set(SFCORE_LIB_FILES
 
 	Task/SFAsyncTaskManager.h
 	Task/SFTask.h
+	Task/SFTimerAction.h
+	Task/SFTimerAction.cpp
 	Task/SFTimerScheduler.h
-	Task/SFTimerSchedulerAction.h
+	Task/SFTimerScheduler.cpp
+	Task/SFTimerManager.h
+	Task/SFTimerManager.cpp
 	Task/SFAsyncTaskManager.cpp
 	Task/SFTask.cpp
-	Task/SFTimerScheduler.cpp
 	Multithread/SFSynchronization.h
 	Multithread/SFSystemSynchronization.h
 	Multithread/SFThread.h

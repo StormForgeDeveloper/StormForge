@@ -164,7 +164,7 @@ namespace SF {
         friend struct MessageCollection;
         static SharedPointerT<MemoryPool> stm_MemoryPool;
 
-        size_t m_MaxPacketBufferCount = 4;
+        size_t m_MaxPacketBufferCount = 10;
 
 		DynamicArray<MessageCollection*> m_MessageCollections;
 	};

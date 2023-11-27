@@ -45,32 +45,36 @@ namespace SF {
 
 	private:
 
-		TimeKey m_InQueueKey;
-		//bool    m_Queued;
+        // Registered timer key
+        TimeKey m_ScheduledKey;
+
+        // requested timer key
+        TimeKey m_TimerKey;
+        //bool    m_Queued;
 		friend class TimerScheduler;
+        friend class TimerManager;
 
 		DurationMS m_TickInterval;
 
-	protected:
-
-		const TimeKey& GetInQueueKey() { return m_InQueueKey; }
-
 	public:
-		TimeKey TimeData;
 
 		TimerAction();
 		virtual ~TimerAction();
 
-		DurationMS GetTickInterval() { return m_TickInterval; }
+        const TimeKey& GetInQueueKey() { return m_ScheduledKey; }
+        const TimeKey& GetTimeKey() { return m_TimerKey; }
+
+        DurationMS GetTickInterval() const { return m_TickInterval; }
 		void SetTickInterval(DurationMS interval) { m_TickInterval = interval; }
 
-		bool IsScheduled()									{ return m_InQueueKey.Components.NextTickTime != TimeStampMS::max(); }
-		void ClearTime()									{ TimeData.Components.NextTickTime = TimeStampMS::max(); }
+		bool IsScheduled() const { return m_ScheduledKey.Components.NextTickTime != TimeStampMS::max(); }
+		void ClearTime()									{ m_TimerKey.Components.NextTickTime = TimeStampMS::max(); }
 
-		TimeStampMS GetNexTickTime()						{ return TimeData.Components.NextTickTime; }
+        void SetKeyObjectId(uint objectId) { m_TimerKey.Components.ObjectId = objectId; }
+		TimeStampMS GetNextTickTime() const { return m_TimerKey.Components.NextTickTime; }
 		void SetNextTickTime(TimeStampMS nextTickTime);
 
-		TimeStampMS GetScheduledTime()						{ Assert(m_InQueueKey.Components.NextTickTime != TimeStampMS::min());  return m_InQueueKey.Components.NextTickTime; }
+		TimeStampMS GetScheduledTime() const { Assert(m_ScheduledKey.Components.NextTickTime != TimeStampMS::min());  return m_ScheduledKey.Components.NextTickTime; }
 
 		virtual bool OnTimerTick() { return false; }
 
