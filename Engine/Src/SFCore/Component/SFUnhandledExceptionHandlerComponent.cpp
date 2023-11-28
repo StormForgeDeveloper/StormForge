@@ -70,7 +70,7 @@ namespace SF {
 		SYSTEMTIME kSysTime;
 		GetLocalTime(&kSysTime);
 
-		sprintf_s(m_DumpFilePathBuffer, "..\\log\\[%04d_%02d_%02d]%2d_%02d_%02d_%s_[%s]%s",
+		sprintf_s(m_DumpFilePathBuffer, "[%04d_%02d_%02d]%2d_%02d_%02d_%s_[%s]%s",
 			kSysTime.wYear, kSysTime.wMonth, kSysTime.wDay,
 			kSysTime.wHour, kSysTime.wMinute, kSysTime.wSecond, strMode, Util::GetServiceName(), szDumpFileExt);
 
