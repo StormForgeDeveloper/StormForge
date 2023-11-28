@@ -27,7 +27,8 @@ namespace SF {
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 
-		static char m_DumpFilePathBuffer[1024];
+        static bool m_bEnableFullDump;
+        static char m_DumpFilePathBuffer[1024];
 
 		static long __stdcall CrashHandler(EXCEPTION_POINTERS* ipExPtrs);
 		static void WriteCrashDump(EXCEPTION_POINTERS* ipExPtrs, MINIDUMP_TYPE dumpType, const char* strMode);
@@ -36,7 +37,7 @@ namespace SF {
 
 	public:
 
-		UnhandledExceptionHandlerComponent();
+		UnhandledExceptionHandlerComponent(bool bEnableFullDump = false);
 
 		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 

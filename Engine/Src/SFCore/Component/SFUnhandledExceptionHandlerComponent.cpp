@@ -31,9 +31,10 @@ namespace SF {
 	constexpr StringCrc64 UnhandledExceptionHandlerComponent::TypeName;
 
 
-	UnhandledExceptionHandlerComponent::UnhandledExceptionHandlerComponent()
+	UnhandledExceptionHandlerComponent::UnhandledExceptionHandlerComponent(bool bEnableFullDump)
 		: LibraryComponent(TypeName)
 	{
+        m_bEnableFullDump = bEnableFullDump;
 	}
 
 
@@ -63,7 +64,8 @@ namespace SF {
 
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
-	char UnhandledExceptionHandlerComponent::m_DumpFilePathBuffer[1024];
+    bool UnhandledExceptionHandlerComponent::m_bEnableFullDump = false;
+    char UnhandledExceptionHandlerComponent::m_DumpFilePathBuffer[1024];
 	void UnhandledExceptionHandlerComponent::WriteCrashDump(EXCEPTION_POINTERS* ipExPtrs, MINIDUMP_TYPE dumpType, const char* strMode)
 	{
 		const char szDumpFileExt[] = ".dmp";
@@ -105,15 +107,8 @@ namespace SF {
 
 	long __stdcall UnhandledExceptionHandlerComponent::CrashHandler( EXCEPTION_POINTERS* ipExPtrs )
 	{
-		uint uiRetCode = EXCEPTION_EXECUTE_HANDLER;
+		uint uiRetCode = EXCEPTION_CONTINUE_SEARCH; // enable whatever system handler
 		MINIDUMP_TYPE dumpType = MiniDumpWithFullMemory;
-
-
-	#ifdef _DEBUG
-		uiRetCode = EXCEPTION_CONTINUE_SEARCH;
-	#endif
-
-
 
 	#ifdef _DEBUG
 		const char* strMode = "Debug";
@@ -122,14 +117,13 @@ namespace SF {
 	#endif
 
 		WriteCrashDump(ipExPtrs, MiniDumpNormal, strMode);
-		if (dumpType != MiniDumpNormal)
+		if (m_bEnableFullDump && dumpType != MiniDumpNormal)
 		{
 #ifdef _DEBUG
 			strMode = "DebugFull";
 #else
 			strMode = "ReleaseFull";
 #endif
-
 			WriteCrashDump(ipExPtrs, dumpType, strMode);
 		}
 
@@ -139,10 +133,5 @@ namespace SF {
 	}
 #endif
 
-
-
-
-
 } // namespace SF
-
 
