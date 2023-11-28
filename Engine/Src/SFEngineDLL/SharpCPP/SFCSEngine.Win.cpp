@@ -107,6 +107,8 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 	logOutputMask.Debug5 = 0;
 #endif
 	initParam.EnableMemoryLeakDetection = false;
+    // Unity need to enable manually
+    initParam.EnableCrashDump = false;
 
 	char instanceNameBuffer[128];
 	if (g_InstanceMutex == nullptr)

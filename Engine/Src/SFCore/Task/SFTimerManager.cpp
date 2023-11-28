@@ -88,7 +88,7 @@ namespace SF {
 				if (m_FailSafeTimerTickInterval > DurationMS()) // if failsafe tick is enabled
 				{
 					assert(!m_AssertOnInvalidTickTime || bIsNeedToKeep);
-					SFLog(System, Error, "TimerManager: Same Timer value:{1} of {0} correct to fail safe timer value:{2}", pAction->GetDebugString(), pAction->m_TimerKey.Components.NextTickTime, m_FailSafeTimerTickInterval);
+					SFLog(System, Warning, "TimerManager: Same Timer value:{1} of {0} correct to fail safe timer value:{2}", pAction->GetDebugString(), pAction->m_TimerKey.Components.NextTickTime, m_FailSafeTimerTickInterval);
 					pAction->m_TimerKey.Components.NextTickTime = Util::Time.GetTimeMs() + m_FailSafeTimerTickInterval;
 				}
                 else

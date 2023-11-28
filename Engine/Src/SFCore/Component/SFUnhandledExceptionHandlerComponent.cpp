@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2019 Kyungkun Ko
 // 
@@ -54,7 +54,10 @@ namespace SF {
 	// Terminate component
 	void UnhandledExceptionHandlerComponent::DeinitializeComponent()
 	{
-		LibraryComponent::DeinitializeComponent();
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+        ::SetUnhandledExceptionFilter(nullptr);
+#endif
+        LibraryComponent::DeinitializeComponent();
 	}
 
 

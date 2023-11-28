@@ -52,9 +52,16 @@ namespace SF
             m_EngineNativeHandle = IntPtr.Zero;
         }
 
-        public void InitializeTelemetry(string serverAddress, UInt32 clientId, string authKey)
+        // Initialize and enable telemetry module
+        static public void InitializeTelemetry(string serverAddress, UInt32 clientId, string authKey)
         {
             NativeInitializeTelemetry(serverAddress, clientId, authKey);
+        }
+
+        // Initialize and enable native unhandled exception handler
+        static public void InitializeNativeUnhandledExceptionHandler()
+        {
+            NativeInitializeNativeUnhandledExceptionHandler();
         }
 
         public void onWindowFocusChanged(bool hasFocus)
@@ -104,6 +111,9 @@ namespace SF
 
         [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeInitializeTelemetry", CharSet = CharSet.Auto)]
         static extern void NativeInitializeTelemetry([MarshalAs(UnmanagedType.LPStr)] string serverAddress, UInt32 gameId, [MarshalAs(UnmanagedType.LPStr)] string authKey);
+
+        [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeInitializeNativeUnhandledExceptionHandler", CharSet = CharSet.Auto)]
+        static extern void NativeInitializeNativeUnhandledExceptionHandler();
 
         [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeFocused", CharSet = CharSet.Auto)]
         static extern void NativeFocused(bool focused);
