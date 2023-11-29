@@ -34,8 +34,10 @@ namespace SF {
 	UnhandledExceptionHandlerComponent::UnhandledExceptionHandlerComponent(bool bEnableFullDump)
 		: LibraryComponent(TypeName)
 	{
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
         m_bEnableFullDump = bEnableFullDump;
-	}
+#endif
+    }
 
 
 	// Initialize component
