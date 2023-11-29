@@ -177,8 +177,9 @@ namespace SF {
 		constexpr LogOutputType Debug8 = LogOutputType::Debug8;
 
 		// Predefined Log channels
-		extern LogChannel System;
-		extern LogChannel Net;
+		extern LogChannel Default;
+        extern LogChannel System;
+        extern LogChannel Net;
 		extern LogChannel IO;
 		extern LogChannel ThirdParty;
 		extern LogChannel Engine;

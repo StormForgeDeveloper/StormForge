@@ -22,6 +22,7 @@ namespace SF
 {
 	namespace Log
 	{
+        LogChannel Default("Default", LogOutputType::Info);
 		LogChannel System("System", LogOutputType::Info);
 		LogChannel Net("Net", LogOutputType::Info);
 		LogChannel IO("IO", LogOutputType::Info);
