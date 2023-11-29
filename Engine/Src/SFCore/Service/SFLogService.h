@@ -39,6 +39,7 @@ namespace SF {
 		Custom8,
 		Custom9,
 		Custom10,
+        CustomMax = Custom10,
 
 		Debug,
 		Debug1,
@@ -177,7 +178,7 @@ namespace SF {
 		constexpr LogOutputType Debug8 = LogOutputType::Debug8;
 
 		// Predefined Log channels
-		extern LogChannel Default;
+		extern LogChannel Global;
         extern LogChannel System;
         extern LogChannel Net;
 		extern LogChannel IO;
@@ -207,20 +208,18 @@ namespace SF {
 	{
 	protected:
 
-		LogOutputMask m_GlobalOutputMask;
-
 	public:
 
 		LogService(const LogOutputMask& logMask = LogOutputMask())
 		{
-			m_GlobalOutputMask = logMask;
+            SF::Log::Global.ChannelMask = logMask;
 		}
 		virtual ~LogService() {}
 
 		// Check input mask
 		bool ShouldPrint(const LogOutputMask& mainChannelMask, const LogOutputMask& channelMask)
 		{
-			auto filterMask = mainChannelMask.Composited & m_GlobalOutputMask.Composited;
+			uint32_t filterMask = mainChannelMask.Composited & SF::Log::Global.ChannelMask.Composited;
 			return filterMask & channelMask.Composited;
 		}
 
@@ -236,7 +235,7 @@ namespace SF {
 			return channelMask;
 		}
 
-		void SetGlobalOutputMask(const LogOutputMask& outputMask) { m_GlobalOutputMask = outputMask; }
+		void SetGlobalOutputMask(const LogOutputMask& outputMask) { SF::Log::Global.ChannelMask = outputMask; }
 
 		// output handler
 		virtual void RegisterOutputHandler(Log::LogOutputHandler* output) {}
@@ -252,4 +251,3 @@ namespace SF {
 	};
 
 } // namespace SF
-

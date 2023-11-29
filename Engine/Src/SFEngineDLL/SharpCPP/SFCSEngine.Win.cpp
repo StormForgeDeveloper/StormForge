@@ -48,14 +48,13 @@
 static std::unique_ptr<SF::Mutex> g_InstanceMutex;
 static int g_InstanceId = 0;
 
-SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processName, const char* logServerAddress, uint32_t debuggerLogMask)
+SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processName, const char* logServerAddress, const char* logFilePrefix, uint32_t logMask, uint32_t debuggerLogMask)
 {
-	SF::LogOutputMask logOutputMask;
+	SF::LogOutputMask logOutputMask(logMask);
 
 	SF::EngineInitParam initParam;
-#if 1 // def _DEBUG // Use debug for all for the moment
-	initParam.EnableMemoryLeakDetection = false;
-	SF::Log::Net.ChannelMask.Info = 1;
+
+    SF::Log::Net.ChannelMask.Info = 1;
 	SF::Log::Net.ChannelMask.Warning = 1;
 	SF::Log::Net.ChannelMask.Error = 1;
 	SF::Log::Net.ChannelMask.Factal = 1;
@@ -64,48 +63,7 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 	SF::Log::Net.ChannelMask.Debug2 = 0;
 	SF::Log::Net.ChannelMask.Debug3 = 0;
 	SF::Log::Net.ChannelMask.Composited |= debuggerLogMask;
-	logOutputMask.Custom1 = 1;
-	logOutputMask.Custom2 = 1;
-	logOutputMask.Custom3 = 1;
-	logOutputMask.Custom4 = 1;
-	logOutputMask.Custom5 = 1;
-	logOutputMask.Custom6 = 1;
-	logOutputMask.Custom7 = 1;
-	logOutputMask.Custom8 = 1;
-	logOutputMask.Custom9 = 1;
-	logOutputMask.Custom10 = 1;
-	logOutputMask.Debug = 1;
-	logOutputMask.Debug1 = 1;
-	logOutputMask.Debug2 = 1;
-	logOutputMask.Debug3 = 1;
-	logOutputMask.Debug4 = 1;
-	logOutputMask.Debug5 = 1;
-	logOutputMask.Debug6 = 1;
-	logOutputMask.Debug7 = 1;
-	logOutputMask.Debug8 = 1;
-#else
 
-	SF::Log::Net.ChannelMask.Info = 1;
-	SF::Log::Net.ChannelMask.Warning = 1;
-	SF::Log::Net.ChannelMask.Error = 1;
-	SF::Log::Net.ChannelMask.Factal = 1;
-	SF::Log::Net.ChannelMask.Debug1 = 0;
-	logOutputMask.Custom1 = 0;
-	logOutputMask.Custom2 = 0;
-	logOutputMask.Custom3 = 0;
-	logOutputMask.Custom4 = 0;
-	logOutputMask.Custom5 = 0;
-	logOutputMask.Custom6 = 0;
-	logOutputMask.Custom7 = 0;
-	logOutputMask.Custom8 = 0;
-	logOutputMask.Custom9 = 0;
-	logOutputMask.Custom10 = 0;
-	logOutputMask.Debug1 = 0;
-	logOutputMask.Debug2 = 0;
-	logOutputMask.Debug3 = 0;
-	logOutputMask.Debug4 = 0;
-	logOutputMask.Debug5 = 0;
-#endif
 	initParam.EnableMemoryLeakDetection = false;
     // Unity need to enable manually
     initParam.EnableCrashDump = false;
@@ -140,7 +98,16 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 	initParam.GlobalLogOutputMask = logOutputMask;
 	initParam.LogOutputConsole = SF::LogOutputMask(0);
 	initParam.LogOutputDebugger = SF::LogOutputMask(debuggerLogMask);
-	initParam.LogOutputFile = SF::LogOutputMask(0);
+
+    if (SF::StrUtil::IsNullOrEmpty(logFilePrefix))
+    {
+        initParam.LogOutputFile = SF::LogOutputMask(0);
+    }
+    else
+    {
+        initParam.LogOutputFile = SF::LogOutputMask();
+        initParam.LogFilePrefix = logFilePrefix;
+    }
 
 	if (!SF::StrUtil::IsNullOrEmpty(logServerAddress))
 	{

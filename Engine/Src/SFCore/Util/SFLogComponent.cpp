@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2013 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -27,8 +27,6 @@ namespace SF {
 
 
 	constexpr StringCrc64 LogOutputConsoleComponent::TypeName;
-
-
 
 
 	LogOutputConsoleComponent::LogOutputConsoleComponent(const LogOutputMask& logMask)
@@ -235,10 +233,4 @@ namespace SF {
 		Service::LogModule->UnregisterOutputHandler(&m_Handler);
 	}
 
-
-
-
-
 }	// namespace SF
-
-

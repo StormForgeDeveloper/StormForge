@@ -22,15 +22,15 @@ namespace SF
 {
 	namespace Log
 	{
-        LogChannel Default("Default", LogOutputType::Info);
-		LogChannel System("System", LogOutputType::Info);
-		LogChannel Net("Net", LogOutputType::Info);
-		LogChannel IO("IO", LogOutputType::Info);
-		LogChannel ThirdParty("ThirdParty", LogOutputType::Info);
-		LogChannel Engine("Engine", LogOutputType::Info);
-		LogChannel Protocol("Protocol", LogOutputType::Info);
-		LogChannel Editor("Editor", LogOutputType::Info);
-		LogChannel Game("Game", LogOutputType::Info);
+        LogChannel Global("Global", LogOutputType::CustomMax);
+		LogChannel System("System", LogOutputType::CustomMax);
+		LogChannel Net("Net", LogOutputType::CustomMax);
+		LogChannel IO("IO", LogOutputType::CustomMax);
+		LogChannel ThirdParty("ThirdParty", LogOutputType::CustomMax);
+		LogChannel Engine("Engine", LogOutputType::CustomMax);
+		LogChannel Protocol("Protocol", LogOutputType::CustomMax);
+		LogChannel Editor("Editor", LogOutputType::CustomMax);
+		LogChannel Game("Game", LogOutputType::CustomMax);
 	}
 
 	static const char* g_LogOutputTypeNames[] = {
