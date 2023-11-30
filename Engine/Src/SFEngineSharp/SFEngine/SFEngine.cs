@@ -89,6 +89,10 @@ namespace SF
             NativeWindowResized();
         }
 
+        static public void ForceCrash()
+        {
+            NativeForceCrash();
+        }
 
 
         #region Native interfaces 
@@ -126,6 +130,9 @@ namespace SF
 
         [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeWindowResized", CharSet = CharSet.Auto)]
         static extern void NativeWindowResized();
+
+        [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeForceCrash", CharSet = CharSet.Auto)]
+        static extern void NativeForceCrash();
 
         #endregion
 

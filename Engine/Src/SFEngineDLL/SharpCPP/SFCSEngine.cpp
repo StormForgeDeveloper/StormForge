@@ -45,3 +45,9 @@ SFDLL_EXPORT void SFEngine_NativeInitializeNativeUnhandledExceptionHandler()
     pEngine->AddComponent<UnhandledExceptionHandlerComponent>();
 }
 
+SFDLL_EXPORT void SFEngine_NativeForceCrash()
+{
+    int* pInt = nullptr;
+    *pInt = 0;
+}
+
