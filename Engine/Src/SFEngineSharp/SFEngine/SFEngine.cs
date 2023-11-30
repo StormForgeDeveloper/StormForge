@@ -59,9 +59,9 @@ namespace SF
         }
 
         // Initialize and enable native unhandled exception handler
-        static public void InitializeNativeUnhandledExceptionHandler()
+        static public void InitializeNativeUnhandledExceptionHandler(string crashShellCommand)
         {
-            NativeInitializeNativeUnhandledExceptionHandler();
+            NativeInitializeNativeUnhandledExceptionHandler(crashShellCommand);
         }
 
         public void onWindowFocusChanged(bool hasFocus)
@@ -117,7 +117,7 @@ namespace SF
         static extern void NativeInitializeTelemetry([MarshalAs(UnmanagedType.LPStr)] string serverAddress, UInt32 gameId, [MarshalAs(UnmanagedType.LPStr)] string authKey);
 
         [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeInitializeNativeUnhandledExceptionHandler", CharSet = CharSet.Auto)]
-        static extern void NativeInitializeNativeUnhandledExceptionHandler();
+        static extern void NativeInitializeNativeUnhandledExceptionHandler([MarshalAs(UnmanagedType.LPStr)] string crashShellCommand);
 
         [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeFocused", CharSet = CharSet.Auto)]
         static extern void NativeFocused(bool focused);

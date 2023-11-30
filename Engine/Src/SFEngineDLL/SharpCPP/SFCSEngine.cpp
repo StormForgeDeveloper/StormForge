@@ -36,13 +36,14 @@ SFDLL_EXPORT void SFEngine_NativeInitializeTelemetry(const char* serverAddress, 
     //pEngine->AddComponent<TelemetryComponent>(serverAddress, gameId, authKey);
 }
 
-SFDLL_EXPORT void SFEngine_NativeInitializeNativeUnhandledExceptionHandler()
+SFDLL_EXPORT void SFEngine_NativeInitializeNativeUnhandledExceptionHandler(const char* crashShellCommand)
 {
     auto* pEngine = SF::Engine::GetInstance();
     if (pEngine == nullptr)
         return;
 
-    pEngine->AddComponent<UnhandledExceptionHandlerComponent>();
+    UnhandledExceptionHandlerComponent* pComponent = pEngine->AddComponent<UnhandledExceptionHandlerComponent>();
+    pComponent->SetCrashShellCommand(crashShellCommand);
 }
 
 SFDLL_EXPORT void SFEngine_NativeForceCrash()

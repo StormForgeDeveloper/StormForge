@@ -39,6 +39,10 @@ namespace SF {
 #endif
     }
 
+    void UnhandledExceptionHandlerComponent::SetCrashShellCommand(const char* command)
+    {
+        StrUtil::StringCopy(m_CrashShellCommand, command);
+    }
 
 	// Initialize component
 	Result UnhandledExceptionHandlerComponent::InitializeComponent()
@@ -63,7 +67,7 @@ namespace SF {
         LibraryComponent::DeinitializeComponent();
 	}
 
-
+    char UnhandledExceptionHandlerComponent::m_CrashShellCommand[8 * 1024]{};
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
     bool UnhandledExceptionHandlerComponent::m_bEnableFullDump = false;
@@ -103,6 +107,12 @@ namespace SF {
 				ipExPtrs ? &eInfo : NULL,
 				NULL,
 				NULL);
+
+            if (!StrUtil::IsNullOrEmpty(m_CrashShellCommand))
+            {
+                StrUtil::StringCat(m_CrashShellCommand, " -dumpfile=");
+                StrUtil::StringCat(m_CrashShellCommand, m_DumpFilePathBuffer);
+            }
 		}
 		CloseHandle(hFile);
 	}
@@ -130,6 +140,11 @@ namespace SF {
 		}
 
 		Service::LogModule->Flush();
+
+        if (!StrUtil::IsNullOrEmpty(m_CrashShellCommand))
+        {
+            std::system(m_CrashShellCommand);
+        }
 
 		return uiRetCode;
 	}

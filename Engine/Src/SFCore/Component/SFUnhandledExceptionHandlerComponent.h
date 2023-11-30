@@ -23,6 +23,10 @@ namespace SF {
 
 		static constexpr StringCrc64 TypeName = "UnhandledExceptionHandlerComponent";
 
+        // Crash external command up to 8K buffer
+        // shell command will be executed on crash with dump file name(-dumpfile=<filePath>) will be attached
+        static char m_CrashShellCommand[8 * 1024];
+
 	private:
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
@@ -41,7 +45,8 @@ namespace SF {
 
 		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
-
+        // shell command will be executed on crash with dump file name
+        void SetCrashShellCommand(const char* command);
 
 		// Initialize component
 		virtual Result InitializeComponent() override;
