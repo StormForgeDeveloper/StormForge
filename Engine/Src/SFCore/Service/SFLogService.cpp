@@ -17,7 +17,6 @@
 #include "Service/SFLogService.h"
 
 
-
 namespace SF
 {
 	namespace Log
@@ -64,6 +63,11 @@ namespace SF
 
 		"Max",
 	};
+
+    void LogService::SetLogFileName(const char* logFileName)
+    {
+        StrUtil::StringCopy(m_LogFileName, logFileName);
+    }
 
 	const char* ToString(LogOutputType logOutputType)
 	{

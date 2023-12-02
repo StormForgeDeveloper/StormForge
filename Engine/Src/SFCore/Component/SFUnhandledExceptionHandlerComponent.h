@@ -27,7 +27,9 @@ namespace SF {
         // shell command will be executed on crash with dump file name(-dumpfile=<filePath>) will be attached
         static char m_CrashShellCommand[8 * 1024];
 
-	private:
+        // Crash dump file prefix
+        static char m_CrashDumpFilePrefix[1024];
+    private:
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 
@@ -47,6 +49,7 @@ namespace SF {
 
         // shell command will be executed on crash with dump file name
         void SetCrashShellCommand(const char* command);
+        void SetCrashDumpFilePrefix(const char* crashDumpPrefix);
 
 		// Initialize component
 		virtual Result InitializeComponent() override;

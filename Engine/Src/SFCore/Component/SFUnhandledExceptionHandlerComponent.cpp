@@ -41,7 +41,18 @@ namespace SF {
 
     void UnhandledExceptionHandlerComponent::SetCrashShellCommand(const char* command)
     {
-        StrUtil::StringCopy(m_CrashShellCommand, command);
+        if (command)
+        {
+            StrUtil::StringCopy(m_CrashShellCommand, command);
+        }
+    }
+
+    void UnhandledExceptionHandlerComponent::SetCrashDumpFilePrefix(const char* crashDumpPrefix)
+    {
+        if (crashDumpPrefix)
+        {
+            StrUtil::StringCopy(m_CrashDumpFilePrefix, crashDumpPrefix);
+        }
     }
 
 	// Initialize component
@@ -68,6 +79,7 @@ namespace SF {
 	}
 
     char UnhandledExceptionHandlerComponent::m_CrashShellCommand[8 * 1024]{};
+    char UnhandledExceptionHandlerComponent::m_CrashDumpFilePrefix[1024]{};
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
     bool UnhandledExceptionHandlerComponent::m_bEnableFullDump = false;
@@ -78,7 +90,8 @@ namespace SF {
 		SYSTEMTIME kSysTime;
 		GetLocalTime(&kSysTime);
 
-		sprintf_s(m_DumpFilePathBuffer, "[%04d_%02d_%02d]%2d_%02d_%02d_%s_[%s]%s",
+		sprintf_s(m_DumpFilePathBuffer, "%s[%04d_%02d_%02d]%2d_%02d_%02d_%s_[%s]%s",
+            m_CrashDumpFilePrefix,
 			kSysTime.wYear, kSysTime.wMonth, kSysTime.wDay,
 			kSysTime.wHour, kSysTime.wMinute, kSysTime.wSecond, strMode, Util::GetServiceName(), szDumpFileExt);
 
@@ -140,6 +153,13 @@ namespace SF {
 		}
 
 		Service::LogModule->Flush();
+
+        const char* logFileName = Service::LogModule->GetLogFileName();
+        if (!StrUtil::IsNullOrEmpty(m_CrashShellCommand) && !StrUtil::IsNullOrEmpty(logFileName))
+        {
+            StrUtil::StringCat(m_CrashShellCommand, " -logfile=");
+            StrUtil::StringCat(m_CrashShellCommand, logFileName);
+        }
 
         if (!StrUtil::IsNullOrEmpty(m_CrashShellCommand))
         {

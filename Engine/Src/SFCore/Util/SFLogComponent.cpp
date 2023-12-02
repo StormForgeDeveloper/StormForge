@@ -174,15 +174,13 @@ namespace SF {
 
 	void LogOutputFileComponent::MyOutputHandler::OpenLogFile()
 	{
-		String filePath;
-
 		auto logFileCreated = std::chrono::system_clock::now();
 		auto createdTimet = std::chrono::system_clock::to_time_t(logFileCreated);
 		auto timeStruct = std::localtime(&createdTimet);
 		m_LogFileCreatedHour = timeStruct->tm_hour;
 
-		filePath.Format("{0}_{1}{2}{3}_{4}.log", m_FilePrefix.ToString(), timeStruct->tm_year + 1900, timeStruct->tm_mon + 1, timeStruct->tm_mday, timeStruct->tm_hour);
-		m_File.Open(filePath, File::OpenMode::Create);
+        m_LogFilePath.Format("{0}_{1}{2}{3}_{4}.log", m_FilePrefix.ToString(), timeStruct->tm_year + 1900, timeStruct->tm_mon + 1, timeStruct->tm_mday, timeStruct->tm_hour);
+		m_File.Open(m_LogFilePath, File::OpenMode::Create);
 		if (m_File.IsOpened())
 		{
 			size_t szWritten;
@@ -224,6 +222,9 @@ namespace SF {
 	Result LogOutputFileComponent::InitializeComponent()
 	{
 		Service::LogModule->RegisterOutputHandler(&m_Handler);
+
+        Service::LogModule->SetLogFileName(m_Handler.GetLogFilePath());
+
 		return ResultCode::SUCCESS;
 	}
 

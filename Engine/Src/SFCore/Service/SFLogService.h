@@ -208,6 +208,8 @@ namespace SF {
 	{
 	protected:
 
+        char m_LogFileName[1024]{};
+
 	public:
 
 		LogService(const LogOutputMask& logMask = LogOutputMask())
@@ -215,6 +217,9 @@ namespace SF {
             SF::Log::Global.ChannelMask = logMask;
 		}
 		virtual ~LogService() {}
+
+        const char* GetLogFileName() const { return m_LogFileName; }
+        void SetLogFileName(const char* logFileName);
 
 		// Check input mask
 		bool ShouldPrint(const LogOutputMask& mainChannelMask, const LogOutputMask& channelMask)

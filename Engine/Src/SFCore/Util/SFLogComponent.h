@@ -107,7 +107,8 @@ namespace SF {
 		private:
 
 			PathString m_FilePrefix;
-			bool m_OpenNewFileHourly = false;
+            String m_LogFilePath;
+            bool m_OpenNewFileHourly = false;
 			File  m_File;
 			int m_LogFileCreatedHour = 0;
 
@@ -116,6 +117,8 @@ namespace SF {
 			MyOutputHandler(const LogOutputMask& logMask, const String& filePrefix, bool bOpenNewHourly);
 
 			void OpenLogFile();
+
+            const String& GetLogFilePath() const { return m_LogFilePath; }
 
 			virtual void PrintOutput(const Log::LogItem* logMessage) override;
 
@@ -127,7 +130,7 @@ namespace SF {
 
 	public:
 
-		LogOutputFileComponent(const LogOutputMask& logMask, const String& filePath, bool bOpenNewHourly);
+		LogOutputFileComponent(const LogOutputMask& logMask, const String& filePrefix, bool bOpenNewHourly);
 		~LogOutputFileComponent();
 
 		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
