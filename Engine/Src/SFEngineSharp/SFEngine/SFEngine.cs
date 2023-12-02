@@ -66,6 +66,21 @@ namespace SF
             NativeInitializeNativeUnhandledExceptionHandler(crashDumpfilePrefix, crashShellCommand);
         }
 
+        static public string GetLogFileName()
+        {
+            IntPtr fileNamePtr = NativeGetLogFileName();
+            if (fileNamePtr != IntPtr.Zero)
+            {
+                string? fileName = Marshal.PtrToStringAnsi(fileNamePtr);
+                if (fileName != null)
+                {
+                    return fileName;
+                }
+            }
+
+            return string.Empty;
+        }
+
         public void onWindowFocusChanged(bool hasFocus)
         {
             NativeFocused(hasFocus);
@@ -120,6 +135,9 @@ namespace SF
 
         [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeInitializeNativeUnhandledExceptionHandler", CharSet = CharSet.Auto)]
         static extern void NativeInitializeNativeUnhandledExceptionHandler([MarshalAs(UnmanagedType.LPStr)] string crashDumpfilePrefix, [MarshalAs(UnmanagedType.LPStr)] string crashShellCommand);
+
+        [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeGetLogFileName", CharSet = CharSet.Auto)]
+        static extern IntPtr NativeGetLogFileName();
 
         [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeFocused", CharSet = CharSet.Auto)]
         static extern void NativeFocused(bool focused);
