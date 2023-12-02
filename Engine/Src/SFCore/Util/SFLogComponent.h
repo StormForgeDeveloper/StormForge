@@ -118,6 +118,7 @@ namespace SF {
 
 			void OpenLogFile();
 
+            const PathString& GetLogFilePrefix() const { return m_FilePrefix; }
             const String& GetLogFilePath() const { return m_LogFilePath; }
 
 			virtual void PrintOutput(const Log::LogItem* logMessage) override;

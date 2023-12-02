@@ -161,6 +161,7 @@ set(SUBUtil_FILES
 	Util/SFHasher64.h
 	Util/SFPathString.h
 	Util/SFString.h
+    Util/SFStringConverter.h
 	Util/SFStrFormat.h
 	Util/SFStrParserUtil.h
 	Util/SFStringSerialization.h

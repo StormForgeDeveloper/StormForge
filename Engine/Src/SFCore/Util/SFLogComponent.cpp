@@ -19,9 +19,12 @@
 #include "IO/SFFileUtil.h"
 #include "Util/SFStringCrc64.h"
 #include "Util/SFStringFormat.h"
+#include "Util/SFPath.h"
 #include "Service/SFService.h"
 #include "Variable/SFVariableBoxing.h"
+#include "Util/SFStringConverter.h"
 
+#include <filesystem>
 
 namespace SF {
 
@@ -223,7 +226,43 @@ namespace SF {
 	{
 		Service::LogModule->RegisterOutputHandler(&m_Handler);
 
+        // make copy of log file name so that other module can access it
         Service::LogModule->SetLogFileName(m_Handler.GetLogFilePath());
+
+        // Clear old log files
+        //std::filesystem::
+        String logDir = Util::Path::GetFileDirectory(m_Handler.GetLogFilePath());
+        if (!logDir.EndsWith(Util::Path::DirectorySeparatorChars))
+        {
+            logDir.Append(Util::Path::DirectorySeparatorChar);
+        }
+
+
+        //constexpr DurationMS fileLifeTime(2 * 24 * 60 * 60 * 1000);
+        constexpr DurationMS fileLifeTime(5 * 1000);
+        //auto systemNow = std::chrono::system_clock::now();
+        auto systemNow = std::filesystem::file_time_type::clock::now();
+        //auto fileTimeNow = std::chrono::time_point_cast<std::filesystem::file_time_type>(systemNow);
+        std::filesystem::path logDirPath(logDir.c_str());
+        for (const auto& itFile : std::filesystem::directory_iterator(logDirPath, std::filesystem::directory_options::skip_permission_denied))
+        {
+            if (itFile.is_directory() || !itFile.is_regular_file())
+                continue;
+
+            std::filesystem::path filePath = itFile.path();
+            std::filesystem::path::string_type ext = filePath.extension().c_str();
+
+            String fileExt = StringConverter<char, std::filesystem::path::value_type>(ext.c_str());
+            if (!fileExt.EndsWith("log", true) && !fileExt.EndsWith("dmp", true))
+                continue;
+
+            std::filesystem::file_time_type fileTime = itFile.last_write_time();
+            DurationMS timeSince = std::chrono::duration_cast<DurationMS>(systemNow - fileTime);
+            if (timeSince > fileLifeTime)
+            {
+                std::filesystem::remove(filePath);
+            }
+        }
 
 		return ResultCode::SUCCESS;
 	}
