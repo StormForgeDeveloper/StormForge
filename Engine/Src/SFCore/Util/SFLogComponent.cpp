@@ -250,7 +250,9 @@ namespace SF {
             std::filesystem::path filePath = itFile.path();
             std::filesystem::path::string_type ext = filePath.extension().c_str();
 
-            String fileExt = StringConverter<char, std::filesystem::path::value_type>(ext.c_str());
+            StringConverter<char, std::filesystem::path::value_type> converter;
+
+            String fileExt = converter.Convert(ext.c_str());
             if (!fileExt.EndsWith("log", true) && !fileExt.EndsWith("dmp", true))
                 continue;
 

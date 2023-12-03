@@ -34,10 +34,7 @@ namespace SF {
         }
 
         // return by default if it doesn't have specialized conversion logic
-        const TString<ToCharType>& Convert(const TString<FromCharType>& srcString)
-        {
-            return srcString;
-        }
+        const TString<ToCharType>& Convert(const TString<FromCharType>& srcString);
 
         operator const TString<ToCharType>& ()
         {
@@ -46,19 +43,31 @@ namespace SF {
     };
 
     template<>
-    const TString<char>& StringConverter<char, wchar_t>::Convert(const TString<wchar_t>& srcString)
+    SF_FORCEINLINE const TString<char>& StringConverter<char, char>::Convert(const TString<char>& srcString)
+    {
+        return srcString;
+    }
+
+    template<>
+    SF_FORCEINLINE const TString<wchar_t>& StringConverter<wchar_t, wchar_t>::Convert(const TString<wchar_t>& srcString)
+    {
+        return srcString;
+    }
+
+    template<>
+    SF_FORCEINLINE const TString<char>& StringConverter<char, wchar_t>::Convert(const TString<wchar_t>& srcString)
     {
         size_t maxStringSize = (srcString.length() + 1) * 5;
         ConvertedString.Reserve(maxStringSize);
 
         size_t convertedSize = StrUtil::WCSToUTF8(srcString, ConvertedString.data(), (int)maxStringSize);
-        ConvertedString.Resize(convertedSize); 
+        ConvertedString.Resize(convertedSize);
 
         return ConvertedString;
     }
 
     template<>
-    const TString<wchar_t>& StringConverter<wchar_t, char>::Convert(const TString<char>& srcString)
+    SF_FORCEINLINE const TString<wchar_t>& StringConverter<wchar_t, char>::Convert(const TString<char>& srcString)
     {
         size_t maxStringSize = (srcString.length() + 1);
         ConvertedString.Reserve(maxStringSize);
