@@ -43,7 +43,16 @@ namespace SF {
     {
         if (command)
         {
-            StrUtil::StringCopy(m_CrashShellCommand, command);
+            m_CrashShellCommand[0] = {};
+
+            // make the command bg
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+            if (!StrUtil::StringCompairIgnoreCase("start ", 6, command, 6))
+            {
+                StrUtil::StringCopy(m_CrashShellCommand, "start ");
+            }
+#endif
+            StrUtil::StringCat(m_CrashShellCommand, command);
         }
     }
 
@@ -163,6 +172,11 @@ namespace SF {
 
         if (!StrUtil::IsNullOrEmpty(m_CrashShellCommand))
         {
+#if SF_PLATFORM != SF_PLATFORM_WINDOWS
+            // Linux bg command
+            StrUtil::StringCat(m_CrashShellCommand, " &");
+#endif
+
             std::system(m_CrashShellCommand);
         }
 
