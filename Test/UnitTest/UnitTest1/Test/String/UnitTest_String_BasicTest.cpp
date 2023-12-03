@@ -20,6 +20,8 @@
 #include "Util/SFToString.h"
 #include "Util/SFStringFormat.h"
 #include "UnitTest_String.h"
+#include "Util/SFString.h"
+#include "Util/SFStringConverter.h"
 
 
 using ::testing::EmptyTestEventListener;
@@ -103,3 +105,87 @@ TEST_F(StringTest, Format)
 	EXPECT_EQ(C.IsEqual("Test1/B"), true);
 }
 
+TEST_F(StringTest, SFStringBasic)
+{
+    String A("Test1");
+    String B("B");
+    String C = A + B;
+    WString WA(L"Test1");
+    WString WB(L"B");
+    WString WC = WA + WB;
+
+    EXPECT_EQ(A.IsEqual("Test1"), true);
+    EXPECT_EQ(A.IsEqual("tEst1"), false);
+    EXPECT_EQ(A.IsEqualIgnoreCase("tEst1"), true);
+    EXPECT_EQ(5, A.GetLength());
+    EXPECT_EQ(B.IsEqual("B"), true);
+    EXPECT_EQ(B.IsEqual("b"), false);
+    EXPECT_EQ(B.IsEqualIgnoreCase("b"), true);
+    EXPECT_EQ(1, B.GetLength());
+    EXPECT_EQ(C.IsEqual("Test1B"), true);
+    EXPECT_EQ(C.IsEqual("TEsT1b"), false);
+    EXPECT_EQ(C.IsEqualIgnoreCase("TEsT1b"), true);
+    EXPECT_EQ(6, C.GetLength());
+    EXPECT_GE(6+1, C.GetBufferLength());
+
+    EXPECT_EQ(WA.IsEqual(L"Test1"), true);
+    EXPECT_EQ(WA.IsEqual(L"tEst1"), false);
+    EXPECT_EQ(WA.IsEqualIgnoreCase(L"tEst1"), true);
+    EXPECT_EQ(5, WA.GetLength());
+    EXPECT_EQ(WB.IsEqual(L"B"), true);
+    EXPECT_EQ(WB.IsEqual(L"b"), false);
+    EXPECT_EQ(WB.IsEqualIgnoreCase(L"b"), true);
+    EXPECT_EQ(1, WB.GetLength());
+    EXPECT_EQ(WC.IsEqual(L"Test1B"), true);
+    EXPECT_EQ(WC.IsEqual(L"TeSt1b"), false);
+    EXPECT_EQ(WC.IsEqualIgnoreCase(L"TEsT1b"), true);
+    EXPECT_EQ(6, WC.GetLength());
+    EXPECT_EQ((6 + 1) * 2, WC.GetBufferLength());
+}
+
+TEST_F(StringTest, SFStringConverter)
+{
+    String A("Test1");
+    String B("B");
+    String C = A + B;
+    WString WA;
+    WString WB;
+    WString WC;
+
+    WA = StringConverter<wchar_t, char>(A);
+    WB = StringConverter<wchar_t, char>(B);
+    WC = StringConverter<wchar_t, char>(C);
+
+    EXPECT_EQ(WA.IsEqual(L"Test1"), true);
+    EXPECT_EQ(WA.IsEqual(L"tEst1"), false);
+    EXPECT_EQ(WA.IsEqualIgnoreCase(L"tEst1"), true);
+    EXPECT_EQ(5, WA.GetLength());
+    EXPECT_EQ(WB.IsEqual(L"B"), true);
+    EXPECT_EQ(WB.IsEqual(L"b"), false);
+    EXPECT_EQ(WB.IsEqualIgnoreCase(L"b"), true);
+    EXPECT_EQ(1, WB.GetLength());
+    EXPECT_EQ(WC.IsEqual(L"Test1B"), true);
+    EXPECT_EQ(WC.IsEqual(L"TeSt1b"), false);
+    EXPECT_EQ(WC.IsEqualIgnoreCase(L"TEsT1b"), true);
+    EXPECT_EQ(6, WC.GetLength());
+    EXPECT_EQ((6 + 1) * 2, WC.GetBufferLength());
+
+
+    A = StringConverter<char, wchar_t>(WA);
+    B = StringConverter<char, wchar_t>(WB);
+    C = StringConverter<char, wchar_t>(WC);
+
+    EXPECT_EQ(A.IsEqual("Test1"), true);
+    EXPECT_EQ(A.IsEqual("tEst1"), false);
+    EXPECT_EQ(A.IsEqualIgnoreCase("tEst1"), true);
+    EXPECT_EQ(5, A.GetLength());
+    EXPECT_EQ(B.IsEqual("B"), true);
+    EXPECT_EQ(B.IsEqual("b"), false);
+    EXPECT_EQ(B.IsEqualIgnoreCase("b"), true);
+    EXPECT_EQ(1, B.GetLength());
+    EXPECT_EQ(C.IsEqual("Test1B"), true);
+    EXPECT_EQ(C.IsEqual("TEsT1b"), false);
+    EXPECT_EQ(C.IsEqualIgnoreCase("TEsT1b"), true);
+    EXPECT_EQ(6, C.GetLength());
+    EXPECT_GE(6 + 1, C.GetBufferLength());
+}

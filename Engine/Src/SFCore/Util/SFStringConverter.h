@@ -52,7 +52,7 @@ namespace SF {
         ConvertedString.Reserve(maxStringSize);
 
         size_t convertedSize = StrUtil::WCSToUTF8(srcString, ConvertedString.data(), (int)maxStringSize);
-        ConvertedString.Resize(convertedSize);
+        ConvertedString.Resize(convertedSize); 
 
         return ConvertedString;
     }

@@ -182,7 +182,7 @@ namespace SF {
 		auto timeStruct = std::localtime(&createdTimet);
 		m_LogFileCreatedHour = timeStruct->tm_hour;
 
-        m_LogFilePath.Format("{0}_{1}{2}{3}_{4}.log", m_FilePrefix.ToString(), timeStruct->tm_year + 1900, timeStruct->tm_mon + 1, timeStruct->tm_mday, timeStruct->tm_hour);
+        m_LogFilePath.Format("{0}_{1}{2}{3}_{4}:{5}.log", m_FilePrefix.ToString(), timeStruct->tm_year + 1900, timeStruct->tm_mon + 1, timeStruct->tm_mday, timeStruct->tm_hour, timeStruct->tm_min);
 		m_File.Open(m_LogFilePath, File::OpenMode::Create);
 		if (m_File.IsOpened())
 		{
@@ -238,11 +238,9 @@ namespace SF {
         }
 
 
-        //constexpr DurationMS fileLifeTime(2 * 24 * 60 * 60 * 1000);
-        constexpr DurationMS fileLifeTime(5 * 1000);
-        //auto systemNow = std::chrono::system_clock::now();
+        constexpr DurationMS fileLifeTime(2 * 24 * 60 * 60 * 1000);
+        //constexpr DurationMS fileLifeTime(5 * 1000);
         auto systemNow = std::filesystem::file_time_type::clock::now();
-        //auto fileTimeNow = std::chrono::time_point_cast<std::filesystem::file_time_type>(systemNow);
         std::filesystem::path logDirPath(logDir.c_str());
         for (const auto& itFile : std::filesystem::directory_iterator(logDirPath, std::filesystem::directory_options::skip_permission_denied))
         {
@@ -260,7 +258,8 @@ namespace SF {
             DurationMS timeSince = std::chrono::duration_cast<DurationMS>(systemNow - fileTime);
             if (timeSince > fileLifeTime)
             {
-                std::filesystem::remove(filePath);
+                std::error_code err;
+                std::filesystem::remove(filePath, err);
             }
         }
 

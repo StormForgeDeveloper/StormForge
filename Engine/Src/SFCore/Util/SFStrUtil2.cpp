@@ -553,12 +553,8 @@ namespace StrUtil {
 			{
 				// On linux, source buffer can be changed.
 				StaticArray<char, 2048> srcTemp(GetSystemHeap());
-				srcTemp.reserve(srcSize);
-				if(!StrUtil::StringCopy(srcTemp.data(), (int)srcSize, src))
-                {
-                    hr = ResultCode::FAIL;
-                    goto Proc_End;
-                }
+				srcTemp.resize(srcSize);
+                memcpy(srcTemp.data(), src, (int)srcSize);
                 char* strCopied = srcTemp.data();
 				convertedSize = libiconv(context, &strCopied, &srcSize, &dest, &destSize);
 			}
@@ -758,8 +754,10 @@ namespace StrUtil {
 		if (strWCS == nullptr || strUTF8 == nullptr)
 			return ResultCode::INVALID_ARG;
 
-		Result hr = ModuleIconv.Convert("UTF-16LE", (char*)strWCS, iBuffLen * sizeof(wchar_t), "UTF-8", (const char*)strUTF8, strlen(strUTF8)+1, convertedSize);
+		Result hr = ModuleIconv.Convert("UTF-16LE", (char*)strWCS, iBuffLen * sizeof(wchar_t), "UTF-8", (const char*)strUTF8, strlen(strUTF8), convertedSize);
 		if (!(hr)) return hr;
+
+        convertedSize /= sizeof(wchar_t);
 
 		if (iBuffLen >= 1)
 		{
@@ -783,6 +781,8 @@ namespace StrUtil {
 
 		Result hr = ModuleIconv.Convert("UTF-16LE", (char*)stringBuffer, countof(stringBuffer) * sizeof(wchar_t), "UTF-8", (const char*)strUTF8.c_str(), strUTF8.length(), convertedSize);
 		if (!(hr)) return hr;
+
+        convertedSize /= sizeof(wchar_t);
 
 		auto lastPos = std::min(convertedSize + 1, countof(stringBuffer)) - 1;
 		stringBuffer[lastPos] = '\0';

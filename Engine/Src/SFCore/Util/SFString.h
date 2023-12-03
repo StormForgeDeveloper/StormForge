@@ -161,7 +161,10 @@ namespace SF {
 		}
 
 		SF_FORCEINLINE size_t GetStringLength() const { return m_StringLength; }
-		SF_FORCEINLINE size_t GetStringBufferLength() const { return m_StringLength > 0 ? (m_StringLength + 1) * sizeof(CharType) : 0; }
+		SF_FORCEINLINE size_t GetStringBufferLength() const
+        {
+            return m_StringLength > 0 ? (m_StringLength + 1) * sizeof(CharType) : 0;
+        }
 
 		SF_FORCEINLINE CharType* GetBufferPointer() const { return m_StringValue; }
 		SF_FORCEINLINE size_t GetAllocatedSize() const { return m_AllocatedSize; }
@@ -290,8 +293,14 @@ namespace SF {
 		SF_FORCEINLINE void SetHeap(IHeap& heap) { m_pHeap = &heap; }
 
 		// get string length
-		SF_FORCEINLINE size_t GetBufferLength() const { return m_Buffer != nullptr ? m_Buffer->GetStringBufferLength() : 0; }
-		SF_FORCEINLINE size_t GetLength() const { auto bufferLen = GetBufferLength();  return bufferLen > 0 ? bufferLen - 1 : 0; }
+		SF_FORCEINLINE size_t GetBufferLength() const
+        {
+            return m_Buffer != nullptr ? m_Buffer->GetStringBufferLength() : 0;
+        }
+        SF_FORCEINLINE size_t GetLength() const
+        {
+            return m_Buffer != nullptr ? m_Buffer->GetStringLength() : 0;
+        }
 		SF_FORCEINLINE size_t size() const { return GetLength(); }
 		SF_FORCEINLINE size_t length() const { return GetLength(); }
 
@@ -918,23 +927,23 @@ namespace SF {
 
 		bool IsEqual(const StringType& op) const
 		{
-			return StrUtil::StringCompair((const CharType*)*this, (int)GetBufferLength(), (const CharType*)op, (int)op.GetBufferLength());
+			return StrUtil::StringCompair((const CharType*)*this, (int)GetLength(), (const CharType*)op, (int)op.GetLength());
 		}
 
 		bool IsEqual(const CharType* op) const
 		{
 			auto opLen = op != nullptr ? StrUtil::StringLen(op) : 0;
-			return StrUtil::StringCompair((const CharType*)*this, (int)GetBufferLength(), (const CharType*)op, (int)opLen);
+			return StrUtil::StringCompair((const CharType*)*this, (int)GetLength(), (const CharType*)op, (int)opLen);
 		}
 
 		bool IsEqualIgnoreCase(const StringType& op) const
 		{
-			return StrUtil::StringCompairIgnoreCase((const CharType*)*this, (int)GetBufferLength(), (const CharType*)op, (int)op.GetBufferLength());
+			return StrUtil::StringCompairIgnoreCase((const CharType*)*this, (int)GetLength(), (const CharType*)op, (int)op.GetLength());
 		}
 		bool IsEqualIgnoreCase(const CharType* op) const
 		{
 			auto opLen = op != nullptr ? StrUtil::StringLen(op) : 0;
-			return StrUtil::StringCompairIgnoreCase((const CharType*)*this, (int)GetBufferLength(), (const CharType*)op, (int)opLen);
+			return StrUtil::StringCompairIgnoreCase((const CharType*)*this, (int)GetLength(), (const CharType*)op, (int)opLen);
 		}
 
 		// Removes all leading and trailing white-space characters from the current TString object.

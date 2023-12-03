@@ -90,7 +90,7 @@ namespace SF {
 		SYSTEMTIME kSysTime;
 		GetLocalTime(&kSysTime);
 
-		sprintf_s(m_DumpFilePathBuffer, "%s[%04d_%02d_%02d]%2d_%02d_%02d_%s_[%s]%s",
+		sprintf_s(m_DumpFilePathBuffer, "%s_%04d-%02d-%02d_%2d-%02d-%02d_%s_%s%s",
             m_CrashDumpFilePrefix,
 			kSysTime.wYear, kSysTime.wMonth, kSysTime.wDay,
 			kSysTime.wHour, kSysTime.wMinute, kSysTime.wSecond, strMode, Util::GetServiceName(), szDumpFileExt);
