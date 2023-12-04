@@ -182,7 +182,7 @@ namespace SF {
 		auto timeStruct = std::localtime(&createdTimet);
 		m_LogFileCreatedHour = timeStruct->tm_hour;
 
-        m_LogFilePath.Format("{0}_{1}{2}{3}_{4}:{5}.log", m_FilePrefix.ToString(), timeStruct->tm_year + 1900, timeStruct->tm_mon + 1, timeStruct->tm_mday, timeStruct->tm_hour, timeStruct->tm_min);
+        m_LogFilePath.Format("{0}_{1}{2}{3}_{4:02}{5:02}{6:02}.log", m_FilePrefix.ToString(), timeStruct->tm_year + 1900, timeStruct->tm_mon + 1, timeStruct->tm_mday, timeStruct->tm_hour, timeStruct->tm_min, timeStruct->tm_sec);
 		m_File.Open(m_LogFilePath, File::OpenMode::Create);
 		if (m_File.IsOpened())
 		{

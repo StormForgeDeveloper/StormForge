@@ -99,7 +99,7 @@ namespace SF {
 		SYSTEMTIME kSysTime;
 		GetLocalTime(&kSysTime);
 
-		sprintf_s(m_DumpFilePathBuffer, "%s_%04d-%02d-%02d_%2d-%02d-%02d_%s_%s%s",
+		sprintf_s(m_DumpFilePathBuffer, "%s_%04d%02d%02d_%2d%02d%02d_%s_%s%s",
             m_CrashDumpFilePrefix,
 			kSysTime.wYear, kSysTime.wMonth, kSysTime.wDay,
 			kSysTime.wHour, kSysTime.wMinute, kSysTime.wSecond, strMode, Util::GetServiceName(), szDumpFileExt);
@@ -144,19 +144,13 @@ namespace SF {
 		uint uiRetCode = EXCEPTION_CONTINUE_SEARCH; // enable whatever system handler
 		MINIDUMP_TYPE dumpType = MiniDumpWithFullMemory;
 
-	#ifdef _DEBUG
-		const char* strMode = "Debug";
-	#else
-		const char* strMode = "Release";
-	#endif
-
-		WriteCrashDump(ipExPtrs, MiniDumpNormal, strMode);
+		WriteCrashDump(ipExPtrs, MiniDumpNormal, "mini");
 		if (m_bEnableFullDump && dumpType != MiniDumpNormal)
 		{
 #ifdef _DEBUG
-			strMode = "DebugFull";
+            const char* strMode = "DebugFull";
 #else
-			strMode = "ReleaseFull";
+            const char* strMode = "ReleaseFull";
 #endif
 			WriteCrashDump(ipExPtrs, dumpType, strMode);
 		}
