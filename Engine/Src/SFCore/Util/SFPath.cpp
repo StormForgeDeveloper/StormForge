@@ -115,6 +115,22 @@ namespace Util {
 		}
 	}
 
+    String Path::WithoutExt(const char* strFilePath)
+    {
+        if (strFilePath == nullptr)
+            return String(GetSystemHeap());
+
+        auto pExt = GetExt(strFilePath);
+        if (pExt != nullptr)
+        {
+            return String(GetSystemHeap(), strFilePath, 0, (int)((intptr_t)pExt - (intptr_t)strFilePath));
+        }
+        else
+        {
+            return String(GetSystemHeap(), strFilePath);
+        }
+    }
+
 	// Get file directory
 	String Path::GetFileDirectory(const String& strFilePath)
 	{

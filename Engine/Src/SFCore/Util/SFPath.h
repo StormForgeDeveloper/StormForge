@@ -52,6 +52,8 @@ namespace Util {
 		static String GetFileNameWithoutExt(const String& strFilePath);
 		static String GetFileNameWithoutExt(IHeap& heap, const char* strFilePath);
 
+        static String WithoutExt(const char* strFilePath);
+
 		// Get file directory
 		static String GetFileDirectory(const String& strFilePath);
 

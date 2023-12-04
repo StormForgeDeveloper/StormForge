@@ -16,8 +16,8 @@
 #include "Util/SFTimeUtil.h"
 #include "Util/SFLog.h"
 #include "Util/SFUtility.h"
+#include "Util/SFPath.h"
 #include "Component/SFUnhandledExceptionHandlerComponent.h"
-
 
 
 namespace SF {
@@ -41,10 +41,10 @@ namespace SF {
 
     void UnhandledExceptionHandlerComponent::SetCrashShellCommand(const char* command)
     {
-        if (command)
-        {
-            m_CrashShellCommand[0] = {};
+        m_CrashShellCommand[0] = {};
 
+        if (!StrUtil::IsNullOrEmpty(command))
+        {
             // make the command bg
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
             if (!StrUtil::StringCompairIgnoreCase("start ", 6, command, 6))
@@ -58,9 +58,13 @@ namespace SF {
 
     void UnhandledExceptionHandlerComponent::SetCrashDumpFilePrefix(const char* crashDumpPrefix)
     {
-        if (crashDumpPrefix)
+        if (!StrUtil:: IsNullOrEmpty(crashDumpPrefix))
         {
             StrUtil::StringCopy(m_CrashDumpFilePrefix, crashDumpPrefix);
+        }
+        else
+        {
+            StrUtil::StringCopy(m_CrashDumpFilePrefix, Util::Path::WithoutExt(Service::LogModule->GetLogFileName()));
         }
     }
 
@@ -162,10 +166,8 @@ namespace SF {
         {
             StrUtil::StringCat(m_CrashShellCommand, " -logfile=");
             StrUtil::StringCat(m_CrashShellCommand, logFileName);
-        }
 
-        if (!StrUtil::IsNullOrEmpty(m_CrashShellCommand))
-        {
+
 #if SF_PLATFORM != SF_PLATFORM_WINDOWS
             // Linux bg command
             StrUtil::StringCat(m_CrashShellCommand, " &");
