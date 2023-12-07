@@ -66,6 +66,11 @@ namespace SF
             NativeInitializeNativeUnhandledExceptionHandler(crashDumpfilePrefix, crashShellCommand);
         }
 
+        static public void SetCrashShellCommand(string crashShellCommand)
+        {
+            NativeSetCrashShellCommand(crashShellCommand);
+        }
+
         static public string GetLogFileName()
         {
             IntPtr fileNamePtr = NativeGetLogFileName();
@@ -135,6 +140,9 @@ namespace SF
 
         [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeInitializeNativeUnhandledExceptionHandler", CharSet = CharSet.Auto)]
         static extern void NativeInitializeNativeUnhandledExceptionHandler([MarshalAs(UnmanagedType.LPStr)] string crashDumpfilePrefix, [MarshalAs(UnmanagedType.LPStr)] string crashShellCommand);
+
+        [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeSetCrashShellCommand", CharSet = CharSet.Auto)]
+        static extern void NativeSetCrashShellCommand([MarshalAs(UnmanagedType.LPStr)] string crashShellCommand);
 
         [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeGetLogFileName", CharSet = CharSet.Auto)]
         static extern IntPtr NativeGetLogFileName();

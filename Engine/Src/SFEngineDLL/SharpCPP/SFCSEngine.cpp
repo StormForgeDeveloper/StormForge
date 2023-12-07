@@ -47,6 +47,19 @@ SFDLL_EXPORT void SFEngine_NativeInitializeNativeUnhandledExceptionHandler(const
     pComponent->SetCrashShellCommand(crashShellCommand);
 }
 
+SFDLL_EXPORT void SFEngine_NativeSetCrashShellCommand(const char* crashShellCommand)
+{
+    auto* pEngine = SF::Engine::GetInstance();
+    if (pEngine == nullptr)
+        return;
+
+    UnhandledExceptionHandlerComponent* pComponent = pEngine->GetComponent<UnhandledExceptionHandlerComponent>();
+    if (pComponent)
+    {
+        pComponent->SetCrashShellCommand(crashShellCommand);
+    }
+}
+
 SFDLL_EXPORT const char* SFEngine_NativeGetLogFileName()
 {
     return Service::LogModule->GetLogFileName();;
@@ -57,4 +70,3 @@ SFDLL_EXPORT void SFEngine_NativeForceCrash()
     int* pInt = nullptr;
     *pInt = 0;
 }
-

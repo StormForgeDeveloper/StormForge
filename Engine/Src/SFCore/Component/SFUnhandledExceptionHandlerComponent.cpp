@@ -19,6 +19,7 @@
 #include "Util/SFPath.h"
 #include "Component/SFUnhandledExceptionHandlerComponent.h"
 
+#include <filesystem>
 
 namespace SF {
 
@@ -52,6 +53,8 @@ namespace SF {
                 StrUtil::StringCopy(m_CrashShellCommand, "start ");
             }
 #endif
+
+            // Append module path
             StrUtil::StringCat(m_CrashShellCommand, command);
         }
     }
@@ -172,6 +175,9 @@ namespace SF {
             // Linux bg command
             StrUtil::StringCat(m_CrashShellCommand, " &");
 #endif
+
+            //SFLog(System, Info, "Running external command:{0}", m_CrashShellCommand);
+            //Service::LogModule->Flush();
 
             std::system(m_CrashShellCommand);
         }
