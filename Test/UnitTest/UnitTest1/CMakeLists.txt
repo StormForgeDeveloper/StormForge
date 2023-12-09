@@ -76,6 +76,8 @@ set(SF_UNIT_TEST_FILES
 	Test/Movement/UnitTest_Movement.cpp
 	Test/Audio/UnitTest_Audio.h
 	Test/Audio/UnitTest_Audio.cpp
+	Test/System/UnitTest_System.h
+	Test/System/UnitTest_System.cpp
   )
 
 

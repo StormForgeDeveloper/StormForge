@@ -363,6 +363,8 @@ set(SFCORE_LIB_FILES
 	Platform/Android/SFifaddrs.cpp
 	Platform/SFNativeWindow.cpp
 	Platform/SFStackWalker.cpp
+	Platform/SFCPUInfo.h
+	Platform/SFCPUInfo.cpp
 	SFAssert.h
 	SFNetAddress.h
 	SFNetAddress.cpp

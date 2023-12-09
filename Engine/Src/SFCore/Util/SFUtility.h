@@ -108,9 +108,7 @@ namespace Util {
 	//Result PeekKey( int &inputKey, NativeHandle hConsole = INVALID_NATIVE_HANDLE_VALUE);
     Result LoadJsonFile(const char* jsonPath, Json::Value& outValue);
 
-	
 #include "SFUtility.inl"
-
 
 } // namespace Util
 } // namespace SF

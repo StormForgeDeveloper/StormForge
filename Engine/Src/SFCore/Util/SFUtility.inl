@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2013 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -105,25 +105,3 @@ Result SafeDelete( ValueType* &pObj )
 
 	return ResultCode::SUCCESS;
 }
-
-
-
-
-//template<class ValueType>
-//constexpr ValueType Min( ValueType val1, ValueType val2 )
-//{
-//	return ( ((val1) < (val2)) ? (val1) : (val2) );
-//}
-//
-//template<class ValueType>
-//constexpr ValueType Max( ValueType val1, ValueType val2 )
-//{
-//	return ( ((val1) > (val2)) ? (val1) : (val2) );
-//}
-
-//template<class ValType>
-//constexpr ValType Abs( ValType value )
-//{
-//	return value > 0 ? value : -value;
-//}
-//

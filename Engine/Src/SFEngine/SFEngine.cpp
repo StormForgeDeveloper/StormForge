@@ -42,8 +42,9 @@
 #include "Component/SFLibraryComponent3rdParties.h"
 #include "Audio/SFAudioEngineComponentOpenAL.h"
 
-namespace SF {
 
+namespace SF
+{
 
 	Engine* Engine::stm_Instance = nullptr;
 
@@ -155,7 +156,7 @@ namespace SF {
 			itFunc(this);
 		}
 
-		auto result = super::InitializeComponents();
+		Result result = super::InitializeComponents();
 
 		LibraryComponentInitializer::CallInitializers(ComponentInitializeMode::AfterRegisterComponent);
 
@@ -251,8 +252,4 @@ namespace SF {
 		return true;
 	}
 
-
-
-
-}; // namespace SF
-
+} // namespace SF
