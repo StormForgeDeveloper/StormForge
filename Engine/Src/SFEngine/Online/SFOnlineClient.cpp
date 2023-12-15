@@ -892,7 +892,7 @@ namespace SF
             m_Password = password;
         }
 
-        SFLog(Net, Info, "OnlineClient::StartConnection, {0}, {1}, steamUserId:{2}, {3}, userId:{4}, password:{5}", gameId, loginAddress, steamUserId, steamUserName, m_UserId, password);
+        SFLog(Net, Info, "OnlineClient::StartConnection, {0}, {1}, steamUserId:{2}, {3}", gameId, loginAddress, steamUserId, steamUserName);
 
         if (m_SteamUserId != 0)
         {

@@ -521,7 +521,9 @@ struct LoginWithSteamResult FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tab
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_RESULT_CODE = 4,
     VT_ACCOUNT_ID = 6,
-    VT_AUTH_TICKET = 8
+    VT_AUTH_TICKET = 8,
+    VT_BANNED_REASON = 10,
+    VT_GAME_SERVER_ADDRESS = 12
   };
   uint32_t result_code() const {
     return GetField<uint32_t>(VT_RESULT_CODE, 0);
@@ -532,11 +534,21 @@ struct LoginWithSteamResult FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tab
   uint64_t auth_ticket() const {
     return GetField<uint64_t>(VT_AUTH_TICKET, 0);
   }
+  const ::flatbuffers::String *banned_reason() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_BANNED_REASON);
+  }
+  const ::flatbuffers::String *game_server_address() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_GAME_SERVER_ADDRESS);
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_RESULT_CODE, 4) &&
            VerifyField<uint64_t>(verifier, VT_ACCOUNT_ID, 8) &&
            VerifyField<uint64_t>(verifier, VT_AUTH_TICKET, 8) &&
+           VerifyOffset(verifier, VT_BANNED_REASON) &&
+           verifier.VerifyString(banned_reason()) &&
+           VerifyOffsetRequired(verifier, VT_GAME_SERVER_ADDRESS) &&
+           verifier.VerifyString(game_server_address()) &&
            verifier.EndTable();
   }
 };
@@ -554,6 +566,12 @@ struct LoginWithSteamResultBuilder {
   void add_auth_ticket(uint64_t auth_ticket) {
     fbb_.AddElement<uint64_t>(LoginWithSteamResult::VT_AUTH_TICKET, auth_ticket, 0);
   }
+  void add_banned_reason(::flatbuffers::Offset<::flatbuffers::String> banned_reason) {
+    fbb_.AddOffset(LoginWithSteamResult::VT_BANNED_REASON, banned_reason);
+  }
+  void add_game_server_address(::flatbuffers::Offset<::flatbuffers::String> game_server_address) {
+    fbb_.AddOffset(LoginWithSteamResult::VT_GAME_SERVER_ADDRESS, game_server_address);
+  }
   explicit LoginWithSteamResultBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
@@ -561,6 +579,7 @@ struct LoginWithSteamResultBuilder {
   ::flatbuffers::Offset<LoginWithSteamResult> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<LoginWithSteamResult>(end);
+    fbb_.Required(o, LoginWithSteamResult::VT_GAME_SERVER_ADDRESS);
     return o;
   }
 };
@@ -569,12 +588,34 @@ inline ::flatbuffers::Offset<LoginWithSteamResult> CreateLoginWithSteamResult(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     uint32_t result_code = 0,
     uint64_t account_id = 0,
-    uint64_t auth_ticket = 0) {
+    uint64_t auth_ticket = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> banned_reason = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> game_server_address = 0) {
   LoginWithSteamResultBuilder builder_(_fbb);
   builder_.add_auth_ticket(auth_ticket);
   builder_.add_account_id(account_id);
+  builder_.add_game_server_address(game_server_address);
+  builder_.add_banned_reason(banned_reason);
   builder_.add_result_code(result_code);
   return builder_.Finish();
+}
+
+inline ::flatbuffers::Offset<LoginWithSteamResult> CreateLoginWithSteamResultDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint32_t result_code = 0,
+    uint64_t account_id = 0,
+    uint64_t auth_ticket = 0,
+    const char *banned_reason = nullptr,
+    const char *game_server_address = nullptr) {
+  auto banned_reason__ = banned_reason ? _fbb.CreateString(banned_reason) : 0;
+  auto game_server_address__ = game_server_address ? _fbb.CreateString(game_server_address) : 0;
+  return SF::Flat::Login::CreateLoginWithSteamResult(
+      _fbb,
+      result_code,
+      account_id,
+      auth_ticket,
+      banned_reason__,
+      game_server_address__);
 }
 
 inline bool VerifyPayloadData(::flatbuffers::Verifier &verifier, const void *obj, PayloadData type) {
