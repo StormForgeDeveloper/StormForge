@@ -515,8 +515,8 @@ namespace SF
                 var variableName = new StringCrc32(reader.ReadUInt32());
                 var typeName = new StringCrc32(reader.ReadUInt32());
 
-                var typeInfo = TypeSerialization.GetTypeInfo(typeName);
-                var value = typeInfo.Deserializer(reader);
+                TypeSerialization.TypeInfo typeInfo = TypeSerialization.GetTypeInfo(typeName);
+                object value = typeInfo.Deserializer(reader);
                 Add(variableName, value);
             }
         }

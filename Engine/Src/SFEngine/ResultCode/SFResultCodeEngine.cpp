@@ -29,6 +29,7 @@ namespace ResultCode {
 		codeMap.Insert((uint32_t)ENGINE_INVALID_PLATFORM, {"ENGINE_INVALID_PLATFORM", "Invalid platform"});
 		codeMap.Insert((uint32_t)ENGINE_ALREADY_USED_ITEM, {"ENGINE_ALREADY_USED_ITEM", "Already Used Item"});
 		codeMap.Insert((uint32_t)ENGINE_ALREADY_USED_KEY, {"ENGINE_ALREADY_USED_KEY", "Already Used Key"});
+		codeMap.Insert((uint32_t)ENGINE_INVALID_ONLINE_SESSION, {"ENGINE_INVALID_ONLINE_SESSION", "Invalid online session. probably kicked"});
 
 	}//InitializeResultCode 
 }//namespace ResultCode 

@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2017 Kyungkun Ko
 // 
@@ -53,7 +53,7 @@ namespace SF {
             Code = src.Code;
         }
 
-        public bool IsFailed { get { return Code < 0; } }
+        public bool IsFailure { get { return Code < 0; } }
 
         public bool IsSucceeded { get { return Code >= 0; } }
 

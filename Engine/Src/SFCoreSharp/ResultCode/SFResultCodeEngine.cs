@@ -41,6 +41,9 @@ namespace SF {
 		// Already Used Key 
 		public const int ENGINE_ALREADY_USED_KEY =                          unchecked((int)0xE7020008); 
 
+		// Invalid online session. probably kicked 
+		public const int ENGINE_INVALID_ONLINE_SESSION =                    unchecked((int)0xE7020009); 
+
 	}
 }
 

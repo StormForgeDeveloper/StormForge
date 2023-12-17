@@ -45,6 +45,9 @@ namespace SF {
 			// Already Used Key 
 			constexpr Result 			ENGINE_ALREADY_USED_KEY                                            ((int32_t)0xE7020008L);
 
+			// Invalid online session. probably kicked 
+			constexpr Result 			ENGINE_INVALID_ONLINE_SESSION                                      ((int32_t)0xE7020009L);
+
 	void InitializeResultCodeEngine();
 
 	}//namespace ResultCode 

@@ -18,6 +18,8 @@
     <ResultCodeItem Severity="Error" CodeName="ALREADY_USED_ITEM" Desc="Already Used Item"/>
     <ResultCodeItem Severity="Error" CodeName="ALREADY_USED_KEY" Desc="Already Used Key"/>
 
+    <ResultCodeItem Severity="Error" CodeName="INVALID_ONLINE_SESSION" Desc="Invalid online session. probably kicked"/>
+
 
 </ResultCodes>
 
