@@ -13,7 +13,7 @@
 #include "ResultCode/SFResultCodeSystem.h"
 #include "Component/SFLibraryComponent3rdParties.h"
 #include "openssl/evp.h"
-
+#include "curl/curl.h"
 
 namespace SF {
 
@@ -44,12 +44,16 @@ namespace SF {
         OpenSSL_add_all_algorithms();
         OpenSSL_add_all_digests();
 
+        curl_global_init(CURL_GLOBAL_ALL);
+
 		return ResultCode::SUCCESS;
 	}
 
 	// Terminate server component
 	void LibraryComponent3rdParties::DeinitializeComponent()
 	{
+        curl_global_cleanup();
+
 		LibraryComponent::DeinitializeComponent();
 	}
 

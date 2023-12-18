@@ -24,7 +24,9 @@
 #include "Protocol/PlayInstanceMsgClass.h"
 #include "Online/Telemetry/SFTelemetryService.h"
 #include "Online/SFOnlineClientComponent.h"
-#include "curl/curl.h"
+#include "Online/SFHTTPClient.h"
+#include "SFFlat/Login_generated.h"
+#include "Util/SFStringFormat.h"
 
 namespace SF
 {
@@ -57,19 +59,7 @@ namespace SF
     public:
         using super = ClientTask;
 
-        typedef StaticArray<char, 20 * 1024> ResultBuffer;
-
-        CURL* m_Curl{};
-
-        // HTTP query result
-        ResultBuffer m_HTTPResult;
-
-    protected:
-
-        CURLcode m_CurlResult;
-
-    public:
-        static int ResultWriter(char* data, size_t size, size_t nmemb, void* param);
+        HTTPClientPtr m_HttpClient;
 
     public:
 
@@ -92,21 +82,185 @@ namespace SF
 
             m_Owner.DisconnectAll();
 
-            //m_Curl = new CURL;
+            SetupRequest();
 
-            SetOnlineState(OnlineState::ConnectingToLogin);
+            SetOnlineState(OnlineState::LogingIn);
         }
 
         virtual void OnEngineTickUpdate() override
         {
+            Result hr;
+            if (m_HttpClient.IsValid() && !m_HttpClient->HasBeenRequested())
+            {
+                m_HttpClient->ProcessRequest();
+            }
         }
 
-        virtual Result RequestLogin() = 0;
+        virtual Result SetupRequest() = 0;
 
-        void OnLoginRes(const MessageHeader* pHeader)
+        Result ParseResultPacket(const Array<uint8_t>& recvData)
+        {
+            Result hr;
+            uint expectedSize = flatbuffers::GetSizePrefixedBufferLength(recvData.data());
+            if (recvData.size() != expectedSize)
+            {
+                SFLog(System, Warning, "ObjectDirectory received unexpected data size: expected:{0}, received:{1}", expectedSize, recvData.size());
+                defCheck(ResultCode::INVALID_FORMAT);
+            }
+
+            const Flat::Login::LoginPacket* responsePacket = Flat::Login::GetSizePrefixedLoginPacket((const void*)recvData.data());
+            if (responsePacket == nullptr)
+            {
+                defCheck(ResultCode::INVALID_FORMAT);
+            }
+
+            Flat::Login::PayloadData payloadType = responsePacket->payload_data_type();
+            if (payloadType != Flat::Login::PayloadData::PayloadData_LoginResult)
+            {
+                defCheck(ResultCode::INVALID_FORMAT);
+            }
+
+            const SF::Flat::Login::LoginResult* resultData = responsePacket->payload_data_as_LoginResult();
+            defCheckPtr(resultData);
+
+            m_Owner.m_GameAddress = resultData->game_server_address()->c_str();
+            m_Owner.m_AccountId = resultData->account_id();
+            m_Owner.m_AuthTicket = resultData->auth_ticket();
+
+            Service::Telemetry->SetAccountID(m_Owner.m_AccountId);
+
+            SFLog(Net, Debug3, "Logged in: gameserver:{0}, accountId:{1}", m_Owner.m_GameAddress, m_Owner.m_AccountId);
+
+            return hr;
+        }
+
+        virtual void TickUpdate() override
+        {
+            Result hr;
+            if (m_HttpClient.IsValid() && m_HttpClient->IsCompleted())
+            {
+                if (m_HttpClient->GetResultCode())
+                {
+                    auto& recvData = m_HttpClient->GetResultContent();
+                    if (recvData.size() > 0)
+                    {
+                        DynamicArray<uint8_t> decodedData;
+                        decodedData.reserve(recvData.size());
+                        hr = Util::Base64Decode(recvData.size(), recvData.data(), decodedData);
+                        if (!hr)
+                        {
+                            SFLog(System, Error, "Login result decoding error:{0}", hr);
+                        }
+                        else
+                        {
+                            hr = ParseResultPacket(decodedData);
+                        }
+                    }
+                    else
+                    {
+                        hr = ResultCode::INVALID_FORMAT;
+                    }
+
+                    if (!hr)
+                    {
+                        SFLog(System, Error, "Login result parsing error:{0}", hr);
+
+                        SetOnlineState(OnlineState::Disconnected);
+                        SetResult(hr);
+                    }
+                    else
+                    {
+
+                    }
+                    SetOnlineState(OnlineState::LoggedIn);
+                    SetResult(ResultCode::SUCCESS);
+                }
+                else
+                {
+                    SFLog(System, Error, "Login request porocessing error:{0}", m_HttpClient->GetResultCode());
+
+                    SetOnlineState(OnlineState::Disconnected);
+                    SetResult(m_HttpClient->GetResultCode());
+                }
+            }
+        }
+
+
+        void OnLoginSuccess()
         {
             SetOnlineState(OnlineState::LoggedIn);
             SetResult(ResultCode::SUCCESS);
+        }
+    };
+
+
+    class ClientTask_HttpLoginBR : public ClientTask_HttpLogin
+    {
+    public:
+
+        ClientTask_HttpLoginBR(OnlineClient& owner, uint64_t transactionId)
+            : ClientTask_HttpLogin(owner, transactionId)
+        {
+        }
+
+        virtual Result SetupRequest() override
+        {
+            Result hr;
+
+            HTTPClientPtr httpClient = new(GetSystemHeap()) HTTPClientCurl;
+
+            DynamicArray<uint8_t> hashedPassword;
+            defCheck(Util::SHA256Hash(m_Owner.GetPassword().GetLength(), (const uint8_t*)m_Owner.GetPassword().c_str(), hashedPassword));
+
+            DynamicArray<uint8_t> base64Password;
+            base64Password.reserve(hashedPassword.size() * 3);
+            defCheck(Util::Base64Encode(hashedPassword.size(), hashedPassword.data(), base64Password));
+
+            base64Password.push_back('\0');
+
+            String url;
+            url.Format("http://{0}/BR/Login/v1/idpw?AccessKey={1}&userId={2}&password={3}",
+                m_Owner.GetLoginAddresses(), "8FACAEB9-E54D-4CDF-BF85-23F7AF0B9147", m_Owner.GetUserId(), (const char*)base64Password.data());
+            httpClient->SetURL(url);
+            httpClient->SetMethod(true);
+
+
+            m_HttpClient = httpClient;
+
+            return hr;
+        }
+    };
+
+
+    class ClientTask_HttpLoginSteam : public ClientTask_HttpLogin
+    {
+    public:
+        ClientTask_HttpLoginSteam(OnlineClient& owner, uint64_t transactionId)
+            : ClientTask_HttpLogin(owner, transactionId)
+        {
+        }
+
+        virtual Result SetupRequest() override
+        {
+            Result hr;
+
+            HTTPClientPtr httpClient = new(GetSystemHeap()) HTTPClientCurl;
+
+            DynamicArray<uint8_t> base64PlatformName;
+            base64PlatformName.reserve(m_Owner.GetSteamUserName().GetLength() * 3);
+            defCheck(Util::Base64Encode(m_Owner.GetSteamUserName().GetLength(), reinterpret_cast<const uint8_t*>(m_Owner.GetSteamUserName().data()), base64PlatformName));
+            base64PlatformName.push_back('\0');
+
+            String url;
+            url.Format("http://{0}/BR/Login/v1/steam?AccessKey={1}&steamAccountId={2}&steamUserName={3}&steamUserToken={4}",
+                m_Owner.GetLoginAddresses(), "8FACAEB9-E54D-4CDF-BF85-23F7AF0B9147", m_Owner.GetSteamUserId(), (const char*)base64PlatformName.data(), m_Owner.GetSteamUserToken());
+
+            httpClient->SetURL(url);
+            httpClient->SetMethod(true);
+
+            m_HttpClient = httpClient;
+
+            return hr;
         }
     };
 
@@ -265,7 +419,6 @@ namespace SF
 				return;
 			}
 
-			m_Owner.m_LoginEntityUID = packet.GetLoginEntityUID();
 			m_Owner.m_GameAddress = packet.GetGameServerPublicAddress();
 			m_Owner.m_AccountId = packet.GetAccID();
 			m_Owner.m_AuthTicket = packet.GetTicket();
@@ -346,13 +499,6 @@ namespace SF
 
 			SFLog(Net, Info, "Starting ClientTask_JoinGameServer");
 
-			if (m_Owner.GetConnectionLogin() == nullptr || m_Owner.GetConnectionLogin()->GetConnectionState() != Net::ConnectionState::CONNECTED)
-			{
-				SFLog(Net, Error, "Join game server has requested without Login connection");
-				SetResult(ResultCode::INVALID_STATE);
-				return;
-			}
-
 			Disconnect();
 
 			m_Owner.m_Game = new(GetHeap()) Net::ConnectionTCPClient(GetHeap());
@@ -381,8 +527,8 @@ namespace SF
 					}
 				});
 
-			auto authTicket = m_Owner.GetAuthTicket();
-			auto remoteAddress = m_Owner.GetGameAddress();
+			AuthTicket authTicket = m_Owner.GetAuthTicket();
+			String remoteAddress = m_Owner.GetGameAddress();
 			if (authTicket == 0)
 			{
 				SFLog(Net, Error, "Join game server has failed, invalid auth ticket");
@@ -465,7 +611,7 @@ namespace SF
 				{
 					SetOnlineState(OnlineState::JoiningToGameServer);
 					NetPolicyGame policy(GetConnection()->GetMessageEndpoint());
-					auto res = policy.JoinGameServerCmd(intptr_t(this), m_Owner.GetAccountId(), m_Owner.GetAuthTicket(), m_Owner.GetLoginEntityUID());
+					auto res = policy.JoinGameServerCmd(intptr_t(this), m_Owner.GetAccountId(), m_Owner.GetAuthTicket(), 0);
 					if (!res)
 					{
 						SetOnlineState(OnlineState::LoggedIn);
@@ -955,11 +1101,11 @@ namespace SF
 
         if (m_SteamUserId != 0)
         {
-            m_PendingTasks.push_back(new(GetHeap()) ClientTask_LoginSteam(*this, transactionId));
+            m_PendingTasks.push_back(new(GetHeap()) ClientTask_HttpLoginSteam(*this, transactionId));
         }
         else
         {
-            m_PendingTasks.push_back(new(GetHeap()) ClientTask_LoginBR(*this, transactionId));
+            m_PendingTasks.push_back(new(GetHeap()) ClientTask_HttpLoginBR(*this, transactionId));
         }
 		m_PendingTasks.push_back(new(GetHeap()) ClientTask_JoinGameServer(*this, transactionId));
 

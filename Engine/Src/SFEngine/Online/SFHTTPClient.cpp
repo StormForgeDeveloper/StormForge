@@ -65,18 +65,6 @@ namespace SF
 
     HTTPClientCurl::HTTPClientCurl()
     {
-        m_Curl = curl_easy_init();
-        if (m_Curl != nullptr)
-        {
-            m_CurlResult = curl_easy_setopt(GetCURL(), CURLOPT_WRITEDATA, &m_HTTPResult);
-            m_CurlResult = curl_easy_setopt(GetCURL(), CURLOPT_WRITEFUNCTION, ResultWriter);
-        }
-        else
-            m_CurlResult = CURLE_FAILED_INIT;
-
-        m_CurlResult = curl_easy_setopt(GetCURL(), CURLOPT_SSL_VERIFYPEER, false);
-        if (m_CurlResult) return;
-
     }
 
     HTTPClientCurl::~HTTPClientCurl()
@@ -100,9 +88,35 @@ namespace SF
 
         auto* stream = (ResultBuffer*)param;
 
-        stream->push_back(size * nmemb, (char*)data);
+        stream->push_back(size * nmemb, (uint8_t*)data);
 
         return (int)(size * nmemb);
+    }
+
+    int HTTPClientCurl::CurlLogCB(CURL* handle,
+        curl_infotype type,
+        char* data,
+        size_t size,
+        void* clientp)
+    {
+        static const char* TypeNames[] = {
+            "LINFO_TEXT",
+            "CURLINFO_HEADER_IN",    /* 1 */
+            "CURLINFO_HEADER_OUT",   /* 2 */
+            "CURLINFO_DATA_IN",      /* 3 */
+            "CURLINFO_DATA_OUT",     /* 4 */
+            "CURLINFO_SSL_DATA_IN",  /* 5 */
+            "CURLINFO_SSL_DATA_OUT", /* 6 */
+        };
+        const char* typeName = "Unknown";
+        if (int(type) >= 0 && int(type) < CURLINFO_END)
+        {
+            typeName = TypeNames[int(type)];
+        }
+
+        SFLog(System, Info, "CURL: {0}:{1}", typeName, data);
+
+        return 0;
     }
 
     Result HTTPClientCurl::SetPostFieldData(const Array<const char>& postFieldData)
@@ -130,11 +144,41 @@ namespace SF
 
     Result HTTPClientCurl::ProcessRequest()
     {
-        Result hr;
+        ScopeContext hr([&](Result hr)
+            {
+                m_bIsCompleted = true;
+                m_Result = hr;
+            });
+
+        if (m_bRequested)
+        {
+            return hr;
+        }
+
+        m_bRequested = true;
 
         m_HTTPResult.Clear();
 
         SFLog(System, Debug, "HTTP request. url:{0}, method:{1}", m_URL, IsGetMethod());
+
+        m_Curl = curl_easy_init();
+        if (m_Curl != nullptr)
+        {
+            m_CurlResult = curl_easy_setopt(GetCURL(), CURLOPT_WRITEDATA, &m_HTTPResult);
+            defCheck(HTTPClientImpl::CurlCodeToResult(m_CurlResult));
+            m_CurlResult = curl_easy_setopt(GetCURL(), CURLOPT_WRITEFUNCTION, &HTTPClientCurl::ResultWriter);
+            defCheck(HTTPClientImpl::CurlCodeToResult(m_CurlResult));
+        }
+        else
+        {
+            m_CurlResult = CURLE_FAILED_INIT;
+            defCheck(HTTPClientImpl::CurlCodeToResult(m_CurlResult));
+        }
+
+        // Debug logging
+        curl_easy_setopt(GetCURL(), CURLOPT_VERBOSE, 1);
+        curl_easy_setopt(GetCURL(), CURLOPT_DEBUGFUNCTION, &HTTPClientCurl::CurlLogCB);
+
 
         m_CurlResult = curl_easy_setopt(GetCURL(), CURLOPT_HTTPGET, IsGetMethod() ? 1 : 0);
         defCheck(HTTPClientImpl::CurlCodeToResult(m_CurlResult));
@@ -156,6 +200,7 @@ namespace SF
         m_CurlResult = curl_easy_getinfo(GetCURL(), CURLINFO_CONTENT_TYPE, &resultString);
         defCheck(HTTPClientImpl::CurlCodeToResult(m_CurlResult));
 
+        Service::LogModule->Flush();
         m_ResultContentType = resultString;
 
         return hr;

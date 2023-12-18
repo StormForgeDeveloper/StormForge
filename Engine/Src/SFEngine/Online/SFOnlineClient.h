@@ -152,7 +152,6 @@ namespace SF
 		SF_FORCEINLINE const String& GetPassword() const { return m_Password; }
 		SF_FORCEINLINE const String& GetLoginAddresses() const { return m_LoginAddresses; }
 
-		SF_FORCEINLINE uint64_t GetLoginEntityUID() const { return m_LoginEntityUID; }
 		SF_FORCEINLINE const String& GetGameAddress() const { return m_GameAddress; }
 		SF_FORCEINLINE AccountID GetAccountId() const { return m_AccountId; }
 		SF_FORCEINLINE AuthTicket GetAuthTicket() const { return m_AuthTicket; }
@@ -208,6 +207,7 @@ namespace SF
 
 		friend ClientTask;
 		friend class ClientTask_Login;
+        friend class ClientTask_HttpLogin;
 		friend class ClientTask_JoinGameServer;
 		friend class ClientTask_JoinGameInstanceServer;
 
@@ -223,7 +223,6 @@ namespace SF
 
 		String m_LoginAddresses;
 
-		uint64_t m_LoginEntityUID{};
 		String m_GameAddress;
 		AccountID m_AccountId{};
 		AuthTicket m_AuthTicket{};

@@ -51,10 +51,10 @@ namespace Util {
 	Result HEXDecode(size_t srcSize, const uint8_t* bytes_to_decode, Array<uint8_t>& destBuffer, uint8_t dummyChar = '=');
 
 	// Base 64 encode/decode
-	Result Base64Encode(size_t srcSize, const uint8_t* bytes_to_encode, Array<uint8_t> &destBuffer, uint8_t dummyChar = '\0');
+	Result Base64Encode(size_t srcSize, const uint8_t* bytes_to_encode, Array<uint8_t> &destBuffer, uint8_t dummyChar = '=');
 	Result Base64Decode(size_t srcSize, const uint8_t* bytes_to_decode, Array<uint8_t> &destBuffer, uint8_t dummyChar = '=');
 
-	Result Base64URLEncode(size_t srcSize, const uint8_t* bytes_to_encode, Array<uint8_t> &destBuffer, uint8_t dummyChar = '\0');
+	Result Base64URLEncode(size_t srcSize, const uint8_t* bytes_to_encode, Array<uint8_t> &destBuffer, uint8_t dummyChar = '=');
 	Result Base64URLDecode(size_t srcSize, const uint8_t* bytes_to_decode, Array<uint8_t> &destBuffer, uint8_t dummyChar = '=');
 
 	// SHA 256 hashing
