@@ -265,211 +265,6 @@ namespace SF
     };
 
 
-	class ClientTask_Login : public OnlineClient::ClientTask
-	{
-	public:
-		using super = ClientTask;
-
-	public:
-
-		ClientTask_Login(OnlineClient& owner, uint64_t transactionId)
-			: ClientTask(owner, transactionId)
-		{
-		}
-
-		const SharedPointerT<Net::Connection>& GetConnection()
-		{
-			return m_Owner.GetConnectionLogin();
-		}
-
-		void Disconnect()
-		{
-			if (m_Owner.m_Login != nullptr)
-				m_Owner.Disconnect(m_Owner.m_Login);
-		}
-
-		void Initialize() override
-		{
-			super::Initialize();
-
-			SFLog(Net, Info, "Start ClientTask_Login");
-
-			m_Owner.DisconnectAll();
-
-			m_Owner.m_Login = new(GetHeap()) Net::ConnectionTCPClient(GetHeap());
-			GetConnection()->SetEventFireMode(Net::Connection::EventFireMode::OnGameTick);
-
-			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this),
-				[this](Net::Connection*, const Net::ConnectionEvent& evt)
-				{
-					OnConnectionEvent(evt);
-				});
-
-			GetConnection()->AddMessageDelegateUnique(uintptr_t(this),
-				Message::Login::LoginRes::MID.GetMsgID(),
-				[this](Net::Connection*, const MessageHeader* pHeader)
-				{
-					OnLoginRes(pHeader);
-				});
-
-            GetConnection()->AddMessageDelegateUnique(uintptr_t(this),
-                Message::Login::LoginBySteamRes::MID.GetMsgID(),
-                [this](Net::Connection*, const MessageHeader* pHeader)
-                {
-                    OnLoginRes(pHeader);
-                });
-
-
-
-			SetOnlineState(OnlineState::ConnectingToLogin);
-
-            DynamicArray<NetAddress> netAddresses;
-            Result result = NetAddress::ParseNameAddress(m_Owner.GetLoginAddresses(), netAddresses);
-            if (!result)
-            {
-                SFLog(Net, Error, "Failed to get addresses: {0}, hr:{1}", m_Owner.GetLoginAddresses(), result);
-                SetResult(result);
-                SetOnlineState(OnlineState::Disconnected);
-                return;
-            }
-
-            if (netAddresses.size() == 0)
-            {
-                SFLog(Net, Error, "Failed to convert addresses: {0}", m_Owner.GetLoginAddresses());
-                SetResult(ResultCode::NOT_EXIST);
-                SetOnlineState(OnlineState::Disconnected);
-                return;
-            }
-			
-			auto authTicket = 0;
-			result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, netAddresses[0], 0));
-			if (result)
-			{
-				GetConnection()->SetTickGroup(EngineTaskTick::AsyncTick);
-			}
-		}
-
-		virtual ~ClientTask_Login()
-		{
-			SFLog(Net, Info, "Finished ClientTask_Login");
-
-			if (GetConnection() == nullptr)
-				return;
-
-			GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(uintptr_t(this));
-			GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(uintptr_t(this));
-			GetConnection()->RemoveMessageDelegate(uintptr_t(this), Message::Login::LoginRes::MID.GetMsgID());
-            GetConnection()->RemoveMessageDelegate(uintptr_t(this), Message::Login::LoginBySteamRes::MID.GetMsgID());
-        }
-
-        virtual Result RequestLogin() = 0;
-
-		void OnConnectionEvent(const Net::ConnectionEvent& evt)
-		{
-			SFLog(Net, Info, "Login OnConnectionEvent  type:{0}, state:{1}", evt.Components.EventType, evt.Components.State);
-
-			if (evt.Components.EventType == Net::ConnectionEvent::EVT_CONNECTION_RESULT)
-			{
-				if (evt.Components.hr)
-				{
-					SetOnlineState(OnlineState::LogingIn);
-                    auto res = RequestLogin();
-					if (!res)
-					{
-						m_Owner.DisconnectAll();
-						SetOnlineState(OnlineState::Disconnected);
-						SFLog(Net, Error, "Login command has failed {0}", res);
-					}
-				}
-				else
-				{
-					GetConnection()->Disconnect("Login failed");
-					//Disconnect();
-					SetOnlineState(OnlineState::Disconnected);
-				}
-			}
-			else if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
-			{
-				//Disconnect();
-				SetOnlineState(OnlineState::Disconnected);
-				SetResult(ResultCode::IO_DISCONNECTED);
-			}
-
-		}
-
-		void OnLoginRes(const MessageHeader* pHeader)
-		{
-			Message::Login::LoginRes packet(pHeader);
-			auto result = packet.ParseMsg();
-			if (!result)
-			{
-				SFLog(Net, Error, "LoginRes: Packet parsing error: {0}", result);
-				SetResult(result);
-				Disconnect();
-				SetOnlineState(OnlineState::Disconnected);
-				return;
-			}
-
-			if (!packet.GetResult())
-			{
-				SFLog(Net, Error, "LoginRes: Login failure: {0}", packet.GetResult());
-				SetResult(packet.GetResult());
-				Disconnect();
-				SetOnlineState(OnlineState::Disconnected);
-				return;
-			}
-
-			m_Owner.m_GameAddress = packet.GetGameServerPublicAddress();
-			m_Owner.m_AccountId = packet.GetAccID();
-			m_Owner.m_AuthTicket = packet.GetTicket();
-
-            Service::Telemetry->SetAccountID(m_Owner.m_AccountId);
-
-			SFLog(Net, Info, "Logged in: {0},{1}, accountId:{2}", m_Owner.m_GameAddress, m_Owner.m_GameAddress, m_Owner.m_AccountId);
-
-			SetOnlineState(OnlineState::LoggedIn);
-			SetResult(ResultCode::SUCCESS);
-		}
-	};
-
-    class ClientTask_LoginBR : public ClientTask_Login
-    {
-    public:
-        using super = ClientTask_Login;
-
-        ClientTask_LoginBR(OnlineClient& owner, uint64_t transactionId)
-            : ClientTask_Login(owner, transactionId)
-        {
-        }
-
-        virtual Result RequestLogin() override
-        {
-            NetPolicyLogin policy(GetConnection()->GetMessageEndpoint());
-            return policy.LoginCmd(intptr_t(this), m_Owner.GetGameId(), m_Owner.GetUserId(), m_Owner.GetPassword());
-        }
-
-    };
-
-
-    class ClientTask_LoginSteam : public ClientTask_Login
-    {
-    public:
-        using super = ClientTask_Login;
-
-        ClientTask_LoginSteam(OnlineClient& owner, uint64_t transactionId)
-            : ClientTask_Login(owner, transactionId)
-        {
-        }
-
-        virtual Result RequestLogin() override
-        {
-            NetPolicyLogin policy(GetConnection()->GetMessageEndpoint());
-            return policy.LoginBySteamCmd(intptr_t(this), m_Owner.GetGameId(), m_Owner.GetSteamUserId(), m_Owner.GetSteamUserName(), m_Owner.GetSteamUserToken());
-        }
-
-    };
-
-
 	class ClientTask_JoinGameServer : public OnlineClient::ClientTask
 	{
 	public:
@@ -590,8 +385,6 @@ namespace SF
 
 			if (m_Owner.GetOnlineState() == OnlineState::InGameServer)
 			{
-				m_Owner.Disconnect(m_Owner.m_Login);
-				m_Owner.m_Login = nullptr;
 			}
 			else if (m_Owner.GetOnlineState() == OnlineState::LoggedIn)
 			{
@@ -1168,7 +961,6 @@ namespace SF
 
 	void OnlineClient::DisconnectAll()
 	{
-		Disconnect(m_Login);
 		Disconnect(m_Game);
 		Disconnect(m_GameInstance);
 
@@ -1193,20 +985,6 @@ namespace SF
             SFLog(Net, Warning, "OnlineClient::UpdateGameTick, too long online tick interval:{0}", sinceLastTick);
         }
         m_PreviousTickTime = Util::Time.GetTimeMs();
-
-		if (m_Login != nullptr)
-		{
-			m_Login->UpdateGameTick();
-
-			if (m_Login != nullptr)
-			{
-				if (m_Login->GetConnectionState() == Net::ConnectionState::DISCONNECTED)
-				{
-					m_Login->DisconnectNRelease("Already Disconnected");
-					m_Login = nullptr;
-				}
-			}
-		}
 
 		if (m_Game != nullptr)
 		{
@@ -1491,30 +1269,21 @@ namespace SF
 
 	void OnlineClient::UpdateOnlineStateByConnectionState()
 	{
-		if (GetConnectionLogin() != nullptr && GetConnectionLogin()->GetConnectionState() == Net::ConnectionState::CONNECTED)
+		if (GetConnectionGame() != nullptr && GetConnectionGame()->GetConnectionState() == Net::ConnectionState::CONNECTED)
 		{
-			if (GetConnectionGame() != nullptr && GetConnectionGame()->GetConnectionState() == Net::ConnectionState::CONNECTED)
+			if (GetConnectionGameInstance() != nullptr && GetConnectionGameInstance()->GetConnectionState() == Net::ConnectionState::CONNECTED)
 			{
-				if (GetConnectionGameInstance() != nullptr && GetConnectionGameInstance()->GetConnectionState() == Net::ConnectionState::CONNECTED)
-				{
-					SetOnlineState(OnlineState::InGameInGameInstance);
-				}
-				else
-				{
-					SetOnlineState(OnlineState::InGameServer);
-				}
+				SetOnlineState(OnlineState::InGameInGameInstance);
 			}
 			else
 			{
-				Disconnect(m_GameInstance);
-				SetOnlineState(OnlineState::LoggedIn);
+				SetOnlineState(OnlineState::InGameServer);
 			}
 		}
 		else
 		{
-			DisconnectAll();
-			SetOnlineState(OnlineState::Disconnected);
+			Disconnect(m_GameInstance);
+			SetOnlineState(OnlineState::LoggedIn);
 		}
-
 	}
 }

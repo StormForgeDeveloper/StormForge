@@ -182,12 +182,6 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle,
 	};
 
 
-	if (pOnlineClient->GetConnectionLogin() != nullptr)
-	{
-		pOnlineClient->GetConnectionLogin()->GetConnectionEventDelegates().AddDelegateUnique(1, eventHandler);
-		pOnlineClient->GetConnectionLogin()->GetRecvMessageDelegates().AddDelegateUnique(1, messageHandler);
-	}
-
 	if (pOnlineClient->GetConnectionGame() != nullptr)
 	{
 		pOnlineClient->GetConnectionGame()->GetConnectionEventDelegates().AddDelegateUnique(1, eventHandler);
@@ -204,13 +198,6 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle,
 	pOnlineClient->SetTaskFinishedCallback(onTaskFinished);
 
 	pOnlineClient->UpdateGameTick();
-
-
-	if (pOnlineClient->GetConnectionLogin() != nullptr)
-	{
-		pOnlineClient->GetConnectionLogin()->GetConnectionEventDelegates().RemoveDelegateAll(1);
-		pOnlineClient->GetConnectionLogin()->GetRecvMessageDelegates().RemoveDelegateAll(1);
-	}
 
 	if (pOnlineClient->GetConnectionGame() != nullptr)
 	{
@@ -253,7 +240,7 @@ SFDLL_EXPORT uint64_t SFOnlineClient_NativeGetConnection(intptr_t nativeHandle, 
 	switch (connectionIndex)
 	{
 	case 0:
-		return NativeObjectToIntptr(pOnlineClient->GetConnectionLogin().get());
+		return 0; // Deprecated. legacy login
 		break;
 	case 1:
 		return NativeObjectToIntptr(pOnlineClient->GetConnectionGame().get());

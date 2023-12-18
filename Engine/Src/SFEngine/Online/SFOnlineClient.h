@@ -163,7 +163,6 @@ namespace SF
 		SF_FORCEINLINE uint64_t GetGameInstanceUID() const { return m_GameInstanceUID; }
 		SF_FORCEINLINE const String& GetGameInstanceAddress() const { return m_GameInstanceAddress; }
 
-		SF_FORCEINLINE const SharedPointerT<Net::Connection>& GetConnectionLogin() const { return m_Login; }
 		SF_FORCEINLINE const SharedPointerT<Net::Connection>& GetConnectionGame() const { return m_Game; }
 		SF_FORCEINLINE const SharedPointerT<Net::Connection>& GetConnectionGameInstance() const { return m_GameInstance; }
 
@@ -237,7 +236,6 @@ namespace SF
         String m_GameInstanceAddress;
 
 		// connections
-		SharedPointerT<Net::Connection> m_Login;
 		SharedPointerT<Net::Connection> m_Game;
 		SharedPointerT<Net::Connection> m_GameInstance;
 
