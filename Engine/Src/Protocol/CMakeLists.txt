@@ -46,7 +46,8 @@ set(SFPROTOCOL_LIB_FILES
 	Protocol/SFProtocolHelper.h
 	Protocol/SFProtocol.h
 	
-	SFFLat/Login_generated.h
+	SFFlat/Login_generated.h
+	SFFlat/Telemetry_generated.h
 
   )
 
