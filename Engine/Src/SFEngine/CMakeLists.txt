@@ -338,6 +338,8 @@ set(SUBOnline_FILES
 	Online/SFOnlineActor.cpp
     Online/SFOnlineAPIClient.h
     Online/SFOnlineAPIClient.cpp
+	Online/SFHTTPClient.h
+	Online/SFHTTPClient.cpp
   )
 
 source_group(Online FILES

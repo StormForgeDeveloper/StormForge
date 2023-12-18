@@ -26,53 +26,47 @@ struct GenericErrorBuilder;
 struct LoginRequest;
 struct LoginRequestBuilder;
 
-struct LoginResult;
-struct LoginResultBuilder;
-
 struct LoginWithSteamRequest;
 struct LoginWithSteamRequestBuilder;
 
-struct LoginWithSteamResult;
-struct LoginWithSteamResultBuilder;
+struct LoginResult;
+struct LoginResultBuilder;
 
 enum PayloadData : uint8_t {
   PayloadData_NONE = 0,
   PayloadData_GenericError = 1,
   PayloadData_LoginRequest = 2,
-  PayloadData_LoginResult = 3,
-  PayloadData_LoginWithSteamRequest = 4,
-  PayloadData_LoginWithSteamResult = 5,
+  PayloadData_LoginWithSteamRequest = 3,
+  PayloadData_LoginResult = 4,
   PayloadData_MIN = PayloadData_NONE,
-  PayloadData_MAX = PayloadData_LoginWithSteamResult
+  PayloadData_MAX = PayloadData_LoginResult
 };
 
-inline const PayloadData (&EnumValuesPayloadData())[6] {
+inline const PayloadData (&EnumValuesPayloadData())[5] {
   static const PayloadData values[] = {
     PayloadData_NONE,
     PayloadData_GenericError,
     PayloadData_LoginRequest,
-    PayloadData_LoginResult,
     PayloadData_LoginWithSteamRequest,
-    PayloadData_LoginWithSteamResult
+    PayloadData_LoginResult
   };
   return values;
 }
 
 inline const char * const *EnumNamesPayloadData() {
-  static const char * const names[7] = {
+  static const char * const names[6] = {
     "NONE",
     "GenericError",
     "LoginRequest",
-    "LoginResult",
     "LoginWithSteamRequest",
-    "LoginWithSteamResult",
+    "LoginResult",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNamePayloadData(PayloadData e) {
-  if (::flatbuffers::IsOutRange(e, PayloadData_NONE, PayloadData_LoginWithSteamResult)) return "";
+  if (::flatbuffers::IsOutRange(e, PayloadData_NONE, PayloadData_LoginResult)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesPayloadData()[index];
 }
@@ -89,16 +83,12 @@ template<> struct PayloadDataTraits<SF::Flat::Login::LoginRequest> {
   static const PayloadData enum_value = PayloadData_LoginRequest;
 };
 
-template<> struct PayloadDataTraits<SF::Flat::Login::LoginResult> {
-  static const PayloadData enum_value = PayloadData_LoginResult;
-};
-
 template<> struct PayloadDataTraits<SF::Flat::Login::LoginWithSteamRequest> {
   static const PayloadData enum_value = PayloadData_LoginWithSteamRequest;
 };
 
-template<> struct PayloadDataTraits<SF::Flat::Login::LoginWithSteamResult> {
-  static const PayloadData enum_value = PayloadData_LoginWithSteamResult;
+template<> struct PayloadDataTraits<SF::Flat::Login::LoginResult> {
+  static const PayloadData enum_value = PayloadData_LoginResult;
 };
 
 bool VerifyPayloadData(::flatbuffers::Verifier &verifier, const void *obj, PayloadData type);
@@ -127,14 +117,11 @@ struct LoginPacket FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const SF::Flat::Login::LoginRequest *payload_data_as_LoginRequest() const {
     return payload_data_type() == SF::Flat::Login::PayloadData_LoginRequest ? static_cast<const SF::Flat::Login::LoginRequest *>(payload_data()) : nullptr;
   }
-  const SF::Flat::Login::LoginResult *payload_data_as_LoginResult() const {
-    return payload_data_type() == SF::Flat::Login::PayloadData_LoginResult ? static_cast<const SF::Flat::Login::LoginResult *>(payload_data()) : nullptr;
-  }
   const SF::Flat::Login::LoginWithSteamRequest *payload_data_as_LoginWithSteamRequest() const {
     return payload_data_type() == SF::Flat::Login::PayloadData_LoginWithSteamRequest ? static_cast<const SF::Flat::Login::LoginWithSteamRequest *>(payload_data()) : nullptr;
   }
-  const SF::Flat::Login::LoginWithSteamResult *payload_data_as_LoginWithSteamResult() const {
-    return payload_data_type() == SF::Flat::Login::PayloadData_LoginWithSteamResult ? static_cast<const SF::Flat::Login::LoginWithSteamResult *>(payload_data()) : nullptr;
+  const SF::Flat::Login::LoginResult *payload_data_as_LoginResult() const {
+    return payload_data_type() == SF::Flat::Login::PayloadData_LoginResult ? static_cast<const SF::Flat::Login::LoginResult *>(payload_data()) : nullptr;
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -154,16 +141,12 @@ template<> inline const SF::Flat::Login::LoginRequest *LoginPacket::payload_data
   return payload_data_as_LoginRequest();
 }
 
-template<> inline const SF::Flat::Login::LoginResult *LoginPacket::payload_data_as<SF::Flat::Login::LoginResult>() const {
-  return payload_data_as_LoginResult();
-}
-
 template<> inline const SF::Flat::Login::LoginWithSteamRequest *LoginPacket::payload_data_as<SF::Flat::Login::LoginWithSteamRequest>() const {
   return payload_data_as_LoginWithSteamRequest();
 }
 
-template<> inline const SF::Flat::Login::LoginWithSteamResult *LoginPacket::payload_data_as<SF::Flat::Login::LoginWithSteamResult>() const {
-  return payload_data_as_LoginWithSteamResult();
+template<> inline const SF::Flat::Login::LoginResult *LoginPacket::payload_data_as<SF::Flat::Login::LoginResult>() const {
+  return payload_data_as_LoginResult();
 }
 
 struct LoginPacketBuilder {
@@ -337,108 +320,6 @@ inline ::flatbuffers::Offset<LoginRequest> CreateLoginRequestDirect(
       game_id__);
 }
 
-struct LoginResult FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef LoginResultBuilder Builder;
-  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_RESULT_CODE = 4,
-    VT_ACCOUNT_ID = 6,
-    VT_AUTH_TICKET = 8,
-    VT_BANNED_REASON = 10,
-    VT_GAME_SERVER_ADDRESS = 12
-  };
-  uint32_t result_code() const {
-    return GetField<uint32_t>(VT_RESULT_CODE, 0);
-  }
-  uint64_t account_id() const {
-    return GetField<uint64_t>(VT_ACCOUNT_ID, 0);
-  }
-  uint64_t auth_ticket() const {
-    return GetField<uint64_t>(VT_AUTH_TICKET, 0);
-  }
-  const ::flatbuffers::String *banned_reason() const {
-    return GetPointer<const ::flatbuffers::String *>(VT_BANNED_REASON);
-  }
-  const ::flatbuffers::String *game_server_address() const {
-    return GetPointer<const ::flatbuffers::String *>(VT_GAME_SERVER_ADDRESS);
-  }
-  bool Verify(::flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           VerifyField<uint32_t>(verifier, VT_RESULT_CODE, 4) &&
-           VerifyField<uint64_t>(verifier, VT_ACCOUNT_ID, 8) &&
-           VerifyField<uint64_t>(verifier, VT_AUTH_TICKET, 8) &&
-           VerifyOffset(verifier, VT_BANNED_REASON) &&
-           verifier.VerifyString(banned_reason()) &&
-           VerifyOffsetRequired(verifier, VT_GAME_SERVER_ADDRESS) &&
-           verifier.VerifyString(game_server_address()) &&
-           verifier.EndTable();
-  }
-};
-
-struct LoginResultBuilder {
-  typedef LoginResult Table;
-  ::flatbuffers::FlatBufferBuilder &fbb_;
-  ::flatbuffers::uoffset_t start_;
-  void add_result_code(uint32_t result_code) {
-    fbb_.AddElement<uint32_t>(LoginResult::VT_RESULT_CODE, result_code, 0);
-  }
-  void add_account_id(uint64_t account_id) {
-    fbb_.AddElement<uint64_t>(LoginResult::VT_ACCOUNT_ID, account_id, 0);
-  }
-  void add_auth_ticket(uint64_t auth_ticket) {
-    fbb_.AddElement<uint64_t>(LoginResult::VT_AUTH_TICKET, auth_ticket, 0);
-  }
-  void add_banned_reason(::flatbuffers::Offset<::flatbuffers::String> banned_reason) {
-    fbb_.AddOffset(LoginResult::VT_BANNED_REASON, banned_reason);
-  }
-  void add_game_server_address(::flatbuffers::Offset<::flatbuffers::String> game_server_address) {
-    fbb_.AddOffset(LoginResult::VT_GAME_SERVER_ADDRESS, game_server_address);
-  }
-  explicit LoginResultBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  ::flatbuffers::Offset<LoginResult> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<LoginResult>(end);
-    fbb_.Required(o, LoginResult::VT_GAME_SERVER_ADDRESS);
-    return o;
-  }
-};
-
-inline ::flatbuffers::Offset<LoginResult> CreateLoginResult(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    uint32_t result_code = 0,
-    uint64_t account_id = 0,
-    uint64_t auth_ticket = 0,
-    ::flatbuffers::Offset<::flatbuffers::String> banned_reason = 0,
-    ::flatbuffers::Offset<::flatbuffers::String> game_server_address = 0) {
-  LoginResultBuilder builder_(_fbb);
-  builder_.add_auth_ticket(auth_ticket);
-  builder_.add_account_id(account_id);
-  builder_.add_game_server_address(game_server_address);
-  builder_.add_banned_reason(banned_reason);
-  builder_.add_result_code(result_code);
-  return builder_.Finish();
-}
-
-inline ::flatbuffers::Offset<LoginResult> CreateLoginResultDirect(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    uint32_t result_code = 0,
-    uint64_t account_id = 0,
-    uint64_t auth_ticket = 0,
-    const char *banned_reason = nullptr,
-    const char *game_server_address = nullptr) {
-  auto banned_reason__ = banned_reason ? _fbb.CreateString(banned_reason) : 0;
-  auto game_server_address__ = game_server_address ? _fbb.CreateString(game_server_address) : 0;
-  return SF::Flat::Login::CreateLoginResult(
-      _fbb,
-      result_code,
-      account_id,
-      auth_ticket,
-      banned_reason__,
-      game_server_address__);
-}
-
 struct LoginWithSteamRequest FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef LoginWithSteamRequestBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
@@ -557,8 +438,8 @@ inline ::flatbuffers::Offset<LoginWithSteamRequest> CreateLoginWithSteamRequestD
       uid);
 }
 
-struct LoginWithSteamResult FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef LoginWithSteamResultBuilder Builder;
+struct LoginResult FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef LoginResultBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_RESULT_CODE = 4,
     VT_ACCOUNT_ID = 6,
@@ -594,45 +475,45 @@ struct LoginWithSteamResult FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tab
   }
 };
 
-struct LoginWithSteamResultBuilder {
-  typedef LoginWithSteamResult Table;
+struct LoginResultBuilder {
+  typedef LoginResult Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
   void add_result_code(uint32_t result_code) {
-    fbb_.AddElement<uint32_t>(LoginWithSteamResult::VT_RESULT_CODE, result_code, 0);
+    fbb_.AddElement<uint32_t>(LoginResult::VT_RESULT_CODE, result_code, 0);
   }
   void add_account_id(uint64_t account_id) {
-    fbb_.AddElement<uint64_t>(LoginWithSteamResult::VT_ACCOUNT_ID, account_id, 0);
+    fbb_.AddElement<uint64_t>(LoginResult::VT_ACCOUNT_ID, account_id, 0);
   }
   void add_auth_ticket(uint64_t auth_ticket) {
-    fbb_.AddElement<uint64_t>(LoginWithSteamResult::VT_AUTH_TICKET, auth_ticket, 0);
+    fbb_.AddElement<uint64_t>(LoginResult::VT_AUTH_TICKET, auth_ticket, 0);
   }
   void add_banned_reason(::flatbuffers::Offset<::flatbuffers::String> banned_reason) {
-    fbb_.AddOffset(LoginWithSteamResult::VT_BANNED_REASON, banned_reason);
+    fbb_.AddOffset(LoginResult::VT_BANNED_REASON, banned_reason);
   }
   void add_game_server_address(::flatbuffers::Offset<::flatbuffers::String> game_server_address) {
-    fbb_.AddOffset(LoginWithSteamResult::VT_GAME_SERVER_ADDRESS, game_server_address);
+    fbb_.AddOffset(LoginResult::VT_GAME_SERVER_ADDRESS, game_server_address);
   }
-  explicit LoginWithSteamResultBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+  explicit LoginResultBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ::flatbuffers::Offset<LoginWithSteamResult> Finish() {
+  ::flatbuffers::Offset<LoginResult> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<LoginWithSteamResult>(end);
-    fbb_.Required(o, LoginWithSteamResult::VT_GAME_SERVER_ADDRESS);
+    auto o = ::flatbuffers::Offset<LoginResult>(end);
+    fbb_.Required(o, LoginResult::VT_GAME_SERVER_ADDRESS);
     return o;
   }
 };
 
-inline ::flatbuffers::Offset<LoginWithSteamResult> CreateLoginWithSteamResult(
+inline ::flatbuffers::Offset<LoginResult> CreateLoginResult(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     uint32_t result_code = 0,
     uint64_t account_id = 0,
     uint64_t auth_ticket = 0,
     ::flatbuffers::Offset<::flatbuffers::String> banned_reason = 0,
     ::flatbuffers::Offset<::flatbuffers::String> game_server_address = 0) {
-  LoginWithSteamResultBuilder builder_(_fbb);
+  LoginResultBuilder builder_(_fbb);
   builder_.add_auth_ticket(auth_ticket);
   builder_.add_account_id(account_id);
   builder_.add_game_server_address(game_server_address);
@@ -641,7 +522,7 @@ inline ::flatbuffers::Offset<LoginWithSteamResult> CreateLoginWithSteamResult(
   return builder_.Finish();
 }
 
-inline ::flatbuffers::Offset<LoginWithSteamResult> CreateLoginWithSteamResultDirect(
+inline ::flatbuffers::Offset<LoginResult> CreateLoginResultDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     uint32_t result_code = 0,
     uint64_t account_id = 0,
@@ -650,7 +531,7 @@ inline ::flatbuffers::Offset<LoginWithSteamResult> CreateLoginWithSteamResultDir
     const char *game_server_address = nullptr) {
   auto banned_reason__ = banned_reason ? _fbb.CreateString(banned_reason) : 0;
   auto game_server_address__ = game_server_address ? _fbb.CreateString(game_server_address) : 0;
-  return SF::Flat::Login::CreateLoginWithSteamResult(
+  return SF::Flat::Login::CreateLoginResult(
       _fbb,
       result_code,
       account_id,
@@ -672,16 +553,12 @@ inline bool VerifyPayloadData(::flatbuffers::Verifier &verifier, const void *obj
       auto ptr = reinterpret_cast<const SF::Flat::Login::LoginRequest *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case PayloadData_LoginResult: {
-      auto ptr = reinterpret_cast<const SF::Flat::Login::LoginResult *>(obj);
-      return verifier.VerifyTable(ptr);
-    }
     case PayloadData_LoginWithSteamRequest: {
       auto ptr = reinterpret_cast<const SF::Flat::Login::LoginWithSteamRequest *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case PayloadData_LoginWithSteamResult: {
-      auto ptr = reinterpret_cast<const SF::Flat::Login::LoginWithSteamResult *>(obj);
+    case PayloadData_LoginResult: {
+      auto ptr = reinterpret_cast<const SF::Flat::Login::LoginResult *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

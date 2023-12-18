@@ -593,6 +593,51 @@ namespace SF {
 		// Maximum packet 
 		public const int MAX_PACKET =                                       unchecked((int)0xE70100C0); 
 
+		// The protocol is not supported. 
+		public const int HTTP_UNSUPPORTED_PROTOCOL =                        unchecked((int)0xE70100C1); 
+
+		// CURL initialization is failed. 
+		public const int HTTP_FAILED_INIT =                                 unchecked((int)0xE70100C2); 
+
+		// Invalid URL format. 
+		public const int HTTP_URL_MALFORMAT =                               unchecked((int)0xE70100C3); 
+
+		// Not a build-in feature. 
+		public const int HTTP_NOT_BUILT_IN =                                unchecked((int)0xE70100C4); 
+
+		// Failed to resolve URL. 
+		public const int HTTP_COULDNT_RESOLVE_PROXY =                       unchecked((int)0xE70100C5); 
+
+		// Failed to resolve URL. 
+		public const int HTTP_COULDNT_RESOLVE_HOST =                        unchecked((int)0xE70100C6); 
+
+		// Connection is failed 
+		public const int HTTP_COULDNT_CONNECT =                             unchecked((int)0xE70100C7); 
+
+		// HTTP Post can't be done. 
+		public const int HTTP_HTTP_POST_ERROR =                             unchecked((int)0xE70100C8); 
+
+		// Not supported SSL type. 
+		public const int HTTP_SSL_ENGINE_NOTFOUND =                         unchecked((int)0xE70100C9); 
+
+		// Not supported SSL type. 
+		public const int HTTP_SSL_ENGINE_SETFAILED =                        unchecked((int)0xE70100CA); 
+
+		// Network send failed 
+		public const int HTTP_SEND_ERROR =                                  unchecked((int)0xE70100CB); 
+
+		// Network receive failed 
+		public const int HTTP_RECV_ERROR =                                  unchecked((int)0xE70100CC); 
+
+		// Invalid SSL setting. 
+		public const int HTTP_USE_SSL_FAILED =                              unchecked((int)0xE70100CD); 
+
+		// No Connection is available now. 
+		public const int HTTP_NO_CONNECTION_AVAILABLE =                     unchecked((int)0xE70100CE); 
+
+		// SSL error 
+		public const int HTTP_SSL_CONNECT_ERROR =                           unchecked((int)0xE70100CF); 
+
 	}
 }
 

@@ -213,6 +213,21 @@ namespace ResultCode {
 		codeMap.Insert((uint32_t)INVALID_SCHEMA, {"INVALID_SCHEMA", "Invalid schema data"});
 		codeMap.Insert((uint32_t)INVALID_TYPE, {"INVALID_TYPE", "Invalid type"});
 		codeMap.Insert((uint32_t)MAX_PACKET, {"MAX_PACKET", "Maximum packet"});
+		codeMap.Insert((uint32_t)HTTP_UNSUPPORTED_PROTOCOL, {"HTTP_UNSUPPORTED_PROTOCOL", "The protocol is not supported."});
+		codeMap.Insert((uint32_t)HTTP_FAILED_INIT, {"HTTP_FAILED_INIT", "CURL initialization is failed."});
+		codeMap.Insert((uint32_t)HTTP_URL_MALFORMAT, {"HTTP_URL_MALFORMAT", "Invalid URL format."});
+		codeMap.Insert((uint32_t)HTTP_NOT_BUILT_IN, {"HTTP_NOT_BUILT_IN", "Not a build-in feature."});
+		codeMap.Insert((uint32_t)HTTP_COULDNT_RESOLVE_PROXY, {"HTTP_COULDNT_RESOLVE_PROXY", "Failed to resolve URL."});
+		codeMap.Insert((uint32_t)HTTP_COULDNT_RESOLVE_HOST, {"HTTP_COULDNT_RESOLVE_HOST", "Failed to resolve URL."});
+		codeMap.Insert((uint32_t)HTTP_COULDNT_CONNECT, {"HTTP_COULDNT_CONNECT", "Connection is failed"});
+		codeMap.Insert((uint32_t)HTTP_HTTP_POST_ERROR, {"HTTP_HTTP_POST_ERROR", "HTTP Post can't be done."});
+		codeMap.Insert((uint32_t)HTTP_SSL_ENGINE_NOTFOUND, {"HTTP_SSL_ENGINE_NOTFOUND", "Not supported SSL type."});
+		codeMap.Insert((uint32_t)HTTP_SSL_ENGINE_SETFAILED, {"HTTP_SSL_ENGINE_SETFAILED", "Not supported SSL type."});
+		codeMap.Insert((uint32_t)HTTP_SEND_ERROR, {"HTTP_SEND_ERROR", "Network send failed"});
+		codeMap.Insert((uint32_t)HTTP_RECV_ERROR, {"HTTP_RECV_ERROR", "Network receive failed"});
+		codeMap.Insert((uint32_t)HTTP_USE_SSL_FAILED, {"HTTP_USE_SSL_FAILED", "Invalid SSL setting."});
+		codeMap.Insert((uint32_t)HTTP_NO_CONNECTION_AVAILABLE, {"HTTP_NO_CONNECTION_AVAILABLE", "No Connection is available now."});
+		codeMap.Insert((uint32_t)HTTP_SSL_CONNECT_ERROR, {"HTTP_SSL_CONNECT_ERROR", "SSL error"});
 
 	}//InitializeResultCode 
 }//namespace ResultCode 

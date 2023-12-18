@@ -597,6 +597,51 @@ namespace SF {
 			// Maximum packet 
 			constexpr Result 			MAX_PACKET                                                         ((int32_t)0xE70100C0L);
 
+			// The protocol is not supported. 
+			constexpr Result 			HTTP_UNSUPPORTED_PROTOCOL                                          ((int32_t)0xE70100C1L);
+
+			// CURL initialization is failed. 
+			constexpr Result 			HTTP_FAILED_INIT                                                   ((int32_t)0xE70100C2L);
+
+			// Invalid URL format. 
+			constexpr Result 			HTTP_URL_MALFORMAT                                                 ((int32_t)0xE70100C3L);
+
+			// Not a build-in feature. 
+			constexpr Result 			HTTP_NOT_BUILT_IN                                                  ((int32_t)0xE70100C4L);
+
+			// Failed to resolve URL. 
+			constexpr Result 			HTTP_COULDNT_RESOLVE_PROXY                                         ((int32_t)0xE70100C5L);
+
+			// Failed to resolve URL. 
+			constexpr Result 			HTTP_COULDNT_RESOLVE_HOST                                          ((int32_t)0xE70100C6L);
+
+			// Connection is failed 
+			constexpr Result 			HTTP_COULDNT_CONNECT                                               ((int32_t)0xE70100C7L);
+
+			// HTTP Post can't be done. 
+			constexpr Result 			HTTP_HTTP_POST_ERROR                                               ((int32_t)0xE70100C8L);
+
+			// Not supported SSL type. 
+			constexpr Result 			HTTP_SSL_ENGINE_NOTFOUND                                           ((int32_t)0xE70100C9L);
+
+			// Not supported SSL type. 
+			constexpr Result 			HTTP_SSL_ENGINE_SETFAILED                                          ((int32_t)0xE70100CAL);
+
+			// Network send failed 
+			constexpr Result 			HTTP_SEND_ERROR                                                    ((int32_t)0xE70100CBL);
+
+			// Network receive failed 
+			constexpr Result 			HTTP_RECV_ERROR                                                    ((int32_t)0xE70100CCL);
+
+			// Invalid SSL setting. 
+			constexpr Result 			HTTP_USE_SSL_FAILED                                                ((int32_t)0xE70100CDL);
+
+			// No Connection is available now. 
+			constexpr Result 			HTTP_NO_CONNECTION_AVAILABLE                                       ((int32_t)0xE70100CEL);
+
+			// SSL error 
+			constexpr Result 			HTTP_SSL_CONNECT_ERROR                                             ((int32_t)0xE70100CFL);
+
 	void InitializeResultCodeSF();
 
 	}//namespace ResultCode 

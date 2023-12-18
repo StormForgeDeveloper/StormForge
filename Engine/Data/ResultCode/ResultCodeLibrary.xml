@@ -216,6 +216,22 @@
     <ResultCodeItem Severity="Error" CodeName="INVALID_TYPE" Desc="Invalid type"/>
 
     <ResultCodeItem Severity="Error" CodeName="MAX_PACKET" Desc="Maximum packet"/>
+    
+    <ResultCodeItem Severity="Error" CodeName="HTTP_UNSUPPORTED_PROTOCOL" Desc="The protocol is not supported."/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_FAILED_INIT" Desc="CURL initialization is failed."/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_URL_MALFORMAT" Desc="Invalid URL format."/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_NOT_BUILT_IN" Desc="Not a build-in feature."/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_COULDNT_RESOLVE_PROXY" Desc="Failed to resolve URL."/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_COULDNT_RESOLVE_HOST" Desc="Failed to resolve URL."/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_COULDNT_CONNECT" Desc="Connection is failed"/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_HTTP_POST_ERROR" Desc="HTTP Post can't be done."/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_SSL_ENGINE_NOTFOUND" Desc="Not supported SSL type."/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_SSL_ENGINE_SETFAILED" Desc="Not supported SSL type."/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_SEND_ERROR" Desc="Network send failed"/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_RECV_ERROR" Desc="Network receive failed"/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_USE_SSL_FAILED" Desc="Invalid SSL setting."/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_NO_CONNECTION_AVAILABLE" Desc="No Connection is available now."/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_SSL_CONNECT_ERROR" Desc="SSL error"/>
 
 </ResultCodes>
 

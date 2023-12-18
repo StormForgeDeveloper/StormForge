@@ -104,62 +104,17 @@ namespace SF {
 		// Invalid purchase result from server 
 		public const int SVR_INVALID_PURCHASE_FORMAT =                      unchecked((int)0xE712001D); 
 
-		// The protocol is not supported. 
-		public const int SVR_CURL_UNSUPPORTED_PROTOCOL =                    unchecked((int)0xE712001E); 
-
-		// CURL initialization is failed. 
-		public const int SVR_CURL_FAILED_INIT =                             unchecked((int)0xE712001F); 
-
-		// Invalid URL format. 
-		public const int SVR_CURL_URL_MALFORMAT =                           unchecked((int)0xE7120020); 
-
-		// Not a build-in feature. 
-		public const int SVR_CURL_NOT_BUILT_IN =                            unchecked((int)0xE7120021); 
-
-		// Failed to resolve URL. 
-		public const int SVR_CURL_COULDNT_RESOLVE_PROXY =                   unchecked((int)0xE7120022); 
-
-		// Failed to resolve URL. 
-		public const int SVR_CURL_COULDNT_RESOLVE_HOST =                    unchecked((int)0xE7120023); 
-
-		// Connection is failed 
-		public const int SVR_CURL_COULDNT_CONNECT =                         unchecked((int)0xE7120024); 
-
-		// HTTP Post can't be done. 
-		public const int SVR_CURL_HTTP_POST_ERROR =                         unchecked((int)0xE7120025); 
-
-		// Not supported SSL type. 
-		public const int SVR_CURL_SSL_ENGINE_NOTFOUND =                     unchecked((int)0xE7120026); 
-
-		// Not supported SSL type. 
-		public const int SVR_CURL_SSL_ENGINE_SETFAILED =                    unchecked((int)0xE7120027); 
-
-		// Network send failed 
-		public const int SVR_CURL_SEND_ERROR =                              unchecked((int)0xE7120028); 
-
-		// Network receive failed 
-		public const int SVR_CURL_RECV_ERROR =                              unchecked((int)0xE7120029); 
-
-		// Invalid SSL setting. 
-		public const int SVR_CURL_USE_SSL_FAILED =                          unchecked((int)0xE712002A); 
-
-		// No Connection is available now. 
-		public const int SVR_CURL_NO_CONNECTION_AVAILABLE =                 unchecked((int)0xE712002B); 
-
-		// SSL error 
-		public const int SVR_CURLE_SSL_CONNECT_ERROR =                      unchecked((int)0xE712002C); 
-
 		// Invalid state transition 
-		public const int SVR_INVALID_STATE =                                unchecked((int)0xE712002D); 
+		public const int SVR_INVALID_STATE =                                unchecked((int)0xE712001E); 
 
 		// Invalid purchase environment(public/test) 
-		public const int SVR_INVALID_PURCHASE_MODE =                        unchecked((int)0xE712002E); 
+		public const int SVR_INVALID_PURCHASE_MODE =                        unchecked((int)0xE712001F); 
 
 		// Invalid Task group ID 
-		public const int SVR_INVALID_TASK_GROUPID =                         unchecked((int)0xE712002F); 
+		public const int SVR_INVALID_TASK_GROUPID =                         unchecked((int)0xE7120020); 
 
 		// The user's login token is invlaid 
-		public const int SVR_INVALID_1STPARTY_LOGIN =                       unchecked((int)0xE7120030); 
+		public const int SVR_INVALID_1STPARTY_LOGIN =                       unchecked((int)0xE7120021); 
 
 	}
 }

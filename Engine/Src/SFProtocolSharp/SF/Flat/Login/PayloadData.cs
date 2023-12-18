@@ -10,9 +10,8 @@ public enum PayloadData : byte
   NONE = 0,
   GenericError = 1,
   LoginRequest = 2,
-  LoginResult = 3,
-  LoginWithSteamRequest = 4,
-  LoginWithSteamResult = 5,
+  LoginWithSteamRequest = 3,
+  LoginResult = 4,
 };
 
 

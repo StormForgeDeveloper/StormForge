@@ -24,6 +24,7 @@
 #include "Protocol/PlayInstanceMsgClass.h"
 #include "Online/Telemetry/SFTelemetryService.h"
 #include "Online/SFOnlineClientComponent.h"
+#include "curl/curl.h"
 
 namespace SF
 {
@@ -50,6 +51,64 @@ namespace SF
 		m_Owner.SetOnlineState(newState);
 	}
 
+
+    class ClientTask_HttpLogin : public OnlineClient::ClientTask
+    {
+    public:
+        using super = ClientTask;
+
+        typedef StaticArray<char, 20 * 1024> ResultBuffer;
+
+        CURL* m_Curl{};
+
+        // HTTP query result
+        ResultBuffer m_HTTPResult;
+
+    protected:
+
+        CURLcode m_CurlResult;
+
+    public:
+        static int ResultWriter(char* data, size_t size, size_t nmemb, void* param);
+
+    public:
+
+        ClientTask_HttpLogin(OnlineClient& owner, uint64_t transactionId)
+            : ClientTask(owner, transactionId)
+        {
+        }
+
+        virtual ~ClientTask_HttpLogin()
+        {
+            SFLog(Net, Info, "Finished ClientTask_Login");
+
+        }
+
+        void Initialize() override
+        {
+            super::Initialize();
+
+            SFLog(Net, Info, "Start ClientTask_HttpLogin");
+
+            m_Owner.DisconnectAll();
+
+            //m_Curl = new CURL;
+
+            SetOnlineState(OnlineState::ConnectingToLogin);
+        }
+
+        virtual void OnEngineTickUpdate() override
+        {
+        }
+
+        virtual Result RequestLogin() = 0;
+
+        void OnLoginRes(const MessageHeader* pHeader)
+        {
+            SetOnlineState(OnlineState::LoggedIn);
+            SetResult(ResultCode::SUCCESS);
+        }
+    };
 
 
 	class ClientTask_Login : public OnlineClient::ClientTask
@@ -1134,6 +1193,11 @@ namespace SF
         Result hr;
 
         m_ComponentManager.TickUpdate();
+
+        if (m_CurrentTask)
+        {
+            m_CurrentTask->OnEngineTickUpdate();
+        }
 
         return hr;
     }

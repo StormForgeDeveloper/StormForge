@@ -25,9 +25,8 @@ public struct LoginPacket : IFlatbufferObject
   public TTable? PayloadData<TTable>() where TTable : struct, IFlatbufferObject { int o = __p.__offset(8); return o != 0 ? (TTable?)__p.__union<TTable>(o + __p.bb_pos) : null; }
   public SF.Flat.Login.GenericError PayloadDataAsGenericError() { return PayloadData<SF.Flat.Login.GenericError>().Value; }
   public SF.Flat.Login.LoginRequest PayloadDataAsLoginRequest() { return PayloadData<SF.Flat.Login.LoginRequest>().Value; }
-  public SF.Flat.Login.LoginResult PayloadDataAsLoginResult() { return PayloadData<SF.Flat.Login.LoginResult>().Value; }
   public SF.Flat.Login.LoginWithSteamRequest PayloadDataAsLoginWithSteamRequest() { return PayloadData<SF.Flat.Login.LoginWithSteamRequest>().Value; }
-  public SF.Flat.Login.LoginWithSteamResult PayloadDataAsLoginWithSteamResult() { return PayloadData<SF.Flat.Login.LoginWithSteamResult>().Value; }
+  public SF.Flat.Login.LoginResult PayloadDataAsLoginResult() { return PayloadData<SF.Flat.Login.LoginResult>().Value; }
 
   public static Offset<SF.Flat.Login.LoginPacket> CreateLoginPacket(FlatBufferBuilder builder,
       uint request_id = 0,

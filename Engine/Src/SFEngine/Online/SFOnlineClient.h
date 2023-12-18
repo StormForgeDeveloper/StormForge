@@ -104,6 +104,7 @@ namespace SF
 
 			virtual void Initialize() { m_Result = ResultCode::BUSY; }
 			virtual void TickUpdate() {}
+            virtual void OnEngineTickUpdate() {}
 
 		protected:
 
