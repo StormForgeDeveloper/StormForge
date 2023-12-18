@@ -21,7 +21,7 @@
 #include "Online/Websocket/SFWebsocketClientCurl.h"
 #include "Online/Telemetry/SFTelemetryEventQueue.h"
 #include "Util/SFGuid.h"
-#include "SFFLat/Telemetry_generated.h"
+#include "SFFlat/Telemetry_generated.h"
 
 
 namespace SF
