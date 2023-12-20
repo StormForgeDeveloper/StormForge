@@ -4,7 +4,7 @@
 namespace SF
 {
 #pragma pack(push, 2)
-    union SFFlatPacketHeader
+    struct SFFlatPacketHeader
     {
         static constexpr uint HeaderSize = 6;
 
