@@ -87,7 +87,7 @@ namespace SF
 		EventItem* GetNextEvent(EventItem* eventItem);
 
 		// Free up to last accessed
-		bool FreePostedEvents(uint32_t eventId);
+		bool FreePostedEvents(uint16_t eventId);
 
 
 

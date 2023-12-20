@@ -14,8 +14,8 @@
 #include "Online/Telemetry/SFTelemetryClientFlat.h"
 #include "Util/SFStringFormat.h"
 #include "Util/SFLog.h"
-
-
+#include "SFFlat/SFFlatPacketHeader.h"
+#include "flatbuffers/base.h"
 
 namespace SF
 {
@@ -380,12 +380,17 @@ namespace SF
             );
 
         
-        ::flatbuffers::Offset<FlatTelemetryPacket> packetOffset = SF::Flat::Telemetry::CreateTelemetryPacket(packetBuilder, eventId,
+        ::flatbuffers::Offset<FlatTelemetryPacket> packetOffset = SF::Flat::Telemetry::CreateTelemetryPacket(packetBuilder, 
             SF::Flat::Telemetry::PayloadData_PostEventRequest,
             payloadOffset.Union());
 
 
-        packetBuilder.FinishSizePrefixed(packetOffset);
+        packetBuilder.Finish(packetOffset);
+
+        SFFlatPacketHeader packetHeader;
+        packetHeader.RequestId = (uint16_t)eventId;
+        packetHeader.Signature = SFFlatPacketSignature::Telemetry;
+        packetHeader.WriteHeader(packetBuilder);
 
         ArrayView<uint8_t> packetBufferView(packetBuilder.GetSize(), (uint8_t*)packetBuilder.GetBufferPointer());
 
@@ -402,20 +407,29 @@ namespace SF
         if (recvData.size() == 0)
             return hr;
 
-        uint expectedSize = flatbuffers::GetSizePrefixedBufferLength(recvData.data());
+        SFFlatPacketHeader header;
+        header.ReadHeader(recvData);
+
+        uint expectedSize = header.Size;
         if (recvData.size() != expectedSize)
         {
             SFLog(System, Warning, "Telemetry received unexpected data size: expected:{0}, received:{1}", expectedSize, recvData.size());
             return ResultCode::INVALID_FORMAT;
         }
 
-        const Flat::Telemetry::TelemetryPacket* requestPacket = Flat::Telemetry::GetSizePrefixedTelemetryPacket((const void*)recvData.data());
+        if (header.Signature != SFFlatPacketSignature::Telemetry)
+        {
+            SFLog(System, Warning, "Telemetry received unexpected signature: expected:{0}, received:{1}", SFFlatPacketSignature::Telemetry, header.Signature);
+            return ResultCode::INVALID_FORMAT;
+        }
+
+        const Flat::Telemetry::TelemetryPacket* requestPacket = Flat::Telemetry::GetTelemetryPacket((const void*)(recvData.data() + SFFlatPacketHeader::HeaderSize));
         if (requestPacket == nullptr)
         {
             return ResultCode::INVALID_FORMAT;
         }
 
-        uint32_t eventId = requestPacket->request_id();
+        uint16_t eventId = header.RequestId;
 
         m_EventQueue.FreePostedEvents(eventId);
 

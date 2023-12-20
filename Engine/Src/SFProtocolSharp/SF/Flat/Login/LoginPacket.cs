@@ -20,32 +20,28 @@ public struct LoginPacket : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public LoginPacket __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public uint RequestId { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
-  public SF.Flat.Login.PayloadData PayloadDataType { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.Login.PayloadData)__p.bb.Get(o + __p.bb_pos) : SF.Flat.Login.PayloadData.NONE; } }
-  public TTable? PayloadData<TTable>() where TTable : struct, IFlatbufferObject { int o = __p.__offset(8); return o != 0 ? (TTable?)__p.__union<TTable>(o + __p.bb_pos) : null; }
-  public SF.Flat.Login.GenericError PayloadDataAsGenericError() { return PayloadData<SF.Flat.Login.GenericError>().Value; }
+  public SF.Flat.Login.PayloadData PayloadDataType { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.Login.PayloadData)__p.bb.Get(o + __p.bb_pos) : SF.Flat.Login.PayloadData.NONE; } }
+  public TTable? PayloadData<TTable>() where TTable : struct, IFlatbufferObject { int o = __p.__offset(6); return o != 0 ? (TTable?)__p.__union<TTable>(o + __p.bb_pos) : null; }
+  public SF.Flat.GenericError PayloadDataAsGenericError() { return PayloadData<SF.Flat.GenericError>().Value; }
   public SF.Flat.Login.LoginRequest PayloadDataAsLoginRequest() { return PayloadData<SF.Flat.Login.LoginRequest>().Value; }
   public SF.Flat.Login.LoginWithSteamRequest PayloadDataAsLoginWithSteamRequest() { return PayloadData<SF.Flat.Login.LoginWithSteamRequest>().Value; }
   public SF.Flat.Login.LoginResult PayloadDataAsLoginResult() { return PayloadData<SF.Flat.Login.LoginResult>().Value; }
 
   public static Offset<SF.Flat.Login.LoginPacket> CreateLoginPacket(FlatBufferBuilder builder,
-      uint request_id = 0,
       SF.Flat.Login.PayloadData payload_data_type = SF.Flat.Login.PayloadData.NONE,
       int payload_dataOffset = 0) {
-    builder.StartTable(3);
+    builder.StartTable(2);
     LoginPacket.AddPayloadData(builder, payload_dataOffset);
-    LoginPacket.AddRequestId(builder, request_id);
     LoginPacket.AddPayloadDataType(builder, payload_data_type);
     return LoginPacket.EndLoginPacket(builder);
   }
 
-  public static void StartLoginPacket(FlatBufferBuilder builder) { builder.StartTable(3); }
-  public static void AddRequestId(FlatBufferBuilder builder, uint requestId) { builder.AddUint(0, requestId, 0); }
-  public static void AddPayloadDataType(FlatBufferBuilder builder, SF.Flat.Login.PayloadData payloadDataType) { builder.AddByte(1, (byte)payloadDataType, 0); }
-  public static void AddPayloadData(FlatBufferBuilder builder, int payloadDataOffset) { builder.AddOffset(2, payloadDataOffset, 0); }
+  public static void StartLoginPacket(FlatBufferBuilder builder) { builder.StartTable(2); }
+  public static void AddPayloadDataType(FlatBufferBuilder builder, SF.Flat.Login.PayloadData payloadDataType) { builder.AddByte(0, (byte)payloadDataType, 0); }
+  public static void AddPayloadData(FlatBufferBuilder builder, int payloadDataOffset) { builder.AddOffset(1, payloadDataOffset, 0); }
   public static Offset<SF.Flat.Login.LoginPacket> EndLoginPacket(FlatBufferBuilder builder) {
     int o = builder.EndTable();
-    builder.Required(o, 8);  // payload_data
+    builder.Required(o, 6);  // payload_data
     return new Offset<SF.Flat.Login.LoginPacket>(o);
   }
   public static void FinishLoginPacketBuffer(FlatBufferBuilder builder, Offset<SF.Flat.Login.LoginPacket> offset) { builder.Finish(offset.Value); }
@@ -58,9 +54,8 @@ static public class LoginPacketVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*RequestId*/, 4 /*uint*/, 4, false)
-      && verifier.VerifyField(tablePos, 6 /*PayloadDataType*/, 1 /*SF.Flat.Login.PayloadData*/, 1, false)
-      && verifier.VerifyUnion(tablePos, 6, 8 /*PayloadData*/, SF.Flat.Login.PayloadDataVerify.Verify, true)
+      && verifier.VerifyField(tablePos, 4 /*PayloadDataType*/, 1 /*SF.Flat.Login.PayloadData*/, 1, false)
+      && verifier.VerifyUnion(tablePos, 4, 6 /*PayloadData*/, SF.Flat.Login.PayloadDataVerify.Verify, true)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

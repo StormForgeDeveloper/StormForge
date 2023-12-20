@@ -1,0 +1,14 @@
+ 
+namespace SF.Flat;
+
+
+struct FlatTimeSpan {
+    hours:int;
+    minutes:int;
+    seconds:int;
+}
+
+table GenericError {
+
+	reason:string(required);
+}

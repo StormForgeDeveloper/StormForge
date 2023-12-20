@@ -27,6 +27,7 @@
 #include "Online/SFHTTPClient.h"
 #include "SFFlat/Login_generated.h"
 #include "Util/SFStringFormat.h"
+#include "SFFlat/SFFlatPacketHeader.h"
 
 namespace SF
 {
@@ -101,14 +102,18 @@ namespace SF
         Result ParseResultPacket(const Array<uint8_t>& recvData)
         {
             Result hr;
-            uint expectedSize = flatbuffers::GetSizePrefixedBufferLength(recvData.data());
+
+            SFFlatPacketHeader header;
+            header.ReadHeader(recvData);
+
+            uint expectedSize = header.Size;
             if (recvData.size() != expectedSize)
             {
                 SFLog(System, Warning, "ObjectDirectory received unexpected data size: expected:{0}, received:{1}", expectedSize, recvData.size());
                 defCheck(ResultCode::INVALID_FORMAT);
             }
 
-            const Flat::Login::LoginPacket* responsePacket = Flat::Login::GetSizePrefixedLoginPacket((const void*)recvData.data());
+            const Flat::Login::LoginPacket* responsePacket = Flat::Login::GetLoginPacket((const void*)(recvData.data() + SFFlatPacketHeader::HeaderSize));
             if (responsePacket == nullptr)
             {
                 defCheck(ResultCode::INVALID_FORMAT);

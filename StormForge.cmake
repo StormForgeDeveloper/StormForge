@@ -248,6 +248,7 @@ include_directories(AFTER
 	${SF_DIR}/Engine/Src/SFCore
 	${SF_DIR}/Engine/Src/SFEngine
 	${SF_DIR}/Engine/Src/Protocol
+	${SF_DIR}/Engine/Src/Protocol/SFFlat
 )
 
 set(ENGINE_LINK_LIBS SFProtocol SFEngine SFProtocol SFEngine SFCore)

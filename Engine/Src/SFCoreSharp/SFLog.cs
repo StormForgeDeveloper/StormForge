@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -182,6 +182,7 @@ namespace SF
 
         static Log()
         {
+            LogHandler = (Level level, string message) => { Console.WriteLine($"{DateTime.Now}:{level}: {message}"); };
         }
 
         static public void Info(string strFormat, params object[] args)

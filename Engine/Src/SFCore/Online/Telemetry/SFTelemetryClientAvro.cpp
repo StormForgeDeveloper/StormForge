@@ -264,7 +264,7 @@ namespace SF
 				for (uint Processed = 0; Processed < data.size(); Processed+=4, pEventId++)
 				{
                     uint32_t eventId = *pEventId;
-					m_EventQueue.FreePostedEvents(eventId);
+					m_EventQueue.FreePostedEvents((uint16_t)eventId);
 				}
 			});
 

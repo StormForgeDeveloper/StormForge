@@ -1,4 +1,5 @@
- 
+ include "SFTypes.fbs";
+
 namespace SF.Flat.Telemetry;
 
 union PayloadData
@@ -9,13 +10,7 @@ union PayloadData
 
 table TelemetryPacket
 {
-	request_id:uint32;
     payload_data:PayloadData;
-}
-
-table GenericError {
-
-	reason:string(required);
 }
 
 table EventAttributeString

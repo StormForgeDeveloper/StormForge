@@ -13,15 +13,14 @@ static_assert(FLATBUFFERS_VERSION_MAJOR == 23 &&
               FLATBUFFERS_VERSION_REVISION == 26,
              "Non-compatible flatbuffers version included");
 
+#include "SFTypes_generated.h"
+
 namespace SF {
 namespace Flat {
 namespace Telemetry {
 
 struct TelemetryPacket;
 struct TelemetryPacketBuilder;
-
-struct GenericError;
-struct GenericErrorBuilder;
 
 struct EventAttributeString;
 struct EventAttributeStringBuilder;
@@ -96,7 +95,7 @@ template<typename T> struct PayloadDataTraits {
   static const PayloadData enum_value = PayloadData_NONE;
 };
 
-template<> struct PayloadDataTraits<SF::Flat::Telemetry::GenericError> {
+template<> struct PayloadDataTraits<SF::Flat::GenericError> {
   static const PayloadData enum_value = PayloadData_GenericError;
 };
 
@@ -204,13 +203,9 @@ bool VerifyEventAttributeValueVector(::flatbuffers::Verifier &verifier, const ::
 struct TelemetryPacket FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef TelemetryPacketBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_REQUEST_ID = 4,
-    VT_PAYLOAD_DATA_TYPE = 6,
-    VT_PAYLOAD_DATA = 8
+    VT_PAYLOAD_DATA_TYPE = 4,
+    VT_PAYLOAD_DATA = 6
   };
-  uint32_t request_id() const {
-    return GetField<uint32_t>(VT_REQUEST_ID, 0);
-  }
   SF::Flat::Telemetry::PayloadData payload_data_type() const {
     return static_cast<SF::Flat::Telemetry::PayloadData>(GetField<uint8_t>(VT_PAYLOAD_DATA_TYPE, 0));
   }
@@ -218,8 +213,8 @@ struct TelemetryPacket FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
     return GetPointer<const void *>(VT_PAYLOAD_DATA);
   }
   template<typename T> const T *payload_data_as() const;
-  const SF::Flat::Telemetry::GenericError *payload_data_as_GenericError() const {
-    return payload_data_type() == SF::Flat::Telemetry::PayloadData_GenericError ? static_cast<const SF::Flat::Telemetry::GenericError *>(payload_data()) : nullptr;
+  const SF::Flat::GenericError *payload_data_as_GenericError() const {
+    return payload_data_type() == SF::Flat::Telemetry::PayloadData_GenericError ? static_cast<const SF::Flat::GenericError *>(payload_data()) : nullptr;
   }
   const SF::Flat::Telemetry::PostEventRequest *payload_data_as_PostEventRequest() const {
     return payload_data_type() == SF::Flat::Telemetry::PayloadData_PostEventRequest ? static_cast<const SF::Flat::Telemetry::PostEventRequest *>(payload_data()) : nullptr;
@@ -229,7 +224,6 @@ struct TelemetryPacket FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyField<uint32_t>(verifier, VT_REQUEST_ID, 4) &&
            VerifyField<uint8_t>(verifier, VT_PAYLOAD_DATA_TYPE, 1) &&
            VerifyOffset(verifier, VT_PAYLOAD_DATA) &&
            VerifyPayloadData(verifier, payload_data(), payload_data_type()) &&
@@ -237,7 +231,7 @@ struct TelemetryPacket FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
 };
 
-template<> inline const SF::Flat::Telemetry::GenericError *TelemetryPacket::payload_data_as<SF::Flat::Telemetry::GenericError>() const {
+template<> inline const SF::Flat::GenericError *TelemetryPacket::payload_data_as<SF::Flat::GenericError>() const {
   return payload_data_as_GenericError();
 }
 
@@ -253,9 +247,6 @@ struct TelemetryPacketBuilder {
   typedef TelemetryPacket Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
-  void add_request_id(uint32_t request_id) {
-    fbb_.AddElement<uint32_t>(TelemetryPacket::VT_REQUEST_ID, request_id, 0);
-  }
   void add_payload_data_type(SF::Flat::Telemetry::PayloadData payload_data_type) {
     fbb_.AddElement<uint8_t>(TelemetryPacket::VT_PAYLOAD_DATA_TYPE, static_cast<uint8_t>(payload_data_type), 0);
   }
@@ -275,66 +266,12 @@ struct TelemetryPacketBuilder {
 
 inline ::flatbuffers::Offset<TelemetryPacket> CreateTelemetryPacket(
     ::flatbuffers::FlatBufferBuilder &_fbb,
-    uint32_t request_id = 0,
     SF::Flat::Telemetry::PayloadData payload_data_type = SF::Flat::Telemetry::PayloadData_NONE,
     ::flatbuffers::Offset<void> payload_data = 0) {
   TelemetryPacketBuilder builder_(_fbb);
   builder_.add_payload_data(payload_data);
-  builder_.add_request_id(request_id);
   builder_.add_payload_data_type(payload_data_type);
   return builder_.Finish();
-}
-
-struct GenericError FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef GenericErrorBuilder Builder;
-  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_REASON = 4
-  };
-  const ::flatbuffers::String *reason() const {
-    return GetPointer<const ::flatbuffers::String *>(VT_REASON);
-  }
-  bool Verify(::flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           VerifyOffsetRequired(verifier, VT_REASON) &&
-           verifier.VerifyString(reason()) &&
-           verifier.EndTable();
-  }
-};
-
-struct GenericErrorBuilder {
-  typedef GenericError Table;
-  ::flatbuffers::FlatBufferBuilder &fbb_;
-  ::flatbuffers::uoffset_t start_;
-  void add_reason(::flatbuffers::Offset<::flatbuffers::String> reason) {
-    fbb_.AddOffset(GenericError::VT_REASON, reason);
-  }
-  explicit GenericErrorBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  ::flatbuffers::Offset<GenericError> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<GenericError>(end);
-    fbb_.Required(o, GenericError::VT_REASON);
-    return o;
-  }
-};
-
-inline ::flatbuffers::Offset<GenericError> CreateGenericError(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    ::flatbuffers::Offset<::flatbuffers::String> reason = 0) {
-  GenericErrorBuilder builder_(_fbb);
-  builder_.add_reason(reason);
-  return builder_.Finish();
-}
-
-inline ::flatbuffers::Offset<GenericError> CreateGenericErrorDirect(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    const char *reason = nullptr) {
-  auto reason__ = reason ? _fbb.CreateString(reason) : 0;
-  return SF::Flat::Telemetry::CreateGenericError(
-      _fbb,
-      reason__);
 }
 
 struct EventAttributeString FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
@@ -1004,7 +941,7 @@ inline bool VerifyPayloadData(::flatbuffers::Verifier &verifier, const void *obj
       return true;
     }
     case PayloadData_GenericError: {
-      auto ptr = reinterpret_cast<const SF::Flat::Telemetry::GenericError *>(obj);
+      auto ptr = reinterpret_cast<const SF::Flat::GenericError *>(obj);
       return verifier.VerifyTable(ptr);
     }
     case PayloadData_PostEventRequest: {
