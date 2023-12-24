@@ -14,18 +14,11 @@
 #include "SFAssert.h"
 #include "Util/SFUtility.h"
 
-
-
 #include "Util/SFLog.h"
 #include "Object/SFObject.h"
 
 
-
-
-
 using namespace SF;
-
-
 
 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -61,13 +54,10 @@ SFDLL_EXPORT void SFCSLog_LogMessage(int32_t logLevel, const char* message)
 		break;
 	}
 }
-
 	
 
 SFDLL_EXPORT void SFCSLog_Flush()
 {
 	Service::LogModule->Flush();
 }
-
-
 
