@@ -23,7 +23,7 @@
 #include "Net/SFMessage.h"
 #include "Protocol/SFProtocol.h"
 
-#include "SFCSUtil.h"
+#include "Interfaces/Sharp/SFCSUtil.h"
 
 
 using namespace SF;

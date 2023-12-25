@@ -13,7 +13,7 @@
 #include "Service/SFEngineService.h"
 #include "Online/StreamDB/SFStreamDB.h"
 #include "StreamDB/SFStreamDBDirectory.h"
-#include "SFCSUtil.h"
+#include "Interfaces/Sharp/SFCSUtil.h"
 
 
 #ifdef USE_STREAMDB

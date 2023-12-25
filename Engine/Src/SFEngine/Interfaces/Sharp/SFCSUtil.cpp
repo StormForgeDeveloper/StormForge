@@ -10,12 +10,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-#include "SFEngineDLLPCH.h"
+#include "SFEnginePCH.h"
 #include "SFAssert.h"
 #include "Util/SFUtility.h"
 #include "Stream/SFMemoryStream.h"
 #include "Variable/SFVariableSerialization.h"
-#include "SFCSUtil.h"
+#include "Interfaces/Sharp/SFCSUtil.h"
 
 
 

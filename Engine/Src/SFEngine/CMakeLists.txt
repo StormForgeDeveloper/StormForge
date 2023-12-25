@@ -287,6 +287,8 @@ set(SUBEngine_FILES
 	
 	Interfaces/SFPublicInterface.h
 	Interfaces/SFPublicTypes.h
+	Interfaces/Sharp/SFCSUtil.h
+	Interfaces/Sharp/SFCSUtil.cpp
   )
 
 source_group(Engine FILES

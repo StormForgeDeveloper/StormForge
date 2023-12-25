@@ -20,7 +20,7 @@
 #include "Object/SFObject.h"
 #include "Service/SFEngineService.h"
 
-#include "SFCSUtil.h"
+#include "Interfaces/Sharp/SFCSUtil.h"
 #include "IO/SFFileInputStream.h"
 #include "IO/SFFileOutputStream.h"
 

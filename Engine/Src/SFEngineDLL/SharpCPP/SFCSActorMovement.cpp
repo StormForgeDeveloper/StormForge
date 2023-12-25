@@ -23,7 +23,7 @@
 #include "Online/SFOnlineClient.h"
 #include "Actor/Movement/SFActorMovement.h"
 
-#include "SFCSUtil.h"
+#include "Interfaces/Sharp/SFCSUtil.h"
 
 
 using namespace SF;

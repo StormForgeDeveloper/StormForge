@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) StromForge
 // 
@@ -12,7 +12,7 @@
 #include "SFEngineDLLPCH.h"
 #include "Net/SFConnection.h"
 #include "Protocol/PlayInstanceMsgClass.h"
-#include "SharpCPP/SFCSUtil.h"
+#include "Interfaces/Sharp/SFCSUtil.h"
 
 
 
