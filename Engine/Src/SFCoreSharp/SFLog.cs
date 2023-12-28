@@ -178,7 +178,7 @@ namespace SF
         public static event delLogHandler LogHandler;
 
         public delegate void delLogFlush();
-        public static event delLogFlush LogFlush;
+        public static event delLogFlush? LogFlush;
 
         static Log()
         {
@@ -211,7 +211,7 @@ namespace SF
 
         static public void Flush()
         {
-            LogFlush();
+            if (LogFlush != null) LogFlush();
         }
 
     }

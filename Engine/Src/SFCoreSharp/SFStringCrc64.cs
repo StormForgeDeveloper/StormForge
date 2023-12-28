@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -32,7 +32,7 @@ namespace SF
 
         public override string ToString()
         {
-            return Marshal.PtrToStringAnsi(NativeGetString(StringHash));
+            return Marshal.PtrToStringAnsi(NativeGetString(StringHash))?? StringHash.ToString();
         }
 
         public static UInt64 HashString(string strValue)
@@ -46,7 +46,7 @@ namespace SF
             return (int)StringHash;
         }
 
-        public override bool Equals(object op)
+        public override bool Equals(object? op)
         {
             if (op is StringCrc64)
                 return this.Equals((StringCrc64)op);

@@ -25,8 +25,8 @@ namespace SF
         public class TypeInfo
         {
             public delegate void SerializerFunc(BinaryWriter writer, object value);
-            public delegate object DeserializerFunc(BinaryReader reader);
-            public delegate object DeserializeNativeFunc(ref IntPtr valuePtr);
+            public delegate object? DeserializerFunc(BinaryReader reader);
+            public delegate object? DeserializeNativeFunc(ref IntPtr valuePtr);
 
             public readonly Type Type;
             public readonly StringCrc32 TypeNameCrc;
@@ -127,7 +127,7 @@ namespace SF
             }
         }
 
-        static byte[] StringConvertBuffer = null;
+        static byte[]? StringConvertBuffer = null;
         public static string ReadString(int byteCount, ref IntPtr value)
         {
             if (StringConvertBuffer == null || StringConvertBuffer.Length < byteCount)
@@ -137,11 +137,19 @@ namespace SF
             return System.Text.Encoding.UTF8.GetString(StringConvertBuffer, 0, byteCount);
         }
 
-        public static object ReadStruct(ref IntPtr valuePtr, Type type)
+        public static T? ReadStruct<T>(ref IntPtr valuePtr)
         {
+            Type type = typeof(T);
             var value = Marshal.PtrToStructure(valuePtr, type);
-            valuePtr += Marshal.SizeOf(type);
-            return value;
+            if (value != null)
+            {
+                valuePtr += Marshal.SizeOf(type);
+                return (T)value;
+            }
+            else
+            {
+                return default(T);
+            }
         }
 
         public static Vector4 ReadVector4(BinaryReader reader)
@@ -164,6 +172,11 @@ namespace SF
 
 
         static TypeInfo[] TypeInfoList = {
+                new TypeInfo(typeof(object), "Null",
+                    (writer, value) => {  },
+                    (reader) => { return null; },
+                    (ref IntPtr valuePtr) => { return null; }
+                ),
                 new TypeInfo(typeof(Result), "Result",
                     (writer, value) => { writer.Write(((Result)value).Code); },
                     (reader) => { return new Result(reader.ReadInt32()); },
@@ -232,7 +245,7 @@ namespace SF
             new TypeInfo(typeof(SFUInt128), "uint128",
                 (writer, value) => { var valueTemp = (SFUInt128)value; writer.Write(valueTemp.Low); writer.Write(valueTemp.High); },
                 (reader) => { return new SFUInt128() { Low = reader.ReadUInt64(), High = reader.ReadUInt64() }; },
-                (ref IntPtr valuePtr) => { return ReadStruct(ref valuePtr, typeof(SFUInt128)); }),
+                (ref IntPtr valuePtr) => { return ReadStruct<SFUInt128>(ref valuePtr); }),
 
             new TypeInfo(typeof(float), "float",
                 (writer, value) => { writer.Write((float)value); },
@@ -323,17 +336,17 @@ namespace SF
             new TypeInfo(typeof(Vector2), "Vector2",
                 (writer, value) => { var valueTemp = (Vector2)value; writer.Write(valueTemp.x); writer.Write(valueTemp.y); },
                 (reader) => { return new Vector2() { x = reader.ReadSingle(), y = reader.ReadSingle() }; },
-                (ref IntPtr valuePtr) => { return ReadStruct(ref valuePtr, typeof(Vector2)); }),
+                (ref IntPtr valuePtr) => { return ReadStruct<Vector2>(ref valuePtr); }),
 
             new TypeInfo(typeof(Vector3), "Vector3",
                 (writer, value) => { var valueTemp = (Vector3)value; writer.Write(valueTemp.x); writer.Write(valueTemp.y); writer.Write(valueTemp.z); },
                 (reader) => { return new Vector3() { x = reader.ReadSingle(), y = reader.ReadSingle(), z = reader.ReadSingle() }; },
-                (ref IntPtr valuePtr) => { return ReadStruct(ref valuePtr, typeof(Vector3)); }),
+                (ref IntPtr valuePtr) => { return ReadStruct<Vector3>(ref valuePtr); }),
 
             new TypeInfo(typeof(Vector4), "Vector4",
                 (writer, value) => { var valueTemp = (Vector4)value; writer.Write(valueTemp.x); writer.Write(valueTemp.y); writer.Write(valueTemp.z); writer.Write(valueTemp.w); },
                 (reader) => { return new Vector4() { x = reader.ReadSingle(), y = reader.ReadSingle(), z = reader.ReadSingle(), w = reader.ReadSingle() }; },
-                (ref IntPtr valuePtr) => { return ReadStruct(ref valuePtr, typeof(Vector4)); }),
+                (ref IntPtr valuePtr) => { return ReadStruct<Vector4>(ref valuePtr); }),
 
             new TypeInfo(typeof(UInt64), "StringCrc32",
                 (writer, value) => { writer.Write(((StringCrc32)value).StringHash); },
@@ -386,7 +399,8 @@ namespace SF
                 (ref IntPtr valuePtr) =>
                 {
                     var item = Marshal.PtrToStructure(valuePtr, typeof(ActorMovement));
-                    valuePtr += Marshal.SizeOf(item);
+                    if (item != null)
+                        valuePtr += Marshal.SizeOf(item);
                     return item;
                 }),
 
@@ -407,7 +421,7 @@ namespace SF
                 (ref IntPtr valuePtr) =>
                 {
                     var item = Marshal.PtrToStructure(valuePtr, typeof(PlayerPlatformID));
-                    Debug.Assert(Marshal.SizeOf(item) == (Marshal.SizeOf<UInt64>() + Marshal.SizeOf<byte>()));
+                    //Debug.Assert(Marshal.SizeOf(item) == (Marshal.SizeOf<UInt64>() + Marshal.SizeOf<byte>()));
                     valuePtr += Marshal.SizeOf<UInt64>() + Marshal.SizeOf<byte>();
                     return item;
                 }),
@@ -429,7 +443,8 @@ namespace SF
                 (ref IntPtr valuePtr) =>
                 {
                     var item = Marshal.PtrToStructure(valuePtr, typeof(AchievementStat));
-                    valuePtr += Marshal.SizeOf(item);
+                    if (item != null)
+                        valuePtr += Marshal.SizeOf(item);
                     return item;
                 }),
 
@@ -459,17 +474,32 @@ namespace SF
         }
 
 
-        static public TypeInfo GetTypeInfo(object value)
+        static public TypeInfo GetTypeInfo(object? value)
         {
             var objType = value as Type;
             if (objType == null)
-                objType = value.GetType();
+            {
+                if (value != null)
+                    objType = value.GetType();
+                else
+                    objType = typeof(object);
+            }
 
-            TypeInfo typeInfo;
+            TypeInfo? typeInfo;
             if (!TypeInfoByType.TryGetValue(objType, out typeInfo))
             {
-                Log.Error("TypeSerialization.GetTypeInfo: Unknown type {0}", value.GetType().Name);
-                throw new Exception(string.Format("Unknown type {0}", value.GetType().Name));
+                if (value != null)
+                {
+                    Log.Error("TypeSerialization.GetTypeInfo: Unknown type {0}", value.GetType().Name);
+                    throw new Exception(string.Format("Unknown type {0}", value.GetType().Name));
+
+                }
+                else
+                {
+                    Log.Error("TypeSerialization.GetTypeInfo: Unknown type null");
+                    throw new Exception("Unknown type null");
+
+                }
             }
 
             return typeInfo;
@@ -477,7 +507,7 @@ namespace SF
 
         static public TypeInfo GetTypeInfo(StringCrc32 typeName)
         {
-            TypeInfo typeInfo;
+            TypeInfo? typeInfo;
             if (!TypeInfoByTypeName.TryGetValue(typeName.StringHash, out typeInfo))
             {
                 Log.Error("TypeSerialization.GetTypeInfo: Unknown type {0}", typeName);

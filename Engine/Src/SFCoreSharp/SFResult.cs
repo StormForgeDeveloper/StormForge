@@ -33,7 +33,7 @@ namespace SF {
                 if (field.FieldType != typeof(int))
                     continue;
 
-                var errorCode = (int)field.GetValue(null);
+                var errorCode = (int)(field.GetValue(null) ?? 0);
                 var errorName = field.Name;
                 stm_ResultCodeTable.Add(errorCode, errorName);
             }
@@ -59,7 +59,7 @@ namespace SF {
 
         public override string ToString()
         {
-            string strValue;
+            string? strValue;
             if (!stm_ResultCodeTable.TryGetValue(Code, out strValue))
                 strValue = string.Format("{0:X8}", Code);
             return strValue;
@@ -71,7 +71,7 @@ namespace SF {
             return Code;
         }
 
-        public override bool Equals(System.Object obj)
+        public override bool Equals(System.Object? obj)
         {
             // If parameter is null return false.
             if (obj == null)

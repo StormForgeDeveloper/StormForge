@@ -60,7 +60,7 @@ namespace SF
     public class PinnedByteBuffer : IDisposable
     {
         public GCHandle Handle { get; }
-        public byte[] Data { get; private set; }
+        public byte[]? Data { get; private set; }
 
         public IntPtr Ptr
         {
@@ -313,7 +313,8 @@ namespace SF
 
         public NetAddress(int sockFamily, String address, int port)
         {
-            SockFamily = (SockFamilyType)Enum.GetValues(typeof(SockFamilyType)).GetValue(sockFamily);
+            object? sockFamilyObj = Enum.GetValues(typeof(SockFamilyType)).GetValue(sockFamily);
+            SockFamily = sockFamilyObj != null ? (SockFamilyType)sockFamilyObj : SockFamilyType.None;
             Address = address;
             Port = (ushort)port;
         }
@@ -342,7 +343,7 @@ namespace SF
         public ulong PlayerID;
         public ulong FBUID;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
-        public byte[] NickNameBytes;
+        public byte[] NickNameBytes = new byte[64];
         public ulong LastActiveTime;
         public uint Level;
         public int IsPlayingGame;
@@ -351,7 +352,7 @@ namespace SF
         {
             get
             {
-                if (NickNameBytes == null) return null;
+                if (NickNameBytes == null) return string.Empty;
                 var index = Array.FindIndex(NickNameBytes, x => x == 0);
                 if (index < 0) index = NickNameBytes.Length;
                 return System.Text.Encoding.UTF8.GetString(NickNameBytes, 0, index);
@@ -404,7 +405,7 @@ namespace SF
         public void ToBinary(BinaryWriter writer);
     }
 
-    public class VariableTable : Dictionary<StringCrc32, object>, IBinarySerializable
+    public class VariableTable : Dictionary<StringCrc32, object?>, IBinarySerializable
     {
         public VariableTable()
         {
@@ -423,14 +424,17 @@ namespace SF
         {
             StringCrc32 ValueNameCrc32 = new StringCrc32(ValueName);
 
-            System.Object obj;
+            System.Object? obj;
             if (!TryGetValue(ValueNameCrc32, out obj))
             {
                 System.Diagnostics.Debug.Print("SF.VariableTable Value not found Name = {0}", ValueName);
                 return defaultValue;
             }
 
-            return (T)Convert.ChangeType(obj, typeof(T));
+            if (obj != null)
+                return (T)Convert.ChangeType(obj, typeof(T));
+            else
+                return defaultValue;
         }
 
         public void SetValue<T>(string ValueName, T value)
@@ -440,26 +444,34 @@ namespace SF
             this[ValueNameCrc32] = value;
         }
 
-        public bool TryGetValue<T>(string ValueName, ref T outValue)
+        public bool TryGetValue<T>(string ValueName, out T? outValue)
         {
             StringCrc32 ValueNameCrc32 = new StringCrc32(ValueName);
             //if (!Table.ContainsKey(new StringCrc32(ValueName)))
             //	return false;
-            System.Object obj;
+            System.Object? obj;
             if (!TryGetValue(ValueNameCrc32, out obj))
             {
+                outValue = default(T);
                 System.Diagnostics.Debug.Print("SF.VariableTable Value not found Name = {0}", ValueName);
                 return false;
             }
 
+            if (obj == null)
+            {
+                outValue = default(T);
+                return false;
+            }
+
             outValue = (T)Convert.ChangeType(obj, typeof(T));
+
             return true;
         }
 
         public bool TryGetValueBinary<T>(string ValueName, ref T defaultValue) where T : IBinarySerializable
         {
-            System.Object obj;
-            if (!TryGetValue(new StringCrc32(ValueName), out obj))
+            System.Object? obj;
+            if (!TryGetValue(new StringCrc32(ValueName), out obj) || obj == null)
             {
                 return false;
             }
@@ -491,10 +503,13 @@ namespace SF
             {
                 writer.Write(itItem.Key.StringHash);
 
-                var typeInfo = TypeSerialization.GetTypeInfo(itItem.Value);
-                writer.Write(typeInfo.TypeNameCrc.StringHash);
+                if (itItem.Value != null)
+                {
+                    var typeInfo = TypeSerialization.GetTypeInfo(itItem.Value);
+                    writer.Write(typeInfo.TypeNameCrc.StringHash);
 
-                typeInfo.Serializer(writer, itItem.Value);
+                    typeInfo.Serializer(writer, itItem.Value);
+                }
             }
         }
 
@@ -528,7 +543,7 @@ namespace SF
                 var typeName = new StringCrc32(reader.ReadUInt32());
 
                 TypeSerialization.TypeInfo typeInfo = TypeSerialization.GetTypeInfo(typeName);
-                object value = typeInfo.Deserializer(reader);
+                object? value = typeInfo.Deserializer(reader);
                 Add(variableName, value);
             }
         }
@@ -649,7 +664,7 @@ namespace SF
         {
             get
             {
-                if (NickNameBytes == null) return null;
+                if (NickNameBytes == null) return string.Empty;
                 var index = Array.FindIndex(NickNameBytes, x => x == 0);
                 if (index < 0) index = NickNameBytes.Length;
                 return System.Text.Encoding.UTF8.GetString(NickNameBytes, 0, index);
