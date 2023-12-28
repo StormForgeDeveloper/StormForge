@@ -23,7 +23,7 @@ namespace SF
     {
         int m_MessageID;
 
-        Dictionary<string, Object> m_Values = new Dictionary<string, Object>();
+        Dictionary<string, Object?> m_Values = new ();
 
         public SFMessage(int messageID)
         {
@@ -40,21 +40,32 @@ namespace SF
             return m_MessageID;
         }
 
-        public Object GetValue(string valueName)
+        public Object? GetValue(string valueName)
         {
             return m_Values[valueName];
         }
 
-        public ValueType? GetValue<ValueType>(string valueName)
+        public bool TryGetValue<ValueType>(string valueName, out ValueType? outValue)
         {
+            outValue = default(ValueType);
             object? value = null;
-            if(!m_Values.TryGetValue(valueName,out value))
+            if (!m_Values.TryGetValue(valueName, out value))
             {
-                return default(ValueType);
+                return false;
+            }
+
+            if (value == null)
+            {
+                // null value is legit default
+                outValue = default(ValueType);
+                return true;
             }
 
             if (value.GetType() == typeof(ValueType))
-                return (ValueType)value;
+            {
+                outValue = (ValueType)value;
+                return true;
+            }
             else
             {
                 var requestedType = typeof(ValueType);
@@ -65,21 +76,36 @@ namespace SF
                     foreach (object enumValue in values)
                     {
                         if ((int)enumValue == intValue)
-                            return (ValueType)enumValue;
+                        {
+                            outValue = (ValueType)value;
+                            return true;
+                        }
                     }
                     throw new Exception("Can't cast the value");
                 }
                 else
-                    return (ValueType)System.Convert.ChangeType(value, typeof(ValueType));
+                {
+                    outValue = (ValueType)System.Convert.ChangeType(value, typeof(ValueType));
+                    return true;
+                }
             }
         }
 
-        public void SetValue(string valueName, Object value)
+        public ValueType? GetValue<ValueType>(string valueName)
+        {
+            ValueType? outValue;
+
+            TryGetValue(valueName, out outValue);
+
+            return outValue;
+        }
+
+        public void SetValue(string valueName, Object? value)
         {
             m_Values.Add(valueName, value);
         }
 
-        public Dictionary<string, Object> GetValues()
+        public Dictionary<string, Object?> GetValues()
         {
             return m_Values;
         }

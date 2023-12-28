@@ -32,7 +32,7 @@ namespace SF
 			Disconnected,
 
 			// Login operations
-			ConnectingToLogin,
+			ConnectingToLogin, // Not used
             LogingIn,
             LoggedIn,
 
@@ -51,7 +51,7 @@ namespace SF
 
         public enum ConnectionType
         {
-            Login,
+            None, // not used
             Game,
             GameInstance
         }
@@ -204,13 +204,11 @@ namespace SF
 
         #region Connection cache
 
-        SendMessageLogin? m_LoginAdapterCached = null;
         SendMessageGame? m_GameAdapterCached = null;
         SendMessagePlayInstance? m_PlayInstanceAdapterCached = null;
 
         public virtual void ResetConnectionAdapter()
         {
-            m_LoginAdapterCached = null;
             m_GameAdapterCached = null;
             m_PlayInstanceAdapterCached = null;
         }
@@ -234,13 +232,6 @@ namespace SF
             return CachedAdapter;
         }
 
-        public SendMessageLogin? LoginAdapter
-        {
-            get
-            {
-                return GetAdapterInternal<SendMessageLogin>(ConnectionType.Login, ref m_LoginAdapterCached);
-            }
-        }
         public SendMessageGame? GameAdapter
         {
             get

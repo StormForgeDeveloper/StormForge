@@ -115,29 +115,13 @@ namespace SF
                 case "RelayPlayerInfo":
                     stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(RelayPlayerInfo)) ?? new RelayPlayerInfo());
                     break;
-                //case "ActorMovement":
-                //    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(ActorMovement)));
-                //    break;
-                //case "Vector2":
-                //    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(Vector2)));
-                //    break;
-                //case "Vector3":
-                //    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(Vector3)));
-                //    break;
-                //case "Vector4":
-                //    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(Vector4)));
-                //    break;
-                //case "VariableTable":
-                //VariableTable parsedValue = new VariableTable();
-                //parsedValue.FromSerializedMemory(arrayCount, Value);
-                //stm_ParsingMessage.SetValue(stringHash, parsedValue);
-                //break;
                 default:
                     // TODO: gradually move to TypeSerialization
                     var typeInfo = TypeSerialization.GetTypeInfo(new StringCrc32(typeNameHash));
-                    if (typeInfo != null)
+                    if (typeInfo != null && typeInfo.DeserializeNative != null)
                     {
-                        stm_ParsingMessage.SetValue(stringHash, typeInfo.DeserializeNative(ref Value));
+                        object? valueObj = typeInfo.DeserializeNative(ref Value);
+                        stm_ParsingMessage.SetValue(stringHash, valueObj);
                     }
                     else
                     {

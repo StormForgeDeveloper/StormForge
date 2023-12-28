@@ -298,18 +298,10 @@ namespace SF
             IPV6,// = AF_INET6
         }
 
-        //[MarshalAs(UnmanagedType.LPStr)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 70)]
         public String Address;
         public ushort Port;
         public SockFamilyType SockFamily;
-
-        //public SFNetAddress()
-        //{
-        //    SockFamily = SockFamilyType.None;
-        //    Address = "";
-        //    Port = 0;
-        //}
 
         public NetAddress(int sockFamily, String address, int port)
         {
@@ -447,8 +439,7 @@ namespace SF
         public bool TryGetValue<T>(string ValueName, out T? outValue)
         {
             StringCrc32 ValueNameCrc32 = new StringCrc32(ValueName);
-            //if (!Table.ContainsKey(new StringCrc32(ValueName)))
-            //	return false;
+
             System.Object? obj;
             if (!TryGetValue(ValueNameCrc32, out obj))
             {
