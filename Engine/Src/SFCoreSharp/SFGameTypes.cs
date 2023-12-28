@@ -396,7 +396,15 @@ namespace SF
         }
     }
 
-    public class VariableTable : Dictionary<StringCrc32, object>
+    public interface IBinarySerializable
+    {
+        public void FromByteArray(byte[] bytes);
+        public void FromBinary(BinaryReader reader);
+        public byte[] ToByteArray();
+        public void ToBinary(BinaryWriter writer);
+    }
+
+    public class VariableTable : Dictionary<StringCrc32, object>, IBinarySerializable
     {
         public VariableTable()
         {
@@ -448,19 +456,33 @@ namespace SF
             return true;
         }
 
+        public bool TryGetValueBinary<T>(string ValueName, ref T defaultValue) where T : IBinarySerializable
+        {
+            System.Object obj;
+            if (!TryGetValue(new StringCrc32(ValueName), out obj))
+            {
+                return false;
+            }
+
+            byte[] byteData = (byte[])obj;
+            defaultValue.FromByteArray(byteData);
+
+            return true;
+        }
+
         public byte[] ToByteArray()
         {
             UInt16 NumItems = (UInt16)Count;
             using (MemoryStream outputStream = new MemoryStream())
             using (BinaryWriter writer = new BinaryWriter(outputStream))
             {
-                ToByteArray(writer);
+                ToBinary(writer);
 
                 writer.Flush();
                 return outputStream.ToArray();
             }
         }
-        public void ToByteArray(BinaryWriter writer)
+        public void ToBinary(BinaryWriter writer)
         {
             UInt16 NumItems = (UInt16)Count;
             writer.Write(NumItems);
@@ -476,17 +498,7 @@ namespace SF
             }
         }
 
-        public void FromSerializedMemory(int byteSize, IntPtr InDataPtr)
-        {
-            if (byteSize < sizeof(UInt16))
-                return;
-
-            byte[] byteData = new byte[byteSize];
-            Marshal.Copy(InDataPtr, byteData, 0, byteData.Length);
-
-            FromSerializedMemory(byteData);
-        }
-        public void FromSerializedMemory(byte[] byteData)
+        public void FromByteArray(byte[] byteData)
         {
             if (byteData == null)
                 return;
@@ -495,7 +507,7 @@ namespace SF
             {
                 using (BinaryReader reader = new BinaryReader(new MemoryStream(byteData)))
                 {
-                    FromSerializedMemory(reader);
+                    FromBinary(reader);
                 }
             }
             catch (Exception exp)
@@ -504,7 +516,7 @@ namespace SF
             }
         }
 
-        public void FromSerializedMemory(BinaryReader reader)
+        public void FromBinary(BinaryReader reader)
         {
             Clear();
 
@@ -521,6 +533,16 @@ namespace SF
             }
         }
 
+        public void FromSerializedMemory(int byteSize, IntPtr InDataPtr)
+        {
+            if (byteSize < sizeof(UInt16))
+                return;
+
+            byte[] byteData = new byte[byteSize];
+            Marshal.Copy(InDataPtr, byteData, 0, byteData.Length);
+
+            FromByteArray(byteData);
+        }
 
     }
 
@@ -537,7 +559,7 @@ namespace SF
                     writer.Write(numItems);
                     foreach (var table in Tables)
                     {
-                        table.ToByteArray(writer);
+                        table.ToBinary(writer);
                     }
                 }
                 else

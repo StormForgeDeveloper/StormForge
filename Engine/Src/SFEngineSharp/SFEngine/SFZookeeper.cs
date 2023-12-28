@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -111,7 +111,7 @@ namespace SF
 
         public string Get(string nodePath)
         {
-            return Marshal.PtrToStringAnsi(NativeGet(NativeHandle, nodePath));
+            return Marshal.PtrToStringAnsi(NativeGet(NativeHandle, nodePath)) ?? string.Empty;
         }
 
         public string[] GetChildren(string nodePath, bool watch = false)
@@ -119,7 +119,11 @@ namespace SF
             List<string> children = new List<string>();
             NativeGetChildren(NativeHandle, nodePath, (IntPtr stringPtr) =>
             {
-                children.Add(Marshal.PtrToStringAnsi(stringPtr));
+                string? childPath = Marshal.PtrToStringAnsi(stringPtr);
+                if (childPath !=null)
+                {
+                    children.Add(childPath);
+                }
             }, watch ? 1 : 0);
 
             return children.ToArray();
@@ -147,7 +151,7 @@ namespace SF
             var result = NativeDequeueEvent(NativeHandle, out nodePath, out zkEvent.State, out zkEvent.EventType);
             if(result == 0)
             {
-                zkEvent.NodePath = Marshal.PtrToStringAnsi(nodePath);
+                zkEvent.NodePath = Marshal.PtrToStringAnsi(nodePath) ?? string.Empty;
             }
 
             return result == 0;

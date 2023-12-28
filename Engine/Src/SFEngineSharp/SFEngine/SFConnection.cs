@@ -110,11 +110,14 @@ namespace SF
             m_MessageRouter = messageRouter;
         }
 
-        public SFConnection(IntPtr nativeHandle, SFIMessageRouter messageRouter = null)
+        public SFConnection(IntPtr nativeHandle, SFIMessageRouter? messageRouter = null)
         {
             // Don't use constructor of SFObject, it will increase reference count of the object
             NativeHandle = nativeHandle;
-            m_MessageRouter = messageRouter;
+            if (messageRouter != null)
+                m_MessageRouter = messageRouter;
+            else
+                m_MessageRouter = new SFMessageRouter();
         }
 
         virtual public int Connect(UInt64 authTicket, String address, int port)
@@ -208,7 +211,7 @@ namespace SF
         #region Message Parsing
 
         // Message
-        public SFMessage DequeueMessage()
+        public SFMessage? DequeueMessage()
         {
             lock (SFMessageParsingUtil.stm_ParsingLock)
             {

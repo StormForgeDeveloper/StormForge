@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -44,7 +44,7 @@ namespace SF
             return new Result(NativeDeleteStream(NativeHandle, System.Text.Encoding.UTF8.GetBytes(streamName + "\0")));
         }
 
-        public SFMessage PollMessageData()
+        public SFMessage? PollMessageData()
         {
             lock (SFMessageParsingUtil.stm_ParsingLock)
             {

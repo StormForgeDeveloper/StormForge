@@ -22,9 +22,10 @@ namespace SF
     public static class Util
     {
 		// Get module path
-        public static string? GetModulePath()
+        public static string GetModulePath()
 	    {
-            return Marshal.PtrToStringAnsi(NativeGetModulePath());
+            string? mobuldPath = Marshal.PtrToStringAnsi(NativeGetModulePath());
+            return mobuldPath == null ? string.Empty : mobuldPath;
 	    }
 
 

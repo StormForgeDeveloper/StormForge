@@ -38,12 +38,12 @@ namespace SF
         /// <summary>
         /// When a message data is sent
         /// </summary>
-        public delMessageIDEventHandler OnMessageSent = null;
+        public delMessageIDEventHandler? OnMessageSent = null;
 
         /// <summary>
         /// When a message data is dequeued for processing
         /// </summary>
-        public delMessageEventHandler OnMessageProcessing = null;
+        public delMessageEventHandler? OnMessageProcessing = null;
 
 
         /// <summary>

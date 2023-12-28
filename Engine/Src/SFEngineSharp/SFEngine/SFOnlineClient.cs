@@ -56,31 +56,38 @@ namespace SF
             GameInstance
         }
 
-        readonly SFIMessageRouter m_MessageRouter = null;
+        readonly SFIMessageRouter m_MessageRouter;
 
         public SFIMessageRouter MessageRouter { get { return m_MessageRouter; } }
 
 
         // Connection event
         public delegate void ConnectionEventHandler(object sender, ref SFConnection.Event e);
-        public event ConnectionEventHandler OnConnectionEvent;
+        public event ConnectionEventHandler? OnConnectionEvent = null;
 
         // Message event
         public delegate void MessageEventHandler(object sender, SFMessage msg);
-        public event MessageEventHandler OnMessageEvent;
+        public event MessageEventHandler? OnMessageEvent = null;
 
-        public delegate void OnlineStateChangedHandler(object sender, OnlineState prevState, OnlineState newState);
-        public static event OnlineStateChangedHandler OnOnlineStateChanged;
+        public delegate void OnlineStateChangedHandler(object? sender, OnlineState prevState, OnlineState newState);
+        public static event OnlineStateChangedHandler? OnOnlineStateChanged = null;
 
         public delegate void OnlineTaskFinishedHandler(UInt64 transactionId);
-        public static event OnlineTaskFinishedHandler OnOnlineTaskFinished;
+        public static event OnlineTaskFinishedHandler? OnOnlineTaskFinished = null;
 
 
 
-        public OnlineClient(SFIMessageRouter messageRouter = null)
+        public OnlineClient(SFIMessageRouter? messageRouter = null)
         {
             NativeHandle = NativeCreateOnlineClient();
-            m_MessageRouter = messageRouter;
+            if (messageRouter != null)
+            {
+                m_MessageRouter = messageRouter;
+            }
+            else
+            {
+                m_MessageRouter = new SFMessageRouter();
+            }
         }
 
         public Result StartConnection(UInt64 transactionId, string gameId, string loginAddress, string userId, string password)
@@ -185,7 +192,7 @@ namespace SF
             OnOnlineStateChanged?.Invoke(null, prevState, newState);
         }
 
-        public SFConnection GetConnection(ConnectionType connectionType)
+        public SFConnection? GetConnection(ConnectionType connectionType)
         {
             var connectionHandle = NativeGetConnection(NativeHandle, (int)connectionType);
             if (connectionHandle != IntPtr.Zero)
@@ -197,9 +204,9 @@ namespace SF
 
         #region Connection cache
 
-        SendMessageLogin m_LoginAdapterCached;
-        SendMessageGame m_GameAdapterCached;
-        SendMessagePlayInstance m_PlayInstanceAdapterCached;
+        SendMessageLogin? m_LoginAdapterCached = null;
+        SendMessageGame? m_GameAdapterCached = null;
+        SendMessagePlayInstance? m_PlayInstanceAdapterCached = null;
 
         public virtual void ResetConnectionAdapter()
         {
@@ -209,7 +216,7 @@ namespace SF
         }
 
 
-        protected TAdapter GetAdapterInternal<TAdapter>(ConnectionType conType, ref TAdapter CachedAdapter)
+        protected TAdapter? GetAdapterInternal<TAdapter>(ConnectionType conType, ref TAdapter? CachedAdapter)
             where TAdapter : SendMessage, new()
         {
             var connectionHandle = NativeGetConnection(NativeHandle, (int)conType);
@@ -219,7 +226,7 @@ namespace SF
                 return null;
             }
 
-            if (CachedAdapter != null && CachedAdapter.Connection.NativeHandle == connectionHandle)
+            if (CachedAdapter != null && CachedAdapter.Connection != null && CachedAdapter.Connection.NativeHandle == connectionHandle)
                 return CachedAdapter;
 
             CachedAdapter = new TAdapter();
@@ -227,14 +234,14 @@ namespace SF
             return CachedAdapter;
         }
 
-        public SendMessageLogin LoginAdapter
+        public SendMessageLogin? LoginAdapter
         {
             get
             {
                 return GetAdapterInternal<SendMessageLogin>(ConnectionType.Login, ref m_LoginAdapterCached);
             }
         }
-        public SendMessageGame GameAdapter
+        public SendMessageGame? GameAdapter
         {
             get
             {
@@ -242,7 +249,7 @@ namespace SF
             }
         }
 
-        public SendMessagePlayInstance PlayInstanceAdapter
+        public SendMessagePlayInstance? PlayInstanceAdapter
         {
             get
             {
@@ -265,7 +272,7 @@ namespace SF
 
         #region Event Receiving
 
-        static internal OnlineClient stm_StaticEventReceiver = null;
+        static internal OnlineClient? stm_StaticEventReceiver = null;
 
 #if UNITY_STANDALONE
         [AOT.MonoPInvokeCallback(typeof(SET_EVENT_FUNCTION))]
@@ -294,10 +301,13 @@ namespace SF
             var message = SFMessageParsingUtil.stm_ParsingMessage;
             SFMessageParsingUtil.stm_ParsingMessage = null;
 
-            // fire message handler
-            stm_StaticEventReceiver.OnMessageEvent?.Invoke(stm_StaticEventReceiver, message);
+            if (message != null)
+            {
+                // fire message handler
+                stm_StaticEventReceiver.OnMessageEvent?.Invoke(stm_StaticEventReceiver, message);
 
-            stm_StaticEventReceiver.m_MessageRouter?.HandleRecvMessage(message);
+                stm_StaticEventReceiver.m_MessageRouter?.HandleRecvMessage(message);
+            }
         }
 
 #if UNITY_STANDALONE

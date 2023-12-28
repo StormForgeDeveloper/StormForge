@@ -86,7 +86,7 @@ namespace SF
                     stm_ParsingMessage.SetValue(stringHash, (UInt64)Marshal.ReadInt64(Value));
                     break;
                 case "uint128":
-                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(SFUInt128)));
+                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(SFUInt128))??new SFUInt128());
                     break;
                 case "float":
                     stm_ParsingMessage.SetValue(stringHash, ReadFloat(Value));
@@ -95,25 +95,25 @@ namespace SF
                     stm_ParsingMessage.SetValue(stringHash, ReadDouble(Value));
                     break;
                 case "RouteContext":
-                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(SFRouteContext)));
+                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(SFRouteContext)) ?? new SFRouteContext());
                     break;
                 case "NetAddress":
-                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(NetAddress)));
+                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(NetAddress)) ?? new NetAddress());
                     break;
                 case "MatchingQueueTicket":
-                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(MatchingQueueTicket)));
+                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(MatchingQueueTicket)) ?? new MatchingQueueTicket());
                     break;
                 case "PlayerInformation":
-                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(PlayerInformation)));
+                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(PlayerInformation)) ?? new PlayerInformation());
                     break;
                 case "FriendInformation":
-                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(FriendInformation)));
+                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(FriendInformation)) ?? new FriendInformation());
                     break;
                 case "TotalRankingPlayerInformation":
-                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(TotalRankingPlayerInformation)));
+                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(TotalRankingPlayerInformation)) ?? new TotalRankingPlayerInformation());
                     break;
                 case "RelayPlayerInfo":
-                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(RelayPlayerInfo)));
+                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(RelayPlayerInfo)) ?? new RelayPlayerInfo());
                     break;
                 //case "ActorMovement":
                 //    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(ActorMovement)));
@@ -153,6 +153,9 @@ namespace SF
 #endif
         static internal void MessageParseSetArray(string stringHash, string typeNameHash, int arrayCount, IntPtr Value)
         {
+            if (stm_ParsingMessage == null)
+                return;
+
             switch (typeNameHash)
             {
                 case "int8":
@@ -334,7 +337,7 @@ namespace SF
                             for (int iElement = 0; iElement < NumElement; iElement++)
                             {
                                 VariableTable parsedValue = new VariableTable();
-                                parsedValue.FromSerializedMemory(reader);
+                                parsedValue.FromBinary(reader);
                                 tableList.Add(parsedValue);
                             }
                         }
@@ -353,8 +356,13 @@ namespace SF
                         {
                             for (int index = 0; index < arrayCount; index++)
                                 arrayValue.SetValue(typeInfo.DeserializeNative(ref Value), index);
+
+                            stm_ParsingMessage.SetValue(stringHash, arrayValue);
                         }
-                        stm_ParsingMessage.SetValue(stringHash, arrayValue);
+                        else
+                        {
+                            SF.Log.Error("MessageParseSetArray array instancing has failed, type:{0}", stringHash);
+                        }
                     }
                     else
                     {
@@ -382,7 +390,7 @@ namespace SF
             }
         }
 
-        static byte[] StringConvertBuffer = null;
+        static byte[]? StringConvertBuffer = null;
         internal static string ReadString(int byteCount, IntPtr value)
         {
             if (StringConvertBuffer == null || StringConvertBuffer.Length < byteCount)
@@ -472,7 +480,11 @@ namespace SF
                 int dataSize = 1;
                 for (int iIndex = 0; iIndex < length; iIndex++, pCur = new IntPtr(pCur.ToInt64() + dataSize))
                 {
-                    destination[iIndex] = (DataType)Marshal.PtrToStructure(pCur, typeof(DataType));
+                    object? valueObject = Marshal.PtrToStructure(pCur, typeof(DataType));
+                    if (valueObject != null)
+                    {
+                        destination[iIndex] = (DataType)valueObject;
+                    }
                     dataSize = Marshal.SizeOf(destination[iIndex]);
                 }
             }
@@ -480,7 +492,7 @@ namespace SF
 
         // IOS IL2CPP doesn't support native callback of instance, so it has to be static
         static internal byte[] StringDecodeBuffer = new byte[32 * 1024];
-        static internal SFMessage stm_ParsingMessage = null;
+        static internal SFMessage? stm_ParsingMessage = null;
         static internal object stm_ParsingLock = new object();
         static internal SFConnection.Event stm_Event;
 

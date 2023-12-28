@@ -41,88 +41,96 @@ namespace SF.Net
 		// Cmd: Login request
 		public int  LoginCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.String InID, System.String InPassword )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_LoginLoginCmd(m_Connection.NativeHandle, InTransactionID, InGameID,System.Text.Encoding.UTF8.GetBytes(InID + "\0"),System.Text.Encoding.UTF8.GetBytes(InPassword + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.LoginCmd);
+			m_Connection.HandleSentMessage(result, MessageIDLogin.LoginCmd);
 			return result;
 		} // public int  LoginCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.String InID, System.String InPassword )
 
 		// Cmd: Login request with Facebook UID
 		public int  LoginByFacebookCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.UInt64 InUID, System.String InFaceBookName, System.String InEMail, System.String InFacebookToken )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_LoginLoginByFacebookCmd(m_Connection.NativeHandle, InTransactionID, InGameID, InUID,System.Text.Encoding.UTF8.GetBytes(InFaceBookName + "\0"),System.Text.Encoding.UTF8.GetBytes(InEMail + "\0"),System.Text.Encoding.UTF8.GetBytes(InFacebookToken + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.LoginByFacebookCmd);
+			m_Connection.HandleSentMessage(result, MessageIDLogin.LoginByFacebookCmd);
 			return result;
 		} // public int  LoginByFacebookCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.UInt64 InUID, System.String InFaceBookName, System.String InEMail, System.String InFacebookToken )
 
 		// Cmd: Login request with Facebook UID
 		public int  LoginBySteamCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.UInt64 InSteamUserID, System.String InSteamUserName, System.String InSteamUserToken )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_LoginLoginBySteamCmd(m_Connection.NativeHandle, InTransactionID, InGameID, InSteamUserID,System.Text.Encoding.UTF8.GetBytes(InSteamUserName + "\0"),System.Text.Encoding.UTF8.GetBytes(InSteamUserToken + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.LoginBySteamCmd);
+			m_Connection.HandleSentMessage(result, MessageIDLogin.LoginBySteamCmd);
 			return result;
 		} // public int  LoginBySteamCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.UInt64 InSteamUserID, System.String InSteamUserName, System.String InSteamUserToken )
 
 		// Cmd: Login request
 		public int  CreateRandomUserCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.String InCellPhone )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_LoginCreateRandomUserCmd(m_Connection.NativeHandle, InTransactionID, InGameID,System.Text.Encoding.UTF8.GetBytes(InCellPhone + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.CreateRandomUserCmd);
+			m_Connection.HandleSentMessage(result, MessageIDLogin.CreateRandomUserCmd);
 			return result;
 		} // public int  CreateRandomUserCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.String InCellPhone )
 
 		// Cmd: Update my score and Get Ranking list
 		public int  UpdateMyScoreCmd( System.UInt64 InTransactionID, System.UInt64 InRankingScore, SF.RankingType InRankingType, System.UInt16 InCount )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_LoginUpdateMyScoreCmd(m_Connection.NativeHandle, InTransactionID, InRankingScore,(int) InRankingType, InCount);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.UpdateMyScoreCmd);
+			m_Connection.HandleSentMessage(result, MessageIDLogin.UpdateMyScoreCmd);
 			return result;
 		} // public int  UpdateMyScoreCmd( System.UInt64 InTransactionID, System.UInt64 InRankingScore, SF.RankingType InRankingType, System.UInt16 InCount )
 
 		// Cmd: Get Ranking lise
 		public int  GetRankingListCmd( System.UInt64 InTransactionID, SF.RankingType InRankingType, System.Byte InBaseRanking, System.Byte InCount )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_LoginGetRankingListCmd(m_Connection.NativeHandle, InTransactionID,(int) InRankingType, InBaseRanking, InCount);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.GetRankingListCmd);
+			m_Connection.HandleSentMessage(result, MessageIDLogin.GetRankingListCmd);
 			return result;
 		} // public int  GetRankingListCmd( System.UInt64 InTransactionID, SF.RankingType InRankingType, System.Byte InBaseRanking, System.Byte InCount )
 
 		// Cmd: For network test
 		public int  DataTestCmd( System.UInt64 InTransactionID, System.Byte[] InTestData )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_LoginDataTestCmd(m_Connection.NativeHandle, InTransactionID,(ushort)InTestData.Length, InTestData);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.DataTestCmd);
+			m_Connection.HandleSentMessage(result, MessageIDLogin.DataTestCmd);
 			return result;
 		} // public int  DataTestCmd( System.UInt64 InTransactionID, System.Byte[] InTestData )
 
 		// C2S: Heartbeat
 		public int  HeartbeatC2SEvt(  )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_LoginHeartbeatC2SEvt(m_Connection.NativeHandle);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.HeartbeatC2SEvt);
+			m_Connection.HandleSentMessage(result, MessageIDLogin.HeartbeatC2SEvt);
 			return result;
 		} // public int  HeartbeatC2SEvt(  )
 
@@ -130,11 +138,12 @@ namespace SF.Net
 		// Cmd: Write All!! User Score and Ranking list
 		public int  DebugPrintALLRankingCmd( System.UInt64 InTransactionID, System.String InFileName )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_LoginDebugPrintALLRankingCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InFileName + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.DebugPrintALLRankingCmd);
+			m_Connection.HandleSentMessage(result, MessageIDLogin.DebugPrintALLRankingCmd);
 			return result;
 		} // public int  DebugPrintALLRankingCmd( System.UInt64 InTransactionID, System.String InFileName )
 
@@ -208,11 +217,12 @@ namespace SF.Net
 		// Cmd: Login request
 		public int  LoginRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, System.String InErrorReason )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_LoginLoginRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InGameServerPublicAddress + "\0"), InAccID, InTicket, InLoginEntityUID,System.Text.Encoding.UTF8.GetBytes(InErrorReason + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.LoginRes);
+			m_Connection.HandleSentMessage(result, MessageIDLogin.LoginRes);
 			return result;
 		} // public int  LoginRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, System.String InErrorReason )
 
@@ -220,11 +230,12 @@ namespace SF.Net
 		// Cmd: Login request with Facebook UID
 		public int  LoginByFacebookRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, System.String InErrorReason )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_LoginLoginByFacebookRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InGameServerPublicAddress + "\0"), InAccID, InTicket, InLoginEntityUID,System.Text.Encoding.UTF8.GetBytes(InErrorReason + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.LoginByFacebookRes);
+			m_Connection.HandleSentMessage(result, MessageIDLogin.LoginByFacebookRes);
 			return result;
 		} // public int  LoginByFacebookRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, System.String InErrorReason )
 
@@ -232,11 +243,12 @@ namespace SF.Net
 		// Cmd: Login request with Facebook UID
 		public int  LoginBySteamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, System.String InErrorReason )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_LoginLoginBySteamRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InGameServerPublicAddress + "\0"), InAccID, InTicket, InLoginEntityUID,System.Text.Encoding.UTF8.GetBytes(InErrorReason + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.LoginBySteamRes);
+			m_Connection.HandleSentMessage(result, MessageIDLogin.LoginBySteamRes);
 			return result;
 		} // public int  LoginBySteamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, System.String InErrorReason )
 
@@ -244,11 +256,12 @@ namespace SF.Net
 		// Cmd: Login request
 		public int  CreateRandomUserRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_LoginCreateRandomUserRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InGameServerPublicAddress + "\0"), InAccID, InTicket, InLoginEntityUID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.CreateRandomUserRes);
+			m_Connection.HandleSentMessage(result, MessageIDLogin.CreateRandomUserRes);
 			return result;
 		} // public int  CreateRandomUserRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID )
 
@@ -256,11 +269,12 @@ namespace SF.Net
 		// Cmd: Update my score and Get Ranking list
 		public int  UpdateMyScoreRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.TotalRankingPlayerInformation[] InRanking )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_LoginUpdateMyScoreRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InRanking.Length, InRanking);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.UpdateMyScoreRes);
+			m_Connection.HandleSentMessage(result, MessageIDLogin.UpdateMyScoreRes);
 			return result;
 		} // public int  UpdateMyScoreRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.TotalRankingPlayerInformation[] InRanking )
 
@@ -268,11 +282,12 @@ namespace SF.Net
 		// Cmd: Get Ranking lise
 		public int  GetRankingListRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.TotalRankingPlayerInformation[] InRanking )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_LoginGetRankingListRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InRanking.Length, InRanking);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.GetRankingListRes);
+			m_Connection.HandleSentMessage(result, MessageIDLogin.GetRankingListRes);
 			return result;
 		} // public int  GetRankingListRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.TotalRankingPlayerInformation[] InRanking )
 
@@ -280,11 +295,12 @@ namespace SF.Net
 		// Cmd: For network test
 		public int  DataTestRes( System.UInt64 InTransactionID, System.Int32 InResult, System.Byte[] InTestData )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_LoginDataTestRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InTestData.Length, InTestData);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.DataTestRes);
+			m_Connection.HandleSentMessage(result, MessageIDLogin.DataTestRes);
 			return result;
 		} // public int  DataTestRes( System.UInt64 InTransactionID, System.Int32 InResult, System.Byte[] InTestData )
 
@@ -292,11 +308,12 @@ namespace SF.Net
 		// Cmd: Write All!! User Score and Ranking list
 		public int  DebugPrintALLRankingRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_LoginDebugPrintALLRankingRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.DebugPrintALLRankingRes);
+			m_Connection.HandleSentMessage(result, MessageIDLogin.DebugPrintALLRankingRes);
 			return result;
 		} // public int  DebugPrintALLRankingRes( System.UInt64 InTransactionID, System.Int32 InResult )
 

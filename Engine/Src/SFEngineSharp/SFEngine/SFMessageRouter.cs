@@ -23,8 +23,14 @@ namespace SF
         class PriorityComparer<TKey> : IComparer<TKey>
             where TKey : IComparable
         {
-            public int Compare(TKey x, TKey y)
+            public int Compare(TKey? x, TKey? y)
             {
+                if (x == null && y == null)
+                    return 1;
+
+                if (x == null || y == null)
+                    return -1;
+
                 int result = x.CompareTo(y);
 
                 if (result == 0)
@@ -55,7 +61,7 @@ namespace SF
 
         public override void RegisterMessageHandler(int messageID, int priority, Action<SFMessage> handler)
         {
-            SortedList<int, Action<SFMessage>> handlerList = null;
+            SortedList<int, Action<SFMessage>>? handlerList = null;
             lock(m_MessageHandlerMap)
             {
                 if (!m_MessageHandlerMap.TryGetValue(messageID, out handlerList))
@@ -74,7 +80,7 @@ namespace SF
         // This method will clear whole message handler with same priority
         public override void UnregisterMessageHandler(int messageID, int priority)
         {
-            SortedList<int, Action<SFMessage>> handlerList = null;
+            SortedList<int, Action<SFMessage>>? handlerList = null;
             lock (m_MessageHandlerMap)
             {
                 if (!m_MessageHandlerMap.TryGetValue(messageID, out handlerList))
@@ -93,7 +99,7 @@ namespace SF
         // This method will clear whole message handler with same priority
         public override void UnregisterMessageHandler(int messageID, Action<SFMessage> handler)
         {
-            SortedList<int, Action<SFMessage>> handlerList = null;
+            SortedList<int, Action<SFMessage>>? handlerList = null;
             lock (m_MessageHandlerMap)
             {
                 if (!m_MessageHandlerMap.TryGetValue(messageID, out handlerList))
@@ -131,7 +137,7 @@ namespace SF
             if (OnMessageProcessing != null)
                 OnMessageProcessing(message);
 
-            SortedList<int, Action<SFMessage>> handlerList = null;
+            SortedList<int, Action<SFMessage>>? handlerList = null;
             lock (m_MessageHandlerMap)
             {
                 m_MessageHandlerMap.TryGetValue(message.GetMessageID(), out handlerList);

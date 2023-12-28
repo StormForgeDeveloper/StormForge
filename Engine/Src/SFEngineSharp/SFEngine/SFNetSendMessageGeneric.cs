@@ -41,11 +41,12 @@ namespace SF.Net
 		// Cmd: Generic failure message
 		public int  GenericFailureCmd( SF.SFRouteContext InRouteContext, System.UInt64 InTransactionID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GenericGenericFailureCmd(m_Connection.NativeHandle,ref InRouteContext, InTransactionID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGeneric.GenericFailureCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGeneric.GenericFailureCmd);
 			return result;
 		} // public int  GenericFailureCmd( SF.SFRouteContext InRouteContext, System.UInt64 InTransactionID )
 
@@ -78,11 +79,12 @@ namespace SF.Net
 		// Cmd: Generic failure message
 		public int  GenericFailureRes( SF.SFRouteContext InRouteContext, System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GenericGenericFailureRes(m_Connection.NativeHandle,ref InRouteContext, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGeneric.GenericFailureRes);
+			m_Connection.HandleSentMessage(result, MessageIDGeneric.GenericFailureRes);
 			return result;
 		} // public int  GenericFailureRes( SF.SFRouteContext InRouteContext, System.UInt64 InTransactionID, System.Int32 InResult )
 

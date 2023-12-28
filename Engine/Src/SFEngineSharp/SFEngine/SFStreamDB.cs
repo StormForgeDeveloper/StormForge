@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -41,7 +41,8 @@ namespace SF
         public string GetTopic()
         {
             var nativeStr = NativeGetTopic(NativeHandle);
-            return Marshal.PtrToStringAnsi(nativeStr);
+            string topic = Marshal.PtrToStringAnsi(nativeStr) ?? string.Empty;
+            return topic;
         }
 
 
@@ -82,7 +83,7 @@ namespace SF
 
         DirectoryMode m_DirectoryMode;
 
-        public string ServerAddress { get; private set; }
+        public string ServerAddress { get; private set; } = string.Empty;
 
         public StreamDBDirectory(DirectoryMode mode = DirectoryMode.Broker)
         {
@@ -126,7 +127,7 @@ namespace SF
         //}
 
 
-        public SFMessage PollMessageData()
+        public SFMessage? PollMessageData()
         {
             lock (SFMessageParsingUtil.stm_ParsingLock)
             {
@@ -273,7 +274,7 @@ namespace SF
             return dtDateTime;
         }
 
-        public Result PollData(out Int64 InOutmessageOffset, out DateTime InOutmessageTimeStamp, out byte[] recordData)
+        public Result PollData(out Int64 InOutmessageOffset, out DateTime InOutmessageTimeStamp, out byte[]? recordData)
         {
             InOutmessageOffset = 0;
             recordData = null;

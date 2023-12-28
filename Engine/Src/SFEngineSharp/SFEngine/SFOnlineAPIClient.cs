@@ -25,7 +25,7 @@ namespace SF
     {
         public delegate void delOnRecv(string APIName, string resultPayload);
 
-        public delOnRecv OnRecv { get; set; }
+        public delOnRecv OnRecv { get; set; } = (x, y) => { };
 
         public OnlineAPIClient()
         {

@@ -536,6 +536,7 @@ namespace ProtocolCompiler
 
             ParameterMode = TypeUsage.CSharpNative;
 
+            MatchIndent(); OutStream.WriteLine("if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;");
             MatchIndent(); OutStream.WriteLine("int result;");
 
             PrepareCallNative(parameters);
@@ -543,7 +544,7 @@ namespace ProtocolCompiler
             MatchIndent(); OutStream.WriteLine("{");
             MatchIndent(); OutStream.WriteLine("result = {0}({1});", NativeFuncName(baseMsg, msgTypeName), CallNativeParamterString(parameters));
             MatchIndent(); OutStream.WriteLine("}");
-            MatchIndent(); OutStream.WriteLine("if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageID{0}.{1}{2});", Group.Name, baseMsg.Name, msgTypeName);
+            MatchIndent(); OutStream.WriteLine("m_Connection.HandleSentMessage(result, MessageID{0}.{1}{2});", Group.Name, baseMsg.Name, msgTypeName);
             MatchIndent(); OutStream.WriteLine("return result;");
 
             CloseSection();

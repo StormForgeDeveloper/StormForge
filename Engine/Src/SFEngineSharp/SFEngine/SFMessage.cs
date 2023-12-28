@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -45,9 +45,9 @@ namespace SF
             return m_Values[valueName];
         }
 
-        public ValueType GetValue<ValueType>(string valueName)
+        public ValueType? GetValue<ValueType>(string valueName)
         {
-            object value;
+            object? value = null;
             if(!m_Values.TryGetValue(valueName,out value))
             {
                 return default(ValueType);

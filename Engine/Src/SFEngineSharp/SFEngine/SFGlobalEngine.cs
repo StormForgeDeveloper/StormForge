@@ -18,7 +18,7 @@ namespace SF
 {
     public class GlobalEngine
     {
-        static Engine stm_Instance;
+        static Engine? stm_Instance = null;
         static long stm_RefCount = 0;
 
         public static void Start(string processName, string logServerAddress, string logFilePrefix, LogMask defaultLogMask, LogMask debuggerLogMask)

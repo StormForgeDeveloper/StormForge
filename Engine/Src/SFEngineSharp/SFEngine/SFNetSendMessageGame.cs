@@ -41,11 +41,12 @@ namespace SF.Net
 		// C2S: Client heartbeat
 		public int  HeartbeatC2SEvt(  )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameHeartbeatC2SEvt(m_Connection.NativeHandle);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.HeartbeatC2SEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.HeartbeatC2SEvt);
 			return result;
 		} // public int  HeartbeatC2SEvt(  )
 
@@ -53,495 +54,540 @@ namespace SF.Net
 		// Cmd: Player connected from a login server and moved to game server
 		public int  JoinGameServerCmd( System.UInt64 InTransactionID, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameJoinGameServerCmd(m_Connection.NativeHandle, InTransactionID, InAccID, InTicket, InLoginEntityUID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.JoinGameServerCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.JoinGameServerCmd);
 			return result;
 		} // public int  JoinGameServerCmd( System.UInt64 InTransactionID, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID )
 
 		// Cmd: player complition statues
 		public int  GetAchievementStatsCmd( System.UInt64 InTransactionID, System.UInt32 InCharacterID, System.UInt32 InAchievementStatIDFrom, System.UInt32 InAchievementStatIDTo )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameGetAchievementStatsCmd(m_Connection.NativeHandle, InTransactionID, InCharacterID, InAchievementStatIDFrom, InAchievementStatIDTo);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetAchievementStatsCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GetAchievementStatsCmd);
 			return result;
 		} // public int  GetAchievementStatsCmd( System.UInt64 InTransactionID, System.UInt32 InCharacterID, System.UInt32 InAchievementStatIDFrom, System.UInt32 InAchievementStatIDTo )
 
 		// Cmd: Player complition state
 		public int  Dummy1Cmd( System.UInt64 InTransactionID, System.String InComplitionState )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameDummy1Cmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InComplitionState + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.Dummy1Cmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.Dummy1Cmd);
 			return result;
 		} // public int  Dummy1Cmd( System.UInt64 InTransactionID, System.String InComplitionState )
 
 		// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
 		public int  RegisterGCMCmd( System.UInt64 InTransactionID, System.String InGCMRegisteredID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameRegisterGCMCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InGCMRegisteredID + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RegisterGCMCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.RegisterGCMCmd);
 			return result;
 		} // public int  RegisterGCMCmd( System.UInt64 InTransactionID, System.String InGCMRegisteredID )
 
 		// Cmd: Unregister Google notification service ID
 		public int  UnregisterGCMCmd( System.UInt64 InTransactionID, System.String InGCMRegisteredID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameUnregisterGCMCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InGCMRegisteredID + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.UnregisterGCMCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.UnregisterGCMCmd);
 			return result;
 		} // public int  UnregisterGCMCmd( System.UInt64 InTransactionID, System.String InGCMRegisteredID )
 
 		// Cmd: Invite friend
 		public int  InviteFriendCmd( System.UInt64 InTransactionID, System.UInt64 InFriendID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameInviteFriendCmd(m_Connection.NativeHandle, InTransactionID, InFriendID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.InviteFriendCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.InviteFriendCmd);
 			return result;
 		} // public int  InviteFriendCmd( System.UInt64 InTransactionID, System.UInt64 InFriendID )
 
 		// Cmd: Accept friend request
 		public int  AcceptFriendRequestCmd( System.UInt64 InTransactionID, System.UInt64 InInviterID, SF.PlayerPlatformID InInviterPlatformId )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameAcceptFriendRequestCmd(m_Connection.NativeHandle, InTransactionID, InInviterID,ref InInviterPlatformId);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.AcceptFriendRequestCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.AcceptFriendRequestCmd);
 			return result;
 		} // public int  AcceptFriendRequestCmd( System.UInt64 InTransactionID, System.UInt64 InInviterID, SF.PlayerPlatformID InInviterPlatformId )
 
 		// Cmd: Remove friden form the friend list
 		public int  RemoveFriendCmd( System.UInt64 InTransactionID, System.UInt64 InFriendID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameRemoveFriendCmd(m_Connection.NativeHandle, InTransactionID, InFriendID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RemoveFriendCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.RemoveFriendCmd);
 			return result;
 		} // public int  RemoveFriendCmd( System.UInt64 InTransactionID, System.UInt64 InFriendID )
 
 		// Cmd: Get friend list
 		public int  GetFriendListCmd( System.UInt64 InTransactionID, System.UInt16 InStartIndex, System.UInt16 InCount )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameGetFriendListCmd(m_Connection.NativeHandle, InTransactionID, InStartIndex, InCount);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetFriendListCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GetFriendListCmd);
 			return result;
 		} // public int  GetFriendListCmd( System.UInt64 InTransactionID, System.UInt16 InStartIndex, System.UInt16 InCount )
 
 		// Cmd: Query notification list
 		public int  GetNotificationListCmd( System.UInt64 InTransactionID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameGetNotificationListCmd(m_Connection.NativeHandle, InTransactionID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetNotificationListCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GetNotificationListCmd);
 			return result;
 		} // public int  GetNotificationListCmd( System.UInt64 InTransactionID )
 
 		// Cmd: Delete notification
 		public int  DeleteNotificationCmd( System.UInt64 InTransactionID, System.UInt32 InNotificationID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameDeleteNotificationCmd(m_Connection.NativeHandle, InTransactionID, InNotificationID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.DeleteNotificationCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.DeleteNotificationCmd);
 			return result;
 		} // public int  DeleteNotificationCmd( System.UInt64 InTransactionID, System.UInt32 InNotificationID )
 
 		// Cmd: Set notification is read
 		public int  SetNotificationReadCmd( System.UInt64 InTransactionID, System.UInt32 InNotificationID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameSetNotificationReadCmd(m_Connection.NativeHandle, InTransactionID, InNotificationID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SetNotificationReadCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.SetNotificationReadCmd);
 			return result;
 		} // public int  SetNotificationReadCmd( System.UInt64 InTransactionID, System.UInt32 InNotificationID )
 
 		// Cmd: Accept notification
 		public int  AcceptNotificationCmd( System.UInt64 InTransactionID, System.UInt32 InNotificationID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameAcceptNotificationCmd(m_Connection.NativeHandle, InTransactionID, InNotificationID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.AcceptNotificationCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.AcceptNotificationCmd);
 			return result;
 		} // public int  AcceptNotificationCmd( System.UInt64 InTransactionID, System.UInt32 InNotificationID )
 
 		// Cmd: PlayerId Conversion
 		public int  FindPlayerByPlatformIdCmd( System.UInt64 InTransactionID, SF.PlayerPlatformID InPlatformPlayerId )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameFindPlayerByPlatformIdCmd(m_Connection.NativeHandle, InTransactionID,ref InPlatformPlayerId);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlatformIdCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlatformIdCmd);
 			return result;
 		} // public int  FindPlayerByPlatformIdCmd( System.UInt64 InTransactionID, SF.PlayerPlatformID InPlatformPlayerId )
 
 		// Cmd: PlayerId conversion
 		public int  FindPlayerByCharacterNameCmd( System.UInt64 InTransactionID, System.String InCharacterName )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameFindPlayerByCharacterNameCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InCharacterName + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByCharacterNameCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByCharacterNameCmd);
 			return result;
 		} // public int  FindPlayerByCharacterNameCmd( System.UInt64 InTransactionID, System.String InCharacterName )
 
 		// Cmd: PlayerId Conversion
 		public int  FindPlayerByPlatformUserNameCmd( System.UInt64 InTransactionID, System.Byte InPlatformType, System.String InPlatformUserName )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameFindPlayerByPlatformUserNameCmd(m_Connection.NativeHandle, InTransactionID, InPlatformType,System.Text.Encoding.UTF8.GetBytes(InPlatformUserName + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlatformUserNameCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlatformUserNameCmd);
 			return result;
 		} // public int  FindPlayerByPlatformUserNameCmd( System.UInt64 InTransactionID, System.Byte InPlatformType, System.String InPlatformUserName )
 
 		// Cmd: Query playerID list
 		public int  FindPlayerByEMailCmd( System.UInt64 InTransactionID, System.String InPlayerEMail )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameFindPlayerByEMailCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InPlayerEMail + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByEMailCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByEMailCmd);
 			return result;
 		} // public int  FindPlayerByEMailCmd( System.UInt64 InTransactionID, System.String InPlayerEMail )
 
 		// Cmd: Query playerID list
 		public int  FindPlayerByPlayerIDCmd( System.UInt64 InTransactionID, System.UInt64 InPlayerID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameFindPlayerByPlayerIDCmd(m_Connection.NativeHandle, InTransactionID, InPlayerID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlayerIDCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlayerIDCmd);
 			return result;
 		} // public int  FindPlayerByPlayerIDCmd( System.UInt64 InTransactionID, System.UInt64 InPlayerID )
 
 		// Cmd: *Request Player Status Update
 		public int  RequestPlayerStatusUpdateCmd( System.UInt64 InTransactionID, System.UInt64[] InTargetPlayerID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameRequestPlayerStatusUpdateCmd(m_Connection.NativeHandle, InTransactionID,(ushort)InTargetPlayerID.Length, InTargetPlayerID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RequestPlayerStatusUpdateCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.RequestPlayerStatusUpdateCmd);
 			return result;
 		} // public int  RequestPlayerStatusUpdateCmd( System.UInt64 InTransactionID, System.UInt64[] InTargetPlayerID )
 
 		// Cmd: Get Ranking list
 		public int  GetRankingListCmd( System.UInt64 InTransactionID, System.Byte InRankingType, System.Byte InBaseRanking, System.Byte InCount )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameGetRankingListCmd(m_Connection.NativeHandle, InTransactionID, InRankingType, InBaseRanking, InCount);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetRankingListCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GetRankingListCmd);
 			return result;
 		} // public int  GetRankingListCmd( System.UInt64 InTransactionID, System.Byte InRankingType, System.Byte InBaseRanking, System.Byte InCount )
 
 		// Cmd: Game user game play information
 		public int  GetUserGamePlayerInfoCmd( System.UInt64 InTransactionID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameGetUserGamePlayerInfoCmd(m_Connection.NativeHandle, InTransactionID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetUserGamePlayerInfoCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GetUserGamePlayerInfoCmd);
 			return result;
 		} // public int  GetUserGamePlayerInfoCmd( System.UInt64 InTransactionID )
 
 		// Cmd: Game game play information
 		public int  GetGamePlayerInfoCmd( System.UInt64 InTransactionID, System.UInt64 InPlayerID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameGetGamePlayerInfoCmd(m_Connection.NativeHandle, InTransactionID, InPlayerID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetGamePlayerInfoCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GetGamePlayerInfoCmd);
 			return result;
 		} // public int  GetGamePlayerInfoCmd( System.UInt64 InTransactionID, System.UInt64 InPlayerID )
 
 		// Cmd: Change NickName
 		public int  SetNickNameCmd( System.UInt64 InTransactionID, System.String InNickName, System.Byte InIsCostFree )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameSetNickNameCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InNickName + "\0"), InIsCostFree);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SetNickNameCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.SetNickNameCmd);
 			return result;
 		} // public int  SetNickNameCmd( System.UInt64 InTransactionID, System.String InNickName, System.Byte InIsCostFree )
 
 		// Cmd: Create Party
 		public int  CreatePartyCmd( System.UInt64 InTransactionID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameCreatePartyCmd(m_Connection.NativeHandle, InTransactionID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CreatePartyCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.CreatePartyCmd);
 			return result;
 		} // public int  CreatePartyCmd( System.UInt64 InTransactionID )
 
 		// Cmd: Join party
 		public int  JoinPartyCmd( System.UInt64 InTransactionID, System.UInt64 InPartyUID, System.UInt64 InInviterID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameJoinPartyCmd(m_Connection.NativeHandle, InTransactionID, InPartyUID, InInviterID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.JoinPartyCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.JoinPartyCmd);
 			return result;
 		} // public int  JoinPartyCmd( System.UInt64 InTransactionID, System.UInt64 InPartyUID, System.UInt64 InInviterID )
 
 		// Cmd: Leave party command
 		public int  LeavePartyCmd( System.UInt64 InTransactionID, System.UInt64 InPartyUID, System.UInt64 InPlayerID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameLeavePartyCmd(m_Connection.NativeHandle, InTransactionID, InPartyUID, InPlayerID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.LeavePartyCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.LeavePartyCmd);
 			return result;
 		} // public int  LeavePartyCmd( System.UInt64 InTransactionID, System.UInt64 InPartyUID, System.UInt64 InPlayerID )
 
 		// Cmd: Kick player from the party
 		public int  PartyKickPlayerCmd( System.UInt64 InTransactionID, System.UInt64 InPartyUID, System.UInt64 InPlayerID, System.UInt64 InPlayerToKick )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GamePartyKickPlayerCmd(m_Connection.NativeHandle, InTransactionID, InPartyUID, InPlayerID, InPlayerToKick);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyKickPlayerCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.PartyKickPlayerCmd);
 			return result;
 		} // public int  PartyKickPlayerCmd( System.UInt64 InTransactionID, System.UInt64 InPartyUID, System.UInt64 InPlayerID, System.UInt64 InPlayerToKick )
 
 		// Cmd: Invite a player to the party
 		public int  PartyInviteCmd( System.UInt64 InTransactionID, System.UInt64 InInviteTargetID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GamePartyInviteCmd(m_Connection.NativeHandle, InTransactionID, InInviteTargetID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyInviteCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.PartyInviteCmd);
 			return result;
 		} // public int  PartyInviteCmd( System.UInt64 InTransactionID, System.UInt64 InInviteTargetID )
 
 		// Cmd: Send Party quick chat message
 		public int  PartyQuickChatMessageCmd( System.UInt64 InTransactionID, System.UInt32 InQuickChatID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GamePartyQuickChatMessageCmd(m_Connection.NativeHandle, InTransactionID, InQuickChatID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyQuickChatMessageCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.PartyQuickChatMessageCmd);
 			return result;
 		} // public int  PartyQuickChatMessageCmd( System.UInt64 InTransactionID, System.UInt32 InQuickChatID )
 
 		// Cmd: Party chatting
 		public int  PartyChatMessageCmd( System.UInt64 InTransactionID, System.String InChatMessage )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GamePartyChatMessageCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyChatMessageCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.PartyChatMessageCmd);
 			return result;
 		} // public int  PartyChatMessageCmd( System.UInt64 InTransactionID, System.String InChatMessage )
 
 		// Cmd: Join to a game instance
 		public int  JoinGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InInsUID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameJoinGameInstanceCmd(m_Connection.NativeHandle, InTransactionID, InInsUID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.JoinGameInstanceCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.JoinGameInstanceCmd);
 			return result;
 		} // public int  JoinGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InInsUID )
 
 		// Cmd: Leave game instance
 		public int  LeaveGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InInsUID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameLeaveGameInstanceCmd(m_Connection.NativeHandle, InTransactionID, InInsUID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.LeaveGameInstanceCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.LeaveGameInstanceCmd);
 			return result;
 		} // public int  LeaveGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InInsUID )
 
 		// Cmd: Search game instance
 		public int  SearchGameInstanceCmd( System.UInt64 InTransactionID, System.String InSearchKeyword, System.UInt32 InZoneTableID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameSearchGameInstanceCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InSearchKeyword + "\0"), InZoneTableID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SearchGameInstanceCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.SearchGameInstanceCmd);
 			return result;
 		} // public int  SearchGameInstanceCmd( System.UInt64 InTransactionID, System.String InSearchKeyword, System.UInt32 InZoneTableID )
 
 		// Cmd: Search game instance
 		public int  GetCharacterDataInGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameGetCharacterDataInGameInstanceCmd(m_Connection.NativeHandle, InTransactionID, InGameInsUID, InPlayerID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterDataInGameInstanceCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterDataInGameInstanceCmd);
 			return result;
 		} // public int  GetCharacterDataInGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID )
 
 		// Cmd: Request Game match
 		public int  RequestGameMatchCmd( System.UInt64 InTransactionID, System.Byte InNumPlayer, System.Byte InRequestRole )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameRequestGameMatchCmd(m_Connection.NativeHandle, InTransactionID, InNumPlayer, InRequestRole);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RequestGameMatchCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.RequestGameMatchCmd);
 			return result;
 		} // public int  RequestGameMatchCmd( System.UInt64 InTransactionID, System.Byte InNumPlayer, System.Byte InRequestRole )
 
 		// Cmd: Cancel Game match
 		public int  CancelGameMatchCmd( System.UInt64 InTransactionID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameCancelGameMatchCmd(m_Connection.NativeHandle, InTransactionID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CancelGameMatchCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.CancelGameMatchCmd);
 			return result;
 		} // public int  CancelGameMatchCmd( System.UInt64 InTransactionID )
 
 		// Cmd: Buy shop item prepare
 		public int  BuyShopItemPrepareCmd( System.UInt64 InTransactionID, System.UInt32 InShopItemID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameBuyShopItemPrepareCmd(m_Connection.NativeHandle, InTransactionID, InShopItemID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.BuyShopItemPrepareCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.BuyShopItemPrepareCmd);
 			return result;
 		} // public int  BuyShopItemPrepareCmd( System.UInt64 InTransactionID, System.UInt32 InShopItemID )
 
 		// Cmd: Buy shop item
 		public int  BuyShopItemCmd( System.UInt64 InTransactionID, System.UInt32 InShopItemID, System.String InPlatform, System.String InPackageName, System.String InPurchaseTransactionID, System.Byte[] InPurchaseToken )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameBuyShopItemCmd(m_Connection.NativeHandle, InTransactionID, InShopItemID,System.Text.Encoding.UTF8.GetBytes(InPlatform + "\0"),System.Text.Encoding.UTF8.GetBytes(InPackageName + "\0"),System.Text.Encoding.UTF8.GetBytes(InPurchaseTransactionID + "\0"),(ushort)InPurchaseToken.Length, InPurchaseToken);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.BuyShopItemCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.BuyShopItemCmd);
 			return result;
 		} // public int  BuyShopItemCmd( System.UInt64 InTransactionID, System.UInt32 InShopItemID, System.String InPlatform, System.String InPackageName, System.String InPurchaseTransactionID, System.Byte[] InPurchaseToken )
 
 		// Cmd: Create or Join Chat channel
 		public int  CreateOrJoinChatChannelCmd( System.UInt64 InTransactionID, System.String InChannelName, System.String InPasscode )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameCreateOrJoinChatChannelCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InChannelName + "\0"),System.Text.Encoding.UTF8.GetBytes(InPasscode + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CreateOrJoinChatChannelCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.CreateOrJoinChatChannelCmd);
 			return result;
 		} // public int  CreateOrJoinChatChannelCmd( System.UInt64 InTransactionID, System.String InChannelName, System.String InPasscode )
 
 		// Cmd: Join
 		public int  JoinChatChannelCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, System.UInt64 InInviterID, System.String InPasscode )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameJoinChatChannelCmd(m_Connection.NativeHandle, InTransactionID, InChatUID, InInviterID,System.Text.Encoding.UTF8.GetBytes(InPasscode + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.JoinChatChannelCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.JoinChatChannelCmd);
 			return result;
 		} // public int  JoinChatChannelCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, System.UInt64 InInviterID, System.String InPasscode )
 
 		// Cmd: Leave ChatChannel command
 		public int  LeaveChatChannelCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, System.UInt64 InPlayerID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameLeaveChatChannelCmd(m_Connection.NativeHandle, InTransactionID, InChatUID, InPlayerID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.LeaveChatChannelCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.LeaveChatChannelCmd);
 			return result;
 		} // public int  LeaveChatChannelCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, System.UInt64 InPlayerID )
 
 		// Cmd: Kick player from the ChatChannel
 		public int  ChatChannelKickPlayerCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, System.UInt64 InPlayerID, System.UInt64 InPlayerToKick )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameChatChannelKickPlayerCmd(m_Connection.NativeHandle, InTransactionID, InChatUID, InPlayerID, InPlayerToKick);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelKickPlayerCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelKickPlayerCmd);
 			return result;
 		} // public int  ChatChannelKickPlayerCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, System.UInt64 InPlayerID, System.UInt64 InPlayerToKick )
 
 		// Cmd: Chat channel sending chatting message
 		public int  ChatChannelChatMessageCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, SF.VariableTable InChatMetaData, System.String InChatMessage )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			var InChatMetaData_ = InChatMetaData.ToByteArray();
 			using (var InChatMetaData_PinnedPtr_ = new PinnedByteBuffer(InChatMetaData_))
 			{
 			result = CSSFNetAdapter_GameChatChannelChatMessageCmd(m_Connection.NativeHandle, InTransactionID, InChatUID,(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelChatMessageCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelChatMessageCmd);
 			return result;
 		} // public int  ChatChannelChatMessageCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
 		// Cmd: Whisper(tell) other player chatting
 		public int  WhisperMessageCmd( System.UInt64 InTransactionID, System.UInt64 InReceiverID, System.String InReceiverName, SF.VariableTable InChatMetaData, System.String InChatMessage )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			var InChatMetaData_ = InChatMetaData.ToByteArray();
 			using (var InChatMetaData_PinnedPtr_ = new PinnedByteBuffer(InChatMetaData_))
 			{
 			result = CSSFNetAdapter_GameWhisperMessageCmd(m_Connection.NativeHandle, InTransactionID, InReceiverID,System.Text.Encoding.UTF8.GetBytes(InReceiverName + "\0"),(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.WhisperMessageCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.WhisperMessageCmd);
 			return result;
 		} // public int  WhisperMessageCmd( System.UInt64 InTransactionID, System.UInt64 InReceiverID, System.String InReceiverName, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
 		// Cmd: Create character
 		public int  CreateCharacterCmd( System.UInt64 InTransactionID, System.String InCharacterName, SF.VariableTable InPublicData, SF.VariableTable InPrivateData )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			var InPublicData_ = InPublicData.ToByteArray();
 			var InPrivateData_ = InPrivateData.ToByteArray();
 			using (var InPublicData_PinnedPtr_ = new PinnedByteBuffer(InPublicData_))
@@ -549,75 +595,81 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameCreateCharacterCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InCharacterName + "\0"),(ushort)InPublicData_.Length, InPublicData_PinnedPtr_.Ptr,(ushort)InPrivateData_.Length, InPrivateData_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CreateCharacterCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.CreateCharacterCmd);
 			return result;
 		} // public int  CreateCharacterCmd( System.UInt64 InTransactionID, System.String InCharacterName, SF.VariableTable InPublicData, SF.VariableTable InPrivateData )
 
 		// Cmd: Delete character
 		public int  DeleteCharacterCmd( System.UInt64 InTransactionID, System.UInt32 InCharacterID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameDeleteCharacterCmd(m_Connection.NativeHandle, InTransactionID, InCharacterID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.DeleteCharacterCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.DeleteCharacterCmd);
 			return result;
 		} // public int  DeleteCharacterCmd( System.UInt64 InTransactionID, System.UInt32 InCharacterID )
 
 		// Cmd: Get character list
 		public int  GetCharacterListCmd( System.UInt64 InTransactionID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameGetCharacterListCmd(m_Connection.NativeHandle, InTransactionID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterListCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterListCmd);
 			return result;
 		} // public int  GetCharacterListCmd( System.UInt64 InTransactionID )
 
 		// Cmd: 
 		public int  GetCharacterDataCmd( System.UInt64 InTransactionID, System.UInt32 InCharacterID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameGetCharacterDataCmd(m_Connection.NativeHandle, InTransactionID, InCharacterID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterDataCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterDataCmd);
 			return result;
 		} // public int  GetCharacterDataCmd( System.UInt64 InTransactionID, System.UInt32 InCharacterID )
 
 		// Cmd: Select character
 		public int  SelectCharacterCmd( System.UInt64 InTransactionID, System.UInt32 InCharacterID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameSelectCharacterCmd(m_Connection.NativeHandle, InTransactionID, InCharacterID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SelectCharacterCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.SelectCharacterCmd);
 			return result;
 		} // public int  SelectCharacterCmd( System.UInt64 InTransactionID, System.UInt32 InCharacterID )
 
 		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
 		public int  RequestServerNoticeUpdateCmd( System.UInt64 InTransactionID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameRequestServerNoticeUpdateCmd(m_Connection.NativeHandle, InTransactionID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RequestServerNoticeUpdateCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.RequestServerNoticeUpdateCmd);
 			return result;
 		} // public int  RequestServerNoticeUpdateCmd( System.UInt64 InTransactionID )
 
 		// Cmd: To call general functionality
 		public int  CallFunctionCmd( System.UInt64 InTransactionID, System.UInt32 InFunctionName, SF.VariableTable InParameters )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			var InParameters_ = InParameters.ToByteArray();
 			using (var InParameters_PinnedPtr_ = new PinnedByteBuffer(InParameters_))
 			{
 			result = CSSFNetAdapter_GameCallFunctionCmd(m_Connection.NativeHandle, InTransactionID, InFunctionName,(ushort)InParameters_.Length, InParameters_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CallFunctionCmd);
+			m_Connection.HandleSentMessage(result, MessageIDGame.CallFunctionCmd);
 			return result;
 		} // public int  CallFunctionCmd( System.UInt64 InTransactionID, System.UInt32 InFunctionName, SF.VariableTable InParameters )
 
@@ -906,11 +958,12 @@ namespace SF.Net
 		// Cmd: Player connected from a login server and moved to game server
 		public int  JoinGameServerRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InNickName, System.UInt64 InGameUID, System.UInt64 InPartyUID, System.UInt64 InPartyLeaderID, SF.MatchingQueueTicket InMatchingTicket )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameJoinGameServerRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InNickName + "\0"), InGameUID, InPartyUID, InPartyLeaderID,ref InMatchingTicket);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.JoinGameServerRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.JoinGameServerRes);
 			return result;
 		} // public int  JoinGameServerRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InNickName, System.UInt64 InGameUID, System.UInt64 InPartyUID, System.UInt64 InPartyLeaderID, SF.MatchingQueueTicket InMatchingTicket )
 
@@ -918,11 +971,12 @@ namespace SF.Net
 		// Cmd: player complition statues
 		public int  GetAchievementStatsRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.AchievementStat[] InAchievementStats )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameGetAchievementStatsRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InAchievementStats.Length, InAchievementStats);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetAchievementStatsRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GetAchievementStatsRes);
 			return result;
 		} // public int  GetAchievementStatsRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.AchievementStat[] InAchievementStats )
 
@@ -930,11 +984,12 @@ namespace SF.Net
 		// Cmd: Player complition state
 		public int  Dummy1Res( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameDummy1Res(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.Dummy1Res);
+			m_Connection.HandleSentMessage(result, MessageIDGame.Dummy1Res);
 			return result;
 		} // public int  Dummy1Res( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -942,11 +997,12 @@ namespace SF.Net
 		// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
 		public int  RegisterGCMRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameRegisterGCMRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RegisterGCMRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.RegisterGCMRes);
 			return result;
 		} // public int  RegisterGCMRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -954,11 +1010,12 @@ namespace SF.Net
 		// Cmd: Unregister Google notification service ID
 		public int  UnregisterGCMRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameUnregisterGCMRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.UnregisterGCMRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.UnregisterGCMRes);
 			return result;
 		} // public int  UnregisterGCMRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -966,11 +1023,12 @@ namespace SF.Net
 		// Cmd: Invite friend
 		public int  InviteFriendRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameInviteFriendRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.InviteFriendRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.InviteFriendRes);
 			return result;
 		} // public int  InviteFriendRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -978,11 +1036,12 @@ namespace SF.Net
 		// Cmd: Accept friend request
 		public int  AcceptFriendRequestRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.FriendInformation InNewFriend )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameAcceptFriendRequestRes(m_Connection.NativeHandle, InTransactionID, InResult,ref InNewFriend);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.AcceptFriendRequestRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.AcceptFriendRequestRes);
 			return result;
 		} // public int  AcceptFriendRequestRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.FriendInformation InNewFriend )
 
@@ -990,11 +1049,12 @@ namespace SF.Net
 		// S2C: Notification for friend request is accepted
 		public int  FriendRequestAcceptedS2CEvt( SF.FriendInformation InAccepter )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameFriendRequestAcceptedS2CEvt(m_Connection.NativeHandle,ref InAccepter);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FriendRequestAcceptedS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.FriendRequestAcceptedS2CEvt);
 			return result;
 		} // public int  FriendRequestAcceptedS2CEvt( SF.FriendInformation InAccepter )
 
@@ -1002,11 +1062,12 @@ namespace SF.Net
 		// Cmd: Remove friden form the friend list
 		public int  RemoveFriendRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InFriendID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameRemoveFriendRes(m_Connection.NativeHandle, InTransactionID, InResult, InFriendID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RemoveFriendRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.RemoveFriendRes);
 			return result;
 		} // public int  RemoveFriendRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InFriendID )
 
@@ -1014,11 +1075,12 @@ namespace SF.Net
 		// S2C: Friend removed
 		public int  FriendRemovedS2CEvt( System.UInt64 InFriendID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameFriendRemovedS2CEvt(m_Connection.NativeHandle, InFriendID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FriendRemovedS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.FriendRemovedS2CEvt);
 			return result;
 		} // public int  FriendRemovedS2CEvt( System.UInt64 InFriendID )
 
@@ -1026,11 +1088,12 @@ namespace SF.Net
 		// Cmd: Get friend list
 		public int  GetFriendListRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 InMaxFriendSlot, System.UInt16 InTotalNumberOfFriends, System.UInt16 InStartIndex, SF.FriendInformation[] InFriendList )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameGetFriendListRes(m_Connection.NativeHandle, InTransactionID, InResult, InMaxFriendSlot, InTotalNumberOfFriends, InStartIndex,(ushort)InFriendList.Length, InFriendList);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetFriendListRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GetFriendListRes);
 			return result;
 		} // public int  GetFriendListRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 InMaxFriendSlot, System.UInt16 InTotalNumberOfFriends, System.UInt16 InStartIndex, SF.FriendInformation[] InFriendList )
 
@@ -1038,11 +1101,12 @@ namespace SF.Net
 		// Cmd: Query notification list
 		public int  GetNotificationListRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameGetNotificationListRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetNotificationListRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GetNotificationListRes);
 			return result;
 		} // public int  GetNotificationListRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1050,11 +1114,12 @@ namespace SF.Net
 		// Cmd: Delete notification
 		public int  DeleteNotificationRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InNotificationID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameDeleteNotificationRes(m_Connection.NativeHandle, InTransactionID, InResult, InNotificationID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.DeleteNotificationRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.DeleteNotificationRes);
 			return result;
 		} // public int  DeleteNotificationRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InNotificationID )
 
@@ -1062,11 +1127,12 @@ namespace SF.Net
 		// Cmd: Set notification is read
 		public int  SetNotificationReadRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InNotificationID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameSetNotificationReadRes(m_Connection.NativeHandle, InTransactionID, InResult, InNotificationID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SetNotificationReadRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.SetNotificationReadRes);
 			return result;
 		} // public int  SetNotificationReadRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InNotificationID )
 
@@ -1074,11 +1140,12 @@ namespace SF.Net
 		// Cmd: Accept notification
 		public int  AcceptNotificationRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InNotificationID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameAcceptNotificationRes(m_Connection.NativeHandle, InTransactionID, InResult, InNotificationID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.AcceptNotificationRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.AcceptNotificationRes);
 			return result;
 		} // public int  AcceptNotificationRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InNotificationID )
 
@@ -1086,13 +1153,14 @@ namespace SF.Net
 		// S2C: Notify new notification
 		public int  NotifyS2CEvt( System.UInt32 InNotificationID, System.UInt32 InNotificationType, SF.VariableTable InParameters, System.Byte InIsRead, System.UInt64 InTimeStamp )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			var InParameters_ = InParameters.ToByteArray();
 			using (var InParameters_PinnedPtr_ = new PinnedByteBuffer(InParameters_))
 			{
 			result = CSSFNetAdapter_GameNotifyS2CEvt(m_Connection.NativeHandle, InNotificationID, InNotificationType,(ushort)InParameters_.Length, InParameters_PinnedPtr_.Ptr, InIsRead, InTimeStamp);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.NotifyS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.NotifyS2CEvt);
 			return result;
 		} // public int  NotifyS2CEvt( System.UInt32 InNotificationID, System.UInt32 InNotificationType, SF.VariableTable InParameters, System.Byte InIsRead, System.UInt64 InTimeStamp )
 
@@ -1100,11 +1168,12 @@ namespace SF.Net
 		// Cmd: PlayerId Conversion
 		public int  FindPlayerByPlatformIdRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, SF.PlayerPlatformID InPlayerPlatformId )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameFindPlayerByPlatformIdRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayerId,ref InPlayerPlatformId);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlatformIdRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlatformIdRes);
 			return result;
 		} // public int  FindPlayerByPlatformIdRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, SF.PlayerPlatformID InPlayerPlatformId )
 
@@ -1112,11 +1181,12 @@ namespace SF.Net
 		// Cmd: PlayerId conversion
 		public int  FindPlayerByCharacterNameRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameFindPlayerByCharacterNameRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayerId);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByCharacterNameRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByCharacterNameRes);
 			return result;
 		} // public int  FindPlayerByCharacterNameRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId )
 
@@ -1124,11 +1194,12 @@ namespace SF.Net
 		// Cmd: PlayerId Conversion
 		public int  FindPlayerByPlatformUserNameRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, SF.PlayerPlatformID InPlayerPlatformId )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameFindPlayerByPlatformUserNameRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayerId,ref InPlayerPlatformId);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlatformUserNameRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlatformUserNameRes);
 			return result;
 		} // public int  FindPlayerByPlatformUserNameRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, SF.PlayerPlatformID InPlayerPlatformId )
 
@@ -1136,11 +1207,12 @@ namespace SF.Net
 		// Cmd: Query playerID list
 		public int  FindPlayerByEMailRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.PlayerInformation InPlayer )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameFindPlayerByEMailRes(m_Connection.NativeHandle, InTransactionID, InResult,ref InPlayer);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByEMailRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByEMailRes);
 			return result;
 		} // public int  FindPlayerByEMailRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.PlayerInformation InPlayer )
 
@@ -1148,11 +1220,12 @@ namespace SF.Net
 		// Cmd: Query playerID list
 		public int  FindPlayerByPlayerIDRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.PlayerInformation InPlayer )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameFindPlayerByPlayerIDRes(m_Connection.NativeHandle, InTransactionID, InResult,ref InPlayer);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlayerIDRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlayerIDRes);
 			return result;
 		} // public int  FindPlayerByPlayerIDRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.PlayerInformation InPlayer )
 
@@ -1160,11 +1233,12 @@ namespace SF.Net
 		// Cmd: *Request Player Status Update
 		public int  RequestPlayerStatusUpdateRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameRequestPlayerStatusUpdateRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RequestPlayerStatusUpdateRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.RequestPlayerStatusUpdateRes);
 			return result;
 		} // public int  RequestPlayerStatusUpdateRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1172,11 +1246,12 @@ namespace SF.Net
 		// S2C: *Notify Player Status Updated
 		public int  NotifyPlayerStatusUpdatedS2CEvt( System.UInt64 InPlayerID, System.UInt32 InLatestActiveTime, System.Byte InIsInGame )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameNotifyPlayerStatusUpdatedS2CEvt(m_Connection.NativeHandle, InPlayerID, InLatestActiveTime, InIsInGame);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.NotifyPlayerStatusUpdatedS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.NotifyPlayerStatusUpdatedS2CEvt);
 			return result;
 		} // public int  NotifyPlayerStatusUpdatedS2CEvt( System.UInt64 InPlayerID, System.UInt32 InLatestActiveTime, System.Byte InIsInGame )
 
@@ -1184,11 +1259,12 @@ namespace SF.Net
 		// Cmd: Get Ranking list
 		public int  GetRankingListRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.TotalRankingPlayerInformation[] InRanking )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameGetRankingListRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InRanking.Length, InRanking);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetRankingListRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GetRankingListRes);
 			return result;
 		} // public int  GetRankingListRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.TotalRankingPlayerInformation[] InRanking )
 
@@ -1196,13 +1272,14 @@ namespace SF.Net
 		// Cmd: Game user game play information
 		public int  GetUserGamePlayerInfoRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InAttributes )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			var InAttributes_ = InAttributes.ToByteArray();
 			using (var InAttributes_PinnedPtr_ = new PinnedByteBuffer(InAttributes_))
 			{
 			result = CSSFNetAdapter_GameGetUserGamePlayerInfoRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetUserGamePlayerInfoRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GetUserGamePlayerInfoRes);
 			return result;
 		} // public int  GetUserGamePlayerInfoRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InAttributes )
 
@@ -1210,13 +1287,14 @@ namespace SF.Net
 		// Cmd: Game game play information
 		public int  GetGamePlayerInfoRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerID, SF.VariableTable InAttributes )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			var InAttributes_ = InAttributes.ToByteArray();
 			using (var InAttributes_PinnedPtr_ = new PinnedByteBuffer(InAttributes_))
 			{
 			result = CSSFNetAdapter_GameGetGamePlayerInfoRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayerID,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetGamePlayerInfoRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GetGamePlayerInfoRes);
 			return result;
 		} // public int  GetGamePlayerInfoRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerID, SF.VariableTable InAttributes )
 
@@ -1224,11 +1302,12 @@ namespace SF.Net
 		// S2C: Player level up event
 		public int  LevelUpS2CEvt( System.UInt64 InCurrentTotalExp, System.UInt32 InCurrentLevel )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameLevelUpS2CEvt(m_Connection.NativeHandle, InCurrentTotalExp, InCurrentLevel);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.LevelUpS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.LevelUpS2CEvt);
 			return result;
 		} // public int  LevelUpS2CEvt( System.UInt64 InCurrentTotalExp, System.UInt32 InCurrentLevel )
 
@@ -1236,11 +1315,12 @@ namespace SF.Net
 		// Cmd: Change NickName
 		public int  SetNickNameRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameSetNickNameRes(m_Connection.NativeHandle, InTransactionID, InResult, InTotalGem, InTotalGameMoney);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SetNickNameRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.SetNickNameRes);
 			return result;
 		} // public int  SetNickNameRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney )
 
@@ -1248,11 +1328,12 @@ namespace SF.Net
 		// Cmd: Create Party
 		public int  CreatePartyRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPartyUID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameCreatePartyRes(m_Connection.NativeHandle, InTransactionID, InResult, InPartyUID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CreatePartyRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.CreatePartyRes);
 			return result;
 		} // public int  CreatePartyRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPartyUID )
 
@@ -1260,11 +1341,12 @@ namespace SF.Net
 		// Cmd: Join party
 		public int  JoinPartyRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPartyUID, System.UInt64 InPartyLeaderID, System.Byte[] InChatHistoryData )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameJoinPartyRes(m_Connection.NativeHandle, InTransactionID, InResult, InPartyUID, InPartyLeaderID,(ushort)InChatHistoryData.Length, InChatHistoryData);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.JoinPartyRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.JoinPartyRes);
 			return result;
 		} // public int  JoinPartyRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPartyUID, System.UInt64 InPartyLeaderID, System.Byte[] InChatHistoryData )
 
@@ -1272,11 +1354,12 @@ namespace SF.Net
 		// S2C: Player Joined event
 		public int  PartyPlayerJoinedS2CEvt( System.UInt64 InPartyUID, SF.PlayerInformation InJoinedPlayer )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GamePartyPlayerJoinedS2CEvt(m_Connection.NativeHandle, InPartyUID,ref InJoinedPlayer);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyPlayerJoinedS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.PartyPlayerJoinedS2CEvt);
 			return result;
 		} // public int  PartyPlayerJoinedS2CEvt( System.UInt64 InPartyUID, SF.PlayerInformation InJoinedPlayer )
 
@@ -1284,11 +1367,12 @@ namespace SF.Net
 		// S2C: Party leader changed event
 		public int  PartyLeaderChangedS2CEvt( System.UInt64 InPartyUID, System.UInt64 InNewLeaderID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GamePartyLeaderChangedS2CEvt(m_Connection.NativeHandle, InPartyUID, InNewLeaderID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyLeaderChangedS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.PartyLeaderChangedS2CEvt);
 			return result;
 		} // public int  PartyLeaderChangedS2CEvt( System.UInt64 InPartyUID, System.UInt64 InNewLeaderID )
 
@@ -1296,11 +1380,12 @@ namespace SF.Net
 		// Cmd: Leave party command
 		public int  LeavePartyRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameLeavePartyRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.LeavePartyRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.LeavePartyRes);
 			return result;
 		} // public int  LeavePartyRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1308,11 +1393,12 @@ namespace SF.Net
 		// S2C: Party Player left event
 		public int  PartyPlayerLeftS2CEvt( System.UInt64 InPartyUID, System.UInt64 InLeftPlayerID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GamePartyPlayerLeftS2CEvt(m_Connection.NativeHandle, InPartyUID, InLeftPlayerID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyPlayerLeftS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.PartyPlayerLeftS2CEvt);
 			return result;
 		} // public int  PartyPlayerLeftS2CEvt( System.UInt64 InPartyUID, System.UInt64 InLeftPlayerID )
 
@@ -1320,11 +1406,12 @@ namespace SF.Net
 		// Cmd: Kick player from the party
 		public int  PartyKickPlayerRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GamePartyKickPlayerRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyKickPlayerRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.PartyKickPlayerRes);
 			return result;
 		} // public int  PartyKickPlayerRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1332,11 +1419,12 @@ namespace SF.Net
 		// S2C: Party Player kicked message
 		public int  PartyPlayerKickedS2CEvt( System.UInt64 InPartyUID, System.UInt64 InKickedPlayerID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GamePartyPlayerKickedS2CEvt(m_Connection.NativeHandle, InPartyUID, InKickedPlayerID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyPlayerKickedS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.PartyPlayerKickedS2CEvt);
 			return result;
 		} // public int  PartyPlayerKickedS2CEvt( System.UInt64 InPartyUID, System.UInt64 InKickedPlayerID )
 
@@ -1344,11 +1432,12 @@ namespace SF.Net
 		// Cmd: Invite a player to the party
 		public int  PartyInviteRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GamePartyInviteRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyInviteRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.PartyInviteRes);
 			return result;
 		} // public int  PartyInviteRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1356,11 +1445,12 @@ namespace SF.Net
 		// S2C: Party invite requested
 		public int  PartyInviteRequestedS2CEvt( System.UInt64 InInviterID, System.String InInviterName, System.UInt64 InPartyToJoinUID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GamePartyInviteRequestedS2CEvt(m_Connection.NativeHandle, InInviterID,System.Text.Encoding.UTF8.GetBytes(InInviterName + "\0"), InPartyToJoinUID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyInviteRequestedS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.PartyInviteRequestedS2CEvt);
 			return result;
 		} // public int  PartyInviteRequestedS2CEvt( System.UInt64 InInviterID, System.String InInviterName, System.UInt64 InPartyToJoinUID )
 
@@ -1368,11 +1458,12 @@ namespace SF.Net
 		// Cmd: Send Party quick chat message
 		public int  PartyQuickChatMessageRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GamePartyQuickChatMessageRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyQuickChatMessageRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.PartyQuickChatMessageRes);
 			return result;
 		} // public int  PartyQuickChatMessageRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1380,11 +1471,12 @@ namespace SF.Net
 		// S2C: Party Chatting message event
 		public int  PartyQuickChatMessageS2CEvt( System.UInt64 InSenderID, System.UInt32 InQuickChatID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GamePartyQuickChatMessageS2CEvt(m_Connection.NativeHandle, InSenderID, InQuickChatID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyQuickChatMessageS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.PartyQuickChatMessageS2CEvt);
 			return result;
 		} // public int  PartyQuickChatMessageS2CEvt( System.UInt64 InSenderID, System.UInt32 InQuickChatID )
 
@@ -1392,11 +1484,12 @@ namespace SF.Net
 		// Cmd: Party chatting
 		public int  PartyChatMessageRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GamePartyChatMessageRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyChatMessageRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.PartyChatMessageRes);
 			return result;
 		} // public int  PartyChatMessageRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1404,11 +1497,12 @@ namespace SF.Net
 		// S2C: Party Chatting message event
 		public int  PartyChatMessageS2CEvt( System.UInt64 InSenderID, System.String InSenderName, System.String InChatMessage )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GamePartyChatMessageS2CEvt(m_Connection.NativeHandle, InSenderID,System.Text.Encoding.UTF8.GetBytes(InSenderName + "\0"),System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyChatMessageS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.PartyChatMessageS2CEvt);
 			return result;
 		} // public int  PartyChatMessageS2CEvt( System.UInt64 InSenderID, System.String InSenderName, System.String InChatMessage )
 
@@ -1416,11 +1510,12 @@ namespace SF.Net
 		// Cmd: Join to a game instance
 		public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID, System.String InServerPublicAddress )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameJoinGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult, InInsUID,System.Text.Encoding.UTF8.GetBytes(InServerPublicAddress + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.JoinGameInstanceRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.JoinGameInstanceRes);
 			return result;
 		} // public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID, System.String InServerPublicAddress )
 
@@ -1428,11 +1523,12 @@ namespace SF.Net
 		// Cmd: Leave game instance
 		public int  LeaveGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameLeaveGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.LeaveGameInstanceRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.LeaveGameInstanceRes);
 			return result;
 		} // public int  LeaveGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1440,13 +1536,14 @@ namespace SF.Net
 		// Cmd: Search game instance
 		public int  SearchGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable[] InGameInstances )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			var InGameInstances_ = InGameInstances.ToByteArray();
 			using (var InGameInstances_PinnedPtr_ = new PinnedByteBuffer(InGameInstances_))
 			{
 			result = CSSFNetAdapter_GameSearchGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InGameInstances_.Length, InGameInstances_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SearchGameInstanceRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.SearchGameInstanceRes);
 			return result;
 		} // public int  SearchGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable[] InGameInstances )
 
@@ -1454,13 +1551,14 @@ namespace SF.Net
 		// Cmd: Search game instance
 		public int  GetCharacterDataInGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerID, SF.VariableTable InGameInstances )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			var InGameInstances_ = InGameInstances.ToByteArray();
 			using (var InGameInstances_PinnedPtr_ = new PinnedByteBuffer(InGameInstances_))
 			{
 			result = CSSFNetAdapter_GameGetCharacterDataInGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayerID,(ushort)InGameInstances_.Length, InGameInstances_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterDataInGameInstanceRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterDataInGameInstanceRes);
 			return result;
 		} // public int  GetCharacterDataInGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerID, SF.VariableTable InGameInstances )
 
@@ -1468,11 +1566,12 @@ namespace SF.Net
 		// Cmd: Request Game match
 		public int  RequestGameMatchRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameRequestGameMatchRes(m_Connection.NativeHandle, InTransactionID, InResult, InTotalGem, InTotalGameMoney);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RequestGameMatchRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.RequestGameMatchRes);
 			return result;
 		} // public int  RequestGameMatchRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney )
 
@@ -1480,11 +1579,12 @@ namespace SF.Net
 		// S2C: Game matched
 		public int  GameMatchedS2CEvt( System.UInt64 InInsUID, System.UInt32 InTimeStamp, SF.GameStateID InGameState, System.Byte InDay, System.Byte InMaxPlayer, System.Byte InPlayerIndex, System.Byte InPlayerCharacter, System.Byte InRole, System.Byte InDead, System.Byte[] InChatHistoryData, System.Byte[] InGameLogData, System.UInt32 InStamina, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameGameMatchedS2CEvt(m_Connection.NativeHandle, InInsUID, InTimeStamp,(int) InGameState, InDay, InMaxPlayer, InPlayerIndex, InPlayerCharacter, InRole, InDead,(ushort)InChatHistoryData.Length, InChatHistoryData,(ushort)InGameLogData.Length, InGameLogData, InStamina, InTotalGem, InTotalGameMoney);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GameMatchedS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GameMatchedS2CEvt);
 			return result;
 		} // public int  GameMatchedS2CEvt( System.UInt64 InInsUID, System.UInt32 InTimeStamp, SF.GameStateID InGameState, System.Byte InDay, System.Byte InMaxPlayer, System.Byte InPlayerIndex, System.Byte InPlayerCharacter, System.Byte InRole, System.Byte InDead, System.Byte[] InChatHistoryData, System.Byte[] InGameLogData, System.UInt32 InStamina, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney )
 
@@ -1492,11 +1592,12 @@ namespace SF.Net
 		// S2C: Game match failed
 		public int  GameMatchFailedS2CEvt( System.Int32 InFailedReason )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameGameMatchFailedS2CEvt(m_Connection.NativeHandle, InFailedReason);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GameMatchFailedS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GameMatchFailedS2CEvt);
 			return result;
 		} // public int  GameMatchFailedS2CEvt( System.Int32 InFailedReason )
 
@@ -1504,11 +1605,12 @@ namespace SF.Net
 		// S2C: Game matching started
 		public int  GameMatchingStartedS2CEvt(  )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameGameMatchingStartedS2CEvt(m_Connection.NativeHandle);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GameMatchingStartedS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GameMatchingStartedS2CEvt);
 			return result;
 		} // public int  GameMatchingStartedS2CEvt(  )
 
@@ -1516,11 +1618,12 @@ namespace SF.Net
 		// Cmd: Cancel Game match
 		public int  CancelGameMatchRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameCancelGameMatchRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CancelGameMatchRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.CancelGameMatchRes);
 			return result;
 		} // public int  CancelGameMatchRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1528,11 +1631,12 @@ namespace SF.Net
 		// S2C: game matching canceled
 		public int  GameMatchingCanceledS2CEvt(  )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameGameMatchingCanceledS2CEvt(m_Connection.NativeHandle);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GameMatchingCanceledS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GameMatchingCanceledS2CEvt);
 			return result;
 		} // public int  GameMatchingCanceledS2CEvt(  )
 
@@ -1540,11 +1644,12 @@ namespace SF.Net
 		// Cmd: Buy shop item prepare
 		public int  BuyShopItemPrepareRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InShopItemID, System.String InPurchaseID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameBuyShopItemPrepareRes(m_Connection.NativeHandle, InTransactionID, InResult, InShopItemID,System.Text.Encoding.UTF8.GetBytes(InPurchaseID + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.BuyShopItemPrepareRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.BuyShopItemPrepareRes);
 			return result;
 		} // public int  BuyShopItemPrepareRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InShopItemID, System.String InPurchaseID )
 
@@ -1552,11 +1657,12 @@ namespace SF.Net
 		// Cmd: Buy shop item
 		public int  BuyShopItemRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InShopItemID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameBuyShopItemRes(m_Connection.NativeHandle, InTransactionID, InResult, InShopItemID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.BuyShopItemRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.BuyShopItemRes);
 			return result;
 		} // public int  BuyShopItemRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InShopItemID )
 
@@ -1564,11 +1670,12 @@ namespace SF.Net
 		// Cmd: Create or Join Chat channel
 		public int  CreateOrJoinChatChannelRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID, System.UInt64 InChannelLeaderID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameCreateOrJoinChatChannelRes(m_Connection.NativeHandle, InTransactionID, InResult, InChatUID, InChannelLeaderID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CreateOrJoinChatChannelRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.CreateOrJoinChatChannelRes);
 			return result;
 		} // public int  CreateOrJoinChatChannelRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID, System.UInt64 InChannelLeaderID )
 
@@ -1576,11 +1683,12 @@ namespace SF.Net
 		// Cmd: Join
 		public int  JoinChatChannelRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID, System.UInt64 InChannelLeaderID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameJoinChatChannelRes(m_Connection.NativeHandle, InTransactionID, InResult, InChatUID, InChannelLeaderID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.JoinChatChannelRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.JoinChatChannelRes);
 			return result;
 		} // public int  JoinChatChannelRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID, System.UInt64 InChannelLeaderID )
 
@@ -1588,11 +1696,12 @@ namespace SF.Net
 		// S2C: Player Joined event
 		public int  ChatChannelPlayerJoinedS2CEvt( System.UInt64 InChatUID, SF.PlayerInformation InJoinedPlayer )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameChatChannelPlayerJoinedS2CEvt(m_Connection.NativeHandle, InChatUID,ref InJoinedPlayer);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelPlayerJoinedS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelPlayerJoinedS2CEvt);
 			return result;
 		} // public int  ChatChannelPlayerJoinedS2CEvt( System.UInt64 InChatUID, SF.PlayerInformation InJoinedPlayer )
 
@@ -1600,11 +1709,12 @@ namespace SF.Net
 		// S2C: ChatChannel leader changed event
 		public int  ChatChannelLeaderChangedS2CEvt( System.UInt64 InChatUID, System.UInt64 InNewLeaderID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameChatChannelLeaderChangedS2CEvt(m_Connection.NativeHandle, InChatUID, InNewLeaderID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelLeaderChangedS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelLeaderChangedS2CEvt);
 			return result;
 		} // public int  ChatChannelLeaderChangedS2CEvt( System.UInt64 InChatUID, System.UInt64 InNewLeaderID )
 
@@ -1612,11 +1722,12 @@ namespace SF.Net
 		// Cmd: Leave ChatChannel command
 		public int  LeaveChatChannelRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameLeaveChatChannelRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.LeaveChatChannelRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.LeaveChatChannelRes);
 			return result;
 		} // public int  LeaveChatChannelRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1624,11 +1735,12 @@ namespace SF.Net
 		// S2C: ChatChannel Player left event
 		public int  ChatChannelPlayerLeftS2CEvt( System.UInt64 InChatUID, System.UInt64 InLeftPlayerID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameChatChannelPlayerLeftS2CEvt(m_Connection.NativeHandle, InChatUID, InLeftPlayerID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelPlayerLeftS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelPlayerLeftS2CEvt);
 			return result;
 		} // public int  ChatChannelPlayerLeftS2CEvt( System.UInt64 InChatUID, System.UInt64 InLeftPlayerID )
 
@@ -1636,11 +1748,12 @@ namespace SF.Net
 		// Cmd: Kick player from the ChatChannel
 		public int  ChatChannelKickPlayerRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameChatChannelKickPlayerRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelKickPlayerRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelKickPlayerRes);
 			return result;
 		} // public int  ChatChannelKickPlayerRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1648,11 +1761,12 @@ namespace SF.Net
 		// S2C: ChatChannel Player kicked message
 		public int  ChatChannelPlayerKickedS2CEvt( System.UInt64 InChatUID, System.UInt64 InKickedPlayerID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameChatChannelPlayerKickedS2CEvt(m_Connection.NativeHandle, InChatUID, InKickedPlayerID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelPlayerKickedS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelPlayerKickedS2CEvt);
 			return result;
 		} // public int  ChatChannelPlayerKickedS2CEvt( System.UInt64 InChatUID, System.UInt64 InKickedPlayerID )
 
@@ -1660,11 +1774,12 @@ namespace SF.Net
 		// Cmd: Chat channel sending chatting message
 		public int  ChatChannelChatMessageRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameChatChannelChatMessageRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelChatMessageRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelChatMessageRes);
 			return result;
 		} // public int  ChatChannelChatMessageRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1672,13 +1787,14 @@ namespace SF.Net
 		// S2C: ChatChannel Chatting message event
 		public int  ChatChannelChatMessageS2CEvt( System.UInt64 InSenderID, SF.VariableTable InChatMetaData, System.String InChatMessage )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			var InChatMetaData_ = InChatMetaData.ToByteArray();
 			using (var InChatMetaData_PinnedPtr_ = new PinnedByteBuffer(InChatMetaData_))
 			{
 			result = CSSFNetAdapter_GameChatChannelChatMessageS2CEvt(m_Connection.NativeHandle, InSenderID,(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelChatMessageS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelChatMessageS2CEvt);
 			return result;
 		} // public int  ChatChannelChatMessageS2CEvt( System.UInt64 InSenderID, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
@@ -1686,11 +1802,12 @@ namespace SF.Net
 		// Cmd: Whisper(tell) other player chatting
 		public int  WhisperMessageRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameWhisperMessageRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.WhisperMessageRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.WhisperMessageRes);
 			return result;
 		} // public int  WhisperMessageRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1698,13 +1815,14 @@ namespace SF.Net
 		// S2C: Other player whispered(tell) to me message event
 		public int  WhisperMessageS2CEvt( System.UInt64 InSenderID, SF.VariableTable InChatMetaData, System.String InChatMessage )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			var InChatMetaData_ = InChatMetaData.ToByteArray();
 			using (var InChatMetaData_PinnedPtr_ = new PinnedByteBuffer(InChatMetaData_))
 			{
 			result = CSSFNetAdapter_GameWhisperMessageS2CEvt(m_Connection.NativeHandle, InSenderID,(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.WhisperMessageS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.WhisperMessageS2CEvt);
 			return result;
 		} // public int  WhisperMessageS2CEvt( System.UInt64 InSenderID, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
@@ -1712,11 +1830,12 @@ namespace SF.Net
 		// Cmd: Create character
 		public int  CreateCharacterRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InCharacterID )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameCreateCharacterRes(m_Connection.NativeHandle, InTransactionID, InResult, InCharacterID);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CreateCharacterRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.CreateCharacterRes);
 			return result;
 		} // public int  CreateCharacterRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InCharacterID )
 
@@ -1724,11 +1843,12 @@ namespace SF.Net
 		// Cmd: Delete character
 		public int  DeleteCharacterRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameDeleteCharacterRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.DeleteCharacterRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.DeleteCharacterRes);
 			return result;
 		} // public int  DeleteCharacterRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1736,13 +1856,14 @@ namespace SF.Net
 		// Cmd: Get character list
 		public int  GetCharacterListRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable[] InCharacters )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			var InCharacters_ = InCharacters.ToByteArray();
 			using (var InCharacters_PinnedPtr_ = new PinnedByteBuffer(InCharacters_))
 			{
 			result = CSSFNetAdapter_GameGetCharacterListRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InCharacters_.Length, InCharacters_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterListRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterListRes);
 			return result;
 		} // public int  GetCharacterListRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable[] InCharacters )
 
@@ -1750,7 +1871,8 @@ namespace SF.Net
 		// Cmd: 
 		public int  GetCharacterDataRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InPrivateData, SF.VariableTable InEquipData )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			var InPrivateData_ = InPrivateData.ToByteArray();
 			var InEquipData_ = InEquipData.ToByteArray();
 			using (var InPrivateData_PinnedPtr_ = new PinnedByteBuffer(InPrivateData_))
@@ -1758,7 +1880,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetCharacterDataRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InPrivateData_.Length, InPrivateData_PinnedPtr_.Ptr,(ushort)InEquipData_.Length, InEquipData_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterDataRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterDataRes);
 			return result;
 		} // public int  GetCharacterDataRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InPrivateData, SF.VariableTable InEquipData )
 
@@ -1766,13 +1888,14 @@ namespace SF.Net
 		// Cmd: Select character
 		public int  SelectCharacterRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InCharacterID, SF.VariableTable InAttributes )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			var InAttributes_ = InAttributes.ToByteArray();
 			using (var InAttributes_PinnedPtr_ = new PinnedByteBuffer(InAttributes_))
 			{
 			result = CSSFNetAdapter_GameSelectCharacterRes(m_Connection.NativeHandle, InTransactionID, InResult, InCharacterID,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SelectCharacterRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.SelectCharacterRes);
 			return result;
 		} // public int  SelectCharacterRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InCharacterID, SF.VariableTable InAttributes )
 
@@ -1780,11 +1903,12 @@ namespace SF.Net
 		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
 		public int  RequestServerNoticeUpdateRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameRequestServerNoticeUpdateRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RequestServerNoticeUpdateRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.RequestServerNoticeUpdateRes);
 			return result;
 		} // public int  RequestServerNoticeUpdateRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1792,11 +1916,12 @@ namespace SF.Net
 		// S2C: Server Notice updated event
 		public int  ServerNoticeS2CEvt( System.SByte InNoticeCategory, System.String InServerNoticeMessage )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			{
 			result = CSSFNetAdapter_GameServerNoticeS2CEvt(m_Connection.NativeHandle, InNoticeCategory,System.Text.Encoding.UTF8.GetBytes(InServerNoticeMessage + "\0"));
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ServerNoticeS2CEvt);
+			m_Connection.HandleSentMessage(result, MessageIDGame.ServerNoticeS2CEvt);
 			return result;
 		} // public int  ServerNoticeS2CEvt( System.SByte InNoticeCategory, System.String InServerNoticeMessage )
 
@@ -1804,13 +1929,14 @@ namespace SF.Net
 		// Cmd: To call general functionality
 		public int  CallFunctionRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InResults )
 		{
- 			int result;
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
 			var InResults_ = InResults.ToByteArray();
 			using (var InResults_PinnedPtr_ = new PinnedByteBuffer(InResults_))
 			{
 			result = CSSFNetAdapter_GameCallFunctionRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InResults_.Length, InResults_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CallFunctionRes);
+			m_Connection.HandleSentMessage(result, MessageIDGame.CallFunctionRes);
 			return result;
 		} // public int  CallFunctionRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InResults )
 
