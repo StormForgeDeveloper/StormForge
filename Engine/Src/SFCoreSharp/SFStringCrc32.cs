@@ -26,9 +26,16 @@ namespace SF
             StringHash = strHash;
         }
 
-        public StringCrc32(string strValue)
+        public StringCrc32(string? strValue)
         {
-            StringHash = NativeAddNGetString32(strValue);
+            if (!string.IsNullOrEmpty(strValue))
+            {
+                StringHash = NativeAddNGetString32(strValue);
+            }
+            else
+            {
+                StringHash = 0;
+            }
         }
 
 

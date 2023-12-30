@@ -102,9 +102,12 @@ namespace SF
             return new Result((int)res);
         }
 
-        public Result JoinGameInstance(TransactionID transactionId, UInt64 gameInstanceUID)
+        public Result JoinGameInstance(TransactionID transactionId, UInt64 gameInstanceUID, Action<SFMessage>? callback = null)
         {
             var res = NativeJoinGameInstance(NativeHandle, transactionId.TransactionId, gameInstanceUID);
+
+            m_RequestCallbackRouter.AddPendingRequest(transactionId, callback);
+
             return new Result((int)res);
         }
 

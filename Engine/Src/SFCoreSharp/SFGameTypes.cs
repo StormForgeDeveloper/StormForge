@@ -400,7 +400,7 @@ namespace SF
 
     public interface IBinarySerializable
     {
-        public void FromByteArray(byte[] bytes);
+        public void FromByteArray(byte[]? bytes);
         public void FromBinary(BinaryReader reader);
         public byte[] ToByteArray();
         public void ToBinary(BinaryWriter writer);
@@ -513,7 +513,7 @@ namespace SF
             }
         }
 
-        public void FromByteArray(byte[] byteData)
+        public void FromByteArray(byte[]? byteData)
         {
             if (byteData == null)
                 return;

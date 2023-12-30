@@ -25,7 +25,7 @@ namespace SF
 {
     public partial class OnlineClient : SFObject
     {
-        
+
         // pending request callback router
         class OnlineRequestCallbackRouter : SFIMessageRouter
         {
@@ -37,27 +37,30 @@ namespace SF
 
             }
 
-            public void AddPendingRequest(TransactionID requestId, Action<SFMessage>? callback)
+            public void AddPendingRequest(TransactionID transId, Action<SFMessage>? callback)
             {
-                if (requestId.TransactionId == 0 || callback == null)
+                if (transId.TransactionId == 0 || callback ==  null)
                 {
                     return;
                 }
 
-                Action<SFMessage>? outCallback;
-                if (m_PendingRequests.TryGetValue(requestId.TransactionId, out outCallback))
-                {
-                    outCallback += callback;
-                }
-                else
-                {
-                    m_PendingRequests.Add(requestId.TransactionId, callback);
-                }
+                m_PendingRequests[transId.TransactionId] = callback;
             }
+
+            public override void HandleSentMessage(int result, TransactionID transId, int messageID, Action<SFMessage>? callback)
+            {
+                if (result <= 0 || transId.TransactionId == 0 || callback == null)
+                {
+                    return;
+                }
+
+                m_PendingRequests[transId.TransactionId] = callback;
+            }
+
 
             public override void HandleRecvMessage(SFMessage message)
             {
-                ulong transactionId = message.GetValue<ulong>("TransactionID");
+                TransactionID transactionId = message.GetValue<TransactionID>("TransactionID");
                 Result result;
                 if (message.TryGetValue("Result", out result))
                 {
@@ -70,7 +73,7 @@ namespace SF
 
 
                 Action<SFMessage>? outCallback = null;
-                m_PendingRequests.Remove(transactionId, out outCallback);
+                m_PendingRequests.Remove(transactionId.TransactionId, out outCallback);
                 if (outCallback != null)
                 {
                     outCallback(message);
@@ -93,10 +96,6 @@ namespace SF
         }
 
 
-        public void RegisterPendingTransactionCallback(TransactionID requestId, Action<SFMessage>? callback)
-        {
-            m_RequestCallbackRouter.AddPendingRequest(requestId, callback);
-        }
     }
 }
 
