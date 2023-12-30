@@ -23,7 +23,7 @@
 namespace SF
 {
  	// Cmd: Login request
-	Result NetPolicyLogin::LoginCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
+	Result NetPolicyLogin::LoginCmd( const TransactionID &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
 	{
  		Result hr;
 
@@ -34,9 +34,9 @@ namespace SF
 		protocolCheck(SF::Message::Login::LoginCmd::Create(messageBuffer, InTransactionID, InGameID, InID, InPassword));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyLogin::LoginCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
+	}; // Result NetPolicyLogin::LoginCmd( const TransactionID &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
 	// Cmd: Login request with Facebook UID
-	Result NetPolicyLogin::LoginByFacebookCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
+	Result NetPolicyLogin::LoginByFacebookCmd( const TransactionID &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
 	{
  		Result hr;
 
@@ -47,9 +47,9 @@ namespace SF
 		protocolCheck(SF::Message::Login::LoginByFacebookCmd::Create(messageBuffer, InTransactionID, InGameID, InUID, InFaceBookName, InEMail, InFacebookToken));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyLogin::LoginByFacebookCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
+	}; // Result NetPolicyLogin::LoginByFacebookCmd( const TransactionID &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
 	// Cmd: Login request with Facebook UID
-	Result NetPolicyLogin::LoginBySteamCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken )
+	Result NetPolicyLogin::LoginBySteamCmd( const TransactionID &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken )
 	{
  		Result hr;
 
@@ -60,9 +60,9 @@ namespace SF
 		protocolCheck(SF::Message::Login::LoginBySteamCmd::Create(messageBuffer, InTransactionID, InGameID, InSteamUserID, InSteamUserName, InSteamUserToken));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyLogin::LoginBySteamCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken )
+	}; // Result NetPolicyLogin::LoginBySteamCmd( const TransactionID &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken )
 	// Cmd: Login request
-	Result NetPolicyLogin::CreateRandomUserCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
+	Result NetPolicyLogin::CreateRandomUserCmd( const TransactionID &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
 	{
  		Result hr;
 
@@ -73,9 +73,9 @@ namespace SF
 		protocolCheck(SF::Message::Login::CreateRandomUserCmd::Create(messageBuffer, InTransactionID, InGameID, InCellPhone));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyLogin::CreateRandomUserCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
+	}; // Result NetPolicyLogin::CreateRandomUserCmd( const TransactionID &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
 	// Cmd: Update my score and Get Ranking list
-	Result NetPolicyLogin::UpdateMyScoreCmd( const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
+	Result NetPolicyLogin::UpdateMyScoreCmd( const TransactionID &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
 	{
  		Result hr;
 
@@ -86,9 +86,9 @@ namespace SF
 		protocolCheck(SF::Message::Login::UpdateMyScoreCmd::Create(messageBuffer, InTransactionID, InRankingScore, InRankingType, InCount));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyLogin::UpdateMyScoreCmd( const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
+	}; // Result NetPolicyLogin::UpdateMyScoreCmd( const TransactionID &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
 	// Cmd: Get Ranking lise
-	Result NetPolicyLogin::GetRankingListCmd( const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
+	Result NetPolicyLogin::GetRankingListCmd( const TransactionID &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 	{
  		Result hr;
 
@@ -99,9 +99,9 @@ namespace SF
 		protocolCheck(SF::Message::Login::GetRankingListCmd::Create(messageBuffer, InTransactionID, InRankingType, InBaseRanking, InCount));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyLogin::GetRankingListCmd( const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
+	}; // Result NetPolicyLogin::GetRankingListCmd( const TransactionID &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 	// Cmd: For network test
-	Result NetPolicyLogin::DataTestCmd( const uint64_t &InTransactionID, const Array<uint8_t>& InTestData )
+	Result NetPolicyLogin::DataTestCmd( const TransactionID &InTransactionID, const Array<uint8_t>& InTestData )
 	{
  		Result hr;
 
@@ -112,7 +112,7 @@ namespace SF
 		protocolCheck(SF::Message::Login::DataTestCmd::Create(messageBuffer, InTransactionID, InTestData));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyLogin::DataTestCmd( const uint64_t &InTransactionID, const Array<uint8_t>& InTestData )
+	}; // Result NetPolicyLogin::DataTestCmd( const TransactionID &InTransactionID, const Array<uint8_t>& InTestData )
 	// C2S: Heartbeat
 	Result NetPolicyLogin::HeartbeatC2SEvt(  )
 	{
@@ -127,7 +127,7 @@ namespace SF
 
 	}; // Result NetPolicyLogin::HeartbeatC2SEvt(  )
 	// Cmd: Write All!! User Score and Ranking list
-	Result NetPolicyLogin::DebugPrintALLRankingCmd( const uint64_t &InTransactionID, const char* InFileName )
+	Result NetPolicyLogin::DebugPrintALLRankingCmd( const TransactionID &InTransactionID, const char* InFileName )
 	{
  		Result hr;
 
@@ -138,11 +138,11 @@ namespace SF
 		protocolCheck(SF::Message::Login::DebugPrintALLRankingCmd::Create(messageBuffer, InTransactionID, InFileName));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyLogin::DebugPrintALLRankingCmd( const uint64_t &InTransactionID, const char* InFileName )
+	}; // Result NetPolicyLogin::DebugPrintALLRankingCmd( const TransactionID &InTransactionID, const char* InFileName )
 
 
 	// Cmd: Login request
-	Result NetSvrPolicyLogin::LoginRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+	Result NetSvrPolicyLogin::LoginRes( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 	{
  		Result hr;
 
@@ -153,9 +153,9 @@ namespace SF
 		protocolCheck(SF::Message::Login::LoginRes::Create(messageBuffer, InTransactionID, InResult, InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID, InErrorReason));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyLogin::LoginRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+	}; // Result NetSvrPolicyLogin::LoginRes( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 	// Cmd: Login request with Facebook UID
-	Result NetSvrPolicyLogin::LoginByFacebookRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+	Result NetSvrPolicyLogin::LoginByFacebookRes( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 	{
  		Result hr;
 
@@ -166,9 +166,9 @@ namespace SF
 		protocolCheck(SF::Message::Login::LoginByFacebookRes::Create(messageBuffer, InTransactionID, InResult, InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID, InErrorReason));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyLogin::LoginByFacebookRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+	}; // Result NetSvrPolicyLogin::LoginByFacebookRes( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 	// Cmd: Login request with Facebook UID
-	Result NetSvrPolicyLogin::LoginBySteamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+	Result NetSvrPolicyLogin::LoginBySteamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 	{
  		Result hr;
 
@@ -179,9 +179,9 @@ namespace SF
 		protocolCheck(SF::Message::Login::LoginBySteamRes::Create(messageBuffer, InTransactionID, InResult, InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID, InErrorReason));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyLogin::LoginBySteamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+	}; // Result NetSvrPolicyLogin::LoginBySteamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 	// Cmd: Login request
-	Result NetSvrPolicyLogin::CreateRandomUserRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+	Result NetSvrPolicyLogin::CreateRandomUserRes( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 	{
  		Result hr;
 
@@ -192,9 +192,9 @@ namespace SF
 		protocolCheck(SF::Message::Login::CreateRandomUserRes::Create(messageBuffer, InTransactionID, InResult, InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyLogin::CreateRandomUserRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+	}; // Result NetSvrPolicyLogin::CreateRandomUserRes( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 	// Cmd: Update my score and Get Ranking list
-	Result NetSvrPolicyLogin::UpdateMyScoreRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+	Result NetSvrPolicyLogin::UpdateMyScoreRes( const TransactionID &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 	{
  		Result hr;
 
@@ -205,9 +205,9 @@ namespace SF
 		protocolCheck(SF::Message::Login::UpdateMyScoreRes::Create(messageBuffer, InTransactionID, InResult, InRanking));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyLogin::UpdateMyScoreRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+	}; // Result NetSvrPolicyLogin::UpdateMyScoreRes( const TransactionID &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 	// Cmd: Get Ranking lise
-	Result NetSvrPolicyLogin::GetRankingListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+	Result NetSvrPolicyLogin::GetRankingListRes( const TransactionID &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 	{
  		Result hr;
 
@@ -218,9 +218,9 @@ namespace SF
 		protocolCheck(SF::Message::Login::GetRankingListRes::Create(messageBuffer, InTransactionID, InResult, InRanking));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyLogin::GetRankingListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+	}; // Result NetSvrPolicyLogin::GetRankingListRes( const TransactionID &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 	// Cmd: For network test
-	Result NetSvrPolicyLogin::DataTestRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
+	Result NetSvrPolicyLogin::DataTestRes( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
 	{
  		Result hr;
 
@@ -231,9 +231,9 @@ namespace SF
 		protocolCheck(SF::Message::Login::DataTestRes::Create(messageBuffer, InTransactionID, InResult, InTestData));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyLogin::DataTestRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
+	}; // Result NetSvrPolicyLogin::DataTestRes( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
 	// Cmd: Write All!! User Score and Ranking list
-	Result NetSvrPolicyLogin::DebugPrintALLRankingRes( const uint64_t &InTransactionID, const Result &InResult )
+	Result NetSvrPolicyLogin::DebugPrintALLRankingRes( const TransactionID &InTransactionID, const Result &InResult )
 	{
  		Result hr;
 
@@ -244,7 +244,7 @@ namespace SF
 		protocolCheck(SF::Message::Login::DebugPrintALLRankingRes::Create(messageBuffer, InTransactionID, InResult));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyLogin::DebugPrintALLRankingRes( const uint64_t &InTransactionID, const Result &InResult )
+	}; // Result NetSvrPolicyLogin::DebugPrintALLRankingRes( const TransactionID &InTransactionID, const Result &InResult )
 
 
 }; // namespace SF

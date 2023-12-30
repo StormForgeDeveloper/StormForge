@@ -12,6 +12,8 @@
 using System;
 using System.Runtime.InteropServices;
 
+#nullable enable
+
 namespace SF
 {
     public static class StringCrcDB
@@ -49,3 +51,5 @@ namespace SF
 
     }
 }
+
+#nullable restore

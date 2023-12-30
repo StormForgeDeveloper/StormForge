@@ -33,23 +33,23 @@ namespace SF
 		{}
 
 		// Cmd: Login request
-		Result LoginCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword );
+		Result LoginCmd( const TransactionID &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword );
 		// Cmd: Login request with Facebook UID
-		Result LoginByFacebookCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken );
+		Result LoginByFacebookCmd( const TransactionID &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken );
 		// Cmd: Login request with Facebook UID
-		Result LoginBySteamCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken );
+		Result LoginBySteamCmd( const TransactionID &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken );
 		// Cmd: Login request
-		Result CreateRandomUserCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone );
+		Result CreateRandomUserCmd( const TransactionID &InTransactionID, const uint32_t &InGameID, const char* InCellPhone );
 		// Cmd: Update my score and Get Ranking list
-		Result UpdateMyScoreCmd( const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount );
+		Result UpdateMyScoreCmd( const TransactionID &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount );
 		// Cmd: Get Ranking lise
-		Result GetRankingListCmd( const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount );
+		Result GetRankingListCmd( const TransactionID &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount );
 		// Cmd: For network test
-		Result DataTestCmd( const uint64_t &InTransactionID, const Array<uint8_t>& InTestData );
+		Result DataTestCmd( const TransactionID &InTransactionID, const Array<uint8_t>& InTestData );
 		// C2S: Heartbeat
 		Result HeartbeatC2SEvt(  );
 		// Cmd: Write All!! User Score and Ranking list
-		Result DebugPrintALLRankingCmd( const uint64_t &InTransactionID, const char* InFileName );
+		Result DebugPrintALLRankingCmd( const TransactionID &InTransactionID, const char* InFileName );
 
 	}; // class NetPolicyLogin 
 
@@ -64,21 +64,21 @@ namespace SF
 		{}
 
 		// Cmd: Login request
-		Result LoginRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
+		Result LoginRes( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
 		// Cmd: Login request with Facebook UID
-		Result LoginByFacebookRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
+		Result LoginByFacebookRes( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
 		// Cmd: Login request with Facebook UID
-		Result LoginBySteamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
+		Result LoginBySteamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
 		// Cmd: Login request
-		Result CreateRandomUserRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
+		Result CreateRandomUserRes( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
 		// Cmd: Update my score and Get Ranking list
-		Result UpdateMyScoreRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
+		Result UpdateMyScoreRes( const TransactionID &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
 		// Cmd: Get Ranking lise
-		Result GetRankingListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
+		Result GetRankingListRes( const TransactionID &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
 		// Cmd: For network test
-		Result DataTestRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData );
+		Result DataTestRes( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData );
 		// Cmd: Write All!! User Score and Ranking list
-		Result DebugPrintALLRankingRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result DebugPrintALLRankingRes( const TransactionID &InTransactionID, const Result &InResult );
 
 	}; // class NetSvrPolicyLogin
 

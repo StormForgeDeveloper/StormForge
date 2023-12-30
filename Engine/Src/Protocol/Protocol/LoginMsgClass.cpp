@@ -58,7 +58,7 @@ namespace SF
 				LoginCmd parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
-				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("GameID", parser.GetGameID());
 				variableBuilder.SetVariable("ID", parser.GetID());
 				variableBuilder.SetVariable("Password", parser.GetPassword());
@@ -79,7 +79,7 @@ namespace SF
 			}; // Result LoginCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t LoginCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
+			size_t LoginCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -89,10 +89,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t LoginCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
+			}; // size_t LoginCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
 
 
-			Result LoginCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
+			Result LoginCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
 			{
  				Result hr;
 
@@ -119,7 +119,7 @@ namespace SF
 				protocolCheck(*output << InPassword);
 
 				return hr;
-			}; // Result LoginCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
+			}; // Result LoginCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
 
 			Result LoginCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -165,7 +165,7 @@ namespace SF
 				LoginRes parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
-				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("GameServerPublicAddress", parser.GetGameServerPublicAddress());
 				variableBuilder.SetVariable("AccID", parser.GetAccID());
@@ -189,7 +189,7 @@ namespace SF
 			}; // Result LoginRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t LoginRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			size_t LoginRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -202,10 +202,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t LoginRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			}; // size_t LoginRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 
 
-			Result LoginRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			Result LoginRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 			{
  				Result hr;
 
@@ -238,7 +238,7 @@ namespace SF
 				protocolCheck(*output << InErrorReason);
 
 				return hr;
-			}; // Result LoginRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			}; // Result LoginRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 
 			Result LoginRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -285,7 +285,7 @@ namespace SF
 				LoginByFacebookCmd parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
-				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("GameID", parser.GetGameID());
 				variableBuilder.SetVariable("UID", parser.GetUID());
 				variableBuilder.SetVariable("FaceBookName", parser.GetFaceBookName());
@@ -308,7 +308,7 @@ namespace SF
 			}; // Result LoginByFacebookCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t LoginByFacebookCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
+			size_t LoginByFacebookCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -320,10 +320,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t LoginByFacebookCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
+			}; // size_t LoginByFacebookCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
 
 
-			Result LoginByFacebookCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
+			Result LoginByFacebookCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
 			{
  				Result hr;
 
@@ -354,7 +354,7 @@ namespace SF
 				protocolCheck(*output << InFacebookToken);
 
 				return hr;
-			}; // Result LoginByFacebookCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
+			}; // Result LoginByFacebookCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
 
 			Result LoginByFacebookCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -400,7 +400,7 @@ namespace SF
 				LoginByFacebookRes parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
-				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("GameServerPublicAddress", parser.GetGameServerPublicAddress());
 				variableBuilder.SetVariable("AccID", parser.GetAccID());
@@ -424,7 +424,7 @@ namespace SF
 			}; // Result LoginByFacebookRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t LoginByFacebookRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			size_t LoginByFacebookRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -437,10 +437,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t LoginByFacebookRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			}; // size_t LoginByFacebookRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 
 
-			Result LoginByFacebookRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			Result LoginByFacebookRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 			{
  				Result hr;
 
@@ -473,7 +473,7 @@ namespace SF
 				protocolCheck(*output << InErrorReason);
 
 				return hr;
-			}; // Result LoginByFacebookRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			}; // Result LoginByFacebookRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 
 			Result LoginByFacebookRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -518,7 +518,7 @@ namespace SF
 				LoginBySteamCmd parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
-				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("GameID", parser.GetGameID());
 				variableBuilder.SetVariable("SteamUserID", parser.GetSteamUserID());
 				variableBuilder.SetVariable("SteamUserName", parser.GetSteamUserName());
@@ -540,7 +540,7 @@ namespace SF
 			}; // Result LoginBySteamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t LoginBySteamCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken )
+			size_t LoginBySteamCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -551,10 +551,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t LoginBySteamCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken )
+			}; // size_t LoginBySteamCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken )
 
 
-			Result LoginBySteamCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken )
+			Result LoginBySteamCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken )
 			{
  				Result hr;
 
@@ -583,7 +583,7 @@ namespace SF
 				protocolCheck(*output << InSteamUserToken);
 
 				return hr;
-			}; // Result LoginBySteamCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken )
+			}; // Result LoginBySteamCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken )
 
 			Result LoginBySteamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -629,7 +629,7 @@ namespace SF
 				LoginBySteamRes parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
-				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("GameServerPublicAddress", parser.GetGameServerPublicAddress());
 				variableBuilder.SetVariable("AccID", parser.GetAccID());
@@ -653,7 +653,7 @@ namespace SF
 			}; // Result LoginBySteamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t LoginBySteamRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			size_t LoginBySteamRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -666,10 +666,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t LoginBySteamRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			}; // size_t LoginBySteamRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 
 
-			Result LoginBySteamRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			Result LoginBySteamRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 			{
  				Result hr;
 
@@ -702,7 +702,7 @@ namespace SF
 				protocolCheck(*output << InErrorReason);
 
 				return hr;
-			}; // Result LoginBySteamRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			}; // Result LoginBySteamRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 
 			Result LoginBySteamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -744,7 +744,7 @@ namespace SF
 				CreateRandomUserCmd parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
-				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("GameID", parser.GetGameID());
 				variableBuilder.SetVariable("CellPhone", parser.GetCellPhone());
 
@@ -764,7 +764,7 @@ namespace SF
 			}; // Result CreateRandomUserCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t CreateRandomUserCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
+			size_t CreateRandomUserCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -773,10 +773,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t CreateRandomUserCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
+			}; // size_t CreateRandomUserCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
 
 
-			Result CreateRandomUserCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
+			Result CreateRandomUserCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
 			{
  				Result hr;
 
@@ -801,7 +801,7 @@ namespace SF
 				protocolCheck(*output << InCellPhone);
 
 				return hr;
-			}; // Result CreateRandomUserCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
+			}; // Result CreateRandomUserCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
 
 			Result CreateRandomUserCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -845,7 +845,7 @@ namespace SF
 				CreateRandomUserRes parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
-				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("GameServerPublicAddress", parser.GetGameServerPublicAddress());
 				variableBuilder.SetVariable("AccID", parser.GetAccID());
@@ -868,7 +868,7 @@ namespace SF
 			}; // Result CreateRandomUserRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t CreateRandomUserRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			size_t CreateRandomUserRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -880,10 +880,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t CreateRandomUserRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			}; // size_t CreateRandomUserRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 
 
-			Result CreateRandomUserRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			Result CreateRandomUserRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 			{
  				Result hr;
 
@@ -914,7 +914,7 @@ namespace SF
 				protocolCheck(*output << InLoginEntityUID);
 
 				return hr;
-			}; // Result CreateRandomUserRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			}; // Result CreateRandomUserRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 
 			Result CreateRandomUserRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -956,7 +956,7 @@ namespace SF
 				UpdateMyScoreCmd parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
-				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("RankingScore", parser.GetRankingScore());
 				variableBuilder.SetVariable("RankingType", (int)parser.GetRankingType());
 				variableBuilder.SetVariable("Count", parser.GetCount());
@@ -977,7 +977,7 @@ namespace SF
 			}; // Result UpdateMyScoreCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t UpdateMyScoreCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
+			size_t UpdateMyScoreCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -987,10 +987,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t UpdateMyScoreCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
+			}; // size_t UpdateMyScoreCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
 
 
-			Result UpdateMyScoreCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
+			Result UpdateMyScoreCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
 			{
  				Result hr;
 
@@ -1017,7 +1017,7 @@ namespace SF
 				protocolCheck(*output << InCount);
 
 				return hr;
-			}; // Result UpdateMyScoreCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
+			}; // Result UpdateMyScoreCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
 
 			Result UpdateMyScoreCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -1060,7 +1060,7 @@ namespace SF
 				UpdateMyScoreRes parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
-				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("Ranking", parser.GetRanking());
 
@@ -1080,7 +1080,7 @@ namespace SF
 			}; // Result UpdateMyScoreRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t UpdateMyScoreRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+			size_t UpdateMyScoreRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -1089,10 +1089,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t UpdateMyScoreRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+			}; // size_t UpdateMyScoreRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 
 
-			Result UpdateMyScoreRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+			Result UpdateMyScoreRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 			{
  				Result hr;
 
@@ -1117,7 +1117,7 @@ namespace SF
 				protocolCheck(*output << InRanking);
 
 				return hr;
-			}; // Result UpdateMyScoreRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+			}; // Result UpdateMyScoreRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 
 			Result UpdateMyScoreRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -1159,7 +1159,7 @@ namespace SF
 				GetRankingListCmd parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
-				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("RankingType", (int)parser.GetRankingType());
 				variableBuilder.SetVariable("BaseRanking", parser.GetBaseRanking());
 				variableBuilder.SetVariable("Count", parser.GetCount());
@@ -1180,7 +1180,7 @@ namespace SF
 			}; // Result GetRankingListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t GetRankingListCmd::CalculateMessageSize( const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
+			size_t GetRankingListCmd::CalculateMessageSize( const TransactionID &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -1190,10 +1190,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t GetRankingListCmd::CalculateMessageSize( const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
+			}; // size_t GetRankingListCmd::CalculateMessageSize( const TransactionID &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 
 
-			Result GetRankingListCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
+			Result GetRankingListCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 			{
  				Result hr;
 
@@ -1220,7 +1220,7 @@ namespace SF
 				protocolCheck(*output << InCount);
 
 				return hr;
-			}; // Result GetRankingListCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
+			}; // Result GetRankingListCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 
 			Result GetRankingListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -1263,7 +1263,7 @@ namespace SF
 				GetRankingListRes parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
-				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("Ranking", parser.GetRanking());
 
@@ -1283,7 +1283,7 @@ namespace SF
 			}; // Result GetRankingListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t GetRankingListRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+			size_t GetRankingListRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -1292,10 +1292,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t GetRankingListRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+			}; // size_t GetRankingListRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 
 
-			Result GetRankingListRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+			Result GetRankingListRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 			{
  				Result hr;
 
@@ -1320,7 +1320,7 @@ namespace SF
 				protocolCheck(*output << InRanking);
 
 				return hr;
-			}; // Result GetRankingListRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+			}; // Result GetRankingListRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 
 			Result GetRankingListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -1363,7 +1363,7 @@ namespace SF
 				DataTestCmd parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
-				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("TestData", parser.GetTestData());
 
 				return hr;
@@ -1382,7 +1382,7 @@ namespace SF
 			}; // Result DataTestCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t DataTestCmd::CalculateMessageSize( const uint64_t &InTransactionID, const Array<uint8_t>& InTestData )
+			size_t DataTestCmd::CalculateMessageSize( const TransactionID &InTransactionID, const Array<uint8_t>& InTestData )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -1390,10 +1390,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t DataTestCmd::CalculateMessageSize( const uint64_t &InTransactionID, const Array<uint8_t>& InTestData )
+			}; // size_t DataTestCmd::CalculateMessageSize( const TransactionID &InTransactionID, const Array<uint8_t>& InTestData )
 
 
-			Result DataTestCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Array<uint8_t>& InTestData )
+			Result DataTestCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Array<uint8_t>& InTestData )
 			{
  				Result hr;
 
@@ -1416,7 +1416,7 @@ namespace SF
 				protocolCheck(*output << InTestData);
 
 				return hr;
-			}; // Result DataTestCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Array<uint8_t>& InTestData )
+			}; // Result DataTestCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Array<uint8_t>& InTestData )
 
 			Result DataTestCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -1459,7 +1459,7 @@ namespace SF
 				DataTestRes parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
-				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("TestData", parser.GetTestData());
 
@@ -1479,7 +1479,7 @@ namespace SF
 			}; // Result DataTestRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t DataTestRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
+			size_t DataTestRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -1488,10 +1488,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t DataTestRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
+			}; // size_t DataTestRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
 
 
-			Result DataTestRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
+			Result DataTestRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
 			{
  				Result hr;
 
@@ -1516,7 +1516,7 @@ namespace SF
 				protocolCheck(*output << InTestData);
 
 				return hr;
-			}; // Result DataTestRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
+			}; // Result DataTestRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
 
 			Result DataTestRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -1632,7 +1632,7 @@ namespace SF
 				DebugPrintALLRankingCmd parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
-				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("FileName", parser.GetFileName());
 
 				return hr;
@@ -1651,7 +1651,7 @@ namespace SF
 			}; // Result DebugPrintALLRankingCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t DebugPrintALLRankingCmd::CalculateMessageSize( const uint64_t &InTransactionID, const char* InFileName )
+			size_t DebugPrintALLRankingCmd::CalculateMessageSize( const TransactionID &InTransactionID, const char* InFileName )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -1659,10 +1659,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t DebugPrintALLRankingCmd::CalculateMessageSize( const uint64_t &InTransactionID, const char* InFileName )
+			}; // size_t DebugPrintALLRankingCmd::CalculateMessageSize( const TransactionID &InTransactionID, const char* InFileName )
 
 
-			Result DebugPrintALLRankingCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InFileName )
+			Result DebugPrintALLRankingCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const char* InFileName )
 			{
  				Result hr;
 
@@ -1685,7 +1685,7 @@ namespace SF
 				protocolCheck(*output << InFileName);
 
 				return hr;
-			}; // Result DebugPrintALLRankingCmd::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const char* InFileName )
+			}; // Result DebugPrintALLRankingCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const char* InFileName )
 
 			Result DebugPrintALLRankingCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -1724,7 +1724,7 @@ namespace SF
 				DebugPrintALLRankingRes parser;
 				protocolCheck(parser.ParseMessage(pHeader));
 
-				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
@@ -1743,7 +1743,7 @@ namespace SF
 			}; // Result DebugPrintALLRankingRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t DebugPrintALLRankingRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
+			size_t DebugPrintALLRankingRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -1751,10 +1751,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t DebugPrintALLRankingRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
+			}; // size_t DebugPrintALLRankingRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult )
 
 
-			Result DebugPrintALLRankingRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
+			Result DebugPrintALLRankingRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult )
 			{
  				Result hr;
 
@@ -1777,7 +1777,7 @@ namespace SF
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // Result DebugPrintALLRankingRes::Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result DebugPrintALLRankingRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult )
 
 			Result DebugPrintALLRankingRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{

@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -47,7 +47,7 @@ namespace ProtocolCompiler
         {
             OutStream.WriteLine("////////////////////////////////////////////////////////////////////////////////");
             OutStream.WriteLine("// ");
-            OutStream.WriteLine("// CopyRight (c) 2016 Kyungkun Ko");
+            OutStream.WriteLine("// CopyRight (c) The Braves");
             OutStream.WriteLine("// ");
             OutStream.WriteLine("// Author : Generated");
             OutStream.WriteLine("// ");
@@ -325,7 +325,7 @@ namespace ProtocolCompiler
                     switch (param.TypeName)
                     {
                         case "String":
-                            MatchIndent(); OutStream.WriteLine( string.Format("public string {0} {{ get; private set; }}", param.Name));
+                            MatchIndent(); OutStream.WriteLine("public string {0} {{ get; private set; }}", param.Name);
                             break;
                         default:
                             //Type csType = SystemTypeInfo.ToCSharpType(param.Type);

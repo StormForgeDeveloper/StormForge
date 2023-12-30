@@ -15,10 +15,10 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 
+#nullable enable
 
 namespace SF
 {
-
 
     static internal class SFMessageParsingUtil
     {
@@ -484,3 +484,4 @@ namespace SF
     }
 }
 
+#nullable restore

@@ -17,6 +17,8 @@ using System.Text;
 using AOT;
 #endif
 
+#nullable enable
+
 namespace SF
 {
 
@@ -325,3 +327,4 @@ namespace SF
     }
 }
 
+#nullable restore

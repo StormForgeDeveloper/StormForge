@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2017 Kyungkun Ko
 // 
@@ -10,6 +10,8 @@
 
 using System;
 using System.Runtime.InteropServices;
+
+#nullable enable
 
 namespace SF
 {
@@ -142,3 +144,7 @@ namespace SF
     };
 
 }
+
+#nullable restore
+
+#nullable enable

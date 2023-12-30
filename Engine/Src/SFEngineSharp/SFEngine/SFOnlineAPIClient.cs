@@ -18,6 +18,8 @@ using SF.Net;
 using AOT;
 #endif
 
+#nullable enable
+
 namespace SF
 {
 
@@ -125,3 +127,5 @@ namespace SF
         #endregion
     }
 }
+
+#nullable restore

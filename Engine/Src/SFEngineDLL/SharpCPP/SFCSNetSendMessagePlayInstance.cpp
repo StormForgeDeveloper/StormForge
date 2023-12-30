@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) StromForge
 // 
@@ -20,16 +20,16 @@ using namespace SF;
 
 
 // Cmd: Player Join request.
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinPlayInstanceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const char* InPlayerIdentifier )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinPlayInstanceCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const char* InPlayerIdentifier )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::JoinPlayInstanceCmd::CalculateMessageSize( InTransactionID, InPlayInstanceUID, InPlayerID,InPlayerIdentifier);
+	size_t messageSize = SF::Message::PlayInstance::JoinPlayInstanceCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID,InPlayerIdentifier);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::JoinPlayInstanceCmd::Create(pMessage,  InTransactionID, InPlayInstanceUID, InPlayerID,InPlayerIdentifier);
+	Result hr = SF::Message::PlayInstance::JoinPlayInstanceCmd::Create(pMessage, InTransactionID, InPlayInstanceUID, InPlayerID,InPlayerIdentifier);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinPlayInstanceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const char* InPlayerIdentifier )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinPlayInstanceCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const char* InPlayerIdentifier )
 
 
 // C2S: Play packet
@@ -89,120 +89,120 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceClientSyncC2SEvt( intptr_t InNative
 
 
 // Cmd: Occupy map object
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId, uint32_t InUsageId )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId, uint32_t InUsageId )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::OccupyMapObjectCmd::CalculateMessageSize( InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId, InUsageId);
+	size_t messageSize = SF::Message::PlayInstance::OccupyMapObjectCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId, InUsageId);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::OccupyMapObjectCmd::Create(pMessage,  InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId, InUsageId);
+	Result hr = SF::Message::PlayInstance::OccupyMapObjectCmd::Create(pMessage, InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId, InUsageId);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId, uint32_t InUsageId )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId, uint32_t InUsageId )
 
 
 // Cmd: Unoccupy map object
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUnoccupyMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUnoccupyMapObjectCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::UnoccupyMapObjectCmd::CalculateMessageSize( InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId);
+	size_t messageSize = SF::Message::PlayInstance::UnoccupyMapObjectCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::UnoccupyMapObjectCmd::Create(pMessage,  InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId);
+	Result hr = SF::Message::PlayInstance::UnoccupyMapObjectCmd::Create(pMessage, InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUnoccupyMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUnoccupyMapObjectCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
 
 
 // Cmd: Use map object
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId, uint16_t _sizeOfInUseParameters,uint8_t* InUseParameters )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId, uint16_t _sizeOfInUseParameters,uint8_t* InUseParameters )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::UseMapObjectCmd::CalculateMessageSize( InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId,SF::ArrayView<uint8_t>(_sizeOfInUseParameters, _sizeOfInUseParameters, InUseParameters));
+	size_t messageSize = SF::Message::PlayInstance::UseMapObjectCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId,SF::ArrayView<uint8_t>(_sizeOfInUseParameters, _sizeOfInUseParameters, InUseParameters));
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::UseMapObjectCmd::Create(pMessage,  InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId,SF::ArrayView<uint8_t>(_sizeOfInUseParameters, _sizeOfInUseParameters, InUseParameters));
+	Result hr = SF::Message::PlayInstance::UseMapObjectCmd::Create(pMessage, InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId,SF::ArrayView<uint8_t>(_sizeOfInUseParameters, _sizeOfInUseParameters, InUseParameters));
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId, uint16_t _sizeOfInUseParameters,uint8_t* InUseParameters )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId, uint16_t _sizeOfInUseParameters,uint8_t* InUseParameters )
 
 
 // Cmd: Send zone chatting
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceZoneChatCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, int8_t InMessageType, uint16_t _sizeOfInChatMetaData,uint8_t* InChatMetaData, const char* InChatMessage )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceZoneChatCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, int8_t InMessageType, uint16_t _sizeOfInChatMetaData,uint8_t* InChatMetaData, const char* InChatMessage )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::ZoneChatCmd::CalculateMessageSize( InTransactionID, InPlayInstanceUID, InPlayerID, InMessageType,SF::ArrayView<uint8_t>(_sizeOfInChatMetaData, _sizeOfInChatMetaData, InChatMetaData),InChatMessage);
+	size_t messageSize = SF::Message::PlayInstance::ZoneChatCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InMessageType,SF::ArrayView<uint8_t>(_sizeOfInChatMetaData, _sizeOfInChatMetaData, InChatMetaData),InChatMessage);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::ZoneChatCmd::Create(pMessage,  InTransactionID, InPlayInstanceUID, InPlayerID, InMessageType,SF::ArrayView<uint8_t>(_sizeOfInChatMetaData, _sizeOfInChatMetaData, InChatMetaData),InChatMessage);
+	Result hr = SF::Message::PlayInstance::ZoneChatCmd::Create(pMessage, InTransactionID, InPlayInstanceUID, InPlayerID, InMessageType,SF::ArrayView<uint8_t>(_sizeOfInChatMetaData, _sizeOfInChatMetaData, InChatMetaData),InChatMessage);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceZoneChatCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, int8_t InMessageType, uint16_t _sizeOfInChatMetaData,uint8_t* InChatMetaData, const char* InChatMessage )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceZoneChatCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, int8_t InMessageType, uint16_t _sizeOfInChatMetaData,uint8_t* InChatMetaData, const char* InChatMessage )
 
 
 // Cmd: Create stream instance
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCreateStreamCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, AuthTicket InTicket, const char* InStreamName )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCreateStreamCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, AuthTicket InTicket, const char* InStreamName )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::CreateStreamCmd::CalculateMessageSize( InTransactionID, InTicket,InStreamName);
+	size_t messageSize = SF::Message::PlayInstance::CreateStreamCmd::CalculateMessageSize(InTransactionID, InTicket,InStreamName);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::CreateStreamCmd::Create(pMessage,  InTransactionID, InTicket,InStreamName);
+	Result hr = SF::Message::PlayInstance::CreateStreamCmd::Create(pMessage, InTransactionID, InTicket,InStreamName);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCreateStreamCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, AuthTicket InTicket, const char* InStreamName )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCreateStreamCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, AuthTicket InTicket, const char* InStreamName )
 
 
 // Cmd: Open stream instance
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceFindStreamCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, AuthTicket InTicket, const char* InStreamName )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceFindStreamCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, AuthTicket InTicket, const char* InStreamName )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::FindStreamCmd::CalculateMessageSize( InTransactionID, InTicket,InStreamName);
+	size_t messageSize = SF::Message::PlayInstance::FindStreamCmd::CalculateMessageSize(InTransactionID, InTicket,InStreamName);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::FindStreamCmd::Create(pMessage,  InTransactionID, InTicket,InStreamName);
+	Result hr = SF::Message::PlayInstance::FindStreamCmd::Create(pMessage, InTransactionID, InTicket,InStreamName);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceFindStreamCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, AuthTicket InTicket, const char* InStreamName )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceFindStreamCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, AuthTicket InTicket, const char* InStreamName )
 
 
 // Cmd: Delete stream instance
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceDeleteStreamCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, AuthTicket InTicket, const char* InStreamName )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceDeleteStreamCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, AuthTicket InTicket, const char* InStreamName )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::DeleteStreamCmd::CalculateMessageSize( InTransactionID, InTicket,InStreamName);
+	size_t messageSize = SF::Message::PlayInstance::DeleteStreamCmd::CalculateMessageSize(InTransactionID, InTicket,InStreamName);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::DeleteStreamCmd::Create(pMessage,  InTransactionID, InTicket,InStreamName);
+	Result hr = SF::Message::PlayInstance::DeleteStreamCmd::Create(pMessage, InTransactionID, InTicket,InStreamName);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceDeleteStreamCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, AuthTicket InTicket, const char* InStreamName )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceDeleteStreamCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, AuthTicket InTicket, const char* InStreamName )
 
 
 // Cmd: Get stream list
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceGetStreamListCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, AuthTicket InTicket )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceGetStreamListCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, AuthTicket InTicket )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::GetStreamListCmd::CalculateMessageSize( InTransactionID, InTicket);
+	size_t messageSize = SF::Message::PlayInstance::GetStreamListCmd::CalculateMessageSize(InTransactionID, InTicket);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::GetStreamListCmd::Create(pMessage,  InTransactionID, InTicket);
+	Result hr = SF::Message::PlayInstance::GetStreamListCmd::Create(pMessage, InTransactionID, InTicket);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceGetStreamListCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, AuthTicket InTicket )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceGetStreamListCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, AuthTicket InTicket )
 
 
 // Cmd: To call general functionality
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, StringCrc32 InFunctionName, PlayerID InPlayerID, uint16_t _sizeOfInParameters,uint8_t* InParameters )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, StringCrc32 InFunctionName, PlayerID InPlayerID, uint16_t _sizeOfInParameters,uint8_t* InParameters )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::CallFunctionCmd::CalculateMessageSize( InTransactionID, InFunctionName, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInParameters, _sizeOfInParameters, InParameters));
+	size_t messageSize = SF::Message::PlayInstance::CallFunctionCmd::CalculateMessageSize(InTransactionID, InFunctionName, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInParameters, _sizeOfInParameters, InParameters));
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::CallFunctionCmd::Create(pMessage,  InTransactionID, InFunctionName, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInParameters, _sizeOfInParameters, InParameters));
+	Result hr = SF::Message::PlayInstance::CallFunctionCmd::Create(pMessage, InTransactionID, InFunctionName, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInParameters, _sizeOfInParameters, InParameters));
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, StringCrc32 InFunctionName, PlayerID InPlayerID, uint16_t _sizeOfInParameters,uint8_t* InParameters )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, StringCrc32 InFunctionName, PlayerID InPlayerID, uint16_t _sizeOfInParameters,uint8_t* InParameters )
 
 
 // C2S: Send coded voice data to server
@@ -222,16 +222,16 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt( intptr_t InNat
 
 
 // Cmd: Player Join request.
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, CharacterID InCharacterID, uint16_t _sizeOfInCharacterPrivateData,uint8_t* InCharacterPrivateData, const ActorMovement& InMovement )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, CharacterID InCharacterID, uint16_t _sizeOfInCharacterPrivateData,uint8_t* InCharacterPrivateData, const ActorMovement& InMovement )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::JoinPlayInstanceRes::CalculateMessageSize( InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InCharacterID,SF::ArrayView<uint8_t>(_sizeOfInCharacterPrivateData, _sizeOfInCharacterPrivateData, InCharacterPrivateData),InMovement);
+	size_t messageSize = SF::Message::PlayInstance::JoinPlayInstanceRes::CalculateMessageSize(InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InCharacterID,SF::ArrayView<uint8_t>(_sizeOfInCharacterPrivateData, _sizeOfInCharacterPrivateData, InCharacterPrivateData),InMovement);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::JoinPlayInstanceRes::Create(pMessage,  InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InCharacterID,SF::ArrayView<uint8_t>(_sizeOfInCharacterPrivateData, _sizeOfInCharacterPrivateData, InCharacterPrivateData),InMovement);
+	Result hr = SF::Message::PlayInstance::JoinPlayInstanceRes::Create(pMessage, InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InCharacterID,SF::ArrayView<uint8_t>(_sizeOfInCharacterPrivateData, _sizeOfInCharacterPrivateData, InCharacterPrivateData),InMovement);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, CharacterID InCharacterID, uint16_t _sizeOfInCharacterPrivateData,uint8_t* InCharacterPrivateData, const ActorMovement& InMovement )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, CharacterID InCharacterID, uint16_t _sizeOfInCharacterPrivateData,uint8_t* InCharacterPrivateData, const ActorMovement& InMovement )
 
 
 
@@ -320,58 +320,58 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerStateChangedS2CEvt( intptr_t 
 
 
 // Cmd: Occupy map object
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::OccupyMapObjectRes::CalculateMessageSize( InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId);
+	size_t messageSize = SF::Message::PlayInstance::OccupyMapObjectRes::CalculateMessageSize(InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::OccupyMapObjectRes::Create(pMessage,  InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId);
+	Result hr = SF::Message::PlayInstance::OccupyMapObjectRes::Create(pMessage, InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
 
 
 
 // Cmd: Unoccupy map object
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUnoccupyMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUnoccupyMapObjectRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::UnoccupyMapObjectRes::CalculateMessageSize( InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId);
+	size_t messageSize = SF::Message::PlayInstance::UnoccupyMapObjectRes::CalculateMessageSize(InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::UnoccupyMapObjectRes::Create(pMessage,  InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId);
+	Result hr = SF::Message::PlayInstance::UnoccupyMapObjectRes::Create(pMessage, InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUnoccupyMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUnoccupyMapObjectRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
 
 
 
 // Cmd: Use map object
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId, uint16_t _sizeOfInResultAttributes,uint8_t* InResultAttributes )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId, uint16_t _sizeOfInResultAttributes,uint8_t* InResultAttributes )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::UseMapObjectRes::CalculateMessageSize( InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId,SF::ArrayView<uint8_t>(_sizeOfInResultAttributes, _sizeOfInResultAttributes, InResultAttributes));
+	size_t messageSize = SF::Message::PlayInstance::UseMapObjectRes::CalculateMessageSize(InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId,SF::ArrayView<uint8_t>(_sizeOfInResultAttributes, _sizeOfInResultAttributes, InResultAttributes));
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::UseMapObjectRes::Create(pMessage,  InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId,SF::ArrayView<uint8_t>(_sizeOfInResultAttributes, _sizeOfInResultAttributes, InResultAttributes));
+	Result hr = SF::Message::PlayInstance::UseMapObjectRes::Create(pMessage, InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId,SF::ArrayView<uint8_t>(_sizeOfInResultAttributes, _sizeOfInResultAttributes, InResultAttributes));
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId, uint16_t _sizeOfInResultAttributes,uint8_t* InResultAttributes )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId, uint16_t _sizeOfInResultAttributes,uint8_t* InResultAttributes )
 
 
 
 // Cmd: Send zone chatting
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceZoneChatRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceZoneChatRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::ZoneChatRes::CalculateMessageSize( InTransactionID, InResult);
+	size_t messageSize = SF::Message::PlayInstance::ZoneChatRes::CalculateMessageSize(InTransactionID, InResult);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::ZoneChatRes::Create(pMessage,  InTransactionID, InResult);
+	Result hr = SF::Message::PlayInstance::ZoneChatRes::Create(pMessage, InTransactionID, InResult);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceZoneChatRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceZoneChatRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult )
 
 
 
@@ -404,73 +404,73 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceLevelUpS2CEvt( intptr_t InNativeCon
 
 
 // Cmd: Create stream instance
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCreateStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InStreamName )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCreateStreamRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, const char* InStreamName )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::CreateStreamRes::CalculateMessageSize( InTransactionID, InResult,InStreamName);
+	size_t messageSize = SF::Message::PlayInstance::CreateStreamRes::CalculateMessageSize(InTransactionID, InResult,InStreamName);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::CreateStreamRes::Create(pMessage,  InTransactionID, InResult,InStreamName);
+	Result hr = SF::Message::PlayInstance::CreateStreamRes::Create(pMessage, InTransactionID, InResult,InStreamName);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCreateStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InStreamName )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCreateStreamRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, const char* InStreamName )
 
 
 
 // Cmd: Open stream instance
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceFindStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InStreamName )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceFindStreamRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, const char* InStreamName )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::FindStreamRes::CalculateMessageSize( InTransactionID, InResult,InStreamName);
+	size_t messageSize = SF::Message::PlayInstance::FindStreamRes::CalculateMessageSize(InTransactionID, InResult,InStreamName);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::FindStreamRes::Create(pMessage,  InTransactionID, InResult,InStreamName);
+	Result hr = SF::Message::PlayInstance::FindStreamRes::Create(pMessage, InTransactionID, InResult,InStreamName);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceFindStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InStreamName )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceFindStreamRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, const char* InStreamName )
 
 
 
 // Cmd: Delete stream instance
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceDeleteStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InStreamName )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceDeleteStreamRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, const char* InStreamName )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::DeleteStreamRes::CalculateMessageSize( InTransactionID, InResult,InStreamName);
+	size_t messageSize = SF::Message::PlayInstance::DeleteStreamRes::CalculateMessageSize(InTransactionID, InResult,InStreamName);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::DeleteStreamRes::Create(pMessage,  InTransactionID, InResult,InStreamName);
+	Result hr = SF::Message::PlayInstance::DeleteStreamRes::Create(pMessage, InTransactionID, InResult,InStreamName);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceDeleteStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InStreamName )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceDeleteStreamRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, const char* InStreamName )
 
 
 
 // Cmd: Get stream list
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceGetStreamListRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, intptr_t InStreamNames )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceGetStreamListRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, intptr_t InStreamNames )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
 	auto& InStreamNamesArray_ = *NativeToObject<SF::ArrayObject<const char*>>(InStreamNames);
-	size_t messageSize = SF::Message::PlayInstance::GetStreamListRes::CalculateMessageSize( InTransactionID, InResult,InStreamNamesArray_);
+	size_t messageSize = SF::Message::PlayInstance::GetStreamListRes::CalculateMessageSize(InTransactionID, InResult,InStreamNamesArray_);
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::GetStreamListRes::Create(pMessage,  InTransactionID, InResult,InStreamNamesArray_);
+	Result hr = SF::Message::PlayInstance::GetStreamListRes::Create(pMessage, InTransactionID, InResult,InStreamNamesArray_);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceGetStreamListRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, intptr_t InStreamNames )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceGetStreamListRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, intptr_t InStreamNames )
 
 
 
 // Cmd: To call general functionality
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint16_t _sizeOfInResults,uint8_t* InResults )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t _sizeOfInResults,uint8_t* InResults )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::CallFunctionRes::CalculateMessageSize( InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInResults, _sizeOfInResults, InResults));
+	size_t messageSize = SF::Message::PlayInstance::CallFunctionRes::CalculateMessageSize(InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInResults, _sizeOfInResults, InResults));
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::CallFunctionRes::Create(pMessage,  InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInResults, _sizeOfInResults, InResults));
+	Result hr = SF::Message::PlayInstance::CallFunctionRes::Create(pMessage, InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInResults, _sizeOfInResults, InResults));
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (uint32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint16_t _sizeOfInResults,uint8_t* InResults )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t _sizeOfInResults,uint8_t* InResults )
 
 
 

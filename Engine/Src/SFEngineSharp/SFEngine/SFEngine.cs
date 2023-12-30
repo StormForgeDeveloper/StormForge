@@ -10,9 +10,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Threading;
+
+#nullable enable
 
 namespace SF
 {
@@ -166,3 +166,5 @@ namespace SF
 
     }
 }
+
+#nullable restore

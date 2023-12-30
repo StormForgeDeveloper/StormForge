@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -16,6 +16,8 @@ using System.Text;
 #if UNITY_IOS
 using AOT;
 #endif
+
+#nullable enable
 
 namespace SF
 {
@@ -60,3 +62,5 @@ namespace SF
         #endregion
     }
 }
+
+#nullable restore

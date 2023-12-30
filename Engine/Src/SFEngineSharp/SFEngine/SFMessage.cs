@@ -13,11 +13,10 @@
 using System;
 using System.Collections.Generic;
 
+#nullable enable
 
 namespace SF
 {
-
-
 
     public class SFMessage : SFObject
     {
@@ -112,3 +111,4 @@ namespace SF
     }
 }
 
+#nullable restore

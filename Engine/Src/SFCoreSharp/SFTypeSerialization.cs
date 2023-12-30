@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 
+#nullable enable
 
 namespace SF
 {
@@ -333,6 +334,11 @@ namespace SF
                     }
                 ),
 
+            new TypeInfo(typeof(TransactionID), "TransactionID",
+                (writer, value) => { writer.Write(((TransactionID)value).TransactionId); },
+                (reader) => { return new TransactionID(){ TransactionId = reader.ReadUInt64() }; },
+                (ref IntPtr valuePtr) => { return new TransactionID(){ TransactionId = ReadUInt64(ref valuePtr) }; }),
+
             new TypeInfo(typeof(Vector2), "Vector2",
                 (writer, value) => { var valueTemp = (Vector2)value; writer.Write(valueTemp.x); writer.Write(valueTemp.y); },
                 (reader) => { return new Vector2() { x = reader.ReadSingle(), y = reader.ReadSingle() }; },
@@ -522,3 +528,4 @@ namespace SF
 
 }
 
+#nullable restore

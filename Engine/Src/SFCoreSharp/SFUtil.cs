@@ -13,6 +13,8 @@
 using System;
 using System.Text;
 
+#nullable enable
+
 namespace SF
 {
     public static class Util
@@ -53,5 +55,4 @@ namespace SF
     }
 }
 
-
-
+#nullable restore

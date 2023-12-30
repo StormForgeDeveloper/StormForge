@@ -17,6 +17,8 @@ using System.Runtime.InteropServices;
 using AOT;
 #endif
 
+#nullable enable
+
 namespace SF
 {
     public static class Util
@@ -85,5 +87,4 @@ namespace SF
     }
 }
 
-
-
+#nullable restore

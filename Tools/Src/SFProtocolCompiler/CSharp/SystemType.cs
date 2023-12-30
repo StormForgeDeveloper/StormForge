@@ -196,7 +196,7 @@ namespace SF
             new TypeMap( "float", false, typeof(float), cppTypeName:"float" ),
             new TypeMap( "Time32", false, typeof(UInt32), cppTypeName:"uint32_t" ),
             new TypeMap( "Time64", false, typeof(UInt64), cppTypeName:"uint64_t" ),
-            new TypeMap( "TransactionID", false, typeof(UInt64), cppTypeName:"uint64_t" ),
+            new TypeMap( "TransactionID", false, typeof(SF.TransactionID), cppTypeName:"TransactionID" ),
             new TypeMap( "AccountID", false, typeof(UInt64) ),
             new TypeMap( "PlayerID", false, typeof(UInt64) ),
             new TypeMap( "CharacterID", false, typeof(UInt32) ),

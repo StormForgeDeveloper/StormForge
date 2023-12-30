@@ -14,7 +14,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using SF;
 
-
+#nullable enable
 
 namespace SF.Net
 {
@@ -39,9 +39,6 @@ namespace SF.Net
 
     };
 
-
-
-
 } // namespace SF.Net
 
-
+#nullable restore

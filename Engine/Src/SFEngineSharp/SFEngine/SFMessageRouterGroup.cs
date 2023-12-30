@@ -11,8 +11,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
+
+#nullable enable
 
 namespace SF
 {
@@ -66,10 +66,10 @@ namespace SF
             throw new NotImplementedException("We don't support directly unregistering message handlers");
         }
 
-        public override void HandleSentMessage(int result, int messageID)
+        public override void HandleSentMessage(int result, TransactionID transId, int messageID, Action<SFMessage>? callback)
         {
             foreach (var router in m_MessageRouters)
-                router.HandleSentMessage(result, messageID);
+                router.HandleSentMessage(result, transId, messageID, callback);
         }
 
         /// <summary>
@@ -85,3 +85,4 @@ namespace SF
     }
 }
 
+#nullable restore

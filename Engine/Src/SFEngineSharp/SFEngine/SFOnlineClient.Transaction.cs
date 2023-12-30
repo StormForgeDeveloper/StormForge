@@ -1,0 +1,103 @@
+////////////////////////////////////////////////////////////////////////////////
+// 
+// CopyRight (c) Kyungkun Ko
+// 
+// Author : KyungKun Ko
+//
+// Description : OnlineClient interface
+//	
+//
+////////////////////////////////////////////////////////////////////////////////
+
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
+using SF.Net;
+#if UNITY_IOS
+using AOT;
+#endif
+
+#nullable enable
+
+namespace SF
+{
+    public partial class OnlineClient : SFObject
+    {
+        
+        // pending request callback router
+        class OnlineRequestCallbackRouter : SFIMessageRouter
+        {
+            Dictionary<ulong, Action<SFMessage>?> m_PendingRequests = new();
+
+            public OnlineRequestCallbackRouter()
+                : base(1000)
+            {
+
+            }
+
+            public void AddPendingRequest(TransactionID requestId, Action<SFMessage>? callback)
+            {
+                if (requestId.TransactionId == 0 || callback == null)
+                {
+                    return;
+                }
+
+                Action<SFMessage>? outCallback;
+                if (m_PendingRequests.TryGetValue(requestId.TransactionId, out outCallback))
+                {
+                    outCallback += callback;
+                }
+                else
+                {
+                    m_PendingRequests.Add(requestId.TransactionId, callback);
+                }
+            }
+
+            public override void HandleRecvMessage(SFMessage message)
+            {
+                ulong transactionId = message.GetValue<ulong>("TransactionID");
+                Result result;
+                if (message.TryGetValue("Result", out result))
+                {
+                    if (result.IsFailure)
+                    {
+                        int messageId = message.GetMessageID();
+                        SF.Log.Error($"Server request has failed, transactionId:{transactionId}, messageId:{messageId}");
+                    }
+                }
+
+
+                Action<SFMessage>? outCallback = null;
+                m_PendingRequests.Remove(transactionId, out outCallback);
+                if (outCallback != null)
+                {
+                    outCallback(message);
+                }
+            }
+        }
+
+        OnlineRequestCallbackRouter m_RequestCallbackRouter = new();
+
+        // Request Id generation serial
+        int m_RequestIdGen = 0;
+        public TransactionID NewTransactionID()
+        {
+            int newId = Interlocked.Increment(ref m_RequestIdGen);
+            if (newId == 0)
+            {
+                newId = Interlocked.Increment(ref m_RequestIdGen);
+            }
+            return new TransactionID() { TransactionId = (uint)newId };
+        }
+
+
+        public void RegisterPendingTransactionCallback(TransactionID requestId, Action<SFMessage>? callback)
+        {
+            m_RequestCallbackRouter.AddPendingRequest(requestId, callback);
+        }
+    }
+}
+
+#nullable restore

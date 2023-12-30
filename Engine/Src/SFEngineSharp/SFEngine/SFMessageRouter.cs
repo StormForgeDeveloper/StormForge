@@ -11,12 +11,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
+
+#nullable enable
 
 namespace SF
 {
-
 
     public class SFMessageRouter : SFIMessageRouter, IDisposable
     {
@@ -123,9 +122,9 @@ namespace SF
             }
         }
 
-        public override void HandleSentMessage(int result, int messageID)
+        public override void HandleSentMessage(int result, TransactionID transId, int messageID, Action<SFMessage>? callback)
         {
-            if (OnMessageSent != null) OnMessageSent(result, messageID);
+            if (OnMessageSent != null) OnMessageSent(result, transId, messageID, callback);
         }
 
         /// <summary>
@@ -158,3 +157,4 @@ namespace SF
     }
 }
 
+#nullable restore

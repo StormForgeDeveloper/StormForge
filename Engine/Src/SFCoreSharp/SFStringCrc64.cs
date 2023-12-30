@@ -12,6 +12,8 @@
 using System;
 using System.Runtime.InteropServices;
 
+#nullable enable
+
 namespace SF
 {
     public class StringCrc64
@@ -82,3 +84,5 @@ namespace SF
 
     }
 }
+
+#nullable restore

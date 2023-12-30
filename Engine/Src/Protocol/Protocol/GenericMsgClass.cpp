@@ -55,7 +55,7 @@ namespace SF
 				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("RouteContext", "RouteContext", parser.GetRouteContext());
-				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 
 				return hr;
 
@@ -73,7 +73,7 @@ namespace SF
 			}; // Result GenericFailureCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t GenericFailureCmd::CalculateMessageSize( const RouteContext &InRouteContext, const uint64_t &InTransactionID )
+			size_t GenericFailureCmd::CalculateMessageSize( const RouteContext &InRouteContext, const TransactionID &InTransactionID )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InRouteContext)
@@ -81,10 +81,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t GenericFailureCmd::CalculateMessageSize( const RouteContext &InRouteContext, const uint64_t &InTransactionID )
+			}; // size_t GenericFailureCmd::CalculateMessageSize( const RouteContext &InRouteContext, const TransactionID &InTransactionID )
 
 
-			Result GenericFailureCmd::Create( MessageHeader* messageBuffer, const RouteContext &InRouteContext, const uint64_t &InTransactionID )
+			Result GenericFailureCmd::Create( MessageHeader* messageBuffer, const RouteContext &InRouteContext, const TransactionID &InTransactionID )
 			{
  				Result hr;
 
@@ -107,7 +107,7 @@ namespace SF
 				protocolCheck(*output << InTransactionID);
 
 				return hr;
-			}; // Result GenericFailureCmd::Create( MessageHeader* messageBuffer, const RouteContext &InRouteContext, const uint64_t &InTransactionID )
+			}; // Result GenericFailureCmd::Create( MessageHeader* messageBuffer, const RouteContext &InRouteContext, const TransactionID &InTransactionID )
 
 			Result GenericFailureCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -148,7 +148,7 @@ namespace SF
 				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("RouteContext", "RouteContext", parser.GetRouteContext());
-				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
@@ -167,7 +167,7 @@ namespace SF
 			}; // Result GenericFailureRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t GenericFailureRes::CalculateMessageSize( const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult )
+			size_t GenericFailureRes::CalculateMessageSize( const RouteContext &InRouteContext, const TransactionID &InTransactionID, const Result &InResult )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InRouteContext)
@@ -176,10 +176,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t GenericFailureRes::CalculateMessageSize( const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult )
+			}; // size_t GenericFailureRes::CalculateMessageSize( const RouteContext &InRouteContext, const TransactionID &InTransactionID, const Result &InResult )
 
 
-			Result GenericFailureRes::Create( MessageHeader* messageBuffer, const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult )
+			Result GenericFailureRes::Create( MessageHeader* messageBuffer, const RouteContext &InRouteContext, const TransactionID &InTransactionID, const Result &InResult )
 			{
  				Result hr;
 
@@ -204,7 +204,7 @@ namespace SF
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // Result GenericFailureRes::Create( MessageHeader* messageBuffer, const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult )
+			}; // Result GenericFailureRes::Create( MessageHeader* messageBuffer, const RouteContext &InRouteContext, const TransactionID &InTransactionID, const Result &InResult )
 
 			Result GenericFailureRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{

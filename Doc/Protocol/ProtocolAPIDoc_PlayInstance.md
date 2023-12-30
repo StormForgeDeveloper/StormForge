@@ -19,7 +19,7 @@ Player Join request.
 
 1. Command interface
 
-        Result JoinPlayInstanceCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier)
+        Result JoinPlayInstanceCmd(const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -178,7 +178,7 @@ Occupy map object
 
 1. Command interface
 
-        Result OccupyMapObjectCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId)
+        Result OccupyMapObjectCmd(const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -207,7 +207,7 @@ Unoccupy map object
 
 1. Command interface
 
-        Result UnoccupyMapObjectCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId)
+        Result UnoccupyMapObjectCmd(const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -234,7 +234,7 @@ Use map object
 
 1. Command interface
 
-        Result UseMapObjectCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InUseParameters)
+        Result UseMapObjectCmd(const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InUseParameters)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -264,7 +264,7 @@ Send zone chatting
 
 1. Command interface
 
-        Result ZoneChatCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
+        Result ZoneChatCmd(const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -322,7 +322,7 @@ Create stream instance
 
 1. Command interface
 
-        Result CreateStreamCmd(const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName)
+        Result CreateStreamCmd(const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -345,7 +345,7 @@ Open stream instance
 
 1. Command interface
 
-        Result FindStreamCmd(const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName)
+        Result FindStreamCmd(const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -368,7 +368,7 @@ Delete stream instance
 
 1. Command interface
 
-        Result DeleteStreamCmd(const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName)
+        Result DeleteStreamCmd(const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -391,7 +391,7 @@ Get stream list
 
 1. Command interface
 
-        Result GetStreamListCmd(const uint64_t &InTransactionID, const AuthTicket &InTicket)
+        Result GetStreamListCmd(const TransactionID &InTransactionID, const AuthTicket &InTicket)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -412,7 +412,7 @@ To call general functionality
 
 1. Command interface
 
-        Result CallFunctionCmd(const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters)
+        Result CallFunctionCmd(const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters)
 
 		- OutTransactionID: TransactionID type. 
 

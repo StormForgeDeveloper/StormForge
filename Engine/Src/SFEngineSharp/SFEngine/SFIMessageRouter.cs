@@ -10,9 +10,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Text;
+
+#nullable enable
 
 namespace SF
 {
@@ -30,7 +29,7 @@ namespace SF
 		/// <summary>
 		/// Message event argument
 		/// </summary>
-		public delegate void delMessageIDEventHandler(int sendResult, int messageID);
+		public delegate void delMessageIDEventHandler(int sendResult, TransactionID transId, int messageID, Action<SFMessage>? callback);
         public delegate void delMessageEventHandler(SFMessage message);
 
         public virtual void Dispose() { }
@@ -74,7 +73,7 @@ namespace SF
         /// </summary>
         /// <param name="result">Send result</param>
         /// <param name="messageID">Message ID</param>
-        public virtual void HandleSentMessage(int result, int messageID) { }
+        public virtual void HandleSentMessage(int result, TransactionID transId, int messageID, Action<SFMessage>? callback) { }
 
 
         /// <summary>
@@ -85,3 +84,4 @@ namespace SF
     }
 }
 
+#nullable restore

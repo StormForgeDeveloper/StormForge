@@ -33,7 +33,7 @@ namespace SF
 		{}
 
 		// Cmd: Player Join request.
-		Result JoinPlayInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
+		Result JoinPlayInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
 		// C2S: Play packet
 		Result PlayPacketC2SEvt( const uint64_t &InPlayInstanceUID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload );
 		// C2S: Player Movement
@@ -43,23 +43,23 @@ namespace SF
 		// C2S: Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
 		Result ClientSyncC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData );
 		// Cmd: Occupy map object
-		Result OccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId );
+		Result OccupyMapObjectCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId );
 		// Cmd: Unoccupy map object
-		Result UnoccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
+		Result UnoccupyMapObjectCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
 		// Cmd: Use map object
-		Result UseMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters );
+		Result UseMapObjectCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters );
 		// Cmd: Send zone chatting
-		Result ZoneChatCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage );
+		Result ZoneChatCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage );
 		// Cmd: Create stream instance
-		Result CreateStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
+		Result CreateStreamCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
 		// Cmd: Open stream instance
-		Result FindStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
+		Result FindStreamCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
 		// Cmd: Delete stream instance
-		Result DeleteStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
+		Result DeleteStreamCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
 		// Cmd: Get stream list
-		Result GetStreamListCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket );
+		Result GetStreamListCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket );
 		// Cmd: To call general functionality
-		Result CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters );
+		Result CallFunctionCmd( const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters );
 		// C2S: Send coded voice data to server
 		Result SendVoiceDataC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData );
 
@@ -76,7 +76,7 @@ namespace SF
 		{}
 
 		// Cmd: Player Join request.
-		Result JoinPlayInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const VariableTable &InCharacterPrivateData, const ActorMovement &InMovement );
+		Result JoinPlayInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const VariableTable &InCharacterPrivateData, const ActorMovement &InMovement );
 		// S2C: Player kicked event. this event will be broadcasted when a player kicked.
 		Result PlayerKickedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InKickedPlayerID );
 		// S2C: New actor in get view
@@ -90,27 +90,27 @@ namespace SF
 		// S2C: Player state change
 		Result PlayerStateChangedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition, const VariableTable &InStateValues );
 		// Cmd: Occupy map object
-		Result OccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
+		Result OccupyMapObjectRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
 		// Cmd: Unoccupy map object
-		Result UnoccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
+		Result UnoccupyMapObjectRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
 		// Cmd: Use map object
-		Result UseMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes );
+		Result UseMapObjectRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes );
 		// Cmd: Send zone chatting
-		Result ZoneChatRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result ZoneChatRes( const TransactionID &InTransactionID, const Result &InResult );
 		// S2C: Player state change
 		Result ZoneChatS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InSenderID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage );
 		// S2C: Effect modifier initial sync
 		Result LevelUpS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int64_t &InCurrentExp, const int32_t &InCurrentLevel );
 		// Cmd: Create stream instance
-		Result CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName );
+		Result CreateStreamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName );
 		// Cmd: Open stream instance
-		Result FindStreamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName );
+		Result FindStreamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName );
 		// Cmd: Delete stream instance
-		Result DeleteStreamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName );
+		Result DeleteStreamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName );
 		// Cmd: Get stream list
-		Result GetStreamListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames );
+		Result GetStreamListRes( const TransactionID &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames );
 		// Cmd: To call general functionality
-		Result CallFunctionRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults );
+		Result CallFunctionRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InResults );
 		// S2C: Voice data
 		Result VoiceDataS2CEvt( const uint32_t &InActorID, const Array<uint8_t>& InVoiceData );
 

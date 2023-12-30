@@ -10,7 +10,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Windows.Media;
 using ProtocolXml;
 using SF;
 
@@ -70,10 +72,19 @@ namespace ProtocolCompiler
             OutStream.WriteLine("using System.Diagnostics;");
             OutStream.WriteLine("using System.Runtime.InteropServices;");
             OutStream.WriteLine("using SF;");
+            OutStream.WriteLine("#nullable enable");
+
             NewLine(3);
 
             // namespace definition
             OpenSection("namespace", PrjPrefix + "." + BuilderNamespace, false);
+        }
+
+        void BuildCSPostfix()
+        {
+            CloseAllSection();
+
+            OutStream.WriteLine("#nullable restore");
         }
 
         void BuildCPPPrefix()
@@ -530,10 +541,17 @@ namespace ProtocolCompiler
         void BuildSendFunction(MessageBase baseMsg, string msgTypeName, Parameter[] parameters)
         {
             ParameterMode = TypeUsage.CSharp;
-            OpenSection("public int ",
-                string.Format("{0}( {1} )", SendFuncName(baseMsg, msgTypeName), ParamInString("", parameters)),
-                false);
 
+            string paramInString = ParamInString("", parameters);
+            bool bIsCmd = msgTypeName == "Cmd";
+            if (bIsCmd)
+            {
+                paramInString += ", Action<SFMessage>? callback = null";
+            }
+
+            OpenSection("public int ",
+                $"{SendFuncName(baseMsg, msgTypeName)}( {paramInString} )",
+                false);
             ParameterMode = TypeUsage.CSharpNative;
 
             MatchIndent(); OutStream.WriteLine("if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;");
@@ -544,7 +562,14 @@ namespace ProtocolCompiler
             MatchIndent(); OutStream.WriteLine("{");
             MatchIndent(); OutStream.WriteLine("result = {0}({1});", NativeFuncName(baseMsg, msgTypeName), CallNativeParamterString(parameters));
             MatchIndent(); OutStream.WriteLine("}");
-            MatchIndent(); OutStream.WriteLine("m_Connection.HandleSentMessage(result, MessageID{0}.{1}{2});", Group.Name, baseMsg.Name, msgTypeName);
+            if (bIsCmd)
+            {
+                MatchIndent(); OutStream.WriteLine("m_Connection.HandleSentMessage(result, InTransactionID, MessageID{0}.{1}{2}, callback);", Group.Name, baseMsg.Name, msgTypeName);
+            }
+            else
+            {
+                MatchIndent(); OutStream.WriteLine("m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageID{0}.{1}{2});", Group.Name, baseMsg.Name, msgTypeName);
+            }
             MatchIndent(); OutStream.WriteLine("return result;");
 
             CloseSection();
@@ -816,6 +841,7 @@ namespace ProtocolCompiler
             NewLine(2);
 
             NewLine(2);
+            BuildCSPostfix();
             CloseOutFile();
 
 

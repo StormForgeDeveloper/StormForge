@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
+#nullable enable
 
 namespace SF {
 	public struct Result
@@ -114,5 +115,4 @@ namespace SF {
 
 }
 
-
-
+#nullable restore

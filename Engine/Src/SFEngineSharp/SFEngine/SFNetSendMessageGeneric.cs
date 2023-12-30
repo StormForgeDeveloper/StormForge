@@ -13,6 +13,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using SF;
+#nullable enable
 
 
 
@@ -39,21 +40,21 @@ namespace SF.Net
  		} // public  SendMessageGeneric( SF.SFConnection connection ) : base(connection)
 
 		// Cmd: Generic failure message
-		public int  GenericFailureCmd( SF.SFRouteContext InRouteContext, System.UInt64 InTransactionID )
+		public int  GenericFailureCmd( SF.SFRouteContext InRouteContext, SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			{
-			result = CSSFNetAdapter_GenericGenericFailureCmd(m_Connection.NativeHandle,ref InRouteContext, InTransactionID);
+			result = CSSFNetAdapter_GenericGenericFailureCmd(m_Connection.NativeHandle,ref InRouteContext,ref InTransactionID);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDGeneric.GenericFailureCmd);
+			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDGeneric.GenericFailureCmd, callback);
 			return result;
-		} // public int  GenericFailureCmd( SF.SFRouteContext InRouteContext, System.UInt64 InTransactionID )
+		} // public int  GenericFailureCmd( SF.SFRouteContext InRouteContext, SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 
 		#region Native Interfaces 
 		// Cmd: Generic failure message
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GenericGenericFailureCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GenericGenericFailureCmd(System.IntPtr InNativeConnectionHandle, ref SF.SFRouteContext InRouteContext, System.UInt64 InTransactionID );
+		static extern int CSSFNetAdapter_GenericGenericFailureCmd(System.IntPtr InNativeConnectionHandle, ref SF.SFRouteContext InRouteContext, ref SF.TransactionID InTransactionID );
 
 
 		#endregion //Native Interfaces 
@@ -77,22 +78,22 @@ namespace SF.Net
  		} // public  SendMessageSvrGeneric( SF.SFConnection connection ) : base(connection)
 
 		// Cmd: Generic failure message
-		public int  GenericFailureRes( SF.SFRouteContext InRouteContext, System.UInt64 InTransactionID, System.Int32 InResult )
+		public int  GenericFailureRes( SF.SFRouteContext InRouteContext, SF.TransactionID InTransactionID, System.Int32 InResult )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			{
-			result = CSSFNetAdapter_GenericGenericFailureRes(m_Connection.NativeHandle,ref InRouteContext, InTransactionID, InResult);
+			result = CSSFNetAdapter_GenericGenericFailureRes(m_Connection.NativeHandle,ref InRouteContext,ref InTransactionID, InResult);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDGeneric.GenericFailureRes);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDGeneric.GenericFailureRes);
 			return result;
-		} // public int  GenericFailureRes( SF.SFRouteContext InRouteContext, System.UInt64 InTransactionID, System.Int32 InResult )
+		} // public int  GenericFailureRes( SF.SFRouteContext InRouteContext, SF.TransactionID InTransactionID, System.Int32 InResult )
 
 
 		#region Native Interfaces 
 		// Cmd: Generic failure message
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GenericGenericFailureRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GenericGenericFailureRes(System.IntPtr InNativeConnectionHandle, ref SF.SFRouteContext InRouteContext, System.UInt64 InTransactionID, System.Int32 InResult );
+		static extern int CSSFNetAdapter_GenericGenericFailureRes(System.IntPtr InNativeConnectionHandle, ref SF.SFRouteContext InRouteContext, ref SF.TransactionID InTransactionID, System.Int32 InResult );
 
 
 
@@ -103,5 +104,6 @@ namespace SF.Net
 
 
 } // namespace SF.Net
+#nullable restore
 
 

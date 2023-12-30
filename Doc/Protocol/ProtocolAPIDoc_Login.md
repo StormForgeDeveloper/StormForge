@@ -19,7 +19,7 @@ Login request
 
 1. Command interface
 
-        Result LoginCmd(const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword)
+        Result LoginCmd(const TransactionID &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -48,7 +48,7 @@ Login request with Facebook UID
 
 1. Command interface
 
-        Result LoginByFacebookCmd(const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken)
+        Result LoginByFacebookCmd(const TransactionID &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -81,7 +81,7 @@ Login request with Facebook UID
 
 1. Command interface
 
-        Result LoginBySteamCmd(const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken)
+        Result LoginBySteamCmd(const TransactionID &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -112,7 +112,7 @@ Login request
 
 1. Command interface
 
-        Result CreateRandomUserCmd(const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone)
+        Result CreateRandomUserCmd(const TransactionID &InTransactionID, const uint32_t &InGameID, const char* InCellPhone)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -138,7 +138,7 @@ Update my score and Get Ranking list
 
 1. Command interface
 
-        Result UpdateMyScoreCmd(const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount)
+        Result UpdateMyScoreCmd(const TransactionID &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -163,7 +163,7 @@ Get Ranking lise
 
 1. Command interface
 
-        Result GetRankingListCmd(const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount)
+        Result GetRankingListCmd(const TransactionID &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -188,7 +188,7 @@ For network test
 
 1. Command interface
 
-        Result DataTestCmd(const uint64_t &InTransactionID, const Array<uint8_t>& InTestData)
+        Result DataTestCmd(const TransactionID &InTransactionID, const Array<uint8_t>& InTestData)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -215,7 +215,7 @@ Write All!! User Score and Ranking list
 
 1. Command interface
 
-        Result DebugPrintALLRankingCmd(const uint64_t &InTransactionID, const char* InFileName)
+        Result DebugPrintALLRankingCmd(const TransactionID &InTransactionID, const char* InFileName)
 
 		- OutTransactionID: TransactionID type. 
 

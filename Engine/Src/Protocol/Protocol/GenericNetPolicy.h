@@ -33,7 +33,7 @@ namespace SF
 		{}
 
 		// Cmd: Generic failure message
-		Result GenericFailureCmd( const RouteContext &InRouteContext, const uint64_t &InTransactionID );
+		Result GenericFailureCmd( const RouteContext &InRouteContext, const TransactionID &InTransactionID );
 
 	}; // class NetPolicyGeneric 
 
@@ -48,7 +48,7 @@ namespace SF
 		{}
 
 		// Cmd: Generic failure message
-		Result GenericFailureRes( const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult );
+		Result GenericFailureRes( const RouteContext &InRouteContext, const TransactionID &InTransactionID, const Result &InResult );
 
 	}; // class NetSvrPolicyGeneric
 

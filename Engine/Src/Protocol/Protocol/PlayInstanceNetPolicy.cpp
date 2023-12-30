@@ -23,7 +23,7 @@
 namespace SF
 {
  	// Cmd: Player Join request.
-	Result NetPolicyPlayInstance::JoinPlayInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
+	Result NetPolicyPlayInstance::JoinPlayInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
 	{
  		Result hr;
 
@@ -34,7 +34,7 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::JoinPlayInstanceCmd::Create(messageBuffer, InTransactionID, InPlayInstanceUID, InPlayerID, InPlayerIdentifier));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyPlayInstance::JoinPlayInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
+	}; // Result NetPolicyPlayInstance::JoinPlayInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
 	// C2S: Play packet
 	Result NetPolicyPlayInstance::PlayPacketC2SEvt( const uint64_t &InPlayInstanceUID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 	{
@@ -88,7 +88,7 @@ namespace SF
 
 	}; // Result NetPolicyPlayInstance::ClientSyncC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData )
 	// Cmd: Occupy map object
-	Result NetPolicyPlayInstance::OccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
+	Result NetPolicyPlayInstance::OccupyMapObjectCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
 	{
  		Result hr;
 
@@ -99,9 +99,9 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::OccupyMapObjectCmd::Create(messageBuffer, InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId, InUsageId));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyPlayInstance::OccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
+	}; // Result NetPolicyPlayInstance::OccupyMapObjectCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
 	// Cmd: Unoccupy map object
-	Result NetPolicyPlayInstance::UnoccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+	Result NetPolicyPlayInstance::UnoccupyMapObjectCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 	{
  		Result hr;
 
@@ -112,9 +112,9 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::UnoccupyMapObjectCmd::Create(messageBuffer, InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyPlayInstance::UnoccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+	}; // Result NetPolicyPlayInstance::UnoccupyMapObjectCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 	// Cmd: Use map object
-	Result NetPolicyPlayInstance::UseMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters )
+	Result NetPolicyPlayInstance::UseMapObjectCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters )
 	{
  		Result hr;
 
@@ -125,9 +125,9 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::UseMapObjectCmd::Create(messageBuffer, InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId, InUseParameters));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyPlayInstance::UseMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters )
+	}; // Result NetPolicyPlayInstance::UseMapObjectCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters )
 	// Cmd: Send zone chatting
-	Result NetPolicyPlayInstance::ZoneChatCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage )
+	Result NetPolicyPlayInstance::ZoneChatCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage )
 	{
  		Result hr;
 
@@ -138,9 +138,9 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::ZoneChatCmd::Create(messageBuffer, InTransactionID, InPlayInstanceUID, InPlayerID, InMessageType, InChatMetaData, InChatMessage));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyPlayInstance::ZoneChatCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage )
+	}; // Result NetPolicyPlayInstance::ZoneChatCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage )
 	// Cmd: Create stream instance
-	Result NetPolicyPlayInstance::CreateStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+	Result NetPolicyPlayInstance::CreateStreamCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 	{
  		Result hr;
 
@@ -151,9 +151,9 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::CreateStreamCmd::Create(messageBuffer, InTransactionID, InTicket, InStreamName));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyPlayInstance::CreateStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+	}; // Result NetPolicyPlayInstance::CreateStreamCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 	// Cmd: Open stream instance
-	Result NetPolicyPlayInstance::FindStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+	Result NetPolicyPlayInstance::FindStreamCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 	{
  		Result hr;
 
@@ -164,9 +164,9 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::FindStreamCmd::Create(messageBuffer, InTransactionID, InTicket, InStreamName));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyPlayInstance::FindStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+	}; // Result NetPolicyPlayInstance::FindStreamCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 	// Cmd: Delete stream instance
-	Result NetPolicyPlayInstance::DeleteStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+	Result NetPolicyPlayInstance::DeleteStreamCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 	{
  		Result hr;
 
@@ -177,9 +177,9 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::DeleteStreamCmd::Create(messageBuffer, InTransactionID, InTicket, InStreamName));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyPlayInstance::DeleteStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+	}; // Result NetPolicyPlayInstance::DeleteStreamCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 	// Cmd: Get stream list
-	Result NetPolicyPlayInstance::GetStreamListCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket )
+	Result NetPolicyPlayInstance::GetStreamListCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket )
 	{
  		Result hr;
 
@@ -190,9 +190,9 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::GetStreamListCmd::Create(messageBuffer, InTransactionID, InTicket));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyPlayInstance::GetStreamListCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket )
+	}; // Result NetPolicyPlayInstance::GetStreamListCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket )
 	// Cmd: To call general functionality
-	Result NetPolicyPlayInstance::CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters )
+	Result NetPolicyPlayInstance::CallFunctionCmd( const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters )
 	{
  		Result hr;
 
@@ -203,7 +203,7 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::CallFunctionCmd::Create(messageBuffer, InTransactionID, InFunctionName, InPlayerID, InParameters));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyPlayInstance::CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters )
+	}; // Result NetPolicyPlayInstance::CallFunctionCmd( const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters )
 	// C2S: Send coded voice data to server
 	Result NetPolicyPlayInstance::SendVoiceDataC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData )
 	{
@@ -220,7 +220,7 @@ namespace SF
 
 
 	// Cmd: Player Join request.
-	Result NetSvrPolicyPlayInstance::JoinPlayInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const VariableTable &InCharacterPrivateData, const ActorMovement &InMovement )
+	Result NetSvrPolicyPlayInstance::JoinPlayInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const VariableTable &InCharacterPrivateData, const ActorMovement &InMovement )
 	{
  		Result hr;
 
@@ -231,7 +231,7 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::JoinPlayInstanceRes::Create(messageBuffer, InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InCharacterID, InCharacterPrivateData, InMovement));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyPlayInstance::JoinPlayInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const VariableTable &InCharacterPrivateData, const ActorMovement &InMovement )
+	}; // Result NetSvrPolicyPlayInstance::JoinPlayInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const VariableTable &InCharacterPrivateData, const ActorMovement &InMovement )
 	// S2C: Player kicked event. this event will be broadcasted when a player kicked.
 	Result NetSvrPolicyPlayInstance::PlayerKickedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InKickedPlayerID )
 	{
@@ -311,7 +311,7 @@ namespace SF
 
 	}; // Result NetSvrPolicyPlayInstance::PlayerStateChangedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition, const VariableTable &InStateValues )
 	// Cmd: Occupy map object
-	Result NetSvrPolicyPlayInstance::OccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+	Result NetSvrPolicyPlayInstance::OccupyMapObjectRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 	{
  		Result hr;
 
@@ -322,9 +322,9 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::OccupyMapObjectRes::Create(messageBuffer, InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyPlayInstance::OccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+	}; // Result NetSvrPolicyPlayInstance::OccupyMapObjectRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 	// Cmd: Unoccupy map object
-	Result NetSvrPolicyPlayInstance::UnoccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+	Result NetSvrPolicyPlayInstance::UnoccupyMapObjectRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 	{
  		Result hr;
 
@@ -335,9 +335,9 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::UnoccupyMapObjectRes::Create(messageBuffer, InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyPlayInstance::UnoccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+	}; // Result NetSvrPolicyPlayInstance::UnoccupyMapObjectRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 	// Cmd: Use map object
-	Result NetSvrPolicyPlayInstance::UseMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes )
+	Result NetSvrPolicyPlayInstance::UseMapObjectRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes )
 	{
  		Result hr;
 
@@ -348,9 +348,9 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::UseMapObjectRes::Create(messageBuffer, InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId, InResultAttributes));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyPlayInstance::UseMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes )
+	}; // Result NetSvrPolicyPlayInstance::UseMapObjectRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes )
 	// Cmd: Send zone chatting
-	Result NetSvrPolicyPlayInstance::ZoneChatRes( const uint64_t &InTransactionID, const Result &InResult )
+	Result NetSvrPolicyPlayInstance::ZoneChatRes( const TransactionID &InTransactionID, const Result &InResult )
 	{
  		Result hr;
 
@@ -361,7 +361,7 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::ZoneChatRes::Create(messageBuffer, InTransactionID, InResult));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyPlayInstance::ZoneChatRes( const uint64_t &InTransactionID, const Result &InResult )
+	}; // Result NetSvrPolicyPlayInstance::ZoneChatRes( const TransactionID &InTransactionID, const Result &InResult )
 	// S2C: Player state change
 	Result NetSvrPolicyPlayInstance::ZoneChatS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InSenderID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage )
 	{
@@ -389,7 +389,7 @@ namespace SF
 
 	}; // Result NetSvrPolicyPlayInstance::LevelUpS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int64_t &InCurrentExp, const int32_t &InCurrentLevel )
 	// Cmd: Create stream instance
-	Result NetSvrPolicyPlayInstance::CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
+	Result NetSvrPolicyPlayInstance::CreateStreamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
 	{
  		Result hr;
 
@@ -400,9 +400,9 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::CreateStreamRes::Create(messageBuffer, InTransactionID, InResult, InStreamName));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyPlayInstance::CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
+	}; // Result NetSvrPolicyPlayInstance::CreateStreamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
 	// Cmd: Open stream instance
-	Result NetSvrPolicyPlayInstance::FindStreamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
+	Result NetSvrPolicyPlayInstance::FindStreamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
 	{
  		Result hr;
 
@@ -413,9 +413,9 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::FindStreamRes::Create(messageBuffer, InTransactionID, InResult, InStreamName));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyPlayInstance::FindStreamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
+	}; // Result NetSvrPolicyPlayInstance::FindStreamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
 	// Cmd: Delete stream instance
-	Result NetSvrPolicyPlayInstance::DeleteStreamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
+	Result NetSvrPolicyPlayInstance::DeleteStreamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
 	{
  		Result hr;
 
@@ -426,9 +426,9 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::DeleteStreamRes::Create(messageBuffer, InTransactionID, InResult, InStreamName));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyPlayInstance::DeleteStreamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
+	}; // Result NetSvrPolicyPlayInstance::DeleteStreamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
 	// Cmd: Get stream list
-	Result NetSvrPolicyPlayInstance::GetStreamListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
+	Result NetSvrPolicyPlayInstance::GetStreamListRes( const TransactionID &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
 	{
  		Result hr;
 
@@ -439,9 +439,9 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::GetStreamListRes::Create(messageBuffer, InTransactionID, InResult, InStreamNames));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyPlayInstance::GetStreamListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
+	}; // Result NetSvrPolicyPlayInstance::GetStreamListRes( const TransactionID &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
 	// Cmd: To call general functionality
-	Result NetSvrPolicyPlayInstance::CallFunctionRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults )
+	Result NetSvrPolicyPlayInstance::CallFunctionRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InResults )
 	{
  		Result hr;
 
@@ -452,7 +452,7 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::CallFunctionRes::Create(messageBuffer, InTransactionID, InResult, InResults));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyPlayInstance::CallFunctionRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults )
+	}; // Result NetSvrPolicyPlayInstance::CallFunctionRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InResults )
 	// S2C: Voice data
 	Result NetSvrPolicyPlayInstance::VoiceDataS2CEvt( const uint32_t &InActorID, const Array<uint8_t>& InVoiceData )
 	{

@@ -25,7 +25,7 @@ Player connected from a login server and moved to game server
 
 1. Command interface
 
-        Result JoinGameServerCmd(const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID)
+        Result JoinGameServerCmd(const TransactionID &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -54,7 +54,7 @@ player complition statues
 
 1. Command interface
 
-        Result GetAchievementStatsCmd(const uint64_t &InTransactionID, const uint32_t &InCharacterID, const uint32_t &InAchievementStatIDFrom, const uint32_t &InAchievementStatIDTo)
+        Result GetAchievementStatsCmd(const TransactionID &InTransactionID, const uint32_t &InCharacterID, const uint32_t &InAchievementStatIDFrom, const uint32_t &InAchievementStatIDTo)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -79,7 +79,7 @@ Player complition state
 
 1. Command interface
 
-        Result Dummy1Cmd(const uint64_t &InTransactionID, const char* InComplitionState)
+        Result Dummy1Cmd(const TransactionID &InTransactionID, const char* InComplitionState)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -99,7 +99,7 @@ Register Google notification service ID, after this, the player will get notific
 
 1. Command interface
 
-        Result RegisterGCMCmd(const uint64_t &InTransactionID, const char* InGCMRegisteredID)
+        Result RegisterGCMCmd(const TransactionID &InTransactionID, const char* InGCMRegisteredID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -119,7 +119,7 @@ Unregister Google notification service ID
 
 1. Command interface
 
-        Result UnregisterGCMCmd(const uint64_t &InTransactionID, const char* InGCMRegisteredID)
+        Result UnregisterGCMCmd(const TransactionID &InTransactionID, const char* InGCMRegisteredID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -139,7 +139,7 @@ Invite friend
 
 1. Command interface
 
-        Result InviteFriendCmd(const uint64_t &InTransactionID, const AccountID &InFriendID)
+        Result InviteFriendCmd(const TransactionID &InTransactionID, const AccountID &InFriendID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -159,7 +159,7 @@ Accept friend request
 
 1. Command interface
 
-        Result AcceptFriendRequestCmd(const uint64_t &InTransactionID, const AccountID &InInviterID, const PlayerPlatformID &InInviterPlatformId)
+        Result AcceptFriendRequestCmd(const TransactionID &InTransactionID, const AccountID &InInviterID, const PlayerPlatformID &InInviterPlatformId)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -190,7 +190,7 @@ Remove friden form the friend list
 
 1. Command interface
 
-        Result RemoveFriendCmd(const uint64_t &InTransactionID, const AccountID &InFriendID)
+        Result RemoveFriendCmd(const TransactionID &InTransactionID, const AccountID &InFriendID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -219,7 +219,7 @@ Get friend list
 
 1. Command interface
 
-        Result GetFriendListCmd(const uint64_t &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount)
+        Result GetFriendListCmd(const TransactionID &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -245,7 +245,7 @@ Query notification list
 
 1. Command interface
 
-        Result GetNotificationListCmd(const uint64_t &InTransactionID)
+        Result GetNotificationListCmd(const TransactionID &InTransactionID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -263,7 +263,7 @@ Delete notification
 
 1. Command interface
 
-        Result DeleteNotificationCmd(const uint64_t &InTransactionID, const uint32_t &InNotificationID)
+        Result DeleteNotificationCmd(const TransactionID &InTransactionID, const uint32_t &InNotificationID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -284,7 +284,7 @@ Set notification is read
 
 1. Command interface
 
-        Result SetNotificationReadCmd(const uint64_t &InTransactionID, const uint32_t &InNotificationID)
+        Result SetNotificationReadCmd(const TransactionID &InTransactionID, const uint32_t &InNotificationID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -305,7 +305,7 @@ Accept notification
 
 1. Command interface
 
-        Result AcceptNotificationCmd(const uint64_t &InTransactionID, const uint32_t &InNotificationID)
+        Result AcceptNotificationCmd(const TransactionID &InTransactionID, const uint32_t &InNotificationID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -342,7 +342,7 @@ PlayerId Conversion
 
 1. Command interface
 
-        Result FindPlayerByPlatformIdCmd(const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId)
+        Result FindPlayerByPlatformIdCmd(const TransactionID &InTransactionID, const PlayerPlatformID &InPlatformPlayerId)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -364,7 +364,7 @@ PlayerId conversion
 
 1. Command interface
 
-        Result FindPlayerByCharacterNameCmd(const uint64_t &InTransactionID, const char* InCharacterName)
+        Result FindPlayerByCharacterNameCmd(const TransactionID &InTransactionID, const char* InCharacterName)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -385,7 +385,7 @@ PlayerId Conversion
 
 1. Command interface
 
-        Result FindPlayerByPlatformUserNameCmd(const uint64_t &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName)
+        Result FindPlayerByPlatformUserNameCmd(const TransactionID &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -409,7 +409,7 @@ Query playerID list
 
 1. Command interface
 
-        Result FindPlayerByEMailCmd(const uint64_t &InTransactionID, const char* InPlayerEMail)
+        Result FindPlayerByEMailCmd(const TransactionID &InTransactionID, const char* InPlayerEMail)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -430,7 +430,7 @@ Query playerID list
 
 1. Command interface
 
-        Result FindPlayerByPlayerIDCmd(const uint64_t &InTransactionID, const AccountID &InPlayerID)
+        Result FindPlayerByPlayerIDCmd(const TransactionID &InTransactionID, const AccountID &InPlayerID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -451,7 +451,7 @@ C++: Cast message to FindPlayerByPlayerIDRes to access values
 
 1. Command interface
 
-        Result RequestPlayerStatusUpdateCmd(const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID)
+        Result RequestPlayerStatusUpdateCmd(const TransactionID &InTransactionID, const Array<AccountID>& InTargetPlayerID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -483,7 +483,7 @@ Get Ranking list
 
 1. Command interface
 
-        Result GetRankingListCmd(const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount)
+        Result GetRankingListCmd(const TransactionID &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -508,7 +508,7 @@ Game user game play information
 
 1. Command interface
 
-        Result GetUserGamePlayerInfoCmd(const uint64_t &InTransactionID)
+        Result GetUserGamePlayerInfoCmd(const TransactionID &InTransactionID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -527,7 +527,7 @@ Game game play information
 
 1. Command interface
 
-        Result GetGamePlayerInfoCmd(const uint64_t &InTransactionID, const AccountID &InPlayerID)
+        Result GetGamePlayerInfoCmd(const TransactionID &InTransactionID, const AccountID &InPlayerID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -559,7 +559,7 @@ Change NickName
 
 1. Command interface
 
-        Result SetNickNameCmd(const uint64_t &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree)
+        Result SetNickNameCmd(const TransactionID &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -583,7 +583,7 @@ Create Party
 
 1. Command interface
 
-        Result CreatePartyCmd(const uint64_t &InTransactionID)
+        Result CreatePartyCmd(const TransactionID &InTransactionID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -602,7 +602,7 @@ Join party
 
 1. Command interface
 
-        Result JoinPartyCmd(const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID)
+        Result JoinPartyCmd(const TransactionID &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -647,7 +647,7 @@ Leave party command
 
 1. Command interface
 
-        Result LeavePartyCmd(const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID)
+        Result LeavePartyCmd(const TransactionID &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -679,7 +679,7 @@ Kick player from the party
 
 1. Command interface
 
-        Result PartyKickPlayerCmd(const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick)
+        Result PartyKickPlayerCmd(const TransactionID &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -713,7 +713,7 @@ Invite a player to the party
 
 1. Command interface
 
-        Result PartyInviteCmd(const uint64_t &InTransactionID, const AccountID &InInviteTargetID)
+        Result PartyInviteCmd(const TransactionID &InTransactionID, const AccountID &InInviteTargetID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -745,7 +745,7 @@ Send Party quick chat message
 
 1. Command interface
 
-        Result PartyQuickChatMessageCmd(const uint64_t &InTransactionID, const uint32_t &InQuickChatID)
+        Result PartyQuickChatMessageCmd(const TransactionID &InTransactionID, const uint32_t &InQuickChatID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -775,7 +775,7 @@ Party chatting
 
 1. Command interface
 
-        Result PartyChatMessageCmd(const uint64_t &InTransactionID, const char* InChatMessage)
+        Result PartyChatMessageCmd(const TransactionID &InTransactionID, const char* InChatMessage)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -807,7 +807,7 @@ Join to a game instance
 
 1. Command interface
 
-        Result JoinGameInstanceCmd(const uint64_t &InTransactionID, const uint64_t &InInsUID)
+        Result JoinGameInstanceCmd(const TransactionID &InTransactionID, const uint64_t &InInsUID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -829,7 +829,7 @@ Leave game instance
 
 1. Command interface
 
-        Result LeaveGameInstanceCmd(const uint64_t &InTransactionID, const uint64_t &InInsUID)
+        Result LeaveGameInstanceCmd(const TransactionID &InTransactionID, const uint64_t &InInsUID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -849,7 +849,7 @@ Search game instance
 
 1. Command interface
 
-        Result SearchGameInstanceCmd(const uint64_t &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID)
+        Result SearchGameInstanceCmd(const TransactionID &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -872,7 +872,7 @@ Search game instance
 
 1. Command interface
 
-        Result GetCharacterDataInGameInstanceCmd(const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID)
+        Result GetCharacterDataInGameInstanceCmd(const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -896,7 +896,7 @@ Request Game match
 
 1. Command interface
 
-        Result RequestGameMatchCmd(const uint64_t &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole)
+        Result RequestGameMatchCmd(const TransactionID &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -968,7 +968,7 @@ Cancel Game match
 
 1. Command interface
 
-        Result CancelGameMatchCmd(const uint64_t &InTransactionID)
+        Result CancelGameMatchCmd(const TransactionID &InTransactionID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -992,7 +992,7 @@ Buy shop item prepare
 
 1. Command interface
 
-        Result BuyShopItemPrepareCmd(const uint64_t &InTransactionID, const uint32_t &InShopItemID)
+        Result BuyShopItemPrepareCmd(const TransactionID &InTransactionID, const uint32_t &InShopItemID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -1014,7 +1014,7 @@ Buy shop item
 
 1. Command interface
 
-        Result BuyShopItemCmd(const uint64_t &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken)
+        Result BuyShopItemCmd(const TransactionID &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -1043,7 +1043,7 @@ Create or Join Chat channel
 
 1. Command interface
 
-        Result CreateOrJoinChatChannelCmd(const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode)
+        Result CreateOrJoinChatChannelCmd(const TransactionID &InTransactionID, const char* InChannelName, const char* InPasscode)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -1067,7 +1067,7 @@ Join
 
 1. Command interface
 
-        Result JoinChatChannelCmd(const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode)
+        Result JoinChatChannelCmd(const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -1113,7 +1113,7 @@ Leave ChatChannel command
 
 1. Command interface
 
-        Result LeaveChatChannelCmd(const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID)
+        Result LeaveChatChannelCmd(const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -1145,7 +1145,7 @@ Kick player from the ChatChannel
 
 1. Command interface
 
-        Result ChatChannelKickPlayerCmd(const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick)
+        Result ChatChannelKickPlayerCmd(const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -1179,7 +1179,7 @@ Chat channel sending chatting message
 
 1. Command interface
 
-        Result ChatChannelChatMessageCmd(const uint64_t &InTransactionID, const uint64_t &InChatUID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
+        Result ChatChannelChatMessageCmd(const TransactionID &InTransactionID, const uint64_t &InChatUID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -1215,7 +1215,7 @@ Whisper(tell) other player chatting
 
 1. Command interface
 
-        Result WhisperMessageCmd(const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
+        Result WhisperMessageCmd(const TransactionID &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -1253,7 +1253,7 @@ Create character
 
 1. Command interface
 
-        Result CreateCharacterCmd(const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InPrivateData)
+        Result CreateCharacterCmd(const TransactionID &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InPrivateData)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -1278,7 +1278,7 @@ Delete character
 
 1. Command interface
 
-        Result DeleteCharacterCmd(const uint64_t &InTransactionID, const uint32_t &InCharacterID)
+        Result DeleteCharacterCmd(const TransactionID &InTransactionID, const uint32_t &InCharacterID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -1298,7 +1298,7 @@ Get character list
 
 1. Command interface
 
-        Result GetCharacterListCmd(const uint64_t &InTransactionID)
+        Result GetCharacterListCmd(const TransactionID &InTransactionID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -1317,7 +1317,7 @@ C++: Cast message to GetCharacterListRes to access values
 
 1. Command interface
 
-        Result GetCharacterDataCmd(const uint64_t &InTransactionID, const uint32_t &InCharacterID)
+        Result GetCharacterDataCmd(const TransactionID &InTransactionID, const uint32_t &InCharacterID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -1339,7 +1339,7 @@ Select character
 
 1. Command interface
 
-        Result SelectCharacterCmd(const uint64_t &InTransactionID, const uint32_t &InCharacterID)
+        Result SelectCharacterCmd(const TransactionID &InTransactionID, const uint32_t &InCharacterID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -1361,7 +1361,7 @@ Request Server Notice. Sever will send ServerNoticeS2CEvt
 
 1. Command interface
 
-        Result RequestServerNoticeUpdateCmd(const uint64_t &InTransactionID)
+        Result RequestServerNoticeUpdateCmd(const TransactionID &InTransactionID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -1389,7 +1389,7 @@ To call general functionality
 
 1. Command interface
 
-        Result CallFunctionCmd(const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const Array<uint8_t>& InParameters)
+        Result CallFunctionCmd(const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const Array<uint8_t>& InParameters)
 
 		- OutTransactionID: TransactionID type. 
 

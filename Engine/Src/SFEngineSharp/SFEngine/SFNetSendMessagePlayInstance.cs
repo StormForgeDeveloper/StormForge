@@ -13,6 +13,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using SF;
+#nullable enable
 
 
 
@@ -39,16 +40,16 @@ namespace SF.Net
  		} // public  SendMessagePlayInstance( SF.SFConnection connection ) : base(connection)
 
 		// Cmd: Player Join request.
-		public int  JoinPlayInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.String InPlayerIdentifier )
+		public int  JoinPlayInstanceCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.String InPlayerIdentifier, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceJoinPlayInstanceCmd(m_Connection.NativeHandle, InTransactionID, InPlayInstanceUID, InPlayerID,System.Text.Encoding.UTF8.GetBytes(InPlayerIdentifier + "\0"));
+			result = CSSFNetAdapter_PlayInstanceJoinPlayInstanceCmd(m_Connection.NativeHandle,ref InTransactionID, InPlayInstanceUID, InPlayerID,System.Text.Encoding.UTF8.GetBytes(InPlayerIdentifier + "\0"));
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.JoinPlayInstanceCmd);
+			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDPlayInstance.JoinPlayInstanceCmd, callback);
 			return result;
-		} // public int  JoinPlayInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.String InPlayerIdentifier )
+		} // public int  JoinPlayInstanceCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.String InPlayerIdentifier, Action<SFMessage>? callback = null )
 
 		// C2S: Play packet
 		public int  PlayPacketC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt32 InSenderEndpointID, System.UInt32 InTargetEndpointMask, System.Byte[] InPayload )
@@ -58,7 +59,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstancePlayPacketC2SEvt(m_Connection.NativeHandle, InPlayInstanceUID, InSenderEndpointID, InTargetEndpointMask,(ushort)InPayload.Length, InPayload);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.PlayPacketC2SEvt);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.PlayPacketC2SEvt);
 			return result;
 		} // public int  PlayPacketC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt32 InSenderEndpointID, System.UInt32 InTargetEndpointMask, System.Byte[] InPayload )
 
@@ -71,7 +72,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstancePlayerMovementC2SEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID,ref InMovement);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.PlayerMovementC2SEvt);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.PlayerMovementC2SEvt);
 			return result;
 		} // public int  PlayerMovementC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.ActorMovement InMovement )
 
@@ -86,7 +87,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceClientSyncReliableC2SEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID,(ushort)InSyncData_.Length, InSyncData_PinnedPtr_.Ptr);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.ClientSyncReliableC2SEvt);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.ClientSyncReliableC2SEvt);
 			return result;
 		} // public int  ClientSyncReliableC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.VariableTable InSyncData )
 
@@ -101,124 +102,124 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceClientSyncC2SEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID,(ushort)InSyncData_.Length, InSyncData_PinnedPtr_.Ptr);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.ClientSyncC2SEvt);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.ClientSyncC2SEvt);
 			return result;
 		} // public int  ClientSyncC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.VariableTable InSyncData )
 
 
 		// Cmd: Occupy map object
-		public int  OccupyMapObjectCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, System.UInt32 InUsageId )
+		public int  OccupyMapObjectCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, System.UInt32 InUsageId, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceOccupyMapObjectCmd(m_Connection.NativeHandle, InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId, InUsageId);
+			result = CSSFNetAdapter_PlayInstanceOccupyMapObjectCmd(m_Connection.NativeHandle,ref InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId, InUsageId);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.OccupyMapObjectCmd);
+			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDPlayInstance.OccupyMapObjectCmd, callback);
 			return result;
-		} // public int  OccupyMapObjectCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, System.UInt32 InUsageId )
+		} // public int  OccupyMapObjectCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, System.UInt32 InUsageId, Action<SFMessage>? callback = null )
 
 		// Cmd: Unoccupy map object
-		public int  UnoccupyMapObjectCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId )
+		public int  UnoccupyMapObjectCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceUnoccupyMapObjectCmd(m_Connection.NativeHandle, InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId);
+			result = CSSFNetAdapter_PlayInstanceUnoccupyMapObjectCmd(m_Connection.NativeHandle,ref InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.UnoccupyMapObjectCmd);
+			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDPlayInstance.UnoccupyMapObjectCmd, callback);
 			return result;
-		} // public int  UnoccupyMapObjectCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId )
+		} // public int  UnoccupyMapObjectCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, Action<SFMessage>? callback = null )
 
 		// Cmd: Use map object
-		public int  UseMapObjectCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InUseParameters )
+		public int  UseMapObjectCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InUseParameters, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			var InUseParameters_ = InUseParameters.ToByteArray();
 			using (var InUseParameters_PinnedPtr_ = new PinnedByteBuffer(InUseParameters_))
 			{
-			result = CSSFNetAdapter_PlayInstanceUseMapObjectCmd(m_Connection.NativeHandle, InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId,(ushort)InUseParameters_.Length, InUseParameters_PinnedPtr_.Ptr);
+			result = CSSFNetAdapter_PlayInstanceUseMapObjectCmd(m_Connection.NativeHandle,ref InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId,(ushort)InUseParameters_.Length, InUseParameters_PinnedPtr_.Ptr);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.UseMapObjectCmd);
+			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDPlayInstance.UseMapObjectCmd, callback);
 			return result;
-		} // public int  UseMapObjectCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InUseParameters )
+		} // public int  UseMapObjectCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InUseParameters, Action<SFMessage>? callback = null )
 
 		// Cmd: Send zone chatting
-		public int  ZoneChatCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage )
+		public int  ZoneChatCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			var InChatMetaData_ = InChatMetaData.ToByteArray();
 			using (var InChatMetaData_PinnedPtr_ = new PinnedByteBuffer(InChatMetaData_))
 			{
-			result = CSSFNetAdapter_PlayInstanceZoneChatCmd(m_Connection.NativeHandle, InTransactionID, InPlayInstanceUID, InPlayerID, InMessageType,(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
+			result = CSSFNetAdapter_PlayInstanceZoneChatCmd(m_Connection.NativeHandle,ref InTransactionID, InPlayInstanceUID, InPlayerID, InMessageType,(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.ZoneChatCmd);
+			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDPlayInstance.ZoneChatCmd, callback);
 			return result;
-		} // public int  ZoneChatCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage )
+		} // public int  ZoneChatCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage, Action<SFMessage>? callback = null )
 
 		// Cmd: Create stream instance
-		public int  CreateStreamCmd( System.UInt64 InTransactionID, System.UInt64 InTicket, System.String InStreamName )
+		public int  CreateStreamCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceCreateStreamCmd(m_Connection.NativeHandle, InTransactionID, InTicket,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
+			result = CSSFNetAdapter_PlayInstanceCreateStreamCmd(m_Connection.NativeHandle,ref InTransactionID, InTicket,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.CreateStreamCmd);
+			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDPlayInstance.CreateStreamCmd, callback);
 			return result;
-		} // public int  CreateStreamCmd( System.UInt64 InTransactionID, System.UInt64 InTicket, System.String InStreamName )
+		} // public int  CreateStreamCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 
 		// Cmd: Open stream instance
-		public int  FindStreamCmd( System.UInt64 InTransactionID, System.UInt64 InTicket, System.String InStreamName )
+		public int  FindStreamCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceFindStreamCmd(m_Connection.NativeHandle, InTransactionID, InTicket,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
+			result = CSSFNetAdapter_PlayInstanceFindStreamCmd(m_Connection.NativeHandle,ref InTransactionID, InTicket,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.FindStreamCmd);
+			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDPlayInstance.FindStreamCmd, callback);
 			return result;
-		} // public int  FindStreamCmd( System.UInt64 InTransactionID, System.UInt64 InTicket, System.String InStreamName )
+		} // public int  FindStreamCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 
 		// Cmd: Delete stream instance
-		public int  DeleteStreamCmd( System.UInt64 InTransactionID, System.UInt64 InTicket, System.String InStreamName )
+		public int  DeleteStreamCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceDeleteStreamCmd(m_Connection.NativeHandle, InTransactionID, InTicket,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
+			result = CSSFNetAdapter_PlayInstanceDeleteStreamCmd(m_Connection.NativeHandle,ref InTransactionID, InTicket,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.DeleteStreamCmd);
+			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDPlayInstance.DeleteStreamCmd, callback);
 			return result;
-		} // public int  DeleteStreamCmd( System.UInt64 InTransactionID, System.UInt64 InTicket, System.String InStreamName )
+		} // public int  DeleteStreamCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 
 		// Cmd: Get stream list
-		public int  GetStreamListCmd( System.UInt64 InTransactionID, System.UInt64 InTicket )
+		public int  GetStreamListCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceGetStreamListCmd(m_Connection.NativeHandle, InTransactionID, InTicket);
+			result = CSSFNetAdapter_PlayInstanceGetStreamListCmd(m_Connection.NativeHandle,ref InTransactionID, InTicket);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.GetStreamListCmd);
+			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDPlayInstance.GetStreamListCmd, callback);
 			return result;
-		} // public int  GetStreamListCmd( System.UInt64 InTransactionID, System.UInt64 InTicket )
+		} // public int  GetStreamListCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, Action<SFMessage>? callback = null )
 
 		// Cmd: To call general functionality
-		public int  CallFunctionCmd( System.UInt64 InTransactionID, System.UInt32 InFunctionName, System.UInt64 InPlayerID, SF.VariableTable InParameters )
+		public int  CallFunctionCmd( SF.TransactionID InTransactionID, System.UInt32 InFunctionName, System.UInt64 InPlayerID, SF.VariableTable InParameters, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			var InParameters_ = InParameters.ToByteArray();
 			using (var InParameters_PinnedPtr_ = new PinnedByteBuffer(InParameters_))
 			{
-			result = CSSFNetAdapter_PlayInstanceCallFunctionCmd(m_Connection.NativeHandle, InTransactionID, InFunctionName, InPlayerID,(ushort)InParameters_.Length, InParameters_PinnedPtr_.Ptr);
+			result = CSSFNetAdapter_PlayInstanceCallFunctionCmd(m_Connection.NativeHandle,ref InTransactionID, InFunctionName, InPlayerID,(ushort)InParameters_.Length, InParameters_PinnedPtr_.Ptr);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.CallFunctionCmd);
+			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDPlayInstance.CallFunctionCmd, callback);
 			return result;
-		} // public int  CallFunctionCmd( System.UInt64 InTransactionID, System.UInt32 InFunctionName, System.UInt64 InPlayerID, SF.VariableTable InParameters )
+		} // public int  CallFunctionCmd( SF.TransactionID InTransactionID, System.UInt32 InFunctionName, System.UInt64 InPlayerID, SF.VariableTable InParameters, Action<SFMessage>? callback = null )
 
 		// C2S: Send coded voice data to server
 		public int  SendVoiceDataC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.Byte[] InVoiceData )
@@ -228,7 +229,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID,(ushort)InVoiceData.Length, InVoiceData);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.SendVoiceDataC2SEvt);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.SendVoiceDataC2SEvt);
 			return result;
 		} // public int  SendVoiceDataC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.Byte[] InVoiceData )
 
@@ -236,7 +237,7 @@ namespace SF.Net
 		#region Native Interfaces 
 		// Cmd: Player Join request.
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceJoinPlayInstanceCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceJoinPlayInstanceCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, [MarshalAs(UnmanagedType.LPArray)] byte[] InPlayerIdentifier );
+		static extern int CSSFNetAdapter_PlayInstanceJoinPlayInstanceCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, [MarshalAs(UnmanagedType.LPArray)] byte[] InPlayerIdentifier );
 
 
 		// C2S: Play packet
@@ -265,47 +266,47 @@ namespace SF.Net
 
 		// Cmd: Occupy map object
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceOccupyMapObjectCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceOccupyMapObjectCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, System.UInt32 InUsageId );
+		static extern int CSSFNetAdapter_PlayInstanceOccupyMapObjectCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, System.UInt32 InUsageId );
 
 
 		// Cmd: Unoccupy map object
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceUnoccupyMapObjectCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceUnoccupyMapObjectCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId );
+		static extern int CSSFNetAdapter_PlayInstanceUnoccupyMapObjectCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId );
 
 
 		// Cmd: Use map object
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceUseMapObjectCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceUseMapObjectCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, System.UInt16 _sizeOfInUseParameters,IntPtr InUseParameters );
+		static extern int CSSFNetAdapter_PlayInstanceUseMapObjectCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, System.UInt16 _sizeOfInUseParameters,IntPtr InUseParameters );
 
 
 		// Cmd: Send zone chatting
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceZoneChatCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceZoneChatCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InMessageType, System.UInt16 _sizeOfInChatMetaData,IntPtr InChatMetaData, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
+		static extern int CSSFNetAdapter_PlayInstanceZoneChatCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InMessageType, System.UInt16 _sizeOfInChatMetaData,IntPtr InChatMetaData, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
 
 
 		// Cmd: Create stream instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceCreateStreamCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceCreateStreamCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InTicket, [MarshalAs(UnmanagedType.LPArray)] byte[] InStreamName );
+		static extern int CSSFNetAdapter_PlayInstanceCreateStreamCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InTicket, [MarshalAs(UnmanagedType.LPArray)] byte[] InStreamName );
 
 
 		// Cmd: Open stream instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceFindStreamCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceFindStreamCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InTicket, [MarshalAs(UnmanagedType.LPArray)] byte[] InStreamName );
+		static extern int CSSFNetAdapter_PlayInstanceFindStreamCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InTicket, [MarshalAs(UnmanagedType.LPArray)] byte[] InStreamName );
 
 
 		// Cmd: Delete stream instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceDeleteStreamCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceDeleteStreamCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InTicket, [MarshalAs(UnmanagedType.LPArray)] byte[] InStreamName );
+		static extern int CSSFNetAdapter_PlayInstanceDeleteStreamCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InTicket, [MarshalAs(UnmanagedType.LPArray)] byte[] InStreamName );
 
 
 		// Cmd: Get stream list
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceGetStreamListCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceGetStreamListCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InTicket );
+		static extern int CSSFNetAdapter_PlayInstanceGetStreamListCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InTicket );
 
 
 		// Cmd: To call general functionality
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceCallFunctionCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceCallFunctionCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InFunctionName, System.UInt64 InPlayerID, System.UInt16 _sizeOfInParameters,IntPtr InParameters );
+		static extern int CSSFNetAdapter_PlayInstanceCallFunctionCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt32 InFunctionName, System.UInt64 InPlayerID, System.UInt16 _sizeOfInParameters,IntPtr InParameters );
 
 
 		// C2S: Send coded voice data to server
@@ -335,18 +336,18 @@ namespace SF.Net
  		} // public  SendMessageSvrPlayInstance( SF.SFConnection connection ) : base(connection)
 
 		// Cmd: Player Join request.
-		public int  JoinPlayInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InCharacterID, SF.VariableTable InCharacterPrivateData, SF.ActorMovement InMovement )
+		public int  JoinPlayInstanceRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InCharacterID, SF.VariableTable InCharacterPrivateData, SF.ActorMovement InMovement )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			var InCharacterPrivateData_ = InCharacterPrivateData.ToByteArray();
 			using (var InCharacterPrivateData_PinnedPtr_ = new PinnedByteBuffer(InCharacterPrivateData_))
 			{
-			result = CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InCharacterID,(ushort)InCharacterPrivateData_.Length, InCharacterPrivateData_PinnedPtr_.Ptr,ref InMovement);
+			result = CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes(m_Connection.NativeHandle,ref InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InCharacterID,(ushort)InCharacterPrivateData_.Length, InCharacterPrivateData_PinnedPtr_.Ptr,ref InMovement);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.JoinPlayInstanceRes);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.JoinPlayInstanceRes);
 			return result;
-		} // public int  JoinPlayInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InCharacterID, SF.VariableTable InCharacterPrivateData, SF.ActorMovement InMovement )
+		} // public int  JoinPlayInstanceRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InCharacterID, SF.VariableTable InCharacterPrivateData, SF.ActorMovement InMovement )
 
 
 		// S2C: Player kicked event. this event will be broadcasted when a player kicked.
@@ -357,7 +358,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstancePlayerKickedS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InKickedPlayerID);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.PlayerKickedS2CEvt);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.PlayerKickedS2CEvt);
 			return result;
 		} // public int  PlayerKickedS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InKickedPlayerID )
 
@@ -376,7 +377,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceNewActorInViewS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID,ref InPlayerPlatformId,(ushort)InPublicData_.Length, InPublicData_PinnedPtr_.Ptr,(ushort)InEquipData_.Length, InEquipData_PinnedPtr_.Ptr,ref InMovement, InState,(ushort)InStateValues_.Length, InStateValues_PinnedPtr_.Ptr);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.NewActorInViewS2CEvt);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.NewActorInViewS2CEvt);
 			return result;
 		} // public int  NewActorInViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.PlayerPlatformID InPlayerPlatformId, SF.VariableTable InPublicData, SF.VariableTable InEquipData, SF.ActorMovement InMovement, System.UInt32 InState, SF.VariableTable InStateValues )
 
@@ -389,7 +390,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceRemoveActorFromViewS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InActorID);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.RemoveActorFromViewS2CEvt);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.RemoveActorFromViewS2CEvt);
 			return result;
 		} // public int  RemoveActorFromViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt32 InActorID )
 
@@ -402,7 +403,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceActorMovementS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID,ref InMovement);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.ActorMovementS2CEvt);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.ActorMovementS2CEvt);
 			return result;
 		} // public int  ActorMovementS2CEvt( System.UInt64 InPlayInstanceUID, SF.ActorMovement InMovement )
 
@@ -415,7 +416,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceActorMovementsS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID,(ushort)InMovement.Length, InMovement);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.ActorMovementsS2CEvt);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.ActorMovementsS2CEvt);
 			return result;
 		} // public int  ActorMovementsS2CEvt( System.UInt64 InPlayInstanceUID, SF.ActorMovement[] InMovement )
 
@@ -430,63 +431,63 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstancePlayerStateChangedS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID, InState, InMoveFrame,ref InPosition,(ushort)InStateValues_.Length, InStateValues_PinnedPtr_.Ptr);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.PlayerStateChangedS2CEvt);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.PlayerStateChangedS2CEvt);
 			return result;
 		} // public int  PlayerStateChangedS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InState, System.UInt32 InMoveFrame, SF.Vector4 InPosition, SF.VariableTable InStateValues )
 
 
 		// Cmd: Occupy map object
-		public int  OccupyMapObjectRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId )
+		public int  OccupyMapObjectRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceOccupyMapObjectRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId);
+			result = CSSFNetAdapter_PlayInstanceOccupyMapObjectRes(m_Connection.NativeHandle,ref InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.OccupyMapObjectRes);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.OccupyMapObjectRes);
 			return result;
-		} // public int  OccupyMapObjectRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId )
+		} // public int  OccupyMapObjectRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId )
 
 
 		// Cmd: Unoccupy map object
-		public int  UnoccupyMapObjectRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId )
+		public int  UnoccupyMapObjectRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceUnoccupyMapObjectRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId);
+			result = CSSFNetAdapter_PlayInstanceUnoccupyMapObjectRes(m_Connection.NativeHandle,ref InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.UnoccupyMapObjectRes);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.UnoccupyMapObjectRes);
 			return result;
-		} // public int  UnoccupyMapObjectRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId )
+		} // public int  UnoccupyMapObjectRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId )
 
 
 		// Cmd: Use map object
-		public int  UseMapObjectRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InResultAttributes )
+		public int  UseMapObjectRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InResultAttributes )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			var InResultAttributes_ = InResultAttributes.ToByteArray();
 			using (var InResultAttributes_PinnedPtr_ = new PinnedByteBuffer(InResultAttributes_))
 			{
-			result = CSSFNetAdapter_PlayInstanceUseMapObjectRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId,(ushort)InResultAttributes_.Length, InResultAttributes_PinnedPtr_.Ptr);
+			result = CSSFNetAdapter_PlayInstanceUseMapObjectRes(m_Connection.NativeHandle,ref InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId,(ushort)InResultAttributes_.Length, InResultAttributes_PinnedPtr_.Ptr);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.UseMapObjectRes);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.UseMapObjectRes);
 			return result;
-		} // public int  UseMapObjectRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InResultAttributes )
+		} // public int  UseMapObjectRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InResultAttributes )
 
 
 		// Cmd: Send zone chatting
-		public int  ZoneChatRes( System.UInt64 InTransactionID, System.Int32 InResult )
+		public int  ZoneChatRes( SF.TransactionID InTransactionID, System.Int32 InResult )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceZoneChatRes(m_Connection.NativeHandle, InTransactionID, InResult);
+			result = CSSFNetAdapter_PlayInstanceZoneChatRes(m_Connection.NativeHandle,ref InTransactionID, InResult);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.ZoneChatRes);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.ZoneChatRes);
 			return result;
-		} // public int  ZoneChatRes( System.UInt64 InTransactionID, System.Int32 InResult )
+		} // public int  ZoneChatRes( SF.TransactionID InTransactionID, System.Int32 InResult )
 
 
 		// S2C: Player state change
@@ -499,7 +500,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceZoneChatS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InSenderID, InMessageType,(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.ZoneChatS2CEvt);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.ZoneChatS2CEvt);
 			return result;
 		} // public int  ZoneChatS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InSenderID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
@@ -512,77 +513,77 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceLevelUpS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID, InCurrentExp, InCurrentLevel);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.LevelUpS2CEvt);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.LevelUpS2CEvt);
 			return result;
 		} // public int  LevelUpS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.Int64 InCurrentExp, System.Int32 InCurrentLevel )
 
 
 		// Cmd: Create stream instance
-		public int  CreateStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InStreamName )
+		public int  CreateStreamRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.String InStreamName )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceCreateStreamRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
+			result = CSSFNetAdapter_PlayInstanceCreateStreamRes(m_Connection.NativeHandle,ref InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.CreateStreamRes);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.CreateStreamRes);
 			return result;
-		} // public int  CreateStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InStreamName )
+		} // public int  CreateStreamRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.String InStreamName )
 
 
 		// Cmd: Open stream instance
-		public int  FindStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InStreamName )
+		public int  FindStreamRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.String InStreamName )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceFindStreamRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
+			result = CSSFNetAdapter_PlayInstanceFindStreamRes(m_Connection.NativeHandle,ref InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.FindStreamRes);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.FindStreamRes);
 			return result;
-		} // public int  FindStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InStreamName )
+		} // public int  FindStreamRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.String InStreamName )
 
 
 		// Cmd: Delete stream instance
-		public int  DeleteStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InStreamName )
+		public int  DeleteStreamRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.String InStreamName )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceDeleteStreamRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
+			result = CSSFNetAdapter_PlayInstanceDeleteStreamRes(m_Connection.NativeHandle,ref InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.DeleteStreamRes);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.DeleteStreamRes);
 			return result;
-		} // public int  DeleteStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InStreamName )
+		} // public int  DeleteStreamRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.String InStreamName )
 
 
 		// Cmd: Get stream list
-		public int  GetStreamListRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String[] InStreamNames )
+		public int  GetStreamListRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.String[] InStreamNames )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			using (var InStreamNamesArray = new ArrayObjectString(InStreamNames))
 			{
-			result = CSSFNetAdapter_PlayInstanceGetStreamListRes(m_Connection.NativeHandle, InTransactionID, InResult,InStreamNamesArray.NativeHandle);
+			result = CSSFNetAdapter_PlayInstanceGetStreamListRes(m_Connection.NativeHandle,ref InTransactionID, InResult,InStreamNamesArray.NativeHandle);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.GetStreamListRes);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.GetStreamListRes);
 			return result;
-		} // public int  GetStreamListRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String[] InStreamNames )
+		} // public int  GetStreamListRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.String[] InStreamNames )
 
 
 		// Cmd: To call general functionality
-		public int  CallFunctionRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InResults )
+		public int  CallFunctionRes( SF.TransactionID InTransactionID, System.Int32 InResult, SF.VariableTable InResults )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			var InResults_ = InResults.ToByteArray();
 			using (var InResults_PinnedPtr_ = new PinnedByteBuffer(InResults_))
 			{
-			result = CSSFNetAdapter_PlayInstanceCallFunctionRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InResults_.Length, InResults_PinnedPtr_.Ptr);
+			result = CSSFNetAdapter_PlayInstanceCallFunctionRes(m_Connection.NativeHandle,ref InTransactionID, InResult,(ushort)InResults_.Length, InResults_PinnedPtr_.Ptr);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.CallFunctionRes);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.CallFunctionRes);
 			return result;
-		} // public int  CallFunctionRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InResults )
+		} // public int  CallFunctionRes( SF.TransactionID InTransactionID, System.Int32 InResult, SF.VariableTable InResults )
 
 
 		// S2C: Voice data
@@ -593,7 +594,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt(m_Connection.NativeHandle, InActorID,(ushort)InVoiceData.Length, InVoiceData);
 			}
-			m_Connection.HandleSentMessage(result, MessageIDPlayInstance.VoiceDataS2CEvt);
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.VoiceDataS2CEvt);
 			return result;
 		} // public int  VoiceDataS2CEvt( System.UInt32 InActorID, System.Byte[] InVoiceData )
 
@@ -601,7 +602,7 @@ namespace SF.Net
 		#region Native Interfaces 
 		// Cmd: Player Join request.
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InCharacterID, System.UInt16 _sizeOfInCharacterPrivateData,IntPtr InCharacterPrivateData, ref SF.ActorMovement InMovement );
+		static extern int CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InCharacterID, System.UInt16 _sizeOfInCharacterPrivateData,IntPtr InCharacterPrivateData, ref SF.ActorMovement InMovement );
 
 
 
@@ -643,25 +644,25 @@ namespace SF.Net
 
 		// Cmd: Occupy map object
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceOccupyMapObjectRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceOccupyMapObjectRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId );
+		static extern int CSSFNetAdapter_PlayInstanceOccupyMapObjectRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId );
 
 
 
 		// Cmd: Unoccupy map object
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceUnoccupyMapObjectRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceUnoccupyMapObjectRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId );
+		static extern int CSSFNetAdapter_PlayInstanceUnoccupyMapObjectRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId );
 
 
 
 		// Cmd: Use map object
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceUseMapObjectRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceUseMapObjectRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, System.UInt16 _sizeOfInResultAttributes,IntPtr InResultAttributes );
+		static extern int CSSFNetAdapter_PlayInstanceUseMapObjectRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, System.UInt16 _sizeOfInResultAttributes,IntPtr InResultAttributes );
 
 
 
 		// Cmd: Send zone chatting
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceZoneChatRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceZoneChatRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
+		static extern int CSSFNetAdapter_PlayInstanceZoneChatRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult );
 
 
 
@@ -679,31 +680,31 @@ namespace SF.Net
 
 		// Cmd: Create stream instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceCreateStreamRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceCreateStreamRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, [MarshalAs(UnmanagedType.LPArray)] byte[] InStreamName );
+		static extern int CSSFNetAdapter_PlayInstanceCreateStreamRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, [MarshalAs(UnmanagedType.LPArray)] byte[] InStreamName );
 
 
 
 		// Cmd: Open stream instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceFindStreamRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceFindStreamRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, [MarshalAs(UnmanagedType.LPArray)] byte[] InStreamName );
+		static extern int CSSFNetAdapter_PlayInstanceFindStreamRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, [MarshalAs(UnmanagedType.LPArray)] byte[] InStreamName );
 
 
 
 		// Cmd: Delete stream instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceDeleteStreamRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceDeleteStreamRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, [MarshalAs(UnmanagedType.LPArray)] byte[] InStreamName );
+		static extern int CSSFNetAdapter_PlayInstanceDeleteStreamRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, [MarshalAs(UnmanagedType.LPArray)] byte[] InStreamName );
 
 
 
 		// Cmd: Get stream list
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceGetStreamListRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceGetStreamListRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, IntPtr InStreamNames );
+		static extern int CSSFNetAdapter_PlayInstanceGetStreamListRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, IntPtr InStreamNames );
 
 
 
 		// Cmd: To call general functionality
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceCallFunctionRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceCallFunctionRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInResults,IntPtr InResults );
+		static extern int CSSFNetAdapter_PlayInstanceCallFunctionRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInResults,IntPtr InResults );
 
 
 
@@ -720,5 +721,6 @@ namespace SF.Net
 
 
 } // namespace SF.Net
+#nullable restore
 
 

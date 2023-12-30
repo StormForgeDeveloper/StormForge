@@ -17,6 +17,8 @@ using System.Text;
 using AOT;
 #endif
 
+#nullable enable
+
 namespace SF
 {
 
@@ -82,11 +84,11 @@ namespace SF
         public SFIMessageRouter MessageRouter { get { return m_MessageRouter; } }
 
 
-        public void HandleSentMessage(int result, int messageID)
+        public void HandleSentMessage(int result, TransactionID transId, int messageID, Action<SFMessage>? callback = null)
         {
             if (m_MessageRouter != null)
             {
-                m_MessageRouter.HandleSentMessage(result, messageID);
+                m_MessageRouter.HandleSentMessage(result, transId, messageID, callback);
             }
         }
 
@@ -297,3 +299,4 @@ namespace SF
     }
 }
 
+#nullable restore

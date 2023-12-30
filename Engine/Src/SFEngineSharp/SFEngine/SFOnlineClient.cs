@@ -13,16 +13,17 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using SF.Net;
 #if UNITY_IOS
 using AOT;
 #endif
 
+#nullable enable
+
 namespace SF
 {
-
-
-    public class OnlineClient : SFObject
+    public partial class OnlineClient : SFObject
     {
         public enum OnlineState
         {
@@ -56,9 +57,9 @@ namespace SF
             GameInstance
         }
 
-        readonly SFIMessageRouter m_MessageRouter;
+        SFMessageRouterGroup m_MessageRouterGroup = new();
 
-        public SFIMessageRouter MessageRouter { get { return m_MessageRouter; } }
+        public SFMessageRouterGroup MessageRouter { get { return m_MessageRouterGroup; } }
 
 
         // Connection event
@@ -76,43 +77,34 @@ namespace SF
         public static event OnlineTaskFinishedHandler? OnOnlineTaskFinished = null;
 
 
-
-        public OnlineClient(SFIMessageRouter? messageRouter = null)
+        public OnlineClient()
         {
             NativeHandle = NativeCreateOnlineClient();
-            if (messageRouter != null)
-            {
-                m_MessageRouter = messageRouter;
-            }
-            else
-            {
-                m_MessageRouter = new SFMessageRouter();
-            }
         }
 
-        public Result StartConnection(UInt64 transactionId, string gameId, string loginAddress, string userId, string password)
+        public Result StartConnection(TransactionID transactionId, string gameId, string loginAddress, string userId, string password)
         {
             ResetConnectionAdapter();
 
             SF.Log.Info($"Online StartConnection: gameId:{gameId}, loginAddr:{loginAddress}, userId:{userId}");
 
-            var res = NativeStartConnection(NativeHandle, transactionId, gameId, loginAddress, userId, password);
+            var res = NativeStartConnection(NativeHandle, transactionId.TransactionId, gameId, loginAddress, userId, password);
             return new Result((int)res);
         }
 
-        public Result StartConnection(UInt64 transactionId, string gameId, string loginAddress, UInt64 steamUserId, string steamUserName, string steamUserToken)
+        public Result StartConnection(TransactionID transactionId, string gameId, string loginAddress, UInt64 steamUserId, string steamUserName, string steamUserToken)
         {
             ResetConnectionAdapter();
 
             SF.Log.Info($"Online StartConnection: gameId:{gameId}, loginAddr:{loginAddress}, steamUserId:{steamUserId}, steamUserName:{steamUserName}");
 
-            var res = NativeStartConnectionSteam(NativeHandle, transactionId, gameId, loginAddress, steamUserId, steamUserName, steamUserToken);
+            var res = NativeStartConnectionSteam(NativeHandle, transactionId.TransactionId, gameId, loginAddress, steamUserId, steamUserName, steamUserToken);
             return new Result((int)res);
         }
 
-        public Result JoinGameInstance(UInt64 transactionId, UInt64 gameInstanceUID)
+        public Result JoinGameInstance(TransactionID transactionId, UInt64 gameInstanceUID)
         {
-            var res = NativeJoinGameInstance(NativeHandle, transactionId, gameInstanceUID);
+            var res = NativeJoinGameInstance(NativeHandle, transactionId.TransactionId, gameInstanceUID);
             return new Result((int)res);
         }
 
@@ -297,7 +289,7 @@ namespace SF
                 // fire message handler
                 stm_StaticEventReceiver.OnMessageEvent?.Invoke(stm_StaticEventReceiver, message);
 
-                stm_StaticEventReceiver.m_MessageRouter?.HandleRecvMessage(message);
+                stm_StaticEventReceiver.MessageRouter.HandleRecvMessage(message);
             }
         }
 
@@ -399,3 +391,5 @@ namespace SF
         #endregion
     }
 }
+
+#nullable restore

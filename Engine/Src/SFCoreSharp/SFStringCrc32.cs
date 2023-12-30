@@ -12,6 +12,8 @@
 using System;
 using System.Runtime.InteropServices;
 
+#nullable enable
+
 namespace SF
 {
     public struct StringCrc32
@@ -79,3 +81,5 @@ namespace SF
 
     }
 }
+
+#nullable restore

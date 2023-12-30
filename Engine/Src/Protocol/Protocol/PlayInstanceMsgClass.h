@@ -40,7 +40,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
 				const char* m_PlayerIdentifier{};
@@ -56,7 +56,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
 				const char* GetPlayerIdentifier() const	{ return m_PlayerIdentifier; };
@@ -67,8 +67,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
 
 			}; // class JoinPlayInstanceCmd : public MessageBase
 
@@ -85,7 +85,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				Result m_Result{};
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
@@ -106,7 +106,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
@@ -121,10 +121,10 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const VariableTable &InCharacterPrivateData, const ActorMovement &InMovement );
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const Array<uint8_t>& InCharacterPrivateData, const ActorMovement &InMovement );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const Array<uint8_t>& InCharacterPrivateData, const ActorMovement &InMovement );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const VariableTable &InCharacterPrivateData, const ActorMovement &InMovement );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const VariableTable &InCharacterPrivateData, const ActorMovement &InMovement );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const Array<uint8_t>& InCharacterPrivateData, const ActorMovement &InMovement );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const Array<uint8_t>& InCharacterPrivateData, const ActorMovement &InMovement );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const VariableTable &InCharacterPrivateData, const ActorMovement &InMovement );
 
 			}; // class JoinPlayInstanceRes : public MessageBase
 
@@ -140,7 +140,7 @@ namespace SF
 					HasRouteContext = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetTransactionID() { return uint64_t{}; }
+				TransactionID GetTransactionID() { return TransactionID{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
@@ -183,7 +183,7 @@ namespace SF
 					HasRouteContext = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetTransactionID() { return uint64_t{}; }
+				TransactionID GetTransactionID() { return TransactionID{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
@@ -230,7 +230,7 @@ namespace SF
 					HasRouteContext = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetTransactionID() { return uint64_t{}; }
+				TransactionID GetTransactionID() { return TransactionID{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
@@ -296,7 +296,7 @@ namespace SF
 					HasRouteContext = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetTransactionID() { return uint64_t{}; }
+				TransactionID GetTransactionID() { return TransactionID{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
@@ -339,7 +339,7 @@ namespace SF
 					HasRouteContext = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetTransactionID() { return uint64_t{}; }
+				TransactionID GetTransactionID() { return TransactionID{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
@@ -384,7 +384,7 @@ namespace SF
 					HasRouteContext = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetTransactionID() { return uint64_t{}; }
+				TransactionID GetTransactionID() { return TransactionID{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
@@ -427,7 +427,7 @@ namespace SF
 					HasRouteContext = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetTransactionID() { return uint64_t{}; }
+				TransactionID GetTransactionID() { return TransactionID{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
@@ -470,7 +470,7 @@ namespace SF
 					HasRouteContext = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetTransactionID() { return uint64_t{}; }
+				TransactionID GetTransactionID() { return TransactionID{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
@@ -526,7 +526,7 @@ namespace SF
 					HasRouteContext = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetTransactionID() { return uint64_t{}; }
+				TransactionID GetTransactionID() { return TransactionID{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
@@ -576,7 +576,7 @@ namespace SF
 					HasRouteContext = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetTransactionID() { return uint64_t{}; }
+				TransactionID GetTransactionID() { return TransactionID{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
@@ -628,7 +628,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
 				uint32_t m_MapObjectId{};
@@ -645,7 +645,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
 				const uint32_t& GetMapObjectId() const	{ return m_MapObjectId; };
@@ -657,8 +657,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId );
 
 			}; // class OccupyMapObjectCmd : public MessageBase
 
@@ -675,7 +675,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				Result m_Result{};
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
@@ -692,7 +692,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
@@ -704,8 +704,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
 
 			}; // class OccupyMapObjectRes : public MessageBase
 
@@ -723,7 +723,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
 				uint32_t m_MapObjectId{};
@@ -739,7 +739,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
 				const uint32_t& GetMapObjectId() const	{ return m_MapObjectId; };
@@ -750,8 +750,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
 
 			}; // class UnoccupyMapObjectCmd : public MessageBase
 
@@ -768,7 +768,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				Result m_Result{};
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
@@ -785,7 +785,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
@@ -797,8 +797,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
 
 			}; // class UnoccupyMapObjectRes : public MessageBase
 
@@ -816,7 +816,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
 				StringCrc32 m_MapObjectId{};
@@ -835,7 +835,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
 				const StringCrc32& GetMapObjectId() const	{ return m_MapObjectId; };
@@ -848,10 +848,10 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters );
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InUseParameters );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InUseParameters );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InUseParameters );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InUseParameters );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters );
 
 			}; // class UseMapObjectCmd : public MessageBase
 
@@ -868,7 +868,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				Result m_Result{};
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
@@ -888,7 +888,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
@@ -902,10 +902,10 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes );
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InResultAttributes );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InResultAttributes );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InResultAttributes );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InResultAttributes );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes );
 
 			}; // class UseMapObjectRes : public MessageBase
 
@@ -923,7 +923,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
 				int8_t m_MessageType{};
@@ -943,7 +943,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
 				const int8_t& GetMessageType() const	{ return m_MessageType; };
@@ -957,10 +957,10 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage );
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage );
 
 			}; // class ZoneChatCmd : public MessageBase
 
@@ -977,7 +977,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				Result m_Result{};
 			public:
 				ZoneChatRes()
@@ -991,7 +991,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
@@ -1000,8 +1000,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult );
 
 			}; // class ZoneChatRes : public MessageBase
 
@@ -1017,7 +1017,7 @@ namespace SF
 					HasRouteContext = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetTransactionID() { return uint64_t{}; }
+				TransactionID GetTransactionID() { return TransactionID{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
@@ -1071,7 +1071,7 @@ namespace SF
 					HasRouteContext = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetTransactionID() { return uint64_t{}; }
+				TransactionID GetTransactionID() { return TransactionID{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
@@ -1120,7 +1120,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				AuthTicket m_Ticket{};
 				const char* m_StreamName{};
 			public:
@@ -1135,7 +1135,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
 				const char* GetStreamName() const	{ return m_StreamName; };
 
@@ -1145,8 +1145,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
 
 			}; // class CreateStreamCmd : public MessageBase
 
@@ -1163,7 +1163,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				Result m_Result{};
 				const char* m_StreamName{};
 			public:
@@ -1178,7 +1178,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const char* GetStreamName() const	{ return m_StreamName; };
 
@@ -1188,8 +1188,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName );
 
 			}; // class CreateStreamRes : public MessageBase
 
@@ -1207,7 +1207,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				AuthTicket m_Ticket{};
 				const char* m_StreamName{};
 			public:
@@ -1222,7 +1222,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
 				const char* GetStreamName() const	{ return m_StreamName; };
 
@@ -1232,8 +1232,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
 
 			}; // class FindStreamCmd : public MessageBase
 
@@ -1250,7 +1250,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				Result m_Result{};
 				const char* m_StreamName{};
 			public:
@@ -1265,7 +1265,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const char* GetStreamName() const	{ return m_StreamName; };
 
@@ -1275,8 +1275,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName );
 
 			}; // class FindStreamRes : public MessageBase
 
@@ -1294,7 +1294,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				AuthTicket m_Ticket{};
 				const char* m_StreamName{};
 			public:
@@ -1309,7 +1309,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
 				const char* GetStreamName() const	{ return m_StreamName; };
 
@@ -1319,8 +1319,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
 
 			}; // class DeleteStreamCmd : public MessageBase
 
@@ -1337,7 +1337,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				Result m_Result{};
 				const char* m_StreamName{};
 			public:
@@ -1352,7 +1352,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const char* GetStreamName() const	{ return m_StreamName; };
 
@@ -1362,8 +1362,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName );
 
 			}; // class DeleteStreamRes : public MessageBase
 
@@ -1381,7 +1381,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				AuthTicket m_Ticket{};
 			public:
 				GetStreamListCmd()
@@ -1395,7 +1395,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
 
 				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
@@ -1404,8 +1404,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const AuthTicket &InTicket );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const AuthTicket &InTicket );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket );
 
 			}; // class GetStreamListCmd : public MessageBase
 
@@ -1422,7 +1422,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				Result m_Result{};
 				DynamicArray<const char*> m_StreamNames;
 			public:
@@ -1437,7 +1437,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const Array<const char*>& GetStreamNames() const	{ return m_StreamNames; };
 
@@ -1447,8 +1447,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames );
 
 			}; // class GetStreamListRes : public MessageBase
 
@@ -1466,7 +1466,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				StringCrc32 m_FunctionName{};
 				PlayerID m_PlayerID{};
 				ArrayView<uint8_t> m_ParametersRaw;
@@ -1484,7 +1484,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const StringCrc32& GetFunctionName() const	{ return m_FunctionName; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
 				const Array<uint8_t>& GetParametersRaw() const	{ return m_ParametersRaw; };
@@ -1496,10 +1496,10 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters );
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters );
 
 			}; // class CallFunctionCmd : public MessageBase
 
@@ -1516,7 +1516,7 @@ namespace SF
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				Result m_Result{};
 				ArrayView<uint8_t> m_ResultsRaw;
 				mutable bool m_ResultsHasParsed = false;
@@ -1533,7 +1533,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const Array<uint8_t>& GetResultsRaw() const	{ return m_ResultsRaw; };
 				const VariableTable& GetResults() const;
@@ -1544,10 +1544,10 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults );
-				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InResults );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InResults );
 
 			}; // class CallFunctionRes : public MessageBase
 
@@ -1563,7 +1563,7 @@ namespace SF
 					HasRouteContext = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetTransactionID() { return uint64_t{}; }
+				TransactionID GetTransactionID() { return TransactionID{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
@@ -1608,7 +1608,7 @@ namespace SF
 					HasRouteContext = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetTransactionID() { return uint64_t{}; }
+				TransactionID GetTransactionID() { return TransactionID{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
 				uint32_t m_ActorID{};

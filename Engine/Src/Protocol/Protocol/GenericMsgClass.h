@@ -40,7 +40,7 @@ namespace SF
 			public:
 			private:
 				RouteContext m_RouteContext{};
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 			public:
 				GenericFailureCmd()
 					{}
@@ -54,7 +54,7 @@ namespace SF
 					{}
 
 				const RouteContext& GetRouteContext() const	{ return m_RouteContext; };
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 
 				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
@@ -62,8 +62,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const RouteContext &InRouteContext, const uint64_t &InTransactionID );
-				static Result Create( MessageHeader* messageBuffer, const RouteContext &InRouteContext, const uint64_t &InTransactionID );
+				static size_t CalculateMessageSize( const RouteContext &InRouteContext, const TransactionID &InTransactionID );
+				static Result Create( MessageHeader* messageBuffer, const RouteContext &InRouteContext, const TransactionID &InTransactionID );
 
 			}; // class GenericFailureCmd : public MessageBase
 
@@ -80,7 +80,7 @@ namespace SF
 			public:
 			private:
 				RouteContext m_RouteContext{};
-				uint64_t m_TransactionID{};
+				TransactionID m_TransactionID{};
 				Result m_Result{};
 			public:
 				GenericFailureRes()
@@ -95,7 +95,7 @@ namespace SF
 					{}
 
 				const RouteContext& GetRouteContext() const	{ return m_RouteContext; };
-				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
@@ -104,8 +104,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult );
-				static Result Create( MessageHeader* messageBuffer, const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult );
+				static size_t CalculateMessageSize( const RouteContext &InRouteContext, const TransactionID &InTransactionID, const Result &InResult );
+				static Result Create( MessageHeader* messageBuffer, const RouteContext &InRouteContext, const TransactionID &InTransactionID, const Result &InResult );
 
 			}; // class GenericFailureRes : public MessageBase
 

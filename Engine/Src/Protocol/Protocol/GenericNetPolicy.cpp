@@ -23,7 +23,7 @@
 namespace SF
 {
  	// Cmd: Generic failure message
-	Result NetPolicyGeneric::GenericFailureCmd( const RouteContext &InRouteContext, const uint64_t &InTransactionID )
+	Result NetPolicyGeneric::GenericFailureCmd( const RouteContext &InRouteContext, const TransactionID &InTransactionID )
 	{
  		Result hr;
 
@@ -34,11 +34,11 @@ namespace SF
 		protocolCheck(SF::Message::Generic::GenericFailureCmd::Create(messageBuffer, InRouteContext, InTransactionID));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyGeneric::GenericFailureCmd( const RouteContext &InRouteContext, const uint64_t &InTransactionID )
+	}; // Result NetPolicyGeneric::GenericFailureCmd( const RouteContext &InRouteContext, const TransactionID &InTransactionID )
 
 
 	// Cmd: Generic failure message
-	Result NetSvrPolicyGeneric::GenericFailureRes( const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult )
+	Result NetSvrPolicyGeneric::GenericFailureRes( const RouteContext &InRouteContext, const TransactionID &InTransactionID, const Result &InResult )
 	{
  		Result hr;
 
@@ -49,7 +49,7 @@ namespace SF
 		protocolCheck(SF::Message::Generic::GenericFailureRes::Create(messageBuffer, InRouteContext, InTransactionID, InResult));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyGeneric::GenericFailureRes( const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult )
+	}; // Result NetSvrPolicyGeneric::GenericFailureRes( const RouteContext &InRouteContext, const TransactionID &InTransactionID, const Result &InResult )
 
 
 }; // namespace SF

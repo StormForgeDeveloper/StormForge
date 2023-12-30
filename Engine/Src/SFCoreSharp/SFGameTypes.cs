@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
+#nullable enable
 
 namespace SF
 {
@@ -84,6 +85,14 @@ namespace SF
         }
     }
 
+    [Struct]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct TransactionID
+    {
+        public static readonly TransactionID Empty = new TransactionID();
+
+        public ulong TransactionId;
+    }
 
     // Player Role
     public enum PlayerRole
@@ -690,3 +699,4 @@ namespace SF
 
 }
 
+#nullable restore

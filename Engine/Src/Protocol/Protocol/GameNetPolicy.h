@@ -35,107 +35,107 @@ namespace SF
 		// C2S: Client heartbeat
 		Result HeartbeatC2SEvt(  );
 		// Cmd: Player connected from a login server and moved to game server
-		Result JoinGameServerCmd( const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
+		Result JoinGameServerCmd( const TransactionID &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
 		// Cmd: player complition statues
-		Result GetAchievementStatsCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID, const uint32_t &InAchievementStatIDFrom, const uint32_t &InAchievementStatIDTo );
+		Result GetAchievementStatsCmd( const TransactionID &InTransactionID, const uint32_t &InCharacterID, const uint32_t &InAchievementStatIDFrom, const uint32_t &InAchievementStatIDTo );
 		// Cmd: Player complition state
-		Result Dummy1Cmd( const uint64_t &InTransactionID, const char* InComplitionState );
+		Result Dummy1Cmd( const TransactionID &InTransactionID, const char* InComplitionState );
 		// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
-		Result RegisterGCMCmd( const uint64_t &InTransactionID, const char* InGCMRegisteredID );
+		Result RegisterGCMCmd( const TransactionID &InTransactionID, const char* InGCMRegisteredID );
 		// Cmd: Unregister Google notification service ID
-		Result UnregisterGCMCmd( const uint64_t &InTransactionID, const char* InGCMRegisteredID );
+		Result UnregisterGCMCmd( const TransactionID &InTransactionID, const char* InGCMRegisteredID );
 		// Cmd: Invite friend
-		Result InviteFriendCmd( const uint64_t &InTransactionID, const AccountID &InFriendID );
+		Result InviteFriendCmd( const TransactionID &InTransactionID, const AccountID &InFriendID );
 		// Cmd: Accept friend request
-		Result AcceptFriendRequestCmd( const uint64_t &InTransactionID, const AccountID &InInviterID, const PlayerPlatformID &InInviterPlatformId );
+		Result AcceptFriendRequestCmd( const TransactionID &InTransactionID, const AccountID &InInviterID, const PlayerPlatformID &InInviterPlatformId );
 		// Cmd: Remove friden form the friend list
-		Result RemoveFriendCmd( const uint64_t &InTransactionID, const AccountID &InFriendID );
+		Result RemoveFriendCmd( const TransactionID &InTransactionID, const AccountID &InFriendID );
 		// Cmd: Get friend list
-		Result GetFriendListCmd( const uint64_t &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount );
+		Result GetFriendListCmd( const TransactionID &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount );
 		// Cmd: Query notification list
-		Result GetNotificationListCmd( const uint64_t &InTransactionID );
+		Result GetNotificationListCmd( const TransactionID &InTransactionID );
 		// Cmd: Delete notification
-		Result DeleteNotificationCmd( const uint64_t &InTransactionID, const uint32_t &InNotificationID );
+		Result DeleteNotificationCmd( const TransactionID &InTransactionID, const uint32_t &InNotificationID );
 		// Cmd: Set notification is read
-		Result SetNotificationReadCmd( const uint64_t &InTransactionID, const uint32_t &InNotificationID );
+		Result SetNotificationReadCmd( const TransactionID &InTransactionID, const uint32_t &InNotificationID );
 		// Cmd: Accept notification
-		Result AcceptNotificationCmd( const uint64_t &InTransactionID, const uint32_t &InNotificationID );
+		Result AcceptNotificationCmd( const TransactionID &InTransactionID, const uint32_t &InNotificationID );
 		// Cmd: PlayerId Conversion
-		Result FindPlayerByPlatformIdCmd( const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId );
+		Result FindPlayerByPlatformIdCmd( const TransactionID &InTransactionID, const PlayerPlatformID &InPlatformPlayerId );
 		// Cmd: PlayerId conversion
-		Result FindPlayerByCharacterNameCmd( const uint64_t &InTransactionID, const char* InCharacterName );
+		Result FindPlayerByCharacterNameCmd( const TransactionID &InTransactionID, const char* InCharacterName );
 		// Cmd: PlayerId Conversion
-		Result FindPlayerByPlatformUserNameCmd( const uint64_t &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName );
+		Result FindPlayerByPlatformUserNameCmd( const TransactionID &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName );
 		// Cmd: Query playerID list
-		Result FindPlayerByEMailCmd( const uint64_t &InTransactionID, const char* InPlayerEMail );
+		Result FindPlayerByEMailCmd( const TransactionID &InTransactionID, const char* InPlayerEMail );
 		// Cmd: Query playerID list
-		Result FindPlayerByPlayerIDCmd( const uint64_t &InTransactionID, const AccountID &InPlayerID );
+		Result FindPlayerByPlayerIDCmd( const TransactionID &InTransactionID, const AccountID &InPlayerID );
 		// Cmd: *Request Player Status Update
-		Result RequestPlayerStatusUpdateCmd( const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID );
+		Result RequestPlayerStatusUpdateCmd( const TransactionID &InTransactionID, const Array<AccountID>& InTargetPlayerID );
 		// Cmd: Get Ranking list
-		Result GetRankingListCmd( const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount );
+		Result GetRankingListCmd( const TransactionID &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount );
 		// Cmd: Game user game play information
-		Result GetUserGamePlayerInfoCmd( const uint64_t &InTransactionID );
+		Result GetUserGamePlayerInfoCmd( const TransactionID &InTransactionID );
 		// Cmd: Game game play information
-		Result GetGamePlayerInfoCmd( const uint64_t &InTransactionID, const AccountID &InPlayerID );
+		Result GetGamePlayerInfoCmd( const TransactionID &InTransactionID, const AccountID &InPlayerID );
 		// Cmd: Change NickName
-		Result SetNickNameCmd( const uint64_t &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree );
+		Result SetNickNameCmd( const TransactionID &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree );
 		// Cmd: Create Party
-		Result CreatePartyCmd( const uint64_t &InTransactionID );
+		Result CreatePartyCmd( const TransactionID &InTransactionID );
 		// Cmd: Join party
-		Result JoinPartyCmd( const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID );
+		Result JoinPartyCmd( const TransactionID &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID );
 		// Cmd: Leave party command
-		Result LeavePartyCmd( const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID );
+		Result LeavePartyCmd( const TransactionID &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID );
 		// Cmd: Kick player from the party
-		Result PartyKickPlayerCmd( const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick );
+		Result PartyKickPlayerCmd( const TransactionID &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick );
 		// Cmd: Invite a player to the party
-		Result PartyInviteCmd( const uint64_t &InTransactionID, const AccountID &InInviteTargetID );
+		Result PartyInviteCmd( const TransactionID &InTransactionID, const AccountID &InInviteTargetID );
 		// Cmd: Send Party quick chat message
-		Result PartyQuickChatMessageCmd( const uint64_t &InTransactionID, const uint32_t &InQuickChatID );
+		Result PartyQuickChatMessageCmd( const TransactionID &InTransactionID, const uint32_t &InQuickChatID );
 		// Cmd: Party chatting
-		Result PartyChatMessageCmd( const uint64_t &InTransactionID, const char* InChatMessage );
+		Result PartyChatMessageCmd( const TransactionID &InTransactionID, const char* InChatMessage );
 		// Cmd: Join to a game instance
-		Result JoinGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InInsUID );
+		Result JoinGameInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InInsUID );
 		// Cmd: Leave game instance
-		Result LeaveGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InInsUID );
+		Result LeaveGameInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InInsUID );
 		// Cmd: Search game instance
-		Result SearchGameInstanceCmd( const uint64_t &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID );
+		Result SearchGameInstanceCmd( const TransactionID &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID );
 		// Cmd: Search game instance
-		Result GetCharacterDataInGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID );
+		Result GetCharacterDataInGameInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID );
 		// Cmd: Request Game match
-		Result RequestGameMatchCmd( const uint64_t &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole );
+		Result RequestGameMatchCmd( const TransactionID &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole );
 		// Cmd: Cancel Game match
-		Result CancelGameMatchCmd( const uint64_t &InTransactionID );
+		Result CancelGameMatchCmd( const TransactionID &InTransactionID );
 		// Cmd: Buy shop item prepare
-		Result BuyShopItemPrepareCmd( const uint64_t &InTransactionID, const uint32_t &InShopItemID );
+		Result BuyShopItemPrepareCmd( const TransactionID &InTransactionID, const uint32_t &InShopItemID );
 		// Cmd: Buy shop item
-		Result BuyShopItemCmd( const uint64_t &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken );
+		Result BuyShopItemCmd( const TransactionID &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken );
 		// Cmd: Create or Join Chat channel
-		Result CreateOrJoinChatChannelCmd( const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode );
+		Result CreateOrJoinChatChannelCmd( const TransactionID &InTransactionID, const char* InChannelName, const char* InPasscode );
 		// Cmd: Join
-		Result JoinChatChannelCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode );
+		Result JoinChatChannelCmd( const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode );
 		// Cmd: Leave ChatChannel command
-		Result LeaveChatChannelCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID );
+		Result LeaveChatChannelCmd( const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID );
 		// Cmd: Kick player from the ChatChannel
-		Result ChatChannelKickPlayerCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick );
+		Result ChatChannelKickPlayerCmd( const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick );
 		// Cmd: Chat channel sending chatting message
-		Result ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const VariableTable &InChatMetaData, const char* InChatMessage );
+		Result ChatChannelChatMessageCmd( const TransactionID &InTransactionID, const uint64_t &InChatUID, const VariableTable &InChatMetaData, const char* InChatMessage );
 		// Cmd: Whisper(tell) other player chatting
-		Result WhisperMessageCmd( const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage );
+		Result WhisperMessageCmd( const TransactionID &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage );
 		// Cmd: Create character
-		Result CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InPublicData, const VariableTable &InPrivateData );
+		Result CreateCharacterCmd( const TransactionID &InTransactionID, const char* InCharacterName, const VariableTable &InPublicData, const VariableTable &InPrivateData );
 		// Cmd: Delete character
-		Result DeleteCharacterCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID );
+		Result DeleteCharacterCmd( const TransactionID &InTransactionID, const uint32_t &InCharacterID );
 		// Cmd: Get character list
-		Result GetCharacterListCmd( const uint64_t &InTransactionID );
+		Result GetCharacterListCmd( const TransactionID &InTransactionID );
 		// Cmd: 
-		Result GetCharacterDataCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID );
+		Result GetCharacterDataCmd( const TransactionID &InTransactionID, const uint32_t &InCharacterID );
 		// Cmd: Select character
-		Result SelectCharacterCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID );
+		Result SelectCharacterCmd( const TransactionID &InTransactionID, const uint32_t &InCharacterID );
 		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
-		Result RequestServerNoticeUpdateCmd( const uint64_t &InTransactionID );
+		Result RequestServerNoticeUpdateCmd( const TransactionID &InTransactionID );
 		// Cmd: To call general functionality
-		Result CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters );
+		Result CallFunctionCmd( const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters );
 
 	}; // class NetPolicyGame 
 
@@ -150,99 +150,99 @@ namespace SF
 		{}
 
 		// Cmd: Player connected from a login server and moved to game server
-		Result JoinGameServerRes( const uint64_t &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket );
+		Result JoinGameServerRes( const TransactionID &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket );
 		// Cmd: player complition statues
-		Result GetAchievementStatsRes( const uint64_t &InTransactionID, const Result &InResult, const Array<AchievementStat>& InAchievementStats );
+		Result GetAchievementStatsRes( const TransactionID &InTransactionID, const Result &InResult, const Array<AchievementStat>& InAchievementStats );
 		// Cmd: Player complition state
-		Result Dummy1Res( const uint64_t &InTransactionID, const Result &InResult );
+		Result Dummy1Res( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
-		Result RegisterGCMRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result RegisterGCMRes( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: Unregister Google notification service ID
-		Result UnregisterGCMRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result UnregisterGCMRes( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: Invite friend
-		Result InviteFriendRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result InviteFriendRes( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: Accept friend request
-		Result AcceptFriendRequestRes( const uint64_t &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend );
+		Result AcceptFriendRequestRes( const TransactionID &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend );
 		// S2C: Notification for friend request is accepted
 		Result FriendRequestAcceptedS2CEvt( const FriendInformation &InAccepter );
 		// Cmd: Remove friden form the friend list
-		Result RemoveFriendRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InFriendID );
+		Result RemoveFriendRes( const TransactionID &InTransactionID, const Result &InResult, const AccountID &InFriendID );
 		// S2C: Friend removed
 		Result FriendRemovedS2CEvt( const AccountID &InFriendID );
 		// Cmd: Get friend list
-		Result GetFriendListRes( const uint64_t &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList );
+		Result GetFriendListRes( const TransactionID &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList );
 		// Cmd: Query notification list
-		Result GetNotificationListRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result GetNotificationListRes( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: Delete notification
-		Result DeleteNotificationRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
+		Result DeleteNotificationRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
 		// Cmd: Set notification is read
-		Result SetNotificationReadRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
+		Result SetNotificationReadRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
 		// Cmd: Accept notification
-		Result AcceptNotificationRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
+		Result AcceptNotificationRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
 		// S2C: Notify new notification
 		Result NotifyS2CEvt( const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const VariableTable &InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp );
 		// Cmd: PlayerId Conversion
-		Result FindPlayerByPlatformIdRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId );
+		Result FindPlayerByPlatformIdRes( const TransactionID &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId );
 		// Cmd: PlayerId conversion
-		Result FindPlayerByCharacterNameRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId );
+		Result FindPlayerByCharacterNameRes( const TransactionID &InTransactionID, const Result &InResult, const PlayerID &InPlayerId );
 		// Cmd: PlayerId Conversion
-		Result FindPlayerByPlatformUserNameRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId );
+		Result FindPlayerByPlatformUserNameRes( const TransactionID &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId );
 		// Cmd: Query playerID list
-		Result FindPlayerByEMailRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer );
+		Result FindPlayerByEMailRes( const TransactionID &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer );
 		// Cmd: Query playerID list
-		Result FindPlayerByPlayerIDRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer );
+		Result FindPlayerByPlayerIDRes( const TransactionID &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer );
 		// Cmd: *Request Player Status Update
-		Result RequestPlayerStatusUpdateRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result RequestPlayerStatusUpdateRes( const TransactionID &InTransactionID, const Result &InResult );
 		// S2C: *Notify Player Status Updated
 		Result NotifyPlayerStatusUpdatedS2CEvt( const AccountID &InPlayerID, const uint32_t &InLatestActiveTime, const uint8_t &InIsInGame );
 		// Cmd: Get Ranking list
-		Result GetRankingListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
+		Result GetRankingListRes( const TransactionID &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
 		// Cmd: Game user game play information
-		Result GetUserGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes );
+		Result GetUserGamePlayerInfoRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InAttributes );
 		// Cmd: Game game play information
-		Result GetGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const VariableTable &InAttributes );
+		Result GetGamePlayerInfoRes( const TransactionID &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const VariableTable &InAttributes );
 		// S2C: Player level up event
 		Result LevelUpS2CEvt( const uint64_t &InCurrentTotalExp, const uint32_t &InCurrentLevel );
 		// Cmd: Change NickName
-		Result SetNickNameRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
+		Result SetNickNameRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 		// Cmd: Create Party
-		Result CreatePartyRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID );
+		Result CreatePartyRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPartyUID );
 		// Cmd: Join party
-		Result JoinPartyRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData );
+		Result JoinPartyRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData );
 		// S2C: Player Joined event
 		Result PartyPlayerJoinedS2CEvt( const uint64_t &InPartyUID, const PlayerInformation &InJoinedPlayer );
 		// S2C: Party leader changed event
 		Result PartyLeaderChangedS2CEvt( const uint64_t &InPartyUID, const AccountID &InNewLeaderID );
 		// Cmd: Leave party command
-		Result LeavePartyRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result LeavePartyRes( const TransactionID &InTransactionID, const Result &InResult );
 		// S2C: Party Player left event
 		Result PartyPlayerLeftS2CEvt( const uint64_t &InPartyUID, const AccountID &InLeftPlayerID );
 		// Cmd: Kick player from the party
-		Result PartyKickPlayerRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result PartyKickPlayerRes( const TransactionID &InTransactionID, const Result &InResult );
 		// S2C: Party Player kicked message
 		Result PartyPlayerKickedS2CEvt( const uint64_t &InPartyUID, const AccountID &InKickedPlayerID );
 		// Cmd: Invite a player to the party
-		Result PartyInviteRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result PartyInviteRes( const TransactionID &InTransactionID, const Result &InResult );
 		// S2C: Party invite requested
 		Result PartyInviteRequestedS2CEvt( const AccountID &InInviterID, const char* InInviterName, const uint64_t &InPartyToJoinUID );
 		// Cmd: Send Party quick chat message
-		Result PartyQuickChatMessageRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result PartyQuickChatMessageRes( const TransactionID &InTransactionID, const Result &InResult );
 		// S2C: Party Chatting message event
 		Result PartyQuickChatMessageS2CEvt( const AccountID &InSenderID, const uint32_t &InQuickChatID );
 		// Cmd: Party chatting
-		Result PartyChatMessageRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result PartyChatMessageRes( const TransactionID &InTransactionID, const Result &InResult );
 		// S2C: Party Chatting message event
 		Result PartyChatMessageS2CEvt( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage );
 		// Cmd: Join to a game instance
-		Result JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const char* InServerPublicAddress );
+		Result JoinGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const char* InServerPublicAddress );
 		// Cmd: Leave game instance
-		Result LeaveGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result LeaveGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: Search game instance
-		Result SearchGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances );
+		Result SearchGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances );
 		// Cmd: Search game instance
-		Result GetCharacterDataInGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances );
+		Result GetCharacterDataInGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances );
 		// Cmd: Request Game match
-		Result RequestGameMatchRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
+		Result RequestGameMatchRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 		// S2C: Game matched
 		Result GameMatchedS2CEvt( const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData, const uint32_t &InStamina, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 		// S2C: Game match failed
@@ -250,53 +250,53 @@ namespace SF
 		// S2C: Game matching started
 		Result GameMatchingStartedS2CEvt(  );
 		// Cmd: Cancel Game match
-		Result CancelGameMatchRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result CancelGameMatchRes( const TransactionID &InTransactionID, const Result &InResult );
 		// S2C: game matching canceled
 		Result GameMatchingCanceledS2CEvt(  );
 		// Cmd: Buy shop item prepare
-		Result BuyShopItemPrepareRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID );
+		Result BuyShopItemPrepareRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID );
 		// Cmd: Buy shop item
-		Result BuyShopItemRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID );
+		Result BuyShopItemRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InShopItemID );
 		// Cmd: Create or Join Chat channel
-		Result CreateOrJoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID );
+		Result CreateOrJoinChatChannelRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID );
 		// Cmd: Join
-		Result JoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID );
+		Result JoinChatChannelRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID );
 		// S2C: Player Joined event
 		Result ChatChannelPlayerJoinedS2CEvt( const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer );
 		// S2C: ChatChannel leader changed event
 		Result ChatChannelLeaderChangedS2CEvt( const uint64_t &InChatUID, const AccountID &InNewLeaderID );
 		// Cmd: Leave ChatChannel command
-		Result LeaveChatChannelRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result LeaveChatChannelRes( const TransactionID &InTransactionID, const Result &InResult );
 		// S2C: ChatChannel Player left event
 		Result ChatChannelPlayerLeftS2CEvt( const uint64_t &InChatUID, const AccountID &InLeftPlayerID );
 		// Cmd: Kick player from the ChatChannel
-		Result ChatChannelKickPlayerRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result ChatChannelKickPlayerRes( const TransactionID &InTransactionID, const Result &InResult );
 		// S2C: ChatChannel Player kicked message
 		Result ChatChannelPlayerKickedS2CEvt( const uint64_t &InChatUID, const AccountID &InKickedPlayerID );
 		// Cmd: Chat channel sending chatting message
-		Result ChatChannelChatMessageRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result ChatChannelChatMessageRes( const TransactionID &InTransactionID, const Result &InResult );
 		// S2C: ChatChannel Chatting message event
 		Result ChatChannelChatMessageS2CEvt( const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage );
 		// Cmd: Whisper(tell) other player chatting
-		Result WhisperMessageRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result WhisperMessageRes( const TransactionID &InTransactionID, const Result &InResult );
 		// S2C: Other player whispered(tell) to me message event
 		Result WhisperMessageS2CEvt( const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage );
 		// Cmd: Create character
-		Result CreateCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID );
+		Result CreateCharacterRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InCharacterID );
 		// Cmd: Delete character
-		Result DeleteCharacterRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result DeleteCharacterRes( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: Get character list
-		Result GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InCharacters );
+		Result GetCharacterListRes( const TransactionID &InTransactionID, const Result &InResult, const Array<VariableTable>& InCharacters );
 		// Cmd: 
-		Result GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InPrivateData, const VariableTable &InEquipData );
+		Result GetCharacterDataRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InPrivateData, const VariableTable &InEquipData );
 		// Cmd: Select character
-		Result SelectCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const VariableTable &InAttributes );
+		Result SelectCharacterRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const VariableTable &InAttributes );
 		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
-		Result RequestServerNoticeUpdateRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result RequestServerNoticeUpdateRes( const TransactionID &InTransactionID, const Result &InResult );
 		// S2C: Server Notice updated event
 		Result ServerNoticeS2CEvt( const int8_t &InNoticeCategory, const char* InServerNoticeMessage );
 		// Cmd: To call general functionality
-		Result CallFunctionRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults );
+		Result CallFunctionRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InResults );
 
 	}; // class NetSvrPolicyGame
 
