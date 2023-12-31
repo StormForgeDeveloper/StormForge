@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -98,7 +98,7 @@ namespace SF {
 	size_t File::GetLocationRaw() const
 	{
 		if (m_FileHandle == INVALID_NATIVE_HANDLE_VALUE)
-			return ResultCode::FAIL;
+			return 0;
 
 		return static_cast<size_t>(lseek((int)(int64_t)m_FileHandle, 0, SEEK_CUR));
 	}
@@ -106,7 +106,7 @@ namespace SF {
 	size_t File::GetFileSize() const
 	{
 		if (m_FileHandle == INVALID_NATIVE_HANDLE_VALUE)
-			return ResultCode::FAIL;
+			return 0;
 
 		struct stat buf;
 		fstat((int)(int64_t)m_FileHandle, &buf);
