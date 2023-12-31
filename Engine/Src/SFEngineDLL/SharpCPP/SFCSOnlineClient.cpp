@@ -162,9 +162,7 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle,
 	if (nativeHandle == 0)
 		return (int)ResultCode::NOT_INITIALIZED;
 
-
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
-
 
 	auto eventHandler = [setEventFunc](Net::Connection* pConn, const Net::ConnectionEvent& evt)
 	{

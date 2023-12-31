@@ -56,8 +56,8 @@ namespace SF.Net
 		public int  JoinGameServerCmd( System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return JoinGameServerCmd(transId, InAccID, InTicket, InLoginEntityUID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return JoinGameServerCmd(InTransactionID, InAccID, InTicket, InLoginEntityUID, callback);
 		} // public int  JoinGameServerCmd( System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, Action<SFMessage>? callback = null )
 		public int  JoinGameServerCmd( SF.TransactionID InTransactionID, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, Action<SFMessage>? callback = null )
 		{
@@ -74,8 +74,8 @@ namespace SF.Net
 		public int  GetAchievementStatsCmd( System.UInt32 InCharacterID, System.UInt32 InAchievementStatIDFrom, System.UInt32 InAchievementStatIDTo, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return GetAchievementStatsCmd(transId, InCharacterID, InAchievementStatIDFrom, InAchievementStatIDTo, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return GetAchievementStatsCmd(InTransactionID, InCharacterID, InAchievementStatIDFrom, InAchievementStatIDTo, callback);
 		} // public int  GetAchievementStatsCmd( System.UInt32 InCharacterID, System.UInt32 InAchievementStatIDFrom, System.UInt32 InAchievementStatIDTo, Action<SFMessage>? callback = null )
 		public int  GetAchievementStatsCmd( SF.TransactionID InTransactionID, System.UInt32 InCharacterID, System.UInt32 InAchievementStatIDFrom, System.UInt32 InAchievementStatIDTo, Action<SFMessage>? callback = null )
 		{
@@ -92,8 +92,8 @@ namespace SF.Net
 		public int  Dummy1Cmd( System.String InComplitionState, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return Dummy1Cmd(transId, InComplitionState, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return Dummy1Cmd(InTransactionID, InComplitionState, callback);
 		} // public int  Dummy1Cmd( System.String InComplitionState, Action<SFMessage>? callback = null )
 		public int  Dummy1Cmd( SF.TransactionID InTransactionID, System.String InComplitionState, Action<SFMessage>? callback = null )
 		{
@@ -110,8 +110,8 @@ namespace SF.Net
 		public int  RegisterGCMCmd( System.String InGCMRegisteredID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return RegisterGCMCmd(transId, InGCMRegisteredID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return RegisterGCMCmd(InTransactionID, InGCMRegisteredID, callback);
 		} // public int  RegisterGCMCmd( System.String InGCMRegisteredID, Action<SFMessage>? callback = null )
 		public int  RegisterGCMCmd( SF.TransactionID InTransactionID, System.String InGCMRegisteredID, Action<SFMessage>? callback = null )
 		{
@@ -128,8 +128,8 @@ namespace SF.Net
 		public int  UnregisterGCMCmd( System.String InGCMRegisteredID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return UnregisterGCMCmd(transId, InGCMRegisteredID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return UnregisterGCMCmd(InTransactionID, InGCMRegisteredID, callback);
 		} // public int  UnregisterGCMCmd( System.String InGCMRegisteredID, Action<SFMessage>? callback = null )
 		public int  UnregisterGCMCmd( SF.TransactionID InTransactionID, System.String InGCMRegisteredID, Action<SFMessage>? callback = null )
 		{
@@ -146,8 +146,8 @@ namespace SF.Net
 		public int  InviteFriendCmd( System.UInt64 InFriendID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return InviteFriendCmd(transId, InFriendID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return InviteFriendCmd(InTransactionID, InFriendID, callback);
 		} // public int  InviteFriendCmd( System.UInt64 InFriendID, Action<SFMessage>? callback = null )
 		public int  InviteFriendCmd( SF.TransactionID InTransactionID, System.UInt64 InFriendID, Action<SFMessage>? callback = null )
 		{
@@ -164,8 +164,8 @@ namespace SF.Net
 		public int  AcceptFriendRequestCmd( System.UInt64 InInviterID, SF.PlayerPlatformID InInviterPlatformId, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return AcceptFriendRequestCmd(transId, InInviterID, InInviterPlatformId, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return AcceptFriendRequestCmd(InTransactionID, InInviterID, InInviterPlatformId, callback);
 		} // public int  AcceptFriendRequestCmd( System.UInt64 InInviterID, SF.PlayerPlatformID InInviterPlatformId, Action<SFMessage>? callback = null )
 		public int  AcceptFriendRequestCmd( SF.TransactionID InTransactionID, System.UInt64 InInviterID, SF.PlayerPlatformID InInviterPlatformId, Action<SFMessage>? callback = null )
 		{
@@ -182,8 +182,8 @@ namespace SF.Net
 		public int  RemoveFriendCmd( System.UInt64 InFriendID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return RemoveFriendCmd(transId, InFriendID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return RemoveFriendCmd(InTransactionID, InFriendID, callback);
 		} // public int  RemoveFriendCmd( System.UInt64 InFriendID, Action<SFMessage>? callback = null )
 		public int  RemoveFriendCmd( SF.TransactionID InTransactionID, System.UInt64 InFriendID, Action<SFMessage>? callback = null )
 		{
@@ -200,8 +200,8 @@ namespace SF.Net
 		public int  GetFriendListCmd( System.UInt16 InStartIndex, System.UInt16 InCount, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return GetFriendListCmd(transId, InStartIndex, InCount, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return GetFriendListCmd(InTransactionID, InStartIndex, InCount, callback);
 		} // public int  GetFriendListCmd( System.UInt16 InStartIndex, System.UInt16 InCount, Action<SFMessage>? callback = null )
 		public int  GetFriendListCmd( SF.TransactionID InTransactionID, System.UInt16 InStartIndex, System.UInt16 InCount, Action<SFMessage>? callback = null )
 		{
@@ -218,8 +218,8 @@ namespace SF.Net
 		public int  GetNotificationListCmd( Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return GetNotificationListCmd(transId, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return GetNotificationListCmd(InTransactionID, callback);
 		} // public int  GetNotificationListCmd( Action<SFMessage>? callback = null )
 		public int  GetNotificationListCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 		{
@@ -236,8 +236,8 @@ namespace SF.Net
 		public int  DeleteNotificationCmd( System.UInt32 InNotificationID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return DeleteNotificationCmd(transId, InNotificationID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return DeleteNotificationCmd(InTransactionID, InNotificationID, callback);
 		} // public int  DeleteNotificationCmd( System.UInt32 InNotificationID, Action<SFMessage>? callback = null )
 		public int  DeleteNotificationCmd( SF.TransactionID InTransactionID, System.UInt32 InNotificationID, Action<SFMessage>? callback = null )
 		{
@@ -254,8 +254,8 @@ namespace SF.Net
 		public int  SetNotificationReadCmd( System.UInt32 InNotificationID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return SetNotificationReadCmd(transId, InNotificationID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return SetNotificationReadCmd(InTransactionID, InNotificationID, callback);
 		} // public int  SetNotificationReadCmd( System.UInt32 InNotificationID, Action<SFMessage>? callback = null )
 		public int  SetNotificationReadCmd( SF.TransactionID InTransactionID, System.UInt32 InNotificationID, Action<SFMessage>? callback = null )
 		{
@@ -272,8 +272,8 @@ namespace SF.Net
 		public int  AcceptNotificationCmd( System.UInt32 InNotificationID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return AcceptNotificationCmd(transId, InNotificationID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return AcceptNotificationCmd(InTransactionID, InNotificationID, callback);
 		} // public int  AcceptNotificationCmd( System.UInt32 InNotificationID, Action<SFMessage>? callback = null )
 		public int  AcceptNotificationCmd( SF.TransactionID InTransactionID, System.UInt32 InNotificationID, Action<SFMessage>? callback = null )
 		{
@@ -290,8 +290,8 @@ namespace SF.Net
 		public int  FindPlayerByPlatformIdCmd( SF.PlayerPlatformID InPlatformPlayerId, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return FindPlayerByPlatformIdCmd(transId, InPlatformPlayerId, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return FindPlayerByPlatformIdCmd(InTransactionID, InPlatformPlayerId, callback);
 		} // public int  FindPlayerByPlatformIdCmd( SF.PlayerPlatformID InPlatformPlayerId, Action<SFMessage>? callback = null )
 		public int  FindPlayerByPlatformIdCmd( SF.TransactionID InTransactionID, SF.PlayerPlatformID InPlatformPlayerId, Action<SFMessage>? callback = null )
 		{
@@ -308,8 +308,8 @@ namespace SF.Net
 		public int  FindPlayerByCharacterNameCmd( System.String InCharacterName, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return FindPlayerByCharacterNameCmd(transId, InCharacterName, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return FindPlayerByCharacterNameCmd(InTransactionID, InCharacterName, callback);
 		} // public int  FindPlayerByCharacterNameCmd( System.String InCharacterName, Action<SFMessage>? callback = null )
 		public int  FindPlayerByCharacterNameCmd( SF.TransactionID InTransactionID, System.String InCharacterName, Action<SFMessage>? callback = null )
 		{
@@ -326,8 +326,8 @@ namespace SF.Net
 		public int  FindPlayerByPlatformUserNameCmd( System.Byte InPlatformType, System.String InPlatformUserName, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return FindPlayerByPlatformUserNameCmd(transId, InPlatformType, InPlatformUserName, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return FindPlayerByPlatformUserNameCmd(InTransactionID, InPlatformType, InPlatformUserName, callback);
 		} // public int  FindPlayerByPlatformUserNameCmd( System.Byte InPlatformType, System.String InPlatformUserName, Action<SFMessage>? callback = null )
 		public int  FindPlayerByPlatformUserNameCmd( SF.TransactionID InTransactionID, System.Byte InPlatformType, System.String InPlatformUserName, Action<SFMessage>? callback = null )
 		{
@@ -344,8 +344,8 @@ namespace SF.Net
 		public int  FindPlayerByEMailCmd( System.String InPlayerEMail, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return FindPlayerByEMailCmd(transId, InPlayerEMail, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return FindPlayerByEMailCmd(InTransactionID, InPlayerEMail, callback);
 		} // public int  FindPlayerByEMailCmd( System.String InPlayerEMail, Action<SFMessage>? callback = null )
 		public int  FindPlayerByEMailCmd( SF.TransactionID InTransactionID, System.String InPlayerEMail, Action<SFMessage>? callback = null )
 		{
@@ -362,8 +362,8 @@ namespace SF.Net
 		public int  FindPlayerByPlayerIDCmd( System.UInt64 InPlayerID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return FindPlayerByPlayerIDCmd(transId, InPlayerID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return FindPlayerByPlayerIDCmd(InTransactionID, InPlayerID, callback);
 		} // public int  FindPlayerByPlayerIDCmd( System.UInt64 InPlayerID, Action<SFMessage>? callback = null )
 		public int  FindPlayerByPlayerIDCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayerID, Action<SFMessage>? callback = null )
 		{
@@ -380,8 +380,8 @@ namespace SF.Net
 		public int  RequestPlayerStatusUpdateCmd( System.UInt64[] InTargetPlayerID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return RequestPlayerStatusUpdateCmd(transId, InTargetPlayerID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return RequestPlayerStatusUpdateCmd(InTransactionID, InTargetPlayerID, callback);
 		} // public int  RequestPlayerStatusUpdateCmd( System.UInt64[] InTargetPlayerID, Action<SFMessage>? callback = null )
 		public int  RequestPlayerStatusUpdateCmd( SF.TransactionID InTransactionID, System.UInt64[] InTargetPlayerID, Action<SFMessage>? callback = null )
 		{
@@ -398,8 +398,8 @@ namespace SF.Net
 		public int  GetRankingListCmd( System.Byte InRankingType, System.Byte InBaseRanking, System.Byte InCount, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return GetRankingListCmd(transId, InRankingType, InBaseRanking, InCount, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return GetRankingListCmd(InTransactionID, InRankingType, InBaseRanking, InCount, callback);
 		} // public int  GetRankingListCmd( System.Byte InRankingType, System.Byte InBaseRanking, System.Byte InCount, Action<SFMessage>? callback = null )
 		public int  GetRankingListCmd( SF.TransactionID InTransactionID, System.Byte InRankingType, System.Byte InBaseRanking, System.Byte InCount, Action<SFMessage>? callback = null )
 		{
@@ -416,8 +416,8 @@ namespace SF.Net
 		public int  GetUserGamePlayerInfoCmd( Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return GetUserGamePlayerInfoCmd(transId, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return GetUserGamePlayerInfoCmd(InTransactionID, callback);
 		} // public int  GetUserGamePlayerInfoCmd( Action<SFMessage>? callback = null )
 		public int  GetUserGamePlayerInfoCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 		{
@@ -434,8 +434,8 @@ namespace SF.Net
 		public int  GetGamePlayerInfoCmd( System.UInt64 InPlayerID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return GetGamePlayerInfoCmd(transId, InPlayerID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return GetGamePlayerInfoCmd(InTransactionID, InPlayerID, callback);
 		} // public int  GetGamePlayerInfoCmd( System.UInt64 InPlayerID, Action<SFMessage>? callback = null )
 		public int  GetGamePlayerInfoCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayerID, Action<SFMessage>? callback = null )
 		{
@@ -452,8 +452,8 @@ namespace SF.Net
 		public int  SetNickNameCmd( System.String InNickName, System.Byte InIsCostFree, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return SetNickNameCmd(transId, InNickName, InIsCostFree, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return SetNickNameCmd(InTransactionID, InNickName, InIsCostFree, callback);
 		} // public int  SetNickNameCmd( System.String InNickName, System.Byte InIsCostFree, Action<SFMessage>? callback = null )
 		public int  SetNickNameCmd( SF.TransactionID InTransactionID, System.String InNickName, System.Byte InIsCostFree, Action<SFMessage>? callback = null )
 		{
@@ -470,8 +470,8 @@ namespace SF.Net
 		public int  CreatePartyCmd( Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return CreatePartyCmd(transId, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return CreatePartyCmd(InTransactionID, callback);
 		} // public int  CreatePartyCmd( Action<SFMessage>? callback = null )
 		public int  CreatePartyCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 		{
@@ -488,8 +488,8 @@ namespace SF.Net
 		public int  JoinPartyCmd( System.UInt64 InPartyUID, System.UInt64 InInviterID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return JoinPartyCmd(transId, InPartyUID, InInviterID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return JoinPartyCmd(InTransactionID, InPartyUID, InInviterID, callback);
 		} // public int  JoinPartyCmd( System.UInt64 InPartyUID, System.UInt64 InInviterID, Action<SFMessage>? callback = null )
 		public int  JoinPartyCmd( SF.TransactionID InTransactionID, System.UInt64 InPartyUID, System.UInt64 InInviterID, Action<SFMessage>? callback = null )
 		{
@@ -506,8 +506,8 @@ namespace SF.Net
 		public int  LeavePartyCmd( System.UInt64 InPartyUID, System.UInt64 InPlayerID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return LeavePartyCmd(transId, InPartyUID, InPlayerID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return LeavePartyCmd(InTransactionID, InPartyUID, InPlayerID, callback);
 		} // public int  LeavePartyCmd( System.UInt64 InPartyUID, System.UInt64 InPlayerID, Action<SFMessage>? callback = null )
 		public int  LeavePartyCmd( SF.TransactionID InTransactionID, System.UInt64 InPartyUID, System.UInt64 InPlayerID, Action<SFMessage>? callback = null )
 		{
@@ -524,8 +524,8 @@ namespace SF.Net
 		public int  PartyKickPlayerCmd( System.UInt64 InPartyUID, System.UInt64 InPlayerID, System.UInt64 InPlayerToKick, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return PartyKickPlayerCmd(transId, InPartyUID, InPlayerID, InPlayerToKick, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return PartyKickPlayerCmd(InTransactionID, InPartyUID, InPlayerID, InPlayerToKick, callback);
 		} // public int  PartyKickPlayerCmd( System.UInt64 InPartyUID, System.UInt64 InPlayerID, System.UInt64 InPlayerToKick, Action<SFMessage>? callback = null )
 		public int  PartyKickPlayerCmd( SF.TransactionID InTransactionID, System.UInt64 InPartyUID, System.UInt64 InPlayerID, System.UInt64 InPlayerToKick, Action<SFMessage>? callback = null )
 		{
@@ -542,8 +542,8 @@ namespace SF.Net
 		public int  PartyInviteCmd( System.UInt64 InInviteTargetID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return PartyInviteCmd(transId, InInviteTargetID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return PartyInviteCmd(InTransactionID, InInviteTargetID, callback);
 		} // public int  PartyInviteCmd( System.UInt64 InInviteTargetID, Action<SFMessage>? callback = null )
 		public int  PartyInviteCmd( SF.TransactionID InTransactionID, System.UInt64 InInviteTargetID, Action<SFMessage>? callback = null )
 		{
@@ -560,8 +560,8 @@ namespace SF.Net
 		public int  PartyQuickChatMessageCmd( System.UInt32 InQuickChatID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return PartyQuickChatMessageCmd(transId, InQuickChatID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return PartyQuickChatMessageCmd(InTransactionID, InQuickChatID, callback);
 		} // public int  PartyQuickChatMessageCmd( System.UInt32 InQuickChatID, Action<SFMessage>? callback = null )
 		public int  PartyQuickChatMessageCmd( SF.TransactionID InTransactionID, System.UInt32 InQuickChatID, Action<SFMessage>? callback = null )
 		{
@@ -578,8 +578,8 @@ namespace SF.Net
 		public int  PartyChatMessageCmd( System.String InChatMessage, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return PartyChatMessageCmd(transId, InChatMessage, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return PartyChatMessageCmd(InTransactionID, InChatMessage, callback);
 		} // public int  PartyChatMessageCmd( System.String InChatMessage, Action<SFMessage>? callback = null )
 		public int  PartyChatMessageCmd( SF.TransactionID InTransactionID, System.String InChatMessage, Action<SFMessage>? callback = null )
 		{
@@ -596,8 +596,8 @@ namespace SF.Net
 		public int  JoinGameInstanceCmd( System.UInt64 InInsUID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return JoinGameInstanceCmd(transId, InInsUID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return JoinGameInstanceCmd(InTransactionID, InInsUID, callback);
 		} // public int  JoinGameInstanceCmd( System.UInt64 InInsUID, Action<SFMessage>? callback = null )
 		public int  JoinGameInstanceCmd( SF.TransactionID InTransactionID, System.UInt64 InInsUID, Action<SFMessage>? callback = null )
 		{
@@ -614,8 +614,8 @@ namespace SF.Net
 		public int  LeaveGameInstanceCmd( System.UInt64 InInsUID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return LeaveGameInstanceCmd(transId, InInsUID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return LeaveGameInstanceCmd(InTransactionID, InInsUID, callback);
 		} // public int  LeaveGameInstanceCmd( System.UInt64 InInsUID, Action<SFMessage>? callback = null )
 		public int  LeaveGameInstanceCmd( SF.TransactionID InTransactionID, System.UInt64 InInsUID, Action<SFMessage>? callback = null )
 		{
@@ -632,8 +632,8 @@ namespace SF.Net
 		public int  SearchGameInstanceCmd( System.String InSearchKeyword, System.UInt32 InZoneTableID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return SearchGameInstanceCmd(transId, InSearchKeyword, InZoneTableID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return SearchGameInstanceCmd(InTransactionID, InSearchKeyword, InZoneTableID, callback);
 		} // public int  SearchGameInstanceCmd( System.String InSearchKeyword, System.UInt32 InZoneTableID, Action<SFMessage>? callback = null )
 		public int  SearchGameInstanceCmd( SF.TransactionID InTransactionID, System.String InSearchKeyword, System.UInt32 InZoneTableID, Action<SFMessage>? callback = null )
 		{
@@ -650,8 +650,8 @@ namespace SF.Net
 		public int  GetCharacterDataInGameInstanceCmd( System.UInt64 InGameInsUID, System.UInt64 InPlayerID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return GetCharacterDataInGameInstanceCmd(transId, InGameInsUID, InPlayerID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return GetCharacterDataInGameInstanceCmd(InTransactionID, InGameInsUID, InPlayerID, callback);
 		} // public int  GetCharacterDataInGameInstanceCmd( System.UInt64 InGameInsUID, System.UInt64 InPlayerID, Action<SFMessage>? callback = null )
 		public int  GetCharacterDataInGameInstanceCmd( SF.TransactionID InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, Action<SFMessage>? callback = null )
 		{
@@ -668,8 +668,8 @@ namespace SF.Net
 		public int  RequestGameMatchCmd( System.Byte InNumPlayer, System.Byte InRequestRole, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return RequestGameMatchCmd(transId, InNumPlayer, InRequestRole, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return RequestGameMatchCmd(InTransactionID, InNumPlayer, InRequestRole, callback);
 		} // public int  RequestGameMatchCmd( System.Byte InNumPlayer, System.Byte InRequestRole, Action<SFMessage>? callback = null )
 		public int  RequestGameMatchCmd( SF.TransactionID InTransactionID, System.Byte InNumPlayer, System.Byte InRequestRole, Action<SFMessage>? callback = null )
 		{
@@ -686,8 +686,8 @@ namespace SF.Net
 		public int  CancelGameMatchCmd( Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return CancelGameMatchCmd(transId, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return CancelGameMatchCmd(InTransactionID, callback);
 		} // public int  CancelGameMatchCmd( Action<SFMessage>? callback = null )
 		public int  CancelGameMatchCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 		{
@@ -704,8 +704,8 @@ namespace SF.Net
 		public int  BuyShopItemPrepareCmd( System.UInt32 InShopItemID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return BuyShopItemPrepareCmd(transId, InShopItemID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return BuyShopItemPrepareCmd(InTransactionID, InShopItemID, callback);
 		} // public int  BuyShopItemPrepareCmd( System.UInt32 InShopItemID, Action<SFMessage>? callback = null )
 		public int  BuyShopItemPrepareCmd( SF.TransactionID InTransactionID, System.UInt32 InShopItemID, Action<SFMessage>? callback = null )
 		{
@@ -722,8 +722,8 @@ namespace SF.Net
 		public int  BuyShopItemCmd( System.UInt32 InShopItemID, System.String InPlatform, System.String InPackageName, System.String InPurchaseTransactionID, System.Byte[] InPurchaseToken, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return BuyShopItemCmd(transId, InShopItemID, InPlatform, InPackageName, InPurchaseTransactionID, InPurchaseToken, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return BuyShopItemCmd(InTransactionID, InShopItemID, InPlatform, InPackageName, InPurchaseTransactionID, InPurchaseToken, callback);
 		} // public int  BuyShopItemCmd( System.UInt32 InShopItemID, System.String InPlatform, System.String InPackageName, System.String InPurchaseTransactionID, System.Byte[] InPurchaseToken, Action<SFMessage>? callback = null )
 		public int  BuyShopItemCmd( SF.TransactionID InTransactionID, System.UInt32 InShopItemID, System.String InPlatform, System.String InPackageName, System.String InPurchaseTransactionID, System.Byte[] InPurchaseToken, Action<SFMessage>? callback = null )
 		{
@@ -740,8 +740,8 @@ namespace SF.Net
 		public int  CreateOrJoinChatChannelCmd( System.String InChannelName, System.String InPasscode, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return CreateOrJoinChatChannelCmd(transId, InChannelName, InPasscode, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return CreateOrJoinChatChannelCmd(InTransactionID, InChannelName, InPasscode, callback);
 		} // public int  CreateOrJoinChatChannelCmd( System.String InChannelName, System.String InPasscode, Action<SFMessage>? callback = null )
 		public int  CreateOrJoinChatChannelCmd( SF.TransactionID InTransactionID, System.String InChannelName, System.String InPasscode, Action<SFMessage>? callback = null )
 		{
@@ -758,8 +758,8 @@ namespace SF.Net
 		public int  JoinChatChannelCmd( System.UInt64 InChatUID, System.UInt64 InInviterID, System.String InPasscode, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return JoinChatChannelCmd(transId, InChatUID, InInviterID, InPasscode, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return JoinChatChannelCmd(InTransactionID, InChatUID, InInviterID, InPasscode, callback);
 		} // public int  JoinChatChannelCmd( System.UInt64 InChatUID, System.UInt64 InInviterID, System.String InPasscode, Action<SFMessage>? callback = null )
 		public int  JoinChatChannelCmd( SF.TransactionID InTransactionID, System.UInt64 InChatUID, System.UInt64 InInviterID, System.String InPasscode, Action<SFMessage>? callback = null )
 		{
@@ -776,8 +776,8 @@ namespace SF.Net
 		public int  LeaveChatChannelCmd( System.UInt64 InChatUID, System.UInt64 InPlayerID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return LeaveChatChannelCmd(transId, InChatUID, InPlayerID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return LeaveChatChannelCmd(InTransactionID, InChatUID, InPlayerID, callback);
 		} // public int  LeaveChatChannelCmd( System.UInt64 InChatUID, System.UInt64 InPlayerID, Action<SFMessage>? callback = null )
 		public int  LeaveChatChannelCmd( SF.TransactionID InTransactionID, System.UInt64 InChatUID, System.UInt64 InPlayerID, Action<SFMessage>? callback = null )
 		{
@@ -794,8 +794,8 @@ namespace SF.Net
 		public int  ChatChannelKickPlayerCmd( System.UInt64 InChatUID, System.UInt64 InPlayerID, System.UInt64 InPlayerToKick, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return ChatChannelKickPlayerCmd(transId, InChatUID, InPlayerID, InPlayerToKick, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return ChatChannelKickPlayerCmd(InTransactionID, InChatUID, InPlayerID, InPlayerToKick, callback);
 		} // public int  ChatChannelKickPlayerCmd( System.UInt64 InChatUID, System.UInt64 InPlayerID, System.UInt64 InPlayerToKick, Action<SFMessage>? callback = null )
 		public int  ChatChannelKickPlayerCmd( SF.TransactionID InTransactionID, System.UInt64 InChatUID, System.UInt64 InPlayerID, System.UInt64 InPlayerToKick, Action<SFMessage>? callback = null )
 		{
@@ -812,8 +812,8 @@ namespace SF.Net
 		public int  ChatChannelChatMessageCmd( System.UInt64 InChatUID, SF.VariableTable InChatMetaData, System.String InChatMessage, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return ChatChannelChatMessageCmd(transId, InChatUID, InChatMetaData, InChatMessage, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return ChatChannelChatMessageCmd(InTransactionID, InChatUID, InChatMetaData, InChatMessage, callback);
 		} // public int  ChatChannelChatMessageCmd( System.UInt64 InChatUID, SF.VariableTable InChatMetaData, System.String InChatMessage, Action<SFMessage>? callback = null )
 		public int  ChatChannelChatMessageCmd( SF.TransactionID InTransactionID, System.UInt64 InChatUID, SF.VariableTable InChatMetaData, System.String InChatMessage, Action<SFMessage>? callback = null )
 		{
@@ -832,8 +832,8 @@ namespace SF.Net
 		public int  WhisperMessageCmd( System.UInt64 InReceiverID, System.String InReceiverName, SF.VariableTable InChatMetaData, System.String InChatMessage, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return WhisperMessageCmd(transId, InReceiverID, InReceiverName, InChatMetaData, InChatMessage, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return WhisperMessageCmd(InTransactionID, InReceiverID, InReceiverName, InChatMetaData, InChatMessage, callback);
 		} // public int  WhisperMessageCmd( System.UInt64 InReceiverID, System.String InReceiverName, SF.VariableTable InChatMetaData, System.String InChatMessage, Action<SFMessage>? callback = null )
 		public int  WhisperMessageCmd( SF.TransactionID InTransactionID, System.UInt64 InReceiverID, System.String InReceiverName, SF.VariableTable InChatMetaData, System.String InChatMessage, Action<SFMessage>? callback = null )
 		{
@@ -852,8 +852,8 @@ namespace SF.Net
 		public int  CreateCharacterCmd( System.String InCharacterName, SF.VariableTable InPublicData, SF.VariableTable InPrivateData, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return CreateCharacterCmd(transId, InCharacterName, InPublicData, InPrivateData, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return CreateCharacterCmd(InTransactionID, InCharacterName, InPublicData, InPrivateData, callback);
 		} // public int  CreateCharacterCmd( System.String InCharacterName, SF.VariableTable InPublicData, SF.VariableTable InPrivateData, Action<SFMessage>? callback = null )
 		public int  CreateCharacterCmd( SF.TransactionID InTransactionID, System.String InCharacterName, SF.VariableTable InPublicData, SF.VariableTable InPrivateData, Action<SFMessage>? callback = null )
 		{
@@ -874,8 +874,8 @@ namespace SF.Net
 		public int  DeleteCharacterCmd( System.UInt32 InCharacterID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return DeleteCharacterCmd(transId, InCharacterID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return DeleteCharacterCmd(InTransactionID, InCharacterID, callback);
 		} // public int  DeleteCharacterCmd( System.UInt32 InCharacterID, Action<SFMessage>? callback = null )
 		public int  DeleteCharacterCmd( SF.TransactionID InTransactionID, System.UInt32 InCharacterID, Action<SFMessage>? callback = null )
 		{
@@ -892,8 +892,8 @@ namespace SF.Net
 		public int  GetCharacterListCmd( Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return GetCharacterListCmd(transId, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return GetCharacterListCmd(InTransactionID, callback);
 		} // public int  GetCharacterListCmd( Action<SFMessage>? callback = null )
 		public int  GetCharacterListCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 		{
@@ -910,8 +910,8 @@ namespace SF.Net
 		public int  GetCharacterDataCmd( System.UInt32 InCharacterID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return GetCharacterDataCmd(transId, InCharacterID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return GetCharacterDataCmd(InTransactionID, InCharacterID, callback);
 		} // public int  GetCharacterDataCmd( System.UInt32 InCharacterID, Action<SFMessage>? callback = null )
 		public int  GetCharacterDataCmd( SF.TransactionID InTransactionID, System.UInt32 InCharacterID, Action<SFMessage>? callback = null )
 		{
@@ -928,8 +928,8 @@ namespace SF.Net
 		public int  SelectCharacterCmd( System.UInt32 InCharacterID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return SelectCharacterCmd(transId, InCharacterID, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return SelectCharacterCmd(InTransactionID, InCharacterID, callback);
 		} // public int  SelectCharacterCmd( System.UInt32 InCharacterID, Action<SFMessage>? callback = null )
 		public int  SelectCharacterCmd( SF.TransactionID InTransactionID, System.UInt32 InCharacterID, Action<SFMessage>? callback = null )
 		{
@@ -946,8 +946,8 @@ namespace SF.Net
 		public int  RequestServerNoticeUpdateCmd( Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return RequestServerNoticeUpdateCmd(transId, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return RequestServerNoticeUpdateCmd(InTransactionID, callback);
 		} // public int  RequestServerNoticeUpdateCmd( Action<SFMessage>? callback = null )
 		public int  RequestServerNoticeUpdateCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 		{
@@ -964,8 +964,8 @@ namespace SF.Net
 		public int  CallFunctionCmd( System.UInt32 InFunctionName, SF.VariableTable InParameters, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return CallFunctionCmd(transId, InFunctionName, InParameters, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return CallFunctionCmd(InTransactionID, InFunctionName, InParameters, callback);
 		} // public int  CallFunctionCmd( System.UInt32 InFunctionName, SF.VariableTable InParameters, Action<SFMessage>? callback = null )
 		public int  CallFunctionCmd( SF.TransactionID InTransactionID, System.UInt32 InFunctionName, SF.VariableTable InParameters, Action<SFMessage>? callback = null )
 		{

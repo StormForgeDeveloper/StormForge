@@ -232,7 +232,9 @@ namespace SF
                 return CachedAdapter;
 
             CachedAdapter = new TAdapter();
-            CachedAdapter.Connection = new SFConnection(connectionHandle, transactionIdGenerator: m_OnlineTransactionIDGenerator);
+            CachedAdapter.Connection = new SFConnection(connectionHandle
+                , messageRouter: MessageRouter
+                , transactionIdGenerator: m_OnlineTransactionIDGenerator);
             return CachedAdapter;
         }
 

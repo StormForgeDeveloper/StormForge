@@ -16,6 +16,11 @@
 
 namespace SF
 {
+    namespace Log
+    {
+        LogChannel HTTP("HTTP", LogOutputType::Info);
+    }
+
     namespace HTTPClientImpl
     {
 
@@ -114,7 +119,7 @@ namespace SF
             typeName = TypeNames[int(type)];
         }
 
-        SFLog(System, Info, "CURL: {0}:{1}", typeName, data);
+        SFLog(HTTP, Custom1, "CURL: {0}:{1}", typeName, data);
 
         return 0;
     }

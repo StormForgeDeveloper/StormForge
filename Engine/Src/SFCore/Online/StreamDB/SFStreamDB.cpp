@@ -326,12 +326,12 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
-	Result StreamDBProducer::Flush()
+	Result StreamDBProducer::Flush(DurationMS timeout)
 	{
 		if (!m_Producer)
 			return ResultCode::NOT_INITIALIZED;
 
-		auto res = m_Producer->flush(30 * 1000);
+		auto res = m_Producer->flush(timeout.count());
 		return res == RdKafka::ErrorCode::ERR_NO_ERROR ? ResultCode::SUCCESS : ResultCode::IO_TIMEDOUT;
 	}
 

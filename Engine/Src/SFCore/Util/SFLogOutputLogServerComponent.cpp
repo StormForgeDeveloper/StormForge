@@ -61,7 +61,7 @@ namespace SF {
 	{
 		if (m_StreamProducer != nullptr)
 		{
-			m_StreamProducer->Flush();
+			m_StreamProducer->Flush(DurationMS(1000));
 			m_StreamProducer = nullptr;
 		}
 	}

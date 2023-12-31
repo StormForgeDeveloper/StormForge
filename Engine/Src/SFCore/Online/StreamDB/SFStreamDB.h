@@ -129,7 +129,7 @@ namespace SF
 
         Result SendRecord(const ArrayView<const uint8_t>& data);
 
-        Result Flush();
+        Result Flush(DurationMS timeout = DurationMS(30*1000));
 
 
     private:

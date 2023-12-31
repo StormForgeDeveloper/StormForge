@@ -43,8 +43,8 @@ namespace SF.Net
 		public int  LoginCmd( System.UInt32 InGameID, System.String InID, System.String InPassword, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return LoginCmd(transId, InGameID, InID, InPassword, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return LoginCmd(InTransactionID, InGameID, InID, InPassword, callback);
 		} // public int  LoginCmd( System.UInt32 InGameID, System.String InID, System.String InPassword, Action<SFMessage>? callback = null )
 		public int  LoginCmd( SF.TransactionID InTransactionID, System.UInt32 InGameID, System.String InID, System.String InPassword, Action<SFMessage>? callback = null )
 		{
@@ -61,8 +61,8 @@ namespace SF.Net
 		public int  LoginByFacebookCmd( System.UInt32 InGameID, System.UInt64 InUID, System.String InFaceBookName, System.String InEMail, System.String InFacebookToken, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return LoginByFacebookCmd(transId, InGameID, InUID, InFaceBookName, InEMail, InFacebookToken, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return LoginByFacebookCmd(InTransactionID, InGameID, InUID, InFaceBookName, InEMail, InFacebookToken, callback);
 		} // public int  LoginByFacebookCmd( System.UInt32 InGameID, System.UInt64 InUID, System.String InFaceBookName, System.String InEMail, System.String InFacebookToken, Action<SFMessage>? callback = null )
 		public int  LoginByFacebookCmd( SF.TransactionID InTransactionID, System.UInt32 InGameID, System.UInt64 InUID, System.String InFaceBookName, System.String InEMail, System.String InFacebookToken, Action<SFMessage>? callback = null )
 		{
@@ -79,8 +79,8 @@ namespace SF.Net
 		public int  LoginBySteamCmd( System.UInt32 InGameID, System.UInt64 InSteamUserID, System.String InSteamUserName, System.String InSteamUserToken, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return LoginBySteamCmd(transId, InGameID, InSteamUserID, InSteamUserName, InSteamUserToken, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return LoginBySteamCmd(InTransactionID, InGameID, InSteamUserID, InSteamUserName, InSteamUserToken, callback);
 		} // public int  LoginBySteamCmd( System.UInt32 InGameID, System.UInt64 InSteamUserID, System.String InSteamUserName, System.String InSteamUserToken, Action<SFMessage>? callback = null )
 		public int  LoginBySteamCmd( SF.TransactionID InTransactionID, System.UInt32 InGameID, System.UInt64 InSteamUserID, System.String InSteamUserName, System.String InSteamUserToken, Action<SFMessage>? callback = null )
 		{
@@ -97,8 +97,8 @@ namespace SF.Net
 		public int  CreateRandomUserCmd( System.UInt32 InGameID, System.String InCellPhone, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return CreateRandomUserCmd(transId, InGameID, InCellPhone, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return CreateRandomUserCmd(InTransactionID, InGameID, InCellPhone, callback);
 		} // public int  CreateRandomUserCmd( System.UInt32 InGameID, System.String InCellPhone, Action<SFMessage>? callback = null )
 		public int  CreateRandomUserCmd( SF.TransactionID InTransactionID, System.UInt32 InGameID, System.String InCellPhone, Action<SFMessage>? callback = null )
 		{
@@ -115,8 +115,8 @@ namespace SF.Net
 		public int  UpdateMyScoreCmd( System.UInt64 InRankingScore, SF.RankingType InRankingType, System.UInt16 InCount, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return UpdateMyScoreCmd(transId, InRankingScore, InRankingType, InCount, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return UpdateMyScoreCmd(InTransactionID, InRankingScore, InRankingType, InCount, callback);
 		} // public int  UpdateMyScoreCmd( System.UInt64 InRankingScore, SF.RankingType InRankingType, System.UInt16 InCount, Action<SFMessage>? callback = null )
 		public int  UpdateMyScoreCmd( SF.TransactionID InTransactionID, System.UInt64 InRankingScore, SF.RankingType InRankingType, System.UInt16 InCount, Action<SFMessage>? callback = null )
 		{
@@ -133,8 +133,8 @@ namespace SF.Net
 		public int  GetRankingListCmd( SF.RankingType InRankingType, System.Byte InBaseRanking, System.Byte InCount, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return GetRankingListCmd(transId, InRankingType, InBaseRanking, InCount, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return GetRankingListCmd(InTransactionID, InRankingType, InBaseRanking, InCount, callback);
 		} // public int  GetRankingListCmd( SF.RankingType InRankingType, System.Byte InBaseRanking, System.Byte InCount, Action<SFMessage>? callback = null )
 		public int  GetRankingListCmd( SF.TransactionID InTransactionID, SF.RankingType InRankingType, System.Byte InBaseRanking, System.Byte InCount, Action<SFMessage>? callback = null )
 		{
@@ -151,8 +151,8 @@ namespace SF.Net
 		public int  DataTestCmd( System.Byte[] InTestData, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return DataTestCmd(transId, InTestData, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return DataTestCmd(InTransactionID, InTestData, callback);
 		} // public int  DataTestCmd( System.Byte[] InTestData, Action<SFMessage>? callback = null )
 		public int  DataTestCmd( SF.TransactionID InTransactionID, System.Byte[] InTestData, Action<SFMessage>? callback = null )
 		{
@@ -182,8 +182,8 @@ namespace SF.Net
 		public int  DebugPrintALLRankingCmd( System.String InFileName, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID transId = NewTransactionID();
-			return DebugPrintALLRankingCmd(transId, InFileName, callback);
+			TransactionID InTransactionID = NewTransactionID();
+			return DebugPrintALLRankingCmd(InTransactionID, InFileName, callback);
 		} // public int  DebugPrintALLRankingCmd( System.String InFileName, Action<SFMessage>? callback = null )
 		public int  DebugPrintALLRankingCmd( SF.TransactionID InTransactionID, System.String InFileName, Action<SFMessage>? callback = null )
 		{

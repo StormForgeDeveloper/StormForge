@@ -19,6 +19,12 @@
 
 namespace SF
 {
+    namespace Log
+    {
+        extern LogChannel HTTP;
+    }
+
+
 
     // HTTP request wrapper
     class HTTPClient : public SharedObject

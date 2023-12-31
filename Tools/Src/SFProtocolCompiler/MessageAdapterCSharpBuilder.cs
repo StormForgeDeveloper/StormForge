@@ -560,13 +560,22 @@ namespace ProtocolCompiler
         }  // 
 
 
-        void BuildCmdAutoSendFunction(MessageBase baseMsg, Parameter[] parameters)
+        void BuildCmdAutoTransIdSendFunction(MessageBase baseMsg, Parameter[] parameters)
         {
             ParameterMode = TypeUsage.CSharp;
             string msgTypeName = "Cmd";
 
-            string paramInString = ParamInString("", parameters);
-            if (parameters.Length > 0)
+            List<Parameter> parameterWithoutTransactionId = new List<Parameter>();
+            foreach (Parameter param in parameters)
+            {
+                if (param.Name == ParamContext.Name)
+                    continue;
+
+                parameterWithoutTransactionId.Add(param);
+            }
+
+            string paramInString = ParamInString("", parameterWithoutTransactionId.ToArray());
+            if (parameterWithoutTransactionId.Count > 0)
                 paramInString += ", ";
             paramInString += "Action<SFMessage>? callback = null";
 
@@ -579,8 +588,8 @@ namespace ProtocolCompiler
             OpenSection("public int ",$"{SendFuncName(baseMsg, msgTypeName)}( {paramInString} )", false);
 
             MatchIndent(); OutStream.WriteLine("if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;");
-            MatchIndent(); OutStream.WriteLine("TransactionID transId = NewTransactionID();");
-            MatchIndent(); OutStream.WriteLine($"return {SendFuncName(baseMsg, msgTypeName)}(transId, {paramCallString});");
+            MatchIndent(); OutStream.WriteLine("TransactionID InTransactionID = NewTransactionID();");
+            MatchIndent(); OutStream.WriteLine($"return {SendFuncName(baseMsg, msgTypeName)}({paramCallString});");
 
             CloseSection();
         }
@@ -610,14 +619,16 @@ namespace ProtocolCompiler
             MatchIndent(); OutStream.WriteLine("{");
             MatchIndent(); OutStream.WriteLine("result = {0}({1});", NativeFuncName(baseMsg, msgTypeName), CallNativeParameterStringWithNativeHandle(parameters));
             MatchIndent(); OutStream.WriteLine("}");
-            if (bIsCmd)
+
+            string contextInParam = ", TransactionID.Empty";
+            string callbackInParam = string.Empty;
+            if (Group.GenParameterContext && bIsCmd)
             {
-                MatchIndent(); OutStream.WriteLine("m_Connection.HandleSentMessage(result, InTransactionID, MessageID{0}.{1}{2}, callback);", Group.Name, baseMsg.Name, msgTypeName);
+                contextInParam = ", InTransactionID";
+                callbackInParam = ", callback";
             }
-            else
-            {
-                MatchIndent(); OutStream.WriteLine("m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageID{0}.{1}{2});", Group.Name, baseMsg.Name, msgTypeName);
-            }
+
+            MatchIndent(); OutStream.WriteLine($"m_Connection.HandleSentMessage(result{contextInParam}, MessageID{Group.Name}.{baseMsg.Name}{msgTypeName}{callbackInParam});");
             MatchIndent(); OutStream.WriteLine("return result;");
 
             CloseSection();
@@ -629,7 +640,6 @@ namespace ProtocolCompiler
             IsCSharpNative = true;
             ParameterMode = TypeUsage.CSharpNative;
             MatchIndent(); OutStream.WriteLine("[DllImport(NativeDLLName, EntryPoint = \"{0}\", CharSet = CharSet.Ansi)]", NativeFuncName(baseMsg, msgTypeName));
-            //MatchIndent(); OutStream.WriteLine("[return: MarshalAs(UnmanagedType.I1)]");
             MatchIndent(); OutStream.WriteLine("static extern int {0}({1} );", NativeFuncName(baseMsg, msgTypeName), ParamInStringNative(parameters));
             IsCSharpNative = false;
             NewLine();
@@ -711,10 +721,10 @@ namespace ProtocolCompiler
                     MatchIndent(); OutStream.WriteLine("// Cmd: " + baseMsg.Desc);
                     ProtocolsProtocolGroupCommand msg = baseMsg as ProtocolsProtocolGroupCommand;
 
+                    newparams = MakeParameters(MsgType.Cmd, msg.Cmd);
                     if (Group.GenParameterContext)
                     {
-                        var autoIDParameters = MakeParameters(MsgType.Evt, msg.Cmd);
-                        BuildCmdAutoSendFunction(msg, autoIDParameters);
+                        BuildCmdAutoTransIdSendFunction(msg, newparams);
                     }
 
                     newparams = MakeParameters(MsgType.Cmd, msg.Cmd);
