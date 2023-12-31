@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using SF.Net;
 #if UNITY_IOS
 using AOT;
@@ -23,6 +22,8 @@ using AOT;
 
 namespace SF
 {
+
+
     public partial class OnlineClient : SFObject
     {
         public enum OnlineState
@@ -82,52 +83,59 @@ namespace SF
             MessageRouter.AddUnique(m_RequestCallbackRouter);
         }
 
-        public TransactionID StartConnection(string gameId, string loginAddress, string userId, string password, Action<SFMessage>? callback = null)
+        public Result StartConnection(TransactionID transactionId, string gameId, string loginAddress, string userId, string password, Action<SFMessage>? callback = null)
         {
             ResetConnectionAdapter();
 
             SF.Log.Info($"Online StartConnection: gameId:{gameId}, loginAddr:{loginAddress}, userId:{userId}");
 
-            TransactionID transactionId = NewTransactionID();
+            if (!transactionId.IsValid)
+                transactionId = NewTransactionID();
 
             Result res = new(NativeStartConnection(NativeHandle, transactionId.TransactionId, gameId, loginAddress, userId, password));
             if (res.IsFailure)
-                return TransactionID.Empty;
+                return res;
 
             m_RequestCallbackRouter.AddPendingRequest(transactionId, callback);
 
-            return transactionId;
+            return res;
         }
 
-        public TransactionID StartConnection(string gameId, string loginAddress, UInt64 steamUserId, string steamUserName, string steamUserToken, Action<SFMessage>? callback = null)
+        public Result StartConnection(TransactionID transactionId, string gameId, string loginAddress, UInt64 steamUserId, string steamUserName, string steamUserToken, Action<SFMessage>? callback = null)
         {
             ResetConnectionAdapter();
 
             SF.Log.Info($"Online StartConnection: gameId:{gameId}, loginAddr:{loginAddress}, steamUserId:{steamUserId}, steamUserName:{steamUserName}");
 
-            TransactionID transactionId = NewTransactionID();
+            if (!transactionId.IsValid)
+                transactionId = NewTransactionID();
 
             Result res = new(NativeStartConnectionSteam(NativeHandle, transactionId.TransactionId, gameId, loginAddress, steamUserId, steamUserName, steamUserToken));
             if (res.IsFailure)
-                return TransactionID.Empty;
+                return res;
 
             m_RequestCallbackRouter.AddPendingRequest(transactionId, callback);
 
-            return transactionId;
+            return res;
         }
 
-        public TransactionID JoinGameInstance(UInt64 gameInstanceUID, Action<SFMessage>? callback = null)
+        public Result JoinGameInstance(UInt64 gameInstanceUID, Action<SFMessage>? callback = null)
         {
             TransactionID transactionId = NewTransactionID();
 
+            return JoinGameInstance(transactionId, gameInstanceUID, callback);
+        }
+        public Result JoinGameInstance(TransactionID transactionId, UInt64 gameInstanceUID, Action<SFMessage>? callback = null)
+        {
             Result res = new(NativeJoinGameInstance(NativeHandle, transactionId.TransactionId, gameInstanceUID));
             if (res.IsFailure)
-                return TransactionID.Empty;
+                return res;
 
             m_RequestCallbackRouter.AddPendingRequest(transactionId, callback);
 
-            return transactionId;
+            return res;
         }
+
 
         public void DisconnectAll()
         {

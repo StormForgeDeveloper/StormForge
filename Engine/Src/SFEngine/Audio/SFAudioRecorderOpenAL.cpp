@@ -132,7 +132,7 @@ namespace SF
         size_t maxFramesCanRead = (outBuffer.capacity() - curBufferPos) / GetSampleFrameSize();
         if (maxFramesCanRead == 0)
         {
-            StopRecording();
+            SFLog(System, Error, "AudioRecorderOpenAL::ReadSamples fail, read bffersize:{0}, maxFramesCanRead:{1}, availableSampleCount:{2}", outBuffer.size(), maxFramesCanRead, availableSampleCount);
             return ResultCode::OUT_OF_MEMORY;
         }
 
@@ -145,8 +145,7 @@ namespace SF
         err = alcGetError(m_pDevice);
         if (err != ALC_NO_ERROR)
         {
-            SFLog(System, Error, "alcCaptureSamples fail:{0}", int(err));
-            StopRecording();
+            SFLog(System, Error, "alcCaptureSamples fail:{0}, sampleCount:{1}, availableSampleCount:{2}", int(err), sampleCount, availableSampleCount);
             return ResultCode::UNEXPECTED;
         }
         else
@@ -154,5 +153,4 @@ namespace SF
             return ResultCode::SUCCESS;
         }
     }
-
 }

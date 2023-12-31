@@ -49,7 +49,7 @@ namespace SF
 
             public override void HandleSentMessage(int result, TransactionID transId, int messageID, Action<SFMessage>? callback)
             {
-                if (result <= 0 || transId.TransactionId == 0 || callback == null)
+                if (result < 0 || transId.TransactionId == 0 || callback == null)
                 {
                     return;
                 }
