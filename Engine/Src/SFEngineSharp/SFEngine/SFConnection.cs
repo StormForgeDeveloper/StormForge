@@ -92,6 +92,12 @@ namespace SF
             }
         }
 
+        public OnlineTransactionIDGenerator? TransactionIDGenerator { get; private set; } = null;
+        public TransactionID NewTransactionID()
+        {
+            return TransactionIDGenerator?.NewTransactionID() ?? TransactionID.Empty;
+        }
+
         public UInt64 LocalPeerID
         {
             get { return NativeGetLocalPeerID(NativeHandle); }
@@ -102,6 +108,7 @@ namespace SF
         // Local loopback message queue
         Queue<SFMessage> m_LoopBackQueue = new Queue<SFMessage>();
 
+        [Obsolete("Not used any more", true)]
         public SFConnection(SFIMessageRouter messageRouter, ProtocolType protocolType = ProtocolType.MRUDP)
         {
             // Don't use constructor of SFObject, it will increase reference count of the object
@@ -112,7 +119,7 @@ namespace SF
             m_MessageRouter = messageRouter;
         }
 
-        public SFConnection(IntPtr nativeHandle, SFIMessageRouter? messageRouter = null)
+        public SFConnection(IntPtr nativeHandle, SFIMessageRouter? messageRouter = null, OnlineTransactionIDGenerator? transactionIdGenerator = null)
         {
             // Don't use constructor of SFObject, it will increase reference count of the object
             NativeHandle = nativeHandle;
@@ -120,6 +127,8 @@ namespace SF
                 m_MessageRouter = messageRouter;
             else
                 m_MessageRouter = new SFMessageRouter();
+
+            TransactionIDGenerator = transactionIdGenerator;
         }
 
         virtual public int Connect(UInt64 authTicket, String address, int port)

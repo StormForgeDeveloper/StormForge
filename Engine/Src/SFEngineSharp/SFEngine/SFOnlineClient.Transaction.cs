@@ -83,16 +83,10 @@ namespace SF
 
         OnlineRequestCallbackRouter m_RequestCallbackRouter = new();
 
-        // Request Id generation serial
-        int m_RequestIdGen = 0;
+        OnlineTransactionIDGenerator m_OnlineTransactionIDGenerator = new();
         public TransactionID NewTransactionID()
         {
-            int newId = Interlocked.Increment(ref m_RequestIdGen);
-            if (newId == 0)
-            {
-                newId = Interlocked.Increment(ref m_RequestIdGen);
-            }
-            return new TransactionID() { TransactionId = (uint)newId };
+            return m_OnlineTransactionIDGenerator.NewTransactionID();
         }
 
 

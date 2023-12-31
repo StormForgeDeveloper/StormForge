@@ -527,19 +527,19 @@ namespace ProtocolCompiler
 
                 if (IsStrType(param)) // string type
                 {
-                    strParams += string.Format("{0}", InParamName(param.Name));
+                    strParams += InParamName(param.Name);
                 }
                 else if (param.IsArray) // array
                 {
-                    strParams += string.Format("{0}", InParamName(param.Name));
+                    strParams += InParamName(param.Name);
                 }
                 else if (IsVariableSizeType(param))
                 {
-                    strParams += string.Format("{0}", InParamName(param.Name));
+                    strParams += InParamName(param.Name);
                 }
                 else // generic type
                 {
-                    strParams += string.Format("{0}", InParamName(param.Name));
+                    strParams += InParamName(param.Name);
                 }
             }
 

@@ -92,6 +92,8 @@ namespace SF
         public static readonly TransactionID Empty = new TransactionID();
 
         public ulong TransactionId;
+
+        public bool IsValid => TransactionId != 0;
     }
 
     // Player Role

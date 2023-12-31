@@ -138,12 +138,10 @@ namespace ProtocolCompiler
             return ParamInStringNative("", newParameters.ToArray());
         }
 
-        string CallNativeParamterString(Parameter[] parameter)
+        string CallNativeParameterStringWithNativeHandle(Parameter[] parameter)
         {
             if(parameter == null || parameter.Length == 0)
-            {
                 return "m_Connection.NativeHandle";
-            }
             else
                 return "m_Connection.NativeHandle" + CallNativeParameterString(parameter);
         }
@@ -536,6 +534,56 @@ namespace ProtocolCompiler
             }
         }
 
+        public virtual string CallParamStringSharp(Parameter[] parameter)
+        {
+            string strParams = "";
+            bool bIsFirst = true;
+
+            if (parameter == null)
+                return strParams;
+
+            foreach (Parameter param in parameter)
+            {
+                if (bIsFirst)
+                {
+                    bIsFirst = false;
+                }
+                else
+                {
+                    strParams += ", ";
+                }
+
+                strParams += InParamName(param.Name);
+            }
+
+            return strParams;
+        }  // 
+
+
+        void BuildCmdAutoSendFunction(MessageBase baseMsg, Parameter[] parameters)
+        {
+            ParameterMode = TypeUsage.CSharp;
+            string msgTypeName = "Cmd";
+
+            string paramInString = ParamInString("", parameters);
+            if (parameters.Length > 0)
+                paramInString += ", ";
+            paramInString += "Action<SFMessage>? callback = null";
+
+
+            string paramCallString = CallParamStringSharp(parameters);
+            if (parameters.Length > 0)
+                paramCallString += ", ";
+            paramCallString += "callback";
+
+            OpenSection("public int ",$"{SendFuncName(baseMsg, msgTypeName)}( {paramInString} )", false);
+
+            MatchIndent(); OutStream.WriteLine("if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;");
+            MatchIndent(); OutStream.WriteLine("TransactionID transId = NewTransactionID();");
+            MatchIndent(); OutStream.WriteLine($"return {SendFuncName(baseMsg, msgTypeName)}(transId, {paramCallString});");
+
+            CloseSection();
+        }
 
         // Build parser class implementation
         void BuildSendFunction(MessageBase baseMsg, string msgTypeName, Parameter[] parameters)
@@ -560,7 +608,7 @@ namespace ProtocolCompiler
             PrepareCallNative(parameters);
 
             MatchIndent(); OutStream.WriteLine("{");
-            MatchIndent(); OutStream.WriteLine("result = {0}({1});", NativeFuncName(baseMsg, msgTypeName), CallNativeParamterString(parameters));
+            MatchIndent(); OutStream.WriteLine("result = {0}({1});", NativeFuncName(baseMsg, msgTypeName), CallNativeParameterStringWithNativeHandle(parameters));
             MatchIndent(); OutStream.WriteLine("}");
             if (bIsCmd)
             {
@@ -662,6 +710,12 @@ namespace ProtocolCompiler
                 {
                     MatchIndent(); OutStream.WriteLine("// Cmd: " + baseMsg.Desc);
                     ProtocolsProtocolGroupCommand msg = baseMsg as ProtocolsProtocolGroupCommand;
+
+                    if (Group.GenParameterContext)
+                    {
+                        var autoIDParameters = MakeParameters(MsgType.Evt, msg.Cmd);
+                        BuildCmdAutoSendFunction(msg, autoIDParameters);
+                    }
 
                     newparams = MakeParameters(MsgType.Cmd, msg.Cmd);
                     BuildSendFunction(msg, "Cmd", newparams);

@@ -187,15 +187,6 @@ namespace SF
             OnOnlineStateChanged?.Invoke(null, prevState, newState);
         }
 
-        public SFConnection? GetConnection(ConnectionType connectionType)
-        {
-            var connectionHandle = NativeGetConnection(NativeHandle, (int)connectionType);
-            if (connectionHandle != IntPtr.Zero)
-                return new SFConnection(connectionHandle);
-
-            return null;
-        }
-
 
         #region Connection cache
 
@@ -223,7 +214,7 @@ namespace SF
                 return CachedAdapter;
 
             CachedAdapter = new TAdapter();
-            CachedAdapter.Connection = new SFConnection(connectionHandle);
+            CachedAdapter.Connection = new SFConnection(connectionHandle, transactionIdGenerator: m_OnlineTransactionIDGenerator);
             return CachedAdapter;
         }
 

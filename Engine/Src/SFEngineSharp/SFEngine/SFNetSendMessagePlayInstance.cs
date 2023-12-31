@@ -40,6 +40,12 @@ namespace SF.Net
  		} // public  SendMessagePlayInstance( SF.SFConnection connection ) : base(connection)
 
 		// Cmd: Player Join request.
+		public int  JoinPlayInstanceCmd( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.String InPlayerIdentifier, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID transId = NewTransactionID();
+			return JoinPlayInstanceCmd(transId, InPlayInstanceUID, InPlayerID, InPlayerIdentifier, callback);
+		} // public int  JoinPlayInstanceCmd( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.String InPlayerIdentifier, Action<SFMessage>? callback = null )
 		public int  JoinPlayInstanceCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.String InPlayerIdentifier, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
@@ -108,6 +114,12 @@ namespace SF.Net
 
 
 		// Cmd: Occupy map object
+		public int  OccupyMapObjectCmd( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, System.UInt32 InUsageId, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID transId = NewTransactionID();
+			return OccupyMapObjectCmd(transId, InPlayInstanceUID, InPlayerID, InMapObjectId, InUsageId, callback);
+		} // public int  OccupyMapObjectCmd( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, System.UInt32 InUsageId, Action<SFMessage>? callback = null )
 		public int  OccupyMapObjectCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, System.UInt32 InUsageId, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
@@ -120,6 +132,12 @@ namespace SF.Net
 		} // public int  OccupyMapObjectCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, System.UInt32 InUsageId, Action<SFMessage>? callback = null )
 
 		// Cmd: Unoccupy map object
+		public int  UnoccupyMapObjectCmd( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID transId = NewTransactionID();
+			return UnoccupyMapObjectCmd(transId, InPlayInstanceUID, InPlayerID, InMapObjectId, callback);
+		} // public int  UnoccupyMapObjectCmd( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, Action<SFMessage>? callback = null )
 		public int  UnoccupyMapObjectCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
@@ -132,6 +150,12 @@ namespace SF.Net
 		} // public int  UnoccupyMapObjectCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, Action<SFMessage>? callback = null )
 
 		// Cmd: Use map object
+		public int  UseMapObjectCmd( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InUseParameters, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID transId = NewTransactionID();
+			return UseMapObjectCmd(transId, InPlayInstanceUID, InPlayerID, InMapObjectId, InUseParameters, callback);
+		} // public int  UseMapObjectCmd( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InUseParameters, Action<SFMessage>? callback = null )
 		public int  UseMapObjectCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InUseParameters, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
@@ -146,6 +170,12 @@ namespace SF.Net
 		} // public int  UseMapObjectCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InUseParameters, Action<SFMessage>? callback = null )
 
 		// Cmd: Send zone chatting
+		public int  ZoneChatCmd( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID transId = NewTransactionID();
+			return ZoneChatCmd(transId, InPlayInstanceUID, InPlayerID, InMessageType, InChatMetaData, InChatMessage, callback);
+		} // public int  ZoneChatCmd( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage, Action<SFMessage>? callback = null )
 		public int  ZoneChatCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
@@ -160,6 +190,12 @@ namespace SF.Net
 		} // public int  ZoneChatCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage, Action<SFMessage>? callback = null )
 
 		// Cmd: Create stream instance
+		public int  CreateStreamCmd( System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID transId = NewTransactionID();
+			return CreateStreamCmd(transId, InTicket, InStreamName, callback);
+		} // public int  CreateStreamCmd( System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 		public int  CreateStreamCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
@@ -172,6 +208,12 @@ namespace SF.Net
 		} // public int  CreateStreamCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 
 		// Cmd: Open stream instance
+		public int  FindStreamCmd( System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID transId = NewTransactionID();
+			return FindStreamCmd(transId, InTicket, InStreamName, callback);
+		} // public int  FindStreamCmd( System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 		public int  FindStreamCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
@@ -184,6 +226,12 @@ namespace SF.Net
 		} // public int  FindStreamCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 
 		// Cmd: Delete stream instance
+		public int  DeleteStreamCmd( System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID transId = NewTransactionID();
+			return DeleteStreamCmd(transId, InTicket, InStreamName, callback);
+		} // public int  DeleteStreamCmd( System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 		public int  DeleteStreamCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
@@ -196,6 +244,12 @@ namespace SF.Net
 		} // public int  DeleteStreamCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 
 		// Cmd: Get stream list
+		public int  GetStreamListCmd( System.UInt64 InTicket, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID transId = NewTransactionID();
+			return GetStreamListCmd(transId, InTicket, callback);
+		} // public int  GetStreamListCmd( System.UInt64 InTicket, Action<SFMessage>? callback = null )
 		public int  GetStreamListCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
@@ -208,6 +262,12 @@ namespace SF.Net
 		} // public int  GetStreamListCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, Action<SFMessage>? callback = null )
 
 		// Cmd: To call general functionality
+		public int  CallFunctionCmd( System.UInt32 InFunctionName, System.UInt64 InPlayerID, SF.VariableTable InParameters, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID transId = NewTransactionID();
+			return CallFunctionCmd(transId, InFunctionName, InPlayerID, InParameters, callback);
+		} // public int  CallFunctionCmd( System.UInt32 InFunctionName, System.UInt64 InPlayerID, SF.VariableTable InParameters, Action<SFMessage>? callback = null )
 		public int  CallFunctionCmd( SF.TransactionID InTransactionID, System.UInt32 InFunctionName, System.UInt64 InPlayerID, SF.VariableTable InParameters, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;

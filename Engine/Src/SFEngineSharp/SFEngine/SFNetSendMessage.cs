@@ -37,6 +37,10 @@ namespace SF.Net
             m_Connection = connection;
         }
 
+        public TransactionID NewTransactionID()
+        {
+            return m_Connection?.NewTransactionID() ?? TransactionID.Empty;
+        }
     };
 
 } // namespace SF.Net
