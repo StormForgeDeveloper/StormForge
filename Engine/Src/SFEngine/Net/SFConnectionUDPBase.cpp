@@ -157,7 +157,7 @@ namespace Net {
         Net::SocketIO* pIOHandler = GetNetIOHandler();
         ScopeContext hr([this, &pIOHandler](Result hr)
             {
-                if (!hr && pIOHandler != nullptr)
+                if (!hr.IsSuccess() && pIOHandler != nullptr)
                     pIOHandler->DecPendingSendCount();
             });
 
@@ -772,7 +772,7 @@ namespace Net {
 	{
 		ScopeContext hr([this](Result hr)
 			{
-				if (!hr)
+				if (!hr.IsSuccess())
 				{
 					CloseConnection("OnRecv is failed");
 				}

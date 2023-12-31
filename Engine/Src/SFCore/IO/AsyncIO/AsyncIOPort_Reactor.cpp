@@ -106,7 +106,7 @@ namespace AsyncIO {
 		cbInstance->OnIORegistered();
 
 
-		if (!hr)
+		if (!hr.IsSuccess())
 		{
 			cbInstance->OnIOUnregistered();
 		}

@@ -77,7 +77,7 @@ namespace SF
 		};
 
 		typedef void(*ONLINESTATE_CHAGED_CALLBACK)(OnlineClient::OnlineState prevState, OnlineClient::OnlineState newState);
-		typedef void(*ONLINE_TASK_FINISHED_CALLBACK)(uint64_t transactionId);
+		typedef void(*ONLINE_TASK_FINISHED_CALLBACK)(uint64_t transactionId, int result);
 
 
 		/////////////////////////////////////////////////////////////////////////////////////
@@ -243,7 +243,14 @@ namespace SF
 
 		SFUniquePtr<ClientTask> m_CurrentTask;
 		DynamicArray<ClientTask*> m_PendingTasks;
-		CircularQueue<uint64_t, 4> m_FinishedTaskTransactionIds;
+        struct FinishedTaskInfo
+        {
+            uint64_t TransactionId = 0;
+            Result hr;
+
+            bool operator == (const FinishedTaskInfo& op) { return TransactionId == op.TransactionId && hr == op.hr; }
+        };
+		CircularQueue<FinishedTaskInfo, 4> m_FinishedTaskTransactionIds;
 
 		// My actor movement
 		SharedPointerT<SendingActorMovementManager> m_OutgoingMovement;

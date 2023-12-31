@@ -59,7 +59,7 @@ namespace SF {
 
 		SharedPointerT<TimerAction> removed;
 		Result hr = m_TimerMap.Remove(key.TimerKey, removed);
-		if (!hr)
+		if (!hr.IsSuccess())
 		{
 			hr = m_TimerMap.Remove(pAction->GetInQueueKey().TimerKey, removed);
 			assert((hr));

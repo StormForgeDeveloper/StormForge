@@ -69,7 +69,7 @@ namespace SF
         m_Client.SetReconnectOnDisconnected(true);
 
 		hr = m_Client.Initialize(m_Url, "ws");
-		if (!hr)
+		if (!hr.IsSuccess())
 			return hr;
 
 		return ResultCode::SUCCESS;
@@ -87,7 +87,7 @@ namespace SF
         Disconnect();
 
         hr = m_Client.Initialize(m_Url, "ws");
-        if (!hr)
+        if (!hr.IsSuccess())
             return hr;
 
         return hr;

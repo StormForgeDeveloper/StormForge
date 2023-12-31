@@ -48,7 +48,7 @@ SFDLL_EXPORT intptr_t SFOnlineAPIClient_NativeCreate()
 SFDLL_EXPORT int32_t SFOnlineAPIClient_NativeConnect(intptr_t nativeHandle, const char* url, const char* accessKey)
 {
 	if (nativeHandle == 0)
-		return ResultCode::NOT_INITIALIZED;
+		return (int)ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineAPIClient = NativeToObject<OnlineAPIClient>(nativeHandle);
 
@@ -68,7 +68,7 @@ SFDLL_EXPORT void SFOnlineAPIClient_NativeDisconnect(intptr_t nativeHandle)
 SFDLL_EXPORT int32_t SFOnlineAPIClient_IsConnected(intptr_t nativeHandle)
 {
     if (nativeHandle == 0)
-        return ResultCode::NOT_INITIALIZED;
+        return (int)ResultCode::NOT_INITIALIZED;
 
     auto pOnlineAPIClient = NativeToObject<OnlineAPIClient>(nativeHandle);
 
@@ -78,7 +78,7 @@ SFDLL_EXPORT int32_t SFOnlineAPIClient_IsConnected(intptr_t nativeHandle)
 SFDLL_EXPORT int32_t SFOnlineAPIClient_NativeTickUpdate(intptr_t nativeHandle, ON_ONLINE_API_DATA onOnlineEventData)
 {
 	if (nativeHandle == 0)
-		return ResultCode::NOT_INITIALIZED;
+		return (int)ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineAPIClient = NativeToObject<OnlineAPIClient>(nativeHandle);
 
@@ -93,14 +93,14 @@ SFDLL_EXPORT int32_t SFOnlineAPIClient_NativeTickUpdate(intptr_t nativeHandle, O
         }
     }
 
-	return ResultCode::SUCCESS;
+	return (int)ResultCode::SUCCESS;
 
 }
 
 SFDLL_EXPORT int32_t SFOnlineAPIClient_NativeRequest(intptr_t nativeHandle, const char* APIName)
 {
     if (nativeHandle == 0)
-        return ResultCode::NOT_INITIALIZED;
+        return (int)ResultCode::NOT_INITIALIZED;
 
     auto pOnlineAPIClient = NativeToObject<OnlineAPIClient>(nativeHandle);
 

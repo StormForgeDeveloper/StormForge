@@ -678,7 +678,7 @@ namespace SF {
 			MessageID msgIDTem;
 
 			hr = ProcConnectionStateAction();
-			if (!hr)
+			if (!hr.IsSuccess())
 			{
 				SFLog(Net, Info, "Process Connection state failed {0:X8}", hr);
 			}

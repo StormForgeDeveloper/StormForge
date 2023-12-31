@@ -397,7 +397,7 @@ namespace SF {
 		bool DualSortedMap<KeyType, ValueType>::Contains(KeyType key)
 		{
 			ValueType value;
-			return Find(key, value);
+			return Find(key, value).IsSuccess();
 		}
 
 		// Find a key value

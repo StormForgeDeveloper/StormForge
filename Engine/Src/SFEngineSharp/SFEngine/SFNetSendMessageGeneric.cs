@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) StromForge
 // 
@@ -40,6 +40,12 @@ namespace SF.Net
  		} // public  SendMessageGeneric( SF.SFConnection connection ) : base(connection)
 
 		// Cmd: Generic failure message
+		public int  GenericFailureCmd( SF.SFRouteContext InRouteContext, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID transId = NewTransactionID();
+			return GenericFailureCmd(transId, InRouteContext, callback);
+		} // public int  GenericFailureCmd( SF.SFRouteContext InRouteContext, Action<SFMessage>? callback = null )
 		public int  GenericFailureCmd( SF.SFRouteContext InRouteContext, SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;

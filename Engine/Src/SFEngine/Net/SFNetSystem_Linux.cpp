@@ -268,7 +268,7 @@ namespace Net {
 
 	Proc_End:
 
-		if (!hr && cbInstance != nullptr)
+		if (!hr.IsSuccess() && cbInstance != nullptr)
 		{
 			cbInstance->OnIOUnregistered();
 		}

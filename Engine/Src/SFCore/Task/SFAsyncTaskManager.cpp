@@ -151,7 +151,7 @@ namespace SF {
 		{
 			TaskOperator().Requested(pTask);
 			hr = m_PendingTasks.Enqueue(SharedPointerAtomicT<Task>(pTask));
-			if (!hr)
+			if (!hr.IsSuccess())
 			{
 				TaskOperator().Canceled(pTask);
 			}

@@ -301,7 +301,7 @@ namespace SF
 			// shorten queue size (delete a used page)
 			Result hr = DequeuePageMove();
 
-			if (!hr)
+			if (!hr.IsSuccess())
 			{
 				return hr;
 			}
@@ -441,7 +441,7 @@ namespace SF
 			// shorten queue size (delete a used page)
 			Result hr = DequeuePageMove();
 
-			if (!hr)
+			if (!hr.IsSuccess())
 			{
 				return hr;
 			}

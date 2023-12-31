@@ -648,7 +648,7 @@ namespace Net {
 	{
 		ScopeContext hr([this](Result hr) 
 			{
-				if (!hr)
+				if (!hr.IsSuccess())
 					Disconnect("Failed to send reliable packets");
 			});
 		SharedPointerT<MessageData> pIMsg;

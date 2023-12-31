@@ -613,7 +613,7 @@ namespace StrUtil {
 			return ResultCode::INVALID_ARG;
 
 		Result hr = ModuleIconv.Convert("UTF-8", (char*)strUTF8, iBuffLen, "CP1252", (const char*)strAnsi, strlen(strAnsi), convertedSize);
-		if (!hr) return hr;
+		if (!hr.IsSuccess()) return hr;
 
 		if (iBuffLen >= 1)
 		{
@@ -633,7 +633,7 @@ namespace StrUtil {
 			return ResultCode::INVALID_ARG;
 
 		Result hr = ModuleIconv.Convert("CP1252", (char*)strAnsi, iBuffLen, "UTF-8", (const char*)strUTF8, strlen(strUTF8), convertedSize);
-		if (!hr) return hr;
+		if (!hr.IsSuccess()) return hr;
 
 		if (iBuffLen >= 1)
 		{
@@ -650,10 +650,10 @@ namespace StrUtil {
 		size_t convertedSize;
 
 		if (strWCS == nullptr || strUTF8 == nullptr)
-			return ResultCode::INVALID_ARG;
+			return 0;
 
 		Result hr = ModuleIconv.Convert("UTF-8", (char*)strUTF8, iBuffLen, "UTF-16LE", (const char*)strWCS, wcslen(strWCS)*sizeof(wchar_t), convertedSize);
-		if (!hr) return hr;
+		if (!hr.IsSuccess()) return 0;
 
 		if (iBuffLen >= 1)
 		{
@@ -672,13 +672,13 @@ namespace StrUtil {
 		if (strWCS.c_str() == nullptr)
 		{
 			strUTF8 = "";
-			return ResultCode::SUCCESS;
+			return 0;
 		}
 
 		assert(sizeof(stringBuffer) >= ((strWCS.length() + 1) * 5)); // Maximum buffer test
 
 		Result hr = ModuleIconv.Convert("UTF-8", (char*)stringBuffer, countof(stringBuffer), "UTF-16LE", (const char*)strWCS.c_str(), strWCS.length() * sizeof(wchar_t), convertedSize);
-		if (!hr) return hr;
+		if (!hr.IsSuccess()) return 0;
 
 		auto lastPos = std::min(convertedSize + 1, countof(stringBuffer)) - 1;
 		stringBuffer[lastPos] = '\0';
@@ -694,7 +694,7 @@ namespace StrUtil {
 		size_t convertedSize;
 
 		if (strWCS == nullptr || strUTF8 == nullptr)
-			return ResultCode::INVALID_ARG;
+			return 0;
 
 		auto inputStrLen = std::char_traits<char16_t>::length(strWCS);
 
@@ -705,7 +705,7 @@ namespace StrUtil {
 #endif
 
 		Result hr = ModuleIconv.Convert("UTF-8", (char*)strUTF8, iBuffLen, char16Type, (const char*)strWCS, inputStrLen * sizeof(char16_t), convertedSize);
-		if (!hr) return hr;
+		if (!hr.IsSuccess()) return 0;
 
 		if (iBuffLen >= 1)
 		{
@@ -724,7 +724,7 @@ namespace StrUtil {
 		if (strWCS.c_str() == nullptr)
 		{
 			strUTF8 = "";
-			return ResultCode::SUCCESS;
+			return 0;
 		}
 
 		assert(sizeof(stringBuffer) >= ((strWCS.length() + 1) * 5)); // Maximum buffer test
@@ -735,7 +735,7 @@ namespace StrUtil {
 #endif
 
 		Result hr = ModuleIconv.Convert("UTF-8", (char*)stringBuffer, countof(stringBuffer), char16Type, (const char*)strWCS.c_str(), strWCS.length() * sizeof(char16_t), convertedSize);
-		if (!hr) return hr;
+		if (!hr.IsSuccess()) return 0;
 
 		auto lastPos = std::min(convertedSize + 1, countof(stringBuffer)) - 1;
 		stringBuffer[lastPos] = '\0';
@@ -752,10 +752,10 @@ namespace StrUtil {
 		size_t convertedSize;
 
 		if (strWCS == nullptr || strUTF8 == nullptr)
-			return ResultCode::INVALID_ARG;
+			return 0;
 
 		Result hr = ModuleIconv.Convert("UTF-16LE", (char*)strWCS, iBuffLen * sizeof(wchar_t), "UTF-8", (const char*)strUTF8, strlen(strUTF8), convertedSize);
-		if (!(hr)) return hr;
+		if (!hr.IsSuccess()) return 0;
 
         convertedSize /= sizeof(wchar_t);
 
@@ -776,11 +776,11 @@ namespace StrUtil {
 		if (strWCS.c_str() == nullptr)
 		{
 			strWCS = L"";
-			return ResultCode::SUCCESS;
+			return 0;
 		}
 
 		Result hr = ModuleIconv.Convert("UTF-16LE", (char*)stringBuffer, countof(stringBuffer) * sizeof(wchar_t), "UTF-8", (const char*)strUTF8.c_str(), strUTF8.length(), convertedSize);
-		if (!(hr)) return hr;
+		if (!hr.IsSuccess()) return 0;
 
         convertedSize /= sizeof(wchar_t);
 

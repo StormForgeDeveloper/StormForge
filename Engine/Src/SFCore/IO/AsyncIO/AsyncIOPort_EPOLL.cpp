@@ -114,7 +114,7 @@ namespace AsyncIO {
 			hr = pCallBack->OnWriteReady();
 		}
 
-		if (!hr)
+		if (!hr.IsSuccess())
 		{
 			char stringBuffer[512];
 			SFLog(System, Info, "ERROR Epoll RW fail nativeHandle:{0}, events:{1} hr:{2}", pCallBack->GetIOHandle(), GetOwner()->EventFlagToString(sizeof(stringBuffer), stringBuffer, events), hr);

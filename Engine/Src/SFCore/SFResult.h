@@ -64,7 +64,12 @@ namespace SF
 
 		explicit constexpr operator uint32_t() const { return (uint32_t)m_Value.HResultCode; }
 
-		operator bool() const { return m_Value.HResultCode >= 0; }
+        explicit operator bool() const { return m_Value.HResultCode >= 0; }
+
+        uint32_t GetHResultCode() const { return m_Value.HResultCode; }
+
+        bool IsSuccess() const { return m_Value.HResultCode >= 0; }
+        bool IsFailure() const { return m_Value.HResultCode < 0; }
 
 		Result& operator = (const Result& op)
 		{

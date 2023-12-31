@@ -78,7 +78,7 @@ namespace Util {
 				for (i = 0; (i < 4); i++)
 				{
 					hr = destBuffer.push_back((uint8_t)encodeChars[char_array_4[i]]);
-					if (!hr) return hr;
+					if (!hr.IsSuccess()) return hr;
 				}
 				i = 0;
 			}
@@ -98,7 +98,7 @@ namespace Util {
 			for (j = 0; (j < i + 1); j++)
 			{
 				hr = destBuffer.push_back((uint8_t)encodeChars[char_array_4[j]]);
-				if (!hr) return hr;
+				if (!hr.IsSuccess()) return hr;
 			}
 
 			if (dummyChar != '\0')
@@ -106,7 +106,7 @@ namespace Util {
 				while ((i++ < 3))
 				{
 					hr = destBuffer.push_back((uint8_t)'=');
-					if (!hr) return hr;
+					if (!hr.IsSuccess()) return hr;
 				}
 			}
 		}
@@ -128,7 +128,7 @@ namespace Util {
 		while (in_len-- && (bytes_to_decode[in_] != dummyChar))
 		{
 			hr = Base64_DecodeChar(bytes_to_decode[in_], char_array_4[i++], encodeChars);
-			if (!hr) return hr;
+			if (!hr.IsSuccess()) return hr;
 
 			in_++;
 			if (i == 4)
@@ -140,7 +140,7 @@ namespace Util {
 				for (i = 0; (i < 3); i++)
 				{
 					hr = destBuffer.push_back((uint8_t)char_array_3[i]);
-					if (!hr) return hr;
+					if (!hr.IsSuccess()) return hr;
 				}
 				i = 0;
 			}
@@ -158,7 +158,7 @@ namespace Util {
 			for (j = 0; (j < i - 1); j++)
 			{
 				hr = destBuffer.push_back((uint8_t)char_array_3[j]);
-				if (!hr) return hr;
+				if (!hr.IsSuccess()) return hr;
 			}
 		}
 

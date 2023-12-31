@@ -294,7 +294,7 @@ namespace SF
 
             assert(pTail->State == ItemState::Reading);
         }
-        else if (!hr)
+        else if (!hr.IsSuccess())
         {
             return ItemReadPtr();
         }

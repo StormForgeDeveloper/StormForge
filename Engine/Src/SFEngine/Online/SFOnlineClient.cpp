@@ -131,6 +131,17 @@ namespace SF
             m_Owner.m_GameAddress = resultData->game_server_address()->c_str();
             m_Owner.m_AccountId = resultData->account_id();
             m_Owner.m_AuthTicket = resultData->auth_ticket();
+            Result loginResult = resultData->result_code();
+
+            if (!loginResult)
+            {
+                defCheck(loginResult);
+            }
+
+            if (m_Owner.m_AccountId == 0 || m_Owner.m_AuthTicket == 0)
+            {
+                defCheck(ResultCode::UNEXPECTED);
+            }
 
             Service::Telemetry->SetAccountID(m_Owner.m_AccountId);
 
@@ -152,7 +163,7 @@ namespace SF
                         DynamicArray<uint8_t> decodedData;
                         decodedData.reserve(recvData.size());
                         hr = Util::Base64Decode(recvData.size(), recvData.data(), decodedData);
-                        if (!hr)
+                        if (!hr.IsSuccess())
                         {
                             SFLog(System, Error, "Login result decoding error:{0}", hr);
                         }
@@ -166,7 +177,7 @@ namespace SF
                         hr = ResultCode::INVALID_FORMAT;
                     }
 
-                    if (!hr)
+                    if (!hr.IsSuccess())
                     {
                         SFLog(System, Error, "Login result parsing error:{0}", hr);
 
@@ -1031,24 +1042,36 @@ namespace SF
 			m_CurrentTask->TickUpdate();
 			if (m_CurrentTask->GetResult() != ResultCode::BUSY)
 			{
-				uint64_t temp{};
+                FinishedTaskInfo temp{};
 				if (m_FinishedTaskTransactionIds.IsFull())
 					m_FinishedTaskTransactionIds.Dequeue(temp);
-				m_FinishedTaskTransactionIds.Enqueue(m_CurrentTask->GetTransactionID());
 
-				// Sequence of task are queued int the PendingTasks, if one fails need to cancel whole task sequence
-				if (!m_CurrentTask->GetResult())
-					ClearTasks();
-				else
-					m_CurrentTask.reset();
+                FinishedTaskInfo finishedInfo{};
+                finishedInfo.TransactionId = m_CurrentTask->GetTransactionID();
+                finishedInfo.hr = m_CurrentTask->GetResult();
+
+                // Sequence of task are queued int the PendingTasks, if one fails need to cancel whole task sequence
+                if (!m_CurrentTask->GetResult())
+                {
+                    m_FinishedTaskTransactionIds.Enqueue(finishedInfo);
+                    ClearTasks();
+                }
+                else
+                {
+                    if (m_PendingTasks.size() == 0 || m_CurrentTask->GetTransactionID() != m_PendingTasks[0]->GetTransactionID())
+                    {
+                        m_FinishedTaskTransactionIds.Enqueue(finishedInfo);
+                    }
+                    m_CurrentTask.reset();
+                }
 			}
 		}
 
-		uint64_t transId{};
-		while (m_FinishedTaskTransactionIds.Dequeue(transId))
+        FinishedTaskInfo transactionInfo{};
+		while (m_FinishedTaskTransactionIds.Dequeue(transactionInfo))
 		{
 			if (m_OnlineTaskFinishedCallback)
-				m_OnlineTaskFinishedCallback(transId);
+				m_OnlineTaskFinishedCallback(transactionInfo.TransactionId, (int32_t)transactionInfo.hr);
 		}
 
 		if (m_CurrentTask == nullptr && m_PendingTasks.size() > 0)

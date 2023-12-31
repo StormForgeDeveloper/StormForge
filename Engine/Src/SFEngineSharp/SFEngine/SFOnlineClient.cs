@@ -73,42 +73,60 @@ namespace SF
         public delegate void OnlineStateChangedHandler(object? sender, OnlineState prevState, OnlineState newState);
         public static event OnlineStateChangedHandler? OnOnlineStateChanged = null;
 
-        public delegate void OnlineTaskFinishedHandler(UInt64 transactionId);
-        public static event OnlineTaskFinishedHandler? OnOnlineTaskFinished = null;
 
 
         public OnlineClient()
         {
             NativeHandle = NativeCreateOnlineClient();
+
+            MessageRouter.AddUnique(m_RequestCallbackRouter);
         }
 
-        public Result StartConnection(TransactionID transactionId, string gameId, string loginAddress, string userId, string password)
+        public TransactionID StartConnection(string gameId, string loginAddress, string userId, string password, Action<SFMessage>? callback = null)
         {
             ResetConnectionAdapter();
 
             SF.Log.Info($"Online StartConnection: gameId:{gameId}, loginAddr:{loginAddress}, userId:{userId}");
 
-            var res = NativeStartConnection(NativeHandle, transactionId.TransactionId, gameId, loginAddress, userId, password);
-            return new Result((int)res);
+            TransactionID transactionId = NewTransactionID();
+
+            Result res = new(NativeStartConnection(NativeHandle, transactionId.TransactionId, gameId, loginAddress, userId, password));
+            if (res.IsFailure)
+                return TransactionID.Empty;
+
+            m_RequestCallbackRouter.AddPendingRequest(transactionId, callback);
+
+            return transactionId;
         }
 
-        public Result StartConnection(TransactionID transactionId, string gameId, string loginAddress, UInt64 steamUserId, string steamUserName, string steamUserToken)
+        public TransactionID StartConnection(string gameId, string loginAddress, UInt64 steamUserId, string steamUserName, string steamUserToken, Action<SFMessage>? callback = null)
         {
             ResetConnectionAdapter();
 
             SF.Log.Info($"Online StartConnection: gameId:{gameId}, loginAddr:{loginAddress}, steamUserId:{steamUserId}, steamUserName:{steamUserName}");
 
-            var res = NativeStartConnectionSteam(NativeHandle, transactionId.TransactionId, gameId, loginAddress, steamUserId, steamUserName, steamUserToken);
-            return new Result((int)res);
-        }
+            TransactionID transactionId = NewTransactionID();
 
-        public Result JoinGameInstance(TransactionID transactionId, UInt64 gameInstanceUID, Action<SFMessage>? callback = null)
-        {
-            var res = NativeJoinGameInstance(NativeHandle, transactionId.TransactionId, gameInstanceUID);
+            Result res = new(NativeStartConnectionSteam(NativeHandle, transactionId.TransactionId, gameId, loginAddress, steamUserId, steamUserName, steamUserToken));
+            if (res.IsFailure)
+                return TransactionID.Empty;
 
             m_RequestCallbackRouter.AddPendingRequest(transactionId, callback);
 
-            return new Result((int)res);
+            return transactionId;
+        }
+
+        public TransactionID JoinGameInstance(UInt64 gameInstanceUID, Action<SFMessage>? callback = null)
+        {
+            TransactionID transactionId = NewTransactionID();
+
+            Result res = new(NativeJoinGameInstance(NativeHandle, transactionId.TransactionId, gameInstanceUID));
+            if (res.IsFailure)
+                return TransactionID.Empty;
+
+            m_RequestCallbackRouter.AddPendingRequest(transactionId, callback);
+
+            return transactionId;
         }
 
         public void DisconnectAll()
@@ -290,9 +308,17 @@ namespace SF
 #if UNITY_STANDALONE
         [AOT.MonoPInvokeCallback(typeof(ONLINE_TASK_FINISHED_CALLBACK))]
 #endif
-        static internal void OnTaskFinished_Internal(UInt64 transactionId)
+        static internal void OnTaskFinished_Internal(UInt64 transactionId, int result)
         {
-            OnOnlineTaskFinished?.Invoke(transactionId);
+            if (stm_StaticEventReceiver != null)
+            {
+                var message = new SFMessage();
+
+                message.SetValue("Result", new Result(result));
+                message.SetValue("TransactionID", new TransactionID() { TransactionId = transactionId });
+
+                stm_StaticEventReceiver.MessageRouter.HandleRecvMessage(message);
+            }
         }
 
 
@@ -331,7 +357,7 @@ namespace SF
         public delegate void ONLINE_STATECHAGED_CALLBACK(OnlineState prevState, OnlineState newState);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void ONLINE_TASK_FINISHED_CALLBACK(UInt64 transactionId);
+        public delegate void ONLINE_TASK_FINISHED_CALLBACK(UInt64 transactionId, int result);
 
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeCreateOnlineClient", CharSet = CharSet.Auto)]

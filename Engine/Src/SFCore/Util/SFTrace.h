@@ -150,7 +150,7 @@ namespace SF {
 #define trcChk(checkState) \
 	do{\
 		hr = checkState;\
-		if( !(hr) )\
+		if( !hr.IsSuccess() )\
 		{\
 			defTrace( Error, "{0}({1}): {2}", __FILE__, __LINE__, hr ); \
 			goto Proc_End;\
@@ -191,7 +191,7 @@ namespace SF {
 #define trcCheck(checkState) \
 	do{\
 		hr = checkState;\
-		if( !(hr) )\
+		if( !hr.IsSuccess() )\
 		{\
 			defTrace( Error, "{0}({1}): {2}", __FILE__, __LINE__, hr ); \
 			return hr;\
@@ -239,7 +239,7 @@ namespace SF {
 // Assert with expression
 #define trcCheckConditionExp(condi,expr) \
 				do{ \
-					if( !(condi) ) {\
+					if( !(condi).IsSuccess() ) {\
 						defTrace( Factal, "{0}({1}): Assert occure : {2} : {3}", __FILE__, __LINE__, #condi, expr ); SF::Service::LogModule->Flush();\
 						return hr = ResultCode::UNEXPECTED;\
 					}\
@@ -263,7 +263,7 @@ namespace SF {
 #define trcChk(checkState) \
 	do{\
 		hr = checkState;\
-		if( !(hr) )\
+		if( !hr.IsSuccess() )\
 		{\
 			goto Proc_End;\
 		}\
@@ -350,7 +350,7 @@ namespace SF {
 #define trcChkSilent(checkState) \
 	do{\
 	hr = checkState;\
-	if( !(hr) )\
+	if( !hr.IsSuccess() )\
 		{\
 		goto Proc_End;\
 		}\
@@ -387,7 +387,7 @@ namespace SF {
 
 #define defError(e)			trcError(e)
 #define defCheck(e)			trcCheck(e)
-#define defCheckError(ErrCode,exp)			{ do{ Result hRes = exp; if( !(hRes) ) TrcErrJmp(Svr,ErrCode,hr); } while(0); }
+#define defCheckError(ErrCode,exp)			{ do{ Result hRes = exp; if( !hRes.IsSuccess() ) TrcErrJmp(Svr,ErrCode,hr); } while(0); }
 #define defCheckMem(a)			trcCheckMem(a)
 #define defCheckPtr(a)			trcCheckMem(a)
 #define defChkPtr(a)		trcChkPtr(a)
@@ -395,7 +395,7 @@ namespace SF {
 
 #define defErr(e)			trcErr(e)
 #define defChk(e)			trcChk(e)
-#define defChkErr(ErrCode,exp)			{ do{ Result hRes = exp; if( !(hRes) ) TrcErrJmp(Svr,ErrCode,hr); } while(0); }
+#define defChkErr(ErrCode,exp)			{ do{ Result hRes = exp; if( !hRes.IsSuccess() ) TrcErrJmp(Svr,ErrCode,hr); } while(0); }
 #define defMem(a)			trcMem(a)
 #define defChkPtr(a)		trcChkPtr(a)
 

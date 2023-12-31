@@ -61,7 +61,7 @@ namespace SF {
 
 		SharedPointerT<TimerAction> removed;
 		Result hr = m_TimerMap.Remove(key.TimerKey, removed);
-		if (!hr)
+		if (!hr.IsSuccess())
 		{
 			hr = m_TimerMap.Remove(pAction->GetInQueueKey().TimerKey, removed);
 			Assert((hr));
@@ -181,7 +181,7 @@ namespace SF {
 		if (m_WorkingThreadID != threadID)
 		{
 			hr = (ResultCode::INVALID_THREAD);
-			if (!hr) return hr;
+			if (!hr.IsSuccess()) return hr;
 		}
 
 		if (!m_TimerMap.Remove(pAction->m_ScheduledKey.TimerKey, removed))

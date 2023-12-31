@@ -290,7 +290,7 @@ namespace SF
         String jsonString;
 
         hr = in >> jsonString;
-        if (!hr)
+        if (!hr.IsSuccess())
             return hr;
         
         return Init(jsonString);
@@ -722,7 +722,7 @@ namespace SF
         if (data.size() < readSize)
         {
             hr = data.resize(readSize);
-            if (!hr)
+            if (!hr.IsSuccess())
                 return hr;
         }
 
@@ -834,7 +834,7 @@ namespace SF
         size_t len = StrUtil::StringLen(value);
 
         hr = WriteInt64(len);
-        if (!hr)
+        if (!hr.IsSuccess())
             return hr;
 
         int iRet = avro_write(m_Handle, (void*)value, len);
@@ -853,7 +853,7 @@ namespace SF
         size_t len = value.length();
 
         hr = WriteInt64(len);
-        if (!hr)
+        if (!hr.IsSuccess())
             return hr;
 
         int iRet = avro_write(m_Handle, (void*)value.data(), len);

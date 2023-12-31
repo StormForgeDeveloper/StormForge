@@ -39,7 +39,7 @@ namespace SF {
 	Result LibraryComponent3rdParties::InitializeComponent()
 	{
 		Result hr = LibraryComponent::InitializeComponent();
-		if (!hr) return hr;
+		if (!hr.IsSuccess()) return hr;
 
         OpenSSL_add_all_algorithms();
         OpenSSL_add_all_digests();

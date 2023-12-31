@@ -61,7 +61,8 @@ namespace SF
 
 		operator Result() const { return m_Hr; }
 		operator decltype(auto)() const{ m_ExitFuncHasCalled = true;  return m_ExitFunc(m_Hr); }
-		explicit operator bool() const { return m_Hr; }
+        bool IsSuccess() const { return m_Hr.IsSuccess(); }
+        bool IsFailure() const { return m_Hr.IsFailure(); }
 
 	private:
 

@@ -253,7 +253,7 @@ namespace SF
 	uint SphericalShellManager::CalculateShellForPlayer(PreferencePlayer* pPlayer)
 	{
 		if (m_Shells.size() == 0)
-			return ResultCode::FAIL;
+			return 0;
 
 		float fPreferenceLenPerPartitionInv = (1.f / (m_ShellThickness));
 		return (uint)(pPlayer->GetPreference().GetLength() * fPreferenceLenPerPartitionInv);

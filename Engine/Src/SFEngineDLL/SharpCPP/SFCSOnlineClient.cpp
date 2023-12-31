@@ -55,7 +55,7 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnection(intptr_t nativeHandle,
     const char* userId, const char* password)
 {
 	if (nativeHandle == 0)
-		return ResultCode::NOT_INITIALIZED;
+		return (int)ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
@@ -66,7 +66,7 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnectionSteam(intptr_t nativeHa
     uint64_t steamUserId, const char* steamUserName, const char* steamUserToken)
 {
     if (nativeHandle == 0)
-        return ResultCode::NOT_INITIALIZED;
+        return (int)ResultCode::NOT_INITIALIZED;
 
     auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
@@ -76,7 +76,7 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnectionSteam(intptr_t nativeHa
 SFDLL_EXPORT int32_t SFOnlineClient_NativeJoinGameInstance(intptr_t nativeHandle, uint64_t transactionId, uint64_t gameInstanceUID)
 {
 	if (nativeHandle == 0)
-		return ResultCode::NOT_INITIALIZED;
+		return (int)ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
@@ -106,7 +106,7 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeGetOnlineState(intptr_t nativeHandle)
 SFDLL_EXPORT uint64_t SFOnlineClient_NativeGetPlayerId(intptr_t nativeHandle)
 {
 	if (nativeHandle == 0)
-		return ResultCode::NOT_INITIALIZED;
+		return (int)ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
@@ -116,7 +116,7 @@ SFDLL_EXPORT uint64_t SFOnlineClient_NativeGetPlayerId(intptr_t nativeHandle)
 SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetCharacterId(intptr_t nativeHandle)
 {
 	if (nativeHandle == 0)
-		return ResultCode::NOT_INITIALIZED;
+		return (uint)ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
@@ -126,7 +126,7 @@ SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetCharacterId(intptr_t nativeHandle)
 SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetActorId(intptr_t nativeHandle)
 {
 	if (nativeHandle == 0)
-		return ResultCode::NOT_INITIALIZED;
+		return (uint)ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
@@ -136,7 +136,7 @@ SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetActorId(intptr_t nativeHandle)
 SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetGameId(intptr_t nativeHandle)
 {
 	if (nativeHandle == 0)
-		return ResultCode::NOT_INITIALIZED;
+		return (uint)ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
@@ -160,7 +160,7 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle,
 	OnlineClient::ONLINE_TASK_FINISHED_CALLBACK onTaskFinished)
 {
 	if (nativeHandle == 0)
-		return ResultCode::NOT_INITIALIZED;
+		return (int)ResultCode::NOT_INITIALIZED;
 
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
@@ -168,7 +168,7 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle,
 
 	auto eventHandler = [setEventFunc](Net::Connection* pConn, const Net::ConnectionEvent& evt)
 	{
-		setEventFunc(evt.Components.EventType, evt.Components.hr, evt.Components.State);
+		setEventFunc(evt.Components.EventType, (int)evt.Components.hr, evt.Components.State);
 	};
 
 	auto messageHandler = [setMessageFunc, setValueFunc, setArrayValueFunc, onMessageReady](Net::Connection* pConn, const MessageHeader* pMsgData)
@@ -214,20 +214,20 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle,
 	pOnlineClient->SetStateChangeCallback(nullptr);
 	pOnlineClient->SetTaskFinishedCallback(nullptr);
 
-	return ResultCode::SUCCESS;
+	return (int)ResultCode::SUCCESS;
 
 }
 
 SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateMovement(intptr_t nativeHandle, uint32_t& outDeltaFrames)
 {
 	if (nativeHandle == 0)
-		return ResultCode::NOT_INITIALIZED;
+		return (int)ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
 	outDeltaFrames = pOnlineClient->UpdateMovement();
 
-	return ResultCode::SUCCESS;
+	return (int)ResultCode::SUCCESS;
 }
 
 SFDLL_EXPORT uint64_t SFOnlineClient_NativeGetConnection(intptr_t nativeHandle, int32_t connectionIndex)
@@ -258,7 +258,7 @@ SFDLL_EXPORT uint64_t SFOnlineClient_NativeGetConnection(intptr_t nativeHandle, 
 SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetCurrentMoveFrame(intptr_t nativeHandle)
 {
 	if (nativeHandle == 0)
-		return ResultCode::NOT_INITIALIZED;
+		return (uint)ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
@@ -268,12 +268,12 @@ SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetCurrentMoveFrame(intptr_t nativeHa
 SFDLL_EXPORT int32_t SFOnlineClient_NativeSendMovement(intptr_t nativeHandle, const ActorMovement& newMove)
 {
 	if (nativeHandle == 0)
-		return ResultCode::NOT_INITIALIZED;
+		return (int)ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
 	if (pOnlineClient->GetSendMovementManager() == nullptr)
-		return ResultCode::INVALID_STATE;
+		return (int)ResultCode::INVALID_STATE;
 
 	// ActorMovement requires special memory alignment, copy incoming data to local storage to make it aligned
 	ActorMovement tempMove = newMove;

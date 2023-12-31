@@ -412,7 +412,7 @@ namespace Net {
 
 		addr.SocketFamily = family;
 		Result hr = Addr2SockAddr(addr, testSockAddr);
-        if (!hr)
+        if (!hr.IsSuccess())
         {
             //SFLog(System, Info, "CheckLocalAddress family:{0}, hr:{1}", family, hr);
             return hr;
@@ -588,7 +588,7 @@ namespace Net {
 		memset(&testSockAddr, 0, sizeof testSockAddr);
         addr.SocketFamily = family;
         Result hr = Addr2SockAddr(addr, testSockAddr);
-        if (!hr)
+        if (!hr.IsSuccess())
         {
             //SFLog(System, Info, "CheckLocalAddress family:{0}, hr:{1}", family, hr);
             return hr;

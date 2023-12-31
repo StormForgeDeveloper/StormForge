@@ -118,7 +118,7 @@ namespace SF
 						pComponent->TerminateComponent();
 
 					hr = pComponent->InitializeComponent();
-					if (!hr) return hr;
+					if (!hr.IsSuccess()) return hr;
 				}
 			}
 
@@ -209,7 +209,7 @@ namespace SF
 				return ResultCode::OUT_OF_MEMORY;
 
 			Result hr = AddComponent(newComponent);
-			if (!hr)
+			if (!hr.IsSuccess())
 			{
 				IHeap::Delete(newComponent);
 			}
@@ -232,7 +232,7 @@ namespace SF
 		//		return ResultCode::OUT_OF_MEMORY;
 
 		//	Result hr = AddComponent(newComponent);
-		//	if (!hr)
+		//	if (!hr.IsSuccess())
 		//	{
 		//		IHeap::Delete(newComponent);
 		//	}
@@ -255,7 +255,7 @@ namespace SF
 		//		return ResultCode::OUT_OF_MEMORY;
 
 		//	Result hr = AddComponent(newComponent);
-		//	if (!hr)
+		//	if (!hr.IsSuccess())
 		//	{
 		//		IHeap::Delete(newComponent);
 		//	}

@@ -653,7 +653,7 @@ namespace ProtocolCompiler
                 false);
 
             MatchIndent(); OutStream.WriteLine("auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);");
-            MatchIndent(); OutStream.WriteLine("if(pConnection == nullptr) return ResultCode::INVALID_POINTER;");
+            MatchIndent(); OutStream.WriteLine("if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;");
 
             PrepareSendFunctionParametersCPP("", parameters);
 
@@ -662,7 +662,7 @@ namespace ProtocolCompiler
             string combineString = parameters.Length > 0 ? ", " : "";
             MatchIndent(); OutStream.WriteLine($"Result hr = SF::Message::{Group.Name}::{baseMsg.Name}{msgTypeName}::Create(pMessage{combineString}{createParamString});");
             MatchIndent(); OutStream.WriteLine("if (hr) hr = pConnection->SendMsg(pMessage);");
-            MatchIndent(); OutStream.WriteLine("return (uint32_t)hr;");
+            MatchIndent(); OutStream.WriteLine("return (int32_t)hr;");
 
             CloseSection();
 

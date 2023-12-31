@@ -191,7 +191,7 @@ namespace SF {
 			return ResultCode::INVALID_POINTER;
 
 		LibraryComponent *pFound = nullptr;
-		bool sameNameFound = m_ComponentByName.Find(newComponent->GetName(), pFound);
+		bool sameNameFound = m_ComponentByName.Find(newComponent->GetName(), pFound).IsSuccess();
 		if (sameNameFound)
 		{
             SFLog(System, Warning, "Engine system has component with duplicated name:{0}", newComponent->GetName().ToString());

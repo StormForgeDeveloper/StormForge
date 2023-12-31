@@ -345,17 +345,17 @@ namespace SF {
 		virtual void SetValue(double value) override { m_Value = (uint32_t)value; }
 
 		virtual void* GetDataPtr() const override { return (void*)&m_Value; }
-		virtual bool GetValueBool() const override { return m_Value; }
-		virtual int8_t GetValueInt8() const override { return (int8_t)m_Value; }
-		virtual uint8_t GetValueUInt8() const override { return (uint8_t)m_Value; }
-		virtual int16_t GetValueInt16() const override { return (int16_t)m_Value; }
-		virtual uint16_t GetValueUInt16() const override { return (uint16_t)m_Value; }
-		virtual int32_t GetValueInt32() const override { return (int32_t)m_Value; }
-		virtual uint32_t GetValueUInt32() const override { return (uint32_t)m_Value; }
-		virtual int64_t GetValueInt64() const override { return (int64_t)m_Value; }
-		virtual uint64_t GetValueUInt64() const override { return (uint64_t)m_Value; }
-		virtual float GetValueFloat() const override { return (float)m_Value; }
-		virtual double GetValueDouble() const override { return (double)m_Value; }
+		virtual bool GetValueBool() const override { return m_Value.IsSuccess(); }
+		virtual int8_t GetValueInt8() const override { return (int8_t)m_Value.GetHResultCode(); }
+		virtual uint8_t GetValueUInt8() const override { return (uint8_t)m_Value.GetHResultCode(); }
+		virtual int16_t GetValueInt16() const override { return (int16_t)m_Value.GetHResultCode(); }
+		virtual uint16_t GetValueUInt16() const override { return (uint16_t)m_Value.GetHResultCode(); }
+		virtual int32_t GetValueInt32() const override { return (int32_t)m_Value.GetHResultCode(); }
+		virtual uint32_t GetValueUInt32() const override { return (uint32_t)m_Value.GetHResultCode(); }
+		virtual int64_t GetValueInt64() const override { return (int64_t)m_Value.GetHResultCode(); }
+		virtual uint64_t GetValueUInt64() const override { return (uint64_t)m_Value.GetHResultCode(); }
+		virtual float GetValueFloat() const override { return (float)m_Value.IsSuccess(); }
+		virtual double GetValueDouble() const override { return (double)m_Value.IsSuccess(); }
 		virtual StringCrc64 GetValueStringCrc64() const override { return m_Value.ToString(); }
 		virtual String GetValueString() const override { return m_Value.ToString(); }
 

@@ -311,7 +311,7 @@ namespace Net {
 	{
 		Connection::OnConnectionResult( hrConnect );
 
-		if( !hrConnect )
+		if( !hrConnect.IsSuccess())
 		{
 			CloseConnection("Connecting failed");
 		}
@@ -402,7 +402,7 @@ namespace Net {
 					SFLog(Net, Debug, "Connect sock:{0}, to:{1}, hrCon:{2}, hr:{3}", GetSocket(), GetRemoteInfo().PeerAddress, hrConResult, hr);
 				}
 
-				if (!hr)
+				if (!hr.IsSuccess())
 				{
 					SetConnectionState(ConnectionState::DISCONNECTED);
 					m_NetIOAdapter.CloseSocket();
@@ -591,7 +591,7 @@ namespace Net {
         netCheck(MakeNetCtrl(pHeader, uiCtrlCode, uiSequence, returnMsgID, parameter0));
 
         hrTem = SendRaw(pHeader);
-        if (!hrTem)
+        if (!hrTem.IsSuccess())
         {
             SFLog(Net, Debug4, "NetCtrl Send failed : CID:{0}, msg:{1:X8}, seq:{2}, hr={3:X8}",
                 GetCID(),
@@ -677,7 +677,7 @@ namespace Net {
 
             // WriteBuffer will trigger OnIOSendCompleted if transfer is completed, and the item will be released
             hr = m_NetIOAdapter.WriteBuffer(pSendBuffer);
-            if (!hr)
+            if (!hr.IsSuccess())
             {
                 // need to try again
                 itemPtr.CancelRead();

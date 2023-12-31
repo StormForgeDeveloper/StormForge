@@ -36,7 +36,7 @@ SF::Result MyTestBase::LoadJsonFile(const String& jsonPath, Json::Value& outValu
 	buffer.resize(fileSize + 1);
 	size_t readed = 0;
 	hr = file.Read(buffer.data(), fileSize, readed);
-	if (!hr)
+	if (!hr.IsSuccess())
 		return hr;
 
 	buffer[fileSize] = '\0';

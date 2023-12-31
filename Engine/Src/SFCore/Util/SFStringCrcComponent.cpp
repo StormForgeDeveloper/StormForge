@@ -40,7 +40,7 @@ namespace SF {
 	Result StringCrcLibraryComponent::InitializeComponent()
 	{
 		Result hr = LibraryComponent::InitializeComponent();
-		if (!hr) return hr;
+		if (!hr.IsSuccess()) return hr;
 
 		const char* inputPaths[] = {
 			m_StringCrcBinPath.data(),

@@ -241,7 +241,7 @@ namespace SF
 			});
 
 		hr = m_Client.Initialize(url, KeyName_Protocol);
-		if (!hr)
+		if (!hr.IsSuccess())
 			return hr;
 
 		m_EventQueue.Initialize(bUseEventFileCache);
@@ -433,7 +433,7 @@ namespace SF
 
         m_EventQueue.FreePostedEvents(eventId);
 
-        if (!hr)
+        if (!hr.IsSuccess())
         {
             SFLog(System, Error, "ObjectDirectory: failed with hr:{0}", hr);
         }

@@ -110,7 +110,7 @@ namespace Net {
 				{
 					hr = pCallBack->OnIOAccept(hr, pAcceptInfo);
 					pAcceptInfo = nullptr;
-					if (!hr)
+					if (!hr.IsSuccess())
 						return hr;
 				}
 				else

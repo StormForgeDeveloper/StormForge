@@ -274,7 +274,7 @@ namespace Net {
         ScopeContext hr(
             [this, &pSendBuffer](Result hr)
             {
-                if (!hr)
+                if (!hr.IsSuccess())
                 {
                     m_NetIOAdapter.DecPendingSendCount();
                     if (hr != Result(ResultCode::IO_IO_SEND_FAIL))

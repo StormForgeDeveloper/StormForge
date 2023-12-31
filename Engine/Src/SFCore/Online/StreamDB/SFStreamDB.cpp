@@ -243,7 +243,7 @@ namespace SF
 		}
 
 		Result hr = super::Initialize(serverAddress, path, partition);
-		if (!hr)
+		if (!hr.IsSuccess())
 			return hr;
 
 		std::string errstr;
@@ -412,7 +412,7 @@ namespace SF
 		}
 
 		Result hr = super::Initialize(serverAddress, path, partition);
-		if (!hr)
+		if (!hr.IsSuccess())
 			return hr;
 
 		GetConfig()->set("enable.partition.eof", "true", errstr);
@@ -556,7 +556,7 @@ namespace SF
 		std::string errstr;
 
 		Result hr = super::Initialize(serverAddress, path, -1);
-		if (!hr)
+		if (!hr.IsSuccess())
 			return hr;
 
 		GetConfig()->set("enable.partition.eof", "true", errstr);

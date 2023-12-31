@@ -112,7 +112,7 @@ SFDLL_EXPORT const char* StreamDBDirectory_NativeGetTopic(intptr_t nativeHandle,
 SFDLL_EXPORT int32_t StreamDBDirectory_NativePollMessage(intptr_t nativeHandle, SET_MESSAGE_FUNCTION setMessageFunc, VariableMapBuilderCS::SET_FUNCTION setValueFunc, VariableMapBuilderCS::SET_ARRAY_FUNCTION setArrayValueFunc)
 {
 	if (nativeHandle == 0)
-		return ResultCode::INVALID_ARG;
+		return (int)ResultCode::INVALID_ARG;
 
 	auto pDirectoryBase = NativeToObject<StreamDBDirectory>(nativeHandle);
 
@@ -122,7 +122,7 @@ SFDLL_EXPORT int32_t StreamDBDirectory_NativePollMessage(intptr_t nativeHandle, 
 
 	MessageDataPtr pIMsg;
 	if (!pDirectoryBase->PollMessage(pIMsg))
-		return ResultCode::NO_DATA_EXIST;
+		return (int)ResultCode::NO_DATA_EXIST;
 
 	setMessageFunc(pIMsg->GetMessageHeader()->msgID.IDSeq.MsgID);
 
@@ -130,9 +130,9 @@ SFDLL_EXPORT int32_t StreamDBDirectory_NativePollMessage(intptr_t nativeHandle, 
 	VariableMapBuilderCS builder(setValueFunc, setArrayValueFunc);
 	auto result = SF::Protocol::ParseMessage(pIMsg->GetMessageHeader(), builder);
 	if (!result)
-		return result;
+		return (int)result;
 
-	return ResultCode::SUCCESS;
+	return (int)ResultCode::SUCCESS;
 }
 
 
@@ -176,7 +176,7 @@ SFDLL_EXPORT int32_t StreamDBConsumer_NativePollData(intptr_t nativeHandle, int6
 {
 	auto pStreamInstance = NativeToObject<StreamDBConsumer>(nativeHandle);
 	if (pStreamInstance == nullptr)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 
 	auto result = pStreamInstance->PollData();

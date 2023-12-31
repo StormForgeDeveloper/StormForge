@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -41,7 +41,7 @@ namespace SF {
 	Result LibraryComponentEngineResultCode::InitializeComponent()
 	{
 		Result hr = LibraryComponent::InitializeComponent();
-		if (!hr) return hr;
+		if (!hr.IsSuccess()) return hr;
 
 		ResultCode::InitializeResultCodeSystem();
 		ResultCode::InitializeResultCodeSF();

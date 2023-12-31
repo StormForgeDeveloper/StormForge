@@ -303,12 +303,12 @@ namespace SF {
 		{
 			Result hr;
 			hr = reserve(src.size() + size());
-			if (!hr) return hr;
+			if (!hr.IsSuccess()) return hr;
 
 			for (auto& itItem : src)
 			{
 				hr = push_back(itItem);
-				if (!hr) return hr;
+				if (!hr.IsSuccess()) return hr;
 			}
 
 			return hr;
@@ -319,12 +319,12 @@ namespace SF {
         {
             Result hr;
             hr = reserve(dataCount + size());
-            if (!hr) return hr;
+            if (!hr.IsSuccess()) return hr;
 
             for (uint iData = 0; iData < dataCount; iData++)
             {
                 hr = push_back(data);
-                if (!hr) return hr;
+                if (!hr.IsSuccess()) return hr;
             }
 
             return hr;

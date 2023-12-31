@@ -151,7 +151,7 @@ namespace SF
 
 		size_t written{};
 		auto hr = m_StorageFile.Write(reinterpret_cast<uint8_t*>(&m_StorageFileHeader), sizeof(m_StorageFileHeader), written);
-		if (!hr)
+		if (!hr.IsSuccess())
 		{
 			SFLog(Telemetry, Error, "TelemetryEventQueue::CreateStorageFile, Failed to save header, file:{0}", m_StorageFilePath);
 			m_StorageFile.Close();
@@ -159,7 +159,7 @@ namespace SF
 		}
 
 		hr = m_StorageFile.Write(m_EventBufferQueue.data(), m_EventBufferQueue.size(), written);
-		if (!hr)
+		if (!hr.IsSuccess())
 		{
 			SFLog(Telemetry, Error, "TelemetryEventQueue::CreateStorageFile, Failed to save body, file:{0}", m_StorageFilePath);
 			m_StorageFile.Close();
@@ -185,7 +185,7 @@ namespace SF
 		size_t writenSize{};
 
 		m_StorageFile.Seek(SeekMode::Begin, sizeof(m_StorageFileHeader) + Start);
-		bool bRet = m_StorageFile.Write(m_EventBufferQueue.data() + Start, DataSize, writenSize);
+		bool bRet = m_StorageFile.Write(m_EventBufferQueue.data() + Start, DataSize, writenSize).IsSuccess();
 		if (!bRet)
 		{
 			SFLog(Telemetry, Error, "TelemetryEventQueue::WriteDataSection, Failed, file:{0}", m_StorageFilePath);
@@ -229,7 +229,7 @@ namespace SF
 
 			size_t writtern{};
 			m_StorageFile.Seek(SeekMode::Begin, 0);
-			bool bRet = m_StorageFile.Write(reinterpret_cast<uint8_t*>(&m_StorageFileHeader), sizeof(m_StorageFileHeader), writtern);
+			bool bRet = m_StorageFile.Write(reinterpret_cast<uint8_t*>(&m_StorageFileHeader), sizeof(m_StorageFileHeader), writtern).IsSuccess();
 			if (!bRet)
 			{
 				SFLog(Telemetry, Error, "TelemetryEventQueue::WriteDataSection, Failed, file:{0}", m_StorageFilePath);
@@ -257,14 +257,14 @@ namespace SF
 		}
 
 		size_t readSize{};
-		bool ReadRes = m_StorageFile.Read(reinterpret_cast<uint8_t*>(&m_StorageFileHeader), sizeof(m_StorageFileHeader), readSize);
+		bool ReadRes = m_StorageFile.Read(reinterpret_cast<uint8_t*>(&m_StorageFileHeader), sizeof(m_StorageFileHeader), readSize).IsSuccess();
 		if (!ReadRes)
 		{
 			SFLog(Telemetry, Error, "TelemetryEventQueue Failed to read cache file header {0}.", m_StorageFilePath);
 			return false;
 		}
 
-		ReadRes = m_StorageFile.Read(m_EventBufferQueue.data(), m_EventBufferQueue.size(), readSize);
+		ReadRes = m_StorageFile.Read(m_EventBufferQueue.data(), m_EventBufferQueue.size(), readSize).IsSuccess();
 		if (!ReadRes)
 		{
 			SFLog(Telemetry, Error, "TelemetryEventQueue Failed to read cache file data {0}.", m_StorageFilePath);

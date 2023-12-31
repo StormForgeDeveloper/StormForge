@@ -86,7 +86,7 @@ TEST_F(KafkaTest, Consumer)
             // data may not yet available, ignore
             continue;
         }
-        else if (!hr)
+        else if (!hr.IsSuccess())
         {
             GTEST_ASSERT_EQ(hr, ResultCode::SUCCESS);
 			break;
@@ -130,7 +130,7 @@ TEST_F(KafkaTest, GroupConsumer)
 				{
 					// data may not yet available, ignore
 				}
-				else if (!hr)
+				else if (!hr.IsSuccess())
 				{
                     SFLog(System, Error, "Thread {0}, received failed: {1}", iThread, hr);
                     Service::LogModule->Flush();

@@ -54,7 +54,7 @@ SFDLL_EXPORT intptr_t SFConnection_NativeCreateConnectionTCP()
 SFDLL_EXPORT int SFConnection_NativeConnect(intptr_t nativeHandle, uint64_t authTicket, const char* address, int port)
 {
 	if (nativeHandle == 0)
-		return ResultCode::INVALID_ARG;
+		return (int)ResultCode::INVALID_ARG;
 
 	NetAddress remoteAddress(address, (uint16_t)port);
 
@@ -64,7 +64,7 @@ SFDLL_EXPORT int SFConnection_NativeConnect(intptr_t nativeHandle, uint64_t auth
 	{
 		pConnection->SetTickGroup(EngineTaskTick::AsyncTick);
 	}
-	return result;
+	return (int)result;
 }
 
 SFDLL_EXPORT void SFConnection_NativeDispose(intptr_t nativeHandle)
@@ -140,7 +140,7 @@ SFDLL_EXPORT bool SFConnection_NativeDequeueEvent(intptr_t nativeHandle, Net::Co
 	result = (int32_t)conEvent.Components.hr;
 	state = conEvent.Components.State;
 
-	return hr;
+	return hr.IsSuccess();
 }
 
 
@@ -176,7 +176,7 @@ SFDLL_EXPORT bool SFConnection_NativeTimeSync(intptr_t nativeHandle)
 	auto pConnection = NativeToObject<Net::Connection>(nativeHandle);
 
 
-	return pConnection->TimeSync();
+	return pConnection->TimeSync().IsSuccess();
 }
 
 

@@ -257,14 +257,14 @@ namespace SF
 
         alBufferData(bufferId, m_ALFormat, dataBlock->Data, (ALsizei)dataBlock->DataSize, (ALsizei)GetSamplesPerSec());
         Result hr = AudioOpenAL::GetALError();
-        if (!hr)
+        if (!hr.IsSuccess())
         {
             SFLog(System, Error, "Error alBufferData. error:{0}", hr);
         }
 
         alSourceQueueBuffers(m_ALSource, 1, &bufferId);
         hr = AudioOpenAL::GetALError();
-        if (!hr)
+        if (!hr.IsSuccess())
         {
             SFLog(System, Error, "Error alSourceQueueBuffers. error:{0}", hr);
         }

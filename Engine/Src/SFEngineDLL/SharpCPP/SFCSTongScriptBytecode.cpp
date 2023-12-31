@@ -67,319 +67,319 @@ SFDLL_EXPORT void SFTongScriptByteCode_NativeDelete(uintptr_t nativeHandler)
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendNoop(uintptr_t nativeHandler)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendNoop();
+	return (int)pScriptByteCode->AppendNoop();
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendLabel(uintptr_t nativeHandler, uint32_t labelHash)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendLabel(labelHash);
+	return (int)pScriptByteCode->AppendLabel(labelHash);
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendExit(uintptr_t nativeHandler)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendExit();
+	return (int)pScriptByteCode->AppendExit();
 }
 
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendAdd(uintptr_t nativeHandler)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendAdd();
+	return (int)pScriptByteCode->AppendAdd();
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendSub(uintptr_t nativeHandler)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendSub();
+	return (int)pScriptByteCode->AppendSub();
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendMul(uintptr_t nativeHandler)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendMul();
+	return (int)pScriptByteCode->AppendMul();
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendDiv(uintptr_t nativeHandler)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendDiv();
+	return (int)pScriptByteCode->AppendDiv();
 }
 
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendAddI(uintptr_t nativeHandler, int32_t value)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendAddI(value);
+	return (int)pScriptByteCode->AppendAddI(value);
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendSubI(uintptr_t nativeHandler, int32_t value)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendSubI(value);
+	return (int)pScriptByteCode->AppendSubI(value);
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendMulI(uintptr_t nativeHandler, int32_t value)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendMulI(value);
+	return (int)pScriptByteCode->AppendMulI(value);
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendDivI(uintptr_t nativeHandler, int32_t value)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendDivI(value);
+	return (int)pScriptByteCode->AppendDivI(value);
 }
 
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendAddF(uintptr_t nativeHandler, float value)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendAddF(value);
+	return (int)pScriptByteCode->AppendAddF(value);
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendSubF(uintptr_t nativeHandler, float value)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendSubF(value);
+	return (int)pScriptByteCode->AppendSubF(value);
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendMulF(uintptr_t nativeHandler, float value)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendMulF(value);
+	return (int)pScriptByteCode->AppendMulF(value);
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendDivF(uintptr_t nativeHandler, float value)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendDivF(value);
+	return (int)pScriptByteCode->AppendDivF(value);
 }
 
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendCmpEqual(uintptr_t nativeHandler)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendCmpEqual();
+	return (int)pScriptByteCode->AppendCmpEqual();
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendCmpGreater(uintptr_t nativeHandler)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendCmpGreater();
+	return (int)pScriptByteCode->AppendCmpGreater();
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendCmpLess(uintptr_t nativeHandler)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendCmpLess();
+	return (int)pScriptByteCode->AppendCmpLess();
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendCmpGreaterOrEqual(uintptr_t nativeHandler)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendCmpGreaterOrEqual();
+	return (int)pScriptByteCode->AppendCmpGreaterOrEqual();
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendCmpLessOrEqual(uintptr_t nativeHandler)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendCmpLessOrEqual();
+	return (int)pScriptByteCode->AppendCmpLessOrEqual();
 }
 
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendJump(uintptr_t nativeHandler, uint32_t label)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendJump(label);
+	return (int)pScriptByteCode->AppendJump(label);
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendJumpFalse(uintptr_t nativeHandler, uint32_t label)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendJumpFalse(label);
+	return (int)pScriptByteCode->AppendJumpFalse(label);
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendYieldFrame(uintptr_t nativeHandler)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendYieldFrame();
+	return (int)pScriptByteCode->AppendYieldFrame();
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendStoreToContext(uintptr_t nativeHandler, const char* name)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendStoreToContext(name);
+	return (int)pScriptByteCode->AppendStoreToContext(name);
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendStore(uintptr_t nativeHandler, const char* path)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendStore(path);
+	return (int)pScriptByteCode->AppendStore(path);
 }
 
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendLoadI(uintptr_t nativeHandler, int32_t value)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendLoadI(value);
+	return (int)pScriptByteCode->AppendLoadI(value);
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendLoadF(uintptr_t nativeHandler, float value)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendLoadF(value);
+	return (int)pScriptByteCode->AppendLoadF(value);
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendLoad(uintptr_t nativeHandler, const char* path)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendLoad(path);
+	return (int)pScriptByteCode->AppendLoad(path);
 }
 
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendMoveToContext(uintptr_t nativeHandler, const char* name)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendMoveToContext(name);
+	return (int)pScriptByteCode->AppendMoveToContext(name);
 }
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendMove(uintptr_t nativeHandler, const char* path)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendMove(path);
+	return (int)pScriptByteCode->AppendMove(path);
 }
 
 
 SFDLL_EXPORT uint32_t SFTongScriptByteCode_NativeAppendCall(uintptr_t nativeHandler, const char* path)
 {
 	if (nativeHandler == 0)
-		return ResultCode::UNEXPECTED;
+		return (int)ResultCode::UNEXPECTED;
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	return pScriptByteCode->AppendCall(path);
+	return (int)pScriptByteCode->AppendCall(path);
 }
 
 

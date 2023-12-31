@@ -55,12 +55,12 @@ namespace SF
 			if (value == nullptr)
 			{
 				hr = SetSetting(key, "true");
-				if (!hr) return hr;
+				if (!hr.IsSuccess()) return hr;
 			}
 			else
 			{
 				hr = SetSetting(key, value);
-				if (!hr) return hr;
+				if (!hr.IsSuccess()) return hr;
 			}
 
 			break;
@@ -80,7 +80,7 @@ namespace SF
 		if (arg == nullptr) return ResultCode::INVALID_ARG;
 
 		hr = StrUtil::StringCopy(settingBufferForParsing, arg);
-		if (!hr) return hr;
+		if (!hr.IsSuccess()) return hr;
 
 		curArg = StrUtil::SkipWhiteSpace(settingBufferForParsing);
 		while (curArg != nullptr)
@@ -90,7 +90,7 @@ namespace SF
 				*endOfArg = '\0';
 
 			hr = ProcessSingleParameter(curArg);
-			if (!hr) return hr;
+			if (!hr.IsSuccess()) return hr;
 
 			if (endOfArg == nullptr)
 				break;
@@ -108,7 +108,7 @@ namespace SF
 		for (int iArg = 0; iArg < numArg; iArg++)
 		{
 			hr = ProcessSingleParameter(argc[iArg]);
-			if (!hr) return hr;
+			if (!hr.IsSuccess()) return hr;
 		}
 
 		return hr;
@@ -128,13 +128,13 @@ namespace SF
 
 		char* curSettingValue = bufferPos;
 		hr = StrUtil::StringCopyEx(bufferPos, bufferSize, value);
-		if (!hr) return hr;
+		if (!hr.IsSuccess()) return hr;
 
 		*bufferPos++ = '\0'; bufferSize--;
 
 		key = StringCrc64(settingName);
 		hr = m_Settings.FindPrevNode(key, pPrevNode);
-		if (!hr) return hr;
+		if (!hr.IsSuccess()) return hr;
 
 		if (pPrevNode->Key == key)
 		{
@@ -147,7 +147,7 @@ namespace SF
 			// Add new value
 			char* curSettingName = bufferPos;
 			hr = StrUtil::StringLwrEx(bufferPos, bufferSize, settingName);
-			if (!hr) return hr;
+			if (!hr.IsSuccess()) return hr;
 
 			*bufferPos++ = '\0'; bufferSize--;
 			if (bufferSize < (INT)sizeof(LinkedListNode))
@@ -162,7 +162,7 @@ namespace SF
 			pNewNode->Value = curSettingValue;
 
 			hr = m_Settings.Insert(pPrevNode, pNewNode->Key, pNewNode);
-			if (!hr) return hr;
+			if (!hr.IsSuccess()) return hr;
 		}
 
 		m_BufferUsedOffset = (INT)countof(m_SettingBuffer) - bufferSize;

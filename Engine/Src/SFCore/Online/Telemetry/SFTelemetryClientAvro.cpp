@@ -269,7 +269,7 @@ namespace SF
 			});
 
 		hr = m_Client.Initialize(url, TelemetryClientAvro::KeyName_Protocol);
-		if (!hr)
+		if (!hr.IsSuccess())
 			return hr;
 
 		m_EventQueue.Initialize(bUseEventFileCache);
@@ -368,7 +368,7 @@ namespace SF
 
         auto newSchema = new AvroSchema;
         hr = newSchema->Init(String(eventSchema));
-        if (!hr)
+        if (!hr.IsSuccess())
         {
             SFLog(Telemetry, Error, "RegisterEventSchema failed, hr:{0}", hr);
             return hr;
@@ -417,20 +417,20 @@ namespace SF
             ArrayView<const uint8_t> sessionIdView(sizeof(Guid), (uint8_t*)sessionId.data);
 
             hr = avroValue.SetValue(FieldName_SessionId, sessionIdView);
-            if (!hr)
+            if (!hr.IsSuccess())
                 return nullptr;
             //hr = avroValue.SetValue(FieldName_EventId, (int)newEvent->GetEventId());
             hr = avroValue.SetValue(FieldName_AppId, (int64_t)GetApplicationId());
-            if (!hr)
+            if (!hr.IsSuccess())
                 return nullptr;
             hr = avroValue.SetValue(FieldName_MachineId, GetMachineId());
-            if (!hr)
+            if (!hr.IsSuccess())
                 return nullptr;
             hr = avroValue.SetValue(FieldName_AccountId, (int64_t)GetAccountID());
-            if (!hr)
+            if (!hr.IsSuccess())
                 return nullptr;
             hr = avroValue.SetValue(FieldName_EventName, eventName);
-            if (!hr)
+            if (!hr.IsSuccess())
                 return nullptr;
         }
 

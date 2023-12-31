@@ -184,7 +184,7 @@ namespace Log {
 #define SFCheckResult(trcMod, Op) \
 	do {\
 		hr = (Op);\
-		if (!hr) { \
+		if (!hr.IsSuccess()) { \
 			SFLog(trcMod, Error, "{0}({1}): {2}", __FILE__, __LINE__, (Result)hr );    \
 			return hr;\
 		}\
@@ -193,7 +193,7 @@ namespace Log {
 #define SFCheckMem(trcMod, Op) \
 	do {\
 		hr = (Op) != nullptr ? ResultCode::SUCCESS : ResultCode::OUT_OF_MEMORY;\
-		if (!hr) { \
+		if (!hr.IsSuccess()) { \
 			SFLog(trcMod, Error, "{0}({1}): {2}", __FILE__, __LINE__, (Result)hr );    \
 			return hr;\
 		}\
@@ -203,7 +203,7 @@ namespace Log {
 #define SFCheckPtr(trcMod, Op) \
 	do {\
 		hr = (Op) != nullptr ? ResultCode::SUCCESS : ResultCode::INVALID_POINTER;\
-		if (!hr) { \
+		if (!hr.IsSuccess()) { \
 			SFLog(trcMod, Error, "{0}({1}): {2}", __FILE__, __LINE__, (Result)hr );    \
 			return hr;\
 		}\

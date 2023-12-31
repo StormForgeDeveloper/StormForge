@@ -79,14 +79,14 @@ TEST_F(NetTest, RecvMessageWindowSimple)
 		if (iTest < recvMessage.GetAcceptableSequenceRange())
 		{
 			EXPECT_TRUE(pResult != nullptr);
-			EXPECT_TRUE(hr);
+			EXPECT_TRUE(hr.IsSuccess());
 
 			EXPECT_TRUE(MessageSequence::Difference(pResult->GetMessageHeader()->msgID.IDSeq.Sequence, uiSequence++) == 0);
 		}
 		else
 		{
 			EXPECT_TRUE(pResult == nullptr);
-			EXPECT_TRUE(!hr);
+			EXPECT_TRUE(!hr.IsSuccess());
 		}
 	}
 }
@@ -110,12 +110,12 @@ TEST_F(NetTest, RecvMessageWindowSimple2)
 			hr = recvMessage.AddMsg(pNewMsg);
 			if (MessageSequence::Difference(uiSequence, recvMessage.GetBaseSequence()) < recvMessage.GetAcceptableSequenceRange())
 			{
-				EXPECT_TRUE(hr);
+				EXPECT_TRUE(hr.IsSuccess());
 				uiSequence++;
 			}
 			else
 			{
-				EXPECT_TRUE(!hr);
+				EXPECT_TRUE(!hr.IsSuccess());
 			}
 			break;
 		case 1: // release
@@ -130,7 +130,7 @@ TEST_F(NetTest, RecvMessageWindowSimple2)
 			else
 			{
 				EXPECT_TRUE(pResult == nullptr);
-				EXPECT_TRUE(!hr);
+				EXPECT_TRUE(!hr.IsSuccess());
 			}
 			break;
 		}
@@ -167,12 +167,12 @@ TEST_F(NetTest, RecvMessageWindowSimple3)
 			auto seqOffset = MessageSequence::Difference(testSequence, recvMessage.GetBaseSequence());
 			if (seqOffset < recvMessage.GetAcceptableSequenceRange() && seqOffset >= 0)
 			{
-				EXPECT_TRUE(hr);
+				EXPECT_TRUE(hr.IsSuccess());
 				uiSequence++;
 			}
 			else
 			{
-				EXPECT_TRUE(seqOffset < 0 || !hr);
+				EXPECT_TRUE(seqOffset < 0 || !hr.IsSuccess());
 			}
 		}
 		break;
@@ -188,7 +188,7 @@ TEST_F(NetTest, RecvMessageWindowSimple3)
 			else
 			{
 				EXPECT_TRUE(pResult == nullptr);
-				EXPECT_TRUE(!hr);
+				EXPECT_TRUE(!hr.IsSuccess());
 			}
 			break;
 		}
@@ -292,7 +292,7 @@ TEST_F(NetTest, RecvMessageWindowMT)
 				{
 					pMsg = NewMessage(testHeap, sequence);
 					hr = recvMessage.AddMsg(pMsg);
-					if (!hr)
+					if (!hr.IsSuccess())
 					{
 						pMsg = nullptr;
 					}
@@ -332,7 +332,7 @@ TEST_F(NetTest, RecvMessageWindowMT)
 				else
 				{
 					EXPECT_TRUE(pResult == nullptr);
-					EXPECT_TRUE(!hr);
+					EXPECT_TRUE(!hr.IsSuccess());
 				}
 			}
 		});
@@ -428,7 +428,7 @@ TEST_F(NetTest, RecvMessageWindowMT2)
 				else
 				{
 					EXPECT_TRUE(pResult == nullptr);
-					EXPECT_TRUE(!hr);
+					EXPECT_TRUE(!hr.IsSuccess());
 				}
 			}
 		});
@@ -483,7 +483,7 @@ TEST_F(NetTest, RecvMessageWindow2Simple)
         else
         {
             EXPECT_TRUE(!messageData);
-            EXPECT_TRUE(!hr);
+            EXPECT_TRUE(!hr.IsSuccess());
         }
     }
 }
@@ -512,7 +512,7 @@ TEST_F(NetTest, RecvMessageWindow2Simple2)
             }
             else
             {
-                EXPECT_TRUE(!hr);
+                EXPECT_TRUE(!hr.IsSuccess());
             }
             break;
         case 1: // release
@@ -527,7 +527,7 @@ TEST_F(NetTest, RecvMessageWindow2Simple2)
             else
             {
                 EXPECT_TRUE(pResult == nullptr);
-                EXPECT_TRUE(!hr);
+                EXPECT_TRUE(!hr.IsSuccess());
             }
             break;
         }
@@ -569,7 +569,7 @@ TEST_F(NetTest, RecvMessageWindow2Simple3)
             }
             else
             {
-                EXPECT_TRUE(seqOffset < 0 || !hr);
+                EXPECT_TRUE(seqOffset < 0 || !hr.IsSuccess());
             }
         }
         break;
@@ -585,7 +585,7 @@ TEST_F(NetTest, RecvMessageWindow2Simple3)
             else
             {
                 EXPECT_TRUE(pResult == nullptr);
-                EXPECT_TRUE(!hr);
+                EXPECT_TRUE(!hr.IsSuccess());
             }
             break;
         }
@@ -690,7 +690,7 @@ TEST_F(NetTest, RecvMessageWindow2MT)
                     {
                         pMsg = NewMessage(testHeap, sequence);
                         hr = recvMessage.AddMsg(pMsg->GetMessageHeader());
-                        if (!hr)
+                        if (!hr.IsSuccess())
                         {
                             pMsg = nullptr;
                         }

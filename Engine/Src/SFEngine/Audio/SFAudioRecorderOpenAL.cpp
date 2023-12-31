@@ -124,6 +124,7 @@ namespace SF
         if (err != ALC_NO_ERROR)
         {
             SFLog(System, Error, "alcGetIntegerv ALC_CAPTURE_SAMPLES fail:{0}", int(err));
+            StopRecording();
             return ResultCode::UNEXPECTED;
         }
 
@@ -131,6 +132,7 @@ namespace SF
         size_t maxFramesCanRead = (outBuffer.capacity() - curBufferPos) / GetSampleFrameSize();
         if (maxFramesCanRead == 0)
         {
+            StopRecording();
             return ResultCode::OUT_OF_MEMORY;
         }
 
@@ -144,6 +146,7 @@ namespace SF
         if (err != ALC_NO_ERROR)
         {
             SFLog(System, Error, "alcCaptureSamples fail:{0}", int(err));
+            StopRecording();
             return ResultCode::UNEXPECTED;
         }
         else

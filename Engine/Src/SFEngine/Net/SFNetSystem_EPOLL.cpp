@@ -117,7 +117,7 @@ namespace Net {
 				{
 					hr = pCallBack->OnIOAccept(hr, pAcceptInfo);
 					pAcceptInfo = nullptr;
-					if (!hr)
+					if (!hr.IsSuccess())
 						return hr;
 				}
 				else
@@ -178,7 +178,7 @@ namespace Net {
 					Assert(false);
 					break;
 				default:
-					if (!hr)
+					if (!hr.IsSuccess())
 					{
 						char stringBuffer[512];
 						SFLog(Net, Info, "ERROR Epoll Recv fail sock:{0} events:{1} hr:{2}", sock, Service::NetSystem->GetNetIOSystem().EventFlagToString(sizeof(stringBuffer), stringBuffer, events), hrErr);
@@ -205,7 +205,7 @@ namespace Net {
 		{
 			// This call will just poke working thread
 			hr = pCallBack->OnWriteReady();
-			if (!hr)
+			if (!hr.IsSuccess())
 			{
 				netErr(hr);
 			}
@@ -213,7 +213,7 @@ namespace Net {
 
 	Proc_End:
 
-		if (!hr)
+		if (!hr.IsSuccess())
 		{
 			char stringBuffer[512];
 			SFLog(Net, Info, "ERROR Epoll RW fail sock:{0}, events:{1} hr:{2}", sock, Service::NetSystem->GetNetIOSystem().EventFlagToString(sizeof(stringBuffer), stringBuffer, events), hr);

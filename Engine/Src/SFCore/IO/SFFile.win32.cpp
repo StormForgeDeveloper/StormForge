@@ -121,7 +121,7 @@ namespace SF {
 	size_t File::GetLocationRaw() const
 	{
 		if (m_FileHandle == INVALID_NATIVE_HANDLE_VALUE)
-			return ResultCode::FAIL;
+			return 0;
 
 		LARGE_INTEGER lInt;
 		lInt.QuadPart = 0;
@@ -133,7 +133,7 @@ namespace SF {
 	size_t File::GetFileSize() const
 	{
 		if (m_FileHandle == INVALID_NATIVE_HANDLE_VALUE)
-			return ResultCode::FAIL;
+			return 0;
 
 		LARGE_INTEGER szSize;
 		if (GetFileSizeEx(m_FileHandle, &szSize) == INVALID_FILE_SIZE)

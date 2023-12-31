@@ -57,7 +57,7 @@ namespace SF
         SFLog(Telemetry, Info, "Telemetry initialize: {0}, clientId:{1}", m_Url, m_ClientId);
 
         hr = m_TelemetryPtr->Initialize(m_Url, m_ClientId, m_AuthTicket, m_bUseEventCacheFile);
-        if (!hr)
+        if (!hr.IsSuccess())
             return hr;
 
         Service::Telemetry = m_TelemetryPtr.get();

@@ -237,7 +237,7 @@ namespace Net {
 			{
 				pRecvBuffer = new(GetSystemHeap()) IOBUFFER_READ;
 				hr = pRecvBuffer->SetPendingTrue();
-				if (!hr)
+				if (!hr.IsSuccess())
 				{
 					DecPendingRecvCount();
 					break;
@@ -364,7 +364,7 @@ namespace Net {
 
 	Proc_End:
 
-		if (!hr && pSendBuffer != nullptr)
+		if (!hr.IsSuccess() && pSendBuffer != nullptr)
 		{
 			if (hr != ResultCode::IO_IO_SEND_FAIL)
 			{
@@ -496,7 +496,7 @@ namespace Net {
 		IncPendingRecvCount();
 
 		hr = Recv(pRecvBuffer);
-		if (!hr && hr != ResultCode::IO_IO_PENDING && hr != ResultCode::IO_TRY_AGAIN)
+		if (!hr.IsSuccess() && hr != ResultCode::IO_IO_PENDING && hr != ResultCode::IO_TRY_AGAIN)
 		{
 			SFLog(Net, Debug3, "Pending Recv failed, CID:{0}, pending:{1}, hr:{2}", GetUserSocketID(), GetPendingRecvCount(), hr);
 			//Assert(false);
