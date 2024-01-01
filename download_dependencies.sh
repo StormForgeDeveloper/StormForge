@@ -75,6 +75,8 @@ do
 	./vcpkg install $dep --triplet $Triplet --recurse
 done
 
+git pull
+
 ./vcpkg install curl[openssl,websockets] --recurse
 
 ./vcpkg update
