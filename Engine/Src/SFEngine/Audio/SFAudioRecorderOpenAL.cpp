@@ -124,7 +124,6 @@ namespace SF
         if (err != ALC_NO_ERROR)
         {
             SFLog(System, Error, "alcGetIntegerv ALC_CAPTURE_SAMPLES fail:{0}", int(err));
-            StopRecording();
             return ResultCode::UNEXPECTED;
         }
 
