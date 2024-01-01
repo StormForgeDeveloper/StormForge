@@ -227,6 +227,9 @@ list(APPEND THIRDPARTY_LIBS protobuf::libprotoc protobuf::libprotobuf protobuf::
 find_package(gRPC CONFIG REQUIRED)
 list(APPEND THIRDPARTY_LIBS gRPC::gpr gRPC::grpc gRPC::grpc++ gRPC::grpc++_alts)
 
+find_package(recastnavigation CONFIG REQUIRED)
+list(APPEND THIRDPARTY_LIBS RecastNavigation::Detour RecastNavigation::Recast RecastNavigation::DebugUtils RecastNavigation::DetourCrowd)
+
 
 
 add_definitions(-DHAVE_CONFIG_H=1)

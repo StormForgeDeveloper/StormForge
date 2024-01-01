@@ -36,6 +36,7 @@ $deps = "vcpkg-pkgconfig-get-modules",
 		"librdkafka[zlib]",
 		"mysql-connector-cpp",
 		"gtest",
+		"recastnavigation",
 		"vulkan"
 
 #Those are complicated and being separated shared lib is better

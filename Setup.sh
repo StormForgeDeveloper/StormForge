@@ -21,7 +21,7 @@ if [ ! -f "/etc/apt/sources.list.d/lunarg-vulkan-jammy.list" ]; then
 fi
 
 
-sudo apt-get install -y moreutils git-lfs build-essential clang cmake rsync zip ninja-build libatomic-ops-dev gdb perl pkg-config openjdk-8-jdk dotnet6
+sudo apt-get install -y moreutils git-lfs build-essential clang rsync zip ninja-build libatomic-ops-dev gdb perl pkg-config openjdk-8-jdk dotnet6
 
 # for Vulkan
 sudo apt-get install -y vulkan-sdk
@@ -37,11 +37,27 @@ sudo apt install -y libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev l
 # for openal
 sudo apt install -y libtool
 
-
 if [ ! -d "$ATF_PATH" ]; then
 	echo $ATF_PATH
 	git clone https://github.com/blue3k/ATFClone.git $ATF_PATH
 fi
+
+
+wget https://github.com/Kitware/CMake/releases/download/v3.28.1/cmake-3.28.1-linux-x86_64.sh
+chmod au+x cmake-3.28.1-linux-x86_64.sh
+sudo mkdir /usr/local/share/cmake-3.28.1
+sudo ./cmake-3.28.1-linux-x86_64.sh --skip-license --prefix=/usr/local/share/cmake-3.28.1 
+sudo rm -rf /usr/local/bin/cmake
+sudo rm -rf /usr/local/bin/ccmake
+sudo rm -rf /usr/local/bin/cmake-gui
+sudo rm -rf /usr/local/bin/cpack
+sudo rm -rf /usr/local/bin/ctest
+sudo ln -s /usr/local/share/cmake-3.28.1/bin/ccmake /usr/local/bin/
+sudo ln -s /usr/local/share/cmake-3.28.1/bin/cmake /usr/local/bin/
+sudo ln -s /usr/local/share/cmake-3.28.1/bin/cmake-gui /usr/local/bin/
+sudo ln -s /usr/local/share/cmake-3.28.1/bin/cpack /usr/local/bin/
+sudo ln -s /usr/local/share/cmake-3.28.1/bin/ctest /usr/local/bin/
+
 
 
 pushd $SF_PATH/3rdParties 

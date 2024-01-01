@@ -13,7 +13,7 @@ For now the development is still going on and have many missing modules, however
 1. Linux sub system for WIndows. 
 	- It's tested on Ubuntu 22.04 with dotnet6.
 1. Visual Studio 2022 with dotnet 6. 
-1. CMake 3.25 or later
+1. CMake 3.27.1 or later
 1. VulkanSDK
 
 We have moved onto vcpkg for 3rdparty libraries. Only few left for custom build.
