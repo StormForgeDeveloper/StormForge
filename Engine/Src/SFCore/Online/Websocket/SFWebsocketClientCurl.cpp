@@ -272,7 +272,7 @@ namespace SF
                 return len;
             }
 
-            struct curl_ws_frame* frameMeta = curl_ws_meta(curl);
+            const struct curl_ws_frame* frameMeta = curl_ws_meta(curl);
             if (frameMeta == nullptr)
             {
                 SFLog(Websocket, Error, "Recv failed, invalid meta data");
@@ -288,7 +288,7 @@ namespace SF
             return len;
         }
 
-        static bool ReadData(struct curl_ws_frame* frameMeta, const void* buffer, Array<uint8_t>& recvBuffer)
+        static bool ReadData(const struct curl_ws_frame* frameMeta, const void* buffer, Array<uint8_t>& recvBuffer)
         {
             if (frameMeta == nullptr)
             {
