@@ -8,15 +8,9 @@ set(SFPROTOCOL_LIB_FILES
 	Protocol/GameMsgClass.cpp
 	Protocol/GameMsgDebug.cpp
 	Protocol/GameMsgParsing.cpp
-	Protocol/LoginMsgClass.cpp
-	Protocol/LoginMsgDebug.cpp
-	Protocol/LoginMsgParsing.cpp
 	Protocol/GameMsgClass.h
 	Protocol/GameMsgDebug.h
 	Protocol/GameMsgParsing.h
-	Protocol/LoginMsgClass.h
-	Protocol/LoginMsgDebug.h
-	Protocol/LoginMsgParsing.h
 
 	Protocol/PlayInstanceMsgClass.cpp
 	Protocol/PlayInstanceMsgClass.h
@@ -38,8 +32,6 @@ set(SFPROTOCOL_LIB_FILES
 
 	Protocol/GameNetPolicy.cpp
 	Protocol/GameNetPolicy.h
-	Protocol/LoginNetPolicy.cpp
-	Protocol/LoginNetPolicy.h
 
 	Protocol/SFProtocol.cpp
 	Protocol/SFGenericMessageClass.h

@@ -16,10 +16,8 @@ set(SFENGINEDLL_SHARP_FILES
 	SFEngine/SFMessageParsingUtil.cs
 	SFEngine/SFMessageRouter.cs
 	SFEngine/SFNetMessageIDGame.cs
-	SFEngine/SFNetMessageIDLogin.cs
 	SFEngine/SFNetMessageIDPlayInstance.cs
 	SFEngine/SFNetSendMessageGame.cs
-	SFEngine/SFNetSendMessageLogin.cs
 	SFEngine/SFNetSendMessagePlayInstance.cs
 	SFEngine/SFObject.cs
 	SFEngine/SFStreamDB.cs

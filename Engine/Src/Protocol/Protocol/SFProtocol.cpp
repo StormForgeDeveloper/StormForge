@@ -27,10 +27,7 @@
 
 #include "Protocol/SFProtocol.h"
 
-#include "Protocol/LoginMsgDebug.h"
 #include "Protocol/GameMsgDebug.h"
-
-#include "Protocol/LoginMsgParsing.h"
 #include "Protocol/GameMsgParsing.h"
 
 #include "Protocol/PlayInstanceMsgDebug.h"
@@ -66,12 +63,10 @@ namespace Protocol {
 			if (InitMode != ComponentInitializeMode::AfterRegisterComponent)
 				return false;
 
-			RegisterDebugTraceLogin();
 			RegisterDebugTraceGame();
 			RegisterDebugTracePlayInstance();
             RegisterDebugTraceGeneric();
 
-			RegisterParserLogin();
 			RegisterParserGame();
 			RegisterParserPlayInstance();
             RegisterParserGeneric();

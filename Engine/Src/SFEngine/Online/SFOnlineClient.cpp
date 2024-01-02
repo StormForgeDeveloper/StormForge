@@ -16,8 +16,6 @@
 #include "Net/SFConnection.h"
 #include "Net/SFConnectionTCP.h"
 #include "Net/SFConnectionUDP.h"
-#include "Protocol/LoginNetPolicy.h"
-#include "Protocol/LoginMsgClass.h"
 #include "Protocol/GameNetPolicy.h"
 #include "Protocol/GameMsgClass.h"
 #include "Protocol/PlayInstanceNetPolicy.h"
