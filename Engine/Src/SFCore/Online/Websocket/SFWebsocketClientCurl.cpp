@@ -511,7 +511,7 @@ namespace SF
 
 
             size_t rlen{};
-            struct curl_ws_frame* frameMeta{};
+            const struct curl_ws_frame* frameMeta{};
             uint8_t readBuffer[4*1024];
 
             CURLcode result = curl_ws_recv(m_Curl, readBuffer, sizeof(readBuffer), &rlen, &frameMeta);
