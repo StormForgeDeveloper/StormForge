@@ -180,7 +180,7 @@ find_package(libwebsockets CONFIG REQUIRED)
 list(APPEND THIRDPARTY_LIBS websockets)
 
 find_package(libuv CONFIG REQUIRED)
-list(APPEND THIRDPARTY_LIBS $<IF:$<TARGET_EXISTS:uv_a>,uv_a,uv>)
+list(APPEND THIRDPARTY_LIBS $<IF:$<TARGET_EXISTS:libuv::uv_a>,libuv::uv_a,libuv::uv>)
 
 find_package(Libevent CONFIG REQUIRED)
 #list(APPEND THIRDPARTY_LIBS libevent::core libevent::extra libevent::pthreads)
