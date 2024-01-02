@@ -80,7 +80,7 @@ git pull
 ./vcpkg install curl[openssl,websockets] --recurse
 
 ./vcpkg update
-./vcpkg upgrade --no-dry-run
+./vcpkg upgrade --no-dry-run --allow-unsupported
 
 popd
 

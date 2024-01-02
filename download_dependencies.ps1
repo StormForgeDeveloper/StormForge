@@ -106,7 +106,7 @@ try {
 	./vcpkg.exe install $deps --triplet $triplet
 	
 	./vcpkg.exe update
-	./vcpkg.exe upgrade --no-dry-run
+	./vcpkg.exe upgrade --no-dry-run --allow-unsupported
 	
 	cd ..\3rdParties
 	
