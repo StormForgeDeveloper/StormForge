@@ -272,16 +272,20 @@ namespace SF
 
     void AudioSourceOpenAL::QueueZeroSoundBlock(float duration)
     {
-        uint samplesPerSec = GetSamplesPerSec() / 2;
+        uint samplesPerHalfSec = GetSamplesPerSec() / 2;
         size_t sampleFrameSize = Audio::GetBytesPerSample(GetNumChannels(), GetAudioFormat());
-        size_t dataSizePerSec = samplesPerSec * sampleFrameSize;
+        size_t dataSizePerSec = samplesPerHalfSec * sampleFrameSize;
         size_t dataSizeToAdd = size_t(double(duration) * dataSizePerSec);
 
         assert((sizeof(AudioDataBlock) + dataSizeToAdd) <= sizeof(AudioSourceOpenAL_DummyDataBlockBuffer));
         AudioDataBlock* DummyBlock = reinterpret_cast<AudioDataBlock*>(AudioSourceOpenAL_DummyDataBlockBuffer);
         DummyBlock->DataSize = dataSizeToAdd;
 
-        QueueDataBlock(DummyBlock);
+        for ( ; duration > 0; duration -= 0.5f)
+        {
+            QueueDataBlock(DummyBlock);
+
+        }
     }
 
     void AudioSourceOpenAL::TickUpdate()

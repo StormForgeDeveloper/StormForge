@@ -77,7 +77,7 @@ namespace SF
         const AudioBufferPtr& CreateAudioBuffer(size_t bufferSize);
         const AudioBufferPtr& GetAudioBuffer() const { return m_AudioBufferPtr; }
 
-        // qeue zero sound block for waiting moment
+        // queue zero sound block for waiting moment
         virtual void QueueZeroSoundBlock(float duration) = 0;
 
     protected:
