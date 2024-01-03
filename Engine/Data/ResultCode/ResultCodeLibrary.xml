@@ -233,5 +233,20 @@
     <ResultCodeItem Severity="Error" CodeName="HTTP_NO_CONNECTION_AVAILABLE" Desc="No Connection is available now."/>
     <ResultCodeItem Severity="Error" CodeName="HTTP_SSL_CONNECT_ERROR" Desc="SSL error"/>
 
+    <ResultCodeItem Severity="Error" CodeName="HTTP_CALL_MULTI_PERFORM" Desc="please call curl_multi_perform() or curl_multi_socket*() soon"/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_BAD_HANDLE" Desc="the passed-in handle is not a valid CURLM handle"/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_BAD_EASY_HANDLE" Desc="an easy handle was not good/valid"/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_INTERNAL_ERROR" Desc="this is a libcurl bug"/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_BAD_SOCKET" Desc="the passed in socket argument did not match"/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_UNKNOWN_OPTION" Desc="curl_multi_setopt() with unsupported option"/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_ADDED_ALREADY" Desc="an easy handle already added to a multi handle was attempted to get added - again"/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_RECURSIVE_API_CALL" Desc="an api function was called from inside a callback"/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_WAKEUP_FAILURE" Desc="wakeup is unavailable or failed"/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_BAD_FUNCTION_ARGUMENT" Desc="function called with a bad parameter"/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_ABORTED_BY_CALLBACK" Desc="?"/>
+    <ResultCodeItem Severity="Error" CodeName="HTTP_UNRECOVERABLE_POLL" Desc="?"/>
+    
+    <ResultCodeItem Severity="Error" CodeName="HTTP_CANCELED" Desc="Canceled "/>
+
 </ResultCodes>
 

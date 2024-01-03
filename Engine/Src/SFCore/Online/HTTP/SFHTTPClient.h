@@ -15,8 +15,6 @@
 #include "Container/SFArray.h"
 #include "Object/SFSharedObject.h"
 
-#include "curl/curl.h"
-
 namespace SF
 {
     namespace Log
@@ -31,7 +29,9 @@ namespace SF
     {
     public:
 
-        typedef StaticArray<uint8_t, 20 * 1024> ResultBuffer;
+        using ResultBuffer = StaticArray<uint8_t, 20 * 1024>;
+
+        using ResultCallback = std::function<void(HTTPClient*)>;
 
     public:
         HTTPClient();
@@ -60,9 +60,19 @@ namespace SF
         virtual Result AddHeader(const char* headerEntry) { return ResultCode::NOT_IMPLEMENTED; }
 
         // Send HTTP request
-        virtual Result ProcessRequest() { return ResultCode::NOT_IMPLEMENTED; }
+        virtual Result SendRequest() { return ResultCode::NOT_IMPLEMENTED; }
 
-        // TODO: result callback
+        // Set OnFinished callback
+        void SetOnFinishedCallback(const ResultCallback& onFinished) { m_ResultCallback = onFinished; }
+
+        // result callback
+        virtual void OnFinished()
+        {
+            if (m_ResultCallback)
+            {
+                m_ResultCallback(this);
+            }
+        }
 
     protected:
         // Result content type
@@ -88,49 +98,13 @@ namespace SF
 
         // Operation result
         Result m_Result;
+
+        // Result callback
+        ResultCallback m_ResultCallback;
     };
 
     using HTTPClientPtr = SharedPointerT<HTTPClient>;
 
-
-    // Curl specialization
-    class HTTPClientCurl : public HTTPClient
-    {
-    public:
-        HTTPClientCurl();
-        virtual ~HTTPClientCurl();
-
-        CURL* GetCURL() { return m_Curl; }
-        CURLcode GetCURLResult() { return m_CurlResult; }
-
-        // Set post field data
-        virtual Result SetPostFieldData(const Array<const char>& postFieldData) override;
-
-        // Add header entry
-        virtual Result AddHeader(const char* headerEntry) override;
-
-        // Send HTTP request
-        virtual Result ProcessRequest() override;
-
-
-    private:
-        static int ResultWriter(char* data, size_t size, size_t nmemb, void* param);
-        static int CurlLogCB(CURL* handle,
-            curl_infotype type,
-            char* data,
-            size_t size,
-            void* clientp);
-
-    protected:
-        // curl
-        CURL* m_Curl{};
-
-        // curl header list
-        curl_slist* m_Headers{};
-
-        // curl result code
-        CURLcode m_CurlResult = CURLE_OK;
-    };
 
 }
 

@@ -14,7 +14,7 @@
 #include "SFTypedefs.h"
 #include "MemoryManager/SFMemoryPool.h"
 #include "Object/SFObject.h"
-#include "Object/SFLibraryComponentManager.h"
+#include "Component/SFLibraryComponentManager.h"
 #include "Service/SFServices.h"
 
 
@@ -164,7 +164,7 @@ namespace SF {
 			return static_cast<ComponentType*>(stm_Instance->GetComponent<ComponentType>());
 		}
 
-
+        void EngineSystemUpdate();
 
 		////////////////////////////////////////////////////////////////////////////
 		//
@@ -178,7 +178,7 @@ namespace SF {
 		static void Stop();
 
 		// Tick update
-		static bool TickUpdate();
+		static bool StaticTickUpdate();
 
 	};
 

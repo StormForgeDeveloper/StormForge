@@ -30,17 +30,24 @@ namespace SF {
 
 	class SharedObjectManager
 	{
+    public:
+
+        using DestroyObjectEvent = std::function<void(SharedObject*)>;
+
 	private:
 
 		// Free item queue
 		CircularPageQueueAtomic<SharedObject*> m_FreeQueue;
 
 		// Linked Object counter 
-		SyncCounter m_ObjectCount;
+		Atomic<int> m_ObjectCount;
 
 #ifdef REFERENCE_DEBUG_TRACKING
 		long DeletedObjects;
 #endif
+
+        // event handler
+        DestroyObjectEvent m_OnDestroy;
 
 	private:
 
@@ -70,10 +77,14 @@ namespace SF {
 #endif
 			);
 
+        // set OnDestroyObject event handler
+        void SetOnDestroyObjectEventHandler(const DestroyObjectEvent& eventHandler) { m_OnDestroy = eventHandler; }
+        void SetOnDestroyObjectEventHandler(DestroyObjectEvent&& eventHandler) { m_OnDestroy = Forward<DestroyObjectEvent>(eventHandler); }
+
 		// Force clear freed objects
 		void ClearFreedObjects();
 
-		// Garbagte Collect free Pointers
+		// Garbage Collect free Pointers
 		virtual void Update();
 	};
 

@@ -18,14 +18,15 @@
 #include "ResultCode/SFResultCodeSystem.h"
 #include "Util/SFStringCrc64.h"
 #include "Container/SFSortedArray.h"
-#include "Object/SFLibraryComponent.h"
+#include "Container/SFArray.h"
+#include "Component/SFLibraryComponent.h"
 
 
 
 
 namespace SF {
 
-
+    class LibraryComponent;
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -41,6 +42,9 @@ namespace SF {
 
 		SortedArray<StringCrc64, LibraryComponent*> m_ComponentByName;
 		SortedArray<StringCrc64, LibraryComponent*> m_ComponentByTypeName;
+
+        // tickable components
+        DynamicArray<LibraryComponent*> m_TickableComponents;
 
 		bool m_IsInitialized;
 
@@ -116,6 +120,10 @@ namespace SF {
 		{
 			m_ComponentByName.ForeachOrder(0, m_ComponentByName.size(), functor);
 		}
+
+
+        // Tick update, called from engine tick update
+        virtual void ComponentTickUpdate();
 	};
 
 } // namespace SF

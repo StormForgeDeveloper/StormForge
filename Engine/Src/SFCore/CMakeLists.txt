@@ -346,6 +346,14 @@ set(SUBOnline_FILES
 	Online/Websocket/SFWebsocketClient.cpp
 	Online/Websocket/SFWebsocketClientCurl.h
 	Online/Websocket/SFWebsocketClientCurl.cpp
+	Online/HTTP/SFHTTPClient.h
+	Online/HTTP/SFHTTPClient.cpp
+	Online/HTTP/SFHTTPClientSystem.h
+	Online/HTTP/SFHTTPClientSystem.cpp
+	Online/HTTP/SFHTTPClientCurl.h
+	Online/HTTP/SFHTTPClientCurl.cpp
+	Online/HTTP/SFHTTPClientSystemCurl.h
+	Online/HTTP/SFHTTPClientSystemCurl.cpp
   )
 
 source_group(Online FILES

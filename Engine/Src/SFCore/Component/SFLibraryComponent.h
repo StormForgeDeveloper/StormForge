@@ -39,13 +39,14 @@ namespace SF {
 
 		// flags
 		bool m_IsInitialized;
+        bool m_IsTickable = false;
 
 		SortedSet<StringCrc64> m_Dependencies;
 
 		friend class LibraryComponentManager;
 
 	public:
-		LibraryComponent(const StringCrc64& name);
+		LibraryComponent(const StringCrc64& name, bool bIsTickable = false);
 		virtual ~LibraryComponent() {}
 
 		const StringCrc64& GetName() const { return m_Name; }
@@ -53,6 +54,8 @@ namespace SF {
 
 		// Check whether this component is initialized or not
 		bool GetIsInitialized() const { return m_IsInitialized; }
+
+        bool IsTickable() const { return m_IsTickable; }
 
 		// Add component dependency
 		template<class ComponentType>
@@ -75,6 +78,9 @@ namespace SF {
 		virtual Result InitializeComponent() { m_IsInitialized = true; return ResultCode::SUCCESS; }
 		// Terminate component
 		virtual void DeinitializeComponent() { m_IsInitialized = false;  }
+
+        // Tick update, called from engine tick update
+        virtual void TickUpdate() {}
 	};
 
 

@@ -41,6 +41,8 @@ set(SF_UNIT_TEST_FILES
 	Test/Online/UnitTest_Kafka.cpp
 	Test/Online/UnitTest_Telemetry.h
 	Test/Online/UnitTest_Telemetry.cpp
+	Test/Online/UnitTest_HTTP.h
+	Test/Online/UnitTest_HTTP.cpp
 	Test/Math/UnitTest_Math.h
 	Test/Math/UnitTest_Math_Func.cpp
 	Test/Math/3D/UnitTest_Math3D_Matrix.cpp

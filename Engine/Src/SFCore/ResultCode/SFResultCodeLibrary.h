@@ -642,6 +642,45 @@ namespace SF {
 			// SSL error 
 			constexpr Result 			HTTP_SSL_CONNECT_ERROR                                             ((int32_t)0xE70100CFL);
 
+			// please call curl_multi_perform() or curl_multi_socket*() soon 
+			constexpr Result 			HTTP_CALL_MULTI_PERFORM                                            ((int32_t)0xE70100D0L);
+
+			// the passed-in handle is not a valid CURLM handle 
+			constexpr Result 			HTTP_BAD_HANDLE                                                    ((int32_t)0xE70100D1L);
+
+			// an easy handle was not good/valid 
+			constexpr Result 			HTTP_BAD_EASY_HANDLE                                               ((int32_t)0xE70100D2L);
+
+			// this is a libcurl bug 
+			constexpr Result 			HTTP_INTERNAL_ERROR                                                ((int32_t)0xE70100D3L);
+
+			// the passed in socket argument did not match 
+			constexpr Result 			HTTP_BAD_SOCKET                                                    ((int32_t)0xE70100D4L);
+
+			// curl_multi_setopt() with unsupported option 
+			constexpr Result 			HTTP_UNKNOWN_OPTION                                                ((int32_t)0xE70100D5L);
+
+			// an easy handle already added to a multi handle was attempted to get added - again 
+			constexpr Result 			HTTP_ADDED_ALREADY                                                 ((int32_t)0xE70100D6L);
+
+			// an api function was called from inside a callback 
+			constexpr Result 			HTTP_RECURSIVE_API_CALL                                            ((int32_t)0xE70100D7L);
+
+			// wakeup is unavailable or failed 
+			constexpr Result 			HTTP_WAKEUP_FAILURE                                                ((int32_t)0xE70100D8L);
+
+			// function called with a bad parameter 
+			constexpr Result 			HTTP_BAD_FUNCTION_ARGUMENT                                         ((int32_t)0xE70100D9L);
+
+			// ? 
+			constexpr Result 			HTTP_ABORTED_BY_CALLBACK                                           ((int32_t)0xE70100DAL);
+
+			// ? 
+			constexpr Result 			HTTP_UNRECOVERABLE_POLL                                            ((int32_t)0xE70100DBL);
+
+			// Canceled  
+			constexpr Result 			HTTP_CANCELED                                                      ((int32_t)0xE70100DCL);
+
 	void InitializeResultCodeSF();
 
 	}//namespace ResultCode 

@@ -17,7 +17,7 @@
 #include "Util/SFLog.h"
 #include "Multithread/SFSynchronization.h"
 #include "ResultCode/SFResultCodeSystem.h"
-#include "Object/SFLibraryComponentManager.h"
+#include "Component/SFLibraryComponentManager.h"
 #include "Container/SFHashTable.h"
 #include "MemoryManager/SFMemoryPool.h"
 
@@ -26,9 +26,10 @@
 namespace SF {
 
 
-	LibraryComponent::LibraryComponent(const StringCrc64& name)
+	LibraryComponent::LibraryComponent(const StringCrc64& name, bool bIsTickable)
 		: m_Name(name)
 		, m_IsInitialized(false)
+        , m_IsTickable(bIsTickable)
 		, m_Dependencies(GetSystemHeap())
 	{
 		CheckCtrMemory();
@@ -44,6 +45,7 @@ namespace SF {
 	LibraryComponentManager::LibraryComponentManager()
 		: m_ComponentByName(GetSystemHeap())
 		, m_ComponentByTypeName(GetSystemHeap())
+        , m_TickableComponents(GetSystemHeap())
 		, m_IsInitialized(false)
 	{
 	}
@@ -156,6 +158,8 @@ namespace SF {
 			m_ComponentByTypeName.Remove(pRemove->GetTypeName(), pRemove);
 		}
 
+        m_TickableComponents.RemoveItem(pComponent);
+
 		if (m_IsInitialized)
 			pRemove->DeinitializeComponent();
 
@@ -177,6 +181,8 @@ namespace SF {
 		{
 			m_ComponentByTypeName.Remove(pRemove->GetTypeName(), pRemove);
 		}
+
+        m_TickableComponents.RemoveItem(pRemove);
 
 		if (m_IsInitialized)
 			pRemove->DeinitializeComponent();
@@ -204,6 +210,11 @@ namespace SF {
 		// add type map
 		m_ComponentByTypeName.Set(newComponent->GetTypeName(), newComponent);
 
+        if (newComponent->IsTickable())
+        {
+            m_TickableComponents.push_back(newComponent);
+        }
+
 		if (m_IsInitialized)
 			newComponent->InitializeComponent();
 
@@ -229,6 +240,13 @@ namespace SF {
 		return pFound;
 	}
 
+    void LibraryComponentManager::ComponentTickUpdate()
+    {
+        for (LibraryComponent* pComponent : m_TickableComponents)
+        {
+            pComponent->TickUpdate();
+        }
+    }
 }
 
 

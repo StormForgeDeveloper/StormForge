@@ -22,14 +22,14 @@
 #include "Protocol/PlayInstanceMsgClass.h"
 #include "Online/Telemetry/SFTelemetryService.h"
 #include "Online/SFOnlineClientComponent.h"
-#include "Online/SFHTTPClient.h"
+#include "Online/HTTP/SFHTTPClient.h"
+#include "Online/HTTP/SFHTTPClientSystem.h"
 #include "SFFlat/Login_generated.h"
 #include "Util/SFStringFormat.h"
 #include "SFFlat/SFFlatPacketHeader.h"
 
 namespace SF
 {
-
 
 	/////////////////////////////////////////////////////////////////////////////////////
 	// 
@@ -86,15 +86,6 @@ namespace SF
             SetOnlineState(OnlineState::LogingIn);
         }
 
-        virtual void OnEngineTickUpdate() override
-        {
-            Result hr;
-            if (m_HttpClient.IsValid() && !m_HttpClient->HasBeenRequested())
-            {
-                m_HttpClient->ProcessRequest();
-            }
-        }
-
         virtual Result SetupRequest() = 0;
 
         Result ParseResultPacket(const Array<uint8_t>& recvData)
@@ -148,54 +139,59 @@ namespace SF
             return hr;
         }
 
-        virtual void TickUpdate() override
+        void ProcessResult()
         {
-            Result hr;
-            if (m_HttpClient.IsValid() && m_HttpClient->IsCompleted())
-            {
-                if (m_HttpClient->GetResultCode())
-                {
-                    auto& recvData = m_HttpClient->GetResultContent();
-                    if (recvData.size() > 0)
-                    {
-                        DynamicArray<uint8_t> decodedData;
-                        decodedData.reserve(recvData.size());
-                        hr = Util::Base64Decode(recvData.size(), recvData.data(), decodedData);
-                        if (!hr.IsSuccess())
-                        {
-                            SFLog(System, Error, "Login result decoding error:{0}", hr);
-                        }
-                        else
-                        {
-                            hr = ParseResultPacket(decodedData);
-                        }
-                    }
-                    else
-                    {
-                        hr = ResultCode::INVALID_FORMAT;
-                    }
+            if (!m_HttpClient.IsValid())
+                return;
 
+            if (!m_HttpClient->IsCompleted())
+            {
+                SFLog(Net, Error, "Login process hasn't been processed properly");
+                return;
+            }
+
+            Result hr;
+            if (m_HttpClient->GetResultCode())
+            {
+                auto& recvData = m_HttpClient->GetResultContent();
+                if (recvData.size() > 0)
+                {
+                    DynamicArray<uint8_t> decodedData;
+                    decodedData.reserve(recvData.size());
+                    hr = Util::Base64Decode(recvData.size(), recvData.data(), decodedData);
                     if (!hr.IsSuccess())
                     {
-                        SFLog(System, Error, "Login result parsing error:{0}", hr);
-
-                        SetOnlineState(OnlineState::Disconnected);
-                        SetResult(hr);
+                        SFLog(System, Error, "Login result decoding error:{0}", hr);
                     }
                     else
                     {
-
+                        hr = ParseResultPacket(decodedData);
                     }
-                    SetOnlineState(OnlineState::LoggedIn);
-                    SetResult(ResultCode::SUCCESS);
                 }
                 else
                 {
-                    SFLog(System, Error, "Login request porocessing error:{0}", m_HttpClient->GetResultCode());
+                    hr = ResultCode::INVALID_FORMAT;
+                }
+
+                if (!hr.IsSuccess())
+                {
+                    SFLog(System, Error, "Login result parsing error:{0}", hr);
 
                     SetOnlineState(OnlineState::Disconnected);
-                    SetResult(m_HttpClient->GetResultCode());
+                    SetResult(hr);
                 }
+                else
+                {
+                    SetOnlineState(OnlineState::LoggedIn);
+                    SetResult(ResultCode::SUCCESS);
+                }
+            }
+            else
+            {
+                SFLog(System, Error, "Login request porocessing error:{0}", m_HttpClient->GetResultCode());
+
+                SetOnlineState(OnlineState::Disconnected);
+                SetResult(m_HttpClient->GetResultCode());
             }
         }
 
@@ -221,7 +217,8 @@ namespace SF
         {
             Result hr;
 
-            HTTPClientPtr httpClient = new(GetSystemHeap()) HTTPClientCurl;
+            HTTPClientPtr httpClient = Service::HTTP->CreateHTTPClient();
+            defCheckPtr(httpClient);
 
             DynamicArray<uint8_t> hashedPassword;
             defCheck(Util::SHA256Hash(m_Owner.GetPassword().GetLength(), (const uint8_t*)m_Owner.GetPassword().c_str(), hashedPassword));
@@ -237,7 +234,12 @@ namespace SF
                 m_Owner.GetLoginAddresses(), "8FACAEB9-E54D-4CDF-BF85-23F7AF0B9147", m_Owner.GetUserId(), (const char*)base64Password.data());
             httpClient->SetURL(url);
             httpClient->SetMethod(true);
+            httpClient->SetOnFinishedCallback([this](HTTPClient* pClient)
+                {
+                    ProcessResult();
+                });
 
+            httpClient->SendRequest();
 
             m_HttpClient = httpClient;
 
@@ -258,7 +260,8 @@ namespace SF
         {
             Result hr;
 
-            HTTPClientPtr httpClient = new(GetSystemHeap()) HTTPClientCurl;
+            HTTPClientPtr httpClient = Service::HTTP->CreateHTTPClient();
+            defCheckPtr(httpClient);
 
             DynamicArray<uint8_t> base64PlatformName;
             base64PlatformName.reserve(m_Owner.GetSteamUserName().GetLength() * 3);
@@ -271,6 +274,12 @@ namespace SF
 
             httpClient->SetURL(url);
             httpClient->SetMethod(true);
+            httpClient->SetOnFinishedCallback([this](HTTPClient* pClient)
+                {
+                    ProcessResult();
+                });
+
+            httpClient->SendRequest();
 
             m_HttpClient = httpClient;
 
@@ -653,7 +662,7 @@ namespace SF
                 return;
             }
 
-			auto authTicket = m_Owner.GetAuthTicket();
+			AuthTicket authTicket = m_Owner.GetAuthTicket();
 			result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, netAddresses[0], 0));
 			if (result)
 			{

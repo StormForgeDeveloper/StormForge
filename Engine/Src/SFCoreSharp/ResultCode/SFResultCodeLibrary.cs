@@ -638,6 +638,45 @@ namespace SF {
 		// SSL error 
 		public const int HTTP_SSL_CONNECT_ERROR =                           unchecked((int)0xE70100CF); 
 
+		// please call curl_multi_perform() or curl_multi_socket*() soon 
+		public const int HTTP_CALL_MULTI_PERFORM =                          unchecked((int)0xE70100D0); 
+
+		// the passed-in handle is not a valid CURLM handle 
+		public const int HTTP_BAD_HANDLE =                                  unchecked((int)0xE70100D1); 
+
+		// an easy handle was not good/valid 
+		public const int HTTP_BAD_EASY_HANDLE =                             unchecked((int)0xE70100D2); 
+
+		// this is a libcurl bug 
+		public const int HTTP_INTERNAL_ERROR =                              unchecked((int)0xE70100D3); 
+
+		// the passed in socket argument did not match 
+		public const int HTTP_BAD_SOCKET =                                  unchecked((int)0xE70100D4); 
+
+		// curl_multi_setopt() with unsupported option 
+		public const int HTTP_UNKNOWN_OPTION =                              unchecked((int)0xE70100D5); 
+
+		// an easy handle already added to a multi handle was attempted to get added - again 
+		public const int HTTP_ADDED_ALREADY =                               unchecked((int)0xE70100D6); 
+
+		// an api function was called from inside a callback 
+		public const int HTTP_RECURSIVE_API_CALL =                          unchecked((int)0xE70100D7); 
+
+		// wakeup is unavailable or failed 
+		public const int HTTP_WAKEUP_FAILURE =                              unchecked((int)0xE70100D8); 
+
+		// function called with a bad parameter 
+		public const int HTTP_BAD_FUNCTION_ARGUMENT =                       unchecked((int)0xE70100D9); 
+
+		// ? 
+		public const int HTTP_ABORTED_BY_CALLBACK =                         unchecked((int)0xE70100DA); 
+
+		// ? 
+		public const int HTTP_UNRECOVERABLE_POLL =                          unchecked((int)0xE70100DB); 
+
+		// Canceled  
+		public const int HTTP_CANCELED =                                    unchecked((int)0xE70100DC); 
+
 	}
 }
 

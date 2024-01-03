@@ -55,6 +55,8 @@ namespace SF {
 
 		if (!pObj->CanDelete())
 		{
+            // assert is better, but want to see side effect first
+            SFLog(System, Error, "FreeObject has been called, but the object can't be deleted");
 			pObj->m_ManagerReferenceCount.fetch_add(1, std::memory_order_relaxed);
 			return false;
 		}
@@ -67,6 +69,11 @@ namespace SF {
 
 	void SharedObjectManager::FreeObjectInternal(SharedObject* pObj)
 	{
+        if (m_OnDestroy)
+        {
+            m_OnDestroy(pObj);
+        }
+
 #ifdef REFERENCE_DEBUG_TRACKING
 
 		AssertRel(pObj->GetReferenceCount() == 0);

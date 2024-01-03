@@ -433,6 +433,7 @@ namespace SF
         //result = curl_easy_setopt(m_Curl, CURLOPT_PRIVATE, this);
         result = curl_easy_setopt(m_Curl, CURLOPT_SSL_VERIFYPEER, false);
         result = curl_easy_setopt(m_Curl, CURLOPT_SSL_VERIFYHOST, 0L);
+
         result = curl_easy_setopt(m_Curl, CURLOPT_URL, (const char*)m_Url);
 
         // https://curl.se/docs/websocket.html

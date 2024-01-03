@@ -228,6 +228,19 @@ namespace ResultCode {
 		codeMap.Insert((uint32_t)HTTP_USE_SSL_FAILED, {"HTTP_USE_SSL_FAILED", "Invalid SSL setting."});
 		codeMap.Insert((uint32_t)HTTP_NO_CONNECTION_AVAILABLE, {"HTTP_NO_CONNECTION_AVAILABLE", "No Connection is available now."});
 		codeMap.Insert((uint32_t)HTTP_SSL_CONNECT_ERROR, {"HTTP_SSL_CONNECT_ERROR", "SSL error"});
+		codeMap.Insert((uint32_t)HTTP_CALL_MULTI_PERFORM, {"HTTP_CALL_MULTI_PERFORM", "please call curl_multi_perform() or curl_multi_socket*() soon"});
+		codeMap.Insert((uint32_t)HTTP_BAD_HANDLE, {"HTTP_BAD_HANDLE", "the passed-in handle is not a valid CURLM handle"});
+		codeMap.Insert((uint32_t)HTTP_BAD_EASY_HANDLE, {"HTTP_BAD_EASY_HANDLE", "an easy handle was not good/valid"});
+		codeMap.Insert((uint32_t)HTTP_INTERNAL_ERROR, {"HTTP_INTERNAL_ERROR", "this is a libcurl bug"});
+		codeMap.Insert((uint32_t)HTTP_BAD_SOCKET, {"HTTP_BAD_SOCKET", "the passed in socket argument did not match"});
+		codeMap.Insert((uint32_t)HTTP_UNKNOWN_OPTION, {"HTTP_UNKNOWN_OPTION", "curl_multi_setopt() with unsupported option"});
+		codeMap.Insert((uint32_t)HTTP_ADDED_ALREADY, {"HTTP_ADDED_ALREADY", "an easy handle already added to a multi handle was attempted to get added - again"});
+		codeMap.Insert((uint32_t)HTTP_RECURSIVE_API_CALL, {"HTTP_RECURSIVE_API_CALL", "an api function was called from inside a callback"});
+		codeMap.Insert((uint32_t)HTTP_WAKEUP_FAILURE, {"HTTP_WAKEUP_FAILURE", "wakeup is unavailable or failed"});
+		codeMap.Insert((uint32_t)HTTP_BAD_FUNCTION_ARGUMENT, {"HTTP_BAD_FUNCTION_ARGUMENT", "function called with a bad parameter"});
+		codeMap.Insert((uint32_t)HTTP_ABORTED_BY_CALLBACK, {"HTTP_ABORTED_BY_CALLBACK", "?"});
+		codeMap.Insert((uint32_t)HTTP_UNRECOVERABLE_POLL, {"HTTP_UNRECOVERABLE_POLL", "?"});
+		codeMap.Insert((uint32_t)HTTP_CANCELED, {"HTTP_CANCELED", "Canceled "});
 
 	}//InitializeResultCode 
 }//namespace ResultCode 

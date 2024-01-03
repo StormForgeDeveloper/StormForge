@@ -39,6 +39,7 @@
 #include "Net/SFConnectionManager.h"
 #include "Component/SFLibraryComponentInitializer.h"
 #include "Online/Websocket/SFWebsocketComponent.h"
+#include "Online/HTTP/SFHTTPClientSystem.h"
 #include "Component/SFLibraryComponent3rdParties.h"
 #include "Audio/SFAudioEngineComponentOpenAL.h"
 
@@ -139,7 +140,8 @@ namespace SF
 			AddComponent<SF::Net::NetSystem>(m_InitParameter.NetRecvBufferSize, m_InitParameter.NetSendBufferSize, m_InitParameter.NetworkThreadCount, 1024);
 		}
 
-		AddComponent<SF::WebsocketComponent>();
+		AddComponent<SF::HTTPClientComponent>();
+        AddComponent<SF::WebsocketComponent>();
 
 
 		return ResultCode::SUCCESS;
@@ -174,9 +176,7 @@ namespace SF
 					auto pEngine = Engine::GetInstance();
 					if (pEngine == nullptr) break;
 
-					Service::EngineTaskManager->EngineTickUpdate();
-					Service::EngineObjectManager->Update();
-					Service::GraphicDevice->RequestCommand<RenderCommand_KickFrame>(CallTrack());
+                    pEngine->EngineSystemUpdate();
 
 					durationMS = pThread->UpdateInterval(m_TickInterval);
 				}
@@ -231,7 +231,16 @@ namespace SF
 		return sleepInterval;
 	}
 
-	bool Engine::TickUpdate()
+    void Engine::EngineSystemUpdate()
+    {
+        ComponentTickUpdate();
+
+        Service::EngineObjectManager->Update();
+        Service::EngineTaskManager->EngineTickUpdate();
+        Service::GraphicDevice->RequestCommand<RenderCommand_KickFrame>(CallTrack());
+    }
+
+	bool Engine::StaticTickUpdate()
 	{
 		auto pEngine = Engine::GetInstance();
 		if (pEngine == nullptr)
@@ -245,9 +254,7 @@ namespace SF
 		durationMS = pEngine->UpdateInterval(pEngine->m_TickInterval);
 		ThisThread::SleepFor(durationMS);
 
-		Service::EngineObjectManager->Update();
-		Service::EngineTaskManager->EngineTickUpdate();
-		Service::GraphicDevice->RequestCommand<RenderCommand_KickFrame>(CallTrack());
+        pEngine->EngineSystemUpdate();
 
 		return true;
 	}
