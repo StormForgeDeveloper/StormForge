@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ResultCodes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:noNamespaceSchemaLocation="SFResultCode.xsd"
+             Facility="Login"
+             IDTable="true"
+             >
+
+
+    <ResultCodeItem Severity="Error" CodeName="INVALID_USERNAME" Desc="Invalid username"/>
+    <ResultCodeItem Severity="Error" CodeName="INVALID_PASSWORD" Desc="Invalid password"/>
+    <ResultCodeItem Severity="Error" CodeName="ALREADY_LOGGEDIN" Desc="Already logged in"/>
+    <ResultCodeItem Severity="Error" CodeName="ALREADY_LOGGEDIN_OTHERPLACE" Desc="Already logged in at another place, and failed to kick"/>
+    <ResultCodeItem Severity="Error" CodeName="INVALID_SIGNATURE" Desc="Invalid user signature"/>
+    <ResultCodeItem Severity="Error" CodeName="NO_APP_OWNERSHIP" Desc="The user doesn't have app ownership"/>
+    <ResultCodeItem Severity="Error" CodeName="ACCOUNT_BLOCKED" Desc="The user is blocked"/>
+    <ResultCodeItem Severity="Error" CodeName="ACCOUNT_DOES_NOT_EXIST" Desc="The user is not exist"/>
+    <ResultCodeItem Severity="Error" CodeName="INVALID_PLATFORM_LOGIN" Desc="The user's platform login is invalid"/>
+
+
+</ResultCodes>
+

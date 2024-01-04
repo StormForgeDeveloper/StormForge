@@ -15,31 +15,31 @@ namespace SF {
 	public partial struct ResultCode {
 
 		// Invalid username 
-		public const int LOGIN_INVALID_USERNAME =                           unchecked((int)0xE7150000); 
+		public const int LOGIN_INVALID_USERNAME =                           unchecked((int)0xE7060000); 
 
 		// Invalid password 
-		public const int LOGIN_INVALID_PASSWORD =                           unchecked((int)0xE7150001); 
+		public const int LOGIN_INVALID_PASSWORD =                           unchecked((int)0xE7060001); 
 
 		// Already logged in 
-		public const int LOGIN_ALREADY_LOGGEDIN =                           unchecked((int)0xE7150002); 
+		public const int LOGIN_ALREADY_LOGGEDIN =                           unchecked((int)0xE7060002); 
 
 		// Already logged in at another place, and failed to kick 
-		public const int LOGIN_ALREADY_LOGGEDIN_OTHERPLACE =                unchecked((int)0xE7150003); 
+		public const int LOGIN_ALREADY_LOGGEDIN_OTHERPLACE =                unchecked((int)0xE7060003); 
 
 		// Invalid user signature 
-		public const int LOGIN_INVALID_SIGNATURE =                          unchecked((int)0xE7150004); 
+		public const int LOGIN_INVALID_SIGNATURE =                          unchecked((int)0xE7060004); 
 
 		// The user doesn't have app ownership 
-		public const int LOGIN_NO_APP_OWNERSHIP =                           unchecked((int)0xE7150005); 
+		public const int LOGIN_NO_APP_OWNERSHIP =                           unchecked((int)0xE7060005); 
 
 		// The user is blocked 
-		public const int LOGIN_ACCOUNT_BLOCKED =                            unchecked((int)0xE7150006); 
+		public const int LOGIN_ACCOUNT_BLOCKED =                            unchecked((int)0xE7060006); 
 
 		// The user is not exist 
-		public const int LOGIN_ACCOUNT_DOES_NOT_EXIST =                     unchecked((int)0xE7150007); 
+		public const int LOGIN_ACCOUNT_DOES_NOT_EXIST =                     unchecked((int)0xE7060007); 
 
 		// The user's platform login is invalid 
-		public const int LOGIN_INVALID_PLATFORM_LOGIN =                     unchecked((int)0xE7150008); 
+		public const int LOGIN_INVALID_PLATFORM_LOGIN =                     unchecked((int)0xE7060008); 
 
 	}
 }

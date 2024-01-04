@@ -9,6 +9,9 @@ COREBASE_SOURCES=ResultCodeLibrary.xml \
 
 ENGINE_OUTPUT_PATH=../../Src/SFEngine/ResultCode
 ENGINE_SOURCES=ResultCodeEngine.xml \
+	ResultCodeGame.xml \
+	ResultCodeLogin.xml \
+	ResultCodeNet.xml \
 
 
 ENGINE_SHARP_OUTPUT_PATH=../../Src/SFCoreSharp/ResultCode

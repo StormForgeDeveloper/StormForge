@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ResultCodes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:noNamespaceSchemaLocation="SFResultCode.xsd"
+             Facility="Net"
+             IDTable="false"
+             >
+
+  
+  <ResultCodeItem Severity="Success" CodeName="PROCESSED_SEQUENCE" Desc="Network sequence already processed"/>
+  <ResultCodeItem Severity="Error" CodeName="PROTOCOL_VERSION_MISMATCH" Desc="The version not available or miss match with system."/>
+  <ResultCodeItem Severity="Error" CodeName="NOTINITIALIZED" Desc="Network is not initialized"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_NETCLASS" Desc="The version not available or miss match with system."/>
+  <ResultCodeItem Severity="Error" CodeName="NOT_ENOUGH_WINDOWSPACE" Desc="Not enough space in sliding window"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_ABORTED" Desc="Network IO aborted"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_SEND_FAIL" Desc="Network IO send failed"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_RECV_FAIL" Desc="Network IO recv failed"/>
+  <ResultCodeItem Severity="Error" CodeName="SEND_FAIL" Desc="Network send failed"/>
+  <ResultCodeItem Severity="Error" CodeName="RECV_FAIL" Desc="Network recv failed"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_SEQUENCE" Desc="Network Message sequence is invalid"/>
+  <ResultCodeItem Severity="Error" CodeName="BADPACKET_SIZE" Desc="Network Message not expected bad packet size"/>
+  <ResultCodeItem Severity="Error" CodeName="CONNECTION_CLOSED" Desc="Network connection closed"/>
+  <ResultCodeItem Severity="Error" CodeName="NOT_CONNECTED" Desc="Network connection is never made"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_CID" Desc="Network connection ID is invalid"/>
+  <ResultCodeItem Severity="Error" CodeName="CONNECTION_TIMEOUT" Desc="Network Connection timeout"/>
+  <ResultCodeItem Severity="Error" CodeName="CONNECTION_FAIL" Desc="Network connection is failed"/>
+  <ResultCodeItem Severity="Error" CodeName="BADPACKET_TOOBIG" Desc="Too big packet data"/>
+  <ResultCodeItem Severity="Error" CodeName="BADPACKET_NOTEXPECTED" Desc="Network Message not expected bad packet"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_MESSAGE_CHECKSUM" Desc="Checksum value of the message is invalid"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_MESSAGE_ENCRYPTION" Desc="Message encryption is invalid"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_CONNECTION_STATE" Desc="Invalid connection state"/>
+  <ResultCodeItem Severity="Error" CodeName="SEQUENCE_OVERFLOW" Desc="Too big sequence id"/>
+  <ResultCodeItem Severity="Error" CodeName="INTR" Desc="A blocking operation was interrupted by a call to WSACancelBlockingCall."/>
+  <ResultCodeItem Severity="Error" CodeName="BADF" Desc="The file handle supplied is not valid."/>
+  <ResultCodeItem Severity="Error" CodeName="ACCES" Desc="An attempt was made to access a socket in a way forbidden by its access permissions"/>
+  <ResultCodeItem Severity="Error" CodeName="FAULT" Desc="The system detected an invalid pointer address in attempting to use a pointer argument in a call."/>
+  <ResultCodeItem Severity="Error" CodeName="INVAL" Desc="An invalid argument was supplied."/>
+  <ResultCodeItem Severity="Error" CodeName="MFILE" Desc="Too many open sockets."/>
+  <ResultCodeItem Severity="Error" CodeName="WOULDBLOCK" Desc="A non-blocking socket operation could not be completed immediately."/>
+  <ResultCodeItem Severity="Error" CodeName="INPROGRESS" Desc="A blocking operation is currently executing."/>
+  <ResultCodeItem Severity="Error" CodeName="ALREADY" Desc="An operation was attempted on a non-blocking socket that already had an operation in progress."/>
+  <ResultCodeItem Severity="Error" CodeName="NOTSOCK" Desc="An operation was attempted on something that is not a socket."/>
+  <ResultCodeItem Severity="Error" CodeName="DESTADDRREQ" Desc="A required address was omitted from an operation on a socket."/>
+  <ResultCodeItem Severity="Error" CodeName="NETDOWN" Desc="A socket operation encountered a dead network."/>
+  <ResultCodeItem Severity="Error" CodeName="NETUNREACH" Desc="A socket operation was attempted to an unreachable network."/>
+  <ResultCodeItem Severity="Error" CodeName="NETRESET" Desc="The connection has been broken due to keep-alive activity detecting a failure while the operation was in progress."/>
+  <ResultCodeItem Severity="Error" CodeName="CONNABORTED" Desc="An established connection was aborted by the software in your host machine."/>
+  <ResultCodeItem Severity="Error" CodeName="CONNRESET" Desc="An existing connection was forcibly closed by the remote host."/>
+  <ResultCodeItem Severity="Error" CodeName="NOBUFS" Desc="An operation on a socket could not be performed because the system lacked sufficient buffer space or because a queue was full."/>
+  <ResultCodeItem Severity="Error" CodeName="ISCONN" Desc="A connect request was made on an already connected socket."/>
+  <ResultCodeItem Severity="Error" CodeName="NOTCONN" Desc="A request to send or receive data was disallowed because the socket is not connected and (when sending on a datagram socket using a sendto call) no address was supplied."/>
+  <ResultCodeItem Severity="Error" CodeName="SHUTDOWN" Desc="A request to send or receive data was disallowed because the socket had already been shut down in that direction with a previous shutdown call."/>
+  <ResultCodeItem Severity="Error" CodeName="TOOMANYREFS" Desc="Too many references to some kernel object."/>
+  <ResultCodeItem Severity="Error" CodeName="TIMEDOUT" Desc="A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond."/>
+  <ResultCodeItem Severity="Error" CodeName="CONNECTION_REFUSSED" Desc="No connection could be made because the target machine actively refused it."/>
+  <ResultCodeItem Severity="Error" CodeName="LOOP" Desc="Cannot translate name."/>
+  <ResultCodeItem Severity="Error" CodeName="NAMETOOLONG" Desc="Name component or name was too long."/>
+  <ResultCodeItem Severity="Error" CodeName="HOSTDOWN" Desc="A socket operation failed because the destination host was down."/>
+  <ResultCodeItem Severity="Error" CodeName="HOSTUNREACH" Desc="A socket operation was attempted to an unreachable host."/>
+  <ResultCodeItem Severity="Error" CodeName="NOTEMPTY" Desc="Cannot remove a directory that is not empty."/>
+  <ResultCodeItem Severity="Error" CodeName="PROCLIM" Desc="A Windows Sockets implementation may have a limit on the number of applications that may use it simultaneously."/>
+  <ResultCodeItem Severity="Error" CodeName="SYSNOTREADY" Desc="WSAStartup cannot function at this time because the underlying system it uses to provide network services is currently unavailable."/>
+  <ResultCodeItem Severity="Error" CodeName="VERNOTSUPPORTED" Desc="The Windows Sockets version requested is not supported."/>
+  <ResultCodeItem Severity="Error" CodeName="NOTINITIALISED" Desc="Either the application has not called WSAStartup, or WSAStartup failed."/>
+  <ResultCodeItem Severity="Error" CodeName="DISCON" Desc="Returned by WSARecv or WSARecvFrom to indicate the remote party has initiated a graceful shutdown sequence."/>
+  <ResultCodeItem Severity="Error" CodeName="SYSCALLFAILURE" Desc="A system call has failed."/>
+  <ResultCodeItem Severity="Error" CodeName="HOST_NOT_FOUND" Desc="Host not found."/>
+  <ResultCodeItem Severity="Error" CodeName="TRY_AGAIN" Desc="Try again"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_PENDING" Desc="IOPending"/>
+  <ResultCodeItem Severity="Error" CodeName="SECURE_HOST_NOT_FOUND" Desc="No such host is known securely."/>
+  <ResultCodeItem Severity="Error" CodeName="PROTO" Desc="Protocol error"/>
+  <ResultCodeItem Severity="Error" CodeName="PROTOTYPE" Desc="Protocol wrong type for socket."/>
+  <ResultCodeItem Severity="Error" CodeName="NOPROTOOPT" Desc="Protocol not available"/>
+  <ResultCodeItem Severity="Error" CodeName="NONET" Desc="Machine is not on the network"/>
+  <ResultCodeItem Severity="Error" CodeName="OPNOTSUPP" Desc="Operation not supported on socket"/>
+  <ResultCodeItem Severity="Error" CodeName="BADFLAGS" Desc="An invalid value was provided for the ai_flags member of the pHints parameter."/>
+  <ResultCodeItem Severity="Error" CodeName="FAMILY" Desc="Bad network family"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_SERVICE" Desc="The pServiceName parameter is not supported for the specified ai_socktype member of the pHints parameter."/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_ADDRESS" Desc="Invalid network address"/>
+  <ResultCodeItem Severity="Error" CodeName="ADDRINUSE" Desc="Address in use"/>
+  <ResultCodeItem Severity="Error" CodeName="BADPACKET" Desc="Network Message not expected packet data"/>
+  <ResultCodeItem Severity="Error" CodeName="DISCONNECTED" Desc="Disconnected"/>
+
+</ResultCodes>
+

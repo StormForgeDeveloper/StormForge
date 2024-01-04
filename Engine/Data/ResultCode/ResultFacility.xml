@@ -7,7 +7,7 @@
   <Facility Facility="Engine" Value="0x702"/>
   <Facility Facility="Net" Value="0x703"/>
   <Facility Facility="Game" Value="0x704"/>
-
+  <Facility Facility="Login" Value="0x706"/>
 
 
 </ResultCodeFacilities>

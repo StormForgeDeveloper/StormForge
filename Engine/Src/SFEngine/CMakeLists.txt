@@ -365,6 +365,12 @@ set(SFENGINE_LIB_FILES
 	ResultCode/SFResultCodeEngine.cpp
 	ResultCode/SFResultCodeEngineComponent.h
 	ResultCode/SFResultCodeEngineComponent.cpp
+	ResultCode/SFResultCodeGame.h
+	ResultCode/SFResultCodeGame.cpp
+	ResultCode/SFResultCodeLogin.h
+	ResultCode/SFResultCodeLogin.cpp
+	ResultCode/SFResultCodeNet.h
+	ResultCode/SFResultCodeNet.cpp
 	SceneGraph/SFScene.h
 	SceneGraph/SFSceneNode.h
 	SceneGraph/SFSceneNodeComponent.h

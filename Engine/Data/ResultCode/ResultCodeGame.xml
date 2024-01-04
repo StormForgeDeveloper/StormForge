@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ResultCodes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:noNamespaceSchemaLocation="SFResultCode.xsd"
+             Facility="Game"
+             IDTable="true"
+             >
+
+
+	<ResultCodeItem Severity="Error" CodeName="ALREADY_IN_GAME" Desc="User is already in a game"/>
+	<ResultCodeItem Severity="Error" CodeName="INVALID_PLAYER" Desc="Invalid player"/>
+	<ResultCodeItem Severity="Error" CodeName="NOTREADY" Desc="Game is not ready"/>
+
+	<ResultCodeItem Severity="Error" CodeName="INVALID_PLAYER_STATE" Desc="Invalid player state to do the action"/>
+	<ResultCodeItem Severity="Error" CodeName="NO_MATCHING_HARVEST_ID" Desc="Failed to find matching harvest id"/>
+
+	<ResultCodeItem Severity="Error" CodeName="INVALID_SHOPITEM" Desc="Invalid shop item data"/>
+	<ResultCodeItem Severity="Error" CodeName="INVALID_SHOPITEMID" Desc="Invalid shop item id"/>
+
+	<ResultCodeItem Severity="Error" CodeName="ALREADY_IN_PARTY" Desc="User is already in a party"/>
+	<ResultCodeItem Severity="Error" CodeName="INVALID_PARTYID" Desc="Invalid partyID"/>
+	<ResultCodeItem Severity="Error" CodeName="INVALID_PLAYER_COUNT" Desc="Invalid player count for game"/>
+
+	<ResultCodeItem Severity="Error" CodeName="NO_PRIVILEGE" Desc="User doesn't have eligible privilege"/>
+	<ResultCodeItem Severity="Error" CodeName="NOTENOUGH_RESOURCE" Desc="Not enough money(gold, gem, etc)"/>
+	<ResultCodeItem Severity="Error" CodeName="MAX_NOTIFICATION" Desc="Maximum notification count"/>
+	<ResultCodeItem Severity="Error" CodeName="MAX_TRY" Desc="Maximum try reached"/>
+
+	<ResultCodeItem Severity="Error" CodeName="ALREADY_IN_CHAT" Desc="User is already in a chatting channel"/>
+
+	<ResultCodeItem Severity="Error" CodeName="MAPOBJECT_INVALID" Desc="Map object is invalid"/>
+	<ResultCodeItem Severity="Error" CodeName="OCCUPIED_MAPOBJECT_IS_REQUIRED" Desc="Map object is required to be occupied"/>
+	<ResultCodeItem Severity="Error" CodeName="MAPOBJECT_ALREADY_IN_USE" Desc="Map object is already in use"/>
+	<ResultCodeItem Severity="Error" CodeName="MAPOBJECT_NOT_IN_USE" Desc="Map object is not in use"/>
+	<ResultCodeItem Severity="Error" CodeName="MAPOBJECT_NOT_FOUND" Desc="Map object is already in use"/>
+	<ResultCodeItem Severity="Error" CodeName="MAPOBJECT_NOT_OCCUPIED_BY_PLAYER" Desc="Map object is not occupied by the player"/>
+
+	<ResultCodeItem Severity="Error" CodeName="INVALID_NPCID" Desc="Invalid NPC id"/>
+	<ResultCodeItem Severity="Error" CodeName="UNEXPECTED_TABLE_VALUE" Desc="Unexpected table value"/>
+	<ResultCodeItem Severity="Error" CodeName="NOT_ENOUGH_CURRENCY" Desc="Not enough currency"/>
+    <ResultCodeItem Severity="Error" CodeName="NOT_ENOUGH_STAMINA" Desc="Not enough stamina"/>
+
+    <ResultCodeItem Severity="Error" CodeName="PLAYER_IS_BUSY" Desc="The player is busy"/>
+    <ResultCodeItem Severity="Error" CodeName="PLAYER_TOO_FAR_AWAY" Desc="The player is too far away"/>
+    <ResultCodeItem Severity="Error" CodeName="INVALID_GOLD_VALUE" Desc="Invalid gold value has been specified"/>
+
+    <!--Legacy error codes-->
+	<ResultCodeItem Severity="Error" CodeName="INVALID_ROLE" Desc="Invalid player role"/>
+	<ResultCodeItem Severity="Error" CodeName="NOT_READY_FOR_NEXT_STATE" Desc="Not ready for next game play state"/>
+	<ResultCodeItem Severity="Error" CodeName="INVALID_VOTETYPE" Desc="Invalid vote type"/>
+	<ResultCodeItem Severity="Error" CodeName="INVALID_VOTE_STATE" Desc="Invalid vote state"/>
+	<ResultCodeItem Severity="Error" CodeName="INVALID_VOTE_TARGET" Desc="Invalid vote target"/>
+	<ResultCodeItem Severity="Error" CodeName="NO_SUFFRAGE" Desc="No suffrage"/>
+	<ResultCodeItem Severity="Error" CodeName="INVALID_GAMESTATE" Desc="Invalid game state"/>
+	<ResultCodeItem Severity="Error" CodeName="LOW_STAMINA" Desc="Doesn't have enough stamina"/>
+	<ResultCodeItem Severity="Error" CodeName="INVALID_COSTID" Desc="Invalid cost table id"/>
+	<ResultCodeItem Severity="Error" CodeName="INVALID_BOTTALK_TABLE" Desc="Invalid bot talk table"/>
+	
+</ResultCodes>
+
