@@ -242,7 +242,7 @@ namespace Net {
 
 	Proc_End:
 
-		if (!(hr))
+		if (hr.IsFailure())
 			TerminateNet();
 
 		if (socket != INVALID_SOCKET)

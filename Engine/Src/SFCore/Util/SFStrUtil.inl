@@ -410,13 +410,13 @@ namespace SF {
 			if (iBuffLen >= iSrcBuffLen)
 			{
 				hr = StringCopy(szDest, iBuffLen, szSrc);
-				if (!(hr)) return hr;
+				if (hr.IsFailure()) return hr;
 			}
 			else
 			{
 				return ResultCode::INVALID_ARG;
 				//hr = StringDup(szDest, szSrc);
-				//if (!(hr)) return hr;
+				//if (hr.IsFailure()) return hr;
 				//iBuffLen = iSrcBuffLen;
 			}
 
@@ -436,13 +436,13 @@ namespace SF {
 			if (iBuffLen >= iSrcBuffLen)
 			{
 				hr = StringCopy(szDest, iBuffLen, szSrc);
-				if (!(hr)) return hr;
+				if (hr.IsFailure()) return hr;
 			}
 			else
 			{
 				return ResultCode::INVALID_ARG;
 				//hr = StringDup(szDest, szSrc);
-				//if (!(hr)) return hr;
+				//if (hr.IsFailure()) return hr;
 				//iBuffLen = iSrcBuffLen;
 			}
 
@@ -459,7 +459,7 @@ namespace SF {
 
 
 			hr = StringCopyEx(szDest, iBuffLen, szSrc);
-			if (!(hr)) return hr;
+			if (hr.IsFailure()) return hr;
 
 			return StringLower(szDest, iBuffLen);
 		}
@@ -473,7 +473,7 @@ namespace SF {
 
 
 			hr = StringCopyEx(szDest, iBuffLen, szSrc);
-			if (!(hr)) return hr;
+			if (hr.IsFailure()) return hr;
 
 			return StringLower(szDest, iBuffLen);
 		}
@@ -496,7 +496,7 @@ namespace SF {
 			if (iBuffLen >= iSrcBuffLen)
 			{
 				hr = StringCopy(szDest, iConvLen, szSrc);
-				if (!(hr)) return hr;
+				if (hr.IsFailure()) return hr;
 			}
 
 			return StringLower(szDest, iConvLen);
@@ -517,7 +517,7 @@ namespace SF {
 			if (iBuffLen >= iSrcBuffLen)
 			{
 				hr = StringCopy(wszDest, iConvLen, wszSrc);
-				if (!(hr)) return hr;
+				if (hr.IsFailure()) return hr;
 			}
 
 			return StringLower(wszDest, iConvLen);
@@ -596,13 +596,13 @@ namespace SF {
 			if (iBuffLen >= iSrcBuffLen)
 			{
 				hr = StringCopy(szDest, iBuffLen, szSrc);
-				if (!(hr)) return hr;
+				if (hr.IsFailure()) return hr;
 			}
 			else
 			{
 				return ResultCode::INVALID_ARG;
 				//hr = StringDup(szDest, szSrc);
-				//if (!(hr)) return hr;
+				//if (hr.IsFailure()) return hr;
 				//iBuffLen = iSrcBuffLen;
 			}
 
@@ -622,13 +622,13 @@ namespace SF {
 			if (iBuffLen >= iSrcBuffLen)
 			{
 				hr = StringCopy(szDest, iBuffLen, szSrc);
-				if (!(hr)) return hr;
+				if (hr.IsFailure()) return hr;
 			}
 			else
 			{
 				return ResultCode::INVALID_ARG;
 				//hr = StringDup(szDest, szSrc);
-				//if (!(hr)) return hr;
+				//if (hr.IsFailure()) return hr;
 				//iBuffLen = iSrcBuffLen;
 			}
 
@@ -653,7 +653,7 @@ namespace SF {
 			if (iBuffLen >= iSrcBuffLen)
 			{
 				hr = StringCopy(szDest, iConvLen, szSrc);
-				if (!(hr)) return hr;
+				if (hr.IsFailure()) return hr;
 			}
 
 			return StringUpper(szDest, iConvLen);
@@ -674,7 +674,7 @@ namespace SF {
 			if (iBuffLen >= iSrcBuffLen)
 			{
 				hr = StringCopy(wszDest, iConvLen, wszSrc);
-				if (!(hr)) return hr;
+				if (hr.IsFailure()) return hr;
 			}
 
 			return StringUpper(wszDest, iConvLen);

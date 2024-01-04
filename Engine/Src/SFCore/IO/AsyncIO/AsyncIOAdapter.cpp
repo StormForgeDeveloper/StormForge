@@ -111,7 +111,7 @@ namespace AsyncIO {
 			else
 			{
 				hr = writeQueue->Dequeue(pWriteBuffer);
-				if (!(hr))
+				if (hr.IsFailure())
 				{
 					hr = ResultCode::SUCCESS;
 					break;

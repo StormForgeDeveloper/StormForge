@@ -554,13 +554,13 @@ namespace Net {
 			if (m_WorkerUDP.size() < 1)
 			{
 				Result hr = m_ListenWorker->RegisterSocket(cbInstance);
-				if (!(hr)) return hr;
+				if (hr.IsFailure()) return hr;
 			}
 			else
 			{
 				// UDP workers are sharing epoll, add any of them will work same.
 				Result hr = m_WorkerUDP[0]->RegisterSocket(cbInstance);
-				if (!(hr)) return hr;
+				if (hr.IsFailure()) return hr;
 			}
 			cbInstance->SetAssignedIOWorker(0);
 		}
@@ -596,12 +596,12 @@ namespace Net {
 			if (m_WorkerUDP.size() < 1)
 			{
 				Result hr = m_ListenWorker->UnregisterSocket(cbInstance);
-				if (!(hr)) return hr;
+				if (hr.IsFailure()) return hr;
 			}
 			else
 			{
 				Result hr = m_WorkerUDP[0]->UnregisterSocket(cbInstance);
-				if (!(hr)) return hr;
+				if (hr.IsFailure()) return hr;
 			}
 			cbInstance->SetAssignedIOWorker(-1);
 		}

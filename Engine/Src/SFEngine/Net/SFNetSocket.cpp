@@ -131,7 +131,7 @@ namespace Net {
 	//	while (1)
 	//	{
 	//		hr = writeQueue->GetFront(pSendBuffer);
-	//		if (!(hr))
+	//		if (hr.IsFailure())
 	//		{
 	//			hr = ResultCode::SUCCESS;
 	//			break;
@@ -455,7 +455,7 @@ namespace Net {
 
 	Proc_End:
 
-		if (!(hr))
+		if (hr.IsFailure())
 		{
 			Util::SafeDelete(pAcceptInfo);
 		}
@@ -490,7 +490,7 @@ namespace Net {
 
 		pRecvBuffer = new(GetSystemHeap()) IOBUFFER_READ;
 		hr = pRecvBuffer->SetPendingTrue();
-		if (!(hr))
+		if (hr.IsFailure())
 			return ResultCode::SUCCESS;
 
 		IncPendingRecvCount();

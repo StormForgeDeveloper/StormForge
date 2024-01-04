@@ -168,7 +168,7 @@ namespace Net {
 					Assert(false);
 					break;
 				default:
-					if (!(hr))
+					if (hr.IsFailure())
 					{
 						SFLog(Net, Info, "ERROR KQUEUE Recv fail events:{0:X8} hr:{1:X8}", events, hrErr);
 					}
@@ -194,7 +194,7 @@ namespace Net {
 		{
 			// This call will just poke working thread
 			hr = pCallBack->OnWriteReady();
-			if (!(hr))
+			if (hr.IsFailure())
 			{
 				//netErr(hr);
 				goto Proc_End;
@@ -203,7 +203,7 @@ namespace Net {
 
 	Proc_End:
 
-		if (!(hr))
+		if (hr.IsFailure())
 		{
 			SFLog(Net, Info, "ERROR KQUEUE RW fail events:{0:X8} hr:{1:X8}", events, hr);
 		}
@@ -555,13 +555,13 @@ namespace Net {
 			if (m_WorkerUDP.size() < 1)
 			{
 				Result hr = m_ListenWorker->RegisterSocket(cbInstance);
-				if (!(hr)) return hr;
+				if (hr.IsFailure()) return hr;
 			}
 			else
 			{
 				// UDP workers are sharing epoll, add any of them will work same.
 				Result hr = m_WorkerUDP[0]->RegisterSocket(cbInstance);
-				if (!(hr)) return hr;
+				if (hr.IsFailure()) return hr;
 			}
 			cbInstance->SetAssignedIOWorker(0);
 		}
@@ -597,12 +597,12 @@ namespace Net {
 			if (m_WorkerUDP.size() < 1)
 			{
 				Result hr = m_ListenWorker->UnregisterSocket(cbInstance);
-				if (!(hr)) return hr;
+				if (hr.IsFailure()) return hr;
 			}
 			else
 			{
 				Result hr = m_WorkerUDP[0]->UnregisterSocket(cbInstance);
-				if (!(hr)) return hr;
+				if (hr.IsFailure()) return hr;
 			}
 			cbInstance->SetAssignedIOWorker(-1);
 		}

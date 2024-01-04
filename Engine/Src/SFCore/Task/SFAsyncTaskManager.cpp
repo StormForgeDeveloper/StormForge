@@ -237,7 +237,7 @@ namespace SF {
 	Result AsyncTaskManagerComponent::InitializeComponent()
 	{
 		Result hr = LibraryComponent::InitializeComponent();
-		if (!(hr)) return hr;
+		if (hr.IsFailure()) return hr;
 
 		m_TaskManager.Initialize();
 

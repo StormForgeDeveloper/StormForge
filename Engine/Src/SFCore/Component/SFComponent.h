@@ -186,7 +186,7 @@ namespace SF
 				return ResultCode::OUT_OF_MEMORY;
 
 			Result hr = AddComponent(newComponent);
-			if (!(hr))
+			if (hr.IsFailure())
 			{
 				IHeap::Delete(newComponent);
 			}

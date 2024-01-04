@@ -238,12 +238,12 @@ namespace Net {
 		sockaddr_storage sockAddr;
 
 		Result hr = SetSockAddr(sockAddr, Addressess, port);
-		if (!(hr))
+		if (hr.IsFailure())
 			return hr;
 
 		netAddr.SocketFamily = ToSockFamily(sockAddr.ss_family);
 		hr = StrUtil::StringCopy(netAddr.Address, (INT)countof(netAddr.Address), Addressess);
-		if (!(hr))
+		if (hr.IsFailure())
 			return hr;
 
 		netAddr.Port = port;

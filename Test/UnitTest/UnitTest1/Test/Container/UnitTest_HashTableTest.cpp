@@ -97,13 +97,13 @@ TEST_F(HashTableTest, HashTable_NonUnique)
 		hr = TestMap.find( itCheck->first, itCur);
 		EXPECT_TRUE(  hr );
 
-		if( !(hr) )
+		if( hr.IsFailure())
 			continue;
 		TestMapNode *pNode = *itCur;
 
 		hr = TestMap.erase( itCur );
 		EXPECT_TRUE( hr );
-		if( !(hr) )
+		if(hr.IsFailure())
 			continue;
 		delete pNode;
 	}

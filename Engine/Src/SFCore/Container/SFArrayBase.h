@@ -516,7 +516,7 @@ namespace SF {
         while (size() == GetAllocatedSize() || newSize >= GetAllocatedSize())
         {
             hr = IncreaseSize();
-            if (!(hr)) return hr;
+            if (hr.IsFailure()) return hr;
         }
 
         if (index < m_Size)
@@ -552,7 +552,7 @@ namespace SF {
         if (size() == GetAllocatedSize())
         {
             hr = IncreaseSize();
-            if (!(hr)) return hr;
+            if (hr.IsFailure()) return hr;
         }
 
         assert(size() < GetAllocatedSize());
@@ -571,7 +571,7 @@ namespace SF {
         if (size() == GetAllocatedSize())
         {
             hr = IncreaseSize();
-            if (!(hr)) return hr;
+            if (hr.IsFailure()) return hr;
         }
 
         assert(size() < GetAllocatedSize());
@@ -591,7 +591,7 @@ namespace SF {
         if (newSize > GetAllocatedSize())
         {
             hr = reserve(newSize + GetIncreaseSize());
-            if (!(hr)) return hr;
+            if (hr.IsFailure()) return hr;
         }
 
         assert(newSize <= GetAllocatedSize());

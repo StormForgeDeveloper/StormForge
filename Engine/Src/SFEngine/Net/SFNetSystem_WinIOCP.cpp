@@ -403,7 +403,7 @@ namespace Net {
 
 		Proc_End:
 
-			if( !(hr) )
+			if (hr.IsFailure())
 			{
 				Terminate();
 			}

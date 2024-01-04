@@ -108,13 +108,13 @@ TEST_F(HashTableTest, HashTable2_NonUnique)
 		hr = TestMap.Find(itCheck->first, pNode);
 		AssertRel((hr));
 
-		if (!(hr))
+		if (hr.IsFailure())
 			continue;
 		TestMapNode2* pErased = nullptr;
 		hr = TestMap.Erase(pNode->Value, pErased);
 		AssertRel(pNode == pErased);
 		AssertRel((hr));
-		if (!(hr))
+		if (hr.IsFailure())
 			continue;
 		delete pNode;
 	}

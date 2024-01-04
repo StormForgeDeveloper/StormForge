@@ -139,7 +139,7 @@ namespace AsyncIO {
 		if (events & EVFILT_READ)
 		{
 			hr = pCallBack->OnReadReady();
-			if (!(hr))
+			if (hr.IsFailure())
 			{
 				goto Proc_End;
 			}
@@ -149,7 +149,7 @@ namespace AsyncIO {
 		{
 			// This call will just poke working thread
 			hr = pCallBack->OnWriteReady();
-			if (!(hr))
+			if (hr.IsFailure())
 			{
 				goto Proc_End;
 			}
@@ -157,7 +157,7 @@ namespace AsyncIO {
 
 	Proc_End:
 
-		if (!(hr))
+		if (hr.IsFailure())
 		{
 			SFLog(System, Info, "ERROR KQUEUE RW fail events:{0:X8} hr:{1:X8}", events, hr);
 		}
