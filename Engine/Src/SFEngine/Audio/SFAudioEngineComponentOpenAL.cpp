@@ -155,10 +155,19 @@ namespace SF
             deviceName = GetDefaultDeviceName(true);
         }
 
-        if (m_PlaybackDevice.IsValid() && m_PlaybackDevice->GetDeviceName() == deviceName)
+        if (m_PlaybackDevice.IsValid())
         {
-            return ResultCode::SUCCESS;
+            if (m_PlaybackDevice->GetDeviceName() == deviceName)
+            {
+                return ResultCode::SUCCESS;
+            }
+            else
+            {
+                m_PlaybackDevice->Dispose();
+                m_PlaybackDevice.reset();
+            }
         }
+
 
         Result hr;
         auto* pDevice = new(GetSystemHeap()) AudioPlaybackDeviceOpenAL(deviceName);

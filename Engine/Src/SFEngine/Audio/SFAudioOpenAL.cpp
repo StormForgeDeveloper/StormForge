@@ -74,7 +74,8 @@ namespace SF
     void AudioOpenAL::ClearALError()
     {
         ALenum alError = alGetError();
-        while (alError != AL_NO_ERROR)
+        // if there is not current context, it will return AL_INVALID_OPERATION always.
+        while (alError != AL_NO_ERROR && alError != AL_INVALID_OPERATION)
         {
             alError = alGetError();
         }
