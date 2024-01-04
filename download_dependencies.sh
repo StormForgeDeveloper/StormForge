@@ -13,6 +13,21 @@ echo $VULKAN_SDK
 echo $Triplet=$SF_VCPKG_TRIPLET
 echo $VCPKGDIR=$SF_VCPKGDIR
 
+DO_UPGRADE=0
+for i in "$@"; do
+  case $i in
+    -upgrade=*|--upgrade=*)
+      DO_UPGRADE="${i#*=}"
+      shift # past argument=value
+      ;;
+    -*|--*)
+      echo "Unknown option $i"
+      exit 1
+      ;;
+    *)
+      ;;
+  esac
+done
 
 deps='vcpkg-pkgconfig-get-modules,
         zlib,
@@ -56,9 +71,6 @@ deps='vcpkg-pkgconfig-get-modules,
 if [ ! -d "$VCPKGDIR" ]
     then 
         git clone https://github.com/Microsoft/vcpkg.git $VCPKGDIR
-	else
-		pushd $VCPKGDIR
-		git pull .
 fi
 
 pushd vcpkg
@@ -75,12 +87,19 @@ do
 	./vcpkg install $dep --triplet $Triplet --recurse
 done
 
-git pull
-
 ./vcpkg install curl[openssl,websockets] --recurse
 
-./vcpkg update
-./vcpkg upgrade --no-dry-run --allow-unsupported
+
+if [ "$DO_UPGRADE" = "1" ]
+then
+	echo Upgrading vcpkg packages
+	git pull .
+	./vcpkg update
+	./vcpkg upgrade --no-dry-run --allow-unsupported
+else
+	echo Skip upgrade
+	echo Add parameter "--upgrade=1" to upgrade
+fi
 
 popd
 

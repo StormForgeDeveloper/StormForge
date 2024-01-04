@@ -1,6 +1,9 @@
 # Copyright Kyungkun Ko
 
 
+param ($upgrade)
+
+
 $deps = "vcpkg-pkgconfig-get-modules",
         "zlib",
 		"liblzma",
@@ -84,14 +87,9 @@ try {
 	Write-Host "Checking for $vcpkgdir..."
 	if (-not (Test-Path $vcpkgdir)) {
 		git clone https://github.com/Microsoft/vcpkg.git
-		
-		cd $vcpkgdir
-	}
-	else {
-		cd $vcpkgdir
-		git pull 
 	}
 
+	cd $vcpkgdir
 
 	if (-not (Test-Path -LiteralPath vcpkg.exe)) {
 		Write-Host "Installing vcpkg..."
@@ -104,9 +102,20 @@ try {
 	./vcpkg.exe install $deps_shared --triplet $triplet_shared
 
 	./vcpkg.exe install $deps --triplet $triplet
+
 	
-	./vcpkg.exe update
-	./vcpkg.exe upgrade --no-dry-run --allow-unsupported
+	if ($upgrade = 1)
+	{
+		Write-Host "Upgrading ($upgrade)..."
+		git pull 
+		./vcpkg.exe update
+		./vcpkg.exe upgrade --no-dry-run --allow-unsupported
+	}
+	else
+	{
+		Write-Host "Skip upgrade ($upgrade)..."
+		Write-Host "	specify parameter to upgrade example:"download_dependencies.ps1 -upgrade 1""
+	}
 	
 	cd ..\3rdParties
 	
