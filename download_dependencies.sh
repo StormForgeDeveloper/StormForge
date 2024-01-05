@@ -98,7 +98,7 @@ then
 	./vcpkg upgrade --no-dry-run --allow-unsupported
 else
 	echo Skip upgrade
-	echo Add parameter "--upgrade=1" to upgrade
+	echo Add parameter "-upgrade=1" to upgrade
 fi
 
 popd
