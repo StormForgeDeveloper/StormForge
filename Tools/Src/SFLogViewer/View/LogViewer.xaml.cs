@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO.Compression;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -65,7 +65,7 @@ namespace SFLogViewer.View
 
             AddHotKeys();
 
-            GlobalEngine.Start("SFLogViewer");
+            GlobalEngine.Start("SFLogViewer", string.Empty, string.Empty, 0);
 
             m_InitialBacklog = initialBacklog;
             this.Title = string.Format("{0},{1}", logServerAddress, topic);

@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "UpdateBuildVersion": {
+      "commandName": "Project",
+      "commandLineArgs": "-depotroot=//fishing-depot/client/client-dev/... -versionfile=//fishing-depot/client/client-dev/Assets/Resources/Data/BuildVersion.txt",
+      "workingDirectory": "D:\\fishing\\client\\master\\Scripts"
+    }
+  }
+}

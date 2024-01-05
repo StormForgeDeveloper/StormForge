@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -43,7 +43,7 @@ namespace SFLogViewer
             var backLog = SavedValueRegistry.ReadValue("InitialBacklog", "100");
             textBacklog.Text = backLog;
 
-            GlobalEngine.Start("SFLogViewer", logServerAddress);
+            GlobalEngine.Start("SFLogViewer", logServerAddress, string.Empty, 0);
 
             RefreshChannelList();
 

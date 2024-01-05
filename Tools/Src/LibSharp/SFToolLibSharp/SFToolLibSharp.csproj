@@ -2,12 +2,11 @@
 
   <PropertyGroup>
 	  <OutputType>Library</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
-	<Platforms>x64</Platforms>
-	  <UseWPF>true</UseWPF>
+    <TargetFramework>net6.0</TargetFramework>
 	<ApplicationIcon />
 	<StartupObject />
 	<RootNamespace>SF</RootNamespace>
+	<Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
