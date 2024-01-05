@@ -79,7 +79,7 @@ namespace SF
 
     private:
 
-        void TickUpdate();
+        void AudioTickUpdate();
 
     private:
 

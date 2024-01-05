@@ -54,7 +54,7 @@ namespace SF
         m_AudioThread.reset(
             new(GetSystemHeap()) FunctorTickThread([&](Thread* pThisThread)->bool
                 {
-                    TickUpdate();
+                    AudioTickUpdate();
                     return true;
                 })
         );
@@ -271,7 +271,7 @@ namespace SF
     }
 
 
-    void AudioEngineComponentOpenAL::TickUpdate()
+    void AudioEngineComponentOpenAL::AudioTickUpdate()
     {
         auto playbackDevice = m_PlaybackDevice.get();
         if (playbackDevice == nullptr)
