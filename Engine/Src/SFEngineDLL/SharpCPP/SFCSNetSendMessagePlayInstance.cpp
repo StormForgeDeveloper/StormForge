@@ -206,16 +206,16 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionCmd( intptr_t InNativeC
 
 
 // C2S: Send coded voice data to server
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t InFrameIndex, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::SendVoiceDataC2SEvt::CalculateMessageSize( InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInVoiceData, _sizeOfInVoiceData, const_cast<uint8_t*>(InVoiceData)));
+	size_t messageSize = SF::Message::PlayInstance::SendVoiceDataC2SEvt::CalculateMessageSize( InPlayInstanceUID, InPlayerID, InFrameIndex,SF::ArrayView<uint8_t>(_sizeOfInVoiceData, _sizeOfInVoiceData, const_cast<uint8_t*>(InVoiceData)));
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::SendVoiceDataC2SEvt::Create(pMessage,  InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInVoiceData, _sizeOfInVoiceData, const_cast<uint8_t*>(InVoiceData)));
+	Result hr = SF::Message::PlayInstance::SendVoiceDataC2SEvt::Create(pMessage,  InPlayInstanceUID, InPlayerID, InFrameIndex,SF::ArrayView<uint8_t>(_sizeOfInVoiceData, _sizeOfInVoiceData, const_cast<uint8_t*>(InVoiceData)));
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (int32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t InFrameIndex, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
 
 
 
@@ -475,16 +475,16 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionRes( intptr_t InNativeC
 
 
 // S2C: Voice data
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt( intptr_t InNativeConnectionHandle, uint32_t InActorID, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt( intptr_t InNativeConnectionHandle, uint32_t InActorID, uint16_t InFrameIndex, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::VoiceDataS2CEvt::CalculateMessageSize( InActorID,SF::ArrayView<uint8_t>(_sizeOfInVoiceData, _sizeOfInVoiceData, const_cast<uint8_t*>(InVoiceData)));
+	size_t messageSize = SF::Message::PlayInstance::VoiceDataS2CEvt::CalculateMessageSize( InActorID, InFrameIndex,SF::ArrayView<uint8_t>(_sizeOfInVoiceData, _sizeOfInVoiceData, const_cast<uint8_t*>(InVoiceData)));
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::VoiceDataS2CEvt::Create(pMessage,  InActorID,SF::ArrayView<uint8_t>(_sizeOfInVoiceData, _sizeOfInVoiceData, const_cast<uint8_t*>(InVoiceData)));
+	Result hr = SF::Message::PlayInstance::VoiceDataS2CEvt::Create(pMessage,  InActorID, InFrameIndex,SF::ArrayView<uint8_t>(_sizeOfInVoiceData, _sizeOfInVoiceData, const_cast<uint8_t*>(InVoiceData)));
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (int32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt( intptr_t InNativeConnectionHandle, uint32_t InActorID, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt( intptr_t InNativeConnectionHandle, uint32_t InActorID, uint16_t InFrameIndex, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
 
 
 

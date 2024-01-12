@@ -229,6 +229,8 @@ namespace SF
 
             base64Password.push_back('\0');
 
+            SFLog(Game, Info, "RequestingLogin: {0}, {1}", m_Owner.GetUserId(), (const char*)base64Password.data());
+
             String url;
             url.Format("http://{0}/BR/Login/v1/idpw?AccessKey={1}&userId={2}&password={3}",
                 m_Owner.GetLoginAddresses(), "8FACAEB9-E54D-4CDF-BF85-23F7AF0B9147", m_Owner.GetUserId(), (const char*)base64Password.data());
@@ -267,6 +269,8 @@ namespace SF
             base64PlatformName.reserve(m_Owner.GetSteamUserName().GetLength() * 3);
             defCheck(Util::Base64Encode(m_Owner.GetSteamUserName().GetLength(), reinterpret_cast<const uint8_t*>(m_Owner.GetSteamUserName().data()), base64PlatformName));
             base64PlatformName.push_back('\0');
+
+            SFLog(Game, Info, "RequestingSteamLogin: {0}, {1}", m_Owner.GetSteamUserId(), (const char*)base64PlatformName.data());
 
             String url;
             url.Format("http://{0}/BR/Login/v1/steam?AccessKey={1}&steamAccountId={2}&steamUserName={3}&steamUserToken={4}",

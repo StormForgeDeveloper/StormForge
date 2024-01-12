@@ -282,16 +282,16 @@ namespace SF.Net
 		} // public int  CallFunctionCmd( SF.TransactionID InTransactionID, System.UInt32 InFunctionName, System.UInt64 InPlayerID, SF.VariableTable InParameters, Action<SFMessage>? callback = null )
 
 		// C2S: Send coded voice data to server
-		public int  SendVoiceDataC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.Byte[] InVoiceData )
+		public int  SendVoiceDataC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt16 InFrameIndex, System.Byte[] InVoiceData )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID,(ushort)InVoiceData.Length, InVoiceData);
+			result = CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID, InFrameIndex,(ushort)InVoiceData.Length, InVoiceData);
 			}
 			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.SendVoiceDataC2SEvt);
 			return result;
-		} // public int  SendVoiceDataC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.Byte[] InVoiceData )
+		} // public int  SendVoiceDataC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt16 InFrameIndex, System.Byte[] InVoiceData )
 
 
 		#region Native Interfaces 
@@ -371,7 +371,7 @@ namespace SF.Net
 
 		// C2S: Send coded voice data to server
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt16 _sizeOfInVoiceData,System.Byte[] InVoiceData );
+		static extern int CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt16 InFrameIndex, System.UInt16 _sizeOfInVoiceData,System.Byte[] InVoiceData );
 
 
 
@@ -647,16 +647,16 @@ namespace SF.Net
 
 
 		// S2C: Voice data
-		public int  VoiceDataS2CEvt( System.UInt32 InActorID, System.Byte[] InVoiceData )
+		public int  VoiceDataS2CEvt( System.UInt32 InActorID, System.UInt16 InFrameIndex, System.Byte[] InVoiceData )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt(m_Connection.NativeHandle, InActorID,(ushort)InVoiceData.Length, InVoiceData);
+			result = CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt(m_Connection.NativeHandle, InActorID, InFrameIndex,(ushort)InVoiceData.Length, InVoiceData);
 			}
 			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.VoiceDataS2CEvt);
 			return result;
-		} // public int  VoiceDataS2CEvt( System.UInt32 InActorID, System.Byte[] InVoiceData )
+		} // public int  VoiceDataS2CEvt( System.UInt32 InActorID, System.UInt16 InFrameIndex, System.Byte[] InVoiceData )
 
 
 		#region Native Interfaces 
@@ -770,7 +770,7 @@ namespace SF.Net
 
 		// S2C: Voice data
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt32 InActorID, System.UInt16 _sizeOfInVoiceData,System.Byte[] InVoiceData );
+		static extern int CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt32 InActorID, System.UInt16 InFrameIndex, System.UInt16 _sizeOfInVoiceData,System.Byte[] InVoiceData );
 
 
 

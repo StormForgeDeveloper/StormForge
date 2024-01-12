@@ -1568,6 +1568,7 @@ namespace SF
 			private:
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
+				uint16_t m_FrameIndex{};
 				ArrayView<uint8_t> m_VoiceData;
 			public:
 				SendVoiceDataC2SEvt()
@@ -1583,6 +1584,7 @@ namespace SF
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const uint16_t& GetFrameIndex() const	{ return m_FrameIndex; };
 				const Array<uint8_t>& GetVoiceData() const	{ return m_VoiceData; };
 
 				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
@@ -1591,8 +1593,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData );
+				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
 
 			}; // class SendVoiceDataC2SEvt : public MessageBase
 
@@ -1612,6 +1614,7 @@ namespace SF
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
 				uint32_t m_ActorID{};
+				uint16_t m_FrameIndex{};
 				ArrayView<uint8_t> m_VoiceData;
 			public:
 				VoiceDataS2CEvt()
@@ -1626,6 +1629,7 @@ namespace SF
 					{}
 
 				const uint32_t& GetActorID() const	{ return m_ActorID; };
+				const uint16_t& GetFrameIndex() const	{ return m_FrameIndex; };
 				const Array<uint8_t>& GetVoiceData() const	{ return m_VoiceData; };
 
 				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
@@ -1634,8 +1638,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint32_t &InActorID, const Array<uint8_t>& InVoiceData );
-				static Result Create( MessageHeader* messageBuffer, const uint32_t &InActorID, const Array<uint8_t>& InVoiceData );
+				static size_t CalculateMessageSize( const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
+				static Result Create( MessageHeader* messageBuffer, const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
 
 			}; // class VoiceDataS2CEvt : public MessageBase
 

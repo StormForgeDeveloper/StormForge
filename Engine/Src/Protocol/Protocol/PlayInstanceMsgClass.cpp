@@ -3962,6 +3962,7 @@ namespace SF
 
 				protocolCheck(*input >> m_PlayInstanceUID);
 				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(*input >> m_FrameIndex);
 				protocolCheck(input->Read(ArrayLen));
 				uint8_t* VoiceDataPtr = nullptr;
 				protocolCheck(input->ReadLink(VoiceDataPtr, ArrayLen));
@@ -3981,6 +3982,7 @@ namespace SF
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariable("FrameIndex", parser.GetFrameIndex());
 				variableBuilder.SetVariable("VoiceData", parser.GetVoiceData());
 
 				return hr;
@@ -3999,25 +4001,27 @@ namespace SF
 			}; // Result SendVoiceDataC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t SendVoiceDataC2SEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData )
+			size_t SendVoiceDataC2SEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InFrameIndex)
 					+ SerializedSizeOf(InVoiceData)
 				);
 
 				return __uiMessageSize;
-			}; // size_t SendVoiceDataC2SEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData )
+			}; // size_t SendVoiceDataC2SEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
 
 
-			Result SendVoiceDataC2SEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData )
+			Result SendVoiceDataC2SEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
 			{
  				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InFrameIndex)
 					+ SerializedSizeOf(InVoiceData)
 				);
 
@@ -4033,17 +4037,18 @@ namespace SF
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InFrameIndex);
 				protocolCheck(*output << InVoiceData);
 
 				return hr;
-			}; // Result SendVoiceDataC2SEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData )
+			}; // Result SendVoiceDataC2SEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
 
 			Result SendVoiceDataC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				SendVoiceDataC2SEvt parser;
 				parser.ParseMessage(pHeader);
-				SFLog(Net, Debug6, "PlayInstance::SendVoiceData, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, VoiceData:{4,30}",
-						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetVoiceData()); 
+				SFLog(Net, Debug6, "PlayInstance::SendVoiceData, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, FrameIndex:{4}, VoiceData:{5,30}",
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetFrameIndex(), parser.GetVoiceData()); 
 				return ResultCode::SUCCESS;
 			}; // Result SendVoiceDataC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
@@ -4062,6 +4067,7 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_ActorID);
+				protocolCheck(*input >> m_FrameIndex);
 				protocolCheck(input->Read(ArrayLen));
 				uint8_t* VoiceDataPtr = nullptr;
 				protocolCheck(input->ReadLink(VoiceDataPtr, ArrayLen));
@@ -4080,6 +4086,7 @@ namespace SF
 				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("ActorID", parser.GetActorID());
+				variableBuilder.SetVariable("FrameIndex", parser.GetFrameIndex());
 				variableBuilder.SetVariable("VoiceData", parser.GetVoiceData());
 
 				return hr;
@@ -4098,23 +4105,25 @@ namespace SF
 			}; // Result VoiceDataS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t VoiceDataS2CEvt::CalculateMessageSize( const uint32_t &InActorID, const Array<uint8_t>& InVoiceData )
+			size_t VoiceDataS2CEvt::CalculateMessageSize( const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InActorID)
+					+ SerializedSizeOf(InFrameIndex)
 					+ SerializedSizeOf(InVoiceData)
 				);
 
 				return __uiMessageSize;
-			}; // size_t VoiceDataS2CEvt::CalculateMessageSize( const uint32_t &InActorID, const Array<uint8_t>& InVoiceData )
+			}; // size_t VoiceDataS2CEvt::CalculateMessageSize( const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
 
 
-			Result VoiceDataS2CEvt::Create( MessageHeader* messageBuffer, const uint32_t &InActorID, const Array<uint8_t>& InVoiceData )
+			Result VoiceDataS2CEvt::Create( MessageHeader* messageBuffer, const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
 			{
  				Result hr;
 
 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InActorID)
+					+ SerializedSizeOf(InFrameIndex)
 					+ SerializedSizeOf(InVoiceData)
 				);
 
@@ -4129,17 +4138,18 @@ namespace SF
 				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InActorID);
+				protocolCheck(*output << InFrameIndex);
 				protocolCheck(*output << InVoiceData);
 
 				return hr;
-			}; // Result VoiceDataS2CEvt::Create( MessageHeader* messageBuffer, const uint32_t &InActorID, const Array<uint8_t>& InVoiceData )
+			}; // Result VoiceDataS2CEvt::Create( MessageHeader* messageBuffer, const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
 
 			Result VoiceDataS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				VoiceDataS2CEvt parser;
 				parser.ParseMessage(pHeader);
-				SFLog(Net, Debug6, "PlayInstance::VoiceData, {0}:{1} , ActorID:{2}, VoiceData:{3,30}",
-						prefix, pHeader->Length, parser.GetActorID(), parser.GetVoiceData()); 
+				SFLog(Net, Debug6, "PlayInstance::VoiceData, {0}:{1} , ActorID:{2}, FrameIndex:{3}, VoiceData:{4,30}",
+						prefix, pHeader->Length, parser.GetActorID(), parser.GetFrameIndex(), parser.GetVoiceData()); 
 				return ResultCode::SUCCESS;
 			}; // Result VoiceDataS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 

@@ -205,18 +205,18 @@ namespace SF
 
 	}; // Result NetPolicyPlayInstance::CallFunctionCmd( const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters )
 	// C2S: Send coded voice data to server
-	Result NetPolicyPlayInstance::SendVoiceDataC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData )
+	Result NetPolicyPlayInstance::SendVoiceDataC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
 	{
  		Result hr;
 
-		size_t messageSize = SF::Message::PlayInstance::SendVoiceDataC2SEvt::CalculateMessageSize(InPlayInstanceUID, InPlayerID, InVoiceData);
+		size_t messageSize = SF::Message::PlayInstance::SendVoiceDataC2SEvt::CalculateMessageSize(InPlayInstanceUID, InPlayerID, InFrameIndex, InVoiceData);
 		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
 		protocolCheckPtr(m_Endpoint);
 
-		protocolCheck(SF::Message::PlayInstance::SendVoiceDataC2SEvt::Create(messageBuffer, InPlayInstanceUID, InPlayerID, InVoiceData));
+		protocolCheck(SF::Message::PlayInstance::SendVoiceDataC2SEvt::Create(messageBuffer, InPlayInstanceUID, InPlayerID, InFrameIndex, InVoiceData));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyPlayInstance::SendVoiceDataC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData )
+	}; // Result NetPolicyPlayInstance::SendVoiceDataC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
 
 
 	// Cmd: Player Join request.
@@ -454,18 +454,18 @@ namespace SF
 
 	}; // Result NetSvrPolicyPlayInstance::CallFunctionRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InResults )
 	// S2C: Voice data
-	Result NetSvrPolicyPlayInstance::VoiceDataS2CEvt( const uint32_t &InActorID, const Array<uint8_t>& InVoiceData )
+	Result NetSvrPolicyPlayInstance::VoiceDataS2CEvt( const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
 	{
  		Result hr;
 
-		size_t messageSize = SF::Message::PlayInstance::VoiceDataS2CEvt::CalculateMessageSize(InActorID, InVoiceData);
+		size_t messageSize = SF::Message::PlayInstance::VoiceDataS2CEvt::CalculateMessageSize(InActorID, InFrameIndex, InVoiceData);
 		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
 		protocolCheckPtr(m_Endpoint);
 
-		protocolCheck(SF::Message::PlayInstance::VoiceDataS2CEvt::Create(messageBuffer, InActorID, InVoiceData));
+		protocolCheck(SF::Message::PlayInstance::VoiceDataS2CEvt::Create(messageBuffer, InActorID, InFrameIndex, InVoiceData));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyPlayInstance::VoiceDataS2CEvt( const uint32_t &InActorID, const Array<uint8_t>& InVoiceData )
+	}; // Result NetSvrPolicyPlayInstance::VoiceDataS2CEvt( const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
 
 
 }; // namespace SF

@@ -97,6 +97,8 @@
 "Parameters"
 "SendVoiceData"
 "SendVoiceDataC2SEvt"
+"FrameIndex"
+"uint16"
 "VoiceData"
 "VoiceDataS2CEvt"
 
