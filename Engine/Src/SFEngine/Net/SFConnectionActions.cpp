@@ -182,6 +182,7 @@ namespace Net {
 				if (GetConnectionState() == ConnectionState::CONNECTING || GetConnectionState() == ConnectionState::CONNECTED)
 				{
 					// Protocol version mismatch
+                    SFLog(Net, Warning, "Protocol version mismatch CID:{0}, Have:{1}", GetCID(), SF_PROTOCOL_VERSION);
 					OnConnectionResult(ResultCode::IO_PROTOCOL_VERSION_MISMATCH);
 				}
 				netChk(Disconnect("Protocal mismatch"));
@@ -206,6 +207,7 @@ namespace Net {
 			{
 			case NetCtrlCode_Connect:
 				// Protocol version mismatch
+                SFLog(Net, Warning, "Protocol version mismatch CID:{0}, Have:{1}", GetCID(), SF_PROTOCOL_VERSION);
 				OnConnectionResult(ResultCode::IO_PROTOCOL_VERSION_MISMATCH);
 				netCheck(Disconnect("Protocol mismatch"));
 				break;
@@ -351,6 +353,7 @@ namespace Net {
 			if (ProtocolVersion != SF_PROTOCOL_VERSION)
 			{
 				netCheck(SendNetCtrl(PACKET_NETCTRL_NACK, pHeader->msgID.IDSeq.Sequence, pHeader->msgID));
+                SFLog(Net, Warning, "Protocol version mismatch CID:{0}, RecvVer:{1}, Expected:{2}", GetCID(), pNetCtrlConnect->ProtocolVersion, SF_PROTOCOL_VERSION);
 				OnConnectionResult(ResultCode::IO_PROTOCOL_VERSION_MISMATCH);
 				netCheck(Disconnect("Protocol mismatch"));
 				break;
@@ -401,7 +404,8 @@ namespace Net {
 			if (pNetCtrlConnect->ProtocolVersion != SF_PROTOCOL_VERSION)
 			{
 				netCheck(SendNetCtrl(PACKET_NETCTRL_NACK, pHeader->msgID.IDSeq.Sequence, pHeader->msgID));
-				OnConnectionResult(ResultCode::IO_PROTOCOL_VERSION_MISMATCH);
+                SFLog(Net, Warning, "Protocol version mismatch CID:{0}, RecvVer:{1}, Expected:{2}", GetCID(), pNetCtrlConnect->ProtocolVersion, SF_PROTOCOL_VERSION);
+                OnConnectionResult(ResultCode::IO_PROTOCOL_VERSION_MISMATCH);
 				netCheck(Disconnect("Protocol mismatch"));
 				break;
 			}
