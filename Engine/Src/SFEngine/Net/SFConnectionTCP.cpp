@@ -114,11 +114,29 @@ namespace Net {
 	// called when receiving message
 	Result ConnectionTCP::MyNetSocketIOAdapter::OnIORecvCompleted(Result hrRes, IOBUFFER_READ* &pIOBuffer)
 	{
-		Result hr = ResultCode::SUCCESS;
+        ScopeContext hr([this, &pIOBuffer](Result hr)
+            {
+                // decrease should be happened at last, and always
+                if (NetSystem::IsProactorSystem())
+                {
+                    DecPendingRecvCount();
+
+                    PendingRecv();
+                }
+
+                if (pIOBuffer != nullptr)
+                {
+                    pIOBuffer->SetPendingFalse();
+                    Util::SafeDelete(pIOBuffer);
+                }
+
+                SFLog(Net, Debug5, "TCP Recv CID:{0}, pending:{1}, hr:{2:X8}", GetCID(), GetPendingRecvCount(), hr);
+
+            });
 
 		if (pIOBuffer == nullptr)
 		{
-			netErr(ResultCode::UNEXPECTED);
+			netCheck(ResultCode::UNEXPECTED);
 		}
 
 		//if (pIOBuffer->CID != GetCID()) // We don't initialize CID any more. skip it
@@ -126,7 +144,14 @@ namespace Net {
 
 		if (pIOBuffer != nullptr && pIOBuffer->Operation != IOBUFFER_OPERATION::OP_TCPREAD)
 		{
-			netErr(ResultCode::UNEXPECTED);
+            if (hrRes.IsSuccess())
+            {
+                netCheck(ResultCode::UNEXPECTED);
+            }
+            else
+            {
+                return hr;
+            }
 		}
 
 		Assert(!NetSystem::IsProactorSystem() || pIOBuffer->bIsPending.load(std::memory_order_relaxed));
@@ -135,13 +160,15 @@ namespace Net {
 		// And PendingRecv should be decreased after new pending is happened
 		if (GetIsIORegistered())
 		{
-
-			if (hrRes)
+			if (hrRes.IsSuccess())
 			{
-				netChkPtr(pIOBuffer);
+				netCheckPtr(pIOBuffer);
 
-				if (!(hr = m_Owner.OnRecv(pIOBuffer->TransferredSize, (uint8_t*)pIOBuffer->GetPayloadPtr())))
-					SFLog(Net, Debug3, "Read IO failed with CID {0}, hr={1:X8}", m_Owner.GetCID(), hr);
+                hr = m_Owner.OnRecv(pIOBuffer->TransferredSize, (uint8_t*)pIOBuffer->GetPayloadPtr());
+                if (hr.IsFailure())
+                {
+                    SFLog(Net, Debug3, "Read IO failed with CID {0}, hr={1:X8}", m_Owner.GetCID(), hr);
+                }
 			}
 			else
 			{
@@ -159,24 +186,6 @@ namespace Net {
 				};
 			}
 		}
-
-	Proc_End:
-
-		// decrease should be happened at last, and always
-		if (NetSystem::IsProactorSystem())
-		{
-			DecPendingRecvCount();
-
-			PendingRecv();
-		}
-
-		if (pIOBuffer != nullptr)
-		{
-			pIOBuffer->SetPendingFalse();
-			Util::SafeDelete(pIOBuffer);
-		}
-
-		SFLog(Net, Debug5, "TCP Recv CID:{0}, pending:{1}, hr:{2:X8}", GetCID(), GetPendingRecvCount(), hr);
 
 		return hr;
 	}
