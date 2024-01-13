@@ -431,12 +431,14 @@ namespace SF
 				{
 					SetOnlineState(OnlineState::JoiningToGameServer);
 					NetPolicyGame policy(GetConnection()->GetMessageEndpoint());
-					auto res = policy.JoinGameServerCmd(intptr_t(this), m_Owner.GetAccountId(), m_Owner.GetAuthTicket(), 0);
+					Result res = policy.JoinGameServerCmd(intptr_t(this), m_Owner.GetAccountId(), m_Owner.GetAuthTicket(), 0);
 					if (!res)
 					{
-						SetOnlineState(OnlineState::LoggedIn);
 						SFLog(Net, Error, "JoinGameServer command has failed {0}", res);
-					}
+                        GetConnection()->Disconnect("JoinGameServer failed");
+                        SetOnlineState(OnlineState::Disconnected);
+                        SetResult(ResultCode::IO_DISCONNECTED);
+                    }
 				}
 				else
 				{
@@ -445,7 +447,7 @@ namespace SF
 			}
 			else if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
 			{
-				SetOnlineState(OnlineState::LoggedIn);
+				SetOnlineState(OnlineState::Disconnected);
 				SetResult(ResultCode::IO_DISCONNECTED);
 			}
 		}
