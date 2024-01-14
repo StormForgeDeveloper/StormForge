@@ -10,6 +10,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 using System;
+using System.Runtime.InteropServices;
 
 #nullable enable
 
@@ -195,14 +196,14 @@ namespace SF
             };
         }
 
-        static public void SetLogLevel(LogLevel logLevel)
+        static public void SetLogLevel(string channelName, LogLevel logLevel)
         {
-            NativeSetLogLevel(logLevel);
+            NativeSetLogLevel(channelName, (int)logLevel);
         }
 
-        static public void SetLogMask(UInt32 logMask)
+        static public void SetLogMask(string channelName, UInt32 logMask)
         {
-            NativeSetLogLevel(logMask);
+            NativeSetLogMask(channelName, logMask);
         }
 
         static public void Info(string strFormat, params object[] args)
@@ -234,6 +235,9 @@ namespace SF
             if (LogFlush != null) LogFlush();
         }
 
+
+        #region Native interfaces
+
         const string NativeDllName =
 #if UNITY_IOS
             "__Internal";
@@ -253,7 +257,7 @@ namespace SF
         [DllImport(NativeDllName, EntryPoint = "SFCSLog_NativeSetLogMask", CharSet = CharSet.Auto)]
         static extern void NativeSetLogMask([MarshalAs(UnmanagedType.LPStr)] string channelName, UInt32 logMask);
 
-#endregion
+    #endregion
     }
 }
 

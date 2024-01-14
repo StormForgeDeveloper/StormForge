@@ -29,7 +29,7 @@ namespace SF
             if (!bInitialized)
             {
                 bInitialized = true;
-                EngineLog.Initialize();
+                Log.InitializeEngineLog();
             }
         }
 
