@@ -275,10 +275,10 @@ namespace SF
         static extern void NativeSFLogFlush();
 
         [DllImport(NativeDllName, EntryPoint = "SFCSLog_NativeSetLogLevel", CharSet = CharSet.Auto)]
-        static extern void NativeSetLogLevel([MarshalAs(UnmanagedType.LPStr)] string channelName, Int32 logLevel);
+        static extern UInt32 NativeSetLogLevel([MarshalAs(UnmanagedType.LPStr)] string channelName, Int32 logLevel);
 
         [DllImport(NativeDllName, EntryPoint = "SFCSLog_NativeSetLogMask", CharSet = CharSet.Auto)]
-        static extern void NativeSetLogMask([MarshalAs(UnmanagedType.LPStr)] string channelName, UInt32 logMask);
+        static extern UInt32 NativeSetLogMask([MarshalAs(UnmanagedType.LPStr)] string channelName, UInt32 logMask);
 
     #endregion
     }
