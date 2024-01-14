@@ -159,21 +159,19 @@ namespace SF
 
     }
 
-
-
-    public abstract class Log
+    public enum LogLevel
     {
-        public enum Level
-        {
-            Info,
-            Warning,
-            Error,
-            Debug1,
-            Debug2,
-            Debug3,
-        }
+        Info,
+        Warning,
+        Error,
+        Debug1,
+        Debug2,
+        Debug3,
+    }
 
-        public delegate void delLogHandler(Level level, string message);
+    public static class Log
+    {
+        public delegate void delLogHandler(LogLevel level, string message);
         public static event delLogHandler LogHandler;
 
         public delegate void delLogFlush();
@@ -181,31 +179,54 @@ namespace SF
 
         static Log()
         {
-            LogHandler = (Level level, string message) => { Console.WriteLine($"{DateTime.Now}:{level}: {message}"); };
+            LogHandler = (LogLevel level, string message) => { Console.WriteLine($"{DateTime.Now}:{level}: {message}"); };
+        }
+
+        static public void InitializeEngineLog()
+        {
+            LogHandler += (level, message) =>
+            {
+                NativeSFLogMessage((int)level, System.Text.Encoding.UTF8.GetBytes(message + "\0"));
+            };
+
+            LogFlush += () =>
+            {
+                NativeSFLogFlush();
+            };
+        }
+
+        static public void SetLogLevel(LogLevel logLevel)
+        {
+            NativeSetLogLevel(logLevel);
+        }
+
+        static public void SetLogMask(UInt32 logMask)
+        {
+            NativeSetLogLevel(logMask);
         }
 
         static public void Info(string strFormat, params object[] args)
         {
             var message = string.Format(strFormat, args);
-            LogHandler(Level.Info, message);
+            LogHandler(LogLevel.Info, message);
         }
 
         static public void Warning(string strFormat, params object[] args)
         {
             var message = string.Format(strFormat, args);
-            LogHandler(Level.Warning, message);
+            LogHandler(LogLevel.Warning, message);
         }
 
         static public void Error(string strFormat, params object[] args)
         {
             var message = string.Format(strFormat, args);
-            LogHandler(Level.Error, message);
+            LogHandler(LogLevel.Error, message);
         }
 
         static public void Debug(string strFormat, params object[] args)
         {
             var message = string.Format(strFormat, args);
-            LogHandler(Level.Debug1, message);
+            LogHandler(LogLevel.Debug1, message);
         }
 
         static public void Flush()
@@ -213,6 +234,26 @@ namespace SF
             if (LogFlush != null) LogFlush();
         }
 
+        const string NativeDllName =
+#if UNITY_IOS
+            "__Internal";
+#else
+    "SFEngineDLL";
+#endif
+
+        [DllImport(NativeDllName, EntryPoint = "SFCSLog_LogMessage", CharSet = CharSet.Auto)]
+        static extern void NativeSFLogMessage(Int32 logLevel, [MarshalAs(UnmanagedType.LPArray)] byte[] logMessage);
+
+        [DllImport(NativeDllName, EntryPoint = "SFCSLog_Flush", CharSet = CharSet.Auto)]
+        static extern void NativeSFLogFlush();
+
+        [DllImport(NativeDllName, EntryPoint = "SFCSLog_NativeSetLogLevel", CharSet = CharSet.Auto)]
+        static extern void NativeSetLogLevel([MarshalAs(UnmanagedType.LPStr)] string channelName, Int32 logLevel);
+
+        [DllImport(NativeDllName, EntryPoint = "SFCSLog_NativeSetLogMask", CharSet = CharSet.Auto)]
+        static extern void NativeSetLogMask([MarshalAs(UnmanagedType.LPStr)] string channelName, UInt32 logMask);
+
+#endregion
     }
 }
 

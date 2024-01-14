@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -60,16 +60,24 @@ namespace SF {
 	class ServiceInstance
 	{
 	private:
-		ServiceType stm_BaseInstance;
-		ServiceType* m_pService;
+
+        ServiceType* stm_pBaseInstance = nullptr;
+        ServiceType* m_pService = nullptr;
 
 	public:
 		ServiceInstance()
-			: m_pService(&stm_BaseInstance)
 		{
+            stm_pBaseInstance = new ServiceType;
+            if (m_pService == nullptr)
+            {
+                m_pService = stm_pBaseInstance;
+            }
+            else
+            {
+                // If m_pService assignment has happened before this instance initialization. m_pService will have value.
+            }
 		}
 
-		//operator ServiceType&() { return *m_pService; }
 		operator ServiceType*() { return m_pService; }
 		ServiceType* operator *() { return m_pService; }
 		ServiceType* operator ->() { return m_pService; }
@@ -77,7 +85,7 @@ namespace SF {
 		ServiceInstance& operator = (ServiceType* pNewService)
 		{
 			if (pNewService == nullptr)
-				m_pService = &stm_BaseInstance;
+				m_pService = stm_pBaseInstance;
 			else
 				m_pService = pNewService;
 

@@ -104,7 +104,14 @@ namespace SF {
 		{
 			return LogOutputMask(Composited | op2.Composited);
 		}
+
+        bool operator ==(const LogOutputMask& op2) const
+        {
+            return Composited == op2.Composited;
+        }
 	};
+
+    class LogService;
 
 	//////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -115,25 +122,42 @@ namespace SF {
 		class LogOutputHandler;
 
 
-		struct LogChannel
+        // Log channel description
+		class LogChannel
 		{
-			char ChannelName[128]{};
-			LogOutputMask ChannelMask{};
+        private:
+            // Next channel
+            LogChannel* m_pNextChannel{};
 
-			LogChannel(const char* channelName, LogOutputType defaultLogLevel)
-			{
-				StrUtil::StringCopy(ChannelName, channelName);
-				ChannelMask.Composited = static_cast<uint32_t>((1 << (static_cast<uint32_t>(defaultLogLevel) + 1)) - 1);
-			}
-			LogChannel(const char* channelName, uint32_t channelMask)
-			{
-				StrUtil::StringCopy(ChannelName, channelName);
-				ChannelMask.Composited = channelMask;
-			}
+            // Channel name in string crc
+            StringCrc32 m_ChannelName;
+
+            // Channel name
+            char m_ChannelNameString[128]{};
+
+            // Channel mask
+            LogOutputMask m_ChannelMask{};
+
+            friend class SF::LogService;
+
+        public: // used to be a structure, and allow access until we update all access
+
+
+            LogChannel(const char* channelName, LogOutputType defaultLogLevel);
+            LogChannel(const char* channelName, uint32_t channelMask);
+
+            const LogOutputMask& GetChannelLogMask() const { return m_ChannelMask; }
+
+            const char* GetChannelNameString() const { return m_ChannelNameString; }
+            StringCrc32 GetChannelName() const { return m_ChannelName; }
+
+            void SetChannelLogLevel(LogOutputType logLevel);
+            void SetChannelLogMask(uint32_t logMask);
+            void SetChannelLogMask(const LogOutputMask& logMask);
 
 			LogChannel& operator = (const LogChannel& src)
 			{
-				ChannelMask = src.ChannelMask;
+                m_ChannelMask = src.m_ChannelMask;
 				return *this;
 			}
 
@@ -141,11 +165,16 @@ namespace SF {
 			{
 				auto channelMask = 1 << static_cast<uint32_t>(subChannel);
 				if (enable)
-					ChannelMask.Composited |= channelMask;
+                    m_ChannelMask.Composited |= channelMask;
 				else
-					ChannelMask.Composited &= (~channelMask);
+                    m_ChannelMask.Composited &= (~channelMask);
 			}
-		};
+
+        private:
+
+            void Init(const char* channelName, uint32_t channelMask);
+            void AddToChannelList();
+        };
 
 
 
@@ -206,15 +235,19 @@ namespace SF {
 
 	class LogService
 	{
-	protected:
+	private:
 
+        // Log channel list. not thread safe for addition. should be initialized during global initialization section
+        static Log::LogChannel* stm_ChannelList;
+
+        // Log file name
         char m_LogFileName[1024]{};
 
 	public:
 
 		LogService(const LogOutputMask& logMask = LogOutputMask())
 		{
-            SF::Log::Global.ChannelMask = logMask;
+            SF::Log::Global.SetChannelLogMask(logMask);
 		}
 		virtual ~LogService() {}
 
@@ -224,13 +257,13 @@ namespace SF {
 		// Check input mask
 		bool ShouldPrint(const LogOutputMask& mainChannelMask, const LogOutputMask& channelMask)
 		{
-			uint32_t filterMask = mainChannelMask.Composited & SF::Log::Global.ChannelMask.Composited;
+			uint32_t filterMask = mainChannelMask.Composited & SF::Log::Global.GetChannelLogMask().Composited;
 			return filterMask & channelMask.Composited;
 		}
 
 		LogOutputMask ToChannelMask(const Log::LogChannel& mainChannel)
 		{
-			return mainChannel.ChannelMask;
+			return mainChannel.GetChannelLogMask();
 		}
 
 		static LogOutputMask ToChannelMask(LogOutputType subChannel)
@@ -240,7 +273,7 @@ namespace SF {
 			return channelMask;
 		}
 
-		void SetGlobalOutputMask(const LogOutputMask& outputMask) { SF::Log::Global.ChannelMask = outputMask; }
+		void SetGlobalOutputMask(const LogOutputMask& outputMask) { SF::Log::Global.SetChannelLogMask(outputMask); }
 
 		// output handler
 		virtual void RegisterOutputHandler(Log::LogOutputHandler* output) {}
@@ -253,6 +286,14 @@ namespace SF {
 
 		// Flush log queue
 		virtual void Flush() {}
+
+        // Find log channel with name
+        Log::LogChannel* FindLogChannel(const StringCrc32 channelName);
+
+    private: // internal use
+        friend class Log::LogChannel;
+        static void AddToChannelList(Log::LogChannel* pLogChannel);
+        static void RemoveFromChannelList(Log::LogChannel* pLogChannel);
 	};
 
 } // namespace SF

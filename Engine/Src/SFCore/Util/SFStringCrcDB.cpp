@@ -55,6 +55,17 @@ namespace SF
         "gold",
 	};
 
+    StringCrcDB* StringCrcDB::stm_Instance = nullptr;
+
+    StringCrcDB& StringCrcDB::Get()
+    {
+        if (stm_Instance == nullptr)
+        {
+            stm_Instance = new StringCrcDB;
+        }
+        return *stm_Instance;
+    }
+
 	size_t StringCrcDB::StringItem::CalculateItemSize(size_t strLen)
 	{
 		auto requiredSize = sizeof(StringItem) + strLen;

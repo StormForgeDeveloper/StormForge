@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -79,6 +79,10 @@ namespace SF
 			const StringItem* AddString(uint64_t hash64, uint32_t hash32, const char* string, size_t strLen);
 		};
 
+        // Because string crc can be accessed from many places and timing, we use single pattern instead service, so that it can initialized even before global initialization section
+        // This will allow initialization order issue
+        static StringCrcDB* stm_Instance;
+
 		// String buffer linked list
 		StringBuffer *m_Head = nullptr;
 
@@ -96,6 +100,8 @@ namespace SF
 	public:
 		StringCrcDB();
 		~StringCrcDB();
+
+        static StringCrcDB& Get();
 
 		// Clear and release all memory
 		void Clear();

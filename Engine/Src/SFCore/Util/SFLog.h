@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -137,7 +137,7 @@ namespace Log {
 			auto* pLogService = *::SF::Service::LogModule;\
 			if( (pLogService != nullptr) )\
 			{\
-				SF::LogOutputMask channelMask = channel.ChannelMask;\
+				SF::LogOutputMask channelMask = channel.GetChannelLogMask();\
 				SF::LogOutputMask outputMask = ::SF::LogService::ToChannelMask(outputType);\
 				if (pLogService->ShouldPrint(channelMask, outputMask))\
 				{\

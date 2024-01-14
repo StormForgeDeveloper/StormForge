@@ -202,7 +202,7 @@ int main(int argc, const char* argv[])
 
 	SF::Engine::Start(initParam);
 
-	SF::Log::System.ChannelMask.Composited = uint32_t(-1);
+	SF::Log::System.SetChannelLogMask(uint32_t(-1));
 
 	int iRet = Process();
 

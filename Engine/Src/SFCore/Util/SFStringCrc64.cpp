@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -24,12 +24,12 @@ namespace SF
 {
 	// todo: move to preprocessing
 	StringCrc32::StringCrc32(const char* text)
-		: m_Crc(Service::StringDB->AddNGetString32(text))
+		: m_Crc(StringCrcDB::Get().AddNGetString32(text))
 	{}
 
 	const char* StringCrc32::ToString() const
 	{
-		auto pStr = Service::StringDB->GetString(m_Crc);
+		auto pStr = StringCrcDB::Get().GetString(m_Crc);
 		if (pStr != nullptr)
 			return pStr;
 		else

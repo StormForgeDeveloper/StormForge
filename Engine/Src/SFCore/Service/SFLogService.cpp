@@ -64,6 +64,98 @@ namespace SF
 		"Max",
 	};
 
+    Log::LogChannel* LogService::stm_ChannelList = nullptr;
+
+
+    Log::LogChannel::LogChannel(const char* channelName, LogOutputType defaultLogLevel)
+    {
+        uint32_t channelMask = static_cast<uint32_t>((1 << (static_cast<uint32_t>(defaultLogLevel) + 1)) - 1);
+
+        Init(channelName, channelMask);
+        AddToChannelList();
+    }
+
+    Log::LogChannel::LogChannel(const char* channelName, uint32_t channelMask)
+    {
+        Init(channelName, channelMask);
+        AddToChannelList();
+    }
+
+    void Log::LogChannel::SetChannelLogLevel(LogOutputType logLevel)
+    {
+        uint32_t channelMask = static_cast<uint32_t>((1 << (static_cast<uint32_t>(logLevel) + 1)) - 1);
+        SetChannelLogMask(channelMask);
+    }
+
+    void Log::LogChannel::SetChannelLogMask(uint32_t logMask)
+    {
+        m_ChannelMask.Composited = logMask;
+    }
+
+    void Log::LogChannel::SetChannelLogMask(const LogOutputMask& logMask)
+    {
+        m_ChannelMask = logMask;
+    }
+
+    void Log::LogChannel::Init(const char* channelName, uint32_t channelMask)
+    {
+        StrUtil::StringCopy(m_ChannelNameString, channelName);
+        m_ChannelNameString[countof(m_ChannelNameString) - 1] = '\0';
+
+        char channelNameLwr[128];
+        StrUtil::StringLower(channelNameLwr, m_ChannelNameString);
+
+        m_ChannelName = channelNameLwr;
+
+        SetChannelLogMask(channelMask);
+    }
+
+    void Log::LogChannel::AddToChannelList()
+    {
+        LogService::AddToChannelList(this);
+    }
+
+    void LogService::AddToChannelList(Log::LogChannel* pLogChannel)
+    {
+        if (pLogChannel == nullptr)
+            return;
+
+        assert(pLogChannel->m_pNextChannel == nullptr);
+
+        pLogChannel->m_pNextChannel = stm_ChannelList;
+        stm_ChannelList = pLogChannel;
+    }
+
+    void LogService::RemoveFromChannelList(Log::LogChannel* pLogChannel)
+    {
+        if (pLogChannel == nullptr)
+            return;
+
+        Log::LogChannel** ppCur = &stm_ChannelList;
+        for ( ;ppCur && *ppCur; ppCur = &((*ppCur)->m_pNextChannel))
+        {
+            if ((*ppCur) == pLogChannel)
+            {
+                (*ppCur) = pLogChannel->m_pNextChannel;
+                break;
+            }
+        }
+    }
+
+    Log::LogChannel* LogService::FindLogChannel(const StringCrc32 channelName)
+    {
+        Log::LogChannel* pCur = stm_ChannelList;
+        for (; pCur; pCur = pCur->m_pNextChannel)
+        {
+            if (pCur->GetChannelName() == channelName)
+            {
+                break;
+            }
+        }
+
+        return pCur;
+    }
+
     void LogService::SetLogFileName(const char* logFileName)
     {
         StrUtil::StringCopy(m_LogFileName, logFileName);

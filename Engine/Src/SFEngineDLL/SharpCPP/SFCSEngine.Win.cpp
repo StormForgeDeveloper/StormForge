@@ -54,15 +54,10 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 
 	SF::EngineInitParam initParam;
 
-    SF::Log::Net.ChannelMask.Info = 1;
-	SF::Log::Net.ChannelMask.Warning = 1;
-	SF::Log::Net.ChannelMask.Error = 1;
-	SF::Log::Net.ChannelMask.Factal = 1;
-	SF::Log::Net.ChannelMask.Debug = 0;
-	SF::Log::Net.ChannelMask.Debug1 = 0;
-	SF::Log::Net.ChannelMask.Debug2 = 0;
-	SF::Log::Net.ChannelMask.Debug3 = 0;
-	SF::Log::Net.ChannelMask.Composited |= debuggerLogMask;
+    SF::Log::Net.SetChannelLogLevel(SF::LogOutputType::Log);
+    SF::LogOutputMask netLogMask = SF::Log::Net.GetChannelLogMask();
+    netLogMask.Composited |= debuggerLogMask;
+    SF::Log::Net.SetChannelLogMask(netLogMask);
 
 	initParam.EnableMemoryLeakDetection = false;
     // Unity need to enable manually
