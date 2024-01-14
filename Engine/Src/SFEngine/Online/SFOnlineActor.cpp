@@ -97,12 +97,12 @@ namespace SF
         m_Movement = movement;
     }
 
-    void OnlineActor::OnComponentData(StringCrc32 name, const Array<const uint8_t>& data)
+    void OnlineActor::OnComponentData(StringCrc32 name, uint16_t frameNo, const Array<const uint8_t>& data)
     {
         OnlineActorComponent* pComponent = m_ComponentManager.GetComponent<OnlineActorComponent>(name);
         if (pComponent)
         {
-            pComponent->OnComponentData(data);
+            pComponent->OnComponentData(frameNo, data);
         }
     }
 

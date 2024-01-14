@@ -52,7 +52,8 @@ namespace SF
         OnlineActorComponent(OnlineActor* pOwner, StringCrc32 name);
         virtual ~OnlineActorComponent();
 
-        virtual Result OnComponentData(const Array<const uint8_t>&) { return ResultCode::SUCCESS_FALSE; }
+        // Only for voice chat at the moment
+        virtual Result OnComponentData(uint16_t frameNo, const Array<const uint8_t>&) { return ResultCode::SUCCESS_FALSE; }
 
         OnlineActor& GetOwner() const { assert(m_pOwner);  return *m_pOwner; }
 
@@ -79,7 +80,7 @@ namespace SF
         void SetMovement(const ActorMovement& movement);
 
         void AddComponent(OnlineActorComponent* pComponent) { m_ComponentManager.AddComponent(pComponent); }
-        void OnComponentData(StringCrc32 name, const Array<const uint8_t>& );
+        void OnComponentData(StringCrc32 name, uint16_t frameNo, const Array<const uint8_t>& );
 
         void TickUpdate();
 

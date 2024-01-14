@@ -1287,7 +1287,7 @@ namespace SF
         OnlineActor* onlineActor{};
         if (m_OnlineActorByActorId.Find(msg.GetActorID(), onlineActor))
         {
-            onlineActor->OnComponentData("VoiceChat"_crc, ArrayView<const uint8_t>(msg.GetVoiceData()));
+            onlineActor->OnComponentData("VoiceChat"_crc, msg.GetFrameIndex(), ArrayView<const uint8_t>(msg.GetVoiceData()));
         }
     }
 
