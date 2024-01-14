@@ -152,7 +152,7 @@ namespace SF
 		SF_FORCEINLINE const String& GetPassword() const { return m_Password; }
 		SF_FORCEINLINE const String& GetLoginAddresses() const { return m_LoginAddresses; }
 
-		SF_FORCEINLINE const String& GetGameAddress() const { return m_GameAddress; }
+		SF_FORCEINLINE const String& GetGameServerAddress() const { return m_GameServerAddress; }
 		SF_FORCEINLINE AccountID GetAccountId() const { return m_AccountId; }
 		SF_FORCEINLINE AuthTicket GetAuthTicket() const { return m_AuthTicket; }
 		SF_FORCEINLINE PlayerID GetPlayerID() const { return m_AccountId; }
@@ -222,7 +222,7 @@ namespace SF
 
 		String m_LoginAddresses;
 
-		String m_GameAddress;
+		String m_GameServerAddress;
 		AccountID m_AccountId{};
 		AuthTicket m_AuthTicket{};
 

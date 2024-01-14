@@ -117,7 +117,7 @@ namespace SF
             const SF::Flat::Login::LoginResult* resultData = responsePacket->payload_data_as_LoginResult();
             defCheckPtr(resultData);
 
-            m_Owner.m_GameAddress = resultData->game_server_address()->c_str();
+            m_Owner.m_GameServerAddress = resultData->game_server_address()->c_str();
             m_Owner.m_AccountId = resultData->account_id();
             m_Owner.m_AuthTicket = resultData->auth_ticket();
             Result loginResult = resultData->result_code();
@@ -134,7 +134,7 @@ namespace SF
 
             Service::Telemetry->SetAccountID(m_Owner.m_AccountId);
 
-            SFLog(Net, Debug3, "Logged in: gameserver:{0}, accountId:{1}", m_Owner.m_GameAddress, m_Owner.m_AccountId);
+            SFLog(Net, Debug3, "Logged in: gameserver:{0}, accountId:{1}", m_Owner.GetGameServerAddress(), m_Owner.m_AccountId);
 
             return hr;
         }
@@ -297,6 +297,8 @@ namespace SF
 	public:
 		using super = ClientTask;
 
+        NetAddress m_GameServerNetAddress{};
+
 	public:
 
 		ClientTask_JoinGameServer(OnlineClient& owner, uint64_t transactionId)
@@ -350,7 +352,7 @@ namespace SF
 				});
 
 			AuthTicket authTicket = m_Owner.GetAuthTicket();
-			String remoteAddress = m_Owner.GetGameAddress();
+			String remoteAddress = m_Owner.GetGameServerAddress();
 			if (authTicket == 0)
 			{
 				SFLog(Net, Error, "Join game server has failed, invalid auth ticket");
@@ -366,10 +368,10 @@ namespace SF
 			}
 
             DynamicArray<NetAddress> netAddresses;
-            Result result = NetAddress::ParseNameAddress(m_Owner.GetGameAddress(), netAddresses);
+            Result result = NetAddress::ParseNameAddress(m_Owner.GetGameServerAddress(), netAddresses);
             if (!result)
             {
-                SFLog(Net, Error, "Failed to get addresses: {0}, hr:{1}", m_Owner.GetGameAddress(), result);
+                SFLog(Net, Error, "Failed to get addresses: {0}, hr:{1}", m_Owner.GetGameServerAddress(), result);
                 SetResult(result);
                 GetConnection()->Disconnect("JoinGameServer failed");
                 SetOnlineState(OnlineState::Disconnected);
@@ -378,15 +380,15 @@ namespace SF
 
             if (netAddresses.size() == 0)
             {
-                SFLog(Net, Error, "Failed to convert addresses: {0}", m_Owner.GetGameAddress());
+                SFLog(Net, Error, "Failed to convert addresses: {0}", m_Owner.GetGameServerAddress());
                 SetResult(ResultCode::NOT_EXIST);
                 GetConnection()->Disconnect("JoinGameServer failed");
                 SetOnlineState(OnlineState::Disconnected);
                 return;
             }
 
-
-			result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, netAddresses[0], 0));
+            m_GameServerNetAddress = netAddresses[0];
+			result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, m_GameServerNetAddress, 0));
 			if (result)
 			{
 				GetConnection()->SetTickGroup(EngineTaskTick::AsyncTick);
@@ -394,7 +396,7 @@ namespace SF
 			}
 			else
 			{
-				SFLog(Net, Error, "Failed to connect to game server {0}", result);
+				SFLog(Net, Error, "Failed to connect to game server:{0}, hr:{1}", m_GameServerNetAddress, result);
 				SetOnlineState(OnlineState::Disconnected);
 			}
 		}
@@ -447,8 +449,9 @@ namespace SF
 			}
 			else if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
 			{
-				SetOnlineState(OnlineState::Disconnected);
-				SetResult(ResultCode::IO_DISCONNECTED);
+                SFLog(Net, Error, "Failed to connect to game server:{0}({1}), probably unreachable, hr:{2}", m_Owner.GetGameServerAddress(), m_GameServerNetAddress, evt.Components.hr);
+                SetOnlineState(OnlineState::Disconnected);
+                SetResult(ResultCode::IO_DISCONNECTED);
 			}
 		}
 
@@ -618,6 +621,8 @@ namespace SF
 			}
 			else if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
 			{
+                SFLog(Net, Error, "Failed to connect to game instance server:{0}, probably unreachable, hr:{1}", m_Owner.GetGameInstanceAddress(), evt.Components.hr);
+
 				m_Owner.UpdateOnlineStateByConnectionState();
 				SetResult(ResultCode::IO_DISCONNECTED);
 			}
