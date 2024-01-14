@@ -94,6 +94,33 @@ namespace SF {
 
 	};
 
+    // Service singleton 
+    template<class ServiceType>
+    class ServiceSingleton
+    {
+    public:
+        ServiceSingleton() {}
+        ~ServiceSingleton()
+        {
+            // Cleaning up static inside function isn't simple
+            // We just dump them without destroy
+        }
+
+        ServiceType* Get()
+        {
+            static ServiceType* m_pService = nullptr;
+            if (m_pService == nullptr)
+            {
+                m_pService = new ServiceType;
+            }
+
+            return m_pService;
+        }
+
+        operator ServiceType* () { return Get(); }
+        ServiceType* operator *() { return Get(); }
+        ServiceType* operator ->() { return Get(); }
+    };
 
 
 	//////////////////////////////////////////////////////////////////////
@@ -104,7 +131,7 @@ namespace SF {
 
 	namespace Service
 	{
-		extern ServiceInstance<StringCrcDB> StringDB;
+		extern ServiceSingleton<StringCrcDB> StringDB;
 		extern ServiceInstance<AsyncTaskService> AsyncTaskManager;
 		extern ServiceInstance<LogService> LogModule;
 		extern ServiceInstance<AsyncIOPortService> AsyncIOPort;
