@@ -162,12 +162,35 @@ namespace SF
 
     public enum LogLevel
     {
-        Info,
-        Warning,
+        // Generic trace
         Error,
+        Warning,
+        Factal,
+        Info,
+        Log = Info,
+
+        // Module additional traces
+        Custom1,
+        Custom2,
+        Custom3,
+        Custom4,
+        Custom5,
+        Custom6,
+        Custom7,
+        Custom8,
+        Custom9,
+        Custom10,
+        CustomMax = Custom10,
+
+        Debug,
         Debug1,
         Debug2,
         Debug3,
+        Debug4,
+        Debug5,
+        Debug6,
+        Debug7,
+        Debug8,
     }
 
     public static class Log
