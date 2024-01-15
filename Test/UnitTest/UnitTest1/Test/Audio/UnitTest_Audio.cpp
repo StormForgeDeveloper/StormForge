@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 #include "UnitTest_Audio.h"
 #include "Audio/SFAudioService.h"
+#include <sndfile.h>
 
 using ::testing::EmptyTestEventListener;
 using ::testing::InitGoogleTest;
@@ -163,4 +164,64 @@ TEST_F(AudioTest, RecordingNPlayback)
     ThisThread::SleepFor(DurationMS(recordingDurationSec * 1000));
 
     player->Stop();
+}
+
+TEST_F(AudioTest, RecordingNSaveWave)
+{
+    Result hr;
+    DynamicArray<String> devices;
+    uint samplesPerSec = 48000;
+    uint numChannels = 1;
+    EAudioFormat format = EAudioFormat::Int16;
+    size_t sampleFrameSize = Audio::GetBytesPerSample(numChannels, format);
+    //size_t dataSizePerSec = samplesPerSec * sampleFrameSize;
+    int opusSamplesPerBlock = samplesPerSec / 2;
+    size_t dataSizePerBlock = opusSamplesPerBlock * sampleFrameSize;
+
+    //sfinfo.frames
+    const char* outputFile = "test.wav";
+    SF_INFO	sfinfo;
+    memset(&sfinfo, 0, sizeof(sfinfo));
+
+    sfinfo.samplerate = samplesPerSec;
+    sfinfo.format = SF_FORMAT_WAV | SF_FORMAT_PCM_16 | SF_ENDIAN_LITTLE;
+    sfinfo.channels = numChannels;
+    SNDFILE* output = sf_open(outputFile, SFM_WRITE, &sfinfo);
+    EXPECT_TRUE(output != nullptr);
+    if (output == nullptr)
+        return;
+
+    AudioRecorderPtr recorder = Service::Audio->CreateRecorder(Service::Audio->GetDefaultDeviceName(false));
+    EXPECT_TRUE(recorder.IsValid());
+
+    hr = recorder->Initialize(numChannels, format, samplesPerSec);
+    EXPECT_TRUE(hr);
+
+    hr = recorder->StartRecording();
+    EXPECT_TRUE(hr);
+
+    SFLog(Game, Info, "Recording save to file:{0}", outputFile);
+
+    uint recordingDurationSec = 10;
+    DynamicArray<uint8_t> testBuffer;
+    testBuffer.reserve((recordingDurationSec + 1) * recorder->GetSamplesPerSec() * recorder->GetSampleFrameSize());
+    memset(testBuffer.data(), 0, testBuffer.capacity());
+    auto startTime = Util::Time.GetRawTimeMs();
+    while (Util::TimeSinceRaw(startTime) < DurationMS(recordingDurationSec * 1000))
+    {
+        hr = recorder->ReadSamples(testBuffer);
+        EXPECT_TRUE(hr);
+
+        sf_write_short(output, reinterpret_cast<const short*>(testBuffer.data()), testBuffer.size() / sizeof(uint16_t));
+        testBuffer.Reset();
+    }
+
+    SFLog(Game, Info, "Recording finished");
+
+    hr = recorder->StopRecording();
+    EXPECT_TRUE(hr);
+
+    recorder->Dispose();
+
+    sf_close(output);
 }
