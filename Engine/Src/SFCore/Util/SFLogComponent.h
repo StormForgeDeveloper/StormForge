@@ -22,7 +22,10 @@
 
 namespace SF {
 
-
+    namespace Log
+    {
+        extern LogChannel OutputConsole;
+    }
 
 	class LogOutputConsoleComponent : public LibraryComponent
 	{
@@ -35,7 +38,7 @@ namespace SF {
 			NativeHandle m_hConsole = INVALID_NATIVE_HANDLE_VALUE;
 #endif
 		public:
-			MyOutputHandler(const LogOutputMask& logMask) : LogOutputHandler(logMask) {}
+			MyOutputHandler() : LogOutputHandler("OutputConsole") {}
 
 			void InitConsole();
 
@@ -48,7 +51,7 @@ namespace SF {
 
 		static constexpr StringCrc64 TypeName = "LogOutputConsoleComponent";
 
-		LogOutputConsoleComponent(const LogOutputMask& logMask);
+		LogOutputConsoleComponent();
 		~LogOutputConsoleComponent();
 
 		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
@@ -62,6 +65,10 @@ namespace SF {
 	};
 
 
+    namespace Log
+    {
+        extern LogChannel OutputDebugger;
+    }
 
 	class LogOutputDebuggerComponent : public LibraryComponent
 	{
@@ -73,14 +80,14 @@ namespace SF {
 		class MyOutputHandler : public Log::LogOutputHandler
 		{
 		public:
-			MyOutputHandler(const LogOutputMask& logMask) : LogOutputHandler(logMask) {}
+			MyOutputHandler() : LogOutputHandler("OutputDebugger") {}
 			virtual void PrintOutput(const Log::LogItem* logMessage) override;
 		};
 
 		MyOutputHandler m_Handler;
 
 	public:
-		LogOutputDebuggerComponent(const LogOutputMask& logMask);
+		LogOutputDebuggerComponent();
 		~LogOutputDebuggerComponent();
 
 		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
@@ -94,6 +101,11 @@ namespace SF {
 		virtual void DeinitializeComponent() override;
 	};
 
+
+    namespace Log
+    {
+        extern LogChannel OutputFile;
+    }
 
 	class LogOutputFileComponent : public LibraryComponent
 	{
@@ -114,7 +126,7 @@ namespace SF {
 
 
 		public:
-			MyOutputHandler(const LogOutputMask& logMask, const String& filePrefix, bool bOpenNewHourly);
+			MyOutputHandler(const String& filePrefix, bool bOpenNewHourly);
 
 			void OpenLogFile();
 
@@ -131,7 +143,7 @@ namespace SF {
 
 	public:
 
-		LogOutputFileComponent(const LogOutputMask& logMask, const String& filePrefix, bool bOpenNewHourly);
+		LogOutputFileComponent(const String& filePrefix, bool bOpenNewHourly);
 		~LogOutputFileComponent();
 
 		virtual const StringCrc64& GetTypeName() const override { return TypeName; }

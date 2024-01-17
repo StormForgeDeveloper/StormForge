@@ -48,16 +48,13 @@
 static std::unique_ptr<SF::Mutex> g_InstanceMutex;
 static int g_InstanceId = 0;
 
-SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processName, const char* logServerAddress, const char* logFilePrefix, uint32_t logMask, uint32_t debuggerLogMask)
+SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processName, const char* logServerAddress, const char* logFilePrefix, uint32_t globalLogMask)
 {
-	SF::LogOutputMask logOutputMask(logMask);
+	SF::LogOutputMask logOutputMask(globalLogMask);
 
 	SF::EngineInitParam initParam;
 
     SF::Log::Net.SetChannelLogLevel(SF::LogOutputType::Log);
-    SF::LogOutputMask netLogMask = SF::Log::Net.GetChannelLogMask();
-    netLogMask.Composited |= debuggerLogMask;
-    SF::Log::Net.SetChannelLogMask(netLogMask);
 
 	initParam.EnableMemoryLeakDetection = false;
     // Unity need to enable manually
@@ -92,7 +89,6 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 	srand(clock());
 	initParam.GlobalLogOutputMask = logOutputMask;
 	initParam.LogOutputConsole = SF::LogOutputMask(0);
-	initParam.LogOutputDebugger = SF::LogOutputMask(debuggerLogMask);
 
     if (SF::StrUtil::IsNullOrEmpty(logFilePrefix))
     {

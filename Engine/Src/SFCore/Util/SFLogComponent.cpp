@@ -31,10 +31,13 @@ namespace SF {
 
 	constexpr StringCrc64 LogOutputConsoleComponent::TypeName;
 
+    namespace Log
+    {
+        LogChannel OutputConsole("OutputConsole", LogOutputType::Debug3);
+    }
 
-	LogOutputConsoleComponent::LogOutputConsoleComponent(const LogOutputMask& logMask)
+	LogOutputConsoleComponent::LogOutputConsoleComponent()
 		: LibraryComponent(StringCrc64("LogConsole"))
-		, m_Handler(logMask)
 	{
 	}
 
@@ -112,12 +115,15 @@ namespace SF {
 
 
 
+    namespace Log
+    {
+        LogChannel OutputDebugger("OutputDebugger", LogOutputType::Max);
+    }
 
 	constexpr StringCrc64 LogOutputDebuggerComponent::TypeName;
 
-	LogOutputDebuggerComponent::LogOutputDebuggerComponent(const LogOutputMask& logMask)
+	LogOutputDebuggerComponent::LogOutputDebuggerComponent()
 		: LibraryComponent(StringCrc64("LogDebugger"))
-		, m_Handler(logMask)
 	{
 
 	}
@@ -151,11 +157,16 @@ namespace SF {
 
 
 
+    namespace Log
+    {
+        LogChannel OutputFile("OutputFile", LogOutputType::Max);
+    }
+
 	constexpr StringCrc64 LogOutputFileComponent::TypeName;
 
-	LogOutputFileComponent::LogOutputFileComponent(const LogOutputMask& logMask, const String& filePrefix, bool bOpenNewHourly)
+	LogOutputFileComponent::LogOutputFileComponent(const String& filePrefix, bool bOpenNewHourly)
 		: LibraryComponent(StringCrc64("LogFile"))
-		, m_Handler(logMask, filePrefix, bOpenNewHourly)
+		, m_Handler(filePrefix, bOpenNewHourly)
 	{
 
 	}
@@ -166,9 +177,9 @@ namespace SF {
 
 	}
 
-	LogOutputFileComponent::MyOutputHandler::MyOutputHandler(const LogOutputMask& logMask, const String& filePrefix, bool bOpenNewHourly)
-		: LogOutputHandler(logMask)
-		, m_FilePrefix(filePrefix)
+	LogOutputFileComponent::MyOutputHandler::MyOutputHandler(const String& filePrefix, bool bOpenNewHourly)
+        : LogOutputHandler("OutputFile")
+        , m_FilePrefix(filePrefix)
 		, m_OpenNewFileHourly(bOpenNewHourly)
 	{
 		FileUtil::CreatePath(m_FilePrefix, 1);

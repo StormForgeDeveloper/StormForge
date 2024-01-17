@@ -108,25 +108,32 @@ namespace SF
 
 		if (m_InitParameter.LogOutputConsole.Composited != 0)
 		{
-			if (AddComponent<SF::LogOutputConsoleComponent>(m_InitParameter.LogOutputConsole) == nullptr)
+            Log::OutputConsole.SetChannelLogMask(m_InitParameter.LogOutputConsole);
+			if (AddComponent<SF::LogOutputConsoleComponent>() == nullptr)
 				return ResultCode::FAIL;
 		}
 
 		if (m_InitParameter.LogOutputDebugger.Composited != 0)
 		{
-			if (AddComponent<SF::LogOutputDebuggerComponent>(m_InitParameter.LogOutputDebugger) == nullptr)
+            Log::OutputDebugger.SetChannelLogMask(m_InitParameter.LogOutputDebugger);
+
+			if (AddComponent<SF::LogOutputDebuggerComponent>() == nullptr)
 				return ResultCode::FAIL;
 		}
 
 		if (m_InitParameter.LogOutputFile.Composited != 0 && m_InitParameter.LogFilePrefix != nullptr)
 		{
-			if (AddComponent<SF::LogOutputFileComponent>(m_InitParameter.LogOutputFile, m_InitParameter.LogFilePrefix, true) == nullptr)
+            Log::OutputFile.SetChannelLogMask(m_InitParameter.LogOutputFile);
+
+			if (AddComponent<SF::LogOutputFileComponent>(m_InitParameter.LogFilePrefix, true) == nullptr)
 				return ResultCode::FAIL;
 		}
 
 		if (!StrUtil::IsNullOrEmpty(m_InitParameter.LogServerAddress) && m_InitParameter.LogOutputLogServer.Composited != 0)
 		{
-			if (AddComponent<SF::LogOutputLogServerComponent>(m_InitParameter.LogOutputLogServer, m_InitParameter.LogServerAddress) == nullptr)
+            Log::OutputLogServer.SetChannelLogMask(m_InitParameter.LogOutputLogServer);
+
+			if (AddComponent<SF::LogOutputLogServerComponent>(m_InitParameter.LogServerAddress) == nullptr)
 				return ResultCode::FAIL;
 		}
 

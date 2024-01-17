@@ -43,7 +43,7 @@
 //	Engine interface
 //
 
-SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processName, const char* logServerAddress, uint32_t debuggerLogMask)
+SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processName, const char* logServerAddress, uint32_t globalLogMask)
 {
 	SF::LogChannelParameter logChannelParameter;
 	logChannelParameter.SubChannelMask.Debug = 0;
@@ -53,8 +53,8 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 
 	SF::EngineInitParam initParam;
 	initParam.LogChannel = logChannelParameter;
-
-	initParam.LogOutputDebugger = SF::LogOutputMask(debuggerLogMask);
+    initParam.GlobalLogOutputMask = SF::LogOutputMask(globalLogMask);
+	//initParam.LogOutputDebugger = SF::LogOutputMask(globalLogMask);
 	initParam.LogOutputConsole = false;
 
 	if (!SF::StrUtil::IsNullOrEmpty(logServerAddress))

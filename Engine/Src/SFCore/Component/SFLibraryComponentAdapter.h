@@ -28,8 +28,8 @@ namespace SF {
 	//		Our memory model has problem with multiple inheritance. This adapter will help to add regular SharedObject as a component
 	//
 
-	template<class ClassType, class ... ParamTypes>
-	class LibraryComponentAdapter : public LibraryComponent
+    template<class ClassType>
+    class LibraryComponentAdapter : public LibraryComponent
 	{
 	public:
 		static constexpr StringCrc64 TypeName = ClassType::TypeName;
@@ -38,28 +38,29 @@ namespace SF {
 
 		IHeap& m_Heap;
 
-		SharedPointerT<ClassType> m_Object;
+        UniquePtr<ClassType> m_Object{};
 
 	public:
 
 		// Constructor
-		LibraryComponentAdapter(IHeap& heap, ParamTypes...args)
+        template<class ...ArgTypes>
+		LibraryComponentAdapter(IHeap& heap, ArgTypes...args)
 			: LibraryComponent(TypeName)
 			, m_Heap(heap)
 		{
-			m_Object = new(heap) ClassType(args...);
+			m_Object.reset(new ClassType(args...));
 		}
 
-		LibraryComponentAdapter(IHeap& heap, ClassType* pObject)
+		LibraryComponentAdapter(IHeap& heap = GetSystemHeap())
 			: LibraryComponent(TypeName)
 			, m_Heap(heap)
 		{
-			m_Object = pObject;
-		}
+            m_Object.reset(new ClassType);
+        }
 
 		~LibraryComponentAdapter()
 		{
-			m_Object = nullptr;
+            m_Object.reset();
 		}
 
 		// Heap
@@ -67,8 +68,8 @@ namespace SF {
 
 		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
-		ClassType* operator ->() { return *m_Object; }
-		ClassType* operator *() { return *m_Object; }
+		ClassType* operator ->() { return m_Object.get(); }
+		ClassType* operator *() { return m_Object.get(); }
 
 		operator ClassType* () { return m_Object.get(); }
 		operator const ClassType* () const { return m_Object.get(); }
@@ -94,9 +95,5 @@ namespace SF {
 	};
 
 
-
 } // namespace SF
-
-
-
 

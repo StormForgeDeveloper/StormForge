@@ -26,6 +26,11 @@ namespace SF {
 
 
 
+    namespace Log
+    {
+        extern LogChannel OutputLogServer;
+    }
+
 	class LogOutputLogServerComponent : public LibraryComponent
 	{
 	private:
@@ -50,7 +55,7 @@ namespace SF {
 
 
 		public:
-			MyOutputHandler(const LogOutputMask& logMask) : LogOutputHandler(logMask) {}
+			MyOutputHandler() : LogOutputHandler("OutputLogServer") {}
 
 			void Init(IHeap& heap, const String& logServer);
 			void Deinit();
@@ -64,7 +69,7 @@ namespace SF {
 
 		static const StringCrc64 TypeName;
 
-		LogOutputLogServerComponent(const LogOutputMask& logMask, const String& logServerAddress);
+		LogOutputLogServerComponent(const String& logServerAddress);
 		~LogOutputLogServerComponent();
 
 		virtual const StringCrc64& GetTypeName() const override { return TypeName; }

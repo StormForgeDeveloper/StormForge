@@ -36,9 +36,10 @@ namespace Log {
 	// Trace Log Module
 	//
 
-	LogOutputHandler::LogOutputHandler(const LogOutputMask& outputMask)
-		: m_OutputMask(outputMask)
+	LogOutputHandler::LogOutputHandler(const char* channelName)
 	{
+        m_OutputMaskChannel = Service::LogModule->FindLogChannel(channelName);
+        assert(m_OutputMaskChannel); // we need channel
 	}
 
 	LogOutputHandler::~LogOutputHandler()

@@ -27,14 +27,16 @@
 namespace SF {
 
 
+    namespace Log
+    {
+        LogChannel OutputLogServer("OutputLogServer", LogOutputType::Max);
+    }
+
 	const StringCrc64 LogOutputLogServerComponent::TypeName = Hash64("LogOutputLogServerComponent");
 
-
-
-
-	LogOutputLogServerComponent::LogOutputLogServerComponent(const LogOutputMask& logMask, const String& logServerAddress)
+	LogOutputLogServerComponent::LogOutputLogServerComponent(const String& logServerAddress)
 		: LibraryComponent(StringCrc64("LogServerOutput"))
-		, m_Handler(logMask)
+		, m_Handler()
 		, m_LogServerAddress(logServerAddress)
 	{
 	}

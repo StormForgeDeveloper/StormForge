@@ -97,15 +97,15 @@ namespace Log {
 	{
 	private:
 
-		LogOutputMask m_OutputMask;
+        LogChannel* m_OutputMaskChannel{};
 
 	public:
 
-		LogOutputHandler(const LogOutputMask& outputMask);
+		LogOutputHandler(const char* channelName);
 		virtual ~LogOutputHandler();
 
-		const LogOutputMask& GetOutputMask() { return m_OutputMask; }
-		void SetOutputMask(const LogOutputMask& value) { m_OutputMask = value; }
+		const LogOutputMask& GetOutputMask() { return m_OutputMaskChannel->GetChannelLogMask(); }
+		void SetOutputMask(const LogOutputMask& value) { m_OutputMaskChannel->SetChannelLogMask(value); }
 
 		virtual void PrintOutput(const LogItem* logMessage) = 0;
 

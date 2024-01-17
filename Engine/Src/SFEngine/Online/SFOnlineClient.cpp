@@ -659,7 +659,7 @@ namespace SF
             result = NetAddress::ParseNameAddress(m_Owner.GetGameInstanceAddress(), netAddresses);
             if (!result)
             {
-                SFLog(Net, Error, "Failed to get addresses: {0}, game:{1}, hr:{2}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress, result);
+                SFLog(Net, Error, "Failed to get addresses: gameId:{0}, game:{1}, hr:{2}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress, result);
                 SetResult(result);
                 SetOnlineState(OnlineState::InGameServer);
                 return;

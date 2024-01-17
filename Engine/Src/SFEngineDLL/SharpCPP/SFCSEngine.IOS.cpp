@@ -42,7 +42,7 @@
 //	Engine interface
 //
 
-SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processName, const char* logServerAddress, uint32_t debuggerLogMask)
+SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processName, const char* logServerAddress, uint32_t globalLogMask)
 {
 	SF::LogMask logMask;
 	logMask.Composited = std::numeric_limits<uint64_t>::max();
@@ -52,8 +52,8 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 	logMask.SubChannelBits.Debug3 = 0;
 
 	SF::EngineInitParam initParam;
-	initParam.LogOutputDebugger = SF::LogOutputMask(debuggerLogMask);
-	initParam.LogOutputConsole = false;
+    initParam.GlobalLogOutputMask = SF::LogOutputMask(globalLogMask);
+    initParam.LogOutputConsole = false;
 	initParam.LogPrintMask = logMask.Composited;
 
     // Unity need to enable manually
