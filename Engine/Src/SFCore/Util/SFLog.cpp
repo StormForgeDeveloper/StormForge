@@ -38,7 +38,7 @@ namespace Log {
 
 	LogOutputHandler::LogOutputHandler(const char* channelName)
 	{
-        m_OutputMaskChannel = Service::LogModule->FindLogChannel(channelName);
+        m_OutputMaskChannel = Service::LogModule->FindLogChannelString(channelName);
         assert(m_OutputMaskChannel); // we need channel
 	}
 

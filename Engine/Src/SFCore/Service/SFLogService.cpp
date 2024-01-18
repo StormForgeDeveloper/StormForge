@@ -156,6 +156,13 @@ namespace SF
         return pCur;
     }
 
+    Log::LogChannel* LogService::FindLogChannelString(const char* channelName)
+    {
+        char channelNameLwr[256]{};
+        StrUtil::StringLower(channelNameLwr, channelName);
+        return FindLogChannel(channelNameLwr);
+    }
+
     void LogService::SetLogFileName(const char* logFileName)
     {
         StrUtil::StringCopy(m_LogFileName, logFileName);

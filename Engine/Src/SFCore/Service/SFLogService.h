@@ -288,7 +288,8 @@ namespace SF {
 		virtual void Flush() {}
 
         // Find log channel with name
-        Log::LogChannel* FindLogChannel(const StringCrc32 channelName);
+        static Log::LogChannel* FindLogChannel(const StringCrc32 channelName);
+        static Log::LogChannel* FindLogChannelString(const char* channelName);
 
     private: // internal use
         friend class Log::LogChannel;

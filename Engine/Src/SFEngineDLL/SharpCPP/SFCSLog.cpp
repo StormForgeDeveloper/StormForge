@@ -64,9 +64,7 @@ SFDLL_EXPORT void SFCSLog_Flush()
 
 SFDLL_EXPORT uint32_t SFCSLog_NativeSetLogLevel(const char* channelName, uint32_t logLevel)
 {
-    char channelNameLwr[256];
-    StrUtil::StringLower(channelNameLwr, channelName);
-    Log::LogChannel* pChannel = Service::LogModule->FindLogChannel(channelNameLwr);
+    Log::LogChannel* pChannel = Service::LogModule->FindLogChannelString(channelName);
     if (pChannel == nullptr)
     {
         return (uint32_t)ResultCode::OBJECT_NOT_FOUND;
@@ -80,9 +78,7 @@ SFDLL_EXPORT uint32_t SFCSLog_NativeSetLogLevel(const char* channelName, uint32_
 
 SFDLL_EXPORT uint32_t SFCSLog_NativeSetLogMask(const char* channelName, uint32_t logMask)
 {
-    char channelNameLwr[256];
-    StrUtil::StringLower(channelNameLwr, channelName);
-    Log::LogChannel* pChannel = Service::LogModule->FindLogChannel(channelNameLwr);
+    Log::LogChannel* pChannel = Service::LogModule->FindLogChannelString(channelName);
     if (pChannel == nullptr)
     {
         return (uint32_t)ResultCode::OBJECT_NOT_FOUND;
