@@ -76,8 +76,6 @@ namespace SF
         void Reset();
 
 		// initialize with schema string data
-        Result Init(const avro_schema_t& schema);
-        Result Init(const AvroSchema& schema);
         Result Init(const Array<char>& schemaData);
         Result Init(const String& schemaData)        { return Init(ArrayView<const char>(schemaData.GetBufferLength(), schemaData.data())); }
         Result Init(const Array<const char>& schemaData);
@@ -111,6 +109,10 @@ namespace SF
 
         friend Result operator >> (AvroReader& in, AvroSchema& op);
         friend Result operator << (AvroWriter& out, const AvroSchema& op);
+
+        AvroSchema& operator=(const avro_schema_t& schema);
+        AvroSchema& operator=(const AvroSchema& schema);
+
 
 	private:
 		avro_schema_t m_Handle{};

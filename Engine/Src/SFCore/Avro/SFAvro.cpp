@@ -138,27 +138,11 @@ namespace SF
         return m_Handle != nullptr;
     }
 
-    Result AvroSchema::Init(const avro_schema_t& schema)
-    {
-        Reset();
-        m_Handle = schema;
-        return ResultCode::SUCCESS;
-    }
-
-    Result AvroSchema::Init(const AvroSchema& schema)
-    {
-        Reset();
-        m_Handle = schema.m_Handle;
-        return ResultCode::SUCCESS;
-    }
-
 	Result AvroSchema::Init(const Array<const char>& schemaData)
 	{
         Reset();
 
-        m_SchemaString.Reset();
-        m_SchemaString.Append(schemaData);
-        //m_SchemaString.Resize(schemaData.size());
+        m_SchemaString = schemaData;
 
 		int res = avro_schema_from_json_length(m_SchemaString.data(), m_SchemaString.length(), &m_Handle);
 		if (res)
@@ -172,11 +156,7 @@ namespace SF
 
     Result AvroSchema::Init(const Array<char>& schemaData)
     {
-        Reset();
-
-        m_SchemaString = schemaData.data();
-
-        return Init(ArrayView<const char>(schemaData.size(), schemaData.data()));
+        return Init(ArrayView<const char>(schemaData));
     }
 
     bool AvroSchema::HasField(const char* fieldName) const
@@ -303,6 +283,29 @@ namespace SF
         return out << GetSchemaString();
     }
 
+    AvroSchema& AvroSchema::operator=(const avro_schema_t& schema)
+    {
+        Reset();
+        m_Handle = schema;
+        if (m_Handle != nullptr)
+        {
+            avro_schema_incref(m_Handle);
+        }
+        return *this;
+    }
+    AvroSchema& AvroSchema::operator=(const AvroSchema& schema)
+    {
+        Reset();
+        m_Handle = schema;
+        if (m_Handle != nullptr)
+        {
+            avro_schema_incref(m_Handle);
+        }
+        return *this;
+    }
+
+
+
     // 
     Result operator >> (AvroReader& in, AvroSchema& op)
     {
@@ -328,7 +331,15 @@ namespace SF
 	{
 		m_OwnerOfValue = true;
 		m_DataClass = avro_generic_class_from_schema(schema);
-		avro_generic_value_new(m_DataClass, &m_DataValue);
+        if (m_DataClass != nullptr)
+        {
+            avro_generic_value_new(m_DataClass, &m_DataValue);
+        }
+        else
+        {
+            const char* avroError = avro_strerror();
+            SFLog(System, Error, "Creating generic avro value form schema has failed, error:{0}", avroError);
+        }
 	}
 
     AvroValue::AvroValue(const AvroValue& src)

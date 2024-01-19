@@ -344,14 +344,24 @@ namespace SF {
         {
             auto pSrc = (const CharType*)src.data();
 
-            if (m_Buffer->IsUniquelyReferenced())
+            if (m_Buffer != nullptr)
             {
-                m_Buffer->Append(src.data(), src.size());
+                if (m_Buffer->IsUniquelyReferenced())
+                {
+                    m_Buffer->Append(src.data(), src.size());
+                }
+                else
+                {
+                    auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), m_Buffer->GetStringLength() + src.size() + 1);
+                    newBuffer->Append(m_Buffer->GetBufferPointer(), m_Buffer->GetStringLength());
+                    newBuffer->Append(pSrc, src.size());
+
+                    m_Buffer = newBuffer;
+                }
             }
             else
             {
-                auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), m_Buffer->GetStringLength() + src.size() + 1);
-                newBuffer->Append(m_Buffer->GetBufferPointer(), m_Buffer->GetStringLength());
+                auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), src.size() + 1);
                 newBuffer->Append(pSrc, src.size());
 
                 m_Buffer = newBuffer;
@@ -1235,7 +1245,11 @@ namespace SF {
             return *this;
         }
 
-
+        StringType& operator = (const Array<const CharType>& src)
+        {
+            Reset();
+            return Append(src);
+        }
 
 	protected:
 
