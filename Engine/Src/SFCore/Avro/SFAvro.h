@@ -185,10 +185,12 @@ namespace SF
 
 		// for array/map
 		size_t GetElementCount() const;
+        size_t GetFieldCount() const { return GetElementCount(); }
 
 		// for array/map
 		Result GetElement(int i, AvroValue& value, const char*& name) const;
 
+        Result GetFieldByIndex(int i, AvroValue& value, const char*& name) const;
 
 		template<class FieldDataType>
 		FieldDataType GetFieldValue(const char* fieldName) const

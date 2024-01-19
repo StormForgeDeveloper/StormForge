@@ -289,6 +289,19 @@ namespace SF {
 
 		~TString() {}
 
+        void Reset()
+        {
+            if (m_Buffer != nullptr && m_Buffer->IsUniquelyReferenced())
+            {
+                m_Buffer->Reset();
+            }
+            else
+            {
+                m_Buffer = nullptr;
+            }
+            m_StringView = nullptr;
+        }
+
 		SF_FORCEINLINE IHeap& GetHeap() const { return *m_pHeap; }
 		SF_FORCEINLINE void SetHeap(IHeap& heap) { m_pHeap = &heap; }
 
@@ -326,6 +339,27 @@ namespace SF {
 
 		// Check whether it's null or empty string
 		bool IsNullOrEmpty() const { return m_Buffer == nullptr || m_Buffer->GetStringLength() == 0; }
+
+        StringType& Append(const Array<const CharType>& src)
+        {
+            auto pSrc = (const CharType*)src.data();
+
+            if (m_Buffer->IsUniquelyReferenced())
+            {
+                m_Buffer->Append(src.data(), src.size());
+            }
+            else
+            {
+                auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), m_Buffer->GetStringLength() + src.size() + 1);
+                newBuffer->Append(m_Buffer->GetBufferPointer(), m_Buffer->GetStringLength());
+                newBuffer->Append(pSrc, src.size());
+
+                m_Buffer = newBuffer;
+            }
+            m_StringView = m_Buffer->GetBufferPointer();
+
+            return *this;
+        }
 
 		// Append to string
 		StringType& Append(const StringType& src)

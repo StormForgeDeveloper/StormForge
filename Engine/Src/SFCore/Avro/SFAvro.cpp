@@ -156,7 +156,9 @@ namespace SF
 	{
         Reset();
 
-        m_SchemaString = schemaData.data();
+        m_SchemaString.Reset();
+        m_SchemaString.Append(schemaData);
+        //m_SchemaString.Resize(schemaData.size());
 
 		int res = avro_schema_from_json_length(m_SchemaString.data(), m_SchemaString.length(), &m_Handle);
 		if (res)
@@ -497,6 +499,15 @@ namespace SF
 
 		return ResultCode::SUCCESS;
 	}
+
+    Result AvroValue::GetFieldByIndex(int i, AvroValue& value, const char*& name) const
+    {
+        int res = avro_value_get_by_index(&m_DataValue, i, value, &name);
+        if (res != 0)
+            return ResultCode::NOT_EXIST;
+
+        return ResultCode::SUCCESS;
+    }
 
     Result AvroValue::SetValue(const char* Name, bool Value)
     {

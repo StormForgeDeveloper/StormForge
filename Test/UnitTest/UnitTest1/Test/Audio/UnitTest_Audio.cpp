@@ -176,7 +176,7 @@ TEST_F(AudioTest, RecordingNSaveWave)
     size_t sampleFrameSize = Audio::GetBytesPerSample(numChannels, format);
     //size_t dataSizePerSec = samplesPerSec * sampleFrameSize;
     int opusSamplesPerBlock = samplesPerSec / 2;
-    size_t dataSizePerBlock = opusSamplesPerBlock * sampleFrameSize;
+    //size_t dataSizePerBlock = opusSamplesPerBlock * sampleFrameSize;
 
     //sfinfo.frames
     const char* outputFile = "test.wav";

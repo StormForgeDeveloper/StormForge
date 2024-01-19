@@ -20,6 +20,15 @@ namespace SF
     {
         public UInt32 Composited;
 
+        public LogMask()
+        {
+            Composited = 0xFFFFFFFF;
+        }
+        public LogMask(LogLevel level)
+        {
+            Composited = (uint)((ulong)1 << ((int)level + 1) - 1);
+        }
+
         public bool GetBit(int bit)
         {
             return (Composited & (1 << bit)) != 0;
@@ -191,6 +200,7 @@ namespace SF
         Debug6,
         Debug7,
         Debug8,
+        Max = Debug8
     }
 
     public static class Log
