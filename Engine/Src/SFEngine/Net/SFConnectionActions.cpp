@@ -467,6 +467,16 @@ namespace Net {
 	}
 
 
+    Result ConnectionStateAction_WaitRW::Run()
+    {
+        Result hr;
+
+        // TODO: select
+        //GetConnection()->GetSocket()->
+
+        return hr;
+    }
+
 
 	Result ConnectionStateAction_TimeoutConnecting::Run()
 	{
@@ -489,11 +499,6 @@ namespace Net {
 			UpdateNetCtrlTryTime();
 			SFLog(Net, Debug2, "Send Connecting CID({0}) : C:{1}, V:{2})", GetCID(), GetLocalInfo().PeerClass, (uint32_t)SF_PROTOCOL_VERSION);
             netCheck(GetConnection()->SendNetCtrl(PACKET_NETCTRL_CONNECT, 0, {}));
-
-            if (m_bSendOnlyOnce)
-            {
-                m_bSent = true;
-            }
 		}
 
 		return hr;

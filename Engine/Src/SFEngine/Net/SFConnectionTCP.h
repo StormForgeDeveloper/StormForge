@@ -129,6 +129,8 @@ namespace SF {
 
 			bool GetIsIORegistered() const { return m_NetIOAdapter.GetIsIORegistered(); }
 
+            bool IsSocketReadyToSend() const { return !m_IsClientConnection || m_IsTCPSocketConnectionEstablished; }
+
 			IOBUFFER_READ* GetRecvBuffer() { return m_RecvBuffer.get(); }
 
 			SockFamily GetSocketFamily() const { return GetLocalInfo().PeerAddress.SocketFamily; }
@@ -190,7 +192,8 @@ namespace SF {
 		private:
 
 			ConnectionMessageAction_HandleTimeSyncRtn m_HandleTimeSyncRtn;
-			ConnectionStateAction_TimeoutConnecting m_TimeoutConnecting;
+            ConnectionStateAction_WaitRW m_WaitRW;
+            ConnectionStateAction_TimeoutConnecting m_TimeoutConnecting;
 			ConnectionStateAction_SendConnect m_SendConnect;
 			ConnectionStateAction_TimeoutDisconnecting m_TimeoutDisconnecting;
 			ConnectionStateAction_SendDisconnect m_SendDisconnect;

@@ -20,10 +20,6 @@ namespace SF
     {
         public UInt32 Composited;
 
-        public LogMask()
-        {
-            Composited = 0xFFFFFFFF;
-        }
         public LogMask(LogLevel level)
         {
             Composited = (uint)((ulong)1 << ((int)level + 1) - 1);

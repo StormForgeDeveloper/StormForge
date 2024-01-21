@@ -50,14 +50,14 @@ namespace Net {
 	// Connection state
 	enum class ConnectionState : uint8_t
 	{
-		NONE,				// None just created
-		WAITING,			// Waiting accept
-		UDP_WAITING,		// UDP incoming Waiting
+		NONE,			// None just created
+		WAITRW,			// Waiting RW enabled state
+		UDP_WAITING,	// UDP incoming Waiting
 		CONNECTING,		// Connecting sequence
-		CHECKVERSION,		// Checking protocol version
+		CHECKVERSION,	// Checking protocol version
 		CONNECTED,		// Connected 
 		DISCONNECTING,	// Disconnecting
-		DISCONNECTED,		// Disconnected
+		DISCONNECTED,	// Disconnected
 		SLEEP,			// For Mobile connection
 		Max
 	};

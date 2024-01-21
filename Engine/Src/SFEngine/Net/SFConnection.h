@@ -231,7 +231,6 @@ namespace Net {
 		// Get Recv queue
         RecvMessageQueue& GetRecvMessageQueue() { return m_RecvMessageQueue; }
 
-
 		bool GetUsePeerIDMap() { return m_UsePeerIDMap; }
 		void SetUsePeerIDMap(bool enable) { m_UsePeerIDMap = enable; }
 

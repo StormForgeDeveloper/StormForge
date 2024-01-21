@@ -821,8 +821,7 @@ namespace Net {
 
 		SetNetCtrlAction(NetCtrlCode_TimeSyncRtn, &m_HandleTimeSyncRtn);
 
-        m_SendConnect.SetSendOnlyOnce(true);
-
+        AddStateAction(ConnectionState::WAITRW, &m_WaitRW);
 		AddStateAction(ConnectionState::CONNECTING, &m_TimeoutConnecting);
 		AddStateAction(ConnectionState::CONNECTING, &m_SendConnect);
 		AddStateAction(ConnectionState::DISCONNECTING, &m_TimeoutDisconnecting);
