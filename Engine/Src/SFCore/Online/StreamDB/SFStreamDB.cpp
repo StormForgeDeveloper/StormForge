@@ -551,7 +551,7 @@ namespace SF
 		m_Consumer.reset();
 	}
 
-	Result StreamDBGroupConsumer::Initialize(const String& serverAddress, const String& consumerGroupId, const String& path)
+	Result StreamDBGroupConsumer::Initialize(const String& serverAddress, const String& consumerGroupId, const String& consumerGroupInstanceId, const String& path)
 	{
 		std::string errstr;
 
@@ -564,7 +564,13 @@ namespace SF
 		if (consumerGroupId.IsNullOrEmpty())
 			return ResultCode::INVALID_ARG;
 
-		GetConfig()->set("group.id", consumerGroupId.data(), errstr);
+		GetConfig()->set("group.id", consumerGroupId.c_str(), errstr);
+        if (!consumerGroupInstanceId.IsNullOrEmpty())
+        {
+            // My unique Id for static membership
+            // https://www.confluent.io/blog/dynamic-vs-static-kafka-consumer-rebalancing/
+            GetConfig()->set("group.instance.id", consumerGroupInstanceId.c_str(), errstr);
+        }
 
 		auto* consumer = RdKafka::KafkaConsumer::create(GetConfig().get(), errstr);
 		if (!consumer)

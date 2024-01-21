@@ -228,7 +228,7 @@ namespace SF
         StreamDBGroupConsumer();
 		virtual ~StreamDBGroupConsumer();
 
-		virtual Result Initialize(const String& serverAddress, const String& consumerGroupId, const String& path);
+		virtual Result Initialize(const String& serverAddress, const String& consumerGroupId, const String& consumerGroupInstanceId, const String& path);
 
 		SF_FORCEINLINE bool IsSubscribed() const { return m_IsSubscribed; }
 

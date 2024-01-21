@@ -113,7 +113,7 @@ TEST_F(KafkaTest, GroupConsumer)
 	{
 		SharedPointerT<StreamDBGroupConsumer> streamDB = new(GetHeap()) StreamDBGroupConsumer;
 
-		EXPECT_EQ(streamDB->Initialize(streamBrokerAddress.asCString(), group, topic), ResultCode::SUCCESS);
+		EXPECT_EQ(streamDB->Initialize(streamBrokerAddress.asCString(), group, Util::GetServiceName(), topic), ResultCode::SUCCESS);
 		EXPECT_EQ(streamDB->Subscribe(), ResultCode::SUCCESS);
 
 		auto* pThread = new(GetHeap()) FunctorTickThread([&, iThread, streamDB](Thread* pThread) -> bool
