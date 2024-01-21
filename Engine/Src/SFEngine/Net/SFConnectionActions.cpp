@@ -484,11 +484,16 @@ namespace Net {
 	{
 		Result hr;
 
-		if (Util::TimeSince(GetNetCtrlTryTime()) > Const::CONNECTION_RETRY_TIME) // retry
+		if (!m_bSent && Util::TimeSince(GetNetCtrlTryTime()) > Const::CONNECTION_RETRY_TIME) // retry
 		{
 			UpdateNetCtrlTryTime();
 			SFLog(Net, Debug2, "Send Connecting CID({0}) : C:{1}, V:{2})", GetCID(), GetLocalInfo().PeerClass, (uint32_t)SF_PROTOCOL_VERSION);
             netCheck(GetConnection()->SendNetCtrl(PACKET_NETCTRL_CONNECT, 0, {}));
+
+            if (m_bSendOnlyOnce)
+            {
+                m_bSent = true;
+            }
 		}
 
 		return hr;

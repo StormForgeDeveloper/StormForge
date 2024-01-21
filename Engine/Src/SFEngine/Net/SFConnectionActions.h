@@ -140,7 +140,14 @@ namespace Net {
 
 	class ConnectionStateAction_SendConnect : public ConnectionAction
 	{
+    private:
+        bool m_bSendOnlyOnce = false;
+        bool m_bSent = false;
+
 	public:
+
+        void SetSendOnlyOnce(bool sendOnlyOnce) { m_bSendOnlyOnce = sendOnlyOnce; }
+
 		virtual Result Run() override;
 	};
 
