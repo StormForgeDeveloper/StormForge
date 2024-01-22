@@ -151,7 +151,7 @@ namespace SF
             }
 
             Result hr;
-            if (m_HttpClient->GetResultCode())
+            if (m_HttpClient->GetResultCode().IsSuccess())
             {
                 auto& recvData = m_HttpClient->GetResultContent();
                 if (recvData.size() > 0)
@@ -175,7 +175,9 @@ namespace SF
 
                 if (!hr.IsSuccess())
                 {
-                    SFLog(System, Error, "Login result parsing error:{0}", hr);
+                    ArrayView<const char> charView(recvData);
+                    String resultString = charView;
+                    SFLog(System, Error, "Login result parsing error:{0}, content:{1}", hr, resultString);
 
                     SetOnlineState(OnlineState::Disconnected);
                     SetResult(hr);

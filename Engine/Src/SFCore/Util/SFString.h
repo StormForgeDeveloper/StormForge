@@ -219,6 +219,12 @@ namespace SF {
 				m_StringView = m_Buffer->GetBufferPointer();
 		}
 
+        TString(const Array<const CharType>& src)
+            : m_pHeap(&GetSystemHeap())
+        {
+            Append(src);
+        }
+
 		TString(IHeap& heap)
 			: m_pHeap(&heap)
 		{
