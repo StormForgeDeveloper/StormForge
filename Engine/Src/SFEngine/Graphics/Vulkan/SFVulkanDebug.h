@@ -15,7 +15,7 @@
 #include "SFTypedefs.h"
 #include "Graphics/Vulkan/SFVulkanLibrary.h"
 
-#if HAVE_VULKAN
+#if SF_USE_VULKAN
 #include "vulkan/vk_platform.h"
 
 
@@ -56,4 +56,4 @@ namespace SF
 }
 
 
-#endif // #if HAVE_VULKAN
+#endif // #if SF_USE_VULKAN

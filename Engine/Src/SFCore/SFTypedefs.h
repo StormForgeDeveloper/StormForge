@@ -131,6 +131,23 @@
 #include <immintrin.h>
 
 
+//////////////////////////////////////////////////
+//
+//  Feature control
+//
+
+
+// Initially off those
+#ifndef SF_USE_VULKAN
+#if !X32
+#define SF_USE_VULKAN 0
+#endif
+#endif // SF_USE_VULKAN
+
+#ifndef SF_USE_FBX
+#define SF_USE_FBX 0
+#endif
+
 
 //////////////////////////////////////////////////
 //
@@ -199,11 +216,6 @@
 typedef HWND NativeWindow;
 typedef unsigned int uint;
 using SF_SOCKET = SOCKET;
-
-#if !X32
-#define HAVE_VULKAN 1
-#endif
-
 
 
 
@@ -296,9 +308,6 @@ using SF_SOCKET = int;
 
 //#define HAVE_EGL 0
 //#define HAVE_GLES 0
-
-#define HAVE_VULKAN 0
-
 
 
 
@@ -396,7 +405,6 @@ using SF_SOCKET = int;
 
 #define HAVE_EGL 1
 #define HAVE_GLES 1
-#define HAVE_VULKAN 1
 
 
 
@@ -476,17 +484,12 @@ using SF_SOCKET = int;
 #define TRUE 1
 #define FALSE 0
 
-
 #define MAX_PATH 512
-
 
 #define KQUEUE 1
 
-
 #define HAVE_EGL 0
 #define HAVE_GLES 1
-//#define HAVE_VULKAN 1
-
 
 #else
 

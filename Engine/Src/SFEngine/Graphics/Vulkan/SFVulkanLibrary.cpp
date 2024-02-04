@@ -13,7 +13,7 @@
 #include "SFVulkanLibrary.h"
 
 
-#if HAVE_VULKAN
+#if SF_USE_VULKAN
 
 #if SF_PLATFORM == SF_PLATFORM_ANDROID
 #include <dlfcn.h>
@@ -450,5 +450,5 @@ PFN_vkDebugReportMessageEXT vkDebugReportMessageEXT = nullptr;
 #endif
 
 
-#endif // #if HAVE_VULKAN
+#endif // #if SF_USE_VULKAN
 

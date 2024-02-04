@@ -15,7 +15,7 @@
 #include "Graphics/SFRenderTargetChain.h"
 
 
-#if HAVE_VULKAN
+#if SF_USE_VULKAN
 
 #include "Graphics/Vulkan/SFVulkanSystem.h"
 
@@ -135,4 +135,4 @@ namespace SF
 
 }
 
-#endif // HAVE_VULKAN
+#endif // SF_USE_VULKAN

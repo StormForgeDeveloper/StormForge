@@ -13,7 +13,7 @@
 
 #include "Asset/Importer/SFAssetImporter3DAsset.h"
 
-#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+#if SF_USE_FBX
 
 namespace fbxsdk
 {

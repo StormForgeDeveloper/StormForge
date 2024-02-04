@@ -105,7 +105,7 @@ namespace SF
 		if (initParam.GraphicSystem != nullptr)
 		{
 			pEngine->AddComponent<SF::ResourceManagerComponent>();
-#if HAVE_VULKAN
+#if SF_USE_VULKAN
 			pEngine->AddComponent<SF::VulkanSystem>();
 			pEngine->AddComponent<SF::GraphicDeviceComponent<SF::GraphicDeviceVulkan>>();
 #endif

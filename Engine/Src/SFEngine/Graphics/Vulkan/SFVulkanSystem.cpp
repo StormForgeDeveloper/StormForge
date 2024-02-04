@@ -15,7 +15,7 @@
 #include "Util/SFLog.h"
 
 
-#if HAVE_VULKAN
+#if SF_USE_VULKAN
 
 
 
@@ -244,5 +244,5 @@ namespace SF
 }
 
 
-#endif // #if HAVE_VULKAN
+#endif // #if SF_USE_VULKAN
 

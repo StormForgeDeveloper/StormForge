@@ -227,7 +227,7 @@ namespace SF
                     curl_multi_remove_handle(m_hMulti, msg->easy_handle);
                     m_Managed.erase(itFound);
 
-                    httpClient->OnFinished();
+                    SetFinished(httpClient.get(), msg->data.result);
                 }
             }
         }

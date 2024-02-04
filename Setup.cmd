@@ -38,24 +38,15 @@ if not exist %VK_SDK_PATH% (
 )
 
 
-rem set FBX_SDK_INSTALL_FILE_WIN=fbx20201_fbxsdk_vs2017_win.exe
-rem if not exist %FBX_SDK_INSTALL_FILE_WIN% (
-rem 	echo downloading FBXSDK
-rem     call %TOOL_PATH%\httpget +url:https://www.autodesk.com/content/dam/autodesk/www/adn/fbx/2020-1/fbx20201_fbxsdk_vs2017_win.exe
-rem 	%FBX_SDK_INSTALL_FILE_WIN% /D=%FBX_SDK_PATH%
-rem )
+set FBX_SDK_INSTALL_FILE_WIN=fbx20201_fbxsdk_vs2017_win.exe
+if not exist %FBX_SDK_INSTALL_FILE_WIN% (
+	echo downloading FBXSDK
+    call %TOOL_PATH%\httpget +url:https://www.autodesk.com/content/dam/autodesk/www/adn/fbx/2020-1/fbx20201_fbxsdk_vs2017_win.exe
+	%FBX_SDK_INSTALL_FILE_WIN% /D=%FBX_SDK_PATH%
+)
 
 
 cd %~dp0
-
-REM set MYSQL_ZIP=mysql-connector-c++-8.0.32-winx64.zip
-REM if not exist %MYSQL_ZIP% (
-	REM echo downloading mysql-connector
-	REM call %TOOL_PATH%\httpget +url:https://cdn.mysql.com//Downloads/Connector-C++/mysql-connector-c++-8.0.32-winx64.zip
-	REM mkdir 3rdParties\Windows
-	REM 7z x mysql-connector-c++-8.0.32-winx64.zip -o.\3rdParties\Windows
-	REM rem NOTE: Register mysql dll path to your path
-REM )
 
 
 if not exist "Test/UnitTest/UnitTest1/Test/LogServer/LocalData/serveraddress.txt" (

@@ -12,7 +12,7 @@
 #pragma once
 
 
-#if HAVE_VULKAN
+#if SF_USE_VULKAN
 
 #include "Resource/SFDeviceTexture.h"
 #include "Graphics/Vulkan/SFVulkanSystem.h"
@@ -51,5 +51,5 @@ namespace SF
 
 }
 
-#endif //#if HAVE_VULKAN
+#endif //#if SF_USE_VULKAN
 

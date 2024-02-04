@@ -13,7 +13,7 @@
 
 #include "Graphics/SFGraphicDevice.h"
 
-#if HAVE_VULKAN
+#if SF_USE_VULKAN
 
 #include "Graphics/Vulkan/SFVulkanSystem.h"
 #include "Graphics/Vulkan/SFVulkanLogicalDevice.h"

@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2018 Kyungkun Ko
 // 
@@ -17,7 +17,7 @@
 #include "Resource/SFAnimation.h"
 #include "Stream/SFMemoryStream.h"
 
-#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+#if SF_USE_FBX
 
 #define FBXSDK_SHARED
 #include "fbxsdk.h"

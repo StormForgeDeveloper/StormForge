@@ -15,7 +15,7 @@
 #include "SFTypedefs.h"
 
 
-#if HAVE_VULKAN
+#if SF_USE_VULKAN
 
 //#if SF_PLATFORM == SF_PLATFORM_ANDROID && __ANDROID_API__ < 24
 #define SF_VULKAN_DYNAMIC_LIBRARY 1
@@ -271,4 +271,4 @@ extern PFN_vkDebugReportMessageEXT vkDebugReportMessageEXT;
 
 #endif
 
-#endif // #if HAVE_VULKAN
+#endif // #if SF_USE_VULKAN
