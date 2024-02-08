@@ -409,21 +409,16 @@ namespace Net {
 				netCheck(Disconnect("Protocol mismatch"));
 				break;
 			}
-			//else if (GetRemoteInfo().PeerClass != NetClass::Unknown && RemoteClass != GetRemoteInfo().PeerClass)
-			//{
-			//	netChk(SendNetCtrl(PACKET_NETCTRL_NACK, pNetCtrl->msgID.IDSeq.Sequence, pNetCtrl->msgID, GetLocalInfo().PeerID));
-			//	OnConnectionResult(ResultCode::IO_INVALID_NETCLASS);
-			//	netChk(Disconnect("Invalid netclass"));
-			//	break;
-			//}
 
 			netCheck(SendNetCtrl(PACKET_NETCTRL_ACK, (uint)GetLocalInfo().PeerClass, pHeader->msgID));
 
-			SFLog(Net, Debug3, "UDP Recv Connecting CID({0}) : C:{1}, Ver:{2})", GetCID(), pNetCtrlConnect->Peer.PeerClass, pNetCtrlConnect->ProtocolVersion);
+			SFLog(Net, Debug3, "Recv Connecting CID({0}) : C:{1}, Ver:{2})", GetCID(), pNetCtrlConnect->Peer.PeerClass, pNetCtrlConnect->ProtocolVersion);
 			GetConnection()->SetRemoteInfo(pNetCtrlConnect->Peer.PeerClass, pNetCtrlConnect->Peer.PeerID);
 
 			// Set connection is succeeded and connected
 			OnConnectionResult(ResultCode::SUCCESS);
+
+            SFLog(Net, Info, "Connection connected CID({0}), State:{1}", GetCID(), GetConnectionState());
 			break;
 		case ConnectionState::CONNECTED:
 			netCheck(SendNetCtrl(PACKET_NETCTRL_ACK, (uint)GetLocalInfo().PeerClass, pHeader->msgID));
