@@ -412,6 +412,7 @@ namespace Net {
 			m_pConnection = SharedPointerT<Connection>(pConnection);
 		}
 
+        virtual SharedPointerT<Connection> GetConnection() const override { return m_pConnection.AsSharedPtr<Connection>(); }
 		virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) override;
         virtual Result SendMsg(const MessageHeader* messageData) override;
     };
