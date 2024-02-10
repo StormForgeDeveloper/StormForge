@@ -496,6 +496,7 @@ namespace Net {
             netCheck(GetConnection()->SendNetCtrl(PACKET_NETCTRL_CONNECT, 0, {}));
 
             // With reliable stream socket we don't need to send multiple times
+            // TODO: Socket reuse?
             if (GetConnection()->GetSocketType() == SocketType::Stream)
             {
                 m_bSent = true;
