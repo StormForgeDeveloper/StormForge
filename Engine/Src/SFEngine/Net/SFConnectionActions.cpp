@@ -494,6 +494,12 @@ namespace Net {
 			UpdateNetCtrlTryTime();
 			SFLog(Net, Debug2, "Send Connecting CID({0}) : C:{1}, V:{2})", GetCID(), GetLocalInfo().PeerClass, (uint32_t)SF_PROTOCOL_VERSION);
             netCheck(GetConnection()->SendNetCtrl(PACKET_NETCTRL_CONNECT, 0, {}));
+
+            // With reliable stream socket we don't need to send multiple times
+            if (GetConnection()->GetSocketType() == SocketType::Stream)
+            {
+                m_bSent = true;
+            }
 		}
 
 		return hr;
