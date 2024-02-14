@@ -159,8 +159,10 @@ namespace SF {
 			virtual Result CloseConnection(const char* reason) override;
 
 
-			// called when incoming message occure
+			// Raw packet data recv
 			virtual Result OnRecv(uint uiBuffSize, uint8_t* pBuff) override;
+
+            // Parsed message data Recv
 			virtual Result OnRecv(MessageHeader* pMsg) override;
 
 			// Send message to connected entity

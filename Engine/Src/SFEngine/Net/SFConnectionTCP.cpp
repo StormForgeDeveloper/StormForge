@@ -815,7 +815,6 @@ namespace Net {
 	ConnectionTCPClient::ConnectionTCPClient(IHeap& heap)
 		: ConnectionTCP(heap)
 	{
-		//GetRecvBuffer()->SetupRecvTCP( GetCID() );
 		// We can't set tick here. There is a small chance that tick update finished before this object's reference count got increased
 		//SetTickGroup(EngineTaskTick::AsyncTick);
 
