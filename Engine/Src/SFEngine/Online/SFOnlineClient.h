@@ -85,7 +85,7 @@ namespace SF
 		//	ClientTask class
 		// 
 
-		class ClientTask
+		class ClientTask : public SharedObject
 		{
 		public:
 			using OnlineState = OnlineClient::OnlineState;
@@ -94,6 +94,7 @@ namespace SF
 			virtual ~ClientTask();
 
 			IHeap& GetHeap() { return m_Owner.GetHeap(); }
+            OnlineClient& GetOwner() { return m_Owner; }
 
 			void SetOnlineState(OnlineState newState);
 

@@ -313,6 +313,31 @@ namespace SF
 			return m_Owner.GetConnectionGame();
 		}
 
+        virtual void Dispose() override
+        {
+            SFLog(Net, Info, "Finished ClientTask_JoinGameServer res:{0}", GetResult());
+
+            if (GetConnection() != nullptr)
+            {
+                GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(uintptr_t(this));
+                GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(uintptr_t(this));
+                GetConnection()->RemoveMessageDelegate(uintptr_t(this), Message::Game::JoinGameServerRes::MID.GetMsgID());
+            }
+
+            if (m_Owner.GetOnlineState() == OnlineState::InGameServer)
+            {
+            }
+            else if (m_Owner.GetOnlineState() == OnlineState::LoggedIn)
+            {
+                m_Owner.Disconnect(m_Owner.m_Game);
+                m_Owner.m_Game = nullptr;
+                m_Owner.Disconnect(m_Owner.m_GameInstance);
+                m_Owner.m_GameInstance = nullptr;
+            }
+
+            super::Dispose();
+        }
+
 		void Disconnect()
 		{
 			if (m_Owner.m_Game != nullptr)
@@ -330,27 +355,40 @@ namespace SF
 			m_Owner.m_Game = new(GetHeap()) Net::ConnectionTCPClient(GetHeap());
 			GetConnection()->SetEventFireMode(Net::Connection::EventFireMode::OnGameTick);
 
+            WeakPointerT<ClientTask_JoinGameServer> WeakThis = AsSharedPtr<ClientTask_JoinGameServer>();
 			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this),
-				[this](Net::Connection*, const Net::ConnectionEvent& evt)
+				[WeakThis](Net::Connection*, const Net::ConnectionEvent& evt)
 				{
-					OnConnectionEvent(evt);
+                    SharedPointerT<ClientTask_JoinGameServer> This = WeakThis.AsSharedPtr<ClientTask_JoinGameServer>();
+                    if (This.IsValid())
+                    {
+                        This->OnConnectionEvent(evt);
+                    }
 				});
 
 			GetConnection()->AddMessageDelegateUnique(uintptr_t(this),
 				Message::Game::JoinGameServerRes::MID.GetMsgID(),
-				[this](Net::Connection*, const MessageHeader* pHeader)
+				[WeakThis](Net::Connection*, const MessageHeader* pHeader)
 				{
-					OnJoinGameServerRes(pHeader);
+                    SharedPointerT<ClientTask_JoinGameServer> This = WeakThis.AsSharedPtr<ClientTask_JoinGameServer>();
+                    if (This.IsValid())
+                    {
+                        This->OnJoinGameServerRes(pHeader);
+                    }
 				});
 
 			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(&m_Owner),
-				[pOnlineClient = &m_Owner](Net::Connection*, const Net::ConnectionEvent& evt)
+				[WeakThis](Net::Connection*, const Net::ConnectionEvent& evt)
 				{
-					if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
-					{
-						pOnlineClient->ClearInstanceInfo();
-						pOnlineClient->UpdateOnlineStateByConnectionState();
-					}
+                    SharedPointerT<ClientTask_JoinGameServer> This = WeakThis.AsSharedPtr<ClientTask_JoinGameServer>();
+                    if (This.IsValid())
+                    {
+                        if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
+                        {
+                            This->GetOwner().ClearInstanceInfo();
+                            This->GetOwner().UpdateOnlineStateByConnectionState();
+                        }
+                    }
 				});
 
 			AuthTicket authTicket = m_Owner.GetAuthTicket();
@@ -405,25 +443,6 @@ namespace SF
 
 		virtual ~ClientTask_JoinGameServer()
 		{
-			SFLog(Net, Info, "Finished ClientTask_JoinGameServer res:{0}", GetResult());
-
-			if (GetConnection() != nullptr)
-			{
-				GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(uintptr_t(this));
-				GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(uintptr_t(this));
-				GetConnection()->RemoveMessageDelegate(uintptr_t(this), Message::Game::JoinGameServerRes::MID.GetMsgID());
-			}
-
-			if (m_Owner.GetOnlineState() == OnlineState::InGameServer)
-			{
-			}
-			else if (m_Owner.GetOnlineState() == OnlineState::LoggedIn)
-			{
-				m_Owner.Disconnect(m_Owner.m_Game);
-				m_Owner.m_Game = nullptr;
-				m_Owner.Disconnect(m_Owner.m_GameInstance);
-				m_Owner.m_GameInstance = nullptr;
-			}
 		}
 
 		void OnConnectionEvent(const Net::ConnectionEvent& evt)
@@ -504,6 +523,29 @@ namespace SF
 		{
 		}
 
+        virtual void Dispose() override
+        {
+            SFLog(Net, Info, "Finished ClientTask_JoinGameInstanceServer");
+
+            if (m_Owner.GetConnectionGame() != nullptr)
+                m_Owner.GetConnectionGame()->RemoveMessageDelegate(uintptr_t(this), Message::Game::JoinGameInstanceRes::MID.GetMsgID());
+
+            if (m_Owner.GetOnlineState() != OnlineState::InGameInGameInstance)
+            {
+                m_Owner.ClearInstanceInfo();
+                Disconnect();
+            }
+
+            if (GetConnection() == nullptr)
+                return;
+
+            GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(uintptr_t(this));
+            GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(uintptr_t(this));
+            GetConnection()->RemoveMessageDelegate(uintptr_t(this), Message::PlayInstance::JoinPlayInstanceRes::MID.GetMsgID());
+
+            super::Dispose();
+        }
+
 		const SharedPointerT<Net::Connection>& GetConnection()
 		{
 			return m_Owner.GetConnectionGameInstance();
@@ -540,24 +582,38 @@ namespace SF
 			m_Owner.m_GameInstance = new(GetHeap()) Net::ConnectionUDPClient(GetHeap());
 			GetConnection()->SetEventFireMode(Net::Connection::EventFireMode::OnGameTick);
 
+            WeakPointerT<ClientTask_JoinGameInstanceServer> WeakThis = AsSharedPtr<ClientTask_JoinGameInstanceServer>();
+
 			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this),
-				[this](Net::Connection*, const Net::ConnectionEvent& evt)
+				[WeakThis](Net::Connection*, const Net::ConnectionEvent& evt)
 				{
-					OnConnectionEvent(evt);
+                    SharedPointerT<ClientTask_JoinGameInstanceServer> This = WeakThis.AsSharedPtr<ClientTask_JoinGameInstanceServer>();
+                    if (This.IsValid())
+                    {
+                        This->OnConnectionEvent(evt);
+                    }
 				});
 
 			GetConnection()->AddMessageDelegateUnique(uintptr_t(this),
 				Message::PlayInstance::JoinPlayInstanceRes::MID.GetMsgID(),
-				[this](Net::Connection*, const MessageHeader* pHeader)
+				[WeakThis](Net::Connection*, const MessageHeader* pHeader)
 				{
-					OnPlayInstanceJoinGameInstanceRes(pHeader);
+                    SharedPointerT<ClientTask_JoinGameInstanceServer> This = WeakThis.AsSharedPtr<ClientTask_JoinGameInstanceServer>();
+                    if (This.IsValid())
+                    {
+                        This->OnPlayInstanceJoinGameInstanceRes(pHeader);
+                    }
 				});
 
 			m_Owner.GetConnectionGame()->AddMessageDelegateUnique(uintptr_t(this),
 				Message::Game::JoinGameInstanceRes::MID.GetMsgID(),
-				[this](Net::Connection*, const MessageHeader* pHeader)
+				[WeakThis](Net::Connection*, const MessageHeader* pHeader)
 				{
-					OnJoinGameInstanceRes(pHeader);
+                    SharedPointerT<ClientTask_JoinGameInstanceServer> This = WeakThis.AsSharedPtr<ClientTask_JoinGameInstanceServer>();
+                    if (This.IsValid())
+                    {
+                        This->OnJoinGameInstanceRes(pHeader);
+                    }
 				});
 
 			m_Owner.RegisterPlayInstanceHandlers();
@@ -576,23 +632,6 @@ namespace SF
 
 		virtual ~ClientTask_JoinGameInstanceServer()
 		{
-			SFLog(Net, Info, "Finished ClientTask_JoinGameInstanceServer");
-
-			if (m_Owner.GetOnlineState() != OnlineState::InGameInGameInstance)
-			{
-				m_Owner.ClearInstanceInfo();
-				Disconnect();
-			}
-
-			if (GetConnection() == nullptr)
-				return;
-
-			GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(uintptr_t(this));
-			GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(uintptr_t(this));
-			GetConnection()->RemoveMessageDelegate(uintptr_t(this), Message::PlayInstance::JoinPlayInstanceRes::MID.GetMsgID());
-
-			if (m_Owner.GetConnectionGame() != nullptr)
-				m_Owner.GetConnectionGame()->RemoveMessageDelegate(uintptr_t(this), Message::Game::JoinGameInstanceRes::MID.GetMsgID());
 		}
 
 		void OnConnectionEvent(const Net::ConnectionEvent& evt)
