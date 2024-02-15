@@ -689,6 +689,7 @@ namespace SF
 				return;
 			}
 
+            m_Owner.SetupInstanceInfo();
 			m_Owner.m_GameInstanceUID = packet.GetInsUID();
 			m_Owner.m_GameInstanceAddress = packet.GetServerPublicAddress();
 			
