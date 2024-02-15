@@ -74,7 +74,7 @@ namespace SF {
 			ReleaseReference();
 		}
 
-		void reset() const
+		void reset()
 		{
 			ReleaseReference();
 		}
@@ -217,10 +217,16 @@ namespace SF {
 		{
 		}
 
-        SF_FORCEINLINE void reset() const
+        SF_FORCEINLINE void reset()
 		{
 			ReleaseReference();
 		}
+
+        SF_FORCEINLINE void reset(ClassType* pRef)
+        {
+            ReleaseReference();
+            *this = pRef;
+        }
 
         SF_FORCEINLINE ClassType* GetObjectPtr()
 		{
@@ -905,7 +911,7 @@ namespace SF {
 			ReleaseReference();
 		}
 
-		void reset() const
+		void reset()
 		{
 			ReleaseReference();
 		}
@@ -1067,7 +1073,7 @@ namespace SF {
 		{
 		}
 
-		void reset() const
+		void reset()
 		{
 			ReleaseReference();
 		}

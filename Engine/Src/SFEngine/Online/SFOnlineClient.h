@@ -242,8 +242,8 @@ namespace SF
 
 		TimeStampMS m_HeartbeatTimer{};
 
-		SFUniquePtr<ClientTask> m_CurrentTask;
-		DynamicArray<ClientTask*> m_PendingTasks;
+		SharedPointerT<ClientTask> m_CurrentTask;
+		DynamicArray<SharedPointerT<ClientTask>> m_PendingTasks;
         struct FinishedTaskInfo
         {
             uint64_t TransactionId = 0;

@@ -797,8 +797,6 @@ namespace SF
 	void OnlineClient::ClearTasks()
 	{
 		m_CurrentTask.reset();
-		for (auto& itTask : m_PendingTasks)
-			IHeap::Delete(itTask);
 		m_PendingTasks.Clear();
 	}
 
@@ -1096,7 +1094,7 @@ namespace SF
 
 	void OnlineClient::UpdateTasks()
 	{
-		if (m_CurrentTask)
+		if (m_CurrentTask.IsValid())
 		{
 			m_CurrentTask->TickUpdate();
 			if (m_CurrentTask->GetResult() != ResultCode::BUSY)
@@ -1135,7 +1133,7 @@ namespace SF
 
 		if (m_CurrentTask == nullptr && m_PendingTasks.size() > 0)
 		{
-			m_CurrentTask.reset(m_PendingTasks[0]);
+			m_CurrentTask = m_PendingTasks[0];
 			m_PendingTasks.RemoveAt(0);
 
 			m_CurrentTask->Initialize();
@@ -1205,7 +1203,7 @@ namespace SF
 
         m_ComponentManager.TickUpdate();
 
-        if (m_CurrentTask)
+        if (m_CurrentTask.IsValid())
         {
             m_CurrentTask->OnEngineTickUpdate();
         }
