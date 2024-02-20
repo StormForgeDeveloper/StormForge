@@ -50,54 +50,6 @@ namespace Net {
 	};
 
 
-
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Server UDP Network connection class
-	//
-
-	class ConnectionUDPServerPeer : public ConnectionUDP
-	{
-	public:
-
-	protected:
-
-
-	public:
-		// Constructor
-		ConnectionUDPServerPeer(IHeap& heap, SocketIOUDP* ioHandler);
-		virtual ~ConnectionUDPServerPeer();
-
-
-		// Initialize packet synchronization
-		virtual Result InitSynchronization() override;
-
-	};
-
-	
-
-
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Server UDP Network connection class
-	//
-
-	class ConnectionUDPServer : public ConnectionUDP
-	{
-	public:
-
-	protected:
-
-
-	public:
-		// Constructor
-		ConnectionUDPServer(IHeap& heap, SocketIO* ioHandler);
-		virtual ~ConnectionUDPServer();
-	};
-	
-
-
-
 	////////////////////////////////////////////////////////////////////////////////
 	//
 	//	client UDP Network connection class

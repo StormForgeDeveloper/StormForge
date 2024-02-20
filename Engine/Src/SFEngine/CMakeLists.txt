@@ -45,8 +45,6 @@ set(SUBNet_FILES
 	Net/SFConnection.h
 	Net/SFConnectionAction.h
 	Net/SFConnectionActions.h
-	Net/SFConnectionManager.h
-	Net/SFConnectionManagerTask.h
 	Net/SFConnectionMUDP.h
 	Net/SFConnectionTasks.h
 	Net/SFConnectionTCP.h
@@ -69,7 +67,6 @@ set(SUBNet_FILES
 	Net/SFNetToString.h
 	Net/SFNetUtil.h
 	Net/SFConnection.inl
-	Net/SFConnectionManager.inl
 	Net/SFNetDef.inl
 	Net/SFNetSystem_Linux.inl
 	Net/SFNetSystem_WinIOCP.inl
@@ -78,8 +75,6 @@ set(SUBNet_FILES
 	Net/SFConnection.cpp
 	Net/SFConnectionAction.cpp
 	Net/SFConnectionActions.cpp
-	Net/SFConnectionManager.cpp
-	Net/SFConnectionManagerTask.cpp
 	Net/SFConnectionMUDP.cpp
 	Net/SFConnectionMUDPClient.cpp
 	Net/SFConnectionPeerTCP.cpp
@@ -108,10 +103,6 @@ set(SUBNet_FILES
 	Net/SFNetMessageCollection.cpp
 	Net/SFNetPacketData.h
 	Net/SFNetPacketData.cpp
-	#Net/SFNetRelayNetwork.cpp
-	#Net/SFNetRelayNetwork.h
-	Component/SFConnectionManagerComponent.cpp
-	Component/SFConnectionManagerComponent.h
   )
 
 source_group(Net FILES

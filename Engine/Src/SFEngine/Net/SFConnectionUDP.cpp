@@ -44,61 +44,6 @@ namespace SF {
 namespace Net {
 
 
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Server UDP Network connection class
-	//
-
-
-	// Constructor
-	ConnectionUDPServerPeer::ConnectionUDPServerPeer(IHeap& heap, SocketIOUDP* ioHandler)
-		: ConnectionUDP(heap, ioHandler)
-	{
-		// limit server net retry maximum
-		SetMaxGuarantedRetry( Const::UDP_CLI_RETRY_ONETIME_MAX );
-	}
-
-	ConnectionUDPServerPeer::~ConnectionUDPServerPeer()
-	{
-		m_RecvReliableWindow.Reset();
-		m_SendReliableWindow.ClearWindow();
-	}
-
-
-	// Initialize packet synchronization
-	Result ConnectionUDPServerPeer::InitSynchronization()
-	{
-		Result hr;
-
-		netCheck(ConnectionUDP::InitSynchronization() );
-
-		m_RecvReliableWindow.Reset();
-		m_SendReliableWindow.ClearWindow();
-
-		return hr;
-	}
-	
-
-
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Server UDP Network connection class
-	//
-
-	// Constructor
-	ConnectionUDPServer::ConnectionUDPServer(IHeap& heap, SocketIO* ioHandler)
-		: ConnectionUDP(heap, ioHandler)
-	{
-		// limit server net retry maximum
-		SetMaxGuarantedRetry( Const::UDP_CLI_RETRY_ONETIME_MAX );
-	}
-
-	ConnectionUDPServer::~ConnectionUDPServer()
-	{
-		ClearQueues();
-	}
-
-
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
