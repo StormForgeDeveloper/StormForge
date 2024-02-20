@@ -106,7 +106,7 @@ namespace SF {
 
 	AsyncTaskManager::~AsyncTaskManager()
 	{
-		
+        Deinitialize();
 	}
 /*
 	void AsyncTaskManager::AssignTask(SharedPointerT<Task>& pTask)
@@ -196,6 +196,7 @@ namespace SF {
 			(*itWorker)->Stop(true);
 			IHeap::Delete(*itWorker);
 		}
+        m_TaskWorkers.Reset();
 
 		SharedPointerAtomicT<Task> task;
 		while (m_PendingTasks.Dequeue(task))

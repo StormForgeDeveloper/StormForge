@@ -103,9 +103,9 @@ namespace SF {
 
 
 		// Initialize component
-		virtual Result Initialize();
+		Result Initialize();
 		// Terminate component
-		virtual void Deinitialize();
+		void Deinitialize();
 	};
 
 
