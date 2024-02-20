@@ -68,7 +68,7 @@ namespace SF {
 		ServiceInstance()
 		{
             stm_pBaseInstance = new ServiceType;
-            check(m_pService == nullptr); // nothing should be assigned yet
+            assert(m_pService == nullptr); // nothing should be assigned yet
             m_pService = stm_pBaseInstance;
 		}
 
