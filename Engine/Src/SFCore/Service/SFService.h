@@ -68,14 +68,8 @@ namespace SF {
 		ServiceInstance()
 		{
             stm_pBaseInstance = new ServiceType;
-            if (m_pService == nullptr)
-            {
-                m_pService = stm_pBaseInstance;
-            }
-            else
-            {
-                // If m_pService assignment has happened before this instance initialization. m_pService will have value.
-            }
+            check(m_pService == nullptr); // nothing should be assigned yet
+            m_pService = stm_pBaseInstance;
 		}
 
 		operator ServiceType*() { return m_pService; }
