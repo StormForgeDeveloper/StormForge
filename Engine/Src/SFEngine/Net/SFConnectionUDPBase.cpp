@@ -504,18 +504,18 @@ namespace Net {
 			SendReliableMessageAck(msgID);
 
             RecvMsgWindow2::MessageBuffer::ItemReadPtr messageItemPtr;
-			while (m_RecvReliableWindow.PopMsg(messageItemPtr))
-			{
+            while (m_RecvReliableWindow.PopMsg(messageItemPtr))
+            {
                 MessageHeader* pPopHeader = reinterpret_cast<MessageHeader*>(messageItemPtr.data());
-				if (pPopHeader->msgID.GetMsgID() == PACKET_NETCTRL_SEQUENCE_FRAME.GetMsgID())
-				{
-					hr = OnFrameSequenceMessage(pHeader);
-				}
-				else
-				{
-					hr = super::OnRecv(pPopHeader);
-				}
-			}
+                if (pPopHeader->msgID.GetMsgID() == PACKET_NETCTRL_SEQUENCE_FRAME.GetMsgID())
+                {
+                    hr = OnFrameSequenceMessage(pHeader);
+                }
+                else
+                {
+                    hr = super::OnRecv(pPopHeader);
+                }
+            }
 		}
 
 		return hr;

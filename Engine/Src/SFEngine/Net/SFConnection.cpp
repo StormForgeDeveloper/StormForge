@@ -560,14 +560,6 @@ namespace SF {
 			if (GetEventFireMode() == EventFireMode::Immediate)
 			{
 				GetRecvMessageDelegates().Invoke(this, pMsgHeader);
-
-				//if (pMsgHeader != nullptr) // if it hasn't consumed yet, call next callback
-				//{
-				//	RecvMessageDelegates* pMessageDelegate = nullptr;
-				//	m_RecvMessageDelegatesByMsgId.Find(pMsgHeader->msgID.GetMsgID(), pMessageDelegate);
-				//	if (pMessageDelegate)
-				//		pMessageDelegate->Invoke(this, pMsgHeader);
-				//}
 			}
 			else
 			{
@@ -616,13 +608,6 @@ namespace SF {
                 }
 
                 pHeader = reinterpret_cast<MessageHeader*>(itemPtr.data());
-
-				//RecvMessageDelegates* pMessageDelegate = nullptr;
-				//m_RecvMessageDelegatesByMsgId.Find(pHeader->msgID.GetMsgID(), pMessageDelegate);
-				//if (pMessageDelegate && pMessageDelegate->size() > 0)
-				//{
-				//	pMessageDelegate->Invoke(this, pHeader);
-				//}
 
 				GetRecvMessageDelegates().Invoke(this, pHeader);
 			}

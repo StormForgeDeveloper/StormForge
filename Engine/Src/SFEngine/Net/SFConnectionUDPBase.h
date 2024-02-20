@@ -119,7 +119,7 @@ namespace Net {
 
 		virtual Result ProcNetCtrl(const MsgNetCtrlBuffer* pNetCtrl) override;
 
-		Result OnGuaranteedMessageRecv(const MessageHeader* pMsg);
+        virtual Result OnGuaranteedMessageRecv(const MessageHeader* pMsg);
 		virtual Result SendReliableMessageAck(MessageID msgID);
 
 	public:

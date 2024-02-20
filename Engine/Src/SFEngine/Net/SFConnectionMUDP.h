@@ -60,33 +60,6 @@ namespace Net {
 
 
 
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Server Mobile UDP Network connection class
-	//
-
-	class ConnectionMUDPServer : public ConnectionMUDP
-	{
-	private:
-
-		ConnectionMessageAction_MUDPHandleSyncReliableServer m_HandleSyncReliable;
-
-		// Server doesn't send sync
-		//ConnectionStateAction_SendSyncSvr m_ActSync;
-
-	public:
-		// Constructor
-		ConnectionMUDPServer(IHeap& heap, SocketIO* ioHandler)
-			: ConnectionMUDP(heap, ioHandler)
-		{
-			SetNetCtrlAction(NetCtrlCode_SyncReliable, &m_HandleSyncReliable);
-
-			//AddStateAction(ConnectionState::CONNECTED, &m_ActSync);
-		}
-		virtual ~ConnectionMUDPServer() = default;
-
-	};
-
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
