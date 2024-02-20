@@ -173,9 +173,9 @@ TEST_F(AudioTest, RecordingNSaveWave)
     uint samplesPerSec = 48000;
     uint numChannels = 1;
     EAudioFormat format = EAudioFormat::Int16;
-    size_t sampleFrameSize = Audio::GetBytesPerSample(numChannels, format);
+    //size_t sampleFrameSize = Audio::GetBytesPerSample(numChannels, format);
     //size_t dataSizePerSec = samplesPerSec * sampleFrameSize;
-    int opusSamplesPerBlock = samplesPerSec / 2;
+    //int opusSamplesPerBlock = samplesPerSec / 2;
     //size_t dataSizePerBlock = opusSamplesPerBlock * sampleFrameSize;
 
     //sfinfo.frames
