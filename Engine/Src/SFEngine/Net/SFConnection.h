@@ -272,27 +272,6 @@ namespace Net {
 		RecvMessageDelegates& GetRecvMessageDelegates() { return m_RecvMessageDelegates; }
 
 
-		void AddMessageDelegateUnique(uintptr_t context, uint32_t msgId, RecvMessageDelegates::CallableType&& func)
-		{
-			RecvMessageDelegates* pDelegateList = nullptr;
-			if (!m_RecvMessageDelegatesByMsgId.Find(msgId, pDelegateList))
-			{
-				pDelegateList = new(GetHeap()) RecvMessageDelegates(GetHeap());
-				m_RecvMessageDelegatesByMsgId.Insert(msgId, pDelegateList);
-				m_RecvMessageDelegatesByMsgId.CommitChanges();
-			}
-
-			pDelegateList->AddDelegateUnique(uintptr_t(context), Forward<RecvMessageDelegates::CallableType>(func));
-		}
-
-		void RemoveMessageDelegate(uintptr_t context, uint32_t msgId)
-		{
-			RecvMessageDelegates* pDelegateList = nullptr;
-			if (m_RecvMessageDelegatesByMsgId.Find(msgId, pDelegateList))
-			{
-				pDelegateList->RemoveDelegateAll(uintptr_t(context));
-			}
-		}
 
 
 		//////////////////////////////////////////////////////////////////////////
@@ -379,16 +358,80 @@ namespace Net {
 
 		//////////////////////////////////////////////////////////////////////////
 		//
-		//	Event delegates
+		//	Message/Event delegates
 		//
 
+        // event fire mode
 		EventFireMode m_DelegateFireMode = EventFireMode::OnGameTick;
 
+        // Event delegate
 		ConnectionEventDeletates m_ConnectionEventDelegates;
+
+        // Recv message delegate
 		RecvMessageDelegates m_RecvMessageDelegates;
-		// Received message handler map by msgId
-		DualSortedMap<uint32_t, RecvMessageDelegates*> m_RecvMessageDelegatesByMsgId;
 	};
+
+	// Message delegates by MessageID
+    class  MessageDelegateByMsgID
+    {
+    public:
+        using RecvMessageDelegates = EventDelegateList<Connection*, const MessageHeader*>;
+
+        MessageDelegateByMsgID()
+            : m_RecvMessageDelegatesByMsgId(GetSystemHeap())
+        {
+
+        }
+
+        ~MessageDelegateByMsgID()
+        {
+            m_RecvMessageDelegatesByMsgId.CommitChanges();
+            m_RecvMessageDelegatesByMsgId.ForeachOrder(0, (uint32_t)m_RecvMessageDelegatesByMsgId.size(), [](uint32_t, RecvMessageDelegates* pDelegate)
+                {
+                    IHeap::Delete(pDelegate);
+                    return true;
+                });
+            m_RecvMessageDelegatesByMsgId.clear();
+        }
+
+        void AddMessageDelegateUnique(uintptr_t context, uint32_t msgId, RecvMessageDelegates::CallableType&& func)
+        {
+            RecvMessageDelegates* pDelegateList = nullptr;
+            if (!m_RecvMessageDelegatesByMsgId.Find(msgId, pDelegateList))
+            {
+                pDelegateList = new(GetSystemHeap()) RecvMessageDelegates(GetSystemHeap());
+                m_RecvMessageDelegatesByMsgId.Insert(msgId, pDelegateList);
+                m_RecvMessageDelegatesByMsgId.CommitChanges();
+            }
+
+            pDelegateList->AddDelegateUnique(uintptr_t(context), Forward<RecvMessageDelegates::CallableType>(func));
+        }
+
+        void RemoveMessageDelegate(uintptr_t context, uint32_t msgId)
+        {
+            RecvMessageDelegates* pDelegateList = nullptr;
+            if (m_RecvMessageDelegatesByMsgId.Find(msgId, pDelegateList))
+            {
+                pDelegateList->RemoveDelegateAll(uintptr_t(context));
+            }
+        }
+
+        void OnMessage(Connection* pConnection, const MessageHeader* pMsgHeader)
+        {
+            if (pMsgHeader != nullptr) // if it hasn't consumed yet, call next callback
+            {
+                RecvMessageDelegates* pMessageDelegate = nullptr;
+                m_RecvMessageDelegatesByMsgId.Find(pMsgHeader->msgID.GetMsgID(), pMessageDelegate);
+                if (pMessageDelegate)
+                    pMessageDelegate->Invoke(pConnection, pMsgHeader);
+            }
+
+        }
+
+    private:
+        // Received message handler map by msgId
+        DualSortedMap<uint32_t, RecvMessageDelegates*> m_RecvMessageDelegatesByMsgId;
+    };
 
 	#include "SFConnection.inl"
 

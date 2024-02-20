@@ -93,7 +93,6 @@ namespace SF {
 			, m_tConnectionTime(DurationMS(0))
 			, m_ConnectionEventDelegates(GetHeap())
 			, m_RecvMessageDelegates(GetHeap())
-			, m_RecvMessageDelegatesByMsgId(GetHeap())
 			, m_IOHandler(ioHandler)
 			, m_EventQueue(GetHeap())
 			, m_ulConnectingTimeOut(Const::CONNECTION_TIMEOUT)
@@ -134,14 +133,6 @@ namespace SF {
 				}
 				m_ActionsByState = nullptr;
 			}
-
-			m_RecvMessageDelegatesByMsgId.CommitChanges();
-			m_RecvMessageDelegatesByMsgId.ForeachOrder(0, (uint32_t)m_RecvMessageDelegatesByMsgId.size(), [](uint32_t, RecvMessageDelegates* pDelegate)
-				{
-					IHeap::Delete(pDelegate);
-					return true;
-				});
-			m_RecvMessageDelegatesByMsgId.clear();
 
 			// I created IHeap manually, so I need to check manually
 			GetHeap().ReportLeak();
@@ -570,13 +561,13 @@ namespace SF {
 			{
 				GetRecvMessageDelegates().Invoke(this, pMsgHeader);
 
-				if (pMsgHeader != nullptr) // if it hasn't consumed yet, call next callback
-				{
-					RecvMessageDelegates* pMessageDelegate = nullptr;
-					m_RecvMessageDelegatesByMsgId.Find(pMsgHeader->msgID.GetMsgID(), pMessageDelegate);
-					if (pMessageDelegate)
-						pMessageDelegate->Invoke(this, pMsgHeader);
-				}
+				//if (pMsgHeader != nullptr) // if it hasn't consumed yet, call next callback
+				//{
+				//	RecvMessageDelegates* pMessageDelegate = nullptr;
+				//	m_RecvMessageDelegatesByMsgId.Find(pMsgHeader->msgID.GetMsgID(), pMessageDelegate);
+				//	if (pMessageDelegate)
+				//		pMessageDelegate->Invoke(this, pMsgHeader);
+				//}
 			}
 			else
 			{
@@ -626,12 +617,12 @@ namespace SF {
 
                 pHeader = reinterpret_cast<MessageHeader*>(itemPtr.data());
 
-				RecvMessageDelegates* pMessageDelegate = nullptr;
-				m_RecvMessageDelegatesByMsgId.Find(pHeader->msgID.GetMsgID(), pMessageDelegate);
-				if (pMessageDelegate && pMessageDelegate->size() > 0)
-				{
-					pMessageDelegate->Invoke(this, pHeader);
-				}
+				//RecvMessageDelegates* pMessageDelegate = nullptr;
+				//m_RecvMessageDelegatesByMsgId.Find(pHeader->msgID.GetMsgID(), pMessageDelegate);
+				//if (pMessageDelegate && pMessageDelegate->size() > 0)
+				//{
+				//	pMessageDelegate->Invoke(this, pHeader);
+				//}
 
 				GetRecvMessageDelegates().Invoke(this, pHeader);
 			}

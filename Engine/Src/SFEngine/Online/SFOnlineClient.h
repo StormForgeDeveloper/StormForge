@@ -19,14 +19,10 @@
 #include "Delegate/SFEventDelegate.h"
 #include "Online/SFOnlineActor.h"
 #include "SFOnlineClientComponent.h"
+#include "Net/SFConnection.h"
 
 namespace SF
 {
-	namespace Net
-	{
-		class Connection;
-	}
-
 	struct ActorMovement;
 	class SendingActorMovementManager;
 	class ReceivedActorMovementManager;
@@ -273,6 +269,10 @@ namespace SF
 		ONLINE_TASK_FINISHED_CALLBACK m_OnlineTaskFinishedCallback{};
 
         ComponentManager m_ComponentManager;
+
+        // message handler
+        Net::MessageDelegateByMsgID m_MessageHandlerMap;
+
 	};
 
 

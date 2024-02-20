@@ -261,9 +261,6 @@ namespace SF {
 
 			virtual void OnConnectionResult(Result hrConnect) override;
 
-			// Update net control, process connection heartbeat, ... etc
-			virtual Result TickUpdate() override;
-
 		};
 
 

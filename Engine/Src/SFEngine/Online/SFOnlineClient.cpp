@@ -301,11 +301,20 @@ namespace SF
 
         NetAddress m_GameServerNetAddress{};
 
+
+        Net::MessageDelegateByMsgID m_MessageHandlerMap;
+
 	public:
 
 		ClientTask_JoinGameServer(OnlineClient& owner, uint64_t transactionId)
 			: ClientTask(owner, transactionId)
 		{
+            m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
+                Message::Game::JoinGameServerRes::MID.GetMsgID(),
+                [this](Net::Connection*, const MessageHeader* pHeader)
+                {
+                    OnJoinGameServerRes(pHeader);
+                });
 		}
 
 		const SharedPointerT<Net::Connection>& GetConnection()
@@ -321,7 +330,6 @@ namespace SF
             {
                 GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(uintptr_t(this));
                 GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(uintptr_t(this));
-                GetConnection()->RemoveMessageDelegate(uintptr_t(this), Message::Game::JoinGameServerRes::MID.GetMsgID());
             }
 
             if (m_Owner.GetOnlineState() == OnlineState::InGameServer)
@@ -366,17 +374,6 @@ namespace SF
                     }
 				});
 
-			GetConnection()->AddMessageDelegateUnique(uintptr_t(this),
-				Message::Game::JoinGameServerRes::MID.GetMsgID(),
-				[WeakThis](Net::Connection*, const MessageHeader* pHeader)
-				{
-                    SharedPointerT<ClientTask_JoinGameServer> This = WeakThis.AsSharedPtr<ClientTask_JoinGameServer>();
-                    if (This.IsValid())
-                    {
-                        This->OnJoinGameServerRes(pHeader);
-                    }
-				});
-
 			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(&m_Owner),
 				[WeakThis](Net::Connection*, const Net::ConnectionEvent& evt)
 				{
@@ -390,6 +387,15 @@ namespace SF
                         }
                     }
 				});
+
+            GetConnection()->GetRecvMessageDelegates().AddDelegateUnique(uintptr_t(this), [WeakThis](Net::Connection* pConnection, const MessageHeader* pMessageHeader)
+                {
+                    SharedPointerT<ClientTask_JoinGameServer> This = WeakThis.AsSharedPtr<ClientTask_JoinGameServer>();
+                    if (This.IsValid())
+                    {
+                        This->m_MessageHandlerMap.OnMessage(pConnection, pMessageHeader);
+                    }
+                });
 
 			AuthTicket authTicket = m_Owner.GetAuthTicket();
 			String remoteAddress = m_Owner.GetGameServerAddress();
@@ -516,11 +522,30 @@ namespace SF
 	public:
 		using super = ClientTask;
 
+    private:
+
+        Net::MessageDelegateByMsgID m_MessageHandlerMap;
+
 	public:
 
 		ClientTask_JoinGameInstanceServer(OnlineClient& owner, uint64_t transactionId)
 			: ClientTask(owner, transactionId)
 		{
+
+            m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
+                Message::PlayInstance::JoinPlayInstanceRes::MID.GetMsgID(),
+                [this](Net::Connection*, const MessageHeader* pHeader)
+                {
+                    OnPlayInstanceJoinGameInstanceRes(pHeader);
+                });
+
+            m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
+                Message::Game::JoinGameInstanceRes::MID.GetMsgID(),
+                [this](Net::Connection*, const MessageHeader* pHeader)
+                {
+                    OnJoinGameInstanceRes(pHeader);
+                });
+
 		}
 
         virtual void Dispose() override
@@ -528,7 +553,7 @@ namespace SF
             SFLog(Net, Info, "Finished ClientTask_JoinGameInstanceServer");
 
             if (m_Owner.GetConnectionGame() != nullptr)
-                m_Owner.GetConnectionGame()->RemoveMessageDelegate(uintptr_t(this), Message::Game::JoinGameInstanceRes::MID.GetMsgID());
+                m_Owner.GetConnectionGame()->GetRecvMessageDelegates().RemoveDelegateAll(uintptr_t(this));
 
             if (m_Owner.GetOnlineState() != OnlineState::InGameInGameInstance)
             {
@@ -541,7 +566,6 @@ namespace SF
 
             GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(uintptr_t(this));
             GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(uintptr_t(this));
-            GetConnection()->RemoveMessageDelegate(uintptr_t(this), Message::PlayInstance::JoinPlayInstanceRes::MID.GetMsgID());
 
             super::Dispose();
         }
@@ -594,27 +618,23 @@ namespace SF
                     }
 				});
 
-			GetConnection()->AddMessageDelegateUnique(uintptr_t(this),
-				Message::PlayInstance::JoinPlayInstanceRes::MID.GetMsgID(),
-				[WeakThis](Net::Connection*, const MessageHeader* pHeader)
-				{
+            GetConnection()->GetRecvMessageDelegates().AddDelegateUnique(uintptr_t(this), [WeakThis](Net::Connection* pConnection, const MessageHeader* pMessageHeader)
+                {
                     SharedPointerT<ClientTask_JoinGameInstanceServer> This = WeakThis.AsSharedPtr<ClientTask_JoinGameInstanceServer>();
                     if (This.IsValid())
                     {
-                        This->OnPlayInstanceJoinGameInstanceRes(pHeader);
+                        This->m_MessageHandlerMap.OnMessage(pConnection, pMessageHeader);
                     }
-				});
+                });
 
-			m_Owner.GetConnectionGame()->AddMessageDelegateUnique(uintptr_t(this),
-				Message::Game::JoinGameInstanceRes::MID.GetMsgID(),
-				[WeakThis](Net::Connection*, const MessageHeader* pHeader)
-				{
+            m_Owner.GetConnectionGame()->GetRecvMessageDelegates().AddDelegateUnique(uintptr_t(this), [WeakThis](Net::Connection* pConnection, const MessageHeader* pMessageHeader)
+                {
                     SharedPointerT<ClientTask_JoinGameInstanceServer> This = WeakThis.AsSharedPtr<ClientTask_JoinGameInstanceServer>();
                     if (This.IsValid())
                     {
-                        This->OnJoinGameInstanceRes(pHeader);
+                        This->m_MessageHandlerMap.OnMessage(pConnection, pMessageHeader);
                     }
-				});
+                });
 
 			m_Owner.RegisterPlayInstanceHandlers();
 			
@@ -792,6 +812,84 @@ namespace SF
 
         SetTickGroup(EngineTaskTick::AsyncTick);
 
+
+        m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
+            Message::Game::SelectCharacterRes::MID.GetMsgID(),
+            [this](Net::Connection*, const MessageHeader* pMsgData)
+            {
+                Message::Game::SelectCharacterRes msg;
+                if (msg.ParseMessage(pMsgData))
+                {
+                    m_CharacterId = msg.GetCharacterID();
+                }
+            });
+
+
+        m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
+            Message::Game::LeaveGameInstanceRes::MID.GetMsgID(),
+            [this](Net::Connection*, const MessageHeader* pMsgData)
+            {
+                m_GameInstanceUID = 0;
+                switch (GetOnlineState())
+                {
+                case OnlineState::InGameJoiningGameInstance:
+                case OnlineState::InGameConnectingGameInstance:
+                case OnlineState::InGameGameInstanceJoining:
+                case OnlineState::InGameInGameInstance:
+                    SetOnlineState(OnlineState::InGameServer);
+                    if (m_GameInstance.IsValid())
+                    {
+                        Disconnect(m_GameInstance);
+                    }
+                    break;
+                default:
+                    break;
+                }
+            });
+
+
+        m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
+            Message::PlayInstance::NewActorInViewS2CEvt::MID.GetMsgID(),
+            [this](Net::Connection*, const MessageHeader* pMsgData)
+            {
+                OnActorInView(pMsgData);
+            });
+
+        m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
+            Message::PlayInstance::RemoveActorFromViewS2CEvt::MID.GetMsgID(),
+            [this](Net::Connection*, const MessageHeader* pMsgData)
+            {
+                OnActorOutofView(pMsgData);
+            });
+
+        m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
+            Message::PlayInstance::ActorMovementS2CEvt::MID.GetMsgID(),
+            [this](Net::Connection*, const MessageHeader* pMsgData)
+            {
+                OnActorMovement(pMsgData);
+            });
+
+        m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
+            Message::PlayInstance::ActorMovementsS2CEvt::MID.GetMsgID(),
+            [this](Net::Connection*, const MessageHeader* pMsgData)
+            {
+                OnActorMovements(pMsgData);
+            });
+
+        m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
+            Message::PlayInstance::VoiceDataS2CEvt::MID.GetMsgID(),
+            [this](Net::Connection*, const MessageHeader* pMsgData)
+            {
+                OnVoiceData(pMsgData);
+            });
+
+        m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
+            Message::PlayInstance::PlayerStateChangedS2CEvt::MID.GetMsgID(),
+            [this](Net::Connection*, const MessageHeader* pMsgData)
+            {
+                OnPlayerStateChanged(pMsgData);
+            });
+
         return hr;
     }
 
@@ -833,40 +931,15 @@ namespace SF
 			return;
 		}
 
-
-        m_Game->AddMessageDelegateUnique(uintptr_t(this),
-			Message::Game::SelectCharacterRes::MID.GetMsgID(),
-			[this](Net::Connection*, const MessageHeader* pMsgData)
-			{
-				Message::Game::SelectCharacterRes msg;
-				if (msg.ParseMessage(pMsgData))
-				{
-					m_CharacterId = msg.GetCharacterID();
-				}
-			});
-
-
-        m_Game->AddMessageDelegateUnique(uintptr_t(this),
-            Message::Game::LeaveGameInstanceRes::MID.GetMsgID(),
-            [this](Net::Connection*, const MessageHeader* pMsgData)
+        m_Game->GetRecvMessageDelegates().AddDelegateUnique(uintptr_t(this), [this](Net::Connection* pConnection, const MessageHeader* pMessageHeader)
             {
-                 m_GameInstanceUID = 0;
-                 switch (GetOnlineState())
-                 {
-                 case OnlineState::InGameJoiningGameInstance:
-                 case OnlineState::InGameConnectingGameInstance:
-                 case OnlineState::InGameGameInstanceJoining:
-                 case OnlineState::InGameInGameInstance:
-                     SetOnlineState(OnlineState::InGameServer);
-                     if (m_GameInstance.IsValid())
-                     {
-                         Disconnect(m_GameInstance);
-                     }
-                     break;
-                 default:
-                     break;
-                 }
+                //SharedPointerT<ClientTask_JoinGameServer> This = WeakThis.AsSharedPtr<ClientTask_JoinGameServer>();
+                //if (This.IsValid())
+                {
+                    m_MessageHandlerMap.OnMessage(pConnection, pMessageHeader);
+                }
             });
+
 	}
 
 	void OnlineClient::RegisterPlayInstanceHandlers()
@@ -877,49 +950,14 @@ namespace SF
 			return;
 		}
 
-        m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
-            Message::PlayInstance::NewActorInViewS2CEvt::MID.GetMsgID(),
-            [this](Net::Connection*, const MessageHeader* pMsgData)
+        m_GameInstance->GetRecvMessageDelegates().AddDelegateUnique(uintptr_t(this), [this](Net::Connection* pConnection, const MessageHeader* pMessageHeader)
             {
-                OnActorInView(pMsgData);
+                //SharedPointerT<ClientTask_JoinGameServer> This = WeakThis.AsSharedPtr<ClientTask_JoinGameServer>();
+                //if (This.IsValid())
+                {
+                    m_MessageHandlerMap.OnMessage(pConnection, pMessageHeader);
+                }
             });
-
-        m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
-            Message::PlayInstance::RemoveActorFromViewS2CEvt::MID.GetMsgID(),
-            [this](Net::Connection*, const MessageHeader* pMsgData)
-            {
-                OnActorOutofView(pMsgData);
-            });
-
-        m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
-            Message::PlayInstance::ActorMovementS2CEvt::MID.GetMsgID(),
-            [this](Net::Connection*, const MessageHeader* pMsgData)
-            {
-                OnActorMovement(pMsgData);
-            });
-
-        m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
-            Message::PlayInstance::ActorMovementsS2CEvt::MID.GetMsgID(),
-            [this](Net::Connection*, const MessageHeader* pMsgData)
-            {
-                OnActorMovements(pMsgData);
-            });
-
-        m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
-            Message::PlayInstance::VoiceDataS2CEvt::MID.GetMsgID(),
-            [this](Net::Connection*, const MessageHeader* pMsgData)
-            {
-                OnVoiceData(pMsgData);
-            });
-
-
-
-		m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
-			Message::PlayInstance::PlayerStateChangedS2CEvt::MID.GetMsgID(),
-			[this](Net::Connection*, const MessageHeader* pMsgData)
-			{
-				OnPlayerStateChanged(pMsgData);
-			});
 
 		m_GameInstance->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this),
 			[this](Net::Connection*, const Net::ConnectionEvent& evt)

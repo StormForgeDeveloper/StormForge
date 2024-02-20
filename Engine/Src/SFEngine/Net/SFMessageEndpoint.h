@@ -21,9 +21,6 @@ namespace SF {
 	class MessageData;
 	class StreamDBProducer;
 
-
-
-
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	// StreamDB endpoint
 	class MessageEndpointStreamDB : public MessageEndpoint
@@ -47,8 +44,6 @@ namespace SF {
 		virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) override;
         virtual Result SendMsg(const MessageHeader* messageData) override;
 	};
-
-
 
 } // namespace SF
 
