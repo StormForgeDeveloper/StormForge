@@ -19,20 +19,20 @@
 namespace SF {
 
 
-	EngineTask_Terminate::EngineTask_Terminate()
+	EngineTask_Terminate::EngineTask_Terminate(int exitCode)
 		: EngineTask(EngineTaskTick::SyncPostTick)
+        , m_ExitCode(exitCode)
 	{
+        assert(exitCode >= 0);
 	}
 
 	void EngineTask_Terminate::Run()
 	{
-		auto pEngine = Engine::GetInstance();
+		Engine* pEngine = Engine::GetInstance();
 		if (pEngine != nullptr)
-			pEngine->SetExitCode(0);
+			pEngine->SetExitCode(m_ExitCode);
 
 		Finished();
 	}
 
-
 } // namespace SF
-

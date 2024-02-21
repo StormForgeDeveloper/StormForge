@@ -86,7 +86,7 @@ namespace SF
 		if (pApp == nullptr)
 			return;
 
-		EngineTaskPtr pTask = new(GetSystemHeap()) EngineTask_Terminate;
+		EngineTaskPtr pTask = new(GetSystemHeap()) EngineTask_Terminate(1);
 		pTask->Request();
 		pTask->Wait();
 

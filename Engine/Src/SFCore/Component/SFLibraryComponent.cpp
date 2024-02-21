@@ -15,12 +15,12 @@
 #include "Util/SFStrUtil.h"
 #include "Util/SFUtility.h"
 #include "Util/SFLog.h"
+#include "Util/SFTrace.h"
 #include "Multithread/SFSynchronization.h"
 #include "ResultCode/SFResultCodeSystem.h"
 #include "Component/SFLibraryComponentManager.h"
 #include "Container/SFHashTable.h"
 #include "MemoryManager/SFMemoryPool.h"
-
 
 
 namespace SF {
@@ -58,12 +58,13 @@ namespace SF {
 	// Clear components
 	void LibraryComponentManager::ClearComponents()
 	{
-		m_ComponentByName.ForeachOrder(0, (int)m_ComponentByName.size(), [](const StringCrc64& name, LibraryComponent* pComponent)
+		for(int iComponent = int(m_Components.size()) - 1; iComponent >= 0; iComponent--)
 		{
-			unused(name);
+            LibraryComponent* pComponent = m_Components[iComponent];
 			GetSystemHeap().Delete(pComponent);
-		});
+		}
 
+        m_Components.Reset();
 		m_ComponentByName.Clear();
 		m_ComponentByTypeName.Clear();
 	}
@@ -71,7 +72,7 @@ namespace SF {
 	// initialize component and its dependencies
 	Result LibraryComponentManager::InitializeComponent(LibraryComponent* pComponent)
 	{
-		Result result = ResultCode::SUCCESS;
+		Result hr = ResultCode::SUCCESS;
 
 		if (pComponent->GetIsInitialized())
 			return ResultCode::SUCCESS;
@@ -88,8 +89,7 @@ namespace SF {
 				}
 				else if (!pDependency->GetIsInitialized())
 				{
-					auto res = pComponent->InitializeComponent();
-					if (!res) result = res;
+                    defCheck(InitializeComponent(pDependency));
 				}
 			}
 			else
@@ -103,10 +103,10 @@ namespace SF {
 		if (pComponent->GetIsInitialized())
 			return ResultCode::SUCCESS;
 
-		auto res = pComponent->InitializeComponent();
-		if (!res) result = res;
+        defCheck(pComponent->InitializeComponent());
+        pComponent->m_IsInitialized = true;
 
-		return result;
+		return hr;
 	}
 
 
@@ -118,22 +118,23 @@ namespace SF {
 
 		m_IsInitialized = true;
 
-		return m_ComponentByName.ForeachOrder(0, (int)m_ComponentByName.size(), [&](const StringCrc64& name, LibraryComponent* pComponent)
-		{
-			unused(name);
-			auto result = InitializeComponent(pComponent);
-			pComponent->m_IsInitialized = true;
-			if (!result) resultCode = result;
-		});
+        for (int iComponent = int(m_Components.size()) - 1; iComponent >= 0; iComponent--)
+        {
+            LibraryComponent* pComponent = m_Components[iComponent];
+            InitializeComponent(pComponent);
+        }
+
+        return resultCode;
 	}
 
 	Result LibraryComponentManager::DeinitializeComponents()
 	{
-		m_ComponentByName.ForeachOrder(0, (int)m_ComponentByName.size(), [](const StringCrc64& name, LibraryComponent* pComponent)
-		{
-			unused(name);
-			pComponent->DeinitializeComponent();
-		});
+        // reverse order
+        for (int iComponent = int(m_Components.size()) - 1; iComponent >= 0; iComponent--)
+        {
+            LibraryComponent* pComponent = m_Components[iComponent];
+            pComponent->DeinitializeComponent();
+        }
 
 		m_IsInitialized = false;
 
@@ -180,7 +181,8 @@ namespace SF {
 		if (m_ComponentByTypeName.Find(pRemove->GetTypeName(), pFound) && pFound == pRemove)
 		{
 			m_ComponentByTypeName.Remove(pRemove->GetTypeName(), pRemove);
-		}
+            m_Components.RemoveItem(pFound);
+        }
 
         m_TickableComponents.RemoveItem(pRemove);
 
@@ -209,6 +211,7 @@ namespace SF {
 
 		// add type map
 		m_ComponentByTypeName.Set(newComponent->GetTypeName(), newComponent);
+        m_Components.push_back(newComponent);
 
         if (newComponent->IsTickable())
         {

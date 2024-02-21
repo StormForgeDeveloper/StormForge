@@ -39,7 +39,7 @@ namespace SF {
 
 	private:
 
-
+        DynamicArray<LibraryComponent*> m_Components;
 		SortedArray<StringCrc64, LibraryComponent*> m_ComponentByName;
 		SortedArray<StringCrc64, LibraryComponent*> m_ComponentByTypeName;
 

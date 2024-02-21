@@ -22,8 +22,11 @@ namespace SF {
 	class EngineTask_Terminate : public EngineTask
 	{
 		using super = EngineTask;
+    private:
+        int m_ExitCode = 0;
+
 	public:
-		EngineTask_Terminate();
+		EngineTask_Terminate(int exitCode);
 
 		virtual void Run() override;
 	};

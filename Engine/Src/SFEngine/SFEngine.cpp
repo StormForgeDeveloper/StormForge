@@ -180,12 +180,15 @@ namespace SF
 				DurationMS durationMS = m_TickInterval;
 				while (GetExitCode() < 0 && !pThread->CheckKillEvent(durationMS))
 				{
-					auto pEngine = Engine::GetInstance();
+					SF::Engine* pEngine = Engine::GetInstance();
 					if (pEngine == nullptr) break;
 
                     pEngine->EngineSystemUpdate();
 
-					durationMS = pThread->UpdateInterval(m_TickInterval);
+                    if (GetExitCode() >= 0) // if still engine exit has been requested, quit the loop
+                        break;
+
+                    durationMS = pThread->UpdateInterval(m_TickInterval);
 				}
 
 				SFLog(System, Info, "Engine thread finished");

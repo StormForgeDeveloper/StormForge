@@ -231,7 +231,7 @@ namespace SF
 		auto pApp = Engine::GetEngineComponent<AndroidApp>();
 
 		EngineTaskPtr pInputTask = pApp->SendCommand<AndroidAppTask_InputChanged>(nullptr);
-		EngineTaskPtr pTerminateTask = new(GetSystemHeap()) EngineTask_Terminate;
+		EngineTaskPtr pTerminateTask = new(GetSystemHeap()) EngineTask_Terminate(1);
 		pTerminateTask->Request();
 
 		pInputTask->Wait();

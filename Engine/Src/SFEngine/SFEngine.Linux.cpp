@@ -129,7 +129,7 @@ namespace SF
 
 		auto pApp = Engine::GetEngineComponent<LinuxApp>();
 
-		EngineTaskPtr pTerminateTask = new(GetSystemHeap()) EngineTask_Terminate;
+		EngineTaskPtr pTerminateTask = new(GetSystemHeap()) EngineTask_Terminate(1);
 		pTerminateTask->Request();
 
 		pTerminateTask->Wait();
