@@ -72,6 +72,13 @@ namespace SF {
             m_pService = stm_pBaseInstance;
 		}
 
+        ~ServiceInstance()
+        {
+            delete stm_pBaseInstance;
+            stm_pBaseInstance = nullptr;
+        }
+
+
 		operator ServiceType*() { return m_pService; }
 		ServiceType* operator *() { return m_pService; }
 		ServiceType* operator ->() { return m_pService; }
@@ -133,7 +140,4 @@ namespace SF {
 		extern ServiceInstance<VariableFactoryService> VariableFactory;
 	};
 
-
-
 } // namespace SF
-

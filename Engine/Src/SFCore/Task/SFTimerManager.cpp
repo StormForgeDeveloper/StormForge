@@ -238,8 +238,4 @@ namespace SF {
         ValidateTimerKeys();
 	}
 
-
-
-
 } // namespace SF
-
