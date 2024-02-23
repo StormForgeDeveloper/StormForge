@@ -89,7 +89,141 @@
 			<Params TypeName="VariableTable" Name="SyncData" Desc="sync data"/>
 		</C2SEvent>
 
-		<!-- ============================= Object interection ======================================= -->
+        <Command Name="SetCharacterPublicMessage" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Set character public message. Server will broadcast CharacterPublicDataChanged, NewActorInView should have updated value as well">
+            <Cmd>
+                <Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
+                <Params TypeName="PlayerID" Name="PlayerID" Desc="player id"/>
+                <Params TypeName="String" Name="PublicMessage" Desc="Public message to set."/>
+            </Cmd>
+            <Res>
+            </Res>
+        </Command>
+
+        <!-- ========================================== Character Update ========================================== -->
+
+        <S2CEvent Name="CharacterPrivateDataChanged" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Character's private data has changed">
+            <Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance"/>
+            <Params TypeName="PlayerID" Name="PlayerID" Desc="player id"/>
+            <Params TypeName="uint32" Name="CharacterID" Desc="Character Id"/>
+            <Params TypeName="VariableTable" Name="PrivateData" Desc="Character private data"/>
+        </S2CEvent>
+
+        <S2CEvent Name="CharacterPublicDataChanged" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player public data has been changed">
+            <Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+            <Params TypeName="PlayerID" Name="PlayerID" Desc="Player Id"/>
+            <Params TypeName="VariableTable" Name="PublicData" Desc="Character public data"/>
+        </S2CEvent>
+
+        <!-- ============================= Whiteboard interection ======================================= -->
+
+        <Command Name="RequestWhiteboardSharing" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Request WhiteboardSharing">
+            <Cmd>
+                <Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance"/>
+                <Params TypeName="PlayerID" Name="PlayerID" Desc="My Player id"/>
+                <Params TypeName="PlayerID" Name="TargetPlayerID" Desc="Target Player id"/>
+                <Params TypeName="VariableTable" Name="WhiteboardInfo" Desc="Whiteboard information"/>
+            </Cmd>
+            <Res>
+            </Res>
+        </Command>
+
+        <Command Name="AcceptWhiteboardSharing" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Accept WhiteboardSharing">
+            <Cmd>
+                <Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance"/>
+                <Params TypeName="PlayerID" Name="PlayerID" Desc="Player id"/>
+                <Params TypeName="PlayerID" Name="RequestedPlayerID" Desc="Requested Player id"/>
+                <Params TypeName="uint8" Name="Answer" Desc="true: accept, false: reject"/>
+            </Cmd>
+            <Res>
+            </Res>
+        </Command>
+
+        <Command Name="CloseWhiteboardSharing" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Close WhiteboardSharing. Both clients will receive WhiteboardSharingHasClosed">
+            <Cmd>
+                <Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance"/>
+                <Params TypeName="PlayerID" Name="PlayerID" Desc="Player id"/>
+            </Cmd>
+            <Res>
+            </Res>
+        </Command>
+
+        <Command Name="AddWhiteboardSharingLogEntry" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded">
+            <Cmd>
+                <Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance"/>
+                <Params TypeName="PlayerID" Name="PlayerID" Desc="Player id"/>
+                <Params TypeName="VariableTable" Name="LogEntry" Desc="Log entry"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="LogEntryID" Name="LogEntryID" Desc="Log entry Id, you also receive it by event. LogEntryID"/>
+            </Res>
+        </Command>
+
+        <Command Name="UpdateWhiteboardSharingLogEntry" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded">
+            <Cmd>
+                <Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance"/>
+                <Params TypeName="PlayerID" Name="PlayerID" Desc="Player id"/>
+                <Params TypeName="VariableTable" Name="LogEntry" Desc="Log entry, LogEntryID should be included"/>
+            </Cmd>
+            <Res>
+            </Res>
+        </Command>
+
+        <Command Name="RemoveWhiteboardSharingLogEntry" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Update whiteboard log entry">
+            <Cmd>
+                <Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance"/>
+                <Params TypeName="PlayerID" Name="PlayerID" Desc="Player id"/>
+                <Params TypeName="LogEntryID" Name="LogEntryID" Desc="Log entry Id, you received it by event. Removed log entry id"/>
+            </Cmd>
+            <Res>
+            </Res>
+        </Command>
+
+
+        <S2CEvent Name="WhiteboardSharingRequested" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="WhiteboardSharing has been requested">
+            <Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance"/>
+            <Params TypeName="PlayerID" Name="PlayerID" Desc="player id"/>
+            <Params TypeName="PlayerID" Name="RequestedPlayerID" Desc="Player id who requested"/>
+        </S2CEvent>
+
+        <S2CEvent Name="WhiteboardSharingRejected" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="WhiteboardSharing has been requested">
+            <Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance"/>
+            <Params TypeName="PlayerID" Name="PlayerID" Desc="player id to receive"/>
+            <Params TypeName="PlayerID" Name="RejectedPlayerID" Desc="Player id who rejected"/>
+        </S2CEvent>
+
+        <S2CEvent Name="WhiteboardSharingStarted" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="WhiteboardSharing has been started">
+            <Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance"/>
+            <Params TypeName="PlayerID" Name="PlayerID" Desc="player id"/>
+            <Params TypeName="PlayerID" Name="OtherPlayerID" Desc="the other player id"/>
+            <Params TypeName="VariableTable" Name="WhiteboardInfo" Desc="Whiteboard information"/>
+        </S2CEvent>
+
+        <S2CEvent Name="WhiteboardSharingHasClosed" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="WhiteboardSharing has been closed">
+            <Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance"/>
+            <Params TypeName="PlayerID" Name="PlayerID" Desc="player id"/>
+            <Params TypeName="PlayerID" Name="ClosedPlayerID" Desc="Player id who requested close"/>
+        </S2CEvent>
+
+        <S2CEvent Name="WhiteboardSharingNewLogEntryAdded" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="WhiteboardSharing new log entry has been added">
+            <Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance"/>
+            <Params TypeName="PlayerID" Name="PlayerID" Desc="target player id"/>
+            <Params TypeName="VariableTable" Name="LogEntry" Desc="Log entry data. It should have new 'LogEntryID'"/>
+        </S2CEvent>
+
+        <S2CEvent Name="WhiteboardSharingNewLogEntryRemoved" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="WhiteboardSharing new log entry has been removed">
+            <Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance"/>
+            <Params TypeName="PlayerID" Name="PlayerID" Desc="target player id"/>
+            <Params TypeName="LogEntryID" Name="LogEntryID" Desc="Log entry id"/>
+        </S2CEvent>
+
+        <S2CEvent Name="WhiteboardSharingNewLogEntryUpdated" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="WhiteboardSharing new log entry has been updated">
+            <Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance"/>
+            <Params TypeName="PlayerID" Name="PlayerID" Desc="target player id"/>
+            <Params TypeName="VariableTable" Name="LogEntry" Desc="Log entry"/>
+        </S2CEvent>
+
+
+        <!-- ============================= Object interection ======================================= -->
 
 		<Command Name="OccupyMapObject" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Occupy map object">
 			<Cmd>
@@ -167,48 +301,6 @@
         </S2CEvent>
 
 
-		<!-- ============================  Streaming ============================================ -->
-
-		<Command Name="CreateStream" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create stream instance">
-			<Cmd>
-				<Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
-				<Params TypeName="String" Name="StreamName" Desc="Stream name"/>
-			</Cmd>
-			<Res>
-				<Params TypeName="String" Name="StreamName" Desc="Stream name"/>
-			</Res>
-		</Command>
-
-		<Command Name="FindStream" Reliable="true" Crypto="No" Trace="Debug1" Desc="Open stream instance">
-			<Cmd>
-				<Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
-				<Params TypeName="String" Name="StreamName" Desc="Stream name"/>
-			</Cmd>
-			<Res>
-				<Params TypeName="String" Name="StreamName" Desc="Stream name"/>
-			</Res>
-		</Command>
-
-		<Command Name="DeleteStream" Reliable="true" Crypto="No" Trace="Debug1" Desc="Delete stream instance">
-			<Cmd>
-				<Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
-				<Params TypeName="String" Name="StreamName" Desc="stream name to delete"/>
-			</Cmd>
-			<Res>
-				<Params TypeName="String" Name="StreamName" Desc="Stream name"/>
-			</Res>
-		</Command>
-
-		<Command Name="GetStreamList" Reliable="true" Crypto="No" Trace="Debug1" Desc="Get stream list">
-			<Cmd>
-				<Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
-			</Cmd>
-			<Res>
-				<Params TypeName="String" Name="StreamNames" IsArray="true" Desc="Stream names"/>
-			</Res>
-		</Command>
-
-
 		<!-- =============================  ======================================= -->
 
 		<Command Name="CallFunction" Reliable="true" Crypto="No" Trace="Debug1" Desc="To call general functionality">
@@ -236,6 +328,48 @@
             <Params TypeName="uint16" Name="FrameIndex" Desc="voice frame index"/>
             <Params TypeName="uint8" IsArray="true" Name="VoiceData" Desc="Voice data"/>
         </S2CEvent>
+
+        <!-- ============================  Streaming ============================================ -->
+
+        <Command Name="CreateStream" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create stream instance">
+            <Cmd>
+                <Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
+                <Params TypeName="String" Name="StreamName" Desc="Stream name"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="String" Name="StreamName" Desc="Stream name"/>
+            </Res>
+        </Command>
+
+        <Command Name="FindStream" Reliable="true" Crypto="No" Trace="Debug1" Desc="Open stream instance">
+            <Cmd>
+                <Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
+                <Params TypeName="String" Name="StreamName" Desc="Stream name"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="String" Name="StreamName" Desc="Stream name"/>
+            </Res>
+        </Command>
+
+        <Command Name="DeleteStream" Reliable="true" Crypto="No" Trace="Debug1" Desc="Delete stream instance">
+            <Cmd>
+                <Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
+                <Params TypeName="String" Name="StreamName" Desc="stream name to delete"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="String" Name="StreamName" Desc="Stream name"/>
+            </Res>
+        </Command>
+
+        <Command Name="GetStreamList" Reliable="true" Crypto="No" Trace="Debug1" Desc="Get stream list">
+            <Cmd>
+                <Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="String" Name="StreamNames" IsArray="true" Desc="Stream names"/>
+            </Res>
+        </Command>
+
 
     </ProtocolGroup>
 </Protocols>

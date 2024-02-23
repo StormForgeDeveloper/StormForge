@@ -54,6 +54,8 @@
 	<ResultCodeItem Severity="Error" CodeName="LOW_STAMINA" Desc="Doesn't have enough stamina"/>
 	<ResultCodeItem Severity="Error" CodeName="INVALID_COSTID" Desc="Invalid cost table id"/>
 	<ResultCodeItem Severity="Error" CodeName="INVALID_BOTTALK_TABLE" Desc="Invalid bot talk table"/>
-	
+    
+    <ResultCodeItem Severity="Error" CodeName="REQUEST_HAS_EXPIRED" Desc="Request has expired"/>
+
 </ResultCodes>
 

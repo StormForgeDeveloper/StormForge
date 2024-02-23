@@ -58,6 +58,7 @@ namespace ResultCode {
 		codeMap.Insert((uint32_t)GAME_LOW_STAMINA, {"GAME_LOW_STAMINA", "Doesn't have enough stamina"});
 		codeMap.Insert((uint32_t)GAME_INVALID_COSTID, {"GAME_INVALID_COSTID", "Invalid cost table id"});
 		codeMap.Insert((uint32_t)GAME_INVALID_BOTTALK_TABLE, {"GAME_INVALID_BOTTALK_TABLE", "Invalid bot talk table"});
+		codeMap.Insert((uint32_t)GAME_REQUEST_HAS_EXPIRED, {"GAME_REQUEST_HAS_EXPIRED", "Request has expired"});
 
 	}//InitializeResultCode 
 }//namespace ResultCode 

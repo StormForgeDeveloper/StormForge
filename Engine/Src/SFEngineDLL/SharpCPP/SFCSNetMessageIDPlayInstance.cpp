@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2017 StromForge
 // 
@@ -102,6 +102,160 @@ SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceClientSyncC2SEvt()
 } // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceClientSyncC2SEvt()
 
 
+// Cmd: Set character public message. Server will broadcast CharacterPublicDataChanged, NewActorInView should have updated value as well
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceSetCharacterPublicMessageCmd()
+{
+ 	return SF::Message::PlayInstance::SetCharacterPublicMessageCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceSetCharacterPublicMessageCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceSetCharacterPublicMessageRes()
+{
+ 	return SF::Message::PlayInstance::SetCharacterPublicMessageRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceSetCharacterPublicMessageRes()
+
+
+// S2C: Character's private data has changed
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCharacterPrivateDataChangedS2CEvt()
+{
+ 	return SF::Message::PlayInstance::CharacterPrivateDataChangedS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCharacterPrivateDataChangedS2CEvt()
+
+
+// S2C: Player public data has been changed
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCharacterPublicDataChangedS2CEvt()
+{
+ 	return SF::Message::PlayInstance::CharacterPublicDataChangedS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCharacterPublicDataChangedS2CEvt()
+
+
+// Cmd: Request WhiteboardSharing
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceRequestWhiteboardSharingCmd()
+{
+ 	return SF::Message::PlayInstance::RequestWhiteboardSharingCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceRequestWhiteboardSharingCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceRequestWhiteboardSharingRes()
+{
+ 	return SF::Message::PlayInstance::RequestWhiteboardSharingRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceRequestWhiteboardSharingRes()
+
+
+// Cmd: Accept WhiteboardSharing
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceAcceptWhiteboardSharingCmd()
+{
+ 	return SF::Message::PlayInstance::AcceptWhiteboardSharingCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceAcceptWhiteboardSharingCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceAcceptWhiteboardSharingRes()
+{
+ 	return SF::Message::PlayInstance::AcceptWhiteboardSharingRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceAcceptWhiteboardSharingRes()
+
+
+// Cmd: Close WhiteboardSharing. Both clients will receive WhiteboardSharingHasClosed
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCloseWhiteboardSharingCmd()
+{
+ 	return SF::Message::PlayInstance::CloseWhiteboardSharingCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCloseWhiteboardSharingCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCloseWhiteboardSharingRes()
+{
+ 	return SF::Message::PlayInstance::CloseWhiteboardSharingRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCloseWhiteboardSharingRes()
+
+
+// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceAddWhiteboardSharingLogEntryCmd()
+{
+ 	return SF::Message::PlayInstance::AddWhiteboardSharingLogEntryCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceAddWhiteboardSharingLogEntryCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceAddWhiteboardSharingLogEntryRes()
+{
+ 	return SF::Message::PlayInstance::AddWhiteboardSharingLogEntryRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceAddWhiteboardSharingLogEntryRes()
+
+
+// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceUpdateWhiteboardSharingLogEntryCmd()
+{
+ 	return SF::Message::PlayInstance::UpdateWhiteboardSharingLogEntryCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceUpdateWhiteboardSharingLogEntryCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceUpdateWhiteboardSharingLogEntryRes()
+{
+ 	return SF::Message::PlayInstance::UpdateWhiteboardSharingLogEntryRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceUpdateWhiteboardSharingLogEntryRes()
+
+
+// Cmd: Update whiteboard log entry
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceRemoveWhiteboardSharingLogEntryCmd()
+{
+ 	return SF::Message::PlayInstance::RemoveWhiteboardSharingLogEntryCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceRemoveWhiteboardSharingLogEntryCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceRemoveWhiteboardSharingLogEntryRes()
+{
+ 	return SF::Message::PlayInstance::RemoveWhiteboardSharingLogEntryRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceRemoveWhiteboardSharingLogEntryRes()
+
+
+// S2C: WhiteboardSharing has been requested
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceWhiteboardSharingRequestedS2CEvt()
+{
+ 	return SF::Message::PlayInstance::WhiteboardSharingRequestedS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceWhiteboardSharingRequestedS2CEvt()
+
+
+// S2C: WhiteboardSharing has been requested
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceWhiteboardSharingRejectedS2CEvt()
+{
+ 	return SF::Message::PlayInstance::WhiteboardSharingRejectedS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceWhiteboardSharingRejectedS2CEvt()
+
+
+// S2C: WhiteboardSharing has been started
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceWhiteboardSharingStartedS2CEvt()
+{
+ 	return SF::Message::PlayInstance::WhiteboardSharingStartedS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceWhiteboardSharingStartedS2CEvt()
+
+
+// S2C: WhiteboardSharing has been closed
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceWhiteboardSharingHasClosedS2CEvt()
+{
+ 	return SF::Message::PlayInstance::WhiteboardSharingHasClosedS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceWhiteboardSharingHasClosedS2CEvt()
+
+
+// S2C: WhiteboardSharing new log entry has been added
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceWhiteboardSharingNewLogEntryAddedS2CEvt()
+{
+ 	return SF::Message::PlayInstance::WhiteboardSharingNewLogEntryAddedS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceWhiteboardSharingNewLogEntryAddedS2CEvt()
+
+
+// S2C: WhiteboardSharing new log entry has been removed
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceWhiteboardSharingNewLogEntryRemovedS2CEvt()
+{
+ 	return SF::Message::PlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceWhiteboardSharingNewLogEntryRemovedS2CEvt()
+
+
+// S2C: WhiteboardSharing new log entry has been updated
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceWhiteboardSharingNewLogEntryUpdatedS2CEvt()
+{
+ 	return SF::Message::PlayInstance::WhiteboardSharingNewLogEntryUpdatedS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceWhiteboardSharingNewLogEntryUpdatedS2CEvt()
+
+
 // Cmd: Occupy map object
 SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceOccupyMapObjectCmd()
 {
@@ -168,6 +322,33 @@ SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceLevelUpS2CEvt()
 } // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceLevelUpS2CEvt()
 
 
+// Cmd: To call general functionality
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCallFunctionCmd()
+{
+ 	return SF::Message::PlayInstance::CallFunctionCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCallFunctionCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCallFunctionRes()
+{
+ 	return SF::Message::PlayInstance::CallFunctionRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCallFunctionRes()
+
+
+// C2S: Send coded voice data to server
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceSendVoiceDataC2SEvt()
+{
+ 	return SF::Message::PlayInstance::SendVoiceDataC2SEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceSendVoiceDataC2SEvt()
+
+
+// S2C: Voice data
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceVoiceDataS2CEvt()
+{
+ 	return SF::Message::PlayInstance::VoiceDataS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceVoiceDataS2CEvt()
+
+
 // Cmd: Create stream instance
 SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCreateStreamCmd()
 {
@@ -218,33 +399,6 @@ SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceGetStreamListRes()
 {
  	return SF::Message::PlayInstance::GetStreamListRes::MID.IDSeq.MsgID;
 } // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceGetStreamListRes()
-
-
-// Cmd: To call general functionality
-SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCallFunctionCmd()
-{
- 	return SF::Message::PlayInstance::CallFunctionCmd::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCallFunctionCmd()
-
-
-SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCallFunctionRes()
-{
- 	return SF::Message::PlayInstance::CallFunctionRes::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCallFunctionRes()
-
-
-// C2S: Send coded voice data to server
-SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceSendVoiceDataC2SEvt()
-{
- 	return SF::Message::PlayInstance::SendVoiceDataC2SEvt::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceSendVoiceDataC2SEvt()
-
-
-// S2C: Voice data
-SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceVoiceDataS2CEvt()
-{
- 	return SF::Message::PlayInstance::VoiceDataS2CEvt::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceVoiceDataS2CEvt()
 
 
 

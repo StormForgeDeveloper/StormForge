@@ -42,6 +42,8 @@ namespace SF {
 
 	using CharacterID = uint32_t;
 
+    using LogEntryID = uint32_t;
+
 	using FacebookUID = uint64_t;
 
 

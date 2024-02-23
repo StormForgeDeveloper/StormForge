@@ -173,6 +173,289 @@ Player Sync packet. We shares packet for C2S and S2C, meaning other clients will
 		- OutInSyncData: VariableTable type. sync data
 
 
+## SetCharacterPublicMessage Request
+Set character public message. Server will broadcast CharacterPublicDataChanged, NewActorInView should have updated value as well
+
+1. Command interface
+
+        Result SetCharacterPublicMessageCmd(const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPublicMessage)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutPlayInstanceUID: EntityUID type. Play instance ID
+
+		- OutPlayerID: PlayerID type. player id
+
+		- OutPublicMessage: String type. Public message to set.
+
+2. Result interface
+
+C++: Cast message to SetCharacterPublicMessageRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+
+
+## CharacterPrivateDataChangedS2CEvt
+Character's private data has changed
+
+        Result CharacterPrivateDataChangedS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InCharacterID, const Array<uint8_t>& InPrivateData)
+
+		- OutInPlayInstanceUID: EntityUID type. Play instance
+
+		- OutInPlayerID: PlayerID type. player id
+
+		- OutInCharacterID: uint32 type. Character Id
+
+		- OutInPrivateData: VariableTable type. Character private data
+
+
+## CharacterPublicDataChangedS2CEvt
+Player public data has been changed
+
+        Result CharacterPublicDataChangedS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InPublicData)
+
+		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
+
+		- OutInPlayerID: PlayerID type. Player Id
+
+		- OutInPublicData: VariableTable type. Character public data
+
+
+## RequestWhiteboardSharing Request
+Request WhiteboardSharing
+
+1. Command interface
+
+        Result RequestWhiteboardSharingCmd(const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InTargetPlayerID, const Array<uint8_t>& InWhiteboardInfo)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutPlayInstanceUID: EntityUID type. Play instance
+
+		- OutPlayerID: PlayerID type. My Player id
+
+		- OutTargetPlayerID: PlayerID type. Target Player id
+
+		- OutWhiteboardInfo: VariableTable type. Whiteboard information
+
+2. Result interface
+
+C++: Cast message to RequestWhiteboardSharingRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+
+
+## AcceptWhiteboardSharing Request
+Accept WhiteboardSharing
+
+1. Command interface
+
+        Result AcceptWhiteboardSharingCmd(const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID, const uint8_t &InAnswer)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutPlayInstanceUID: EntityUID type. Play instance
+
+		- OutPlayerID: PlayerID type. Player id
+
+		- OutRequestedPlayerID: PlayerID type. Requested Player id
+
+		- OutAnswer: uint8 type. true: accept, false: reject
+
+2. Result interface
+
+C++: Cast message to AcceptWhiteboardSharingRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+
+
+## CloseWhiteboardSharing Request
+Close WhiteboardSharing. Both clients will receive WhiteboardSharingHasClosed
+
+1. Command interface
+
+        Result CloseWhiteboardSharingCmd(const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutPlayInstanceUID: EntityUID type. Play instance
+
+		- OutPlayerID: PlayerID type. Player id
+
+2. Result interface
+
+C++: Cast message to CloseWhiteboardSharingRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+
+
+## AddWhiteboardSharingLogEntry Request
+Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+
+1. Command interface
+
+        Result AddWhiteboardSharingLogEntryCmd(const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutPlayInstanceUID: EntityUID type. Play instance
+
+		- OutPlayerID: PlayerID type. Player id
+
+		- OutLogEntry: VariableTable type. Log entry
+
+2. Result interface
+
+C++: Cast message to AddWhiteboardSharingLogEntryRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+		- OutLogEntryID: LogEntryID type. Log entry Id, you also receive it by event. LogEntryID
+
+
+## UpdateWhiteboardSharingLogEntry Request
+Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+
+1. Command interface
+
+        Result UpdateWhiteboardSharingLogEntryCmd(const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutPlayInstanceUID: EntityUID type. Play instance
+
+		- OutPlayerID: PlayerID type. Player id
+
+		- OutLogEntry: VariableTable type. Log entry, LogEntryID should be included
+
+2. Result interface
+
+C++: Cast message to UpdateWhiteboardSharingLogEntryRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+
+
+## RemoveWhiteboardSharingLogEntry Request
+Update whiteboard log entry
+
+1. Command interface
+
+        Result RemoveWhiteboardSharingLogEntryCmd(const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutPlayInstanceUID: EntityUID type. Play instance
+
+		- OutPlayerID: PlayerID type. Player id
+
+		- OutLogEntryID: LogEntryID type. Log entry Id, you received it by event. Removed log entry id
+
+2. Result interface
+
+C++: Cast message to RemoveWhiteboardSharingLogEntryRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+
+
+## WhiteboardSharingRequestedS2CEvt
+WhiteboardSharing has been requested
+
+        Result WhiteboardSharingRequestedS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID)
+
+		- OutInPlayInstanceUID: EntityUID type. Play instance
+
+		- OutInPlayerID: PlayerID type. player id
+
+		- OutInRequestedPlayerID: PlayerID type. Player id who requested
+
+
+## WhiteboardSharingRejectedS2CEvt
+WhiteboardSharing has been requested
+
+        Result WhiteboardSharingRejectedS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRejectedPlayerID)
+
+		- OutInPlayInstanceUID: EntityUID type. Play instance
+
+		- OutInPlayerID: PlayerID type. player id to receive
+
+		- OutInRejectedPlayerID: PlayerID type. Player id who rejected
+
+
+## WhiteboardSharingStartedS2CEvt
+WhiteboardSharing has been started
+
+        Result WhiteboardSharingStartedS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InOtherPlayerID, const Array<uint8_t>& InWhiteboardInfo)
+
+		- OutInPlayInstanceUID: EntityUID type. Play instance
+
+		- OutInPlayerID: PlayerID type. player id
+
+		- OutInOtherPlayerID: PlayerID type. the other player id
+
+		- OutInWhiteboardInfo: VariableTable type. Whiteboard information
+
+
+## WhiteboardSharingHasClosedS2CEvt
+WhiteboardSharing has been closed
+
+        Result WhiteboardSharingHasClosedS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InClosedPlayerID)
+
+		- OutInPlayInstanceUID: EntityUID type. Play instance
+
+		- OutInPlayerID: PlayerID type. player id
+
+		- OutInClosedPlayerID: PlayerID type. Player id who requested close
+
+
+## WhiteboardSharingNewLogEntryAddedS2CEvt
+WhiteboardSharing new log entry has been added
+
+        Result WhiteboardSharingNewLogEntryAddedS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry)
+
+		- OutInPlayInstanceUID: EntityUID type. Play instance
+
+		- OutInPlayerID: PlayerID type. target player id
+
+		- OutInLogEntry: VariableTable type. Log entry data. It should have new 'LogEntryID'
+
+
+## WhiteboardSharingNewLogEntryRemovedS2CEvt
+WhiteboardSharing new log entry has been removed
+
+        Result WhiteboardSharingNewLogEntryRemovedS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID)
+
+		- OutInPlayInstanceUID: EntityUID type. Play instance
+
+		- OutInPlayerID: PlayerID type. target player id
+
+		- OutInLogEntryID: LogEntryID type. Log entry id
+
+
+## WhiteboardSharingNewLogEntryUpdatedS2CEvt
+WhiteboardSharing new log entry has been updated
+
+        Result WhiteboardSharingNewLogEntryUpdatedS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry)
+
+		- OutInPlayInstanceUID: EntityUID type. Play instance
+
+		- OutInPlayerID: PlayerID type. target player id
+
+		- OutInLogEntry: VariableTable type. Log entry
+
+
 ## OccupyMapObject Request
 Occupy map object
 
@@ -317,6 +600,57 @@ Effect modifier initial sync
 		- OutInCurrentLevel: int type. Current level
 
 
+## CallFunction Request
+To call general functionality
+
+1. Command interface
+
+        Result CallFunctionCmd(const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutFunctionName: StringCrc32 type. function name
+
+		- OutPlayerID: PlayerID type. Caller player Id
+
+		- OutParameters: VariableTable type. function parameter
+
+2. Result interface
+
+C++: Cast message to CallFunctionRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+		- OutResults: VariableTable type. function result
+
+
+## SendVoiceDataC2SEvt
+Send coded voice data to server
+
+        Result SendVoiceDataC2SEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData)
+
+		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
+
+		- OutInPlayerID: PlayerID type. player id
+
+		- OutInFrameIndex: uint16 type. voice frame index
+
+		- OutInVoiceData: uint8 type. Voice data
+
+
+## VoiceDataS2CEvt
+Voice data
+
+        Result VoiceDataS2CEvt(const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData)
+
+		- OutInActorID: uint32 type. actor id
+
+		- OutInFrameIndex: uint16 type. voice frame index
+
+		- OutInVoiceData: uint8 type. Voice data
+
+
 ## CreateStream Request
 Create stream instance
 
@@ -405,57 +739,6 @@ C++: Cast message to GetStreamListRes to access values
 		- OutTransactionID: TransactionID type. 
 		- OutResult: Result type. 
 		- OutStreamNames: String type. Stream names
-
-
-## CallFunction Request
-To call general functionality
-
-1. Command interface
-
-        Result CallFunctionCmd(const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters)
-
-		- OutTransactionID: TransactionID type. 
-
-		- OutFunctionName: StringCrc32 type. function name
-
-		- OutPlayerID: PlayerID type. Caller player Id
-
-		- OutParameters: VariableTable type. function parameter
-
-2. Result interface
-
-C++: Cast message to CallFunctionRes to access values
-
-
-		- OutTransactionID: TransactionID type. 
-		- OutResult: Result type. 
-		- OutResults: VariableTable type. function result
-
-
-## SendVoiceDataC2SEvt
-Send coded voice data to server
-
-        Result SendVoiceDataC2SEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData)
-
-		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
-
-		- OutInPlayerID: PlayerID type. player id
-
-		- OutInFrameIndex: uint16 type. voice frame index
-
-		- OutInVoiceData: uint8 type. Voice data
-
-
-## VoiceDataS2CEvt
-Voice data
-
-        Result VoiceDataS2CEvt(const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData)
-
-		- OutInActorID: uint32 type. actor id
-
-		- OutInFrameIndex: uint16 type. voice frame index
-
-		- OutInVoiceData: uint8 type. Voice data
 
 
 

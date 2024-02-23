@@ -614,6 +614,1068 @@ namespace SF
 
 			}; // class ClientSyncC2SEvt : public MessageBase
 
+			// Cmd: Set character public message. Server will broadcast CharacterPublicDataChanged, NewActorInView should have updated value as well
+			class SetCharacterPublicMessageCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				const char* m_PublicMessage{};
+			public:
+				SetCharacterPublicMessageCmd()
+					{}
+
+				SetCharacterPublicMessageCmd( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				SetCharacterPublicMessageCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const char* GetPublicMessage() const	{ return m_PublicMessage; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPublicMessage );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPublicMessage );
+
+			}; // class SetCharacterPublicMessageCmd : public MessageBase
+
+			class SetCharacterPublicMessageRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				Result m_Result{};
+			public:
+				SetCharacterPublicMessageRes()
+					{}
+
+				SetCharacterPublicMessageRes( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				SetCharacterPublicMessageRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult );
+
+			}; // class SetCharacterPublicMessageRes : public MessageBase
+
+			// S2C: Character's private data has changed
+			class CharacterPrivateDataChangedS2CEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 0,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				TransactionID GetTransactionID() { return TransactionID{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				uint32_t m_CharacterID{};
+				ArrayView<uint8_t> m_PrivateDataRaw;
+				mutable bool m_PrivateDataHasParsed = false;
+				mutable VariableTable m_PrivateData;
+			public:
+				CharacterPrivateDataChangedS2CEvt()
+					{}
+
+				CharacterPrivateDataChangedS2CEvt( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				CharacterPrivateDataChangedS2CEvt( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const uint32_t& GetCharacterID() const	{ return m_CharacterID; };
+				const Array<uint8_t>& GetPrivateDataRaw() const	{ return m_PrivateDataRaw; };
+				const VariableTable& GetPrivateData() const;
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InCharacterID, const VariableTable &InPrivateData );
+				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InCharacterID, const Array<uint8_t>& InPrivateData );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InCharacterID, const Array<uint8_t>& InPrivateData );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InCharacterID, const VariableTable &InPrivateData );
+
+			}; // class CharacterPrivateDataChangedS2CEvt : public MessageBase
+
+			// S2C: Player public data has been changed
+			class CharacterPublicDataChangedS2CEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 0,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				TransactionID GetTransactionID() { return TransactionID{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				ArrayView<uint8_t> m_PublicDataRaw;
+				mutable bool m_PublicDataHasParsed = false;
+				mutable VariableTable m_PublicData;
+			public:
+				CharacterPublicDataChangedS2CEvt()
+					{}
+
+				CharacterPublicDataChangedS2CEvt( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				CharacterPublicDataChangedS2CEvt( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const Array<uint8_t>& GetPublicDataRaw() const	{ return m_PublicDataRaw; };
+				const VariableTable& GetPublicData() const;
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InPublicData );
+				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InPublicData );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InPublicData );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InPublicData );
+
+			}; // class CharacterPublicDataChangedS2CEvt : public MessageBase
+
+			// Cmd: Request WhiteboardSharing
+			class RequestWhiteboardSharingCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				PlayerID m_TargetPlayerID{};
+				ArrayView<uint8_t> m_WhiteboardInfoRaw;
+				mutable bool m_WhiteboardInfoHasParsed = false;
+				mutable VariableTable m_WhiteboardInfo;
+			public:
+				RequestWhiteboardSharingCmd()
+					{}
+
+				RequestWhiteboardSharingCmd( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				RequestWhiteboardSharingCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const PlayerID& GetTargetPlayerID() const	{ return m_TargetPlayerID; };
+				const Array<uint8_t>& GetWhiteboardInfoRaw() const	{ return m_WhiteboardInfoRaw; };
+				const VariableTable& GetWhiteboardInfo() const;
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InTargetPlayerID, const VariableTable &InWhiteboardInfo );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InTargetPlayerID, const Array<uint8_t>& InWhiteboardInfo );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InTargetPlayerID, const Array<uint8_t>& InWhiteboardInfo );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InTargetPlayerID, const VariableTable &InWhiteboardInfo );
+
+			}; // class RequestWhiteboardSharingCmd : public MessageBase
+
+			class RequestWhiteboardSharingRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				Result m_Result{};
+			public:
+				RequestWhiteboardSharingRes()
+					{}
+
+				RequestWhiteboardSharingRes( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				RequestWhiteboardSharingRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult );
+
+			}; // class RequestWhiteboardSharingRes : public MessageBase
+
+			// Cmd: Accept WhiteboardSharing
+			class AcceptWhiteboardSharingCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				PlayerID m_RequestedPlayerID{};
+				uint8_t m_Answer{};
+			public:
+				AcceptWhiteboardSharingCmd()
+					{}
+
+				AcceptWhiteboardSharingCmd( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				AcceptWhiteboardSharingCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const PlayerID& GetRequestedPlayerID() const	{ return m_RequestedPlayerID; };
+				const uint8_t& GetAnswer() const	{ return m_Answer; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID, const uint8_t &InAnswer );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID, const uint8_t &InAnswer );
+
+			}; // class AcceptWhiteboardSharingCmd : public MessageBase
+
+			class AcceptWhiteboardSharingRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				Result m_Result{};
+			public:
+				AcceptWhiteboardSharingRes()
+					{}
+
+				AcceptWhiteboardSharingRes( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				AcceptWhiteboardSharingRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult );
+
+			}; // class AcceptWhiteboardSharingRes : public MessageBase
+
+			// Cmd: Close WhiteboardSharing. Both clients will receive WhiteboardSharingHasClosed
+			class CloseWhiteboardSharingCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+			public:
+				CloseWhiteboardSharingCmd()
+					{}
+
+				CloseWhiteboardSharingCmd( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				CloseWhiteboardSharingCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID );
+
+			}; // class CloseWhiteboardSharingCmd : public MessageBase
+
+			class CloseWhiteboardSharingRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				Result m_Result{};
+			public:
+				CloseWhiteboardSharingRes()
+					{}
+
+				CloseWhiteboardSharingRes( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				CloseWhiteboardSharingRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult );
+
+			}; // class CloseWhiteboardSharingRes : public MessageBase
+
+			// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+			class AddWhiteboardSharingLogEntryCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				ArrayView<uint8_t> m_LogEntryRaw;
+				mutable bool m_LogEntryHasParsed = false;
+				mutable VariableTable m_LogEntry;
+			public:
+				AddWhiteboardSharingLogEntryCmd()
+					{}
+
+				AddWhiteboardSharingLogEntryCmd( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				AddWhiteboardSharingLogEntryCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const Array<uint8_t>& GetLogEntryRaw() const	{ return m_LogEntryRaw; };
+				const VariableTable& GetLogEntry() const;
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry );
+
+			}; // class AddWhiteboardSharingLogEntryCmd : public MessageBase
+
+			class AddWhiteboardSharingLogEntryRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				Result m_Result{};
+				LogEntryID m_LogEntryID{};
+			public:
+				AddWhiteboardSharingLogEntryRes()
+					{}
+
+				AddWhiteboardSharingLogEntryRes( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				AddWhiteboardSharingLogEntryRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+				const LogEntryID& GetLogEntryID() const	{ return m_LogEntryID; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const LogEntryID &InLogEntryID );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const LogEntryID &InLogEntryID );
+
+			}; // class AddWhiteboardSharingLogEntryRes : public MessageBase
+
+			// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+			class UpdateWhiteboardSharingLogEntryCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				ArrayView<uint8_t> m_LogEntryRaw;
+				mutable bool m_LogEntryHasParsed = false;
+				mutable VariableTable m_LogEntry;
+			public:
+				UpdateWhiteboardSharingLogEntryCmd()
+					{}
+
+				UpdateWhiteboardSharingLogEntryCmd( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				UpdateWhiteboardSharingLogEntryCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const Array<uint8_t>& GetLogEntryRaw() const	{ return m_LogEntryRaw; };
+				const VariableTable& GetLogEntry() const;
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry );
+
+			}; // class UpdateWhiteboardSharingLogEntryCmd : public MessageBase
+
+			class UpdateWhiteboardSharingLogEntryRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				Result m_Result{};
+			public:
+				UpdateWhiteboardSharingLogEntryRes()
+					{}
+
+				UpdateWhiteboardSharingLogEntryRes( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				UpdateWhiteboardSharingLogEntryRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult );
+
+			}; // class UpdateWhiteboardSharingLogEntryRes : public MessageBase
+
+			// Cmd: Update whiteboard log entry
+			class RemoveWhiteboardSharingLogEntryCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				LogEntryID m_LogEntryID{};
+			public:
+				RemoveWhiteboardSharingLogEntryCmd()
+					{}
+
+				RemoveWhiteboardSharingLogEntryCmd( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				RemoveWhiteboardSharingLogEntryCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const LogEntryID& GetLogEntryID() const	{ return m_LogEntryID; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID );
+
+			}; // class RemoveWhiteboardSharingLogEntryCmd : public MessageBase
+
+			class RemoveWhiteboardSharingLogEntryRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				Result m_Result{};
+			public:
+				RemoveWhiteboardSharingLogEntryRes()
+					{}
+
+				RemoveWhiteboardSharingLogEntryRes( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				RemoveWhiteboardSharingLogEntryRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult );
+
+			}; // class RemoveWhiteboardSharingLogEntryRes : public MessageBase
+
+			// S2C: WhiteboardSharing has been requested
+			class WhiteboardSharingRequestedS2CEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 0,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				TransactionID GetTransactionID() { return TransactionID{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				PlayerID m_RequestedPlayerID{};
+			public:
+				WhiteboardSharingRequestedS2CEvt()
+					{}
+
+				WhiteboardSharingRequestedS2CEvt( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				WhiteboardSharingRequestedS2CEvt( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const PlayerID& GetRequestedPlayerID() const	{ return m_RequestedPlayerID; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID );
+
+			}; // class WhiteboardSharingRequestedS2CEvt : public MessageBase
+
+			// S2C: WhiteboardSharing has been requested
+			class WhiteboardSharingRejectedS2CEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 0,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				TransactionID GetTransactionID() { return TransactionID{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				PlayerID m_RejectedPlayerID{};
+			public:
+				WhiteboardSharingRejectedS2CEvt()
+					{}
+
+				WhiteboardSharingRejectedS2CEvt( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				WhiteboardSharingRejectedS2CEvt( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const PlayerID& GetRejectedPlayerID() const	{ return m_RejectedPlayerID; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRejectedPlayerID );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRejectedPlayerID );
+
+			}; // class WhiteboardSharingRejectedS2CEvt : public MessageBase
+
+			// S2C: WhiteboardSharing has been started
+			class WhiteboardSharingStartedS2CEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 0,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				TransactionID GetTransactionID() { return TransactionID{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				PlayerID m_OtherPlayerID{};
+				ArrayView<uint8_t> m_WhiteboardInfoRaw;
+				mutable bool m_WhiteboardInfoHasParsed = false;
+				mutable VariableTable m_WhiteboardInfo;
+			public:
+				WhiteboardSharingStartedS2CEvt()
+					{}
+
+				WhiteboardSharingStartedS2CEvt( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				WhiteboardSharingStartedS2CEvt( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const PlayerID& GetOtherPlayerID() const	{ return m_OtherPlayerID; };
+				const Array<uint8_t>& GetWhiteboardInfoRaw() const	{ return m_WhiteboardInfoRaw; };
+				const VariableTable& GetWhiteboardInfo() const;
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InOtherPlayerID, const VariableTable &InWhiteboardInfo );
+				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InOtherPlayerID, const Array<uint8_t>& InWhiteboardInfo );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InOtherPlayerID, const Array<uint8_t>& InWhiteboardInfo );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InOtherPlayerID, const VariableTable &InWhiteboardInfo );
+
+			}; // class WhiteboardSharingStartedS2CEvt : public MessageBase
+
+			// S2C: WhiteboardSharing has been closed
+			class WhiteboardSharingHasClosedS2CEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 0,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				TransactionID GetTransactionID() { return TransactionID{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				PlayerID m_ClosedPlayerID{};
+			public:
+				WhiteboardSharingHasClosedS2CEvt()
+					{}
+
+				WhiteboardSharingHasClosedS2CEvt( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				WhiteboardSharingHasClosedS2CEvt( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const PlayerID& GetClosedPlayerID() const	{ return m_ClosedPlayerID; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InClosedPlayerID );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InClosedPlayerID );
+
+			}; // class WhiteboardSharingHasClosedS2CEvt : public MessageBase
+
+			// S2C: WhiteboardSharing new log entry has been added
+			class WhiteboardSharingNewLogEntryAddedS2CEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 0,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				TransactionID GetTransactionID() { return TransactionID{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				ArrayView<uint8_t> m_LogEntryRaw;
+				mutable bool m_LogEntryHasParsed = false;
+				mutable VariableTable m_LogEntry;
+			public:
+				WhiteboardSharingNewLogEntryAddedS2CEvt()
+					{}
+
+				WhiteboardSharingNewLogEntryAddedS2CEvt( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				WhiteboardSharingNewLogEntryAddedS2CEvt( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const Array<uint8_t>& GetLogEntryRaw() const	{ return m_LogEntryRaw; };
+				const VariableTable& GetLogEntry() const;
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry );
+				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry );
+
+			}; // class WhiteboardSharingNewLogEntryAddedS2CEvt : public MessageBase
+
+			// S2C: WhiteboardSharing new log entry has been removed
+			class WhiteboardSharingNewLogEntryRemovedS2CEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 0,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				TransactionID GetTransactionID() { return TransactionID{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				LogEntryID m_LogEntryID{};
+			public:
+				WhiteboardSharingNewLogEntryRemovedS2CEvt()
+					{}
+
+				WhiteboardSharingNewLogEntryRemovedS2CEvt( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				WhiteboardSharingNewLogEntryRemovedS2CEvt( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const LogEntryID& GetLogEntryID() const	{ return m_LogEntryID; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID );
+
+			}; // class WhiteboardSharingNewLogEntryRemovedS2CEvt : public MessageBase
+
+			// S2C: WhiteboardSharing new log entry has been updated
+			class WhiteboardSharingNewLogEntryUpdatedS2CEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 0,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				TransactionID GetTransactionID() { return TransactionID{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				ArrayView<uint8_t> m_LogEntryRaw;
+				mutable bool m_LogEntryHasParsed = false;
+				mutable VariableTable m_LogEntry;
+			public:
+				WhiteboardSharingNewLogEntryUpdatedS2CEvt()
+					{}
+
+				WhiteboardSharingNewLogEntryUpdatedS2CEvt( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				WhiteboardSharingNewLogEntryUpdatedS2CEvt( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const Array<uint8_t>& GetLogEntryRaw() const	{ return m_LogEntryRaw; };
+				const VariableTable& GetLogEntry() const;
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry );
+				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry );
+
+			}; // class WhiteboardSharingNewLogEntryUpdatedS2CEvt : public MessageBase
+
 			// Cmd: Occupy map object
 			class OccupyMapObjectCmd : public MessageBase
 			{
@@ -1106,6 +2168,197 @@ namespace SF
 
 			}; // class LevelUpS2CEvt : public MessageBase
 
+			// Cmd: To call general functionality
+			class CallFunctionCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				StringCrc32 m_FunctionName{};
+				PlayerID m_PlayerID{};
+				ArrayView<uint8_t> m_ParametersRaw;
+				mutable bool m_ParametersHasParsed = false;
+				mutable VariableTable m_Parameters;
+			public:
+				CallFunctionCmd()
+					{}
+
+				CallFunctionCmd( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				CallFunctionCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const StringCrc32& GetFunctionName() const	{ return m_FunctionName; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const Array<uint8_t>& GetParametersRaw() const	{ return m_ParametersRaw; };
+				const VariableTable& GetParameters() const;
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters );
+
+			}; // class CallFunctionCmd : public MessageBase
+
+			class CallFunctionRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				Result m_Result{};
+				ArrayView<uint8_t> m_ResultsRaw;
+				mutable bool m_ResultsHasParsed = false;
+				mutable VariableTable m_Results;
+			public:
+				CallFunctionRes()
+					{}
+
+				CallFunctionRes( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				CallFunctionRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+				const Array<uint8_t>& GetResultsRaw() const	{ return m_ResultsRaw; };
+				const VariableTable& GetResults() const;
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InResults );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InResults );
+
+			}; // class CallFunctionRes : public MessageBase
+
+			// C2S: Send coded voice data to server
+			class SendVoiceDataC2SEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 0,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				TransactionID GetTransactionID() { return TransactionID{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				uint16_t m_FrameIndex{};
+				ArrayView<uint8_t> m_VoiceData;
+			public:
+				SendVoiceDataC2SEvt()
+					{}
+
+				SendVoiceDataC2SEvt( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				SendVoiceDataC2SEvt( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const uint16_t& GetFrameIndex() const	{ return m_FrameIndex; };
+				const Array<uint8_t>& GetVoiceData() const	{ return m_VoiceData; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
+
+			}; // class SendVoiceDataC2SEvt : public MessageBase
+
+			// S2C: Voice data
+			class VoiceDataS2CEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 0,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				TransactionID GetTransactionID() { return TransactionID{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				uint32_t m_ActorID{};
+				uint16_t m_FrameIndex{};
+				ArrayView<uint8_t> m_VoiceData;
+			public:
+				VoiceDataS2CEvt()
+					{}
+
+				VoiceDataS2CEvt( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				VoiceDataS2CEvt( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const uint32_t& GetActorID() const	{ return m_ActorID; };
+				const uint16_t& GetFrameIndex() const	{ return m_FrameIndex; };
+				const Array<uint8_t>& GetVoiceData() const	{ return m_VoiceData; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
+				static Result Create( MessageHeader* messageBuffer, const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
+
+			}; // class VoiceDataS2CEvt : public MessageBase
+
 			// Cmd: Create stream instance
 			class CreateStreamCmd : public MessageBase
 			{
@@ -1451,197 +2704,6 @@ namespace SF
 				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames );
 
 			}; // class GetStreamListRes : public MessageBase
-
-			// Cmd: To call general functionality
-			class CallFunctionCmd : public MessageBase
-			{
- 			public:
-				static const MessageID MID;
-				// Parameter type informations for template
-				enum ParameterTypeInfo
-				{
- 					HasTransactionID = 1,
-					HasRouteContext = 0,
-				}; // enum ParameterTypeInfo
-			public:
-				RouteContext GetRouteContext() { return RouteContext{}; }
-			private:
-				TransactionID m_TransactionID{};
-				StringCrc32 m_FunctionName{};
-				PlayerID m_PlayerID{};
-				ArrayView<uint8_t> m_ParametersRaw;
-				mutable bool m_ParametersHasParsed = false;
-				mutable VariableTable m_Parameters;
-			public:
-				CallFunctionCmd()
-					{}
-
-				CallFunctionCmd( const MessageDataPtr &pMsg )
-					: MessageBase(pMsg)
-					{}
-
-				CallFunctionCmd( const MessageHeader* pHeader )
-					: MessageBase(pHeader)
-					{}
-
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
-				const StringCrc32& GetFunctionName() const	{ return m_FunctionName; };
-				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
-				const Array<uint8_t>& GetParametersRaw() const	{ return m_ParametersRaw; };
-				const VariableTable& GetParameters() const;
-
-				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
-
-				virtual Result ParseMessage(const MessageHeader* pHeader);
-				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
-
-				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters );
-				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters );
-				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters );
-				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters );
-
-			}; // class CallFunctionCmd : public MessageBase
-
-			class CallFunctionRes : public MessageBase
-			{
- 			public:
-				static const MessageID MID;
-				// Parameter type informations for template
-				enum ParameterTypeInfo
-				{
- 					HasTransactionID = 1,
-					HasRouteContext = 0,
-				}; // enum ParameterTypeInfo
-			public:
-				RouteContext GetRouteContext() { return RouteContext{}; }
-			private:
-				TransactionID m_TransactionID{};
-				Result m_Result{};
-				ArrayView<uint8_t> m_ResultsRaw;
-				mutable bool m_ResultsHasParsed = false;
-				mutable VariableTable m_Results;
-			public:
-				CallFunctionRes()
-					{}
-
-				CallFunctionRes( const MessageDataPtr &pMsg )
-					: MessageBase(pMsg)
-					{}
-
-				CallFunctionRes( const MessageHeader* pHeader )
-					: MessageBase(pHeader)
-					{}
-
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
-				const Result& GetResult() const	{ return m_Result; };
-				const Array<uint8_t>& GetResultsRaw() const	{ return m_ResultsRaw; };
-				const VariableTable& GetResults() const;
-
-				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
-
-				virtual Result ParseMessage(const MessageHeader* pHeader);
-				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
-
-				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InResults );
-				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults );
-				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults );
-				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InResults );
-
-			}; // class CallFunctionRes : public MessageBase
-
-			// C2S: Send coded voice data to server
-			class SendVoiceDataC2SEvt : public MessageBase
-			{
- 			public:
-				static const MessageID MID;
-				// Parameter type informations for template
-				enum ParameterTypeInfo
-				{
- 					HasTransactionID = 0,
-					HasRouteContext = 0,
-				}; // enum ParameterTypeInfo
-			public:
-				TransactionID GetTransactionID() { return TransactionID{}; }
-				RouteContext GetRouteContext() { return RouteContext{}; }
-			private:
-				uint64_t m_PlayInstanceUID{};
-				PlayerID m_PlayerID{};
-				uint16_t m_FrameIndex{};
-				ArrayView<uint8_t> m_VoiceData;
-			public:
-				SendVoiceDataC2SEvt()
-					{}
-
-				SendVoiceDataC2SEvt( const MessageDataPtr &pMsg )
-					: MessageBase(pMsg)
-					{}
-
-				SendVoiceDataC2SEvt( const MessageHeader* pHeader )
-					: MessageBase(pHeader)
-					{}
-
-				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
-				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
-				const uint16_t& GetFrameIndex() const	{ return m_FrameIndex; };
-				const Array<uint8_t>& GetVoiceData() const	{ return m_VoiceData; };
-
-				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
-
-				virtual Result ParseMessage(const MessageHeader* pHeader);
-				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
-
-				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
-
-			}; // class SendVoiceDataC2SEvt : public MessageBase
-
-			// S2C: Voice data
-			class VoiceDataS2CEvt : public MessageBase
-			{
- 			public:
-				static const MessageID MID;
-				// Parameter type informations for template
-				enum ParameterTypeInfo
-				{
- 					HasTransactionID = 0,
-					HasRouteContext = 0,
-				}; // enum ParameterTypeInfo
-			public:
-				TransactionID GetTransactionID() { return TransactionID{}; }
-				RouteContext GetRouteContext() { return RouteContext{}; }
-			private:
-				uint32_t m_ActorID{};
-				uint16_t m_FrameIndex{};
-				ArrayView<uint8_t> m_VoiceData;
-			public:
-				VoiceDataS2CEvt()
-					{}
-
-				VoiceDataS2CEvt( const MessageDataPtr &pMsg )
-					: MessageBase(pMsg)
-					{}
-
-				VoiceDataS2CEvt( const MessageHeader* pHeader )
-					: MessageBase(pHeader)
-					{}
-
-				const uint32_t& GetActorID() const	{ return m_ActorID; };
-				const uint16_t& GetFrameIndex() const	{ return m_FrameIndex; };
-				const Array<uint8_t>& GetVoiceData() const	{ return m_VoiceData; };
-
-				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
-
-				virtual Result ParseMessage(const MessageHeader* pHeader);
-				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
-
-				static size_t CalculateMessageSize( const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
-				static Result Create( MessageHeader* messageBuffer, const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
-
-			}; // class VoiceDataS2CEvt : public MessageBase
 
 
 

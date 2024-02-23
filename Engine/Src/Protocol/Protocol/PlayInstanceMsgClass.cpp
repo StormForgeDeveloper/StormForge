@@ -1574,8 +1574,2696 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result ClientSyncC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
+			// Cmd: Set character public message. Server will broadcast CharacterPublicDataChanged, NewActorInView should have updated value as well
+			const MessageID SetCharacterPublicMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
+			Result SetCharacterPublicMessageCmd::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_PublicMessage, ArrayLen));
+
+				return hr;
+
+			}; // Result SetCharacterPublicMessageCmd::ParseMessage(const MessageHeader* pHeader)
+
+			Result SetCharacterPublicMessageCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				SetCharacterPublicMessageCmd parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariable("PublicMessage", parser.GetPublicMessage());
+
+				return hr;
+
+			}; // Result SetCharacterPublicMessageCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result SetCharacterPublicMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) SetCharacterPublicMessageCmd(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result SetCharacterPublicMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t SetCharacterPublicMessageCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPublicMessage )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InPublicMessage)
+				);
+
+				return __uiMessageSize;
+			}; // size_t SetCharacterPublicMessageCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPublicMessage )
+
+
+			Result SetCharacterPublicMessageCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPublicMessage )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InPublicMessage)
+				);
+
+				messageBuffer->msgID = SetCharacterPublicMessageCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InPublicMessage);
+
+				return hr;
+			}; // Result SetCharacterPublicMessageCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPublicMessage )
+
+			Result SetCharacterPublicMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				SetCharacterPublicMessageCmd parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::SetCharacterPublicMessage, {0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, PublicMessage:{5,60}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetPublicMessage()); 
+				return ResultCode::SUCCESS;
+			}; // Result SetCharacterPublicMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			const MessageID SetCharacterPublicMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
+			Result SetCharacterPublicMessageRes::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+
+				return hr;
+
+			}; // Result SetCharacterPublicMessageRes::ParseMessage(const MessageHeader* pHeader)
+
+			Result SetCharacterPublicMessageRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				SetCharacterPublicMessageRes parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+
+				return hr;
+
+			}; // Result SetCharacterPublicMessageRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result SetCharacterPublicMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) SetCharacterPublicMessageRes(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result SetCharacterPublicMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t SetCharacterPublicMessageRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				return __uiMessageSize;
+			}; // size_t SetCharacterPublicMessageRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult )
+
+
+			Result SetCharacterPublicMessageRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				messageBuffer->msgID = SetCharacterPublicMessageRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+
+				return hr;
+			}; // Result SetCharacterPublicMessageRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult )
+
+			Result SetCharacterPublicMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				SetCharacterPublicMessageRes parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::SetCharacterPublicMessage, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
+				return ResultCode::SUCCESS;
+			}; // Result SetCharacterPublicMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// S2C: Character's private data has changed
+			const MessageID CharacterPrivateDataChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 12);
+			const VariableTable& CharacterPrivateDataChangedS2CEvt::GetPrivateData() const
+			{
+ 				if (!m_PrivateDataHasParsed)
+				{
+ 					m_PrivateDataHasParsed = true;
+					InputMemoryStream PrivateData_ReadStream(m_PrivateDataRaw);
+					*PrivateData_ReadStream.ToInputStream() >> m_PrivateData;
+				} // if (!m_PrivateDataHasParsed)
+				return m_PrivateData;
+			} // const VariableTable& CharacterPrivateDataChangedS2CEvt::GetPrivateData() const
+			Result CharacterPrivateDataChangedS2CEvt::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(*input >> m_CharacterID);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* PrivateDataPtr = nullptr;
+				protocolCheck(input->ReadLink(PrivateDataPtr, ArrayLen));
+				m_PrivateDataRaw.SetLinkedBuffer(ArrayLen, PrivateDataPtr);
+
+				return hr;
+
+			}; // Result CharacterPrivateDataChangedS2CEvt::ParseMessage(const MessageHeader* pHeader)
+
+			Result CharacterPrivateDataChangedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				CharacterPrivateDataChangedS2CEvt parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariable("CharacterID", parser.GetCharacterID());
+				variableBuilder.SetVariableArray("PrivateData", "VariableTable", parser.GetPrivateDataRaw());
+
+				return hr;
+
+			}; // Result CharacterPrivateDataChangedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result CharacterPrivateDataChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) CharacterPrivateDataChangedS2CEvt(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result CharacterPrivateDataChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+			size_t CharacterPrivateDataChangedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InCharacterID, const Array<uint8_t>& InPrivateData )
+			{
+ 				uint16_t serializedSizeOfInPrivateData = static_cast<uint16_t>(SerializedSizeOf(InPrivateData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InCharacterID)
+					+ serializedSizeOfInPrivateData
+				);
+
+				return __uiMessageSize;
+			}; // size_t CharacterPrivateDataChangedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InCharacterID, const Array<uint8_t>& InPrivateData )
+
+			size_t CharacterPrivateDataChangedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InCharacterID, const VariableTable &InPrivateData )
+			{
+ 				uint16_t serializedSizeOfInPrivateData = static_cast<uint16_t>(SerializedSizeOf(InPrivateData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InCharacterID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInPrivateData
+				);
+
+				return __uiMessageSize;
+			}; // size_t CharacterPrivateDataChangedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InCharacterID, const VariableTable &InPrivateData )
+
+			Result CharacterPrivateDataChangedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InCharacterID, const Array<uint8_t>& InPrivateData )
+			{
+ 				Result hr;
+
+				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InPlayerID, InCharacterID, InPrivateData);
+
+				messageBuffer->msgID = CharacterPrivateDataChangedS2CEvt::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InCharacterID);
+				protocolCheck(*output << InPrivateData);
+
+				return hr;
+			}; // Result CharacterPrivateDataChangedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InCharacterID, const Array<uint8_t>& InPrivateData )
+
+			Result CharacterPrivateDataChangedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InCharacterID, const VariableTable &InPrivateData )
+			{
+ 				Result hr;
+
+				uint16_t serializedSizeOfInPrivateData = static_cast<uint16_t>(SerializedSizeOf(InPrivateData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InCharacterID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInPrivateData
+				);
+
+				messageBuffer->msgID = CharacterPrivateDataChangedS2CEvt::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InCharacterID);
+				protocolCheck(output->Write(serializedSizeOfInPrivateData));
+				protocolCheck(*output << InPrivateData);
+
+				return hr;
+			}; // Result CharacterPrivateDataChangedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InCharacterID, const VariableTable &InPrivateData )
+
+			Result CharacterPrivateDataChangedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				CharacterPrivateDataChangedS2CEvt parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::CharacterPrivateDataChanged, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, CharacterID:{4}, PrivateData:{5}",
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetCharacterID(), parser.GetPrivateData()); 
+				return ResultCode::SUCCESS;
+			}; // Result CharacterPrivateDataChangedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// S2C: Player public data has been changed
+			const MessageID CharacterPublicDataChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 13);
+			const VariableTable& CharacterPublicDataChangedS2CEvt::GetPublicData() const
+			{
+ 				if (!m_PublicDataHasParsed)
+				{
+ 					m_PublicDataHasParsed = true;
+					InputMemoryStream PublicData_ReadStream(m_PublicDataRaw);
+					*PublicData_ReadStream.ToInputStream() >> m_PublicData;
+				} // if (!m_PublicDataHasParsed)
+				return m_PublicData;
+			} // const VariableTable& CharacterPublicDataChangedS2CEvt::GetPublicData() const
+			Result CharacterPublicDataChangedS2CEvt::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* PublicDataPtr = nullptr;
+				protocolCheck(input->ReadLink(PublicDataPtr, ArrayLen));
+				m_PublicDataRaw.SetLinkedBuffer(ArrayLen, PublicDataPtr);
+
+				return hr;
+
+			}; // Result CharacterPublicDataChangedS2CEvt::ParseMessage(const MessageHeader* pHeader)
+
+			Result CharacterPublicDataChangedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				CharacterPublicDataChangedS2CEvt parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariableArray("PublicData", "VariableTable", parser.GetPublicDataRaw());
+
+				return hr;
+
+			}; // Result CharacterPublicDataChangedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result CharacterPublicDataChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) CharacterPublicDataChangedS2CEvt(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result CharacterPublicDataChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+			size_t CharacterPublicDataChangedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InPublicData )
+			{
+ 				uint16_t serializedSizeOfInPublicData = static_cast<uint16_t>(SerializedSizeOf(InPublicData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ serializedSizeOfInPublicData
+				);
+
+				return __uiMessageSize;
+			}; // size_t CharacterPublicDataChangedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InPublicData )
+
+			size_t CharacterPublicDataChangedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InPublicData )
+			{
+ 				uint16_t serializedSizeOfInPublicData = static_cast<uint16_t>(SerializedSizeOf(InPublicData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInPublicData
+				);
+
+				return __uiMessageSize;
+			}; // size_t CharacterPublicDataChangedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InPublicData )
+
+			Result CharacterPublicDataChangedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InPublicData )
+			{
+ 				Result hr;
+
+				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InPlayerID, InPublicData);
+
+				messageBuffer->msgID = CharacterPublicDataChangedS2CEvt::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InPublicData);
+
+				return hr;
+			}; // Result CharacterPublicDataChangedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InPublicData )
+
+			Result CharacterPublicDataChangedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InPublicData )
+			{
+ 				Result hr;
+
+				uint16_t serializedSizeOfInPublicData = static_cast<uint16_t>(SerializedSizeOf(InPublicData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInPublicData
+				);
+
+				messageBuffer->msgID = CharacterPublicDataChangedS2CEvt::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(output->Write(serializedSizeOfInPublicData));
+				protocolCheck(*output << InPublicData);
+
+				return hr;
+			}; // Result CharacterPublicDataChangedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InPublicData )
+
+			Result CharacterPublicDataChangedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				CharacterPublicDataChangedS2CEvt parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::CharacterPublicDataChanged, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, PublicData:{4}",
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetPublicData()); 
+				return ResultCode::SUCCESS;
+			}; // Result CharacterPublicDataChangedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// Cmd: Request WhiteboardSharing
+			const MessageID RequestWhiteboardSharingCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 14);
+			const VariableTable& RequestWhiteboardSharingCmd::GetWhiteboardInfo() const
+			{
+ 				if (!m_WhiteboardInfoHasParsed)
+				{
+ 					m_WhiteboardInfoHasParsed = true;
+					InputMemoryStream WhiteboardInfo_ReadStream(m_WhiteboardInfoRaw);
+					*WhiteboardInfo_ReadStream.ToInputStream() >> m_WhiteboardInfo;
+				} // if (!m_WhiteboardInfoHasParsed)
+				return m_WhiteboardInfo;
+			} // const VariableTable& RequestWhiteboardSharingCmd::GetWhiteboardInfo() const
+			Result RequestWhiteboardSharingCmd::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(*input >> m_TargetPlayerID);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* WhiteboardInfoPtr = nullptr;
+				protocolCheck(input->ReadLink(WhiteboardInfoPtr, ArrayLen));
+				m_WhiteboardInfoRaw.SetLinkedBuffer(ArrayLen, WhiteboardInfoPtr);
+
+				return hr;
+
+			}; // Result RequestWhiteboardSharingCmd::ParseMessage(const MessageHeader* pHeader)
+
+			Result RequestWhiteboardSharingCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				RequestWhiteboardSharingCmd parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariable("TargetPlayerID", parser.GetTargetPlayerID());
+				variableBuilder.SetVariableArray("WhiteboardInfo", "VariableTable", parser.GetWhiteboardInfoRaw());
+
+				return hr;
+
+			}; // Result RequestWhiteboardSharingCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result RequestWhiteboardSharingCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) RequestWhiteboardSharingCmd(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result RequestWhiteboardSharingCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+			size_t RequestWhiteboardSharingCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InTargetPlayerID, const Array<uint8_t>& InWhiteboardInfo )
+			{
+ 				uint16_t serializedSizeOfInWhiteboardInfo = static_cast<uint16_t>(SerializedSizeOf(InWhiteboardInfo)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InTargetPlayerID)
+					+ serializedSizeOfInWhiteboardInfo
+				);
+
+				return __uiMessageSize;
+			}; // size_t RequestWhiteboardSharingCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InTargetPlayerID, const Array<uint8_t>& InWhiteboardInfo )
+
+			size_t RequestWhiteboardSharingCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InTargetPlayerID, const VariableTable &InWhiteboardInfo )
+			{
+ 				uint16_t serializedSizeOfInWhiteboardInfo = static_cast<uint16_t>(SerializedSizeOf(InWhiteboardInfo)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InTargetPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInWhiteboardInfo
+				);
+
+				return __uiMessageSize;
+			}; // size_t RequestWhiteboardSharingCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InTargetPlayerID, const VariableTable &InWhiteboardInfo )
+
+			Result RequestWhiteboardSharingCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InTargetPlayerID, const Array<uint8_t>& InWhiteboardInfo )
+			{
+ 				Result hr;
+
+				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InTargetPlayerID, InWhiteboardInfo);
+
+				messageBuffer->msgID = RequestWhiteboardSharingCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InTargetPlayerID);
+				protocolCheck(*output << InWhiteboardInfo);
+
+				return hr;
+			}; // Result RequestWhiteboardSharingCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InTargetPlayerID, const Array<uint8_t>& InWhiteboardInfo )
+
+			Result RequestWhiteboardSharingCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InTargetPlayerID, const VariableTable &InWhiteboardInfo )
+			{
+ 				Result hr;
+
+				uint16_t serializedSizeOfInWhiteboardInfo = static_cast<uint16_t>(SerializedSizeOf(InWhiteboardInfo)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InTargetPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInWhiteboardInfo
+				);
+
+				messageBuffer->msgID = RequestWhiteboardSharingCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InTargetPlayerID);
+				protocolCheck(output->Write(serializedSizeOfInWhiteboardInfo));
+				protocolCheck(*output << InWhiteboardInfo);
+
+				return hr;
+			}; // Result RequestWhiteboardSharingCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InTargetPlayerID, const VariableTable &InWhiteboardInfo )
+
+			Result RequestWhiteboardSharingCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				RequestWhiteboardSharingCmd parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::RequestWhiteboardSharing, {0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, TargetPlayerID:{5}, WhiteboardInfo:{6}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetTargetPlayerID(), parser.GetWhiteboardInfo()); 
+				return ResultCode::SUCCESS;
+			}; // Result RequestWhiteboardSharingCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			const MessageID RequestWhiteboardSharingRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 14);
+			Result RequestWhiteboardSharingRes::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+
+				return hr;
+
+			}; // Result RequestWhiteboardSharingRes::ParseMessage(const MessageHeader* pHeader)
+
+			Result RequestWhiteboardSharingRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				RequestWhiteboardSharingRes parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+
+				return hr;
+
+			}; // Result RequestWhiteboardSharingRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result RequestWhiteboardSharingRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) RequestWhiteboardSharingRes(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result RequestWhiteboardSharingRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t RequestWhiteboardSharingRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				return __uiMessageSize;
+			}; // size_t RequestWhiteboardSharingRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult )
+
+
+			Result RequestWhiteboardSharingRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				messageBuffer->msgID = RequestWhiteboardSharingRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+
+				return hr;
+			}; // Result RequestWhiteboardSharingRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult )
+
+			Result RequestWhiteboardSharingRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				RequestWhiteboardSharingRes parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::RequestWhiteboardSharing, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
+				return ResultCode::SUCCESS;
+			}; // Result RequestWhiteboardSharingRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// Cmd: Accept WhiteboardSharing
+			const MessageID AcceptWhiteboardSharingCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 15);
+			Result AcceptWhiteboardSharingCmd::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(*input >> m_RequestedPlayerID);
+				protocolCheck(*input >> m_Answer);
+
+				return hr;
+
+			}; // Result AcceptWhiteboardSharingCmd::ParseMessage(const MessageHeader* pHeader)
+
+			Result AcceptWhiteboardSharingCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				AcceptWhiteboardSharingCmd parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariable("RequestedPlayerID", parser.GetRequestedPlayerID());
+				variableBuilder.SetVariable("Answer", parser.GetAnswer());
+
+				return hr;
+
+			}; // Result AcceptWhiteboardSharingCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result AcceptWhiteboardSharingCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) AcceptWhiteboardSharingCmd(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result AcceptWhiteboardSharingCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t AcceptWhiteboardSharingCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID, const uint8_t &InAnswer )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InRequestedPlayerID)
+					+ SerializedSizeOf(InAnswer)
+				);
+
+				return __uiMessageSize;
+			}; // size_t AcceptWhiteboardSharingCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID, const uint8_t &InAnswer )
+
+
+			Result AcceptWhiteboardSharingCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID, const uint8_t &InAnswer )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InRequestedPlayerID)
+					+ SerializedSizeOf(InAnswer)
+				);
+
+				messageBuffer->msgID = AcceptWhiteboardSharingCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InRequestedPlayerID);
+				protocolCheck(*output << InAnswer);
+
+				return hr;
+			}; // Result AcceptWhiteboardSharingCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID, const uint8_t &InAnswer )
+
+			Result AcceptWhiteboardSharingCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				AcceptWhiteboardSharingCmd parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::AcceptWhiteboardSharing, {0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, RequestedPlayerID:{5}, Answer:{6}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetRequestedPlayerID(), parser.GetAnswer()); 
+				return ResultCode::SUCCESS;
+			}; // Result AcceptWhiteboardSharingCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			const MessageID AcceptWhiteboardSharingRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 15);
+			Result AcceptWhiteboardSharingRes::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+
+				return hr;
+
+			}; // Result AcceptWhiteboardSharingRes::ParseMessage(const MessageHeader* pHeader)
+
+			Result AcceptWhiteboardSharingRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				AcceptWhiteboardSharingRes parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+
+				return hr;
+
+			}; // Result AcceptWhiteboardSharingRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result AcceptWhiteboardSharingRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) AcceptWhiteboardSharingRes(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result AcceptWhiteboardSharingRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t AcceptWhiteboardSharingRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				return __uiMessageSize;
+			}; // size_t AcceptWhiteboardSharingRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult )
+
+
+			Result AcceptWhiteboardSharingRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				messageBuffer->msgID = AcceptWhiteboardSharingRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+
+				return hr;
+			}; // Result AcceptWhiteboardSharingRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult )
+
+			Result AcceptWhiteboardSharingRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				AcceptWhiteboardSharingRes parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::AcceptWhiteboardSharing, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
+				return ResultCode::SUCCESS;
+			}; // Result AcceptWhiteboardSharingRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// Cmd: Close WhiteboardSharing. Both clients will receive WhiteboardSharingHasClosed
+			const MessageID CloseWhiteboardSharingCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 16);
+			Result CloseWhiteboardSharingCmd::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+
+				return hr;
+
+			}; // Result CloseWhiteboardSharingCmd::ParseMessage(const MessageHeader* pHeader)
+
+			Result CloseWhiteboardSharingCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				CloseWhiteboardSharingCmd parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+
+				return hr;
+
+			}; // Result CloseWhiteboardSharingCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result CloseWhiteboardSharingCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) CloseWhiteboardSharingCmd(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result CloseWhiteboardSharingCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t CloseWhiteboardSharingCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+				);
+
+				return __uiMessageSize;
+			}; // size_t CloseWhiteboardSharingCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID )
+
+
+			Result CloseWhiteboardSharingCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+				);
+
+				messageBuffer->msgID = CloseWhiteboardSharingCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+
+				return hr;
+			}; // Result CloseWhiteboardSharingCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID )
+
+			Result CloseWhiteboardSharingCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				CloseWhiteboardSharingCmd parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::CloseWhiteboardSharing, {0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID()); 
+				return ResultCode::SUCCESS;
+			}; // Result CloseWhiteboardSharingCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			const MessageID CloseWhiteboardSharingRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 16);
+			Result CloseWhiteboardSharingRes::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+
+				return hr;
+
+			}; // Result CloseWhiteboardSharingRes::ParseMessage(const MessageHeader* pHeader)
+
+			Result CloseWhiteboardSharingRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				CloseWhiteboardSharingRes parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+
+				return hr;
+
+			}; // Result CloseWhiteboardSharingRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result CloseWhiteboardSharingRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) CloseWhiteboardSharingRes(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result CloseWhiteboardSharingRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t CloseWhiteboardSharingRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				return __uiMessageSize;
+			}; // size_t CloseWhiteboardSharingRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult )
+
+
+			Result CloseWhiteboardSharingRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				messageBuffer->msgID = CloseWhiteboardSharingRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+
+				return hr;
+			}; // Result CloseWhiteboardSharingRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult )
+
+			Result CloseWhiteboardSharingRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				CloseWhiteboardSharingRes parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::CloseWhiteboardSharing, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
+				return ResultCode::SUCCESS;
+			}; // Result CloseWhiteboardSharingRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+			const MessageID AddWhiteboardSharingLogEntryCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 17);
+			const VariableTable& AddWhiteboardSharingLogEntryCmd::GetLogEntry() const
+			{
+ 				if (!m_LogEntryHasParsed)
+				{
+ 					m_LogEntryHasParsed = true;
+					InputMemoryStream LogEntry_ReadStream(m_LogEntryRaw);
+					*LogEntry_ReadStream.ToInputStream() >> m_LogEntry;
+				} // if (!m_LogEntryHasParsed)
+				return m_LogEntry;
+			} // const VariableTable& AddWhiteboardSharingLogEntryCmd::GetLogEntry() const
+			Result AddWhiteboardSharingLogEntryCmd::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* LogEntryPtr = nullptr;
+				protocolCheck(input->ReadLink(LogEntryPtr, ArrayLen));
+				m_LogEntryRaw.SetLinkedBuffer(ArrayLen, LogEntryPtr);
+
+				return hr;
+
+			}; // Result AddWhiteboardSharingLogEntryCmd::ParseMessage(const MessageHeader* pHeader)
+
+			Result AddWhiteboardSharingLogEntryCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				AddWhiteboardSharingLogEntryCmd parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariableArray("LogEntry", "VariableTable", parser.GetLogEntryRaw());
+
+				return hr;
+
+			}; // Result AddWhiteboardSharingLogEntryCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result AddWhiteboardSharingLogEntryCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) AddWhiteboardSharingLogEntryCmd(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result AddWhiteboardSharingLogEntryCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+			size_t AddWhiteboardSharingLogEntryCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry )
+			{
+ 				uint16_t serializedSizeOfInLogEntry = static_cast<uint16_t>(SerializedSizeOf(InLogEntry)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ serializedSizeOfInLogEntry
+				);
+
+				return __uiMessageSize;
+			}; // size_t AddWhiteboardSharingLogEntryCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry )
+
+			size_t AddWhiteboardSharingLogEntryCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+			{
+ 				uint16_t serializedSizeOfInLogEntry = static_cast<uint16_t>(SerializedSizeOf(InLogEntry)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInLogEntry
+				);
+
+				return __uiMessageSize;
+			}; // size_t AddWhiteboardSharingLogEntryCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+
+			Result AddWhiteboardSharingLogEntryCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry )
+			{
+ 				Result hr;
+
+				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InLogEntry);
+
+				messageBuffer->msgID = AddWhiteboardSharingLogEntryCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InLogEntry);
+
+				return hr;
+			}; // Result AddWhiteboardSharingLogEntryCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry )
+
+			Result AddWhiteboardSharingLogEntryCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+			{
+ 				Result hr;
+
+				uint16_t serializedSizeOfInLogEntry = static_cast<uint16_t>(SerializedSizeOf(InLogEntry)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInLogEntry
+				);
+
+				messageBuffer->msgID = AddWhiteboardSharingLogEntryCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(output->Write(serializedSizeOfInLogEntry));
+				protocolCheck(*output << InLogEntry);
+
+				return hr;
+			}; // Result AddWhiteboardSharingLogEntryCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+
+			Result AddWhiteboardSharingLogEntryCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				AddWhiteboardSharingLogEntryCmd parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::AddWhiteboardSharingLogEntry, {0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, LogEntry:{5}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetLogEntry()); 
+				return ResultCode::SUCCESS;
+			}; // Result AddWhiteboardSharingLogEntryCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			const MessageID AddWhiteboardSharingLogEntryRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 17);
+			Result AddWhiteboardSharingLogEntryRes::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+				protocolCheck(*input >> m_LogEntryID);
+
+				return hr;
+
+			}; // Result AddWhiteboardSharingLogEntryRes::ParseMessage(const MessageHeader* pHeader)
+
+			Result AddWhiteboardSharingLogEntryRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				AddWhiteboardSharingLogEntryRes parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+				variableBuilder.SetVariable("LogEntryID", "LogEntryID", parser.GetLogEntryID());
+
+				return hr;
+
+			}; // Result AddWhiteboardSharingLogEntryRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result AddWhiteboardSharingLogEntryRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) AddWhiteboardSharingLogEntryRes(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result AddWhiteboardSharingLogEntryRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t AddWhiteboardSharingLogEntryRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const LogEntryID &InLogEntryID )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InLogEntryID)
+				);
+
+				return __uiMessageSize;
+			}; // size_t AddWhiteboardSharingLogEntryRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const LogEntryID &InLogEntryID )
+
+
+			Result AddWhiteboardSharingLogEntryRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const LogEntryID &InLogEntryID )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InLogEntryID)
+				);
+
+				messageBuffer->msgID = AddWhiteboardSharingLogEntryRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(*output << InLogEntryID);
+
+				return hr;
+			}; // Result AddWhiteboardSharingLogEntryRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const LogEntryID &InLogEntryID )
+
+			Result AddWhiteboardSharingLogEntryRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				AddWhiteboardSharingLogEntryRes parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::AddWhiteboardSharingLogEntry, {0}:{1} , TransactionID:{2}, Result:{3:X8}, LogEntryID:{4}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetLogEntryID()); 
+				return ResultCode::SUCCESS;
+			}; // Result AddWhiteboardSharingLogEntryRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+			const MessageID UpdateWhiteboardSharingLogEntryCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 18);
+			const VariableTable& UpdateWhiteboardSharingLogEntryCmd::GetLogEntry() const
+			{
+ 				if (!m_LogEntryHasParsed)
+				{
+ 					m_LogEntryHasParsed = true;
+					InputMemoryStream LogEntry_ReadStream(m_LogEntryRaw);
+					*LogEntry_ReadStream.ToInputStream() >> m_LogEntry;
+				} // if (!m_LogEntryHasParsed)
+				return m_LogEntry;
+			} // const VariableTable& UpdateWhiteboardSharingLogEntryCmd::GetLogEntry() const
+			Result UpdateWhiteboardSharingLogEntryCmd::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* LogEntryPtr = nullptr;
+				protocolCheck(input->ReadLink(LogEntryPtr, ArrayLen));
+				m_LogEntryRaw.SetLinkedBuffer(ArrayLen, LogEntryPtr);
+
+				return hr;
+
+			}; // Result UpdateWhiteboardSharingLogEntryCmd::ParseMessage(const MessageHeader* pHeader)
+
+			Result UpdateWhiteboardSharingLogEntryCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				UpdateWhiteboardSharingLogEntryCmd parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariableArray("LogEntry", "VariableTable", parser.GetLogEntryRaw());
+
+				return hr;
+
+			}; // Result UpdateWhiteboardSharingLogEntryCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result UpdateWhiteboardSharingLogEntryCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) UpdateWhiteboardSharingLogEntryCmd(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result UpdateWhiteboardSharingLogEntryCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+			size_t UpdateWhiteboardSharingLogEntryCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry )
+			{
+ 				uint16_t serializedSizeOfInLogEntry = static_cast<uint16_t>(SerializedSizeOf(InLogEntry)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ serializedSizeOfInLogEntry
+				);
+
+				return __uiMessageSize;
+			}; // size_t UpdateWhiteboardSharingLogEntryCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry )
+
+			size_t UpdateWhiteboardSharingLogEntryCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+			{
+ 				uint16_t serializedSizeOfInLogEntry = static_cast<uint16_t>(SerializedSizeOf(InLogEntry)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInLogEntry
+				);
+
+				return __uiMessageSize;
+			}; // size_t UpdateWhiteboardSharingLogEntryCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+
+			Result UpdateWhiteboardSharingLogEntryCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry )
+			{
+ 				Result hr;
+
+				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InLogEntry);
+
+				messageBuffer->msgID = UpdateWhiteboardSharingLogEntryCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InLogEntry);
+
+				return hr;
+			}; // Result UpdateWhiteboardSharingLogEntryCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry )
+
+			Result UpdateWhiteboardSharingLogEntryCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+			{
+ 				Result hr;
+
+				uint16_t serializedSizeOfInLogEntry = static_cast<uint16_t>(SerializedSizeOf(InLogEntry)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInLogEntry
+				);
+
+				messageBuffer->msgID = UpdateWhiteboardSharingLogEntryCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(output->Write(serializedSizeOfInLogEntry));
+				protocolCheck(*output << InLogEntry);
+
+				return hr;
+			}; // Result UpdateWhiteboardSharingLogEntryCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+
+			Result UpdateWhiteboardSharingLogEntryCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				UpdateWhiteboardSharingLogEntryCmd parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::UpdateWhiteboardSharingLogEntry, {0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, LogEntry:{5}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetLogEntry()); 
+				return ResultCode::SUCCESS;
+			}; // Result UpdateWhiteboardSharingLogEntryCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			const MessageID UpdateWhiteboardSharingLogEntryRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 18);
+			Result UpdateWhiteboardSharingLogEntryRes::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+
+				return hr;
+
+			}; // Result UpdateWhiteboardSharingLogEntryRes::ParseMessage(const MessageHeader* pHeader)
+
+			Result UpdateWhiteboardSharingLogEntryRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				UpdateWhiteboardSharingLogEntryRes parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+
+				return hr;
+
+			}; // Result UpdateWhiteboardSharingLogEntryRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result UpdateWhiteboardSharingLogEntryRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) UpdateWhiteboardSharingLogEntryRes(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result UpdateWhiteboardSharingLogEntryRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t UpdateWhiteboardSharingLogEntryRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				return __uiMessageSize;
+			}; // size_t UpdateWhiteboardSharingLogEntryRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult )
+
+
+			Result UpdateWhiteboardSharingLogEntryRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				messageBuffer->msgID = UpdateWhiteboardSharingLogEntryRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+
+				return hr;
+			}; // Result UpdateWhiteboardSharingLogEntryRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult )
+
+			Result UpdateWhiteboardSharingLogEntryRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				UpdateWhiteboardSharingLogEntryRes parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::UpdateWhiteboardSharingLogEntry, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
+				return ResultCode::SUCCESS;
+			}; // Result UpdateWhiteboardSharingLogEntryRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// Cmd: Update whiteboard log entry
+			const MessageID RemoveWhiteboardSharingLogEntryCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 19);
+			Result RemoveWhiteboardSharingLogEntryCmd::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(*input >> m_LogEntryID);
+
+				return hr;
+
+			}; // Result RemoveWhiteboardSharingLogEntryCmd::ParseMessage(const MessageHeader* pHeader)
+
+			Result RemoveWhiteboardSharingLogEntryCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				RemoveWhiteboardSharingLogEntryCmd parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariable("LogEntryID", "LogEntryID", parser.GetLogEntryID());
+
+				return hr;
+
+			}; // Result RemoveWhiteboardSharingLogEntryCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result RemoveWhiteboardSharingLogEntryCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) RemoveWhiteboardSharingLogEntryCmd(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result RemoveWhiteboardSharingLogEntryCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t RemoveWhiteboardSharingLogEntryCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InLogEntryID)
+				);
+
+				return __uiMessageSize;
+			}; // size_t RemoveWhiteboardSharingLogEntryCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+
+
+			Result RemoveWhiteboardSharingLogEntryCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InLogEntryID)
+				);
+
+				messageBuffer->msgID = RemoveWhiteboardSharingLogEntryCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InLogEntryID);
+
+				return hr;
+			}; // Result RemoveWhiteboardSharingLogEntryCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+
+			Result RemoveWhiteboardSharingLogEntryCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				RemoveWhiteboardSharingLogEntryCmd parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::RemoveWhiteboardSharingLogEntry, {0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, LogEntryID:{5}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetLogEntryID()); 
+				return ResultCode::SUCCESS;
+			}; // Result RemoveWhiteboardSharingLogEntryCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			const MessageID RemoveWhiteboardSharingLogEntryRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 19);
+			Result RemoveWhiteboardSharingLogEntryRes::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+
+				return hr;
+
+			}; // Result RemoveWhiteboardSharingLogEntryRes::ParseMessage(const MessageHeader* pHeader)
+
+			Result RemoveWhiteboardSharingLogEntryRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				RemoveWhiteboardSharingLogEntryRes parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+
+				return hr;
+
+			}; // Result RemoveWhiteboardSharingLogEntryRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result RemoveWhiteboardSharingLogEntryRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) RemoveWhiteboardSharingLogEntryRes(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result RemoveWhiteboardSharingLogEntryRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t RemoveWhiteboardSharingLogEntryRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				return __uiMessageSize;
+			}; // size_t RemoveWhiteboardSharingLogEntryRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult )
+
+
+			Result RemoveWhiteboardSharingLogEntryRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				messageBuffer->msgID = RemoveWhiteboardSharingLogEntryRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+
+				return hr;
+			}; // Result RemoveWhiteboardSharingLogEntryRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult )
+
+			Result RemoveWhiteboardSharingLogEntryRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				RemoveWhiteboardSharingLogEntryRes parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::RemoveWhiteboardSharingLogEntry, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
+				return ResultCode::SUCCESS;
+			}; // Result RemoveWhiteboardSharingLogEntryRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// S2C: WhiteboardSharing has been requested
+			const MessageID WhiteboardSharingRequestedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 20);
+			Result WhiteboardSharingRequestedS2CEvt::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(*input >> m_RequestedPlayerID);
+
+				return hr;
+
+			}; // Result WhiteboardSharingRequestedS2CEvt::ParseMessage(const MessageHeader* pHeader)
+
+			Result WhiteboardSharingRequestedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				WhiteboardSharingRequestedS2CEvt parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariable("RequestedPlayerID", parser.GetRequestedPlayerID());
+
+				return hr;
+
+			}; // Result WhiteboardSharingRequestedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result WhiteboardSharingRequestedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) WhiteboardSharingRequestedS2CEvt(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result WhiteboardSharingRequestedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t WhiteboardSharingRequestedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InRequestedPlayerID)
+				);
+
+				return __uiMessageSize;
+			}; // size_t WhiteboardSharingRequestedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID )
+
+
+			Result WhiteboardSharingRequestedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InRequestedPlayerID)
+				);
+
+				messageBuffer->msgID = WhiteboardSharingRequestedS2CEvt::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InRequestedPlayerID);
+
+				return hr;
+			}; // Result WhiteboardSharingRequestedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID )
+
+			Result WhiteboardSharingRequestedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				WhiteboardSharingRequestedS2CEvt parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::WhiteboardSharingRequested, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, RequestedPlayerID:{4}",
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetRequestedPlayerID()); 
+				return ResultCode::SUCCESS;
+			}; // Result WhiteboardSharingRequestedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// S2C: WhiteboardSharing has been requested
+			const MessageID WhiteboardSharingRejectedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 21);
+			Result WhiteboardSharingRejectedS2CEvt::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(*input >> m_RejectedPlayerID);
+
+				return hr;
+
+			}; // Result WhiteboardSharingRejectedS2CEvt::ParseMessage(const MessageHeader* pHeader)
+
+			Result WhiteboardSharingRejectedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				WhiteboardSharingRejectedS2CEvt parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariable("RejectedPlayerID", parser.GetRejectedPlayerID());
+
+				return hr;
+
+			}; // Result WhiteboardSharingRejectedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result WhiteboardSharingRejectedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) WhiteboardSharingRejectedS2CEvt(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result WhiteboardSharingRejectedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t WhiteboardSharingRejectedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRejectedPlayerID )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InRejectedPlayerID)
+				);
+
+				return __uiMessageSize;
+			}; // size_t WhiteboardSharingRejectedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRejectedPlayerID )
+
+
+			Result WhiteboardSharingRejectedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRejectedPlayerID )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InRejectedPlayerID)
+				);
+
+				messageBuffer->msgID = WhiteboardSharingRejectedS2CEvt::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InRejectedPlayerID);
+
+				return hr;
+			}; // Result WhiteboardSharingRejectedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRejectedPlayerID )
+
+			Result WhiteboardSharingRejectedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				WhiteboardSharingRejectedS2CEvt parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::WhiteboardSharingRejected, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, RejectedPlayerID:{4}",
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetRejectedPlayerID()); 
+				return ResultCode::SUCCESS;
+			}; // Result WhiteboardSharingRejectedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// S2C: WhiteboardSharing has been started
+			const MessageID WhiteboardSharingStartedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 22);
+			const VariableTable& WhiteboardSharingStartedS2CEvt::GetWhiteboardInfo() const
+			{
+ 				if (!m_WhiteboardInfoHasParsed)
+				{
+ 					m_WhiteboardInfoHasParsed = true;
+					InputMemoryStream WhiteboardInfo_ReadStream(m_WhiteboardInfoRaw);
+					*WhiteboardInfo_ReadStream.ToInputStream() >> m_WhiteboardInfo;
+				} // if (!m_WhiteboardInfoHasParsed)
+				return m_WhiteboardInfo;
+			} // const VariableTable& WhiteboardSharingStartedS2CEvt::GetWhiteboardInfo() const
+			Result WhiteboardSharingStartedS2CEvt::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(*input >> m_OtherPlayerID);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* WhiteboardInfoPtr = nullptr;
+				protocolCheck(input->ReadLink(WhiteboardInfoPtr, ArrayLen));
+				m_WhiteboardInfoRaw.SetLinkedBuffer(ArrayLen, WhiteboardInfoPtr);
+
+				return hr;
+
+			}; // Result WhiteboardSharingStartedS2CEvt::ParseMessage(const MessageHeader* pHeader)
+
+			Result WhiteboardSharingStartedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				WhiteboardSharingStartedS2CEvt parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariable("OtherPlayerID", parser.GetOtherPlayerID());
+				variableBuilder.SetVariableArray("WhiteboardInfo", "VariableTable", parser.GetWhiteboardInfoRaw());
+
+				return hr;
+
+			}; // Result WhiteboardSharingStartedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result WhiteboardSharingStartedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) WhiteboardSharingStartedS2CEvt(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result WhiteboardSharingStartedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+			size_t WhiteboardSharingStartedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InOtherPlayerID, const Array<uint8_t>& InWhiteboardInfo )
+			{
+ 				uint16_t serializedSizeOfInWhiteboardInfo = static_cast<uint16_t>(SerializedSizeOf(InWhiteboardInfo)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InOtherPlayerID)
+					+ serializedSizeOfInWhiteboardInfo
+				);
+
+				return __uiMessageSize;
+			}; // size_t WhiteboardSharingStartedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InOtherPlayerID, const Array<uint8_t>& InWhiteboardInfo )
+
+			size_t WhiteboardSharingStartedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InOtherPlayerID, const VariableTable &InWhiteboardInfo )
+			{
+ 				uint16_t serializedSizeOfInWhiteboardInfo = static_cast<uint16_t>(SerializedSizeOf(InWhiteboardInfo)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InOtherPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInWhiteboardInfo
+				);
+
+				return __uiMessageSize;
+			}; // size_t WhiteboardSharingStartedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InOtherPlayerID, const VariableTable &InWhiteboardInfo )
+
+			Result WhiteboardSharingStartedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InOtherPlayerID, const Array<uint8_t>& InWhiteboardInfo )
+			{
+ 				Result hr;
+
+				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InPlayerID, InOtherPlayerID, InWhiteboardInfo);
+
+				messageBuffer->msgID = WhiteboardSharingStartedS2CEvt::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InOtherPlayerID);
+				protocolCheck(*output << InWhiteboardInfo);
+
+				return hr;
+			}; // Result WhiteboardSharingStartedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InOtherPlayerID, const Array<uint8_t>& InWhiteboardInfo )
+
+			Result WhiteboardSharingStartedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InOtherPlayerID, const VariableTable &InWhiteboardInfo )
+			{
+ 				Result hr;
+
+				uint16_t serializedSizeOfInWhiteboardInfo = static_cast<uint16_t>(SerializedSizeOf(InWhiteboardInfo)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InOtherPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInWhiteboardInfo
+				);
+
+				messageBuffer->msgID = WhiteboardSharingStartedS2CEvt::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InOtherPlayerID);
+				protocolCheck(output->Write(serializedSizeOfInWhiteboardInfo));
+				protocolCheck(*output << InWhiteboardInfo);
+
+				return hr;
+			}; // Result WhiteboardSharingStartedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InOtherPlayerID, const VariableTable &InWhiteboardInfo )
+
+			Result WhiteboardSharingStartedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				WhiteboardSharingStartedS2CEvt parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::WhiteboardSharingStarted, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, OtherPlayerID:{4}, WhiteboardInfo:{5}",
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetOtherPlayerID(), parser.GetWhiteboardInfo()); 
+				return ResultCode::SUCCESS;
+			}; // Result WhiteboardSharingStartedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// S2C: WhiteboardSharing has been closed
+			const MessageID WhiteboardSharingHasClosedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 23);
+			Result WhiteboardSharingHasClosedS2CEvt::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(*input >> m_ClosedPlayerID);
+
+				return hr;
+
+			}; // Result WhiteboardSharingHasClosedS2CEvt::ParseMessage(const MessageHeader* pHeader)
+
+			Result WhiteboardSharingHasClosedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				WhiteboardSharingHasClosedS2CEvt parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariable("ClosedPlayerID", parser.GetClosedPlayerID());
+
+				return hr;
+
+			}; // Result WhiteboardSharingHasClosedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result WhiteboardSharingHasClosedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) WhiteboardSharingHasClosedS2CEvt(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result WhiteboardSharingHasClosedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t WhiteboardSharingHasClosedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InClosedPlayerID )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InClosedPlayerID)
+				);
+
+				return __uiMessageSize;
+			}; // size_t WhiteboardSharingHasClosedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InClosedPlayerID )
+
+
+			Result WhiteboardSharingHasClosedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InClosedPlayerID )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InClosedPlayerID)
+				);
+
+				messageBuffer->msgID = WhiteboardSharingHasClosedS2CEvt::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InClosedPlayerID);
+
+				return hr;
+			}; // Result WhiteboardSharingHasClosedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InClosedPlayerID )
+
+			Result WhiteboardSharingHasClosedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				WhiteboardSharingHasClosedS2CEvt parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::WhiteboardSharingHasClosed, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, ClosedPlayerID:{4}",
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetClosedPlayerID()); 
+				return ResultCode::SUCCESS;
+			}; // Result WhiteboardSharingHasClosedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// S2C: WhiteboardSharing new log entry has been added
+			const MessageID WhiteboardSharingNewLogEntryAddedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 24);
+			const VariableTable& WhiteboardSharingNewLogEntryAddedS2CEvt::GetLogEntry() const
+			{
+ 				if (!m_LogEntryHasParsed)
+				{
+ 					m_LogEntryHasParsed = true;
+					InputMemoryStream LogEntry_ReadStream(m_LogEntryRaw);
+					*LogEntry_ReadStream.ToInputStream() >> m_LogEntry;
+				} // if (!m_LogEntryHasParsed)
+				return m_LogEntry;
+			} // const VariableTable& WhiteboardSharingNewLogEntryAddedS2CEvt::GetLogEntry() const
+			Result WhiteboardSharingNewLogEntryAddedS2CEvt::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* LogEntryPtr = nullptr;
+				protocolCheck(input->ReadLink(LogEntryPtr, ArrayLen));
+				m_LogEntryRaw.SetLinkedBuffer(ArrayLen, LogEntryPtr);
+
+				return hr;
+
+			}; // Result WhiteboardSharingNewLogEntryAddedS2CEvt::ParseMessage(const MessageHeader* pHeader)
+
+			Result WhiteboardSharingNewLogEntryAddedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				WhiteboardSharingNewLogEntryAddedS2CEvt parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariableArray("LogEntry", "VariableTable", parser.GetLogEntryRaw());
+
+				return hr;
+
+			}; // Result WhiteboardSharingNewLogEntryAddedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result WhiteboardSharingNewLogEntryAddedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) WhiteboardSharingNewLogEntryAddedS2CEvt(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result WhiteboardSharingNewLogEntryAddedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+			size_t WhiteboardSharingNewLogEntryAddedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry )
+			{
+ 				uint16_t serializedSizeOfInLogEntry = static_cast<uint16_t>(SerializedSizeOf(InLogEntry)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ serializedSizeOfInLogEntry
+				);
+
+				return __uiMessageSize;
+			}; // size_t WhiteboardSharingNewLogEntryAddedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry )
+
+			size_t WhiteboardSharingNewLogEntryAddedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+			{
+ 				uint16_t serializedSizeOfInLogEntry = static_cast<uint16_t>(SerializedSizeOf(InLogEntry)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInLogEntry
+				);
+
+				return __uiMessageSize;
+			}; // size_t WhiteboardSharingNewLogEntryAddedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+
+			Result WhiteboardSharingNewLogEntryAddedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry )
+			{
+ 				Result hr;
+
+				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InPlayerID, InLogEntry);
+
+				messageBuffer->msgID = WhiteboardSharingNewLogEntryAddedS2CEvt::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InLogEntry);
+
+				return hr;
+			}; // Result WhiteboardSharingNewLogEntryAddedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry )
+
+			Result WhiteboardSharingNewLogEntryAddedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+			{
+ 				Result hr;
+
+				uint16_t serializedSizeOfInLogEntry = static_cast<uint16_t>(SerializedSizeOf(InLogEntry)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInLogEntry
+				);
+
+				messageBuffer->msgID = WhiteboardSharingNewLogEntryAddedS2CEvt::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(output->Write(serializedSizeOfInLogEntry));
+				protocolCheck(*output << InLogEntry);
+
+				return hr;
+			}; // Result WhiteboardSharingNewLogEntryAddedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+
+			Result WhiteboardSharingNewLogEntryAddedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				WhiteboardSharingNewLogEntryAddedS2CEvt parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::WhiteboardSharingNewLogEntryAdded, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, LogEntry:{4}",
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetLogEntry()); 
+				return ResultCode::SUCCESS;
+			}; // Result WhiteboardSharingNewLogEntryAddedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// S2C: WhiteboardSharing new log entry has been removed
+			const MessageID WhiteboardSharingNewLogEntryRemovedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 25);
+			Result WhiteboardSharingNewLogEntryRemovedS2CEvt::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(*input >> m_LogEntryID);
+
+				return hr;
+
+			}; // Result WhiteboardSharingNewLogEntryRemovedS2CEvt::ParseMessage(const MessageHeader* pHeader)
+
+			Result WhiteboardSharingNewLogEntryRemovedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				WhiteboardSharingNewLogEntryRemovedS2CEvt parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariable("LogEntryID", "LogEntryID", parser.GetLogEntryID());
+
+				return hr;
+
+			}; // Result WhiteboardSharingNewLogEntryRemovedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result WhiteboardSharingNewLogEntryRemovedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) WhiteboardSharingNewLogEntryRemovedS2CEvt(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result WhiteboardSharingNewLogEntryRemovedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t WhiteboardSharingNewLogEntryRemovedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InLogEntryID)
+				);
+
+				return __uiMessageSize;
+			}; // size_t WhiteboardSharingNewLogEntryRemovedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+
+
+			Result WhiteboardSharingNewLogEntryRemovedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InLogEntryID)
+				);
+
+				messageBuffer->msgID = WhiteboardSharingNewLogEntryRemovedS2CEvt::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InLogEntryID);
+
+				return hr;
+			}; // Result WhiteboardSharingNewLogEntryRemovedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+
+			Result WhiteboardSharingNewLogEntryRemovedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				WhiteboardSharingNewLogEntryRemovedS2CEvt parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::WhiteboardSharingNewLogEntryRemoved, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, LogEntryID:{4}",
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetLogEntryID()); 
+				return ResultCode::SUCCESS;
+			}; // Result WhiteboardSharingNewLogEntryRemovedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// S2C: WhiteboardSharing new log entry has been updated
+			const MessageID WhiteboardSharingNewLogEntryUpdatedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 26);
+			const VariableTable& WhiteboardSharingNewLogEntryUpdatedS2CEvt::GetLogEntry() const
+			{
+ 				if (!m_LogEntryHasParsed)
+				{
+ 					m_LogEntryHasParsed = true;
+					InputMemoryStream LogEntry_ReadStream(m_LogEntryRaw);
+					*LogEntry_ReadStream.ToInputStream() >> m_LogEntry;
+				} // if (!m_LogEntryHasParsed)
+				return m_LogEntry;
+			} // const VariableTable& WhiteboardSharingNewLogEntryUpdatedS2CEvt::GetLogEntry() const
+			Result WhiteboardSharingNewLogEntryUpdatedS2CEvt::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* LogEntryPtr = nullptr;
+				protocolCheck(input->ReadLink(LogEntryPtr, ArrayLen));
+				m_LogEntryRaw.SetLinkedBuffer(ArrayLen, LogEntryPtr);
+
+				return hr;
+
+			}; // Result WhiteboardSharingNewLogEntryUpdatedS2CEvt::ParseMessage(const MessageHeader* pHeader)
+
+			Result WhiteboardSharingNewLogEntryUpdatedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				WhiteboardSharingNewLogEntryUpdatedS2CEvt parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariableArray("LogEntry", "VariableTable", parser.GetLogEntryRaw());
+
+				return hr;
+
+			}; // Result WhiteboardSharingNewLogEntryUpdatedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result WhiteboardSharingNewLogEntryUpdatedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) WhiteboardSharingNewLogEntryUpdatedS2CEvt(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result WhiteboardSharingNewLogEntryUpdatedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+			size_t WhiteboardSharingNewLogEntryUpdatedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry )
+			{
+ 				uint16_t serializedSizeOfInLogEntry = static_cast<uint16_t>(SerializedSizeOf(InLogEntry)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ serializedSizeOfInLogEntry
+				);
+
+				return __uiMessageSize;
+			}; // size_t WhiteboardSharingNewLogEntryUpdatedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry )
+
+			size_t WhiteboardSharingNewLogEntryUpdatedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+			{
+ 				uint16_t serializedSizeOfInLogEntry = static_cast<uint16_t>(SerializedSizeOf(InLogEntry)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInLogEntry
+				);
+
+				return __uiMessageSize;
+			}; // size_t WhiteboardSharingNewLogEntryUpdatedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+
+			Result WhiteboardSharingNewLogEntryUpdatedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry )
+			{
+ 				Result hr;
+
+				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InPlayerID, InLogEntry);
+
+				messageBuffer->msgID = WhiteboardSharingNewLogEntryUpdatedS2CEvt::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InLogEntry);
+
+				return hr;
+			}; // Result WhiteboardSharingNewLogEntryUpdatedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry )
+
+			Result WhiteboardSharingNewLogEntryUpdatedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+			{
+ 				Result hr;
+
+				uint16_t serializedSizeOfInLogEntry = static_cast<uint16_t>(SerializedSizeOf(InLogEntry)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInLogEntry
+				);
+
+				messageBuffer->msgID = WhiteboardSharingNewLogEntryUpdatedS2CEvt::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(output->Write(serializedSizeOfInLogEntry));
+				protocolCheck(*output << InLogEntry);
+
+				return hr;
+			}; // Result WhiteboardSharingNewLogEntryUpdatedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+
+			Result WhiteboardSharingNewLogEntryUpdatedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				WhiteboardSharingNewLogEntryUpdatedS2CEvt parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::WhiteboardSharingNewLogEntryUpdated, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, LogEntry:{4}",
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetLogEntry()); 
+				return ResultCode::SUCCESS;
+			}; // Result WhiteboardSharingNewLogEntryUpdatedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
 			// Cmd: Occupy map object
-			const MessageID OccupyMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
+			const MessageID OccupyMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 27);
 			Result OccupyMapObjectCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -1682,7 +4370,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result OccupyMapObjectCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID OccupyMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
+			const MessageID OccupyMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 27);
 			Result OccupyMapObjectRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -1790,7 +4478,7 @@ namespace SF
 			}; // Result OccupyMapObjectRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Unoccupy map object
-			const MessageID UnoccupyMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 12);
+			const MessageID UnoccupyMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 28);
 			Result UnoccupyMapObjectCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -1892,7 +4580,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result UnoccupyMapObjectCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID UnoccupyMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 12);
+			const MessageID UnoccupyMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 28);
 			Result UnoccupyMapObjectRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -2000,7 +4688,7 @@ namespace SF
 			}; // Result UnoccupyMapObjectRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Use map object
-			const MessageID UseMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 13);
+			const MessageID UseMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 29);
 			const VariableTable& UseMapObjectCmd::GetUseParameters() const
 			{
  				if (!m_UseParametersHasParsed)
@@ -2162,7 +4850,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result UseMapObjectCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID UseMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 13);
+			const MessageID UseMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 29);
 			const VariableTable& UseMapObjectRes::GetResultAttributes() const
 			{
  				if (!m_ResultAttributesHasParsed)
@@ -2332,7 +5020,7 @@ namespace SF
 			}; // Result UseMapObjectRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Send zone chatting
-			const MessageID ZoneChatCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 14);
+			const MessageID ZoneChatCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 30);
 			const VariableTable& ZoneChatCmd::GetChatMetaData() const
 			{
  				if (!m_ChatMetaDataHasParsed)
@@ -2502,7 +5190,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result ZoneChatCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID ZoneChatRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 14);
+			const MessageID ZoneChatRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 30);
 			Result ZoneChatRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -2595,7 +5283,7 @@ namespace SF
 			}; // Result ZoneChatRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Player state change
-			const MessageID ZoneChatS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 15);
+			const MessageID ZoneChatS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 31);
 			const VariableTable& ZoneChatS2CEvt::GetChatMetaData() const
 			{
  				if (!m_ChatMetaDataHasParsed)
@@ -2759,7 +5447,7 @@ namespace SF
 			}; // Result ZoneChatS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Effect modifier initial sync
-			const MessageID LevelUpS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 16);
+			const MessageID LevelUpS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 32);
 			Result LevelUpS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -2861,789 +5549,8 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result LevelUpS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			// Cmd: Create stream instance
-			const MessageID CreateStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 17);
-			Result CreateStreamCmd::ParseMessage(const MessageHeader* pHeader)
-			{
- 				Result hr;
-
-
-				protocolCheckPtr(pHeader);
-
-				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
-				InputMemoryStream inputStream(bufferView);
-				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;(void)(ArrayLen);
-
-				protocolCheck(*input >> m_TransactionID);
-				protocolCheck(*input >> m_Ticket);
-				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
-
-				return hr;
-
-			}; // Result CreateStreamCmd::ParseMessage(const MessageHeader* pHeader)
-
-			Result CreateStreamCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-			{
- 				Result hr;
-
-
-				CreateStreamCmd parser;
-				protocolCheck(parser.ParseMessage(pHeader));
-
-				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
-				variableBuilder.SetVariable("Ticket", parser.GetTicket());
-				variableBuilder.SetVariable("StreamName", parser.GetStreamName());
-
-				return hr;
-
-			}; // Result CreateStreamCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-
-			Result CreateStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-			{
- 				Result hr;
-
-				protocolCheckMem(pMessageBase = new(memHeap) CreateStreamCmd(pHeader));
-				protocolCheck(pMessageBase->ParseMsg());
-
-				return hr;
-
-			}; // Result CreateStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-
-
-			size_t CreateStreamCmd::CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
-			{
- 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InTicket)
-					+ SerializedSizeOf(InStreamName)
-				);
-
-				return __uiMessageSize;
-			}; // size_t CreateStreamCmd::CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
-
-
-			Result CreateStreamCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
-			{
- 				Result hr;
-
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InTicket)
-					+ SerializedSizeOf(InStreamName)
-				);
-
-				messageBuffer->msgID = CreateStreamCmd::MID;
-				if (messageBuffer->Length < __uiMessageSize)
-					return ResultCode::UNEXPECTED;
-				else
-					messageBuffer->Length = __uiMessageSize;
-
-				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
-				OutputMemoryStream outputStream(payloadView);
-				IOutputStream* output = outputStream.ToOutputStream();
-
-				protocolCheck(*output << InTransactionID);
-				protocolCheck(*output << InTicket);
-				protocolCheck(*output << InStreamName);
-
-				return hr;
-			}; // Result CreateStreamCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
-
-			Result CreateStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
-			{
- 				CreateStreamCmd parser;
-				parser.ParseMessage(pHeader);
-				SFLog(Net, Debug1, "PlayInstance::CreateStream, {0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
-						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamName()); 
-				return ResultCode::SUCCESS;
-			}; // Result CreateStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
-
-			const MessageID CreateStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 17);
-			Result CreateStreamRes::ParseMessage(const MessageHeader* pHeader)
-			{
- 				Result hr;
-
-
-				protocolCheckPtr(pHeader);
-
-				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
-				InputMemoryStream inputStream(bufferView);
-				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;(void)(ArrayLen);
-
-				protocolCheck(*input >> m_TransactionID);
-				protocolCheck(*input >> m_Result);
-				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
-
-				return hr;
-
-			}; // Result CreateStreamRes::ParseMessage(const MessageHeader* pHeader)
-
-			Result CreateStreamRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-			{
- 				Result hr;
-
-
-				CreateStreamRes parser;
-				protocolCheck(parser.ParseMessage(pHeader));
-
-				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
-				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("StreamName", parser.GetStreamName());
-
-				return hr;
-
-			}; // Result CreateStreamRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-
-			Result CreateStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-			{
- 				Result hr;
-
-				protocolCheckMem(pMessageBase = new(memHeap) CreateStreamRes(pHeader));
-				protocolCheck(pMessageBase->ParseMsg());
-
-				return hr;
-
-			}; // Result CreateStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-
-
-			size_t CreateStreamRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
-			{
- 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InStreamName)
-				);
-
-				return __uiMessageSize;
-			}; // size_t CreateStreamRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
-
-
-			Result CreateStreamRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
-			{
- 				Result hr;
-
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InStreamName)
-				);
-
-				messageBuffer->msgID = CreateStreamRes::MID;
-				if (messageBuffer->Length < __uiMessageSize)
-					return ResultCode::UNEXPECTED;
-				else
-					messageBuffer->Length = __uiMessageSize;
-
-				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
-				OutputMemoryStream outputStream(payloadView);
-				IOutputStream* output = outputStream.ToOutputStream();
-
-				protocolCheck(*output << InTransactionID);
-				protocolCheck(*output << InResult);
-				protocolCheck(*output << InStreamName);
-
-				return hr;
-			}; // Result CreateStreamRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
-
-			Result CreateStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
-			{
- 				CreateStreamRes parser;
-				parser.ParseMessage(pHeader);
-				SFLog(Net, Debug1, "PlayInstance::CreateStream, {0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamName:{4,60}",
-						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamName()); 
-				return ResultCode::SUCCESS;
-			}; // Result CreateStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
-
-			// Cmd: Open stream instance
-			const MessageID FindStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 18);
-			Result FindStreamCmd::ParseMessage(const MessageHeader* pHeader)
-			{
- 				Result hr;
-
-
-				protocolCheckPtr(pHeader);
-
-				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
-				InputMemoryStream inputStream(bufferView);
-				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;(void)(ArrayLen);
-
-				protocolCheck(*input >> m_TransactionID);
-				protocolCheck(*input >> m_Ticket);
-				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
-
-				return hr;
-
-			}; // Result FindStreamCmd::ParseMessage(const MessageHeader* pHeader)
-
-			Result FindStreamCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-			{
- 				Result hr;
-
-
-				FindStreamCmd parser;
-				protocolCheck(parser.ParseMessage(pHeader));
-
-				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
-				variableBuilder.SetVariable("Ticket", parser.GetTicket());
-				variableBuilder.SetVariable("StreamName", parser.GetStreamName());
-
-				return hr;
-
-			}; // Result FindStreamCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-
-			Result FindStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-			{
- 				Result hr;
-
-				protocolCheckMem(pMessageBase = new(memHeap) FindStreamCmd(pHeader));
-				protocolCheck(pMessageBase->ParseMsg());
-
-				return hr;
-
-			}; // Result FindStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-
-
-			size_t FindStreamCmd::CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
-			{
- 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InTicket)
-					+ SerializedSizeOf(InStreamName)
-				);
-
-				return __uiMessageSize;
-			}; // size_t FindStreamCmd::CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
-
-
-			Result FindStreamCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
-			{
- 				Result hr;
-
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InTicket)
-					+ SerializedSizeOf(InStreamName)
-				);
-
-				messageBuffer->msgID = FindStreamCmd::MID;
-				if (messageBuffer->Length < __uiMessageSize)
-					return ResultCode::UNEXPECTED;
-				else
-					messageBuffer->Length = __uiMessageSize;
-
-				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
-				OutputMemoryStream outputStream(payloadView);
-				IOutputStream* output = outputStream.ToOutputStream();
-
-				protocolCheck(*output << InTransactionID);
-				protocolCheck(*output << InTicket);
-				protocolCheck(*output << InStreamName);
-
-				return hr;
-			}; // Result FindStreamCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
-
-			Result FindStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
-			{
- 				FindStreamCmd parser;
-				parser.ParseMessage(pHeader);
-				SFLog(Net, Debug1, "PlayInstance::FindStream, {0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
-						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamName()); 
-				return ResultCode::SUCCESS;
-			}; // Result FindStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
-
-			const MessageID FindStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 18);
-			Result FindStreamRes::ParseMessage(const MessageHeader* pHeader)
-			{
- 				Result hr;
-
-
-				protocolCheckPtr(pHeader);
-
-				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
-				InputMemoryStream inputStream(bufferView);
-				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;(void)(ArrayLen);
-
-				protocolCheck(*input >> m_TransactionID);
-				protocolCheck(*input >> m_Result);
-				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
-
-				return hr;
-
-			}; // Result FindStreamRes::ParseMessage(const MessageHeader* pHeader)
-
-			Result FindStreamRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-			{
- 				Result hr;
-
-
-				FindStreamRes parser;
-				protocolCheck(parser.ParseMessage(pHeader));
-
-				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
-				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("StreamName", parser.GetStreamName());
-
-				return hr;
-
-			}; // Result FindStreamRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-
-			Result FindStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-			{
- 				Result hr;
-
-				protocolCheckMem(pMessageBase = new(memHeap) FindStreamRes(pHeader));
-				protocolCheck(pMessageBase->ParseMsg());
-
-				return hr;
-
-			}; // Result FindStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-
-
-			size_t FindStreamRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
-			{
- 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InStreamName)
-				);
-
-				return __uiMessageSize;
-			}; // size_t FindStreamRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
-
-
-			Result FindStreamRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
-			{
- 				Result hr;
-
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InStreamName)
-				);
-
-				messageBuffer->msgID = FindStreamRes::MID;
-				if (messageBuffer->Length < __uiMessageSize)
-					return ResultCode::UNEXPECTED;
-				else
-					messageBuffer->Length = __uiMessageSize;
-
-				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
-				OutputMemoryStream outputStream(payloadView);
-				IOutputStream* output = outputStream.ToOutputStream();
-
-				protocolCheck(*output << InTransactionID);
-				protocolCheck(*output << InResult);
-				protocolCheck(*output << InStreamName);
-
-				return hr;
-			}; // Result FindStreamRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
-
-			Result FindStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
-			{
- 				FindStreamRes parser;
-				parser.ParseMessage(pHeader);
-				SFLog(Net, Debug1, "PlayInstance::FindStream, {0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamName:{4,60}",
-						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamName()); 
-				return ResultCode::SUCCESS;
-			}; // Result FindStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
-
-			// Cmd: Delete stream instance
-			const MessageID DeleteStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 19);
-			Result DeleteStreamCmd::ParseMessage(const MessageHeader* pHeader)
-			{
- 				Result hr;
-
-
-				protocolCheckPtr(pHeader);
-
-				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
-				InputMemoryStream inputStream(bufferView);
-				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;(void)(ArrayLen);
-
-				protocolCheck(*input >> m_TransactionID);
-				protocolCheck(*input >> m_Ticket);
-				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
-
-				return hr;
-
-			}; // Result DeleteStreamCmd::ParseMessage(const MessageHeader* pHeader)
-
-			Result DeleteStreamCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-			{
- 				Result hr;
-
-
-				DeleteStreamCmd parser;
-				protocolCheck(parser.ParseMessage(pHeader));
-
-				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
-				variableBuilder.SetVariable("Ticket", parser.GetTicket());
-				variableBuilder.SetVariable("StreamName", parser.GetStreamName());
-
-				return hr;
-
-			}; // Result DeleteStreamCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-
-			Result DeleteStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-			{
- 				Result hr;
-
-				protocolCheckMem(pMessageBase = new(memHeap) DeleteStreamCmd(pHeader));
-				protocolCheck(pMessageBase->ParseMsg());
-
-				return hr;
-
-			}; // Result DeleteStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-
-
-			size_t DeleteStreamCmd::CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
-			{
- 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InTicket)
-					+ SerializedSizeOf(InStreamName)
-				);
-
-				return __uiMessageSize;
-			}; // size_t DeleteStreamCmd::CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
-
-
-			Result DeleteStreamCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
-			{
- 				Result hr;
-
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InTicket)
-					+ SerializedSizeOf(InStreamName)
-				);
-
-				messageBuffer->msgID = DeleteStreamCmd::MID;
-				if (messageBuffer->Length < __uiMessageSize)
-					return ResultCode::UNEXPECTED;
-				else
-					messageBuffer->Length = __uiMessageSize;
-
-				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
-				OutputMemoryStream outputStream(payloadView);
-				IOutputStream* output = outputStream.ToOutputStream();
-
-				protocolCheck(*output << InTransactionID);
-				protocolCheck(*output << InTicket);
-				protocolCheck(*output << InStreamName);
-
-				return hr;
-			}; // Result DeleteStreamCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
-
-			Result DeleteStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
-			{
- 				DeleteStreamCmd parser;
-				parser.ParseMessage(pHeader);
-				SFLog(Net, Debug1, "PlayInstance::DeleteStream, {0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
-						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamName()); 
-				return ResultCode::SUCCESS;
-			}; // Result DeleteStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
-
-			const MessageID DeleteStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 19);
-			Result DeleteStreamRes::ParseMessage(const MessageHeader* pHeader)
-			{
- 				Result hr;
-
-
-				protocolCheckPtr(pHeader);
-
-				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
-				InputMemoryStream inputStream(bufferView);
-				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;(void)(ArrayLen);
-
-				protocolCheck(*input >> m_TransactionID);
-				protocolCheck(*input >> m_Result);
-				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
-
-				return hr;
-
-			}; // Result DeleteStreamRes::ParseMessage(const MessageHeader* pHeader)
-
-			Result DeleteStreamRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-			{
- 				Result hr;
-
-
-				DeleteStreamRes parser;
-				protocolCheck(parser.ParseMessage(pHeader));
-
-				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
-				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("StreamName", parser.GetStreamName());
-
-				return hr;
-
-			}; // Result DeleteStreamRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-
-			Result DeleteStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-			{
- 				Result hr;
-
-				protocolCheckMem(pMessageBase = new(memHeap) DeleteStreamRes(pHeader));
-				protocolCheck(pMessageBase->ParseMsg());
-
-				return hr;
-
-			}; // Result DeleteStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-
-
-			size_t DeleteStreamRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
-			{
- 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InStreamName)
-				);
-
-				return __uiMessageSize;
-			}; // size_t DeleteStreamRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
-
-
-			Result DeleteStreamRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
-			{
- 				Result hr;
-
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InStreamName)
-				);
-
-				messageBuffer->msgID = DeleteStreamRes::MID;
-				if (messageBuffer->Length < __uiMessageSize)
-					return ResultCode::UNEXPECTED;
-				else
-					messageBuffer->Length = __uiMessageSize;
-
-				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
-				OutputMemoryStream outputStream(payloadView);
-				IOutputStream* output = outputStream.ToOutputStream();
-
-				protocolCheck(*output << InTransactionID);
-				protocolCheck(*output << InResult);
-				protocolCheck(*output << InStreamName);
-
-				return hr;
-			}; // Result DeleteStreamRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
-
-			Result DeleteStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
-			{
- 				DeleteStreamRes parser;
-				parser.ParseMessage(pHeader);
-				SFLog(Net, Debug1, "PlayInstance::DeleteStream, {0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamName:{4,60}",
-						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamName()); 
-				return ResultCode::SUCCESS;
-			}; // Result DeleteStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
-
-			// Cmd: Get stream list
-			const MessageID GetStreamListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 20);
-			Result GetStreamListCmd::ParseMessage(const MessageHeader* pHeader)
-			{
- 				Result hr;
-
-
-				protocolCheckPtr(pHeader);
-
-				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
-				InputMemoryStream inputStream(bufferView);
-				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;(void)(ArrayLen);
-
-				protocolCheck(*input >> m_TransactionID);
-				protocolCheck(*input >> m_Ticket);
-
-				return hr;
-
-			}; // Result GetStreamListCmd::ParseMessage(const MessageHeader* pHeader)
-
-			Result GetStreamListCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-			{
- 				Result hr;
-
-
-				GetStreamListCmd parser;
-				protocolCheck(parser.ParseMessage(pHeader));
-
-				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
-				variableBuilder.SetVariable("Ticket", parser.GetTicket());
-
-				return hr;
-
-			}; // Result GetStreamListCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-
-			Result GetStreamListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-			{
- 				Result hr;
-
-				protocolCheckMem(pMessageBase = new(memHeap) GetStreamListCmd(pHeader));
-				protocolCheck(pMessageBase->ParseMsg());
-
-				return hr;
-
-			}; // Result GetStreamListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-
-
-			size_t GetStreamListCmd::CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket )
-			{
- 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InTicket)
-				);
-
-				return __uiMessageSize;
-			}; // size_t GetStreamListCmd::CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket )
-
-
-			Result GetStreamListCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket )
-			{
- 				Result hr;
-
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InTicket)
-				);
-
-				messageBuffer->msgID = GetStreamListCmd::MID;
-				if (messageBuffer->Length < __uiMessageSize)
-					return ResultCode::UNEXPECTED;
-				else
-					messageBuffer->Length = __uiMessageSize;
-
-				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
-				OutputMemoryStream outputStream(payloadView);
-				IOutputStream* output = outputStream.ToOutputStream();
-
-				protocolCheck(*output << InTransactionID);
-				protocolCheck(*output << InTicket);
-
-				return hr;
-			}; // Result GetStreamListCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket )
-
-			Result GetStreamListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
-			{
- 				GetStreamListCmd parser;
-				parser.ParseMessage(pHeader);
-				SFLog(Net, Debug1, "PlayInstance::GetStreamList, {0}:{1} , TransactionID:{2}, Ticket:{3}",
-						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetTicket()); 
-				return ResultCode::SUCCESS;
-			}; // Result GetStreamListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
-
-			const MessageID GetStreamListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 20);
-			Result GetStreamListRes::ParseMessage(const MessageHeader* pHeader)
-			{
- 				Result hr;
-
-
-				protocolCheckPtr(pHeader);
-
-				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
-				InputMemoryStream inputStream(bufferView);
-				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;(void)(ArrayLen);
-
-				protocolCheck(*input >> m_TransactionID);
-				protocolCheck(*input >> m_Result);
-				protocolCheck(input->ReadArrayLink(m_StreamNames));
-
-				return hr;
-
-			}; // Result GetStreamListRes::ParseMessage(const MessageHeader* pHeader)
-
-			Result GetStreamListRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-			{
- 				Result hr;
-
-
-				GetStreamListRes parser;
-				protocolCheck(parser.ParseMessage(pHeader));
-
-				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
-				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("StreamNames", parser.GetStreamNames());
-
-				return hr;
-
-			}; // Result GetStreamListRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-
-			Result GetStreamListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-			{
- 				Result hr;
-
-				protocolCheckMem(pMessageBase = new(memHeap) GetStreamListRes(pHeader));
-				protocolCheck(pMessageBase->ParseMsg());
-
-				return hr;
-
-			}; // Result GetStreamListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-
-
-			size_t GetStreamListRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
-			{
- 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InStreamNames)
-				);
-
-				return __uiMessageSize;
-			}; // size_t GetStreamListRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
-
-
-			Result GetStreamListRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
-			{
- 				Result hr;
-
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InStreamNames)
-				);
-
-				messageBuffer->msgID = GetStreamListRes::MID;
-				if (messageBuffer->Length < __uiMessageSize)
-					return ResultCode::UNEXPECTED;
-				else
-					messageBuffer->Length = __uiMessageSize;
-
-				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
-				OutputMemoryStream outputStream(payloadView);
-				IOutputStream* output = outputStream.ToOutputStream();
-
-				protocolCheck(*output << InTransactionID);
-				protocolCheck(*output << InResult);
-				protocolCheck(*output << InStreamNames);
-
-				return hr;
-			}; // Result GetStreamListRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
-
-			Result GetStreamListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
-			{
- 				GetStreamListRes parser;
-				parser.ParseMessage(pHeader);
-				SFLog(Net, Debug1, "PlayInstance::GetStreamList, {0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamNames:{4,60}",
-						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamNames()); 
-				return ResultCode::SUCCESS;
-			}; // Result GetStreamListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
-
 			// Cmd: To call general functionality
-			const MessageID CallFunctionCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 21);
+			const MessageID CallFunctionCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 33);
 			const VariableTable& CallFunctionCmd::GetParameters() const
 			{
  				if (!m_ParametersHasParsed)
@@ -3798,7 +5705,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CallFunctionCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID CallFunctionRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 21);
+			const MessageID CallFunctionRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 33);
 			const VariableTable& CallFunctionRes::GetResults() const
 			{
  				if (!m_ResultsHasParsed)
@@ -3947,7 +5854,7 @@ namespace SF
 			}; // Result CallFunctionRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// C2S: Send coded voice data to server
-			const MessageID SendVoiceDataC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 22);
+			const MessageID SendVoiceDataC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 34);
 			Result SendVoiceDataC2SEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -4053,7 +5960,7 @@ namespace SF
 			}; // Result SendVoiceDataC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Voice data
-			const MessageID VoiceDataS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 23);
+			const MessageID VoiceDataS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 35);
 			Result VoiceDataS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -4152,6 +6059,787 @@ namespace SF
 						prefix, pHeader->Length, parser.GetActorID(), parser.GetFrameIndex(), parser.GetVoiceData()); 
 				return ResultCode::SUCCESS;
 			}; // Result VoiceDataS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// Cmd: Create stream instance
+			const MessageID CreateStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 36);
+			Result CreateStreamCmd::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Ticket);
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
+
+				return hr;
+
+			}; // Result CreateStreamCmd::ParseMessage(const MessageHeader* pHeader)
+
+			Result CreateStreamCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				CreateStreamCmd parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Ticket", parser.GetTicket());
+				variableBuilder.SetVariable("StreamName", parser.GetStreamName());
+
+				return hr;
+
+			}; // Result CreateStreamCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result CreateStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) CreateStreamCmd(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result CreateStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t CreateStreamCmd::CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InStreamName)
+				);
+
+				return __uiMessageSize;
+			}; // size_t CreateStreamCmd::CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+
+
+			Result CreateStreamCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InStreamName)
+				);
+
+				messageBuffer->msgID = CreateStreamCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InTicket);
+				protocolCheck(*output << InStreamName);
+
+				return hr;
+			}; // Result CreateStreamCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+
+			Result CreateStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				CreateStreamCmd parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::CreateStream, {0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamName()); 
+				return ResultCode::SUCCESS;
+			}; // Result CreateStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			const MessageID CreateStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 36);
+			Result CreateStreamRes::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
+
+				return hr;
+
+			}; // Result CreateStreamRes::ParseMessage(const MessageHeader* pHeader)
+
+			Result CreateStreamRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				CreateStreamRes parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+				variableBuilder.SetVariable("StreamName", parser.GetStreamName());
+
+				return hr;
+
+			}; // Result CreateStreamRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result CreateStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) CreateStreamRes(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result CreateStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t CreateStreamRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InStreamName)
+				);
+
+				return __uiMessageSize;
+			}; // size_t CreateStreamRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
+
+
+			Result CreateStreamRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InStreamName)
+				);
+
+				messageBuffer->msgID = CreateStreamRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(*output << InStreamName);
+
+				return hr;
+			}; // Result CreateStreamRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
+
+			Result CreateStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				CreateStreamRes parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::CreateStream, {0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamName:{4,60}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamName()); 
+				return ResultCode::SUCCESS;
+			}; // Result CreateStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// Cmd: Open stream instance
+			const MessageID FindStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 37);
+			Result FindStreamCmd::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Ticket);
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
+
+				return hr;
+
+			}; // Result FindStreamCmd::ParseMessage(const MessageHeader* pHeader)
+
+			Result FindStreamCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				FindStreamCmd parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Ticket", parser.GetTicket());
+				variableBuilder.SetVariable("StreamName", parser.GetStreamName());
+
+				return hr;
+
+			}; // Result FindStreamCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result FindStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) FindStreamCmd(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result FindStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t FindStreamCmd::CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InStreamName)
+				);
+
+				return __uiMessageSize;
+			}; // size_t FindStreamCmd::CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+
+
+			Result FindStreamCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InStreamName)
+				);
+
+				messageBuffer->msgID = FindStreamCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InTicket);
+				protocolCheck(*output << InStreamName);
+
+				return hr;
+			}; // Result FindStreamCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+
+			Result FindStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				FindStreamCmd parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::FindStream, {0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamName()); 
+				return ResultCode::SUCCESS;
+			}; // Result FindStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			const MessageID FindStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 37);
+			Result FindStreamRes::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
+
+				return hr;
+
+			}; // Result FindStreamRes::ParseMessage(const MessageHeader* pHeader)
+
+			Result FindStreamRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				FindStreamRes parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+				variableBuilder.SetVariable("StreamName", parser.GetStreamName());
+
+				return hr;
+
+			}; // Result FindStreamRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result FindStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) FindStreamRes(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result FindStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t FindStreamRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InStreamName)
+				);
+
+				return __uiMessageSize;
+			}; // size_t FindStreamRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
+
+
+			Result FindStreamRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InStreamName)
+				);
+
+				messageBuffer->msgID = FindStreamRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(*output << InStreamName);
+
+				return hr;
+			}; // Result FindStreamRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
+
+			Result FindStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				FindStreamRes parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::FindStream, {0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamName:{4,60}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamName()); 
+				return ResultCode::SUCCESS;
+			}; // Result FindStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// Cmd: Delete stream instance
+			const MessageID DeleteStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 38);
+			Result DeleteStreamCmd::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Ticket);
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
+
+				return hr;
+
+			}; // Result DeleteStreamCmd::ParseMessage(const MessageHeader* pHeader)
+
+			Result DeleteStreamCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				DeleteStreamCmd parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Ticket", parser.GetTicket());
+				variableBuilder.SetVariable("StreamName", parser.GetStreamName());
+
+				return hr;
+
+			}; // Result DeleteStreamCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result DeleteStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) DeleteStreamCmd(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result DeleteStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t DeleteStreamCmd::CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InStreamName)
+				);
+
+				return __uiMessageSize;
+			}; // size_t DeleteStreamCmd::CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+
+
+			Result DeleteStreamCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InStreamName)
+				);
+
+				messageBuffer->msgID = DeleteStreamCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InTicket);
+				protocolCheck(*output << InStreamName);
+
+				return hr;
+			}; // Result DeleteStreamCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+
+			Result DeleteStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				DeleteStreamCmd parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::DeleteStream, {0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamName()); 
+				return ResultCode::SUCCESS;
+			}; // Result DeleteStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			const MessageID DeleteStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 38);
+			Result DeleteStreamRes::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
+
+				return hr;
+
+			}; // Result DeleteStreamRes::ParseMessage(const MessageHeader* pHeader)
+
+			Result DeleteStreamRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				DeleteStreamRes parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+				variableBuilder.SetVariable("StreamName", parser.GetStreamName());
+
+				return hr;
+
+			}; // Result DeleteStreamRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result DeleteStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) DeleteStreamRes(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result DeleteStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t DeleteStreamRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InStreamName)
+				);
+
+				return __uiMessageSize;
+			}; // size_t DeleteStreamRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
+
+
+			Result DeleteStreamRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InStreamName)
+				);
+
+				messageBuffer->msgID = DeleteStreamRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(*output << InStreamName);
+
+				return hr;
+			}; // Result DeleteStreamRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
+
+			Result DeleteStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				DeleteStreamRes parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::DeleteStream, {0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamName:{4,60}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamName()); 
+				return ResultCode::SUCCESS;
+			}; // Result DeleteStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// Cmd: Get stream list
+			const MessageID GetStreamListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 39);
+			Result GetStreamListCmd::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Ticket);
+
+				return hr;
+
+			}; // Result GetStreamListCmd::ParseMessage(const MessageHeader* pHeader)
+
+			Result GetStreamListCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				GetStreamListCmd parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Ticket", parser.GetTicket());
+
+				return hr;
+
+			}; // Result GetStreamListCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result GetStreamListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) GetStreamListCmd(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result GetStreamListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t GetStreamListCmd::CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTicket)
+				);
+
+				return __uiMessageSize;
+			}; // size_t GetStreamListCmd::CalculateMessageSize( const TransactionID &InTransactionID, const AuthTicket &InTicket )
+
+
+			Result GetStreamListCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTicket)
+				);
+
+				messageBuffer->msgID = GetStreamListCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InTicket);
+
+				return hr;
+			}; // Result GetStreamListCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const AuthTicket &InTicket )
+
+			Result GetStreamListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				GetStreamListCmd parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::GetStreamList, {0}:{1} , TransactionID:{2}, Ticket:{3}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetTicket()); 
+				return ResultCode::SUCCESS;
+			}; // Result GetStreamListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			const MessageID GetStreamListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 39);
+			Result GetStreamListRes::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+				protocolCheck(input->ReadArrayLink(m_StreamNames));
+
+				return hr;
+
+			}; // Result GetStreamListRes::ParseMessage(const MessageHeader* pHeader)
+
+			Result GetStreamListRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				GetStreamListRes parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+				variableBuilder.SetVariable("StreamNames", parser.GetStreamNames());
+
+				return hr;
+
+			}; // Result GetStreamListRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result GetStreamListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) GetStreamListRes(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result GetStreamListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t GetStreamListRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InStreamNames)
+				);
+
+				return __uiMessageSize;
+			}; // size_t GetStreamListRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
+
+
+			Result GetStreamListRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InStreamNames)
+				);
+
+				messageBuffer->msgID = GetStreamListRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(*output << InStreamNames);
+
+				return hr;
+			}; // Result GetStreamListRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
+
+			Result GetStreamListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				GetStreamListRes parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "PlayInstance::GetStreamList, {0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamNames:{4,60}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamNames()); 
+				return ResultCode::SUCCESS;
+			}; // Result GetStreamListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 
 

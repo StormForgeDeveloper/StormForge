@@ -3,4 +3,5 @@
 	<DataType TypeName="ActorMovement" IsEnum="false" CppTypeName="ActorMovement" IsVariableSize="false" CSharpTypeName="ActorMovement" IsCSharpStruct="true" IsCSharpArray="false" Desc="ActorMovement struct"/>
 	<DataType TypeName="PlayerPlatformID" IsEnum="false" CppTypeName="PlayerPlatformID" IsVariableSize="false" CSharpTypeName="PlayerPlatformID" IsCSharpStruct="true" IsCSharpArray="false" Desc="Unified player ID cross multiplatform"/>
     <DataType TypeName="AchievementStat" IsEnum="false" CppTypeName="AchievementStat" IsVariableSize="false" CSharpTypeName="AchievementStat" IsCSharpStruct="true" IsCSharpArray="false" Desc="AchievementStat struct"/>
+    <DataType TypeName="LogEntryID" IsEnum="false" CppTypeName="uint32_t" IsVariableSize="false" CSharpTypeName="UInt32" IsCSharpStruct="false" IsCSharpArray="false" Desc="32bit log entry id assigned by system"/>
 </ProtocolTypes>

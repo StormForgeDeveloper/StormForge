@@ -128,6 +128,9 @@ namespace SF {
 		// Invalid bot talk table 
 		public const int GAME_INVALID_BOTTALK_TABLE =                       unchecked((int)0xE7040025); 
 
+		// Request has expired 
+		public const int GAME_REQUEST_HAS_EXPIRED =                         unchecked((int)0xE7040026); 
+
 	}
 }
 

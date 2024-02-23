@@ -1,5 +1,5 @@
 #
-PROTO_BUILD=../../../bin/net6.0-windows/SFProtocolCompiler.exe
+PROTO_BUILD=../../../bin/net8.0/SFProtocolCompiler.exe
 
 
 

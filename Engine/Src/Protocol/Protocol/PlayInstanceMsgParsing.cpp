@@ -66,6 +66,68 @@ namespace SF
 			// C2S: Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
 			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::ClientSyncC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::ClientSyncC2SEvt::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::ClientSyncC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::ClientSyncC2SEvt::ParseMessageToMessageBase));
+			// Cmd: Set character public message. Server will broadcast CharacterPublicDataChanged, NewActorInView should have updated value as well
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::SetCharacterPublicMessageCmd::MID.IDSeq.MsgID,&Message::PlayInstance::SetCharacterPublicMessageCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::SetCharacterPublicMessageCmd::MID.IDSeq.MsgID,&Message::PlayInstance::SetCharacterPublicMessageCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::SetCharacterPublicMessageRes::MID.IDSeq.MsgID,&Message::PlayInstance::SetCharacterPublicMessageRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::SetCharacterPublicMessageRes::MID.IDSeq.MsgID,&Message::PlayInstance::SetCharacterPublicMessageRes::ParseMessageToMessageBase));
+			// S2C: Character's private data has changed
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::CharacterPrivateDataChangedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::CharacterPrivateDataChangedS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::CharacterPrivateDataChangedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::CharacterPrivateDataChangedS2CEvt::ParseMessageToMessageBase));
+			// S2C: Player public data has been changed
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::CharacterPublicDataChangedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::CharacterPublicDataChangedS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::CharacterPublicDataChangedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::CharacterPublicDataChangedS2CEvt::ParseMessageToMessageBase));
+			// Cmd: Request WhiteboardSharing
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::RequestWhiteboardSharingCmd::MID.IDSeq.MsgID,&Message::PlayInstance::RequestWhiteboardSharingCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::RequestWhiteboardSharingCmd::MID.IDSeq.MsgID,&Message::PlayInstance::RequestWhiteboardSharingCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::RequestWhiteboardSharingRes::MID.IDSeq.MsgID,&Message::PlayInstance::RequestWhiteboardSharingRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::RequestWhiteboardSharingRes::MID.IDSeq.MsgID,&Message::PlayInstance::RequestWhiteboardSharingRes::ParseMessageToMessageBase));
+			// Cmd: Accept WhiteboardSharing
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::AcceptWhiteboardSharingCmd::MID.IDSeq.MsgID,&Message::PlayInstance::AcceptWhiteboardSharingCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::AcceptWhiteboardSharingCmd::MID.IDSeq.MsgID,&Message::PlayInstance::AcceptWhiteboardSharingCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::AcceptWhiteboardSharingRes::MID.IDSeq.MsgID,&Message::PlayInstance::AcceptWhiteboardSharingRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::AcceptWhiteboardSharingRes::MID.IDSeq.MsgID,&Message::PlayInstance::AcceptWhiteboardSharingRes::ParseMessageToMessageBase));
+			// Cmd: Close WhiteboardSharing. Both clients will receive WhiteboardSharingHasClosed
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::CloseWhiteboardSharingCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CloseWhiteboardSharingCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::CloseWhiteboardSharingCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CloseWhiteboardSharingCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::CloseWhiteboardSharingRes::MID.IDSeq.MsgID,&Message::PlayInstance::CloseWhiteboardSharingRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::CloseWhiteboardSharingRes::MID.IDSeq.MsgID,&Message::PlayInstance::CloseWhiteboardSharingRes::ParseMessageToMessageBase));
+			// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::AddWhiteboardSharingLogEntryCmd::MID.IDSeq.MsgID,&Message::PlayInstance::AddWhiteboardSharingLogEntryCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::AddWhiteboardSharingLogEntryCmd::MID.IDSeq.MsgID,&Message::PlayInstance::AddWhiteboardSharingLogEntryCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::AddWhiteboardSharingLogEntryRes::MID.IDSeq.MsgID,&Message::PlayInstance::AddWhiteboardSharingLogEntryRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::AddWhiteboardSharingLogEntryRes::MID.IDSeq.MsgID,&Message::PlayInstance::AddWhiteboardSharingLogEntryRes::ParseMessageToMessageBase));
+			// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::UpdateWhiteboardSharingLogEntryCmd::MID.IDSeq.MsgID,&Message::PlayInstance::UpdateWhiteboardSharingLogEntryCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::UpdateWhiteboardSharingLogEntryCmd::MID.IDSeq.MsgID,&Message::PlayInstance::UpdateWhiteboardSharingLogEntryCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::UpdateWhiteboardSharingLogEntryRes::MID.IDSeq.MsgID,&Message::PlayInstance::UpdateWhiteboardSharingLogEntryRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::UpdateWhiteboardSharingLogEntryRes::MID.IDSeq.MsgID,&Message::PlayInstance::UpdateWhiteboardSharingLogEntryRes::ParseMessageToMessageBase));
+			// Cmd: Update whiteboard log entry
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::RemoveWhiteboardSharingLogEntryCmd::MID.IDSeq.MsgID,&Message::PlayInstance::RemoveWhiteboardSharingLogEntryCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::RemoveWhiteboardSharingLogEntryCmd::MID.IDSeq.MsgID,&Message::PlayInstance::RemoveWhiteboardSharingLogEntryCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::RemoveWhiteboardSharingLogEntryRes::MID.IDSeq.MsgID,&Message::PlayInstance::RemoveWhiteboardSharingLogEntryRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::RemoveWhiteboardSharingLogEntryRes::MID.IDSeq.MsgID,&Message::PlayInstance::RemoveWhiteboardSharingLogEntryRes::ParseMessageToMessageBase));
+			// S2C: WhiteboardSharing has been requested
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingRequestedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingRequestedS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingRequestedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingRequestedS2CEvt::ParseMessageToMessageBase));
+			// S2C: WhiteboardSharing has been requested
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingRejectedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingRejectedS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingRejectedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingRejectedS2CEvt::ParseMessageToMessageBase));
+			// S2C: WhiteboardSharing has been started
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingStartedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingStartedS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingStartedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingStartedS2CEvt::ParseMessageToMessageBase));
+			// S2C: WhiteboardSharing has been closed
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingHasClosedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingHasClosedS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingHasClosedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingHasClosedS2CEvt::ParseMessageToMessageBase));
+			// S2C: WhiteboardSharing new log entry has been added
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingNewLogEntryAddedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingNewLogEntryAddedS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingNewLogEntryAddedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingNewLogEntryAddedS2CEvt::ParseMessageToMessageBase));
+			// S2C: WhiteboardSharing new log entry has been removed
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt::ParseMessageToMessageBase));
+			// S2C: WhiteboardSharing new log entry has been updated
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingNewLogEntryUpdatedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingNewLogEntryUpdatedS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingNewLogEntryUpdatedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingNewLogEntryUpdatedS2CEvt::ParseMessageToMessageBase));
 			// Cmd: Occupy map object
 			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::OccupyMapObjectCmd::MID.IDSeq.MsgID,&Message::PlayInstance::OccupyMapObjectCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::OccupyMapObjectCmd::MID.IDSeq.MsgID,&Message::PlayInstance::OccupyMapObjectCmd::ParseMessageToMessageBase));
@@ -92,6 +154,17 @@ namespace SF
 			// S2C: Effect modifier initial sync
 			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::LevelUpS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::LevelUpS2CEvt::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::LevelUpS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::LevelUpS2CEvt::ParseMessageToMessageBase));
+			// Cmd: To call general functionality
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::CallFunctionCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CallFunctionCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::CallFunctionCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CallFunctionCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::CallFunctionRes::MID.IDSeq.MsgID,&Message::PlayInstance::CallFunctionRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::CallFunctionRes::MID.IDSeq.MsgID,&Message::PlayInstance::CallFunctionRes::ParseMessageToMessageBase));
+			// C2S: Send coded voice data to server
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::SendVoiceDataC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::SendVoiceDataC2SEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::SendVoiceDataC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::SendVoiceDataC2SEvt::ParseMessageToMessageBase));
+			// S2C: Voice data
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::VoiceDataS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::VoiceDataS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::VoiceDataS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::VoiceDataS2CEvt::ParseMessageToMessageBase));
 			// Cmd: Create stream instance
 			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::CreateStreamCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CreateStreamCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::CreateStreamCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CreateStreamCmd::ParseMessageToMessageBase));
@@ -112,17 +185,6 @@ namespace SF
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::GetStreamListCmd::MID.IDSeq.MsgID,&Message::PlayInstance::GetStreamListCmd::ParseMessageToMessageBase));
 			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::GetStreamListRes::MID.IDSeq.MsgID,&Message::PlayInstance::GetStreamListRes::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::GetStreamListRes::MID.IDSeq.MsgID,&Message::PlayInstance::GetStreamListRes::ParseMessageToMessageBase));
-			// Cmd: To call general functionality
-			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::CallFunctionCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CallFunctionCmd::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::CallFunctionCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CallFunctionCmd::ParseMessageToMessageBase));
-			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::CallFunctionRes::MID.IDSeq.MsgID,&Message::PlayInstance::CallFunctionRes::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::CallFunctionRes::MID.IDSeq.MsgID,&Message::PlayInstance::CallFunctionRes::ParseMessageToMessageBase));
-			// C2S: Send coded voice data to server
-			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::SendVoiceDataC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::SendVoiceDataC2SEvt::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::SendVoiceDataC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::SendVoiceDataC2SEvt::ParseMessageToMessageBase));
-			// S2C: Voice data
-			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::VoiceDataS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::VoiceDataS2CEvt::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::VoiceDataS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::VoiceDataS2CEvt::ParseMessageToMessageBase));
 		}; // void RegisterParserPlayInstance()
 
 

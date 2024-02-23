@@ -87,6 +87,97 @@ namespace SF
 		return m_Endpoint->SendMsg(messageBuffer);
 
 	}; // Result NetPolicyPlayInstance::ClientSyncC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData )
+	// Cmd: Set character public message. Server will broadcast CharacterPublicDataChanged, NewActorInView should have updated value as well
+	Result NetPolicyPlayInstance::SetCharacterPublicMessageCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPublicMessage )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::SetCharacterPublicMessageCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InPublicMessage);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::SetCharacterPublicMessageCmd::Create(messageBuffer, InTransactionID, InPlayInstanceUID, InPlayerID, InPublicMessage));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetPolicyPlayInstance::SetCharacterPublicMessageCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPublicMessage )
+	// Cmd: Request WhiteboardSharing
+	Result NetPolicyPlayInstance::RequestWhiteboardSharingCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InTargetPlayerID, const VariableTable &InWhiteboardInfo )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::RequestWhiteboardSharingCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InTargetPlayerID, InWhiteboardInfo);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::RequestWhiteboardSharingCmd::Create(messageBuffer, InTransactionID, InPlayInstanceUID, InPlayerID, InTargetPlayerID, InWhiteboardInfo));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetPolicyPlayInstance::RequestWhiteboardSharingCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InTargetPlayerID, const VariableTable &InWhiteboardInfo )
+	// Cmd: Accept WhiteboardSharing
+	Result NetPolicyPlayInstance::AcceptWhiteboardSharingCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID, const uint8_t &InAnswer )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::AcceptWhiteboardSharingCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InRequestedPlayerID, InAnswer);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::AcceptWhiteboardSharingCmd::Create(messageBuffer, InTransactionID, InPlayInstanceUID, InPlayerID, InRequestedPlayerID, InAnswer));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetPolicyPlayInstance::AcceptWhiteboardSharingCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID, const uint8_t &InAnswer )
+	// Cmd: Close WhiteboardSharing. Both clients will receive WhiteboardSharingHasClosed
+	Result NetPolicyPlayInstance::CloseWhiteboardSharingCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::CloseWhiteboardSharingCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::CloseWhiteboardSharingCmd::Create(messageBuffer, InTransactionID, InPlayInstanceUID, InPlayerID));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetPolicyPlayInstance::CloseWhiteboardSharingCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID )
+	// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+	Result NetPolicyPlayInstance::AddWhiteboardSharingLogEntryCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::AddWhiteboardSharingLogEntryCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InLogEntry);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::AddWhiteboardSharingLogEntryCmd::Create(messageBuffer, InTransactionID, InPlayInstanceUID, InPlayerID, InLogEntry));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetPolicyPlayInstance::AddWhiteboardSharingLogEntryCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+	// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+	Result NetPolicyPlayInstance::UpdateWhiteboardSharingLogEntryCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::UpdateWhiteboardSharingLogEntryCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InLogEntry);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::UpdateWhiteboardSharingLogEntryCmd::Create(messageBuffer, InTransactionID, InPlayInstanceUID, InPlayerID, InLogEntry));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetPolicyPlayInstance::UpdateWhiteboardSharingLogEntryCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+	// Cmd: Update whiteboard log entry
+	Result NetPolicyPlayInstance::RemoveWhiteboardSharingLogEntryCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::RemoveWhiteboardSharingLogEntryCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InLogEntryID);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::RemoveWhiteboardSharingLogEntryCmd::Create(messageBuffer, InTransactionID, InPlayInstanceUID, InPlayerID, InLogEntryID));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetPolicyPlayInstance::RemoveWhiteboardSharingLogEntryCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
 	// Cmd: Occupy map object
 	Result NetPolicyPlayInstance::OccupyMapObjectCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
 	{
@@ -139,6 +230,32 @@ namespace SF
 		return m_Endpoint->SendMsg(messageBuffer);
 
 	}; // Result NetPolicyPlayInstance::ZoneChatCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage )
+	// Cmd: To call general functionality
+	Result NetPolicyPlayInstance::CallFunctionCmd( const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::CallFunctionCmd::CalculateMessageSize(InTransactionID, InFunctionName, InPlayerID, InParameters);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::CallFunctionCmd::Create(messageBuffer, InTransactionID, InFunctionName, InPlayerID, InParameters));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetPolicyPlayInstance::CallFunctionCmd( const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters )
+	// C2S: Send coded voice data to server
+	Result NetPolicyPlayInstance::SendVoiceDataC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::SendVoiceDataC2SEvt::CalculateMessageSize(InPlayInstanceUID, InPlayerID, InFrameIndex, InVoiceData);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::SendVoiceDataC2SEvt::Create(messageBuffer, InPlayInstanceUID, InPlayerID, InFrameIndex, InVoiceData));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetPolicyPlayInstance::SendVoiceDataC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
 	// Cmd: Create stream instance
 	Result NetPolicyPlayInstance::CreateStreamCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 	{
@@ -191,32 +308,6 @@ namespace SF
 		return m_Endpoint->SendMsg(messageBuffer);
 
 	}; // Result NetPolicyPlayInstance::GetStreamListCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket )
-	// Cmd: To call general functionality
-	Result NetPolicyPlayInstance::CallFunctionCmd( const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters )
-	{
- 		Result hr;
-
-		size_t messageSize = SF::Message::PlayInstance::CallFunctionCmd::CalculateMessageSize(InTransactionID, InFunctionName, InPlayerID, InParameters);
-		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
-		protocolCheckPtr(m_Endpoint);
-
-		protocolCheck(SF::Message::PlayInstance::CallFunctionCmd::Create(messageBuffer, InTransactionID, InFunctionName, InPlayerID, InParameters));
-		return m_Endpoint->SendMsg(messageBuffer);
-
-	}; // Result NetPolicyPlayInstance::CallFunctionCmd( const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters )
-	// C2S: Send coded voice data to server
-	Result NetPolicyPlayInstance::SendVoiceDataC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
-	{
- 		Result hr;
-
-		size_t messageSize = SF::Message::PlayInstance::SendVoiceDataC2SEvt::CalculateMessageSize(InPlayInstanceUID, InPlayerID, InFrameIndex, InVoiceData);
-		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
-		protocolCheckPtr(m_Endpoint);
-
-		protocolCheck(SF::Message::PlayInstance::SendVoiceDataC2SEvt::Create(messageBuffer, InPlayInstanceUID, InPlayerID, InFrameIndex, InVoiceData));
-		return m_Endpoint->SendMsg(messageBuffer);
-
-	}; // Result NetPolicyPlayInstance::SendVoiceDataC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
 
 
 	// Cmd: Player Join request.
@@ -310,6 +401,214 @@ namespace SF
 		return m_Endpoint->SendMsg(messageBuffer);
 
 	}; // Result NetSvrPolicyPlayInstance::PlayerStateChangedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition, const VariableTable &InStateValues )
+	// Cmd: Set character public message. Server will broadcast CharacterPublicDataChanged, NewActorInView should have updated value as well
+	Result NetSvrPolicyPlayInstance::SetCharacterPublicMessageRes( const TransactionID &InTransactionID, const Result &InResult )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::SetCharacterPublicMessageRes::CalculateMessageSize(InTransactionID, InResult);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::SetCharacterPublicMessageRes::Create(messageBuffer, InTransactionID, InResult));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyPlayInstance::SetCharacterPublicMessageRes( const TransactionID &InTransactionID, const Result &InResult )
+	// S2C: Character's private data has changed
+	Result NetSvrPolicyPlayInstance::CharacterPrivateDataChangedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InCharacterID, const VariableTable &InPrivateData )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::CharacterPrivateDataChangedS2CEvt::CalculateMessageSize(InPlayInstanceUID, InPlayerID, InCharacterID, InPrivateData);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::CharacterPrivateDataChangedS2CEvt::Create(messageBuffer, InPlayInstanceUID, InPlayerID, InCharacterID, InPrivateData));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyPlayInstance::CharacterPrivateDataChangedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InCharacterID, const VariableTable &InPrivateData )
+	// S2C: Player public data has been changed
+	Result NetSvrPolicyPlayInstance::CharacterPublicDataChangedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InPublicData )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::CharacterPublicDataChangedS2CEvt::CalculateMessageSize(InPlayInstanceUID, InPlayerID, InPublicData);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::CharacterPublicDataChangedS2CEvt::Create(messageBuffer, InPlayInstanceUID, InPlayerID, InPublicData));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyPlayInstance::CharacterPublicDataChangedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InPublicData )
+	// Cmd: Request WhiteboardSharing
+	Result NetSvrPolicyPlayInstance::RequestWhiteboardSharingRes( const TransactionID &InTransactionID, const Result &InResult )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::RequestWhiteboardSharingRes::CalculateMessageSize(InTransactionID, InResult);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::RequestWhiteboardSharingRes::Create(messageBuffer, InTransactionID, InResult));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyPlayInstance::RequestWhiteboardSharingRes( const TransactionID &InTransactionID, const Result &InResult )
+	// Cmd: Accept WhiteboardSharing
+	Result NetSvrPolicyPlayInstance::AcceptWhiteboardSharingRes( const TransactionID &InTransactionID, const Result &InResult )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::AcceptWhiteboardSharingRes::CalculateMessageSize(InTransactionID, InResult);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::AcceptWhiteboardSharingRes::Create(messageBuffer, InTransactionID, InResult));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyPlayInstance::AcceptWhiteboardSharingRes( const TransactionID &InTransactionID, const Result &InResult )
+	// Cmd: Close WhiteboardSharing. Both clients will receive WhiteboardSharingHasClosed
+	Result NetSvrPolicyPlayInstance::CloseWhiteboardSharingRes( const TransactionID &InTransactionID, const Result &InResult )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::CloseWhiteboardSharingRes::CalculateMessageSize(InTransactionID, InResult);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::CloseWhiteboardSharingRes::Create(messageBuffer, InTransactionID, InResult));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyPlayInstance::CloseWhiteboardSharingRes( const TransactionID &InTransactionID, const Result &InResult )
+	// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+	Result NetSvrPolicyPlayInstance::AddWhiteboardSharingLogEntryRes( const TransactionID &InTransactionID, const Result &InResult, const LogEntryID &InLogEntryID )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::AddWhiteboardSharingLogEntryRes::CalculateMessageSize(InTransactionID, InResult, InLogEntryID);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::AddWhiteboardSharingLogEntryRes::Create(messageBuffer, InTransactionID, InResult, InLogEntryID));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyPlayInstance::AddWhiteboardSharingLogEntryRes( const TransactionID &InTransactionID, const Result &InResult, const LogEntryID &InLogEntryID )
+	// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+	Result NetSvrPolicyPlayInstance::UpdateWhiteboardSharingLogEntryRes( const TransactionID &InTransactionID, const Result &InResult )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::UpdateWhiteboardSharingLogEntryRes::CalculateMessageSize(InTransactionID, InResult);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::UpdateWhiteboardSharingLogEntryRes::Create(messageBuffer, InTransactionID, InResult));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyPlayInstance::UpdateWhiteboardSharingLogEntryRes( const TransactionID &InTransactionID, const Result &InResult )
+	// Cmd: Update whiteboard log entry
+	Result NetSvrPolicyPlayInstance::RemoveWhiteboardSharingLogEntryRes( const TransactionID &InTransactionID, const Result &InResult )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::RemoveWhiteboardSharingLogEntryRes::CalculateMessageSize(InTransactionID, InResult);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::RemoveWhiteboardSharingLogEntryRes::Create(messageBuffer, InTransactionID, InResult));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyPlayInstance::RemoveWhiteboardSharingLogEntryRes( const TransactionID &InTransactionID, const Result &InResult )
+	// S2C: WhiteboardSharing has been requested
+	Result NetSvrPolicyPlayInstance::WhiteboardSharingRequestedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::WhiteboardSharingRequestedS2CEvt::CalculateMessageSize(InPlayInstanceUID, InPlayerID, InRequestedPlayerID);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::WhiteboardSharingRequestedS2CEvt::Create(messageBuffer, InPlayInstanceUID, InPlayerID, InRequestedPlayerID));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyPlayInstance::WhiteboardSharingRequestedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID )
+	// S2C: WhiteboardSharing has been requested
+	Result NetSvrPolicyPlayInstance::WhiteboardSharingRejectedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRejectedPlayerID )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::WhiteboardSharingRejectedS2CEvt::CalculateMessageSize(InPlayInstanceUID, InPlayerID, InRejectedPlayerID);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::WhiteboardSharingRejectedS2CEvt::Create(messageBuffer, InPlayInstanceUID, InPlayerID, InRejectedPlayerID));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyPlayInstance::WhiteboardSharingRejectedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRejectedPlayerID )
+	// S2C: WhiteboardSharing has been started
+	Result NetSvrPolicyPlayInstance::WhiteboardSharingStartedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InOtherPlayerID, const VariableTable &InWhiteboardInfo )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::WhiteboardSharingStartedS2CEvt::CalculateMessageSize(InPlayInstanceUID, InPlayerID, InOtherPlayerID, InWhiteboardInfo);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::WhiteboardSharingStartedS2CEvt::Create(messageBuffer, InPlayInstanceUID, InPlayerID, InOtherPlayerID, InWhiteboardInfo));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyPlayInstance::WhiteboardSharingStartedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InOtherPlayerID, const VariableTable &InWhiteboardInfo )
+	// S2C: WhiteboardSharing has been closed
+	Result NetSvrPolicyPlayInstance::WhiteboardSharingHasClosedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InClosedPlayerID )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::WhiteboardSharingHasClosedS2CEvt::CalculateMessageSize(InPlayInstanceUID, InPlayerID, InClosedPlayerID);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::WhiteboardSharingHasClosedS2CEvt::Create(messageBuffer, InPlayInstanceUID, InPlayerID, InClosedPlayerID));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyPlayInstance::WhiteboardSharingHasClosedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InClosedPlayerID )
+	// S2C: WhiteboardSharing new log entry has been added
+	Result NetSvrPolicyPlayInstance::WhiteboardSharingNewLogEntryAddedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::WhiteboardSharingNewLogEntryAddedS2CEvt::CalculateMessageSize(InPlayInstanceUID, InPlayerID, InLogEntry);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::WhiteboardSharingNewLogEntryAddedS2CEvt::Create(messageBuffer, InPlayInstanceUID, InPlayerID, InLogEntry));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyPlayInstance::WhiteboardSharingNewLogEntryAddedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+	// S2C: WhiteboardSharing new log entry has been removed
+	Result NetSvrPolicyPlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt::CalculateMessageSize(InPlayInstanceUID, InPlayerID, InLogEntryID);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt::Create(messageBuffer, InPlayInstanceUID, InPlayerID, InLogEntryID));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyPlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+	// S2C: WhiteboardSharing new log entry has been updated
+	Result NetSvrPolicyPlayInstance::WhiteboardSharingNewLogEntryUpdatedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::WhiteboardSharingNewLogEntryUpdatedS2CEvt::CalculateMessageSize(InPlayInstanceUID, InPlayerID, InLogEntry);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::WhiteboardSharingNewLogEntryUpdatedS2CEvt::Create(messageBuffer, InPlayInstanceUID, InPlayerID, InLogEntry));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyPlayInstance::WhiteboardSharingNewLogEntryUpdatedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
 	// Cmd: Occupy map object
 	Result NetSvrPolicyPlayInstance::OccupyMapObjectRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 	{
@@ -388,6 +687,32 @@ namespace SF
 		return m_Endpoint->SendMsg(messageBuffer);
 
 	}; // Result NetSvrPolicyPlayInstance::LevelUpS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int64_t &InCurrentExp, const int32_t &InCurrentLevel )
+	// Cmd: To call general functionality
+	Result NetSvrPolicyPlayInstance::CallFunctionRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InResults )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::CallFunctionRes::CalculateMessageSize(InTransactionID, InResult, InResults);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::CallFunctionRes::Create(messageBuffer, InTransactionID, InResult, InResults));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyPlayInstance::CallFunctionRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InResults )
+	// S2C: Voice data
+	Result NetSvrPolicyPlayInstance::VoiceDataS2CEvt( const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::PlayInstance::VoiceDataS2CEvt::CalculateMessageSize(InActorID, InFrameIndex, InVoiceData);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::PlayInstance::VoiceDataS2CEvt::Create(messageBuffer, InActorID, InFrameIndex, InVoiceData));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyPlayInstance::VoiceDataS2CEvt( const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
 	// Cmd: Create stream instance
 	Result NetSvrPolicyPlayInstance::CreateStreamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
 	{
@@ -440,32 +765,6 @@ namespace SF
 		return m_Endpoint->SendMsg(messageBuffer);
 
 	}; // Result NetSvrPolicyPlayInstance::GetStreamListRes( const TransactionID &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
-	// Cmd: To call general functionality
-	Result NetSvrPolicyPlayInstance::CallFunctionRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InResults )
-	{
- 		Result hr;
-
-		size_t messageSize = SF::Message::PlayInstance::CallFunctionRes::CalculateMessageSize(InTransactionID, InResult, InResults);
-		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
-		protocolCheckPtr(m_Endpoint);
-
-		protocolCheck(SF::Message::PlayInstance::CallFunctionRes::Create(messageBuffer, InTransactionID, InResult, InResults));
-		return m_Endpoint->SendMsg(messageBuffer);
-
-	}; // Result NetSvrPolicyPlayInstance::CallFunctionRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InResults )
-	// S2C: Voice data
-	Result NetSvrPolicyPlayInstance::VoiceDataS2CEvt( const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
-	{
- 		Result hr;
-
-		size_t messageSize = SF::Message::PlayInstance::VoiceDataS2CEvt::CalculateMessageSize(InActorID, InFrameIndex, InVoiceData);
-		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
-		protocolCheckPtr(m_Endpoint);
-
-		protocolCheck(SF::Message::PlayInstance::VoiceDataS2CEvt::Create(messageBuffer, InActorID, InFrameIndex, InVoiceData));
-		return m_Endpoint->SendMsg(messageBuffer);
-
-	}; // Result NetSvrPolicyPlayInstance::VoiceDataS2CEvt( const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
 
 
 }; // namespace SF

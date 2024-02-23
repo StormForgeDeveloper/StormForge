@@ -246,6 +246,7 @@ namespace SF
             new TypeMap( "PerformanceCounterInstanceInfo", false, typeof(PerformanceCounterInstanceInfo) ),
             new TypeMap( "RelayPlayerInfo", false, typeof(RelayPlayerInfo) ),
             new TypeMap( "AchievementStat", false, typeof(AchievementStat), InUseGenericVariableBuilderInterface:true ),
+            new TypeMap( "LogEntryID", false, typeof(UInt32), InUseGenericVariableBuilderInterface:true ),
         };
 
         static Dictionary<string, TypeMap> MapToCSharp = new Dictionary<string, TypeMap>();

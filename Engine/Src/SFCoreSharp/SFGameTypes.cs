@@ -19,6 +19,7 @@ using System.Runtime.InteropServices;
 namespace SF
 {
     using GameInstanceID = System.UInt64;
+    using LogEntryID = System.UInt64;
 
     // structure data type attribute, this is used for message builder
     public class StructAttribute : Attribute

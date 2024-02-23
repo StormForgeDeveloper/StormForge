@@ -88,6 +88,97 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceClientSyncC2SEvt( intptr_t InNative
 
 
 
+// Cmd: Set character public message. Server will broadcast CharacterPublicDataChanged, NewActorInView should have updated value as well
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceSetCharacterPublicMessageCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const char* InPublicMessage )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::SetCharacterPublicMessageCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID,InPublicMessage);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::SetCharacterPublicMessageCmd::Create(pMessage, InTransactionID, InPlayInstanceUID, InPlayerID,InPublicMessage);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceSetCharacterPublicMessageCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const char* InPublicMessage )
+
+
+// Cmd: Request WhiteboardSharing
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRequestWhiteboardSharingCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, PlayerID InTargetPlayerID, uint16_t _sizeOfInWhiteboardInfo,uint8_t* InWhiteboardInfo )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::RequestWhiteboardSharingCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InTargetPlayerID,SF::ArrayView<uint8_t>(_sizeOfInWhiteboardInfo, _sizeOfInWhiteboardInfo, InWhiteboardInfo));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::RequestWhiteboardSharingCmd::Create(pMessage, InTransactionID, InPlayInstanceUID, InPlayerID, InTargetPlayerID,SF::ArrayView<uint8_t>(_sizeOfInWhiteboardInfo, _sizeOfInWhiteboardInfo, InWhiteboardInfo));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRequestWhiteboardSharingCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, PlayerID InTargetPlayerID, uint16_t _sizeOfInWhiteboardInfo,uint8_t* InWhiteboardInfo )
+
+
+// Cmd: Accept WhiteboardSharing
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceAcceptWhiteboardSharingCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, PlayerID InRequestedPlayerID, uint8_t InAnswer )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::AcceptWhiteboardSharingCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InRequestedPlayerID, InAnswer);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::AcceptWhiteboardSharingCmd::Create(pMessage, InTransactionID, InPlayInstanceUID, InPlayerID, InRequestedPlayerID, InAnswer);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceAcceptWhiteboardSharingCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, PlayerID InRequestedPlayerID, uint8_t InAnswer )
+
+
+// Cmd: Close WhiteboardSharing. Both clients will receive WhiteboardSharingHasClosed
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCloseWhiteboardSharingCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::CloseWhiteboardSharingCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::CloseWhiteboardSharingCmd::Create(pMessage, InTransactionID, InPlayInstanceUID, InPlayerID);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCloseWhiteboardSharingCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID )
+
+
+// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceAddWhiteboardSharingLogEntryCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInLogEntry,uint8_t* InLogEntry )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::AddWhiteboardSharingLogEntryCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInLogEntry, _sizeOfInLogEntry, InLogEntry));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::AddWhiteboardSharingLogEntryCmd::Create(pMessage, InTransactionID, InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInLogEntry, _sizeOfInLogEntry, InLogEntry));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceAddWhiteboardSharingLogEntryCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInLogEntry,uint8_t* InLogEntry )
+
+
+// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUpdateWhiteboardSharingLogEntryCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInLogEntry,uint8_t* InLogEntry )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::UpdateWhiteboardSharingLogEntryCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInLogEntry, _sizeOfInLogEntry, InLogEntry));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::UpdateWhiteboardSharingLogEntryCmd::Create(pMessage, InTransactionID, InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInLogEntry, _sizeOfInLogEntry, InLogEntry));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUpdateWhiteboardSharingLogEntryCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInLogEntry,uint8_t* InLogEntry )
+
+
+// Cmd: Update whiteboard log entry
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemoveWhiteboardSharingLogEntryCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, LogEntryID InLogEntryID )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::RemoveWhiteboardSharingLogEntryCmd::CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InLogEntryID);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::RemoveWhiteboardSharingLogEntryCmd::Create(pMessage, InTransactionID, InPlayInstanceUID, InPlayerID, InLogEntryID);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemoveWhiteboardSharingLogEntryCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, LogEntryID InLogEntryID )
+
+
 // Cmd: Occupy map object
 SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId, uint32_t InUsageId )
 {
@@ -140,6 +231,33 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceZoneChatCmd( intptr_t InNativeConne
 } // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceZoneChatCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, int8_t InMessageType, uint16_t _sizeOfInChatMetaData,uint8_t* InChatMetaData, const char* InChatMessage )
 
 
+// Cmd: To call general functionality
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, StringCrc32 InFunctionName, PlayerID InPlayerID, uint16_t _sizeOfInParameters,uint8_t* InParameters )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::CallFunctionCmd::CalculateMessageSize(InTransactionID, InFunctionName, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInParameters, _sizeOfInParameters, InParameters));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::CallFunctionCmd::Create(pMessage, InTransactionID, InFunctionName, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInParameters, _sizeOfInParameters, InParameters));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, StringCrc32 InFunctionName, PlayerID InPlayerID, uint16_t _sizeOfInParameters,uint8_t* InParameters )
+
+
+// C2S: Send coded voice data to server
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t InFrameIndex, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::SendVoiceDataC2SEvt::CalculateMessageSize( InPlayInstanceUID, InPlayerID, InFrameIndex,SF::ArrayView<uint8_t>(_sizeOfInVoiceData, _sizeOfInVoiceData, const_cast<uint8_t*>(InVoiceData)));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::SendVoiceDataC2SEvt::Create(pMessage,  InPlayInstanceUID, InPlayerID, InFrameIndex,SF::ArrayView<uint8_t>(_sizeOfInVoiceData, _sizeOfInVoiceData, const_cast<uint8_t*>(InVoiceData)));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t InFrameIndex, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
+
+
+
 // Cmd: Create stream instance
 SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCreateStreamCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, AuthTicket InTicket, const char* InStreamName )
 {
@@ -190,33 +308,6 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceGetStreamListCmd( intptr_t InNative
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (int32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceGetStreamListCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, AuthTicket InTicket )
-
-
-// Cmd: To call general functionality
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, StringCrc32 InFunctionName, PlayerID InPlayerID, uint16_t _sizeOfInParameters,uint8_t* InParameters )
-{
- 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
-	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::CallFunctionCmd::CalculateMessageSize(InTransactionID, InFunctionName, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInParameters, _sizeOfInParameters, InParameters));
-	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::CallFunctionCmd::Create(pMessage, InTransactionID, InFunctionName, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInParameters, _sizeOfInParameters, InParameters));
-	if (hr) hr = pConnection->SendMsg(pMessage);
-	return (int32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, StringCrc32 InFunctionName, PlayerID InPlayerID, uint16_t _sizeOfInParameters,uint8_t* InParameters )
-
-
-// C2S: Send coded voice data to server
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t InFrameIndex, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
-{
- 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
-	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::SendVoiceDataC2SEvt::CalculateMessageSize( InPlayInstanceUID, InPlayerID, InFrameIndex,SF::ArrayView<uint8_t>(_sizeOfInVoiceData, _sizeOfInVoiceData, const_cast<uint8_t*>(InVoiceData)));
-	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::SendVoiceDataC2SEvt::Create(pMessage,  InPlayInstanceUID, InPlayerID, InFrameIndex,SF::ArrayView<uint8_t>(_sizeOfInVoiceData, _sizeOfInVoiceData, const_cast<uint8_t*>(InVoiceData)));
-	if (hr) hr = pConnection->SendMsg(pMessage);
-	return (int32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t InFrameIndex, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
-
 
 
 
@@ -319,6 +410,230 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerStateChangedS2CEvt( intptr_t 
 
 
 
+// Cmd: Set character public message. Server will broadcast CharacterPublicDataChanged, NewActorInView should have updated value as well
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceSetCharacterPublicMessageRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::SetCharacterPublicMessageRes::CalculateMessageSize(InTransactionID, InResult);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::SetCharacterPublicMessageRes::Create(pMessage, InTransactionID, InResult);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceSetCharacterPublicMessageRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult )
+
+
+
+// S2C: Character's private data has changed
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCharacterPrivateDataChangedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InCharacterID, uint16_t _sizeOfInPrivateData,uint8_t* InPrivateData )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::CharacterPrivateDataChangedS2CEvt::CalculateMessageSize( InPlayInstanceUID, InPlayerID, InCharacterID,SF::ArrayView<uint8_t>(_sizeOfInPrivateData, _sizeOfInPrivateData, InPrivateData));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::CharacterPrivateDataChangedS2CEvt::Create(pMessage,  InPlayInstanceUID, InPlayerID, InCharacterID,SF::ArrayView<uint8_t>(_sizeOfInPrivateData, _sizeOfInPrivateData, InPrivateData));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCharacterPrivateDataChangedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InCharacterID, uint16_t _sizeOfInPrivateData,uint8_t* InPrivateData )
+
+
+
+// S2C: Player public data has been changed
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCharacterPublicDataChangedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInPublicData,uint8_t* InPublicData )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::CharacterPublicDataChangedS2CEvt::CalculateMessageSize( InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInPublicData, _sizeOfInPublicData, InPublicData));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::CharacterPublicDataChangedS2CEvt::Create(pMessage,  InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInPublicData, _sizeOfInPublicData, InPublicData));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCharacterPublicDataChangedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInPublicData,uint8_t* InPublicData )
+
+
+
+// Cmd: Request WhiteboardSharing
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRequestWhiteboardSharingRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::RequestWhiteboardSharingRes::CalculateMessageSize(InTransactionID, InResult);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::RequestWhiteboardSharingRes::Create(pMessage, InTransactionID, InResult);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRequestWhiteboardSharingRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult )
+
+
+
+// Cmd: Accept WhiteboardSharing
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceAcceptWhiteboardSharingRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::AcceptWhiteboardSharingRes::CalculateMessageSize(InTransactionID, InResult);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::AcceptWhiteboardSharingRes::Create(pMessage, InTransactionID, InResult);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceAcceptWhiteboardSharingRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult )
+
+
+
+// Cmd: Close WhiteboardSharing. Both clients will receive WhiteboardSharingHasClosed
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCloseWhiteboardSharingRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::CloseWhiteboardSharingRes::CalculateMessageSize(InTransactionID, InResult);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::CloseWhiteboardSharingRes::Create(pMessage, InTransactionID, InResult);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCloseWhiteboardSharingRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult )
+
+
+
+// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceAddWhiteboardSharingLogEntryRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, LogEntryID InLogEntryID )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::AddWhiteboardSharingLogEntryRes::CalculateMessageSize(InTransactionID, InResult, InLogEntryID);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::AddWhiteboardSharingLogEntryRes::Create(pMessage, InTransactionID, InResult, InLogEntryID);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceAddWhiteboardSharingLogEntryRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, LogEntryID InLogEntryID )
+
+
+
+// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUpdateWhiteboardSharingLogEntryRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::UpdateWhiteboardSharingLogEntryRes::CalculateMessageSize(InTransactionID, InResult);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::UpdateWhiteboardSharingLogEntryRes::Create(pMessage, InTransactionID, InResult);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUpdateWhiteboardSharingLogEntryRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult )
+
+
+
+// Cmd: Update whiteboard log entry
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemoveWhiteboardSharingLogEntryRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::RemoveWhiteboardSharingLogEntryRes::CalculateMessageSize(InTransactionID, InResult);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::RemoveWhiteboardSharingLogEntryRes::Create(pMessage, InTransactionID, InResult);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemoveWhiteboardSharingLogEntryRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult )
+
+
+
+// S2C: WhiteboardSharing has been requested
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingRequestedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, PlayerID InRequestedPlayerID )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::WhiteboardSharingRequestedS2CEvt::CalculateMessageSize( InPlayInstanceUID, InPlayerID, InRequestedPlayerID);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::WhiteboardSharingRequestedS2CEvt::Create(pMessage,  InPlayInstanceUID, InPlayerID, InRequestedPlayerID);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingRequestedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, PlayerID InRequestedPlayerID )
+
+
+
+// S2C: WhiteboardSharing has been requested
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingRejectedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, PlayerID InRejectedPlayerID )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::WhiteboardSharingRejectedS2CEvt::CalculateMessageSize( InPlayInstanceUID, InPlayerID, InRejectedPlayerID);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::WhiteboardSharingRejectedS2CEvt::Create(pMessage,  InPlayInstanceUID, InPlayerID, InRejectedPlayerID);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingRejectedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, PlayerID InRejectedPlayerID )
+
+
+
+// S2C: WhiteboardSharing has been started
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingStartedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, PlayerID InOtherPlayerID, uint16_t _sizeOfInWhiteboardInfo,uint8_t* InWhiteboardInfo )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::WhiteboardSharingStartedS2CEvt::CalculateMessageSize( InPlayInstanceUID, InPlayerID, InOtherPlayerID,SF::ArrayView<uint8_t>(_sizeOfInWhiteboardInfo, _sizeOfInWhiteboardInfo, InWhiteboardInfo));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::WhiteboardSharingStartedS2CEvt::Create(pMessage,  InPlayInstanceUID, InPlayerID, InOtherPlayerID,SF::ArrayView<uint8_t>(_sizeOfInWhiteboardInfo, _sizeOfInWhiteboardInfo, InWhiteboardInfo));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingStartedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, PlayerID InOtherPlayerID, uint16_t _sizeOfInWhiteboardInfo,uint8_t* InWhiteboardInfo )
+
+
+
+// S2C: WhiteboardSharing has been closed
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingHasClosedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, PlayerID InClosedPlayerID )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::WhiteboardSharingHasClosedS2CEvt::CalculateMessageSize( InPlayInstanceUID, InPlayerID, InClosedPlayerID);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::WhiteboardSharingHasClosedS2CEvt::Create(pMessage,  InPlayInstanceUID, InPlayerID, InClosedPlayerID);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingHasClosedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, PlayerID InClosedPlayerID )
+
+
+
+// S2C: WhiteboardSharing new log entry has been added
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingNewLogEntryAddedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInLogEntry,uint8_t* InLogEntry )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::WhiteboardSharingNewLogEntryAddedS2CEvt::CalculateMessageSize( InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInLogEntry, _sizeOfInLogEntry, InLogEntry));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::WhiteboardSharingNewLogEntryAddedS2CEvt::Create(pMessage,  InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInLogEntry, _sizeOfInLogEntry, InLogEntry));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingNewLogEntryAddedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInLogEntry,uint8_t* InLogEntry )
+
+
+
+// S2C: WhiteboardSharing new log entry has been removed
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingNewLogEntryRemovedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, LogEntryID InLogEntryID )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt::CalculateMessageSize( InPlayInstanceUID, InPlayerID, InLogEntryID);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt::Create(pMessage,  InPlayInstanceUID, InPlayerID, InLogEntryID);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingNewLogEntryRemovedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, LogEntryID InLogEntryID )
+
+
+
+// S2C: WhiteboardSharing new log entry has been updated
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingNewLogEntryUpdatedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInLogEntry,uint8_t* InLogEntry )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::WhiteboardSharingNewLogEntryUpdatedS2CEvt::CalculateMessageSize( InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInLogEntry, _sizeOfInLogEntry, InLogEntry));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::WhiteboardSharingNewLogEntryUpdatedS2CEvt::Create(pMessage,  InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInLogEntry, _sizeOfInLogEntry, InLogEntry));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingNewLogEntryUpdatedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInLogEntry,uint8_t* InLogEntry )
+
+
+
 // Cmd: Occupy map object
 SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
 {
@@ -403,6 +718,34 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceLevelUpS2CEvt( intptr_t InNativeCon
 
 
 
+// Cmd: To call general functionality
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t _sizeOfInResults,uint8_t* InResults )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::CallFunctionRes::CalculateMessageSize(InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInResults, _sizeOfInResults, InResults));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::CallFunctionRes::Create(pMessage, InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInResults, _sizeOfInResults, InResults));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t _sizeOfInResults,uint8_t* InResults )
+
+
+
+// S2C: Voice data
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt( intptr_t InNativeConnectionHandle, uint32_t InActorID, uint16_t InFrameIndex, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::PlayInstance::VoiceDataS2CEvt::CalculateMessageSize( InActorID, InFrameIndex,SF::ArrayView<uint8_t>(_sizeOfInVoiceData, _sizeOfInVoiceData, const_cast<uint8_t*>(InVoiceData)));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::PlayInstance::VoiceDataS2CEvt::Create(pMessage,  InActorID, InFrameIndex,SF::ArrayView<uint8_t>(_sizeOfInVoiceData, _sizeOfInVoiceData, const_cast<uint8_t*>(InVoiceData)));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt( intptr_t InNativeConnectionHandle, uint32_t InActorID, uint16_t InFrameIndex, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
+
+
+
 // Cmd: Create stream instance
 SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCreateStreamRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, const char* InStreamName )
 {
@@ -457,34 +800,6 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceGetStreamListRes( intptr_t InNative
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (int32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceGetStreamListRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, intptr_t InStreamNames )
-
-
-
-// Cmd: To call general functionality
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t _sizeOfInResults,uint8_t* InResults )
-{
- 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
-	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::CallFunctionRes::CalculateMessageSize(InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInResults, _sizeOfInResults, InResults));
-	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::CallFunctionRes::Create(pMessage, InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInResults, _sizeOfInResults, InResults));
-	if (hr) hr = pConnection->SendMsg(pMessage);
-	return (int32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t _sizeOfInResults,uint8_t* InResults )
-
-
-
-// S2C: Voice data
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt( intptr_t InNativeConnectionHandle, uint32_t InActorID, uint16_t InFrameIndex, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
-{
- 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
-	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::PlayInstance::VoiceDataS2CEvt::CalculateMessageSize( InActorID, InFrameIndex,SF::ArrayView<uint8_t>(_sizeOfInVoiceData, _sizeOfInVoiceData, const_cast<uint8_t*>(InVoiceData)));
-	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::PlayInstance::VoiceDataS2CEvt::Create(pMessage,  InActorID, InFrameIndex,SF::ArrayView<uint8_t>(_sizeOfInVoiceData, _sizeOfInVoiceData, const_cast<uint8_t*>(InVoiceData)));
-	if (hr) hr = pConnection->SendMsg(pMessage);
-	return (int32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt( intptr_t InNativeConnectionHandle, uint32_t InActorID, uint16_t InFrameIndex, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
 
 
 

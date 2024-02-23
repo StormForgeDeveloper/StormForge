@@ -51,6 +51,45 @@ namespace SF
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::ClientSyncReliableC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::ClientSyncReliableC2SEvt::TraceOut));
 			// C2S: Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::ClientSyncC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::ClientSyncC2SEvt::TraceOut));
+			// Cmd: Set character public message. Server will broadcast CharacterPublicDataChanged, NewActorInView should have updated value as well
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::SetCharacterPublicMessageCmd::MID.IDSeq.MsgID,&Message::PlayInstance::SetCharacterPublicMessageCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::SetCharacterPublicMessageRes::MID.IDSeq.MsgID,&Message::PlayInstance::SetCharacterPublicMessageRes::TraceOut));
+			// S2C: Character's private data has changed
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::CharacterPrivateDataChangedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::CharacterPrivateDataChangedS2CEvt::TraceOut));
+			// S2C: Player public data has been changed
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::CharacterPublicDataChangedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::CharacterPublicDataChangedS2CEvt::TraceOut));
+			// Cmd: Request WhiteboardSharing
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::RequestWhiteboardSharingCmd::MID.IDSeq.MsgID,&Message::PlayInstance::RequestWhiteboardSharingCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::RequestWhiteboardSharingRes::MID.IDSeq.MsgID,&Message::PlayInstance::RequestWhiteboardSharingRes::TraceOut));
+			// Cmd: Accept WhiteboardSharing
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::AcceptWhiteboardSharingCmd::MID.IDSeq.MsgID,&Message::PlayInstance::AcceptWhiteboardSharingCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::AcceptWhiteboardSharingRes::MID.IDSeq.MsgID,&Message::PlayInstance::AcceptWhiteboardSharingRes::TraceOut));
+			// Cmd: Close WhiteboardSharing. Both clients will receive WhiteboardSharingHasClosed
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::CloseWhiteboardSharingCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CloseWhiteboardSharingCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::CloseWhiteboardSharingRes::MID.IDSeq.MsgID,&Message::PlayInstance::CloseWhiteboardSharingRes::TraceOut));
+			// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::AddWhiteboardSharingLogEntryCmd::MID.IDSeq.MsgID,&Message::PlayInstance::AddWhiteboardSharingLogEntryCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::AddWhiteboardSharingLogEntryRes::MID.IDSeq.MsgID,&Message::PlayInstance::AddWhiteboardSharingLogEntryRes::TraceOut));
+			// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::UpdateWhiteboardSharingLogEntryCmd::MID.IDSeq.MsgID,&Message::PlayInstance::UpdateWhiteboardSharingLogEntryCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::UpdateWhiteboardSharingLogEntryRes::MID.IDSeq.MsgID,&Message::PlayInstance::UpdateWhiteboardSharingLogEntryRes::TraceOut));
+			// Cmd: Update whiteboard log entry
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::RemoveWhiteboardSharingLogEntryCmd::MID.IDSeq.MsgID,&Message::PlayInstance::RemoveWhiteboardSharingLogEntryCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::RemoveWhiteboardSharingLogEntryRes::MID.IDSeq.MsgID,&Message::PlayInstance::RemoveWhiteboardSharingLogEntryRes::TraceOut));
+			// S2C: WhiteboardSharing has been requested
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingRequestedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingRequestedS2CEvt::TraceOut));
+			// S2C: WhiteboardSharing has been requested
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingRejectedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingRejectedS2CEvt::TraceOut));
+			// S2C: WhiteboardSharing has been started
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingStartedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingStartedS2CEvt::TraceOut));
+			// S2C: WhiteboardSharing has been closed
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingHasClosedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingHasClosedS2CEvt::TraceOut));
+			// S2C: WhiteboardSharing new log entry has been added
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingNewLogEntryAddedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingNewLogEntryAddedS2CEvt::TraceOut));
+			// S2C: WhiteboardSharing new log entry has been removed
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt::TraceOut));
+			// S2C: WhiteboardSharing new log entry has been updated
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::WhiteboardSharingNewLogEntryUpdatedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::WhiteboardSharingNewLogEntryUpdatedS2CEvt::TraceOut));
 			// Cmd: Occupy map object
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::OccupyMapObjectCmd::MID.IDSeq.MsgID,&Message::PlayInstance::OccupyMapObjectCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::OccupyMapObjectRes::MID.IDSeq.MsgID,&Message::PlayInstance::OccupyMapObjectRes::TraceOut));
@@ -67,6 +106,13 @@ namespace SF
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::ZoneChatS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::ZoneChatS2CEvt::TraceOut));
 			// S2C: Effect modifier initial sync
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::LevelUpS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::LevelUpS2CEvt::TraceOut));
+			// Cmd: To call general functionality
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::CallFunctionCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CallFunctionCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::CallFunctionRes::MID.IDSeq.MsgID,&Message::PlayInstance::CallFunctionRes::TraceOut));
+			// C2S: Send coded voice data to server
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::SendVoiceDataC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::SendVoiceDataC2SEvt::TraceOut));
+			// S2C: Voice data
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::VoiceDataS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::VoiceDataS2CEvt::TraceOut));
 			// Cmd: Create stream instance
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::CreateStreamCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CreateStreamCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::CreateStreamRes::MID.IDSeq.MsgID,&Message::PlayInstance::CreateStreamRes::TraceOut));
@@ -79,13 +125,6 @@ namespace SF
 			// Cmd: Get stream list
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::GetStreamListCmd::MID.IDSeq.MsgID,&Message::PlayInstance::GetStreamListCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::GetStreamListRes::MID.IDSeq.MsgID,&Message::PlayInstance::GetStreamListRes::TraceOut));
-			// Cmd: To call general functionality
-			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::CallFunctionCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CallFunctionCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::CallFunctionRes::MID.IDSeq.MsgID,&Message::PlayInstance::CallFunctionRes::TraceOut));
-			// C2S: Send coded voice data to server
-			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::SendVoiceDataC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::SendVoiceDataC2SEvt::TraceOut));
-			// S2C: Voice data
-			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::VoiceDataS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::VoiceDataS2CEvt::TraceOut));
 		}; // void RegisterDebugTracePlayInstance()
 
 

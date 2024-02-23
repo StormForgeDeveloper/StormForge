@@ -9,7 +9,7 @@ namespace SF
         static constexpr uint HeaderSize = 6;
 
         uint16_t Signature;
-        uint16_t Size;
+        uint16_t Size; // Size is updated when Write Header is called
         uint16_t RequestId;
 
         void WriteHeader(flatbuffers::FlatBufferBuilder& buffer)

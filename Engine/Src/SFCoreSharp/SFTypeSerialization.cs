@@ -454,6 +454,20 @@ namespace SF
                     return item;
                 }),
 
+            new TypeInfo(typeof(UInt32), "LogEntryID",
+                (writer, value) =>
+                {
+                    writer.Write((UInt32)value);
+                },
+                (reader) =>
+                {
+                    return reader.ReadUInt32();
+                },
+                (ref IntPtr valuePtr) =>
+                {
+                    return (UInt32)Marshal.ReadInt32(valuePtr);
+                }),
+
         };
 
         static Dictionary<Type, TypeInfo> TypeInfoByType;

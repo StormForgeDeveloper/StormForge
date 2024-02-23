@@ -132,6 +132,9 @@ namespace SF {
 			// Invalid bot talk table 
 			constexpr Result 			GAME_INVALID_BOTTALK_TABLE                                         ((int32_t)0xE7040025L);
 
+			// Request has expired 
+			constexpr Result 			GAME_REQUEST_HAS_EXPIRED                                           ((int32_t)0xE7040026L);
+
 	void InitializeResultCodeGame();
 
 	}//namespace ResultCode 

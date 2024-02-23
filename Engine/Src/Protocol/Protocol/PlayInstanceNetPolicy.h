@@ -42,6 +42,20 @@ namespace SF
 		Result ClientSyncReliableC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData );
 		// C2S: Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
 		Result ClientSyncC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData );
+		// Cmd: Set character public message. Server will broadcast CharacterPublicDataChanged, NewActorInView should have updated value as well
+		Result SetCharacterPublicMessageCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPublicMessage );
+		// Cmd: Request WhiteboardSharing
+		Result RequestWhiteboardSharingCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InTargetPlayerID, const VariableTable &InWhiteboardInfo );
+		// Cmd: Accept WhiteboardSharing
+		Result AcceptWhiteboardSharingCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID, const uint8_t &InAnswer );
+		// Cmd: Close WhiteboardSharing. Both clients will receive WhiteboardSharingHasClosed
+		Result CloseWhiteboardSharingCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID );
+		// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+		Result AddWhiteboardSharingLogEntryCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry );
+		// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+		Result UpdateWhiteboardSharingLogEntryCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry );
+		// Cmd: Update whiteboard log entry
+		Result RemoveWhiteboardSharingLogEntryCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID );
 		// Cmd: Occupy map object
 		Result OccupyMapObjectCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId );
 		// Cmd: Unoccupy map object
@@ -50,6 +64,10 @@ namespace SF
 		Result UseMapObjectCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters );
 		// Cmd: Send zone chatting
 		Result ZoneChatCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage );
+		// Cmd: To call general functionality
+		Result CallFunctionCmd( const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters );
+		// C2S: Send coded voice data to server
+		Result SendVoiceDataC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
 		// Cmd: Create stream instance
 		Result CreateStreamCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
 		// Cmd: Open stream instance
@@ -58,10 +76,6 @@ namespace SF
 		Result DeleteStreamCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
 		// Cmd: Get stream list
 		Result GetStreamListCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket );
-		// Cmd: To call general functionality
-		Result CallFunctionCmd( const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters );
-		// C2S: Send coded voice data to server
-		Result SendVoiceDataC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
 
 	}; // class NetPolicyPlayInstance 
 
@@ -89,6 +103,38 @@ namespace SF
 		Result ActorMovementsS2CEvt( const uint64_t &InPlayInstanceUID, const Array<ActorMovement>& InMovement );
 		// S2C: Player state change
 		Result PlayerStateChangedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition, const VariableTable &InStateValues );
+		// Cmd: Set character public message. Server will broadcast CharacterPublicDataChanged, NewActorInView should have updated value as well
+		Result SetCharacterPublicMessageRes( const TransactionID &InTransactionID, const Result &InResult );
+		// S2C: Character's private data has changed
+		Result CharacterPrivateDataChangedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InCharacterID, const VariableTable &InPrivateData );
+		// S2C: Player public data has been changed
+		Result CharacterPublicDataChangedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InPublicData );
+		// Cmd: Request WhiteboardSharing
+		Result RequestWhiteboardSharingRes( const TransactionID &InTransactionID, const Result &InResult );
+		// Cmd: Accept WhiteboardSharing
+		Result AcceptWhiteboardSharingRes( const TransactionID &InTransactionID, const Result &InResult );
+		// Cmd: Close WhiteboardSharing. Both clients will receive WhiteboardSharingHasClosed
+		Result CloseWhiteboardSharingRes( const TransactionID &InTransactionID, const Result &InResult );
+		// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+		Result AddWhiteboardSharingLogEntryRes( const TransactionID &InTransactionID, const Result &InResult, const LogEntryID &InLogEntryID );
+		// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
+		Result UpdateWhiteboardSharingLogEntryRes( const TransactionID &InTransactionID, const Result &InResult );
+		// Cmd: Update whiteboard log entry
+		Result RemoveWhiteboardSharingLogEntryRes( const TransactionID &InTransactionID, const Result &InResult );
+		// S2C: WhiteboardSharing has been requested
+		Result WhiteboardSharingRequestedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRequestedPlayerID );
+		// S2C: WhiteboardSharing has been requested
+		Result WhiteboardSharingRejectedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InRejectedPlayerID );
+		// S2C: WhiteboardSharing has been started
+		Result WhiteboardSharingStartedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InOtherPlayerID, const VariableTable &InWhiteboardInfo );
+		// S2C: WhiteboardSharing has been closed
+		Result WhiteboardSharingHasClosedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InClosedPlayerID );
+		// S2C: WhiteboardSharing new log entry has been added
+		Result WhiteboardSharingNewLogEntryAddedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry );
+		// S2C: WhiteboardSharing new log entry has been removed
+		Result WhiteboardSharingNewLogEntryRemovedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID );
+		// S2C: WhiteboardSharing new log entry has been updated
+		Result WhiteboardSharingNewLogEntryUpdatedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry );
 		// Cmd: Occupy map object
 		Result OccupyMapObjectRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
 		// Cmd: Unoccupy map object
@@ -101,6 +147,10 @@ namespace SF
 		Result ZoneChatS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InSenderID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage );
 		// S2C: Effect modifier initial sync
 		Result LevelUpS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int64_t &InCurrentExp, const int32_t &InCurrentLevel );
+		// Cmd: To call general functionality
+		Result CallFunctionRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InResults );
+		// S2C: Voice data
+		Result VoiceDataS2CEvt( const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
 		// Cmd: Create stream instance
 		Result CreateStreamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName );
 		// Cmd: Open stream instance
@@ -109,10 +159,6 @@ namespace SF
 		Result DeleteStreamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName );
 		// Cmd: Get stream list
 		Result GetStreamListRes( const TransactionID &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames );
-		// Cmd: To call general functionality
-		Result CallFunctionRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InResults );
-		// S2C: Voice data
-		Result VoiceDataS2CEvt( const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
 
 	}; // class NetSvrPolicyPlayInstance
 

@@ -394,7 +394,7 @@ namespace SF
 
         ArrayView<uint8_t> packetBufferView(packetBuilder.GetSize(), (uint8_t*)packetBuilder.GetBufferPointer());
 
-        SFLog(Telemetry, Debug3, "Enqueue event event:{0}:{1}, sz:{2}", eventId, pEvent->GetEventName(), packetBuilder.GetSize());
+        SFLog(Telemetry, Debug3, "Enqueue event:{0}:{1}, sz:{2}", eventId, pEvent->GetEventName(), packetBuilder.GetSize());
 
 		m_EventQueue.EnqueueEvent(pEvent->GetEventId(), ArrayView<const uint8_t>(packetBufferView));
 	}
