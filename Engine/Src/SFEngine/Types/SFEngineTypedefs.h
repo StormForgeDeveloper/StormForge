@@ -46,6 +46,7 @@ namespace SF {
 
 	using FacebookUID = uint64_t;
 
+    using UGCID = uint64_t;
 
 	// server ID
 	using ServerID = uint32_t;
