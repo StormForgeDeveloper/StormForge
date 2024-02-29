@@ -1005,7 +1005,7 @@ C++: Cast message to GetUGCTemplatesRes to access values
 
 		- OutTransactionID: TransactionID type. 
 		- OutResult: Result type. 
-		- OutUGCIDs: uint64 type. search result UGC ids
+		- OutUGCIDs: UGCID type. search result UGC ids
 
 
 ## SaveUGC Request
@@ -1028,7 +1028,7 @@ C++: Cast message to SaveUGCRes to access values
 
 		- OutTransactionID: TransactionID type. 
 		- OutResult: Result type. 
-		- OutUGCID: uint64 type. Assigned UGC content id
+		- OutUGCID: UGCID type. Assigned UGC content id
 
 
 ## SearchUGC Request
@@ -1060,7 +1060,7 @@ Get UGC content info, name, thumb image and so on
 
 		- OutTransactionID: TransactionID type. 
 
-		- OutUGCID: uint64 type. UGC content id
+		- OutUGCID: UGCID type. UGC content id
 
 2. Result interface
 
@@ -1081,7 +1081,7 @@ Request WhiteboardSharing
 
 		- OutTransactionID: TransactionID type. 
 
-		- OutUGCID: uint64 type. UGC content id
+		- OutUGCID: UGCID type. UGC content id
 
 		- OutIsIncludeMetaData: uint8 type. 
 
@@ -1104,7 +1104,7 @@ Request ugc zone instance. It will provision new zone instance if there is none 
 
 		- OutTransactionID: TransactionID type. 
 
-		- OutUGCID: uint64 type. UGC content id
+		- OutUGCID: UGCID type. UGC content id
 
 2. Result interface
 

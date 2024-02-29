@@ -167,7 +167,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUpdateWhiteboardSharingLogEntryCmd(
 
 
 // Cmd: Update whiteboard log entry
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemoveWhiteboardSharingLogEntryCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, LogEntryID InLogEntryID )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemoveWhiteboardSharingLogEntryCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InLogEntryID )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
@@ -176,7 +176,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemoveWhiteboardSharingLogEntryCmd(
 	Result hr = SF::Message::PlayInstance::RemoveWhiteboardSharingLogEntryCmd::Create(pMessage, InTransactionID, InPlayInstanceUID, InPlayerID, InLogEntryID);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (int32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemoveWhiteboardSharingLogEntryCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, LogEntryID InLogEntryID )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemoveWhiteboardSharingLogEntryCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InLogEntryID )
 
 
 // Cmd: Occupy map object
@@ -495,7 +495,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCloseWhiteboardSharingRes( intptr_t
 
 
 // Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceAddWhiteboardSharingLogEntryRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, LogEntryID InLogEntryID )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceAddWhiteboardSharingLogEntryRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint32_t InLogEntryID )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
@@ -504,7 +504,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceAddWhiteboardSharingLogEntryRes( in
 	Result hr = SF::Message::PlayInstance::AddWhiteboardSharingLogEntryRes::Create(pMessage, InTransactionID, InResult, InLogEntryID);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (int32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceAddWhiteboardSharingLogEntryRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, LogEntryID InLogEntryID )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceAddWhiteboardSharingLogEntryRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint32_t InLogEntryID )
 
 
 
@@ -607,7 +607,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingNewLogEntryAddedS2
 
 
 // S2C: WhiteboardSharing new log entry has been removed
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingNewLogEntryRemovedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, LogEntryID InLogEntryID )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingNewLogEntryRemovedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InLogEntryID )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
@@ -616,7 +616,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingNewLogEntryRemoved
 	Result hr = SF::Message::PlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt::Create(pMessage,  InPlayInstanceUID, InPlayerID, InLogEntryID);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (int32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingNewLogEntryRemovedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, LogEntryID InLogEntryID )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceWhiteboardSharingNewLogEntryRemovedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InLogEntryID )
 
 
 

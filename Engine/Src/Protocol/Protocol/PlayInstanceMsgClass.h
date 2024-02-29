@@ -1137,7 +1137,7 @@ namespace SF
 			private:
 				TransactionID m_TransactionID{};
 				Result m_Result{};
-				LogEntryID m_LogEntryID{};
+				uint32_t m_LogEntryID{};
 			public:
 				AddWhiteboardSharingLogEntryRes()
 					{}
@@ -1152,7 +1152,7 @@ namespace SF
 
 				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
-				const LogEntryID& GetLogEntryID() const	{ return m_LogEntryID; };
+				const uint32_t& GetLogEntryID() const	{ return m_LogEntryID; };
 
 				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
@@ -1160,8 +1160,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const LogEntryID &InLogEntryID );
-				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const LogEntryID &InLogEntryID );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InLogEntryID );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InLogEntryID );
 
 			}; // class AddWhiteboardSharingLogEntryRes : public MessageBase
 
@@ -1274,7 +1274,7 @@ namespace SF
 				TransactionID m_TransactionID{};
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
-				LogEntryID m_LogEntryID{};
+				uint32_t m_LogEntryID{};
 			public:
 				RemoveWhiteboardSharingLogEntryCmd()
 					{}
@@ -1290,7 +1290,7 @@ namespace SF
 				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
-				const LogEntryID& GetLogEntryID() const	{ return m_LogEntryID; };
+				const uint32_t& GetLogEntryID() const	{ return m_LogEntryID; };
 
 				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
@@ -1298,8 +1298,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID );
-				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID );
 
 			}; // class RemoveWhiteboardSharingLogEntryCmd : public MessageBase
 
@@ -1598,7 +1598,7 @@ namespace SF
 			private:
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
-				LogEntryID m_LogEntryID{};
+				uint32_t m_LogEntryID{};
 			public:
 				WhiteboardSharingNewLogEntryRemovedS2CEvt()
 					{}
@@ -1613,7 +1613,7 @@ namespace SF
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
-				const LogEntryID& GetLogEntryID() const	{ return m_LogEntryID; };
+				const uint32_t& GetLogEntryID() const	{ return m_LogEntryID; };
 
 				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
@@ -1621,8 +1621,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID );
-				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID );
+				static size_t CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID );
+				static Result Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID );
 
 			}; // class WhiteboardSharingNewLogEntryRemovedS2CEvt : public MessageBase
 

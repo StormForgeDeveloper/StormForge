@@ -2925,7 +2925,7 @@ namespace SF
 			}; // Result AddWhiteboardSharingLogEntryRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t AddWhiteboardSharingLogEntryRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const LogEntryID &InLogEntryID )
+			size_t AddWhiteboardSharingLogEntryRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InLogEntryID )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -2934,10 +2934,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t AddWhiteboardSharingLogEntryRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const LogEntryID &InLogEntryID )
+			}; // size_t AddWhiteboardSharingLogEntryRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InLogEntryID )
 
 
-			Result AddWhiteboardSharingLogEntryRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const LogEntryID &InLogEntryID )
+			Result AddWhiteboardSharingLogEntryRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InLogEntryID )
 			{
  				Result hr;
 
@@ -2962,7 +2962,7 @@ namespace SF
 				protocolCheck(*output << InLogEntryID);
 
 				return hr;
-			}; // Result AddWhiteboardSharingLogEntryRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const LogEntryID &InLogEntryID )
+			}; // Result AddWhiteboardSharingLogEntryRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InLogEntryID )
 
 			Result AddWhiteboardSharingLogEntryRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -3273,7 +3273,7 @@ namespace SF
 			}; // Result RemoveWhiteboardSharingLogEntryCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t RemoveWhiteboardSharingLogEntryCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+			size_t RemoveWhiteboardSharingLogEntryCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
@@ -3283,10 +3283,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t RemoveWhiteboardSharingLogEntryCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+			}; // size_t RemoveWhiteboardSharingLogEntryCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID )
 
 
-			Result RemoveWhiteboardSharingLogEntryCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+			Result RemoveWhiteboardSharingLogEntryCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID )
 			{
  				Result hr;
 
@@ -3313,7 +3313,7 @@ namespace SF
 				protocolCheck(*output << InLogEntryID);
 
 				return hr;
-			}; // Result RemoveWhiteboardSharingLogEntryCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+			}; // Result RemoveWhiteboardSharingLogEntryCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID )
 
 			Result RemoveWhiteboardSharingLogEntryCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
@@ -4065,7 +4065,7 @@ namespace SF
 			}; // Result WhiteboardSharingNewLogEntryRemovedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
-			size_t WhiteboardSharingNewLogEntryRemovedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+			size_t WhiteboardSharingNewLogEntryRemovedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID )
 			{
  				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
@@ -4074,10 +4074,10 @@ namespace SF
 				);
 
 				return __uiMessageSize;
-			}; // size_t WhiteboardSharingNewLogEntryRemovedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+			}; // size_t WhiteboardSharingNewLogEntryRemovedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID )
 
 
-			Result WhiteboardSharingNewLogEntryRemovedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+			Result WhiteboardSharingNewLogEntryRemovedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID )
 			{
  				Result hr;
 
@@ -4102,7 +4102,7 @@ namespace SF
 				protocolCheck(*output << InLogEntryID);
 
 				return hr;
-			}; // Result WhiteboardSharingNewLogEntryRemovedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+			}; // Result WhiteboardSharingNewLogEntryRemovedS2CEvt::Create( MessageHeader* messageBuffer, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID )
 
 			Result WhiteboardSharingNewLogEntryRemovedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{

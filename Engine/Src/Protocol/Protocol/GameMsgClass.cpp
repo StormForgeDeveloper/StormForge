@@ -8918,7 +8918,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("UGCIDs", parser.GetUGCIDs());
+				variableBuilder.SetVariable("UGCIDs", "UGCID", parser.GetUGCIDs());
 
 				return hr;
 
@@ -9183,7 +9183,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("UGCID", parser.GetUGCID());
+				variableBuilder.SetVariable("UGCID", "UGCID", parser.GetUGCID());
 
 				return hr;
 
@@ -9464,7 +9464,7 @@ namespace SF
 				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
-				variableBuilder.SetVariable("UGCID", parser.GetUGCID());
+				variableBuilder.SetVariable("UGCID", "UGCID", parser.GetUGCID());
 
 				return hr;
 
@@ -9706,7 +9706,7 @@ namespace SF
 				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
-				variableBuilder.SetVariable("UGCID", parser.GetUGCID());
+				variableBuilder.SetVariable("UGCID", "UGCID", parser.GetUGCID());
 				variableBuilder.SetVariable("IsIncludeMetaData", parser.GetIsIncludeMetaData());
 
 				return hr;
@@ -9951,7 +9951,7 @@ namespace SF
 				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
-				variableBuilder.SetVariable("UGCID", parser.GetUGCID());
+				variableBuilder.SetVariable("UGCID", "UGCID", parser.GetUGCID());
 
 				return hr;
 

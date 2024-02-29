@@ -161,13 +161,13 @@ namespace SF.Net
 		} // public int  InviteFriendCmd( SF.TransactionID InTransactionID, System.UInt64 InFriendID, Action<SFMessage>? callback = null )
 
 		// Cmd: Accept friend request
-		public int  AcceptFriendRequestCmd( System.UInt64 InInviterID, SF.PlayerPlatformID InInviterPlatformId, Action<SFMessage>? callback = null )
+		public int  AcceptFriendRequestCmd( System.UInt64 InInviterID, PlayerPlatformID InInviterPlatformId, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return AcceptFriendRequestCmd(InTransactionID, InInviterID, InInviterPlatformId, callback);
-		} // public int  AcceptFriendRequestCmd( System.UInt64 InInviterID, SF.PlayerPlatformID InInviterPlatformId, Action<SFMessage>? callback = null )
-		public int  AcceptFriendRequestCmd( SF.TransactionID InTransactionID, System.UInt64 InInviterID, SF.PlayerPlatformID InInviterPlatformId, Action<SFMessage>? callback = null )
+		} // public int  AcceptFriendRequestCmd( System.UInt64 InInviterID, PlayerPlatformID InInviterPlatformId, Action<SFMessage>? callback = null )
+		public int  AcceptFriendRequestCmd( SF.TransactionID InTransactionID, System.UInt64 InInviterID, PlayerPlatformID InInviterPlatformId, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
@@ -176,7 +176,7 @@ namespace SF.Net
 			}
 			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDGame.AcceptFriendRequestCmd, callback);
 			return result;
-		} // public int  AcceptFriendRequestCmd( SF.TransactionID InTransactionID, System.UInt64 InInviterID, SF.PlayerPlatformID InInviterPlatformId, Action<SFMessage>? callback = null )
+		} // public int  AcceptFriendRequestCmd( SF.TransactionID InTransactionID, System.UInt64 InInviterID, PlayerPlatformID InInviterPlatformId, Action<SFMessage>? callback = null )
 
 		// Cmd: Remove friden form the friend list
 		public int  RemoveFriendCmd( System.UInt64 InFriendID, Action<SFMessage>? callback = null )
@@ -287,13 +287,13 @@ namespace SF.Net
 		} // public int  AcceptNotificationCmd( SF.TransactionID InTransactionID, System.UInt32 InNotificationID, Action<SFMessage>? callback = null )
 
 		// Cmd: PlayerId Conversion
-		public int  FindPlayerByPlatformIdCmd( SF.PlayerPlatformID InPlatformPlayerId, Action<SFMessage>? callback = null )
+		public int  FindPlayerByPlatformIdCmd( PlayerPlatformID InPlatformPlayerId, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return FindPlayerByPlatformIdCmd(InTransactionID, InPlatformPlayerId, callback);
-		} // public int  FindPlayerByPlatformIdCmd( SF.PlayerPlatformID InPlatformPlayerId, Action<SFMessage>? callback = null )
-		public int  FindPlayerByPlatformIdCmd( SF.TransactionID InTransactionID, SF.PlayerPlatformID InPlatformPlayerId, Action<SFMessage>? callback = null )
+		} // public int  FindPlayerByPlatformIdCmd( PlayerPlatformID InPlatformPlayerId, Action<SFMessage>? callback = null )
+		public int  FindPlayerByPlatformIdCmd( SF.TransactionID InTransactionID, PlayerPlatformID InPlatformPlayerId, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
@@ -302,7 +302,7 @@ namespace SF.Net
 			}
 			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDGame.FindPlayerByPlatformIdCmd, callback);
 			return result;
-		} // public int  FindPlayerByPlatformIdCmd( SF.TransactionID InTransactionID, SF.PlayerPlatformID InPlatformPlayerId, Action<SFMessage>? callback = null )
+		} // public int  FindPlayerByPlatformIdCmd( SF.TransactionID InTransactionID, PlayerPlatformID InPlatformPlayerId, Action<SFMessage>? callback = null )
 
 		// Cmd: PlayerId conversion
 		public int  FindPlayerByCharacterNameCmd( System.String InCharacterName, Action<SFMessage>? callback = null )
@@ -761,13 +761,13 @@ namespace SF.Net
 		} // public int  SearchUGCCmd( SF.TransactionID InTransactionID, System.String[] InTags, Action<SFMessage>? callback = null )
 
 		// Cmd: Get UGC content info, name, thumb image and so on
-		public int  GetUGCContentInfoCmd( System.UInt64 InUGCID, Action<SFMessage>? callback = null )
+		public int  GetUGCContentInfoCmd( UInt64 InUGCID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return GetUGCContentInfoCmd(InTransactionID, InUGCID, callback);
-		} // public int  GetUGCContentInfoCmd( System.UInt64 InUGCID, Action<SFMessage>? callback = null )
-		public int  GetUGCContentInfoCmd( SF.TransactionID InTransactionID, System.UInt64 InUGCID, Action<SFMessage>? callback = null )
+		} // public int  GetUGCContentInfoCmd( UInt64 InUGCID, Action<SFMessage>? callback = null )
+		public int  GetUGCContentInfoCmd( SF.TransactionID InTransactionID, UInt64 InUGCID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
@@ -776,16 +776,16 @@ namespace SF.Net
 			}
 			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDGame.GetUGCContentInfoCmd, callback);
 			return result;
-		} // public int  GetUGCContentInfoCmd( SF.TransactionID InTransactionID, System.UInt64 InUGCID, Action<SFMessage>? callback = null )
+		} // public int  GetUGCContentInfoCmd( SF.TransactionID InTransactionID, UInt64 InUGCID, Action<SFMessage>? callback = null )
 
 		// Cmd: Request WhiteboardSharing
-		public int  DownloadUGCContentCmd( System.UInt64 InUGCID, System.Byte InIsIncludeMetaData, Action<SFMessage>? callback = null )
+		public int  DownloadUGCContentCmd( UInt64 InUGCID, System.Byte InIsIncludeMetaData, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return DownloadUGCContentCmd(InTransactionID, InUGCID, InIsIncludeMetaData, callback);
-		} // public int  DownloadUGCContentCmd( System.UInt64 InUGCID, System.Byte InIsIncludeMetaData, Action<SFMessage>? callback = null )
-		public int  DownloadUGCContentCmd( SF.TransactionID InTransactionID, System.UInt64 InUGCID, System.Byte InIsIncludeMetaData, Action<SFMessage>? callback = null )
+		} // public int  DownloadUGCContentCmd( UInt64 InUGCID, System.Byte InIsIncludeMetaData, Action<SFMessage>? callback = null )
+		public int  DownloadUGCContentCmd( SF.TransactionID InTransactionID, UInt64 InUGCID, System.Byte InIsIncludeMetaData, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
@@ -794,16 +794,16 @@ namespace SF.Net
 			}
 			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDGame.DownloadUGCContentCmd, callback);
 			return result;
-		} // public int  DownloadUGCContentCmd( SF.TransactionID InTransactionID, System.UInt64 InUGCID, System.Byte InIsIncludeMetaData, Action<SFMessage>? callback = null )
+		} // public int  DownloadUGCContentCmd( SF.TransactionID InTransactionID, UInt64 InUGCID, System.Byte InIsIncludeMetaData, Action<SFMessage>? callback = null )
 
 		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
-		public int  RequestUGCZoneInstanceCmd( System.UInt64 InUGCID, Action<SFMessage>? callback = null )
+		public int  RequestUGCZoneInstanceCmd( UInt64 InUGCID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return RequestUGCZoneInstanceCmd(InTransactionID, InUGCID, callback);
-		} // public int  RequestUGCZoneInstanceCmd( System.UInt64 InUGCID, Action<SFMessage>? callback = null )
-		public int  RequestUGCZoneInstanceCmd( SF.TransactionID InTransactionID, System.UInt64 InUGCID, Action<SFMessage>? callback = null )
+		} // public int  RequestUGCZoneInstanceCmd( UInt64 InUGCID, Action<SFMessage>? callback = null )
+		public int  RequestUGCZoneInstanceCmd( SF.TransactionID InTransactionID, UInt64 InUGCID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
@@ -812,7 +812,7 @@ namespace SF.Net
 			}
 			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDGame.RequestUGCZoneInstanceCmd, callback);
 			return result;
-		} // public int  RequestUGCZoneInstanceCmd( SF.TransactionID InTransactionID, System.UInt64 InUGCID, Action<SFMessage>? callback = null )
+		} // public int  RequestUGCZoneInstanceCmd( SF.TransactionID InTransactionID, UInt64 InUGCID, Action<SFMessage>? callback = null )
 
 		// Cmd: Buy shop item prepare
 		public int  BuyShopItemPrepareCmd( System.UInt32 InShopItemID, Action<SFMessage>? callback = null )
@@ -1133,7 +1133,7 @@ namespace SF.Net
 
 		// Cmd: Accept friend request
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameAcceptFriendRequestCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameAcceptFriendRequestCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InInviterID, ref SF.PlayerPlatformID InInviterPlatformId );
+		static extern int CSSFNetAdapter_GameAcceptFriendRequestCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InInviterID, ref PlayerPlatformID InInviterPlatformId );
 
 
 		// Cmd: Remove friden form the friend list
@@ -1168,7 +1168,7 @@ namespace SF.Net
 
 		// Cmd: PlayerId Conversion
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameFindPlayerByPlatformIdCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameFindPlayerByPlatformIdCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, ref SF.PlayerPlatformID InPlatformPlayerId );
+		static extern int CSSFNetAdapter_GameFindPlayerByPlatformIdCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, ref PlayerPlatformID InPlatformPlayerId );
 
 
 		// Cmd: PlayerId conversion
@@ -1298,17 +1298,17 @@ namespace SF.Net
 
 		// Cmd: Get UGC content info, name, thumb image and so on
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetUGCContentInfoCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGetUGCContentInfoCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InUGCID );
+		static extern int CSSFNetAdapter_GameGetUGCContentInfoCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, UInt64 InUGCID );
 
 
 		// Cmd: Request WhiteboardSharing
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameDownloadUGCContentCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameDownloadUGCContentCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InUGCID, System.Byte InIsIncludeMetaData );
+		static extern int CSSFNetAdapter_GameDownloadUGCContentCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, UInt64 InUGCID, System.Byte InIsIncludeMetaData );
 
 
 		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameRequestUGCZoneInstanceCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameRequestUGCZoneInstanceCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InUGCID );
+		static extern int CSSFNetAdapter_GameRequestUGCZoneInstanceCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, UInt64 InUGCID );
 
 
 		// Cmd: Buy shop item prepare
@@ -1420,7 +1420,7 @@ namespace SF.Net
 
 
 		// Cmd: player complition statues
-		public int  GetAchievementStatsRes( SF.TransactionID InTransactionID, System.Int32 InResult, SF.AchievementStat[] InAchievementStats )
+		public int  GetAchievementStatsRes( SF.TransactionID InTransactionID, System.Int32 InResult, AchievementStat[] InAchievementStats )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
@@ -1429,7 +1429,7 @@ namespace SF.Net
 			}
 			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDGame.GetAchievementStatsRes);
 			return result;
-		} // public int  GetAchievementStatsRes( SF.TransactionID InTransactionID, System.Int32 InResult, SF.AchievementStat[] InAchievementStats )
+		} // public int  GetAchievementStatsRes( SF.TransactionID InTransactionID, System.Int32 InResult, AchievementStat[] InAchievementStats )
 
 
 		// Cmd: Player complition state
@@ -1617,7 +1617,7 @@ namespace SF.Net
 
 
 		// Cmd: PlayerId Conversion
-		public int  FindPlayerByPlatformIdRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, SF.PlayerPlatformID InPlayerPlatformId )
+		public int  FindPlayerByPlatformIdRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, PlayerPlatformID InPlayerPlatformId )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
@@ -1626,7 +1626,7 @@ namespace SF.Net
 			}
 			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDGame.FindPlayerByPlatformIdRes);
 			return result;
-		} // public int  FindPlayerByPlatformIdRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, SF.PlayerPlatformID InPlayerPlatformId )
+		} // public int  FindPlayerByPlatformIdRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, PlayerPlatformID InPlayerPlatformId )
 
 
 		// Cmd: PlayerId conversion
@@ -1643,7 +1643,7 @@ namespace SF.Net
 
 
 		// Cmd: PlayerId Conversion
-		public int  FindPlayerByPlatformUserNameRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, SF.PlayerPlatformID InPlayerPlatformId )
+		public int  FindPlayerByPlatformUserNameRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, PlayerPlatformID InPlayerPlatformId )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
@@ -1652,7 +1652,7 @@ namespace SF.Net
 			}
 			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDGame.FindPlayerByPlatformUserNameRes);
 			return result;
-		} // public int  FindPlayerByPlatformUserNameRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, SF.PlayerPlatformID InPlayerPlatformId )
+		} // public int  FindPlayerByPlatformUserNameRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, PlayerPlatformID InPlayerPlatformId )
 
 
 		// Cmd: Query playerID list
@@ -2093,7 +2093,7 @@ namespace SF.Net
 
 
 		// Cmd: Request UGC template list
-		public int  GetUGCTemplatesRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InUGCIDs )
+		public int  GetUGCTemplatesRes( SF.TransactionID InTransactionID, System.Int32 InResult, UInt64 InUGCIDs )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
@@ -2102,11 +2102,11 @@ namespace SF.Net
 			}
 			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDGame.GetUGCTemplatesRes);
 			return result;
-		} // public int  GetUGCTemplatesRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InUGCIDs )
+		} // public int  GetUGCTemplatesRes( SF.TransactionID InTransactionID, System.Int32 InResult, UInt64 InUGCIDs )
 
 
 		// Cmd: Save UGC content data
-		public int  SaveUGCRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InUGCID )
+		public int  SaveUGCRes( SF.TransactionID InTransactionID, System.Int32 InResult, UInt64 InUGCID )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
@@ -2115,7 +2115,7 @@ namespace SF.Net
 			}
 			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDGame.SaveUGCRes);
 			return result;
-		} // public int  SaveUGCRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InUGCID )
+		} // public int  SaveUGCRes( SF.TransactionID InTransactionID, System.Int32 InResult, UInt64 InUGCID )
 
 
 		// Cmd: Request WhiteboardSharing
@@ -2485,7 +2485,7 @@ namespace SF.Net
 
 		// Cmd: player complition statues
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetAchievementStatsRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGetAchievementStatsRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInAchievementStats,SF.AchievementStat[] InAchievementStats );
+		static extern int CSSFNetAdapter_GameGetAchievementStatsRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInAchievementStats,AchievementStat[] InAchievementStats );
 
 
 
@@ -2575,7 +2575,7 @@ namespace SF.Net
 
 		// Cmd: PlayerId Conversion
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameFindPlayerByPlatformIdRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameFindPlayerByPlatformIdRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, ref SF.PlayerPlatformID InPlayerPlatformId );
+		static extern int CSSFNetAdapter_GameFindPlayerByPlatformIdRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, ref PlayerPlatformID InPlayerPlatformId );
 
 
 
@@ -2587,7 +2587,7 @@ namespace SF.Net
 
 		// Cmd: PlayerId Conversion
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameFindPlayerByPlatformUserNameRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameFindPlayerByPlatformUserNameRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, ref SF.PlayerPlatformID InPlayerPlatformId );
+		static extern int CSSFNetAdapter_GameFindPlayerByPlatformUserNameRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, ref PlayerPlatformID InPlayerPlatformId );
 
 
 
@@ -2791,13 +2791,13 @@ namespace SF.Net
 
 		// Cmd: Request UGC template list
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetUGCTemplatesRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGetUGCTemplatesRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InUGCIDs );
+		static extern int CSSFNetAdapter_GameGetUGCTemplatesRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, UInt64 InUGCIDs );
 
 
 
 		// Cmd: Save UGC content data
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameSaveUGCRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameSaveUGCRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InUGCID );
+		static extern int CSSFNetAdapter_GameSaveUGCRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, UInt64 InUGCID );
 
 
 

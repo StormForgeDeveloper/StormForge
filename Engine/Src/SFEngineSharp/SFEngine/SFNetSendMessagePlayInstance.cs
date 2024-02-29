@@ -71,7 +71,7 @@ namespace SF.Net
 
 
 		// C2S: Player Movement
-		public int  PlayerMovementC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.ActorMovement InMovement )
+		public int  PlayerMovementC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, ActorMovement InMovement )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
@@ -80,7 +80,7 @@ namespace SF.Net
 			}
 			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.PlayerMovementC2SEvt);
 			return result;
-		} // public int  PlayerMovementC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.ActorMovement InMovement )
+		} // public int  PlayerMovementC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, ActorMovement InMovement )
 
 
 		// C2S: Repliable player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
@@ -228,13 +228,13 @@ namespace SF.Net
 		} // public int  UpdateWhiteboardSharingLogEntryCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.VariableTable InLogEntry, Action<SFMessage>? callback = null )
 
 		// Cmd: Update whiteboard log entry
-		public int  RemoveWhiteboardSharingLogEntryCmd( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InLogEntryID, Action<SFMessage>? callback = null )
+		public int  RemoveWhiteboardSharingLogEntryCmd( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, UInt32 InLogEntryID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return RemoveWhiteboardSharingLogEntryCmd(InTransactionID, InPlayInstanceUID, InPlayerID, InLogEntryID, callback);
-		} // public int  RemoveWhiteboardSharingLogEntryCmd( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InLogEntryID, Action<SFMessage>? callback = null )
-		public int  RemoveWhiteboardSharingLogEntryCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InLogEntryID, Action<SFMessage>? callback = null )
+		} // public int  RemoveWhiteboardSharingLogEntryCmd( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, UInt32 InLogEntryID, Action<SFMessage>? callback = null )
+		public int  RemoveWhiteboardSharingLogEntryCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, UInt32 InLogEntryID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
@@ -243,7 +243,7 @@ namespace SF.Net
 			}
 			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDPlayInstance.RemoveWhiteboardSharingLogEntryCmd, callback);
 			return result;
-		} // public int  RemoveWhiteboardSharingLogEntryCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InLogEntryID, Action<SFMessage>? callback = null )
+		} // public int  RemoveWhiteboardSharingLogEntryCmd( SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, UInt32 InLogEntryID, Action<SFMessage>? callback = null )
 
 		// Cmd: Occupy map object
 		public int  OccupyMapObjectCmd( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, System.UInt32 InUsageId, Action<SFMessage>? callback = null )
@@ -440,7 +440,7 @@ namespace SF.Net
 
 		// C2S: Player Movement
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstancePlayerMovementC2SEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstancePlayerMovementC2SEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, ref SF.ActorMovement InMovement );
+		static extern int CSSFNetAdapter_PlayInstancePlayerMovementC2SEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, ref ActorMovement InMovement );
 
 
 
@@ -488,7 +488,7 @@ namespace SF.Net
 
 		// Cmd: Update whiteboard log entry
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceRemoveWhiteboardSharingLogEntryCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceRemoveWhiteboardSharingLogEntryCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InLogEntryID );
+		static extern int CSSFNetAdapter_PlayInstanceRemoveWhiteboardSharingLogEntryCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, UInt32 InLogEntryID );
 
 
 		// Cmd: Occupy map object
@@ -563,7 +563,7 @@ namespace SF.Net
  		} // public  SendMessageSvrPlayInstance( SF.SFConnection connection ) : base(connection)
 
 		// Cmd: Player Join request.
-		public int  JoinPlayInstanceRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InCharacterID, SF.VariableTable InCharacterPrivateData, SF.ActorMovement InMovement )
+		public int  JoinPlayInstanceRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InCharacterID, SF.VariableTable InCharacterPrivateData, ActorMovement InMovement )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
@@ -574,7 +574,7 @@ namespace SF.Net
 			}
 			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.JoinPlayInstanceRes);
 			return result;
-		} // public int  JoinPlayInstanceRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InCharacterID, SF.VariableTable InCharacterPrivateData, SF.ActorMovement InMovement )
+		} // public int  JoinPlayInstanceRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InCharacterID, SF.VariableTable InCharacterPrivateData, ActorMovement InMovement )
 
 
 		// S2C: Player kicked event. this event will be broadcasted when a player kicked.
@@ -591,7 +591,7 @@ namespace SF.Net
 
 
 		// S2C: New actor in get view
-		public int  NewActorInViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.PlayerPlatformID InPlayerPlatformId, SF.VariableTable InPublicData, SF.VariableTable InEquipData, SF.ActorMovement InMovement, System.UInt32 InState, SF.VariableTable InStateValues )
+		public int  NewActorInViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, PlayerPlatformID InPlayerPlatformId, SF.VariableTable InPublicData, SF.VariableTable InEquipData, ActorMovement InMovement, System.UInt32 InState, SF.VariableTable InStateValues )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
@@ -606,7 +606,7 @@ namespace SF.Net
 			}
 			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.NewActorInViewS2CEvt);
 			return result;
-		} // public int  NewActorInViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.PlayerPlatformID InPlayerPlatformId, SF.VariableTable InPublicData, SF.VariableTable InEquipData, SF.ActorMovement InMovement, System.UInt32 InState, SF.VariableTable InStateValues )
+		} // public int  NewActorInViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, PlayerPlatformID InPlayerPlatformId, SF.VariableTable InPublicData, SF.VariableTable InEquipData, ActorMovement InMovement, System.UInt32 InState, SF.VariableTable InStateValues )
 
 
 		// S2C: Remove actor from view
@@ -623,7 +623,7 @@ namespace SF.Net
 
 
 		// S2C: Player Movement
-		public int  ActorMovementS2CEvt( System.UInt64 InPlayInstanceUID, SF.ActorMovement InMovement )
+		public int  ActorMovementS2CEvt( System.UInt64 InPlayInstanceUID, ActorMovement InMovement )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
@@ -632,11 +632,11 @@ namespace SF.Net
 			}
 			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.ActorMovementS2CEvt);
 			return result;
-		} // public int  ActorMovementS2CEvt( System.UInt64 InPlayInstanceUID, SF.ActorMovement InMovement )
+		} // public int  ActorMovementS2CEvt( System.UInt64 InPlayInstanceUID, ActorMovement InMovement )
 
 
 		// S2C: Player Movement
-		public int  ActorMovementsS2CEvt( System.UInt64 InPlayInstanceUID, SF.ActorMovement[] InMovement )
+		public int  ActorMovementsS2CEvt( System.UInt64 InPlayInstanceUID, ActorMovement[] InMovement )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
@@ -645,7 +645,7 @@ namespace SF.Net
 			}
 			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.ActorMovementsS2CEvt);
 			return result;
-		} // public int  ActorMovementsS2CEvt( System.UInt64 InPlayInstanceUID, SF.ActorMovement[] InMovement )
+		} // public int  ActorMovementsS2CEvt( System.UInt64 InPlayInstanceUID, ActorMovement[] InMovement )
 
 
 		// S2C: Player state change
@@ -746,7 +746,7 @@ namespace SF.Net
 
 
 		// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
-		public int  AddWhiteboardSharingLogEntryRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt32 InLogEntryID )
+		public int  AddWhiteboardSharingLogEntryRes( SF.TransactionID InTransactionID, System.Int32 InResult, UInt32 InLogEntryID )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
@@ -755,7 +755,7 @@ namespace SF.Net
 			}
 			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.AddWhiteboardSharingLogEntryRes);
 			return result;
-		} // public int  AddWhiteboardSharingLogEntryRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt32 InLogEntryID )
+		} // public int  AddWhiteboardSharingLogEntryRes( SF.TransactionID InTransactionID, System.Int32 InResult, UInt32 InLogEntryID )
 
 
 		// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
@@ -854,7 +854,7 @@ namespace SF.Net
 
 
 		// S2C: WhiteboardSharing new log entry has been removed
-		public int  WhiteboardSharingNewLogEntryRemovedS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InLogEntryID )
+		public int  WhiteboardSharingNewLogEntryRemovedS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, UInt32 InLogEntryID )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
 			int result;
@@ -863,7 +863,7 @@ namespace SF.Net
 			}
 			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDPlayInstance.WhiteboardSharingNewLogEntryRemovedS2CEvt);
 			return result;
-		} // public int  WhiteboardSharingNewLogEntryRemovedS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InLogEntryID )
+		} // public int  WhiteboardSharingNewLogEntryRemovedS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, UInt32 InLogEntryID )
 
 
 		// S2C: WhiteboardSharing new log entry has been updated
@@ -1047,7 +1047,7 @@ namespace SF.Net
 		#region Native Interfaces 
 		// Cmd: Player Join request.
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InCharacterID, System.UInt16 _sizeOfInCharacterPrivateData,IntPtr InCharacterPrivateData, ref SF.ActorMovement InMovement );
+		static extern int CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InCharacterID, System.UInt16 _sizeOfInCharacterPrivateData,IntPtr InCharacterPrivateData, ref ActorMovement InMovement );
 
 
 
@@ -1059,7 +1059,7 @@ namespace SF.Net
 
 		// S2C: New actor in get view
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceNewActorInViewS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceNewActorInViewS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, ref SF.PlayerPlatformID InPlayerPlatformId, System.UInt16 _sizeOfInPublicData,IntPtr InPublicData, System.UInt16 _sizeOfInEquipData,IntPtr InEquipData, ref SF.ActorMovement InMovement, System.UInt32 InState, System.UInt16 _sizeOfInStateValues,IntPtr InStateValues );
+		static extern int CSSFNetAdapter_PlayInstanceNewActorInViewS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, ref PlayerPlatformID InPlayerPlatformId, System.UInt16 _sizeOfInPublicData,IntPtr InPublicData, System.UInt16 _sizeOfInEquipData,IntPtr InEquipData, ref ActorMovement InMovement, System.UInt32 InState, System.UInt16 _sizeOfInStateValues,IntPtr InStateValues );
 
 
 
@@ -1071,13 +1071,13 @@ namespace SF.Net
 
 		// S2C: Player Movement
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceActorMovementS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceActorMovementS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, ref SF.ActorMovement InMovement );
+		static extern int CSSFNetAdapter_PlayInstanceActorMovementS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, ref ActorMovement InMovement );
 
 
 
 		// S2C: Player Movement
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceActorMovementsS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceActorMovementsS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt16 _sizeOfInMovement,SF.ActorMovement[] InMovement );
+		static extern int CSSFNetAdapter_PlayInstanceActorMovementsS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt16 _sizeOfInMovement,ActorMovement[] InMovement );
 
 
 
@@ -1125,7 +1125,7 @@ namespace SF.Net
 
 		// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceAddWhiteboardSharingLogEntryRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceAddWhiteboardSharingLogEntryRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt32 InLogEntryID );
+		static extern int CSSFNetAdapter_PlayInstanceAddWhiteboardSharingLogEntryRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, UInt32 InLogEntryID );
 
 
 
@@ -1173,7 +1173,7 @@ namespace SF.Net
 
 		// S2C: WhiteboardSharing new log entry has been removed
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceWhiteboardSharingNewLogEntryRemovedS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceWhiteboardSharingNewLogEntryRemovedS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InLogEntryID );
+		static extern int CSSFNetAdapter_PlayInstanceWhiteboardSharingNewLogEntryRemovedS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, UInt32 InLogEntryID );
 
 
 

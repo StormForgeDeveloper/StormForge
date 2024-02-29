@@ -351,7 +351,7 @@ Update whiteboard log entry
 
 1. Command interface
 
-        Result RemoveWhiteboardSharingLogEntryCmd(const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID)
+        Result RemoveWhiteboardSharingLogEntryCmd(const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -435,7 +435,7 @@ WhiteboardSharing new log entry has been added
 ## WhiteboardSharingNewLogEntryRemovedS2CEvt
 WhiteboardSharing new log entry has been removed
 
-        Result WhiteboardSharingNewLogEntryRemovedS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID)
+        Result WhiteboardSharingNewLogEntryRemovedS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID)
 
 		- OutInPlayInstanceUID: EntityUID type. Play instance
 

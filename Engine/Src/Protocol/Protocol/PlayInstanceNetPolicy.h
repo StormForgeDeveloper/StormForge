@@ -55,7 +55,7 @@ namespace SF
 		// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
 		Result UpdateWhiteboardSharingLogEntryCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry );
 		// Cmd: Update whiteboard log entry
-		Result RemoveWhiteboardSharingLogEntryCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID );
+		Result RemoveWhiteboardSharingLogEntryCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID );
 		// Cmd: Occupy map object
 		Result OccupyMapObjectCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId );
 		// Cmd: Unoccupy map object
@@ -116,7 +116,7 @@ namespace SF
 		// Cmd: Close WhiteboardSharing. Both clients will receive WhiteboardSharingHasClosed
 		Result CloseWhiteboardSharingRes( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
-		Result AddWhiteboardSharingLogEntryRes( const TransactionID &InTransactionID, const Result &InResult, const LogEntryID &InLogEntryID );
+		Result AddWhiteboardSharingLogEntryRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InLogEntryID );
 		// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
 		Result UpdateWhiteboardSharingLogEntryRes( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: Update whiteboard log entry
@@ -132,7 +132,7 @@ namespace SF
 		// S2C: WhiteboardSharing new log entry has been added
 		Result WhiteboardSharingNewLogEntryAddedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry );
 		// S2C: WhiteboardSharing new log entry has been removed
-		Result WhiteboardSharingNewLogEntryRemovedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID );
+		Result WhiteboardSharingNewLogEntryRemovedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID );
 		// S2C: WhiteboardSharing new log entry has been updated
 		Result WhiteboardSharingNewLogEntryUpdatedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry );
 		// Cmd: Occupy map object

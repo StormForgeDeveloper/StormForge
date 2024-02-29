@@ -166,7 +166,7 @@ namespace SF
 
 	}; // Result NetPolicyPlayInstance::UpdateWhiteboardSharingLogEntryCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
 	// Cmd: Update whiteboard log entry
-	Result NetPolicyPlayInstance::RemoveWhiteboardSharingLogEntryCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+	Result NetPolicyPlayInstance::RemoveWhiteboardSharingLogEntryCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID )
 	{
  		Result hr;
 
@@ -177,7 +177,7 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::RemoveWhiteboardSharingLogEntryCmd::Create(messageBuffer, InTransactionID, InPlayInstanceUID, InPlayerID, InLogEntryID));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetPolicyPlayInstance::RemoveWhiteboardSharingLogEntryCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+	}; // Result NetPolicyPlayInstance::RemoveWhiteboardSharingLogEntryCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID )
 	// Cmd: Occupy map object
 	Result NetPolicyPlayInstance::OccupyMapObjectCmd( const TransactionID &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
 	{
@@ -480,7 +480,7 @@ namespace SF
 
 	}; // Result NetSvrPolicyPlayInstance::CloseWhiteboardSharingRes( const TransactionID &InTransactionID, const Result &InResult )
 	// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
-	Result NetSvrPolicyPlayInstance::AddWhiteboardSharingLogEntryRes( const TransactionID &InTransactionID, const Result &InResult, const LogEntryID &InLogEntryID )
+	Result NetSvrPolicyPlayInstance::AddWhiteboardSharingLogEntryRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InLogEntryID )
 	{
  		Result hr;
 
@@ -491,7 +491,7 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::AddWhiteboardSharingLogEntryRes::Create(messageBuffer, InTransactionID, InResult, InLogEntryID));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyPlayInstance::AddWhiteboardSharingLogEntryRes( const TransactionID &InTransactionID, const Result &InResult, const LogEntryID &InLogEntryID )
+	}; // Result NetSvrPolicyPlayInstance::AddWhiteboardSharingLogEntryRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InLogEntryID )
 	// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
 	Result NetSvrPolicyPlayInstance::UpdateWhiteboardSharingLogEntryRes( const TransactionID &InTransactionID, const Result &InResult )
 	{
@@ -584,7 +584,7 @@ namespace SF
 
 	}; // Result NetSvrPolicyPlayInstance::WhiteboardSharingNewLogEntryAddedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
 	// S2C: WhiteboardSharing new log entry has been removed
-	Result NetSvrPolicyPlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+	Result NetSvrPolicyPlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID )
 	{
  		Result hr;
 
@@ -595,7 +595,7 @@ namespace SF
 		protocolCheck(SF::Message::PlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt::Create(messageBuffer, InPlayInstanceUID, InPlayerID, InLogEntryID));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyPlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const LogEntryID &InLogEntryID )
+	}; // Result NetSvrPolicyPlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InLogEntryID )
 	// S2C: WhiteboardSharing new log entry has been updated
 	Result NetSvrPolicyPlayInstance::WhiteboardSharingNewLogEntryUpdatedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry )
 	{
