@@ -987,6 +987,156 @@ game matching canceled
         Result GameMatchingCanceledS2CEvt()
 
 
+## GetUGCTemplates Request
+Request UGC template list
+
+1. Command interface
+
+        Result GetUGCTemplatesCmd(const TransactionID &InTransactionID, const Array<const char*>& InTags)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutTags: String type. Tags, used for search
+
+2. Result interface
+
+C++: Cast message to GetUGCTemplatesRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+		- OutUGCIDs: uint64 type. search result UGC ids
+
+
+## SaveUGC Request
+Save UGC content data
+
+1. Command interface
+
+        Result SaveUGCCmd(const TransactionID &InTransactionID, const Array<uint8_t>& InUGCMetaData, const Array<uint8_t>& InUGCContents)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutUGCMetaData: VariableTable type. Metadata will be linked with. This is quick access data like name and thumb image
+
+		- OutUGCContents: VariableTable type. UGCContents data. main content binary and so on
+
+2. Result interface
+
+C++: Cast message to SaveUGCRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+		- OutUGCID: uint64 type. Assigned UGC content id
+
+
+## SearchUGC Request
+Request WhiteboardSharing
+
+1. Command interface
+
+        Result SearchUGCCmd(const TransactionID &InTransactionID, const Array<const char*>& InTags)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutTags: String type. Search tags
+
+2. Result interface
+
+C++: Cast message to SearchUGCRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+
+
+## GetUGCContentInfo Request
+Get UGC content info, name, thumb image and so on
+
+1. Command interface
+
+        Result GetUGCContentInfoCmd(const TransactionID &InTransactionID, const uint64_t &InUGCID)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutUGCID: uint64 type. UGC content id
+
+2. Result interface
+
+C++: Cast message to GetUGCContentInfoRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+		- OutUGCMetaData: VariableTable type. UGCContents metadata
+
+
+## DownloadUGCContent Request
+Request WhiteboardSharing
+
+1. Command interface
+
+        Result DownloadUGCContentCmd(const TransactionID &InTransactionID, const uint64_t &InUGCID, const uint8_t &InIsIncludeMetaData)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutUGCID: uint64 type. UGC content id
+
+		- OutIsIncludeMetaData: uint8 type. 
+
+2. Result interface
+
+C++: Cast message to DownloadUGCContentRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+		- OutUGCMetaData: VariableTable type. UGCContents metadata
+
+
+## RequestUGCZoneInstance Request
+Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+
+1. Command interface
+
+        Result RequestUGCZoneInstanceCmd(const TransactionID &InTransactionID, const uint64_t &InUGCID)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutUGCID: uint64 type. UGC content id
+
+2. Result interface
+
+C++: Cast message to RequestUGCZoneInstanceRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+		- OutGameInstance: VariableTable type. Privisoned UGC zone instance information
+
+
+## RequestUGCZoneInstance Request
+Request ugc zone instance
+
+1. Command interface
+
+        Result RequestUGCZoneInstanceCmd(const TransactionID &InTransactionID, const uint64_t &InUGCID)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutUGCID: uint64 type. UGC content id
+
+2. Result interface
+
+C++: Cast message to RequestUGCZoneInstanceRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+		- OutGameInstance: VariableTable type. Privisoned UGC zone instance information
+
+
 ## BuyShopItemPrepare Request
 Buy shop item prepare
 

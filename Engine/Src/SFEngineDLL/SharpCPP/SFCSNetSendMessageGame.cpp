@@ -501,6 +501,99 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameCancelGameMatchCmd( intptr_t InNativeConnec
 } // SFDLL_EXPORT int  CSSFNetAdapter_GameCancelGameMatchCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID )
 
 
+// Cmd: Request UGC template list
+SFDLL_EXPORT int  CSSFNetAdapter_GameGetUGCTemplatesCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, intptr_t InTags )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	auto& InTagsArray_ = *NativeToObject<SF::ArrayObject<const char*>>(InTags);
+	size_t messageSize = SF::Message::Game::GetUGCTemplatesCmd::CalculateMessageSize(InTransactionID,InTagsArray_);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Game::GetUGCTemplatesCmd::Create(pMessage, InTransactionID,InTagsArray_);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameGetUGCTemplatesCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, intptr_t InTags )
+
+
+// Cmd: Save UGC content data
+SFDLL_EXPORT int  CSSFNetAdapter_GameSaveUGCCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint16_t _sizeOfInUGCMetaData,uint8_t* InUGCMetaData, uint16_t _sizeOfInUGCContents,uint8_t* InUGCContents )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::Game::SaveUGCCmd::CalculateMessageSize(InTransactionID,SF::ArrayView<uint8_t>(_sizeOfInUGCMetaData, _sizeOfInUGCMetaData, InUGCMetaData),SF::ArrayView<uint8_t>(_sizeOfInUGCContents, _sizeOfInUGCContents, InUGCContents));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Game::SaveUGCCmd::Create(pMessage, InTransactionID,SF::ArrayView<uint8_t>(_sizeOfInUGCMetaData, _sizeOfInUGCMetaData, InUGCMetaData),SF::ArrayView<uint8_t>(_sizeOfInUGCContents, _sizeOfInUGCContents, InUGCContents));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameSaveUGCCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint16_t _sizeOfInUGCMetaData,uint8_t* InUGCMetaData, uint16_t _sizeOfInUGCContents,uint8_t* InUGCContents )
+
+
+// Cmd: Request WhiteboardSharing
+SFDLL_EXPORT int  CSSFNetAdapter_GameSearchUGCCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, intptr_t InTags )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	auto& InTagsArray_ = *NativeToObject<SF::ArrayObject<const char*>>(InTags);
+	size_t messageSize = SF::Message::Game::SearchUGCCmd::CalculateMessageSize(InTransactionID,InTagsArray_);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Game::SearchUGCCmd::Create(pMessage, InTransactionID,InTagsArray_);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameSearchUGCCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, intptr_t InTags )
+
+
+// Cmd: Get UGC content info, name, thumb image and so on
+SFDLL_EXPORT int  CSSFNetAdapter_GameGetUGCContentInfoCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InUGCID )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::Game::GetUGCContentInfoCmd::CalculateMessageSize(InTransactionID, InUGCID);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Game::GetUGCContentInfoCmd::Create(pMessage, InTransactionID, InUGCID);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameGetUGCContentInfoCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InUGCID )
+
+
+// Cmd: Request WhiteboardSharing
+SFDLL_EXPORT int  CSSFNetAdapter_GameDownloadUGCContentCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InUGCID, uint8_t InIsIncludeMetaData )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::Game::DownloadUGCContentCmd::CalculateMessageSize(InTransactionID, InUGCID, InIsIncludeMetaData);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Game::DownloadUGCContentCmd::Create(pMessage, InTransactionID, InUGCID, InIsIncludeMetaData);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameDownloadUGCContentCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InUGCID, uint8_t InIsIncludeMetaData )
+
+
+// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+SFDLL_EXPORT int  CSSFNetAdapter_GameRequestUGCZoneInstanceCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InUGCID )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::Game::RequestUGCZoneInstanceCmd::CalculateMessageSize(InTransactionID, InUGCID);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Game::RequestUGCZoneInstanceCmd::Create(pMessage, InTransactionID, InUGCID);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameRequestUGCZoneInstanceCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InUGCID )
+
+
+// Cmd: Request ugc zone instance
+SFDLL_EXPORT int  CSSFNetAdapter_GameRequestUGCZoneInstanceCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InUGCID )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::Game::RequestUGCZoneInstanceCmd::CalculateMessageSize(InTransactionID, InUGCID);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Game::RequestUGCZoneInstanceCmd::Create(pMessage, InTransactionID, InUGCID);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameRequestUGCZoneInstanceCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InUGCID )
+
+
 // Cmd: Buy shop item prepare
 SFDLL_EXPORT int  CSSFNetAdapter_GameBuyShopItemPrepareCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint32_t InShopItemID )
 {
@@ -1426,6 +1519,104 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameGameMatchingCanceledS2CEvt( intptr_t InNati
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (int32_t)hr;
 } // SFDLL_EXPORT int  CSSFNetAdapter_GameGameMatchingCanceledS2CEvt( intptr_t InNativeConnectionHandle )
+
+
+
+// Cmd: Request UGC template list
+SFDLL_EXPORT int  CSSFNetAdapter_GameGetUGCTemplatesRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint64_t InUGCIDs )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::Game::GetUGCTemplatesRes::CalculateMessageSize(InTransactionID, InResult, InUGCIDs);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Game::GetUGCTemplatesRes::Create(pMessage, InTransactionID, InResult, InUGCIDs);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameGetUGCTemplatesRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint64_t InUGCIDs )
+
+
+
+// Cmd: Save UGC content data
+SFDLL_EXPORT int  CSSFNetAdapter_GameSaveUGCRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint64_t InUGCID )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::Game::SaveUGCRes::CalculateMessageSize(InTransactionID, InResult, InUGCID);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Game::SaveUGCRes::Create(pMessage, InTransactionID, InResult, InUGCID);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameSaveUGCRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint64_t InUGCID )
+
+
+
+// Cmd: Request WhiteboardSharing
+SFDLL_EXPORT int  CSSFNetAdapter_GameSearchUGCRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::Game::SearchUGCRes::CalculateMessageSize(InTransactionID, InResult);
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Game::SearchUGCRes::Create(pMessage, InTransactionID, InResult);
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameSearchUGCRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult )
+
+
+
+// Cmd: Get UGC content info, name, thumb image and so on
+SFDLL_EXPORT int  CSSFNetAdapter_GameGetUGCContentInfoRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t _sizeOfInUGCMetaData,uint8_t* InUGCMetaData )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::Game::GetUGCContentInfoRes::CalculateMessageSize(InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInUGCMetaData, _sizeOfInUGCMetaData, InUGCMetaData));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Game::GetUGCContentInfoRes::Create(pMessage, InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInUGCMetaData, _sizeOfInUGCMetaData, InUGCMetaData));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameGetUGCContentInfoRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t _sizeOfInUGCMetaData,uint8_t* InUGCMetaData )
+
+
+
+// Cmd: Request WhiteboardSharing
+SFDLL_EXPORT int  CSSFNetAdapter_GameDownloadUGCContentRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t _sizeOfInUGCMetaData,uint8_t* InUGCMetaData )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::Game::DownloadUGCContentRes::CalculateMessageSize(InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInUGCMetaData, _sizeOfInUGCMetaData, InUGCMetaData));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Game::DownloadUGCContentRes::Create(pMessage, InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInUGCMetaData, _sizeOfInUGCMetaData, InUGCMetaData));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameDownloadUGCContentRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t _sizeOfInUGCMetaData,uint8_t* InUGCMetaData )
+
+
+
+// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+SFDLL_EXPORT int  CSSFNetAdapter_GameRequestUGCZoneInstanceRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t _sizeOfInGameInstance,uint8_t* InGameInstance )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::Game::RequestUGCZoneInstanceRes::CalculateMessageSize(InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInGameInstance, _sizeOfInGameInstance, InGameInstance));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Game::RequestUGCZoneInstanceRes::Create(pMessage, InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInGameInstance, _sizeOfInGameInstance, InGameInstance));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameRequestUGCZoneInstanceRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t _sizeOfInGameInstance,uint8_t* InGameInstance )
+
+
+
+// Cmd: Request ugc zone instance
+SFDLL_EXPORT int  CSSFNetAdapter_GameRequestUGCZoneInstanceRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t _sizeOfInGameInstance,uint8_t* InGameInstance )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
+	size_t messageSize = SF::Message::Game::RequestUGCZoneInstanceRes::CalculateMessageSize(InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInGameInstance, _sizeOfInGameInstance, InGameInstance));
+	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
+	Result hr = SF::Message::Game::RequestUGCZoneInstanceRes::Create(pMessage, InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInGameInstance, _sizeOfInGameInstance, InGameInstance));
+	if (hr) hr = pConnection->SendMsg(pMessage);
+	return (int32_t)hr;
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameRequestUGCZoneInstanceRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t _sizeOfInGameInstance,uint8_t* InGameInstance )
 
 
 

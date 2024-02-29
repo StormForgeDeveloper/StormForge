@@ -700,6 +700,138 @@ namespace SF.Net
 			return result;
 		} // public int  CancelGameMatchCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 
+		// Cmd: Request UGC template list
+		public int  GetUGCTemplatesCmd( System.String[] InTags, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID InTransactionID = NewTransactionID();
+			return GetUGCTemplatesCmd(InTransactionID, InTags, callback);
+		} // public int  GetUGCTemplatesCmd( System.String[] InTags, Action<SFMessage>? callback = null )
+		public int  GetUGCTemplatesCmd( SF.TransactionID InTransactionID, System.String[] InTags, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
+			using (var InTagsArray = new ArrayObjectString(InTags))
+			{
+			result = CSSFNetAdapter_GameGetUGCTemplatesCmd(m_Connection.NativeHandle,ref InTransactionID,InTagsArray.NativeHandle);
+			}
+			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDGame.GetUGCTemplatesCmd, callback);
+			return result;
+		} // public int  GetUGCTemplatesCmd( SF.TransactionID InTransactionID, System.String[] InTags, Action<SFMessage>? callback = null )
+
+		// Cmd: Save UGC content data
+		public int  SaveUGCCmd( SF.VariableTable InUGCMetaData, SF.VariableTable InUGCContents, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID InTransactionID = NewTransactionID();
+			return SaveUGCCmd(InTransactionID, InUGCMetaData, InUGCContents, callback);
+		} // public int  SaveUGCCmd( SF.VariableTable InUGCMetaData, SF.VariableTable InUGCContents, Action<SFMessage>? callback = null )
+		public int  SaveUGCCmd( SF.TransactionID InTransactionID, SF.VariableTable InUGCMetaData, SF.VariableTable InUGCContents, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
+			var InUGCMetaData_ = InUGCMetaData.ToByteArray();
+			var InUGCContents_ = InUGCContents.ToByteArray();
+			using (var InUGCMetaData_PinnedPtr_ = new PinnedByteBuffer(InUGCMetaData_))
+			using (var InUGCContents_PinnedPtr_ = new PinnedByteBuffer(InUGCContents_))
+			{
+			result = CSSFNetAdapter_GameSaveUGCCmd(m_Connection.NativeHandle,ref InTransactionID,(ushort)InUGCMetaData_.Length, InUGCMetaData_PinnedPtr_.Ptr,(ushort)InUGCContents_.Length, InUGCContents_PinnedPtr_.Ptr);
+			}
+			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDGame.SaveUGCCmd, callback);
+			return result;
+		} // public int  SaveUGCCmd( SF.TransactionID InTransactionID, SF.VariableTable InUGCMetaData, SF.VariableTable InUGCContents, Action<SFMessage>? callback = null )
+
+		// Cmd: Request WhiteboardSharing
+		public int  SearchUGCCmd( System.String[] InTags, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID InTransactionID = NewTransactionID();
+			return SearchUGCCmd(InTransactionID, InTags, callback);
+		} // public int  SearchUGCCmd( System.String[] InTags, Action<SFMessage>? callback = null )
+		public int  SearchUGCCmd( SF.TransactionID InTransactionID, System.String[] InTags, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
+			using (var InTagsArray = new ArrayObjectString(InTags))
+			{
+			result = CSSFNetAdapter_GameSearchUGCCmd(m_Connection.NativeHandle,ref InTransactionID,InTagsArray.NativeHandle);
+			}
+			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDGame.SearchUGCCmd, callback);
+			return result;
+		} // public int  SearchUGCCmd( SF.TransactionID InTransactionID, System.String[] InTags, Action<SFMessage>? callback = null )
+
+		// Cmd: Get UGC content info, name, thumb image and so on
+		public int  GetUGCContentInfoCmd( System.UInt64 InUGCID, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID InTransactionID = NewTransactionID();
+			return GetUGCContentInfoCmd(InTransactionID, InUGCID, callback);
+		} // public int  GetUGCContentInfoCmd( System.UInt64 InUGCID, Action<SFMessage>? callback = null )
+		public int  GetUGCContentInfoCmd( SF.TransactionID InTransactionID, System.UInt64 InUGCID, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
+			{
+			result = CSSFNetAdapter_GameGetUGCContentInfoCmd(m_Connection.NativeHandle,ref InTransactionID, InUGCID);
+			}
+			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDGame.GetUGCContentInfoCmd, callback);
+			return result;
+		} // public int  GetUGCContentInfoCmd( SF.TransactionID InTransactionID, System.UInt64 InUGCID, Action<SFMessage>? callback = null )
+
+		// Cmd: Request WhiteboardSharing
+		public int  DownloadUGCContentCmd( System.UInt64 InUGCID, System.Byte InIsIncludeMetaData, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID InTransactionID = NewTransactionID();
+			return DownloadUGCContentCmd(InTransactionID, InUGCID, InIsIncludeMetaData, callback);
+		} // public int  DownloadUGCContentCmd( System.UInt64 InUGCID, System.Byte InIsIncludeMetaData, Action<SFMessage>? callback = null )
+		public int  DownloadUGCContentCmd( SF.TransactionID InTransactionID, System.UInt64 InUGCID, System.Byte InIsIncludeMetaData, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
+			{
+			result = CSSFNetAdapter_GameDownloadUGCContentCmd(m_Connection.NativeHandle,ref InTransactionID, InUGCID, InIsIncludeMetaData);
+			}
+			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDGame.DownloadUGCContentCmd, callback);
+			return result;
+		} // public int  DownloadUGCContentCmd( SF.TransactionID InTransactionID, System.UInt64 InUGCID, System.Byte InIsIncludeMetaData, Action<SFMessage>? callback = null )
+
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+		public int  RequestUGCZoneInstanceCmd( System.UInt64 InUGCID, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID InTransactionID = NewTransactionID();
+			return RequestUGCZoneInstanceCmd(InTransactionID, InUGCID, callback);
+		} // public int  RequestUGCZoneInstanceCmd( System.UInt64 InUGCID, Action<SFMessage>? callback = null )
+		public int  RequestUGCZoneInstanceCmd( SF.TransactionID InTransactionID, System.UInt64 InUGCID, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
+			{
+			result = CSSFNetAdapter_GameRequestUGCZoneInstanceCmd(m_Connection.NativeHandle,ref InTransactionID, InUGCID);
+			}
+			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDGame.RequestUGCZoneInstanceCmd, callback);
+			return result;
+		} // public int  RequestUGCZoneInstanceCmd( SF.TransactionID InTransactionID, System.UInt64 InUGCID, Action<SFMessage>? callback = null )
+
+		// Cmd: Request ugc zone instance
+		public int  RequestUGCZoneInstanceCmd( System.UInt64 InUGCID, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID InTransactionID = NewTransactionID();
+			return RequestUGCZoneInstanceCmd(InTransactionID, InUGCID, callback);
+		} // public int  RequestUGCZoneInstanceCmd( System.UInt64 InUGCID, Action<SFMessage>? callback = null )
+		public int  RequestUGCZoneInstanceCmd( SF.TransactionID InTransactionID, System.UInt64 InUGCID, Action<SFMessage>? callback = null )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
+			{
+			result = CSSFNetAdapter_GameRequestUGCZoneInstanceCmd(m_Connection.NativeHandle,ref InTransactionID, InUGCID);
+			}
+			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDGame.RequestUGCZoneInstanceCmd, callback);
+			return result;
+		} // public int  RequestUGCZoneInstanceCmd( SF.TransactionID InTransactionID, System.UInt64 InUGCID, Action<SFMessage>? callback = null )
+
 		// Cmd: Buy shop item prepare
 		public int  BuyShopItemPrepareCmd( System.UInt32 InShopItemID, Action<SFMessage>? callback = null )
 		{
@@ -1165,6 +1297,41 @@ namespace SF.Net
 		// Cmd: Cancel Game match
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameCancelGameMatchCmd", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_GameCancelGameMatchCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID );
+
+
+		// Cmd: Request UGC template list
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetUGCTemplatesCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameGetUGCTemplatesCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, IntPtr InTags );
+
+
+		// Cmd: Save UGC content data
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameSaveUGCCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameSaveUGCCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt16 _sizeOfInUGCMetaData,IntPtr InUGCMetaData, System.UInt16 _sizeOfInUGCContents,IntPtr InUGCContents );
+
+
+		// Cmd: Request WhiteboardSharing
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameSearchUGCCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameSearchUGCCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, IntPtr InTags );
+
+
+		// Cmd: Get UGC content info, name, thumb image and so on
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetUGCContentInfoCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameGetUGCContentInfoCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InUGCID );
+
+
+		// Cmd: Request WhiteboardSharing
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameDownloadUGCContentCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameDownloadUGCContentCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InUGCID, System.Byte InIsIncludeMetaData );
+
+
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameRequestUGCZoneInstanceCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameRequestUGCZoneInstanceCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InUGCID );
+
+
+		// Cmd: Request ugc zone instance
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameRequestUGCZoneInstanceCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameRequestUGCZoneInstanceCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InUGCID );
 
 
 		// Cmd: Buy shop item prepare
@@ -1948,6 +2115,105 @@ namespace SF.Net
 		} // public int  GameMatchingCanceledS2CEvt(  )
 
 
+		// Cmd: Request UGC template list
+		public int  GetUGCTemplatesRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InUGCIDs )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
+			{
+			result = CSSFNetAdapter_GameGetUGCTemplatesRes(m_Connection.NativeHandle,ref InTransactionID, InResult, InUGCIDs);
+			}
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDGame.GetUGCTemplatesRes);
+			return result;
+		} // public int  GetUGCTemplatesRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InUGCIDs )
+
+
+		// Cmd: Save UGC content data
+		public int  SaveUGCRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InUGCID )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
+			{
+			result = CSSFNetAdapter_GameSaveUGCRes(m_Connection.NativeHandle,ref InTransactionID, InResult, InUGCID);
+			}
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDGame.SaveUGCRes);
+			return result;
+		} // public int  SaveUGCRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InUGCID )
+
+
+		// Cmd: Request WhiteboardSharing
+		public int  SearchUGCRes( SF.TransactionID InTransactionID, System.Int32 InResult )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
+			{
+			result = CSSFNetAdapter_GameSearchUGCRes(m_Connection.NativeHandle,ref InTransactionID, InResult);
+			}
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDGame.SearchUGCRes);
+			return result;
+		} // public int  SearchUGCRes( SF.TransactionID InTransactionID, System.Int32 InResult )
+
+
+		// Cmd: Get UGC content info, name, thumb image and so on
+		public int  GetUGCContentInfoRes( SF.TransactionID InTransactionID, System.Int32 InResult, SF.VariableTable InUGCMetaData )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
+			var InUGCMetaData_ = InUGCMetaData.ToByteArray();
+			using (var InUGCMetaData_PinnedPtr_ = new PinnedByteBuffer(InUGCMetaData_))
+			{
+			result = CSSFNetAdapter_GameGetUGCContentInfoRes(m_Connection.NativeHandle,ref InTransactionID, InResult,(ushort)InUGCMetaData_.Length, InUGCMetaData_PinnedPtr_.Ptr);
+			}
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDGame.GetUGCContentInfoRes);
+			return result;
+		} // public int  GetUGCContentInfoRes( SF.TransactionID InTransactionID, System.Int32 InResult, SF.VariableTable InUGCMetaData )
+
+
+		// Cmd: Request WhiteboardSharing
+		public int  DownloadUGCContentRes( SF.TransactionID InTransactionID, System.Int32 InResult, SF.VariableTable InUGCMetaData )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
+			var InUGCMetaData_ = InUGCMetaData.ToByteArray();
+			using (var InUGCMetaData_PinnedPtr_ = new PinnedByteBuffer(InUGCMetaData_))
+			{
+			result = CSSFNetAdapter_GameDownloadUGCContentRes(m_Connection.NativeHandle,ref InTransactionID, InResult,(ushort)InUGCMetaData_.Length, InUGCMetaData_PinnedPtr_.Ptr);
+			}
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDGame.DownloadUGCContentRes);
+			return result;
+		} // public int  DownloadUGCContentRes( SF.TransactionID InTransactionID, System.Int32 InResult, SF.VariableTable InUGCMetaData )
+
+
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+		public int  RequestUGCZoneInstanceRes( SF.TransactionID InTransactionID, System.Int32 InResult, SF.VariableTable InGameInstance )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
+			var InGameInstance_ = InGameInstance.ToByteArray();
+			using (var InGameInstance_PinnedPtr_ = new PinnedByteBuffer(InGameInstance_))
+			{
+			result = CSSFNetAdapter_GameRequestUGCZoneInstanceRes(m_Connection.NativeHandle,ref InTransactionID, InResult,(ushort)InGameInstance_.Length, InGameInstance_PinnedPtr_.Ptr);
+			}
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDGame.RequestUGCZoneInstanceRes);
+			return result;
+		} // public int  RequestUGCZoneInstanceRes( SF.TransactionID InTransactionID, System.Int32 InResult, SF.VariableTable InGameInstance )
+
+
+		// Cmd: Request ugc zone instance
+		public int  RequestUGCZoneInstanceRes( SF.TransactionID InTransactionID, System.Int32 InResult, SF.VariableTable InGameInstance )
+		{
+ 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+			int result;
+			var InGameInstance_ = InGameInstance.ToByteArray();
+			using (var InGameInstance_PinnedPtr_ = new PinnedByteBuffer(InGameInstance_))
+			{
+			result = CSSFNetAdapter_GameRequestUGCZoneInstanceRes(m_Connection.NativeHandle,ref InTransactionID, InResult,(ushort)InGameInstance_.Length, InGameInstance_PinnedPtr_.Ptr);
+			}
+			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDGame.RequestUGCZoneInstanceRes);
+			return result;
+		} // public int  RequestUGCZoneInstanceRes( SF.TransactionID InTransactionID, System.Int32 InResult, SF.VariableTable InGameInstance )
+
+
 		// Cmd: Buy shop item prepare
 		public int  BuyShopItemPrepareRes( SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt32 InShopItemID, System.String InPurchaseID )
 		{
@@ -2558,6 +2824,48 @@ namespace SF.Net
 		// S2C: game matching canceled
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGameMatchingCanceledS2CEvt", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_GameGameMatchingCanceledS2CEvt(System.IntPtr InNativeConnectionHandle );
+
+
+
+		// Cmd: Request UGC template list
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetUGCTemplatesRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameGetUGCTemplatesRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InUGCIDs );
+
+
+
+		// Cmd: Save UGC content data
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameSaveUGCRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameSaveUGCRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt64 InUGCID );
+
+
+
+		// Cmd: Request WhiteboardSharing
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameSearchUGCRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameSearchUGCRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult );
+
+
+
+		// Cmd: Get UGC content info, name, thumb image and so on
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetUGCContentInfoRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameGetUGCContentInfoRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInUGCMetaData,IntPtr InUGCMetaData );
+
+
+
+		// Cmd: Request WhiteboardSharing
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameDownloadUGCContentRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameDownloadUGCContentRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInUGCMetaData,IntPtr InUGCMetaData );
+
+
+
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameRequestUGCZoneInstanceRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameRequestUGCZoneInstanceRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInGameInstance,IntPtr InGameInstance );
+
+
+
+		// Cmd: Request ugc zone instance
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameRequestUGCZoneInstanceRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameRequestUGCZoneInstanceRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInGameInstance,IntPtr InGameInstance );
 
 
 

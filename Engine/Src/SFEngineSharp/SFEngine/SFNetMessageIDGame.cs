@@ -295,6 +295,48 @@ namespace SF.Net
 		// S2C: game matching canceled
 		public static int GameMatchingCanceledS2CEvt { get { return CSSFNetMessageID_GameGameMatchingCanceledS2CEvt(); } }
 
+		// Cmd: Request UGC template list
+		public static int GetUGCTemplatesCmd { get { return CSSFNetMessageID_GameGetUGCTemplatesCmd(); } }
+
+		public static int GetUGCTemplatesRes { get { return CSSFNetMessageID_GameGetUGCTemplatesRes(); } }
+
+
+		// Cmd: Save UGC content data
+		public static int SaveUGCCmd { get { return CSSFNetMessageID_GameSaveUGCCmd(); } }
+
+		public static int SaveUGCRes { get { return CSSFNetMessageID_GameSaveUGCRes(); } }
+
+
+		// Cmd: Request WhiteboardSharing
+		public static int SearchUGCCmd { get { return CSSFNetMessageID_GameSearchUGCCmd(); } }
+
+		public static int SearchUGCRes { get { return CSSFNetMessageID_GameSearchUGCRes(); } }
+
+
+		// Cmd: Get UGC content info, name, thumb image and so on
+		public static int GetUGCContentInfoCmd { get { return CSSFNetMessageID_GameGetUGCContentInfoCmd(); } }
+
+		public static int GetUGCContentInfoRes { get { return CSSFNetMessageID_GameGetUGCContentInfoRes(); } }
+
+
+		// Cmd: Request WhiteboardSharing
+		public static int DownloadUGCContentCmd { get { return CSSFNetMessageID_GameDownloadUGCContentCmd(); } }
+
+		public static int DownloadUGCContentRes { get { return CSSFNetMessageID_GameDownloadUGCContentRes(); } }
+
+
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+		public static int RequestUGCZoneInstanceCmd { get { return CSSFNetMessageID_GameRequestUGCZoneInstanceCmd(); } }
+
+		public static int RequestUGCZoneInstanceRes { get { return CSSFNetMessageID_GameRequestUGCZoneInstanceRes(); } }
+
+
+		// Cmd: Request ugc zone instance
+		public static int RequestUGCZoneInstanceCmd { get { return CSSFNetMessageID_GameRequestUGCZoneInstanceCmd(); } }
+
+		public static int RequestUGCZoneInstanceRes { get { return CSSFNetMessageID_GameRequestUGCZoneInstanceRes(); } }
+
+
 		// Cmd: Buy shop item prepare
 		public static int BuyShopItemPrepareCmd { get { return CSSFNetMessageID_GameBuyShopItemPrepareCmd(); } }
 
@@ -850,6 +892,76 @@ namespace SF.Net
 		// S2C: game matching canceled
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGameMatchingCanceledS2CEvt", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_GameGameMatchingCanceledS2CEvt();
+
+
+		// Cmd: Request UGC template list
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGetUGCTemplatesCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameGetUGCTemplatesCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGetUGCTemplatesRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameGetUGCTemplatesRes();
+
+
+
+		// Cmd: Save UGC content data
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameSaveUGCCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameSaveUGCCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameSaveUGCRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameSaveUGCRes();
+
+
+
+		// Cmd: Request WhiteboardSharing
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameSearchUGCCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameSearchUGCCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameSearchUGCRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameSearchUGCRes();
+
+
+
+		// Cmd: Get UGC content info, name, thumb image and so on
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGetUGCContentInfoCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameGetUGCContentInfoCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGetUGCContentInfoRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameGetUGCContentInfoRes();
+
+
+
+		// Cmd: Request WhiteboardSharing
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameDownloadUGCContentCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameDownloadUGCContentCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameDownloadUGCContentRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameDownloadUGCContentRes();
+
+
+
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameRequestUGCZoneInstanceCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameRequestUGCZoneInstanceCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameRequestUGCZoneInstanceRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameRequestUGCZoneInstanceRes();
+
+
+
+		// Cmd: Request ugc zone instance
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameRequestUGCZoneInstanceCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameRequestUGCZoneInstanceCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameRequestUGCZoneInstanceRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameRequestUGCZoneInstanceRes();
+
 
 
 		// Cmd: Buy shop item prepare

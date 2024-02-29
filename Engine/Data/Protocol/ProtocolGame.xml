@@ -468,7 +468,75 @@
 		<S2CEvent Name="GameMatchingCanceled" Reliable="true" Crypto="No" Trace="Debug1" Desc="game matching canceled">
 		</S2CEvent>
 
-		<!-- ===================================================  Shop & Item ================================================== -->
+
+        <!-- ============================= UGC ======================================= -->
+
+        <Command Name="GetUGCTemplates" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Request UGC template list">
+            <Cmd>
+                <Params TypeName="String" Name="Tags" IsArray="true" Desc="Tags, used for search"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="uint64" Name="UGCIDs" Desc="search result UGC ids"/>
+            </Res>
+        </Command>
+
+        <Command Name="SaveUGC" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Save UGC content data">
+            <Cmd>
+                <Params TypeName="VariableTable" Name="UGCMetaData" Desc="Metadata will be linked with. This is quick access data like name and thumb image"/>
+                <Params TypeName="VariableTable" Name="UGCContents" Desc="UGCContents data. main content binary and so on"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="uint64" Name="UGCID" Desc="Assigned UGC content id"/>
+            </Res>
+        </Command>
+
+        <Command Name="SearchUGC" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Request WhiteboardSharing">
+            <Cmd>
+                <Params TypeName="String" Name="Tags" IsArray="true" Desc="Search tags"/>
+            </Cmd>
+            <Res>
+            </Res>
+        </Command>
+
+        <Command Name="GetUGCContentInfo" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Get UGC content info, name, thumb image and so on">
+            <Cmd>
+                <Params TypeName="uint64" Name="UGCID" Desc="UGC content id"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="VariableTable" Name="UGCMetaData" Desc="UGCContents metadata"/>
+            </Res>
+        </Command>
+
+        <Command Name="DownloadUGCContent" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Request WhiteboardSharing">
+            <Cmd>
+                <Params TypeName="uint64" Name="UGCID" Desc="UGC content id"/>
+                <Params TypeName="uint8" Name="IsIncludeMetaData" Desc=""/>
+            </Cmd>
+            <Res>
+                <Params TypeName="VariableTable" Name="UGCMetaData" Desc="UGCContents metadata"/>
+            </Res>
+        </Command>
+
+        <Command Name="RequestUGCZoneInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)">
+            <Cmd>
+                <Params TypeName="uint64" Name="UGCID" Desc="UGC content id"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="VariableTable" Name="GameInstance" Desc="Privisoned UGC zone instance information"/>
+            </Res>
+        </Command>
+        
+        <Command Name="RequestUGCZoneInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Request ugc zone instance">
+            <Cmd>
+                <Params TypeName="uint64" Name="UGCID" Desc="UGC content id"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="VariableTable" Name="GameInstance" Desc="Privisoned UGC zone instance information"/>
+            </Res>
+        </Command>
+
+
+        <!-- ===================================================  Shop & Item ================================================== -->
 
 		<Command Name="BuyShopItemPrepare" Reliable="true" Crypto="No" Trace="Debug1" Desc="Buy shop item prepare">
 			<Cmd>

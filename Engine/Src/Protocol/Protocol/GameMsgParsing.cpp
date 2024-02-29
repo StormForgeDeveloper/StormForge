@@ -262,6 +262,41 @@ namespace SF
 			// S2C: game matching canceled
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GameMatchingCanceledS2CEvt::MID.IDSeq.MsgID,&Message::Game::GameMatchingCanceledS2CEvt::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GameMatchingCanceledS2CEvt::MID.IDSeq.MsgID,&Message::Game::GameMatchingCanceledS2CEvt::ParseMessageToMessageBase));
+			// Cmd: Request UGC template list
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetUGCTemplatesCmd::MID.IDSeq.MsgID,&Message::Game::GetUGCTemplatesCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetUGCTemplatesCmd::MID.IDSeq.MsgID,&Message::Game::GetUGCTemplatesCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetUGCTemplatesRes::MID.IDSeq.MsgID,&Message::Game::GetUGCTemplatesRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetUGCTemplatesRes::MID.IDSeq.MsgID,&Message::Game::GetUGCTemplatesRes::ParseMessageToMessageBase));
+			// Cmd: Save UGC content data
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::SaveUGCCmd::MID.IDSeq.MsgID,&Message::Game::SaveUGCCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::SaveUGCCmd::MID.IDSeq.MsgID,&Message::Game::SaveUGCCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::SaveUGCRes::MID.IDSeq.MsgID,&Message::Game::SaveUGCRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::SaveUGCRes::MID.IDSeq.MsgID,&Message::Game::SaveUGCRes::ParseMessageToMessageBase));
+			// Cmd: Request WhiteboardSharing
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::SearchUGCCmd::MID.IDSeq.MsgID,&Message::Game::SearchUGCCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::SearchUGCCmd::MID.IDSeq.MsgID,&Message::Game::SearchUGCCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::SearchUGCRes::MID.IDSeq.MsgID,&Message::Game::SearchUGCRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::SearchUGCRes::MID.IDSeq.MsgID,&Message::Game::SearchUGCRes::ParseMessageToMessageBase));
+			// Cmd: Get UGC content info, name, thumb image and so on
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetUGCContentInfoCmd::MID.IDSeq.MsgID,&Message::Game::GetUGCContentInfoCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetUGCContentInfoCmd::MID.IDSeq.MsgID,&Message::Game::GetUGCContentInfoCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetUGCContentInfoRes::MID.IDSeq.MsgID,&Message::Game::GetUGCContentInfoRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetUGCContentInfoRes::MID.IDSeq.MsgID,&Message::Game::GetUGCContentInfoRes::ParseMessageToMessageBase));
+			// Cmd: Request WhiteboardSharing
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::DownloadUGCContentCmd::MID.IDSeq.MsgID,&Message::Game::DownloadUGCContentCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::DownloadUGCContentCmd::MID.IDSeq.MsgID,&Message::Game::DownloadUGCContentCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::DownloadUGCContentRes::MID.IDSeq.MsgID,&Message::Game::DownloadUGCContentRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::DownloadUGCContentRes::MID.IDSeq.MsgID,&Message::Game::DownloadUGCContentRes::ParseMessageToMessageBase));
+			// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceCmd::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceCmd::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceRes::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceRes::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceRes::ParseMessageToMessageBase));
+			// Cmd: Request ugc zone instance
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceCmd::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceCmd::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceRes::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceRes::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceRes::ParseMessageToMessageBase));
 			// Cmd: Buy shop item prepare
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::BuyShopItemPrepareCmd::MID.IDSeq.MsgID,&Message::Game::BuyShopItemPrepareCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::BuyShopItemPrepareCmd::MID.IDSeq.MsgID,&Message::Game::BuyShopItemPrepareCmd::ParseMessageToMessageBase));

@@ -170,6 +170,27 @@ namespace SF
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::CancelGameMatchRes::MID.IDSeq.MsgID,&Message::Game::CancelGameMatchRes::TraceOut));
 			// S2C: game matching canceled
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GameMatchingCanceledS2CEvt::MID.IDSeq.MsgID,&Message::Game::GameMatchingCanceledS2CEvt::TraceOut));
+			// Cmd: Request UGC template list
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetUGCTemplatesCmd::MID.IDSeq.MsgID,&Message::Game::GetUGCTemplatesCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetUGCTemplatesRes::MID.IDSeq.MsgID,&Message::Game::GetUGCTemplatesRes::TraceOut));
+			// Cmd: Save UGC content data
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::SaveUGCCmd::MID.IDSeq.MsgID,&Message::Game::SaveUGCCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::SaveUGCRes::MID.IDSeq.MsgID,&Message::Game::SaveUGCRes::TraceOut));
+			// Cmd: Request WhiteboardSharing
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::SearchUGCCmd::MID.IDSeq.MsgID,&Message::Game::SearchUGCCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::SearchUGCRes::MID.IDSeq.MsgID,&Message::Game::SearchUGCRes::TraceOut));
+			// Cmd: Get UGC content info, name, thumb image and so on
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetUGCContentInfoCmd::MID.IDSeq.MsgID,&Message::Game::GetUGCContentInfoCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetUGCContentInfoRes::MID.IDSeq.MsgID,&Message::Game::GetUGCContentInfoRes::TraceOut));
+			// Cmd: Request WhiteboardSharing
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::DownloadUGCContentCmd::MID.IDSeq.MsgID,&Message::Game::DownloadUGCContentCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::DownloadUGCContentRes::MID.IDSeq.MsgID,&Message::Game::DownloadUGCContentRes::TraceOut));
+			// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceCmd::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceRes::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceRes::TraceOut));
+			// Cmd: Request ugc zone instance
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceCmd::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceRes::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceRes::TraceOut));
 			// Cmd: Buy shop item prepare
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::BuyShopItemPrepareCmd::MID.IDSeq.MsgID,&Message::Game::BuyShopItemPrepareCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::BuyShopItemPrepareRes::MID.IDSeq.MsgID,&Message::Game::BuyShopItemPrepareRes::TraceOut));

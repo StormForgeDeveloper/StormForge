@@ -503,6 +503,97 @@ namespace SF
 		return m_Endpoint->SendMsg(messageBuffer);
 
 	}; // Result NetPolicyGame::CancelGameMatchCmd( const TransactionID &InTransactionID )
+	// Cmd: Request UGC template list
+	Result NetPolicyGame::GetUGCTemplatesCmd( const TransactionID &InTransactionID, const Array<const char*>& InTags )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::Game::GetUGCTemplatesCmd::CalculateMessageSize(InTransactionID, InTags);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::Game::GetUGCTemplatesCmd::Create(messageBuffer, InTransactionID, InTags));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetPolicyGame::GetUGCTemplatesCmd( const TransactionID &InTransactionID, const Array<const char*>& InTags )
+	// Cmd: Save UGC content data
+	Result NetPolicyGame::SaveUGCCmd( const TransactionID &InTransactionID, const VariableTable &InUGCMetaData, const VariableTable &InUGCContents )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::Game::SaveUGCCmd::CalculateMessageSize(InTransactionID, InUGCMetaData, InUGCContents);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::Game::SaveUGCCmd::Create(messageBuffer, InTransactionID, InUGCMetaData, InUGCContents));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetPolicyGame::SaveUGCCmd( const TransactionID &InTransactionID, const VariableTable &InUGCMetaData, const VariableTable &InUGCContents )
+	// Cmd: Request WhiteboardSharing
+	Result NetPolicyGame::SearchUGCCmd( const TransactionID &InTransactionID, const Array<const char*>& InTags )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::Game::SearchUGCCmd::CalculateMessageSize(InTransactionID, InTags);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::Game::SearchUGCCmd::Create(messageBuffer, InTransactionID, InTags));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetPolicyGame::SearchUGCCmd( const TransactionID &InTransactionID, const Array<const char*>& InTags )
+	// Cmd: Get UGC content info, name, thumb image and so on
+	Result NetPolicyGame::GetUGCContentInfoCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::Game::GetUGCContentInfoCmd::CalculateMessageSize(InTransactionID, InUGCID);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::Game::GetUGCContentInfoCmd::Create(messageBuffer, InTransactionID, InUGCID));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetPolicyGame::GetUGCContentInfoCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID )
+	// Cmd: Request WhiteboardSharing
+	Result NetPolicyGame::DownloadUGCContentCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID, const uint8_t &InIsIncludeMetaData )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::Game::DownloadUGCContentCmd::CalculateMessageSize(InTransactionID, InUGCID, InIsIncludeMetaData);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::Game::DownloadUGCContentCmd::Create(messageBuffer, InTransactionID, InUGCID, InIsIncludeMetaData));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetPolicyGame::DownloadUGCContentCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID, const uint8_t &InIsIncludeMetaData )
+	// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+	Result NetPolicyGame::RequestUGCZoneInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::Game::RequestUGCZoneInstanceCmd::CalculateMessageSize(InTransactionID, InUGCID);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::Game::RequestUGCZoneInstanceCmd::Create(messageBuffer, InTransactionID, InUGCID));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetPolicyGame::RequestUGCZoneInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID )
+	// Cmd: Request ugc zone instance
+	Result NetPolicyGame::RequestUGCZoneInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::Game::RequestUGCZoneInstanceCmd::CalculateMessageSize(InTransactionID, InUGCID);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::Game::RequestUGCZoneInstanceCmd::Create(messageBuffer, InTransactionID, InUGCID));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetPolicyGame::RequestUGCZoneInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID )
 	// Cmd: Buy shop item prepare
 	Result NetPolicyGame::BuyShopItemPrepareCmd( const TransactionID &InTransactionID, const uint32_t &InShopItemID )
 	{
@@ -1376,6 +1467,97 @@ namespace SF
 		return m_Endpoint->SendMsg(messageBuffer);
 
 	}; // Result NetSvrPolicyGame::GameMatchingCanceledS2CEvt(  )
+	// Cmd: Request UGC template list
+	Result NetSvrPolicyGame::GetUGCTemplatesRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCIDs )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::Game::GetUGCTemplatesRes::CalculateMessageSize(InTransactionID, InResult, InUGCIDs);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::Game::GetUGCTemplatesRes::Create(messageBuffer, InTransactionID, InResult, InUGCIDs));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyGame::GetUGCTemplatesRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCIDs )
+	// Cmd: Save UGC content data
+	Result NetSvrPolicyGame::SaveUGCRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCID )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::Game::SaveUGCRes::CalculateMessageSize(InTransactionID, InResult, InUGCID);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::Game::SaveUGCRes::Create(messageBuffer, InTransactionID, InResult, InUGCID));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyGame::SaveUGCRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCID )
+	// Cmd: Request WhiteboardSharing
+	Result NetSvrPolicyGame::SearchUGCRes( const TransactionID &InTransactionID, const Result &InResult )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::Game::SearchUGCRes::CalculateMessageSize(InTransactionID, InResult);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::Game::SearchUGCRes::Create(messageBuffer, InTransactionID, InResult));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyGame::SearchUGCRes( const TransactionID &InTransactionID, const Result &InResult )
+	// Cmd: Get UGC content info, name, thumb image and so on
+	Result NetSvrPolicyGame::GetUGCContentInfoRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::Game::GetUGCContentInfoRes::CalculateMessageSize(InTransactionID, InResult, InUGCMetaData);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::Game::GetUGCContentInfoRes::Create(messageBuffer, InTransactionID, InResult, InUGCMetaData));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyGame::GetUGCContentInfoRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData )
+	// Cmd: Request WhiteboardSharing
+	Result NetSvrPolicyGame::DownloadUGCContentRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::Game::DownloadUGCContentRes::CalculateMessageSize(InTransactionID, InResult, InUGCMetaData);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::Game::DownloadUGCContentRes::Create(messageBuffer, InTransactionID, InResult, InUGCMetaData));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyGame::DownloadUGCContentRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData )
+	// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+	Result NetSvrPolicyGame::RequestUGCZoneInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::Game::RequestUGCZoneInstanceRes::CalculateMessageSize(InTransactionID, InResult, InGameInstance);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::Game::RequestUGCZoneInstanceRes::Create(messageBuffer, InTransactionID, InResult, InGameInstance));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyGame::RequestUGCZoneInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
+	// Cmd: Request ugc zone instance
+	Result NetSvrPolicyGame::RequestUGCZoneInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
+	{
+ 		Result hr;
+
+		size_t messageSize = SF::Message::Game::RequestUGCZoneInstanceRes::CalculateMessageSize(InTransactionID, InResult, InGameInstance);
+		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
+		protocolCheckPtr(m_Endpoint);
+
+		protocolCheck(SF::Message::Game::RequestUGCZoneInstanceRes::Create(messageBuffer, InTransactionID, InResult, InGameInstance));
+		return m_Endpoint->SendMsg(messageBuffer);
+
+	}; // Result NetSvrPolicyGame::RequestUGCZoneInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
 	// Cmd: Buy shop item prepare
 	Result NetSvrPolicyGame::BuyShopItemPrepareRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID )
 	{

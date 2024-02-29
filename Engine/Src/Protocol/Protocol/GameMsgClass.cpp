@@ -8794,8 +8794,1617 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GameMatchingCanceledS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
+			// Cmd: Request UGC template list
+			const MessageID GetUGCTemplatesCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 53);
+			Result GetUGCTemplatesCmd::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(input->ReadArrayLink(m_Tags));
+
+				return hr;
+
+			}; // Result GetUGCTemplatesCmd::ParseMessage(const MessageHeader* pHeader)
+
+			Result GetUGCTemplatesCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				GetUGCTemplatesCmd parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Tags", parser.GetTags());
+
+				return hr;
+
+			}; // Result GetUGCTemplatesCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result GetUGCTemplatesCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) GetUGCTemplatesCmd(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result GetUGCTemplatesCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t GetUGCTemplatesCmd::CalculateMessageSize( const TransactionID &InTransactionID, const Array<const char*>& InTags )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTags)
+				);
+
+				return __uiMessageSize;
+			}; // size_t GetUGCTemplatesCmd::CalculateMessageSize( const TransactionID &InTransactionID, const Array<const char*>& InTags )
+
+
+			Result GetUGCTemplatesCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Array<const char*>& InTags )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTags)
+				);
+
+				messageBuffer->msgID = GetUGCTemplatesCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InTags);
+
+				return hr;
+			}; // Result GetUGCTemplatesCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Array<const char*>& InTags )
+
+			Result GetUGCTemplatesCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				GetUGCTemplatesCmd parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "Game::GetUGCTemplates, {0}:{1} , TransactionID:{2}, Tags:{3,60}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetTags()); 
+				return ResultCode::SUCCESS;
+			}; // Result GetUGCTemplatesCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			const MessageID GetUGCTemplatesRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 53);
+			Result GetUGCTemplatesRes::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+				protocolCheck(*input >> m_UGCIDs);
+
+				return hr;
+
+			}; // Result GetUGCTemplatesRes::ParseMessage(const MessageHeader* pHeader)
+
+			Result GetUGCTemplatesRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				GetUGCTemplatesRes parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+				variableBuilder.SetVariable("UGCIDs", parser.GetUGCIDs());
+
+				return hr;
+
+			}; // Result GetUGCTemplatesRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result GetUGCTemplatesRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) GetUGCTemplatesRes(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result GetUGCTemplatesRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t GetUGCTemplatesRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCIDs )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InUGCIDs)
+				);
+
+				return __uiMessageSize;
+			}; // size_t GetUGCTemplatesRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCIDs )
+
+
+			Result GetUGCTemplatesRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCIDs )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InUGCIDs)
+				);
+
+				messageBuffer->msgID = GetUGCTemplatesRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(*output << InUGCIDs);
+
+				return hr;
+			}; // Result GetUGCTemplatesRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCIDs )
+
+			Result GetUGCTemplatesRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				GetUGCTemplatesRes parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "Game::GetUGCTemplates, {0}:{1} , TransactionID:{2}, Result:{3:X8}, UGCIDs:{4}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetUGCIDs()); 
+				return ResultCode::SUCCESS;
+			}; // Result GetUGCTemplatesRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// Cmd: Save UGC content data
+			const MessageID SaveUGCCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 54);
+			const VariableTable& SaveUGCCmd::GetUGCMetaData() const
+			{
+ 				if (!m_UGCMetaDataHasParsed)
+				{
+ 					m_UGCMetaDataHasParsed = true;
+					InputMemoryStream UGCMetaData_ReadStream(m_UGCMetaDataRaw);
+					*UGCMetaData_ReadStream.ToInputStream() >> m_UGCMetaData;
+				} // if (!m_UGCMetaDataHasParsed)
+				return m_UGCMetaData;
+			} // const VariableTable& SaveUGCCmd::GetUGCMetaData() const
+			const VariableTable& SaveUGCCmd::GetUGCContents() const
+			{
+ 				if (!m_UGCContentsHasParsed)
+				{
+ 					m_UGCContentsHasParsed = true;
+					InputMemoryStream UGCContents_ReadStream(m_UGCContentsRaw);
+					*UGCContents_ReadStream.ToInputStream() >> m_UGCContents;
+				} // if (!m_UGCContentsHasParsed)
+				return m_UGCContents;
+			} // const VariableTable& SaveUGCCmd::GetUGCContents() const
+			Result SaveUGCCmd::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* UGCMetaDataPtr = nullptr;
+				protocolCheck(input->ReadLink(UGCMetaDataPtr, ArrayLen));
+				m_UGCMetaDataRaw.SetLinkedBuffer(ArrayLen, UGCMetaDataPtr);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* UGCContentsPtr = nullptr;
+				protocolCheck(input->ReadLink(UGCContentsPtr, ArrayLen));
+				m_UGCContentsRaw.SetLinkedBuffer(ArrayLen, UGCContentsPtr);
+
+				return hr;
+
+			}; // Result SaveUGCCmd::ParseMessage(const MessageHeader* pHeader)
+
+			Result SaveUGCCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				SaveUGCCmd parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariableArray("UGCMetaData", "VariableTable", parser.GetUGCMetaDataRaw());
+				variableBuilder.SetVariableArray("UGCContents", "VariableTable", parser.GetUGCContentsRaw());
+
+				return hr;
+
+			}; // Result SaveUGCCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result SaveUGCCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) SaveUGCCmd(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result SaveUGCCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+			size_t SaveUGCCmd::CalculateMessageSize( const TransactionID &InTransactionID, const Array<uint8_t>& InUGCMetaData, const Array<uint8_t>& InUGCContents )
+			{
+ 				uint16_t serializedSizeOfInUGCMetaData = static_cast<uint16_t>(SerializedSizeOf(InUGCMetaData)); 
+				uint16_t serializedSizeOfInUGCContents = static_cast<uint16_t>(SerializedSizeOf(InUGCContents)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ serializedSizeOfInUGCMetaData
+					+ serializedSizeOfInUGCContents
+				);
+
+				return __uiMessageSize;
+			}; // size_t SaveUGCCmd::CalculateMessageSize( const TransactionID &InTransactionID, const Array<uint8_t>& InUGCMetaData, const Array<uint8_t>& InUGCContents )
+
+			size_t SaveUGCCmd::CalculateMessageSize( const TransactionID &InTransactionID, const VariableTable &InUGCMetaData, const VariableTable &InUGCContents )
+			{
+ 				uint16_t serializedSizeOfInUGCMetaData = static_cast<uint16_t>(SerializedSizeOf(InUGCMetaData)); 
+				uint16_t serializedSizeOfInUGCContents = static_cast<uint16_t>(SerializedSizeOf(InUGCContents)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInUGCMetaData
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInUGCContents
+				);
+
+				return __uiMessageSize;
+			}; // size_t SaveUGCCmd::CalculateMessageSize( const TransactionID &InTransactionID, const VariableTable &InUGCMetaData, const VariableTable &InUGCContents )
+
+			Result SaveUGCCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Array<uint8_t>& InUGCMetaData, const Array<uint8_t>& InUGCContents )
+			{
+ 				Result hr;
+
+				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InUGCMetaData, InUGCContents);
+
+				messageBuffer->msgID = SaveUGCCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InUGCMetaData);
+				protocolCheck(*output << InUGCContents);
+
+				return hr;
+			}; // Result SaveUGCCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Array<uint8_t>& InUGCMetaData, const Array<uint8_t>& InUGCContents )
+
+			Result SaveUGCCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const VariableTable &InUGCMetaData, const VariableTable &InUGCContents )
+			{
+ 				Result hr;
+
+				uint16_t serializedSizeOfInUGCMetaData = static_cast<uint16_t>(SerializedSizeOf(InUGCMetaData)); 
+				uint16_t serializedSizeOfInUGCContents = static_cast<uint16_t>(SerializedSizeOf(InUGCContents)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInUGCMetaData
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInUGCContents
+				);
+
+				messageBuffer->msgID = SaveUGCCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(output->Write(serializedSizeOfInUGCMetaData));
+				protocolCheck(*output << InUGCMetaData);
+				protocolCheck(output->Write(serializedSizeOfInUGCContents));
+				protocolCheck(*output << InUGCContents);
+
+				return hr;
+			}; // Result SaveUGCCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const VariableTable &InUGCMetaData, const VariableTable &InUGCContents )
+
+			Result SaveUGCCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				SaveUGCCmd parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "Game::SaveUGC, {0}:{1} , TransactionID:{2}, UGCMetaData:{3}, UGCContents:{4}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetUGCMetaData(), parser.GetUGCContents()); 
+				return ResultCode::SUCCESS;
+			}; // Result SaveUGCCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			const MessageID SaveUGCRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 54);
+			Result SaveUGCRes::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+				protocolCheck(*input >> m_UGCID);
+
+				return hr;
+
+			}; // Result SaveUGCRes::ParseMessage(const MessageHeader* pHeader)
+
+			Result SaveUGCRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				SaveUGCRes parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+				variableBuilder.SetVariable("UGCID", parser.GetUGCID());
+
+				return hr;
+
+			}; // Result SaveUGCRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result SaveUGCRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) SaveUGCRes(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result SaveUGCRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t SaveUGCRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCID )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InUGCID)
+				);
+
+				return __uiMessageSize;
+			}; // size_t SaveUGCRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCID )
+
+
+			Result SaveUGCRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCID )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InUGCID)
+				);
+
+				messageBuffer->msgID = SaveUGCRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(*output << InUGCID);
+
+				return hr;
+			}; // Result SaveUGCRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCID )
+
+			Result SaveUGCRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				SaveUGCRes parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "Game::SaveUGC, {0}:{1} , TransactionID:{2}, Result:{3:X8}, UGCID:{4}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetUGCID()); 
+				return ResultCode::SUCCESS;
+			}; // Result SaveUGCRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// Cmd: Request WhiteboardSharing
+			const MessageID SearchUGCCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 55);
+			Result SearchUGCCmd::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(input->ReadArrayLink(m_Tags));
+
+				return hr;
+
+			}; // Result SearchUGCCmd::ParseMessage(const MessageHeader* pHeader)
+
+			Result SearchUGCCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				SearchUGCCmd parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Tags", parser.GetTags());
+
+				return hr;
+
+			}; // Result SearchUGCCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result SearchUGCCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) SearchUGCCmd(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result SearchUGCCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t SearchUGCCmd::CalculateMessageSize( const TransactionID &InTransactionID, const Array<const char*>& InTags )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTags)
+				);
+
+				return __uiMessageSize;
+			}; // size_t SearchUGCCmd::CalculateMessageSize( const TransactionID &InTransactionID, const Array<const char*>& InTags )
+
+
+			Result SearchUGCCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Array<const char*>& InTags )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTags)
+				);
+
+				messageBuffer->msgID = SearchUGCCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InTags);
+
+				return hr;
+			}; // Result SearchUGCCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Array<const char*>& InTags )
+
+			Result SearchUGCCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				SearchUGCCmd parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "Game::SearchUGC, {0}:{1} , TransactionID:{2}, Tags:{3,60}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetTags()); 
+				return ResultCode::SUCCESS;
+			}; // Result SearchUGCCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			const MessageID SearchUGCRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 55);
+			Result SearchUGCRes::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+
+				return hr;
+
+			}; // Result SearchUGCRes::ParseMessage(const MessageHeader* pHeader)
+
+			Result SearchUGCRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				SearchUGCRes parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+
+				return hr;
+
+			}; // Result SearchUGCRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result SearchUGCRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) SearchUGCRes(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result SearchUGCRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t SearchUGCRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				return __uiMessageSize;
+			}; // size_t SearchUGCRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult )
+
+
+			Result SearchUGCRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				messageBuffer->msgID = SearchUGCRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+
+				return hr;
+			}; // Result SearchUGCRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult )
+
+			Result SearchUGCRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				SearchUGCRes parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "Game::SearchUGC, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
+				return ResultCode::SUCCESS;
+			}; // Result SearchUGCRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// Cmd: Get UGC content info, name, thumb image and so on
+			const MessageID GetUGCContentInfoCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 56);
+			Result GetUGCContentInfoCmd::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_UGCID);
+
+				return hr;
+
+			}; // Result GetUGCContentInfoCmd::ParseMessage(const MessageHeader* pHeader)
+
+			Result GetUGCContentInfoCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				GetUGCContentInfoCmd parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("UGCID", parser.GetUGCID());
+
+				return hr;
+
+			}; // Result GetUGCContentInfoCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result GetUGCContentInfoCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) GetUGCContentInfoCmd(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result GetUGCContentInfoCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t GetUGCContentInfoCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InUGCID )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InUGCID)
+				);
+
+				return __uiMessageSize;
+			}; // size_t GetUGCContentInfoCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InUGCID )
+
+
+			Result GetUGCContentInfoCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InUGCID )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InUGCID)
+				);
+
+				messageBuffer->msgID = GetUGCContentInfoCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InUGCID);
+
+				return hr;
+			}; // Result GetUGCContentInfoCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InUGCID )
+
+			Result GetUGCContentInfoCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				GetUGCContentInfoCmd parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "Game::GetUGCContentInfo, {0}:{1} , TransactionID:{2}, UGCID:{3}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetUGCID()); 
+				return ResultCode::SUCCESS;
+			}; // Result GetUGCContentInfoCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			const MessageID GetUGCContentInfoRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 56);
+			const VariableTable& GetUGCContentInfoRes::GetUGCMetaData() const
+			{
+ 				if (!m_UGCMetaDataHasParsed)
+				{
+ 					m_UGCMetaDataHasParsed = true;
+					InputMemoryStream UGCMetaData_ReadStream(m_UGCMetaDataRaw);
+					*UGCMetaData_ReadStream.ToInputStream() >> m_UGCMetaData;
+				} // if (!m_UGCMetaDataHasParsed)
+				return m_UGCMetaData;
+			} // const VariableTable& GetUGCContentInfoRes::GetUGCMetaData() const
+			Result GetUGCContentInfoRes::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* UGCMetaDataPtr = nullptr;
+				protocolCheck(input->ReadLink(UGCMetaDataPtr, ArrayLen));
+				m_UGCMetaDataRaw.SetLinkedBuffer(ArrayLen, UGCMetaDataPtr);
+
+				return hr;
+
+			}; // Result GetUGCContentInfoRes::ParseMessage(const MessageHeader* pHeader)
+
+			Result GetUGCContentInfoRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				GetUGCContentInfoRes parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+				variableBuilder.SetVariableArray("UGCMetaData", "VariableTable", parser.GetUGCMetaDataRaw());
+
+				return hr;
+
+			}; // Result GetUGCContentInfoRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result GetUGCContentInfoRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) GetUGCContentInfoRes(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result GetUGCContentInfoRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+			size_t GetUGCContentInfoRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InUGCMetaData )
+			{
+ 				uint16_t serializedSizeOfInUGCMetaData = static_cast<uint16_t>(SerializedSizeOf(InUGCMetaData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ serializedSizeOfInUGCMetaData
+				);
+
+				return __uiMessageSize;
+			}; // size_t GetUGCContentInfoRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InUGCMetaData )
+
+			size_t GetUGCContentInfoRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData )
+			{
+ 				uint16_t serializedSizeOfInUGCMetaData = static_cast<uint16_t>(SerializedSizeOf(InUGCMetaData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInUGCMetaData
+				);
+
+				return __uiMessageSize;
+			}; // size_t GetUGCContentInfoRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData )
+
+			Result GetUGCContentInfoRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InUGCMetaData )
+			{
+ 				Result hr;
+
+				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InResult, InUGCMetaData);
+
+				messageBuffer->msgID = GetUGCContentInfoRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(*output << InUGCMetaData);
+
+				return hr;
+			}; // Result GetUGCContentInfoRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InUGCMetaData )
+
+			Result GetUGCContentInfoRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData )
+			{
+ 				Result hr;
+
+				uint16_t serializedSizeOfInUGCMetaData = static_cast<uint16_t>(SerializedSizeOf(InUGCMetaData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInUGCMetaData
+				);
+
+				messageBuffer->msgID = GetUGCContentInfoRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(output->Write(serializedSizeOfInUGCMetaData));
+				protocolCheck(*output << InUGCMetaData);
+
+				return hr;
+			}; // Result GetUGCContentInfoRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData )
+
+			Result GetUGCContentInfoRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				GetUGCContentInfoRes parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "Game::GetUGCContentInfo, {0}:{1} , TransactionID:{2}, Result:{3:X8}, UGCMetaData:{4}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetUGCMetaData()); 
+				return ResultCode::SUCCESS;
+			}; // Result GetUGCContentInfoRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// Cmd: Request WhiteboardSharing
+			const MessageID DownloadUGCContentCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 57);
+			Result DownloadUGCContentCmd::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_UGCID);
+				protocolCheck(*input >> m_IsIncludeMetaData);
+
+				return hr;
+
+			}; // Result DownloadUGCContentCmd::ParseMessage(const MessageHeader* pHeader)
+
+			Result DownloadUGCContentCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				DownloadUGCContentCmd parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("UGCID", parser.GetUGCID());
+				variableBuilder.SetVariable("IsIncludeMetaData", parser.GetIsIncludeMetaData());
+
+				return hr;
+
+			}; // Result DownloadUGCContentCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result DownloadUGCContentCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) DownloadUGCContentCmd(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result DownloadUGCContentCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t DownloadUGCContentCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InUGCID, const uint8_t &InIsIncludeMetaData )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InUGCID)
+					+ SerializedSizeOf(InIsIncludeMetaData)
+				);
+
+				return __uiMessageSize;
+			}; // size_t DownloadUGCContentCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InUGCID, const uint8_t &InIsIncludeMetaData )
+
+
+			Result DownloadUGCContentCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InUGCID, const uint8_t &InIsIncludeMetaData )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InUGCID)
+					+ SerializedSizeOf(InIsIncludeMetaData)
+				);
+
+				messageBuffer->msgID = DownloadUGCContentCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InUGCID);
+				protocolCheck(*output << InIsIncludeMetaData);
+
+				return hr;
+			}; // Result DownloadUGCContentCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InUGCID, const uint8_t &InIsIncludeMetaData )
+
+			Result DownloadUGCContentCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				DownloadUGCContentCmd parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "Game::DownloadUGCContent, {0}:{1} , TransactionID:{2}, UGCID:{3}, IsIncludeMetaData:{4}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetUGCID(), parser.GetIsIncludeMetaData()); 
+				return ResultCode::SUCCESS;
+			}; // Result DownloadUGCContentCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			const MessageID DownloadUGCContentRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 57);
+			const VariableTable& DownloadUGCContentRes::GetUGCMetaData() const
+			{
+ 				if (!m_UGCMetaDataHasParsed)
+				{
+ 					m_UGCMetaDataHasParsed = true;
+					InputMemoryStream UGCMetaData_ReadStream(m_UGCMetaDataRaw);
+					*UGCMetaData_ReadStream.ToInputStream() >> m_UGCMetaData;
+				} // if (!m_UGCMetaDataHasParsed)
+				return m_UGCMetaData;
+			} // const VariableTable& DownloadUGCContentRes::GetUGCMetaData() const
+			Result DownloadUGCContentRes::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* UGCMetaDataPtr = nullptr;
+				protocolCheck(input->ReadLink(UGCMetaDataPtr, ArrayLen));
+				m_UGCMetaDataRaw.SetLinkedBuffer(ArrayLen, UGCMetaDataPtr);
+
+				return hr;
+
+			}; // Result DownloadUGCContentRes::ParseMessage(const MessageHeader* pHeader)
+
+			Result DownloadUGCContentRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				DownloadUGCContentRes parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+				variableBuilder.SetVariableArray("UGCMetaData", "VariableTable", parser.GetUGCMetaDataRaw());
+
+				return hr;
+
+			}; // Result DownloadUGCContentRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result DownloadUGCContentRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) DownloadUGCContentRes(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result DownloadUGCContentRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+			size_t DownloadUGCContentRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InUGCMetaData )
+			{
+ 				uint16_t serializedSizeOfInUGCMetaData = static_cast<uint16_t>(SerializedSizeOf(InUGCMetaData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ serializedSizeOfInUGCMetaData
+				);
+
+				return __uiMessageSize;
+			}; // size_t DownloadUGCContentRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InUGCMetaData )
+
+			size_t DownloadUGCContentRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData )
+			{
+ 				uint16_t serializedSizeOfInUGCMetaData = static_cast<uint16_t>(SerializedSizeOf(InUGCMetaData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInUGCMetaData
+				);
+
+				return __uiMessageSize;
+			}; // size_t DownloadUGCContentRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData )
+
+			Result DownloadUGCContentRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InUGCMetaData )
+			{
+ 				Result hr;
+
+				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InResult, InUGCMetaData);
+
+				messageBuffer->msgID = DownloadUGCContentRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(*output << InUGCMetaData);
+
+				return hr;
+			}; // Result DownloadUGCContentRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InUGCMetaData )
+
+			Result DownloadUGCContentRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData )
+			{
+ 				Result hr;
+
+				uint16_t serializedSizeOfInUGCMetaData = static_cast<uint16_t>(SerializedSizeOf(InUGCMetaData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInUGCMetaData
+				);
+
+				messageBuffer->msgID = DownloadUGCContentRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(output->Write(serializedSizeOfInUGCMetaData));
+				protocolCheck(*output << InUGCMetaData);
+
+				return hr;
+			}; // Result DownloadUGCContentRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData )
+
+			Result DownloadUGCContentRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				DownloadUGCContentRes parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "Game::DownloadUGCContent, {0}:{1} , TransactionID:{2}, Result:{3:X8}, UGCMetaData:{4}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetUGCMetaData()); 
+				return ResultCode::SUCCESS;
+			}; // Result DownloadUGCContentRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+			const MessageID RequestUGCZoneInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 58);
+			Result RequestUGCZoneInstanceCmd::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_UGCID);
+
+				return hr;
+
+			}; // Result RequestUGCZoneInstanceCmd::ParseMessage(const MessageHeader* pHeader)
+
+			Result RequestUGCZoneInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				RequestUGCZoneInstanceCmd parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("UGCID", parser.GetUGCID());
+
+				return hr;
+
+			}; // Result RequestUGCZoneInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result RequestUGCZoneInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) RequestUGCZoneInstanceCmd(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result RequestUGCZoneInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t RequestUGCZoneInstanceCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InUGCID )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InUGCID)
+				);
+
+				return __uiMessageSize;
+			}; // size_t RequestUGCZoneInstanceCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InUGCID )
+
+
+			Result RequestUGCZoneInstanceCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InUGCID )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InUGCID)
+				);
+
+				messageBuffer->msgID = RequestUGCZoneInstanceCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InUGCID);
+
+				return hr;
+			}; // Result RequestUGCZoneInstanceCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InUGCID )
+
+			Result RequestUGCZoneInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				RequestUGCZoneInstanceCmd parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "Game::RequestUGCZoneInstance, {0}:{1} , TransactionID:{2}, UGCID:{3}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetUGCID()); 
+				return ResultCode::SUCCESS;
+			}; // Result RequestUGCZoneInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			const MessageID RequestUGCZoneInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 58);
+			const VariableTable& RequestUGCZoneInstanceRes::GetGameInstance() const
+			{
+ 				if (!m_GameInstanceHasParsed)
+				{
+ 					m_GameInstanceHasParsed = true;
+					InputMemoryStream GameInstance_ReadStream(m_GameInstanceRaw);
+					*GameInstance_ReadStream.ToInputStream() >> m_GameInstance;
+				} // if (!m_GameInstanceHasParsed)
+				return m_GameInstance;
+			} // const VariableTable& RequestUGCZoneInstanceRes::GetGameInstance() const
+			Result RequestUGCZoneInstanceRes::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* GameInstancePtr = nullptr;
+				protocolCheck(input->ReadLink(GameInstancePtr, ArrayLen));
+				m_GameInstanceRaw.SetLinkedBuffer(ArrayLen, GameInstancePtr);
+
+				return hr;
+
+			}; // Result RequestUGCZoneInstanceRes::ParseMessage(const MessageHeader* pHeader)
+
+			Result RequestUGCZoneInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				RequestUGCZoneInstanceRes parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+				variableBuilder.SetVariableArray("GameInstance", "VariableTable", parser.GetGameInstanceRaw());
+
+				return hr;
+
+			}; // Result RequestUGCZoneInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result RequestUGCZoneInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) RequestUGCZoneInstanceRes(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result RequestUGCZoneInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+			size_t RequestUGCZoneInstanceRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InGameInstance )
+			{
+ 				uint16_t serializedSizeOfInGameInstance = static_cast<uint16_t>(SerializedSizeOf(InGameInstance)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ serializedSizeOfInGameInstance
+				);
+
+				return __uiMessageSize;
+			}; // size_t RequestUGCZoneInstanceRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InGameInstance )
+
+			size_t RequestUGCZoneInstanceRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
+			{
+ 				uint16_t serializedSizeOfInGameInstance = static_cast<uint16_t>(SerializedSizeOf(InGameInstance)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInGameInstance
+				);
+
+				return __uiMessageSize;
+			}; // size_t RequestUGCZoneInstanceRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
+
+			Result RequestUGCZoneInstanceRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InGameInstance )
+			{
+ 				Result hr;
+
+				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InResult, InGameInstance);
+
+				messageBuffer->msgID = RequestUGCZoneInstanceRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(*output << InGameInstance);
+
+				return hr;
+			}; // Result RequestUGCZoneInstanceRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InGameInstance )
+
+			Result RequestUGCZoneInstanceRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
+			{
+ 				Result hr;
+
+				uint16_t serializedSizeOfInGameInstance = static_cast<uint16_t>(SerializedSizeOf(InGameInstance)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInGameInstance
+				);
+
+				messageBuffer->msgID = RequestUGCZoneInstanceRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(output->Write(serializedSizeOfInGameInstance));
+				protocolCheck(*output << InGameInstance);
+
+				return hr;
+			}; // Result RequestUGCZoneInstanceRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
+
+			Result RequestUGCZoneInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				RequestUGCZoneInstanceRes parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "Game::RequestUGCZoneInstance, {0}:{1} , TransactionID:{2}, Result:{3:X8}, GameInstance:{4}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameInstance()); 
+				return ResultCode::SUCCESS;
+			}; // Result RequestUGCZoneInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			// Cmd: Request ugc zone instance
+			const MessageID RequestUGCZoneInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 59);
+			Result RequestUGCZoneInstanceCmd::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_UGCID);
+
+				return hr;
+
+			}; // Result RequestUGCZoneInstanceCmd::ParseMessage(const MessageHeader* pHeader)
+
+			Result RequestUGCZoneInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				RequestUGCZoneInstanceCmd parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("UGCID", parser.GetUGCID());
+
+				return hr;
+
+			}; // Result RequestUGCZoneInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result RequestUGCZoneInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) RequestUGCZoneInstanceCmd(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result RequestUGCZoneInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t RequestUGCZoneInstanceCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InUGCID )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InUGCID)
+				);
+
+				return __uiMessageSize;
+			}; // size_t RequestUGCZoneInstanceCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InUGCID )
+
+
+			Result RequestUGCZoneInstanceCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InUGCID )
+			{
+ 				Result hr;
+
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InUGCID)
+				);
+
+				messageBuffer->msgID = RequestUGCZoneInstanceCmd::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InUGCID);
+
+				return hr;
+			}; // Result RequestUGCZoneInstanceCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InUGCID )
+
+			Result RequestUGCZoneInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				RequestUGCZoneInstanceCmd parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "Game::RequestUGCZoneInstance, {0}:{1} , TransactionID:{2}, UGCID:{3}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetUGCID()); 
+				return ResultCode::SUCCESS;
+			}; // Result RequestUGCZoneInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
+			const MessageID RequestUGCZoneInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 59);
+			const VariableTable& RequestUGCZoneInstanceRes::GetGameInstance() const
+			{
+ 				if (!m_GameInstanceHasParsed)
+				{
+ 					m_GameInstanceHasParsed = true;
+					InputMemoryStream GameInstance_ReadStream(m_GameInstanceRaw);
+					*GameInstance_ReadStream.ToInputStream() >> m_GameInstance;
+				} // if (!m_GameInstanceHasParsed)
+				return m_GameInstance;
+			} // const VariableTable& RequestUGCZoneInstanceRes::GetGameInstance() const
+			Result RequestUGCZoneInstanceRes::ParseMessage(const MessageHeader* pHeader)
+			{
+ 				Result hr;
+
+
+				protocolCheckPtr(pHeader);
+
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* GameInstancePtr = nullptr;
+				protocolCheck(input->ReadLink(GameInstancePtr, ArrayLen));
+				m_GameInstanceRaw.SetLinkedBuffer(ArrayLen, GameInstancePtr);
+
+				return hr;
+
+			}; // Result RequestUGCZoneInstanceRes::ParseMessage(const MessageHeader* pHeader)
+
+			Result RequestUGCZoneInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+			{
+ 				Result hr;
+
+
+				RequestUGCZoneInstanceRes parser;
+				protocolCheck(parser.ParseMessage(pHeader));
+
+				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+				variableBuilder.SetVariableArray("GameInstance", "VariableTable", parser.GetGameInstanceRaw());
+
+				return hr;
+
+			}; // Result RequestUGCZoneInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
+
+			Result RequestUGCZoneInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+			{
+ 				Result hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) RequestUGCZoneInstanceRes(pHeader));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result RequestUGCZoneInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+			size_t RequestUGCZoneInstanceRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InGameInstance )
+			{
+ 				uint16_t serializedSizeOfInGameInstance = static_cast<uint16_t>(SerializedSizeOf(InGameInstance)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ serializedSizeOfInGameInstance
+				);
+
+				return __uiMessageSize;
+			}; // size_t RequestUGCZoneInstanceRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InGameInstance )
+
+			size_t RequestUGCZoneInstanceRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
+			{
+ 				uint16_t serializedSizeOfInGameInstance = static_cast<uint16_t>(SerializedSizeOf(InGameInstance)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInGameInstance
+				);
+
+				return __uiMessageSize;
+			}; // size_t RequestUGCZoneInstanceRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
+
+			Result RequestUGCZoneInstanceRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InGameInstance )
+			{
+ 				Result hr;
+
+				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InResult, InGameInstance);
+
+				messageBuffer->msgID = RequestUGCZoneInstanceRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(*output << InGameInstance);
+
+				return hr;
+			}; // Result RequestUGCZoneInstanceRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InGameInstance )
+
+			Result RequestUGCZoneInstanceRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
+			{
+ 				Result hr;
+
+				uint16_t serializedSizeOfInGameInstance = static_cast<uint16_t>(SerializedSizeOf(InGameInstance)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInGameInstance
+				);
+
+				messageBuffer->msgID = RequestUGCZoneInstanceRes::MID;
+				if (messageBuffer->Length < __uiMessageSize)
+					return ResultCode::UNEXPECTED;
+				else
+					messageBuffer->Length = __uiMessageSize;
+
+				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
+				OutputMemoryStream outputStream(payloadView);
+				IOutputStream* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(output->Write(serializedSizeOfInGameInstance));
+				protocolCheck(*output << InGameInstance);
+
+				return hr;
+			}; // Result RequestUGCZoneInstanceRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
+
+			Result RequestUGCZoneInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+			{
+ 				RequestUGCZoneInstanceRes parser;
+				parser.ParseMessage(pHeader);
+				SFLog(Net, Debug1, "Game::RequestUGCZoneInstance, {0}:{1} , TransactionID:{2}, Result:{3:X8}, GameInstance:{4}",
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameInstance()); 
+				return ResultCode::SUCCESS;
+			}; // Result RequestUGCZoneInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
+
 			// Cmd: Buy shop item prepare
-			const MessageID BuyShopItemPrepareCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 53);
+			const MessageID BuyShopItemPrepareCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 60);
 			Result BuyShopItemPrepareCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -8887,7 +10496,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result BuyShopItemPrepareCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID BuyShopItemPrepareRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 53);
+			const MessageID BuyShopItemPrepareRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 60);
 			Result BuyShopItemPrepareRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -8991,7 +10600,7 @@ namespace SF
 			}; // Result BuyShopItemPrepareRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Buy shop item
-			const MessageID BuyShopItemCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 54);
+			const MessageID BuyShopItemCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 61);
 			Result BuyShopItemCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -9109,7 +10718,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result BuyShopItemCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID BuyShopItemRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 54);
+			const MessageID BuyShopItemRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 61);
 			Result BuyShopItemRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -9207,7 +10816,7 @@ namespace SF
 			}; // Result BuyShopItemRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Create or Join Chat channel
-			const MessageID CreateOrJoinChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 55);
+			const MessageID CreateOrJoinChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 62);
 			Result CreateOrJoinChatChannelCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -9306,7 +10915,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CreateOrJoinChatChannelCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID CreateOrJoinChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 55);
+			const MessageID CreateOrJoinChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 62);
 			Result CreateOrJoinChatChannelRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -9409,7 +11018,7 @@ namespace SF
 			}; // Result CreateOrJoinChatChannelRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Join
-			const MessageID JoinChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 56);
+			const MessageID JoinChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 63);
 			Result JoinChatChannelCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -9512,7 +11121,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result JoinChatChannelCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID JoinChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 56);
+			const MessageID JoinChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 63);
 			Result JoinChatChannelRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -9615,7 +11224,7 @@ namespace SF
 			}; // Result JoinChatChannelRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Player Joined event
-			const MessageID ChatChannelPlayerJoinedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 57);
+			const MessageID ChatChannelPlayerJoinedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 64);
 			Result ChatChannelPlayerJoinedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -9708,7 +11317,7 @@ namespace SF
 			}; // Result ChatChannelPlayerJoinedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: ChatChannel leader changed event
-			const MessageID ChatChannelLeaderChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 58);
+			const MessageID ChatChannelLeaderChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 65);
 			Result ChatChannelLeaderChangedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -9801,7 +11410,7 @@ namespace SF
 			}; // Result ChatChannelLeaderChangedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Leave ChatChannel command
-			const MessageID LeaveChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 59);
+			const MessageID LeaveChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 66);
 			Result LeaveChatChannelCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -9898,7 +11507,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result LeaveChatChannelCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID LeaveChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 59);
+			const MessageID LeaveChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 66);
 			Result LeaveChatChannelRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -9991,7 +11600,7 @@ namespace SF
 			}; // Result LeaveChatChannelRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: ChatChannel Player left event
-			const MessageID ChatChannelPlayerLeftS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 60);
+			const MessageID ChatChannelPlayerLeftS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 67);
 			Result ChatChannelPlayerLeftS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -10084,7 +11693,7 @@ namespace SF
 			}; // Result ChatChannelPlayerLeftS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Kick player from the ChatChannel
-			const MessageID ChatChannelKickPlayerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 61);
+			const MessageID ChatChannelKickPlayerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 68);
 			Result ChatChannelKickPlayerCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -10186,7 +11795,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result ChatChannelKickPlayerCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID ChatChannelKickPlayerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 61);
+			const MessageID ChatChannelKickPlayerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 68);
 			Result ChatChannelKickPlayerRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -10279,7 +11888,7 @@ namespace SF
 			}; // Result ChatChannelKickPlayerRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: ChatChannel Player kicked message
-			const MessageID ChatChannelPlayerKickedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 62);
+			const MessageID ChatChannelPlayerKickedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 69);
 			Result ChatChannelPlayerKickedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -10372,7 +11981,7 @@ namespace SF
 			}; // Result ChatChannelPlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Chat channel sending chatting message
-			const MessageID ChatChannelChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 63);
+			const MessageID ChatChannelChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 70);
 			const VariableTable& ChatChannelChatMessageCmd::GetChatMetaData() const
 			{
  				if (!m_ChatMetaDataHasParsed)
@@ -10528,7 +12137,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result ChatChannelChatMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID ChatChannelChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 63);
+			const MessageID ChatChannelChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 70);
 			Result ChatChannelChatMessageRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -10621,7 +12230,7 @@ namespace SF
 			}; // Result ChatChannelChatMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: ChatChannel Chatting message event
-			const MessageID ChatChannelChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 64);
+			const MessageID ChatChannelChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 71);
 			const VariableTable& ChatChannelChatMessageS2CEvt::GetChatMetaData() const
 			{
  				if (!m_ChatMetaDataHasParsed)
@@ -10771,7 +12380,7 @@ namespace SF
 			}; // Result ChatChannelChatMessageS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Whisper(tell) other player chatting
-			const MessageID WhisperMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 65);
+			const MessageID WhisperMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 72);
 			const VariableTable& WhisperMessageCmd::GetChatMetaData() const
 			{
  				if (!m_ChatMetaDataHasParsed)
@@ -10935,7 +12544,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result WhisperMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID WhisperMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 65);
+			const MessageID WhisperMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 72);
 			Result WhisperMessageRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -11028,7 +12637,7 @@ namespace SF
 			}; // Result WhisperMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Other player whispered(tell) to me message event
-			const MessageID WhisperMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 66);
+			const MessageID WhisperMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 73);
 			const VariableTable& WhisperMessageS2CEvt::GetChatMetaData() const
 			{
  				if (!m_ChatMetaDataHasParsed)
@@ -11178,7 +12787,7 @@ namespace SF
 			}; // Result WhisperMessageS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Create character
-			const MessageID CreateCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 67);
+			const MessageID CreateCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 74);
 			const VariableTable& CreateCharacterCmd::GetPublicData() const
 			{
  				if (!m_PublicDataHasParsed)
@@ -11353,7 +12962,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CreateCharacterCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID CreateCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 67);
+			const MessageID CreateCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 74);
 			Result CreateCharacterRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -11451,7 +13060,7 @@ namespace SF
 			}; // Result CreateCharacterRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Delete character
-			const MessageID DeleteCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 68);
+			const MessageID DeleteCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 75);
 			Result DeleteCharacterCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -11543,7 +13152,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result DeleteCharacterCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID DeleteCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 68);
+			const MessageID DeleteCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 75);
 			Result DeleteCharacterRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -11636,7 +13245,7 @@ namespace SF
 			}; // Result DeleteCharacterRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Get character list
-			const MessageID GetCharacterListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 69);
+			const MessageID GetCharacterListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 76);
 			Result GetCharacterListCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -11723,7 +13332,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetCharacterListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID GetCharacterListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 69);
+			const MessageID GetCharacterListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 76);
 			Result GetCharacterListRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -11821,7 +13430,7 @@ namespace SF
 			}; // Result GetCharacterListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: 
-			const MessageID GetCharacterDataCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 70);
+			const MessageID GetCharacterDataCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 77);
 			Result GetCharacterDataCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -11913,7 +13522,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetCharacterDataCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID GetCharacterDataRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 70);
+			const MessageID GetCharacterDataRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 77);
 			const VariableTable& GetCharacterDataRes::GetPrivateData() const
 			{
  				if (!m_PrivateDataHasParsed)
@@ -12088,7 +13697,7 @@ namespace SF
 			}; // Result GetCharacterDataRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Select character
-			const MessageID SelectCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 71);
+			const MessageID SelectCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 78);
 			Result SelectCharacterCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -12180,7 +13789,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result SelectCharacterCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID SelectCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 71);
+			const MessageID SelectCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 78);
 			const VariableTable& SelectCharacterRes::GetAttributes() const
 			{
  				if (!m_AttributesHasParsed)
@@ -12336,7 +13945,7 @@ namespace SF
 			}; // Result SelectCharacterRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
-			const MessageID RequestServerNoticeUpdateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 72);
+			const MessageID RequestServerNoticeUpdateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 79);
 			Result RequestServerNoticeUpdateCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -12423,7 +14032,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result RequestServerNoticeUpdateCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID RequestServerNoticeUpdateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 72);
+			const MessageID RequestServerNoticeUpdateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 79);
 			Result RequestServerNoticeUpdateRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -12516,7 +14125,7 @@ namespace SF
 			}; // Result RequestServerNoticeUpdateRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Server Notice updated event
-			const MessageID ServerNoticeS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 73);
+			const MessageID ServerNoticeS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 80);
 			Result ServerNoticeS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -12610,7 +14219,7 @@ namespace SF
 			}; // Result ServerNoticeS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: To call general functionality
-			const MessageID CallFunctionCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 74);
+			const MessageID CallFunctionCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 81);
 			const VariableTable& CallFunctionCmd::GetParameters() const
 			{
  				if (!m_ParametersHasParsed)
@@ -12758,7 +14367,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CallFunctionCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID CallFunctionRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 74);
+			const MessageID CallFunctionRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 81);
 			const VariableTable& CallFunctionRes::GetResults() const
 			{
  				if (!m_ResultsHasParsed)

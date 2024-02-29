@@ -328,7 +328,7 @@
             <Params TypeName="uint16" Name="FrameIndex" Desc="voice frame index"/>
             <Params TypeName="uint8" IsArray="true" Name="VoiceData" Desc="Voice data"/>
         </S2CEvent>
-
+        
         <!-- ============================  Streaming ============================================ -->
 
         <Command Name="CreateStream" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create stream instance">

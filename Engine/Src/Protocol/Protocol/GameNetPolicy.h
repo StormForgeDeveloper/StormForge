@@ -106,6 +106,20 @@ namespace SF
 		Result RequestGameMatchCmd( const TransactionID &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole );
 		// Cmd: Cancel Game match
 		Result CancelGameMatchCmd( const TransactionID &InTransactionID );
+		// Cmd: Request UGC template list
+		Result GetUGCTemplatesCmd( const TransactionID &InTransactionID, const Array<const char*>& InTags );
+		// Cmd: Save UGC content data
+		Result SaveUGCCmd( const TransactionID &InTransactionID, const VariableTable &InUGCMetaData, const VariableTable &InUGCContents );
+		// Cmd: Request WhiteboardSharing
+		Result SearchUGCCmd( const TransactionID &InTransactionID, const Array<const char*>& InTags );
+		// Cmd: Get UGC content info, name, thumb image and so on
+		Result GetUGCContentInfoCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID );
+		// Cmd: Request WhiteboardSharing
+		Result DownloadUGCContentCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID, const uint8_t &InIsIncludeMetaData );
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+		Result RequestUGCZoneInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID );
+		// Cmd: Request ugc zone instance
+		Result RequestUGCZoneInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID );
 		// Cmd: Buy shop item prepare
 		Result BuyShopItemPrepareCmd( const TransactionID &InTransactionID, const uint32_t &InShopItemID );
 		// Cmd: Buy shop item
@@ -253,6 +267,20 @@ namespace SF
 		Result CancelGameMatchRes( const TransactionID &InTransactionID, const Result &InResult );
 		// S2C: game matching canceled
 		Result GameMatchingCanceledS2CEvt(  );
+		// Cmd: Request UGC template list
+		Result GetUGCTemplatesRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCIDs );
+		// Cmd: Save UGC content data
+		Result SaveUGCRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCID );
+		// Cmd: Request WhiteboardSharing
+		Result SearchUGCRes( const TransactionID &InTransactionID, const Result &InResult );
+		// Cmd: Get UGC content info, name, thumb image and so on
+		Result GetUGCContentInfoRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData );
+		// Cmd: Request WhiteboardSharing
+		Result DownloadUGCContentRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData );
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+		Result RequestUGCZoneInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance );
+		// Cmd: Request ugc zone instance
+		Result RequestUGCZoneInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance );
 		// Cmd: Buy shop item prepare
 		Result BuyShopItemPrepareRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID );
 		// Cmd: Buy shop item

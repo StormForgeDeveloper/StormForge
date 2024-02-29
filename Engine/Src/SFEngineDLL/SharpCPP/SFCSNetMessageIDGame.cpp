@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2017 StromForge
 // 
@@ -604,6 +604,97 @@ SFDLL_EXPORT int  CSSFNetMessageID_GameGameMatchingCanceledS2CEvt()
 {
  	return SF::Message::Game::GameMatchingCanceledS2CEvt::MID.IDSeq.MsgID;
 } // SFDLL_EXPORT int  CSSFNetMessageID_GameGameMatchingCanceledS2CEvt()
+
+
+// Cmd: Request UGC template list
+SFDLL_EXPORT int  CSSFNetMessageID_GameGetUGCTemplatesCmd()
+{
+ 	return SF::Message::Game::GetUGCTemplatesCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameGetUGCTemplatesCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_GameGetUGCTemplatesRes()
+{
+ 	return SF::Message::Game::GetUGCTemplatesRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameGetUGCTemplatesRes()
+
+
+// Cmd: Save UGC content data
+SFDLL_EXPORT int  CSSFNetMessageID_GameSaveUGCCmd()
+{
+ 	return SF::Message::Game::SaveUGCCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameSaveUGCCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_GameSaveUGCRes()
+{
+ 	return SF::Message::Game::SaveUGCRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameSaveUGCRes()
+
+
+// Cmd: Request WhiteboardSharing
+SFDLL_EXPORT int  CSSFNetMessageID_GameSearchUGCCmd()
+{
+ 	return SF::Message::Game::SearchUGCCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameSearchUGCCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_GameSearchUGCRes()
+{
+ 	return SF::Message::Game::SearchUGCRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameSearchUGCRes()
+
+
+// Cmd: Get UGC content info, name, thumb image and so on
+SFDLL_EXPORT int  CSSFNetMessageID_GameGetUGCContentInfoCmd()
+{
+ 	return SF::Message::Game::GetUGCContentInfoCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameGetUGCContentInfoCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_GameGetUGCContentInfoRes()
+{
+ 	return SF::Message::Game::GetUGCContentInfoRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameGetUGCContentInfoRes()
+
+
+// Cmd: Request WhiteboardSharing
+SFDLL_EXPORT int  CSSFNetMessageID_GameDownloadUGCContentCmd()
+{
+ 	return SF::Message::Game::DownloadUGCContentCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameDownloadUGCContentCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_GameDownloadUGCContentRes()
+{
+ 	return SF::Message::Game::DownloadUGCContentRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameDownloadUGCContentRes()
+
+
+// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+SFDLL_EXPORT int  CSSFNetMessageID_GameRequestUGCZoneInstanceCmd()
+{
+ 	return SF::Message::Game::RequestUGCZoneInstanceCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameRequestUGCZoneInstanceCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_GameRequestUGCZoneInstanceRes()
+{
+ 	return SF::Message::Game::RequestUGCZoneInstanceRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameRequestUGCZoneInstanceRes()
+
+
+// Cmd: Request ugc zone instance
+SFDLL_EXPORT int  CSSFNetMessageID_GameRequestUGCZoneInstanceCmd()
+{
+ 	return SF::Message::Game::RequestUGCZoneInstanceCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameRequestUGCZoneInstanceCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_GameRequestUGCZoneInstanceRes()
+{
+ 	return SF::Message::Game::RequestUGCZoneInstanceRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameRequestUGCZoneInstanceRes()
 
 
 // Cmd: Buy shop item prepare

@@ -3887,6 +3887,631 @@ namespace SF
 
 			}; // class GameMatchingCanceledS2CEvt : public MessageBase
 
+			// Cmd: Request UGC template list
+			class GetUGCTemplatesCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				DynamicArray<const char*> m_Tags;
+			public:
+				GetUGCTemplatesCmd()
+					{}
+
+				GetUGCTemplatesCmd( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				GetUGCTemplatesCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const Array<const char*>& GetTags() const	{ return m_Tags; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Array<const char*>& InTags );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Array<const char*>& InTags );
+
+			}; // class GetUGCTemplatesCmd : public MessageBase
+
+			class GetUGCTemplatesRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				Result m_Result{};
+				uint64_t m_UGCIDs{};
+			public:
+				GetUGCTemplatesRes()
+					{}
+
+				GetUGCTemplatesRes( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				GetUGCTemplatesRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+				const uint64_t& GetUGCIDs() const	{ return m_UGCIDs; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCIDs );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCIDs );
+
+			}; // class GetUGCTemplatesRes : public MessageBase
+
+			// Cmd: Save UGC content data
+			class SaveUGCCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				ArrayView<uint8_t> m_UGCMetaDataRaw;
+				mutable bool m_UGCMetaDataHasParsed = false;
+				mutable VariableTable m_UGCMetaData;
+				ArrayView<uint8_t> m_UGCContentsRaw;
+				mutable bool m_UGCContentsHasParsed = false;
+				mutable VariableTable m_UGCContents;
+			public:
+				SaveUGCCmd()
+					{}
+
+				SaveUGCCmd( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				SaveUGCCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const Array<uint8_t>& GetUGCMetaDataRaw() const	{ return m_UGCMetaDataRaw; };
+				const VariableTable& GetUGCMetaData() const;
+				const Array<uint8_t>& GetUGCContentsRaw() const	{ return m_UGCContentsRaw; };
+				const VariableTable& GetUGCContents() const;
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const VariableTable &InUGCMetaData, const VariableTable &InUGCContents );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Array<uint8_t>& InUGCMetaData, const Array<uint8_t>& InUGCContents );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Array<uint8_t>& InUGCMetaData, const Array<uint8_t>& InUGCContents );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const VariableTable &InUGCMetaData, const VariableTable &InUGCContents );
+
+			}; // class SaveUGCCmd : public MessageBase
+
+			class SaveUGCRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				Result m_Result{};
+				uint64_t m_UGCID{};
+			public:
+				SaveUGCRes()
+					{}
+
+				SaveUGCRes( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				SaveUGCRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+				const uint64_t& GetUGCID() const	{ return m_UGCID; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCID );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCID );
+
+			}; // class SaveUGCRes : public MessageBase
+
+			// Cmd: Request WhiteboardSharing
+			class SearchUGCCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				DynamicArray<const char*> m_Tags;
+			public:
+				SearchUGCCmd()
+					{}
+
+				SearchUGCCmd( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				SearchUGCCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const Array<const char*>& GetTags() const	{ return m_Tags; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Array<const char*>& InTags );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Array<const char*>& InTags );
+
+			}; // class SearchUGCCmd : public MessageBase
+
+			class SearchUGCRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				Result m_Result{};
+			public:
+				SearchUGCRes()
+					{}
+
+				SearchUGCRes( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				SearchUGCRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult );
+
+			}; // class SearchUGCRes : public MessageBase
+
+			// Cmd: Get UGC content info, name, thumb image and so on
+			class GetUGCContentInfoCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				uint64_t m_UGCID{};
+			public:
+				GetUGCContentInfoCmd()
+					{}
+
+				GetUGCContentInfoCmd( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				GetUGCContentInfoCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetUGCID() const	{ return m_UGCID; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InUGCID );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InUGCID );
+
+			}; // class GetUGCContentInfoCmd : public MessageBase
+
+			class GetUGCContentInfoRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				Result m_Result{};
+				ArrayView<uint8_t> m_UGCMetaDataRaw;
+				mutable bool m_UGCMetaDataHasParsed = false;
+				mutable VariableTable m_UGCMetaData;
+			public:
+				GetUGCContentInfoRes()
+					{}
+
+				GetUGCContentInfoRes( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				GetUGCContentInfoRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+				const Array<uint8_t>& GetUGCMetaDataRaw() const	{ return m_UGCMetaDataRaw; };
+				const VariableTable& GetUGCMetaData() const;
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InUGCMetaData );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InUGCMetaData );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData );
+
+			}; // class GetUGCContentInfoRes : public MessageBase
+
+			// Cmd: Request WhiteboardSharing
+			class DownloadUGCContentCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				uint64_t m_UGCID{};
+				uint8_t m_IsIncludeMetaData{};
+			public:
+				DownloadUGCContentCmd()
+					{}
+
+				DownloadUGCContentCmd( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				DownloadUGCContentCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetUGCID() const	{ return m_UGCID; };
+				const uint8_t& GetIsIncludeMetaData() const	{ return m_IsIncludeMetaData; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InUGCID, const uint8_t &InIsIncludeMetaData );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InUGCID, const uint8_t &InIsIncludeMetaData );
+
+			}; // class DownloadUGCContentCmd : public MessageBase
+
+			class DownloadUGCContentRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				Result m_Result{};
+				ArrayView<uint8_t> m_UGCMetaDataRaw;
+				mutable bool m_UGCMetaDataHasParsed = false;
+				mutable VariableTable m_UGCMetaData;
+			public:
+				DownloadUGCContentRes()
+					{}
+
+				DownloadUGCContentRes( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				DownloadUGCContentRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+				const Array<uint8_t>& GetUGCMetaDataRaw() const	{ return m_UGCMetaDataRaw; };
+				const VariableTable& GetUGCMetaData() const;
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InUGCMetaData );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InUGCMetaData );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData );
+
+			}; // class DownloadUGCContentRes : public MessageBase
+
+			// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+			class RequestUGCZoneInstanceCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				uint64_t m_UGCID{};
+			public:
+				RequestUGCZoneInstanceCmd()
+					{}
+
+				RequestUGCZoneInstanceCmd( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				RequestUGCZoneInstanceCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetUGCID() const	{ return m_UGCID; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InUGCID );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InUGCID );
+
+			}; // class RequestUGCZoneInstanceCmd : public MessageBase
+
+			class RequestUGCZoneInstanceRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				Result m_Result{};
+				ArrayView<uint8_t> m_GameInstanceRaw;
+				mutable bool m_GameInstanceHasParsed = false;
+				mutable VariableTable m_GameInstance;
+			public:
+				RequestUGCZoneInstanceRes()
+					{}
+
+				RequestUGCZoneInstanceRes( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				RequestUGCZoneInstanceRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+				const Array<uint8_t>& GetGameInstanceRaw() const	{ return m_GameInstanceRaw; };
+				const VariableTable& GetGameInstance() const;
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InGameInstance );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InGameInstance );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance );
+
+			}; // class RequestUGCZoneInstanceRes : public MessageBase
+
+			// Cmd: Request ugc zone instance
+			class RequestUGCZoneInstanceCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				uint64_t m_UGCID{};
+			public:
+				RequestUGCZoneInstanceCmd()
+					{}
+
+				RequestUGCZoneInstanceCmd( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				RequestUGCZoneInstanceCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetUGCID() const	{ return m_UGCID; };
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InUGCID );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InUGCID );
+
+			}; // class RequestUGCZoneInstanceCmd : public MessageBase
+
+			class RequestUGCZoneInstanceRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasTransactionID = 1,
+					HasRouteContext = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+			private:
+				TransactionID m_TransactionID{};
+				Result m_Result{};
+				ArrayView<uint8_t> m_GameInstanceRaw;
+				mutable bool m_GameInstanceHasParsed = false;
+				mutable VariableTable m_GameInstance;
+			public:
+				RequestUGCZoneInstanceRes()
+					{}
+
+				RequestUGCZoneInstanceRes( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+				RequestUGCZoneInstanceRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
+				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+				const Array<uint8_t>& GetGameInstanceRaw() const	{ return m_GameInstanceRaw; };
+				const VariableTable& GetGameInstance() const;
+
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
+
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InGameInstance );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InGameInstance );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance );
+
+			}; // class RequestUGCZoneInstanceRes : public MessageBase
+
 			// Cmd: Buy shop item prepare
 			class BuyShopItemPrepareCmd : public MessageBase
 			{
