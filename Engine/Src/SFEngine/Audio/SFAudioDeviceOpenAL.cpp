@@ -43,7 +43,7 @@ namespace SF
 
         m_pDevice = alcOpenDevice(m_OALDeviceName);
         if (m_pDevice == nullptr)
-            return ResultCode::UNEXPECTED;
+            return ResultCode::INVALID_DEVICE;
 
         m_pContext = alcCreateContext(m_pDevice, nullptr);
         if (m_pContext == nullptr)
