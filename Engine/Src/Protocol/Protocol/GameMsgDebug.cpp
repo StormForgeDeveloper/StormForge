@@ -185,10 +185,7 @@ namespace SF
 			// Cmd: Request WhiteboardSharing
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::DownloadUGCContentCmd::MID.IDSeq.MsgID,&Message::Game::DownloadUGCContentCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::DownloadUGCContentRes::MID.IDSeq.MsgID,&Message::Game::DownloadUGCContentRes::TraceOut));
-			// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceCmd::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceRes::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceRes::TraceOut));
-			// Cmd: Request ugc zone instance
+			// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceCmd::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceRes::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceRes::TraceOut));
 			// Cmd: Buy shop item prepare

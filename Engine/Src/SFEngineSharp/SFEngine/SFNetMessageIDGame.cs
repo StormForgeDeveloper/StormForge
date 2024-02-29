@@ -325,13 +325,7 @@ namespace SF.Net
 		public static int DownloadUGCContentRes { get { return CSSFNetMessageID_GameDownloadUGCContentRes(); } }
 
 
-		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
-		public static int RequestUGCZoneInstanceCmd { get { return CSSFNetMessageID_GameRequestUGCZoneInstanceCmd(); } }
-
-		public static int RequestUGCZoneInstanceRes { get { return CSSFNetMessageID_GameRequestUGCZoneInstanceRes(); } }
-
-
-		// Cmd: Request ugc zone instance
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
 		public static int RequestUGCZoneInstanceCmd { get { return CSSFNetMessageID_GameRequestUGCZoneInstanceCmd(); } }
 
 		public static int RequestUGCZoneInstanceRes { get { return CSSFNetMessageID_GameRequestUGCZoneInstanceRes(); } }
@@ -944,17 +938,7 @@ namespace SF.Net
 
 
 
-		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameRequestUGCZoneInstanceCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameRequestUGCZoneInstanceCmd();
-
-
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameRequestUGCZoneInstanceRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameRequestUGCZoneInstanceRes();
-
-
-
-		// Cmd: Request ugc zone instance
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameRequestUGCZoneInstanceCmd", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_GameRequestUGCZoneInstanceCmd();
 

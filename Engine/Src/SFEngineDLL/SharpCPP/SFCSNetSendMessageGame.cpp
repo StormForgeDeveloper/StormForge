@@ -568,20 +568,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameDownloadUGCContentCmd( intptr_t InNativeCon
 } // SFDLL_EXPORT int  CSSFNetAdapter_GameDownloadUGCContentCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InUGCID, uint8_t InIsIncludeMetaData )
 
 
-// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
-SFDLL_EXPORT int  CSSFNetAdapter_GameRequestUGCZoneInstanceCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InUGCID )
-{
- 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
-	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::Game::RequestUGCZoneInstanceCmd::CalculateMessageSize(InTransactionID, InUGCID);
-	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::Game::RequestUGCZoneInstanceCmd::Create(pMessage, InTransactionID, InUGCID);
-	if (hr) hr = pConnection->SendMsg(pMessage);
-	return (int32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameRequestUGCZoneInstanceCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InUGCID )
-
-
-// Cmd: Request ugc zone instance
+// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
 SFDLL_EXPORT int  CSSFNetAdapter_GameRequestUGCZoneInstanceCmd( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, uint64_t InUGCID )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
@@ -1592,21 +1579,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameDownloadUGCContentRes( intptr_t InNativeCon
 
 
 
-// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
-SFDLL_EXPORT int  CSSFNetAdapter_GameRequestUGCZoneInstanceRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t _sizeOfInGameInstance,uint8_t* InGameInstance )
-{
- 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
-	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::Game::RequestUGCZoneInstanceRes::CalculateMessageSize(InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInGameInstance, _sizeOfInGameInstance, InGameInstance));
-	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::Game::RequestUGCZoneInstanceRes::Create(pMessage, InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInGameInstance, _sizeOfInGameInstance, InGameInstance));
-	if (hr) hr = pConnection->SendMsg(pMessage);
-	return (int32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameRequestUGCZoneInstanceRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t _sizeOfInGameInstance,uint8_t* InGameInstance )
-
-
-
-// Cmd: Request ugc zone instance
+// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
 SFDLL_EXPORT int  CSSFNetAdapter_GameRequestUGCZoneInstanceRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t _sizeOfInGameInstance,uint8_t* InGameInstance )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);

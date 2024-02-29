@@ -517,16 +517,7 @@
             </Res>
         </Command>
 
-        <Command Name="RequestUGCZoneInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)">
-            <Cmd>
-                <Params TypeName="uint64" Name="UGCID" Desc="UGC content id"/>
-            </Cmd>
-            <Res>
-                <Params TypeName="VariableTable" Name="GameInstance" Desc="Privisoned UGC zone instance information"/>
-            </Res>
-        </Command>
-        
-        <Command Name="RequestUGCZoneInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Request ugc zone instance">
+        <Command Name="RequestUGCZoneInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone">
             <Cmd>
                 <Params TypeName="uint64" Name="UGCID" Desc="UGC content id"/>
             </Cmd>

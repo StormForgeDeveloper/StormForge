@@ -287,12 +287,7 @@ namespace SF
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::DownloadUGCContentCmd::MID.IDSeq.MsgID,&Message::Game::DownloadUGCContentCmd::ParseMessageToMessageBase));
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::DownloadUGCContentRes::MID.IDSeq.MsgID,&Message::Game::DownloadUGCContentRes::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::DownloadUGCContentRes::MID.IDSeq.MsgID,&Message::Game::DownloadUGCContentRes::ParseMessageToMessageBase));
-			// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
-			MessageParseToVariableMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceCmd::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceCmd::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceCmd::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceCmd::ParseMessageToMessageBase));
-			MessageParseToVariableMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceRes::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceRes::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceRes::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceRes::ParseMessageToMessageBase));
-			// Cmd: Request ugc zone instance
+			// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceCmd::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceCmd::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceCmd::ParseMessageToMessageBase));
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::RequestUGCZoneInstanceRes::MID.IDSeq.MsgID,&Message::Game::RequestUGCZoneInstanceRes::ParseMessageTo));

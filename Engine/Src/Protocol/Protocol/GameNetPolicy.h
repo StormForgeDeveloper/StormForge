@@ -116,9 +116,7 @@ namespace SF
 		Result GetUGCContentInfoCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID );
 		// Cmd: Request WhiteboardSharing
 		Result DownloadUGCContentCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID, const uint8_t &InIsIncludeMetaData );
-		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
-		Result RequestUGCZoneInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID );
-		// Cmd: Request ugc zone instance
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
 		Result RequestUGCZoneInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID );
 		// Cmd: Buy shop item prepare
 		Result BuyShopItemPrepareCmd( const TransactionID &InTransactionID, const uint32_t &InShopItemID );
@@ -277,9 +275,7 @@ namespace SF
 		Result GetUGCContentInfoRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData );
 		// Cmd: Request WhiteboardSharing
 		Result DownloadUGCContentRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData );
-		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
-		Result RequestUGCZoneInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance );
-		// Cmd: Request ugc zone instance
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
 		Result RequestUGCZoneInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance );
 		// Cmd: Buy shop item prepare
 		Result BuyShopItemPrepareRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID );

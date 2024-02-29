@@ -9921,7 +9921,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result DownloadUGCContentRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
+			// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
 			const MessageID RequestUGCZoneInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 58);
 			Result RequestUGCZoneInstanceCmd::ParseMessage(const MessageHeader* pHeader)
 			{
@@ -10162,249 +10162,8 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result RequestUGCZoneInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			// Cmd: Request ugc zone instance
-			const MessageID RequestUGCZoneInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 59);
-			Result RequestUGCZoneInstanceCmd::ParseMessage(const MessageHeader* pHeader)
-			{
- 				Result hr;
-
-
-				protocolCheckPtr(pHeader);
-
-				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
-				InputMemoryStream inputStream(bufferView);
-				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;(void)(ArrayLen);
-
-				protocolCheck(*input >> m_TransactionID);
-				protocolCheck(*input >> m_UGCID);
-
-				return hr;
-
-			}; // Result RequestUGCZoneInstanceCmd::ParseMessage(const MessageHeader* pHeader)
-
-			Result RequestUGCZoneInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-			{
- 				Result hr;
-
-
-				RequestUGCZoneInstanceCmd parser;
-				protocolCheck(parser.ParseMessage(pHeader));
-
-				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
-				variableBuilder.SetVariable("UGCID", parser.GetUGCID());
-
-				return hr;
-
-			}; // Result RequestUGCZoneInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-
-			Result RequestUGCZoneInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-			{
- 				Result hr;
-
-				protocolCheckMem(pMessageBase = new(memHeap) RequestUGCZoneInstanceCmd(pHeader));
-				protocolCheck(pMessageBase->ParseMsg());
-
-				return hr;
-
-			}; // Result RequestUGCZoneInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-
-
-			size_t RequestUGCZoneInstanceCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InUGCID )
-			{
- 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InUGCID)
-				);
-
-				return __uiMessageSize;
-			}; // size_t RequestUGCZoneInstanceCmd::CalculateMessageSize( const TransactionID &InTransactionID, const uint64_t &InUGCID )
-
-
-			Result RequestUGCZoneInstanceCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InUGCID )
-			{
- 				Result hr;
-
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InUGCID)
-				);
-
-				messageBuffer->msgID = RequestUGCZoneInstanceCmd::MID;
-				if (messageBuffer->Length < __uiMessageSize)
-					return ResultCode::UNEXPECTED;
-				else
-					messageBuffer->Length = __uiMessageSize;
-
-				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
-				OutputMemoryStream outputStream(payloadView);
-				IOutputStream* output = outputStream.ToOutputStream();
-
-				protocolCheck(*output << InTransactionID);
-				protocolCheck(*output << InUGCID);
-
-				return hr;
-			}; // Result RequestUGCZoneInstanceCmd::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const uint64_t &InUGCID )
-
-			Result RequestUGCZoneInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
-			{
- 				RequestUGCZoneInstanceCmd parser;
-				parser.ParseMessage(pHeader);
-				SFLog(Net, Debug1, "Game::RequestUGCZoneInstance, {0}:{1} , TransactionID:{2}, UGCID:{3}",
-						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetUGCID()); 
-				return ResultCode::SUCCESS;
-			}; // Result RequestUGCZoneInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
-
-			const MessageID RequestUGCZoneInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 59);
-			const VariableTable& RequestUGCZoneInstanceRes::GetGameInstance() const
-			{
- 				if (!m_GameInstanceHasParsed)
-				{
- 					m_GameInstanceHasParsed = true;
-					InputMemoryStream GameInstance_ReadStream(m_GameInstanceRaw);
-					*GameInstance_ReadStream.ToInputStream() >> m_GameInstance;
-				} // if (!m_GameInstanceHasParsed)
-				return m_GameInstance;
-			} // const VariableTable& RequestUGCZoneInstanceRes::GetGameInstance() const
-			Result RequestUGCZoneInstanceRes::ParseMessage(const MessageHeader* pHeader)
-			{
- 				Result hr;
-
-
-				protocolCheckPtr(pHeader);
-
-				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
-				InputMemoryStream inputStream(bufferView);
-				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;(void)(ArrayLen);
-
-				protocolCheck(*input >> m_TransactionID);
-				protocolCheck(*input >> m_Result);
-				protocolCheck(input->Read(ArrayLen));
-				uint8_t* GameInstancePtr = nullptr;
-				protocolCheck(input->ReadLink(GameInstancePtr, ArrayLen));
-				m_GameInstanceRaw.SetLinkedBuffer(ArrayLen, GameInstancePtr);
-
-				return hr;
-
-			}; // Result RequestUGCZoneInstanceRes::ParseMessage(const MessageHeader* pHeader)
-
-			Result RequestUGCZoneInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-			{
- 				Result hr;
-
-
-				RequestUGCZoneInstanceRes parser;
-				protocolCheck(parser.ParseMessage(pHeader));
-
-				variableBuilder.SetVariable("TransactionID", "TransactionID", parser.GetTransactionID());
-				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariableArray("GameInstance", "VariableTable", parser.GetGameInstanceRaw());
-
-				return hr;
-
-			}; // Result RequestUGCZoneInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
-
-			Result RequestUGCZoneInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-			{
- 				Result hr;
-
-				protocolCheckMem(pMessageBase = new(memHeap) RequestUGCZoneInstanceRes(pHeader));
-				protocolCheck(pMessageBase->ParseMsg());
-
-				return hr;
-
-			}; // Result RequestUGCZoneInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
-
-			size_t RequestUGCZoneInstanceRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InGameInstance )
-			{
- 				uint16_t serializedSizeOfInGameInstance = static_cast<uint16_t>(SerializedSizeOf(InGameInstance)); 
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InResult)
-					+ serializedSizeOfInGameInstance
-				);
-
-				return __uiMessageSize;
-			}; // size_t RequestUGCZoneInstanceRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InGameInstance )
-
-			size_t RequestUGCZoneInstanceRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
-			{
- 				uint16_t serializedSizeOfInGameInstance = static_cast<uint16_t>(SerializedSizeOf(InGameInstance)); 
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InResult)
-					+ sizeof(uint16_t)
-					+ serializedSizeOfInGameInstance
-				);
-
-				return __uiMessageSize;
-			}; // size_t RequestUGCZoneInstanceRes::CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
-
-			Result RequestUGCZoneInstanceRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InGameInstance )
-			{
- 				Result hr;
-
-				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InResult, InGameInstance);
-
-				messageBuffer->msgID = RequestUGCZoneInstanceRes::MID;
-				if (messageBuffer->Length < __uiMessageSize)
-					return ResultCode::UNEXPECTED;
-				else
-					messageBuffer->Length = __uiMessageSize;
-
-				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
-				OutputMemoryStream outputStream(payloadView);
-				IOutputStream* output = outputStream.ToOutputStream();
-
-				protocolCheck(*output << InTransactionID);
-				protocolCheck(*output << InResult);
-				protocolCheck(*output << InGameInstance);
-
-				return hr;
-			}; // Result RequestUGCZoneInstanceRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const Array<uint8_t>& InGameInstance )
-
-			Result RequestUGCZoneInstanceRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
-			{
- 				Result hr;
-
-				uint16_t serializedSizeOfInGameInstance = static_cast<uint16_t>(SerializedSizeOf(InGameInstance)); 
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InResult)
-					+ sizeof(uint16_t)
-					+ serializedSizeOfInGameInstance
-				);
-
-				messageBuffer->msgID = RequestUGCZoneInstanceRes::MID;
-				if (messageBuffer->Length < __uiMessageSize)
-					return ResultCode::UNEXPECTED;
-				else
-					messageBuffer->Length = __uiMessageSize;
-
-				ArrayView<uint8_t> payloadView(size_t(messageBuffer->Length - sizeof(MessageHeader)), 0, reinterpret_cast<uint8_t*>(messageBuffer->GetDataPtr()));
-				OutputMemoryStream outputStream(payloadView);
-				IOutputStream* output = outputStream.ToOutputStream();
-
-				protocolCheck(*output << InTransactionID);
-				protocolCheck(*output << InResult);
-				protocolCheck(output->Write(serializedSizeOfInGameInstance));
-				protocolCheck(*output << InGameInstance);
-
-				return hr;
-			}; // Result RequestUGCZoneInstanceRes::Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
-
-			Result RequestUGCZoneInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
-			{
- 				RequestUGCZoneInstanceRes parser;
-				parser.ParseMessage(pHeader);
-				SFLog(Net, Debug1, "Game::RequestUGCZoneInstance, {0}:{1} , TransactionID:{2}, Result:{3:X8}, GameInstance:{4}",
-						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameInstance()); 
-				return ResultCode::SUCCESS;
-			}; // Result RequestUGCZoneInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
-
 			// Cmd: Buy shop item prepare
-			const MessageID BuyShopItemPrepareCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 60);
+			const MessageID BuyShopItemPrepareCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 59);
 			Result BuyShopItemPrepareCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -10496,7 +10255,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result BuyShopItemPrepareCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID BuyShopItemPrepareRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 60);
+			const MessageID BuyShopItemPrepareRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 59);
 			Result BuyShopItemPrepareRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -10600,7 +10359,7 @@ namespace SF
 			}; // Result BuyShopItemPrepareRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Buy shop item
-			const MessageID BuyShopItemCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 61);
+			const MessageID BuyShopItemCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 60);
 			Result BuyShopItemCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -10718,7 +10477,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result BuyShopItemCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID BuyShopItemRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 61);
+			const MessageID BuyShopItemRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 60);
 			Result BuyShopItemRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -10816,7 +10575,7 @@ namespace SF
 			}; // Result BuyShopItemRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Create or Join Chat channel
-			const MessageID CreateOrJoinChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 62);
+			const MessageID CreateOrJoinChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 61);
 			Result CreateOrJoinChatChannelCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -10915,7 +10674,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CreateOrJoinChatChannelCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID CreateOrJoinChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 62);
+			const MessageID CreateOrJoinChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 61);
 			Result CreateOrJoinChatChannelRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -11018,7 +10777,7 @@ namespace SF
 			}; // Result CreateOrJoinChatChannelRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Join
-			const MessageID JoinChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 63);
+			const MessageID JoinChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 62);
 			Result JoinChatChannelCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -11121,7 +10880,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result JoinChatChannelCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID JoinChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 63);
+			const MessageID JoinChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 62);
 			Result JoinChatChannelRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -11224,7 +10983,7 @@ namespace SF
 			}; // Result JoinChatChannelRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Player Joined event
-			const MessageID ChatChannelPlayerJoinedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 64);
+			const MessageID ChatChannelPlayerJoinedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 63);
 			Result ChatChannelPlayerJoinedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -11317,7 +11076,7 @@ namespace SF
 			}; // Result ChatChannelPlayerJoinedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: ChatChannel leader changed event
-			const MessageID ChatChannelLeaderChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 65);
+			const MessageID ChatChannelLeaderChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 64);
 			Result ChatChannelLeaderChangedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -11410,7 +11169,7 @@ namespace SF
 			}; // Result ChatChannelLeaderChangedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Leave ChatChannel command
-			const MessageID LeaveChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 66);
+			const MessageID LeaveChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 65);
 			Result LeaveChatChannelCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -11507,7 +11266,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result LeaveChatChannelCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID LeaveChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 66);
+			const MessageID LeaveChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 65);
 			Result LeaveChatChannelRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -11600,7 +11359,7 @@ namespace SF
 			}; // Result LeaveChatChannelRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: ChatChannel Player left event
-			const MessageID ChatChannelPlayerLeftS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 67);
+			const MessageID ChatChannelPlayerLeftS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 66);
 			Result ChatChannelPlayerLeftS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -11693,7 +11452,7 @@ namespace SF
 			}; // Result ChatChannelPlayerLeftS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Kick player from the ChatChannel
-			const MessageID ChatChannelKickPlayerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 68);
+			const MessageID ChatChannelKickPlayerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 67);
 			Result ChatChannelKickPlayerCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -11795,7 +11554,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result ChatChannelKickPlayerCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID ChatChannelKickPlayerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 68);
+			const MessageID ChatChannelKickPlayerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 67);
 			Result ChatChannelKickPlayerRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -11888,7 +11647,7 @@ namespace SF
 			}; // Result ChatChannelKickPlayerRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: ChatChannel Player kicked message
-			const MessageID ChatChannelPlayerKickedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 69);
+			const MessageID ChatChannelPlayerKickedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 68);
 			Result ChatChannelPlayerKickedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -11981,7 +11740,7 @@ namespace SF
 			}; // Result ChatChannelPlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Chat channel sending chatting message
-			const MessageID ChatChannelChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 70);
+			const MessageID ChatChannelChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 69);
 			const VariableTable& ChatChannelChatMessageCmd::GetChatMetaData() const
 			{
  				if (!m_ChatMetaDataHasParsed)
@@ -12137,7 +11896,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result ChatChannelChatMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID ChatChannelChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 70);
+			const MessageID ChatChannelChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 69);
 			Result ChatChannelChatMessageRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -12230,7 +11989,7 @@ namespace SF
 			}; // Result ChatChannelChatMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: ChatChannel Chatting message event
-			const MessageID ChatChannelChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 71);
+			const MessageID ChatChannelChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 70);
 			const VariableTable& ChatChannelChatMessageS2CEvt::GetChatMetaData() const
 			{
  				if (!m_ChatMetaDataHasParsed)
@@ -12380,7 +12139,7 @@ namespace SF
 			}; // Result ChatChannelChatMessageS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Whisper(tell) other player chatting
-			const MessageID WhisperMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 72);
+			const MessageID WhisperMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 71);
 			const VariableTable& WhisperMessageCmd::GetChatMetaData() const
 			{
  				if (!m_ChatMetaDataHasParsed)
@@ -12544,7 +12303,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result WhisperMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID WhisperMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 72);
+			const MessageID WhisperMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 71);
 			Result WhisperMessageRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -12637,7 +12396,7 @@ namespace SF
 			}; // Result WhisperMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Other player whispered(tell) to me message event
-			const MessageID WhisperMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 73);
+			const MessageID WhisperMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 72);
 			const VariableTable& WhisperMessageS2CEvt::GetChatMetaData() const
 			{
  				if (!m_ChatMetaDataHasParsed)
@@ -12787,7 +12546,7 @@ namespace SF
 			}; // Result WhisperMessageS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Create character
-			const MessageID CreateCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 74);
+			const MessageID CreateCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 73);
 			const VariableTable& CreateCharacterCmd::GetPublicData() const
 			{
  				if (!m_PublicDataHasParsed)
@@ -12962,7 +12721,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CreateCharacterCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID CreateCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 74);
+			const MessageID CreateCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 73);
 			Result CreateCharacterRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -13060,7 +12819,7 @@ namespace SF
 			}; // Result CreateCharacterRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Delete character
-			const MessageID DeleteCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 75);
+			const MessageID DeleteCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 74);
 			Result DeleteCharacterCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -13152,7 +12911,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result DeleteCharacterCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID DeleteCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 75);
+			const MessageID DeleteCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 74);
 			Result DeleteCharacterRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -13245,7 +13004,7 @@ namespace SF
 			}; // Result DeleteCharacterRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Get character list
-			const MessageID GetCharacterListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 76);
+			const MessageID GetCharacterListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 75);
 			Result GetCharacterListCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -13332,7 +13091,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetCharacterListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID GetCharacterListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 76);
+			const MessageID GetCharacterListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 75);
 			Result GetCharacterListRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -13430,7 +13189,7 @@ namespace SF
 			}; // Result GetCharacterListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: 
-			const MessageID GetCharacterDataCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 77);
+			const MessageID GetCharacterDataCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 76);
 			Result GetCharacterDataCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -13522,7 +13281,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetCharacterDataCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID GetCharacterDataRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 77);
+			const MessageID GetCharacterDataRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 76);
 			const VariableTable& GetCharacterDataRes::GetPrivateData() const
 			{
  				if (!m_PrivateDataHasParsed)
@@ -13697,7 +13456,7 @@ namespace SF
 			}; // Result GetCharacterDataRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Select character
-			const MessageID SelectCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 78);
+			const MessageID SelectCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 77);
 			Result SelectCharacterCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -13789,7 +13548,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result SelectCharacterCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID SelectCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 78);
+			const MessageID SelectCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 77);
 			const VariableTable& SelectCharacterRes::GetAttributes() const
 			{
  				if (!m_AttributesHasParsed)
@@ -13945,7 +13704,7 @@ namespace SF
 			}; // Result SelectCharacterRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
-			const MessageID RequestServerNoticeUpdateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 79);
+			const MessageID RequestServerNoticeUpdateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 78);
 			Result RequestServerNoticeUpdateCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -14032,7 +13791,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result RequestServerNoticeUpdateCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID RequestServerNoticeUpdateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 79);
+			const MessageID RequestServerNoticeUpdateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 78);
 			Result RequestServerNoticeUpdateRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -14125,7 +13884,7 @@ namespace SF
 			}; // Result RequestServerNoticeUpdateRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Server Notice updated event
-			const MessageID ServerNoticeS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 80);
+			const MessageID ServerNoticeS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 79);
 			Result ServerNoticeS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -14219,7 +13978,7 @@ namespace SF
 			}; // Result ServerNoticeS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: To call general functionality
-			const MessageID CallFunctionCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 81);
+			const MessageID CallFunctionCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 80);
 			const VariableTable& CallFunctionCmd::GetParameters() const
 			{
  				if (!m_ParametersHasParsed)
@@ -14367,7 +14126,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CallFunctionCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID CallFunctionRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 81);
+			const MessageID CallFunctionRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 80);
 			const VariableTable& CallFunctionRes::GetResults() const
 			{
  				if (!m_ResultsHasParsed)

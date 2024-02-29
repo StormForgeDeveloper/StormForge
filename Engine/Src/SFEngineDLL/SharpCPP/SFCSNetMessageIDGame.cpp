@@ -671,20 +671,7 @@ SFDLL_EXPORT int  CSSFNetMessageID_GameDownloadUGCContentRes()
 } // SFDLL_EXPORT int  CSSFNetMessageID_GameDownloadUGCContentRes()
 
 
-// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
-SFDLL_EXPORT int  CSSFNetMessageID_GameRequestUGCZoneInstanceCmd()
-{
- 	return SF::Message::Game::RequestUGCZoneInstanceCmd::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_GameRequestUGCZoneInstanceCmd()
-
-
-SFDLL_EXPORT int  CSSFNetMessageID_GameRequestUGCZoneInstanceRes()
-{
- 	return SF::Message::Game::RequestUGCZoneInstanceRes::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_GameRequestUGCZoneInstanceRes()
-
-
-// Cmd: Request ugc zone instance
+// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
 SFDLL_EXPORT int  CSSFNetMessageID_GameRequestUGCZoneInstanceCmd()
 {
  	return SF::Message::Game::RequestUGCZoneInstanceCmd::MID.IDSeq.MsgID;

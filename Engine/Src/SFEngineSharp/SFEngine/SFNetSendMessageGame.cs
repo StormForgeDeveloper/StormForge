@@ -796,25 +796,7 @@ namespace SF.Net
 			return result;
 		} // public int  DownloadUGCContentCmd( SF.TransactionID InTransactionID, System.UInt64 InUGCID, System.Byte InIsIncludeMetaData, Action<SFMessage>? callback = null )
 
-		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
-		public int  RequestUGCZoneInstanceCmd( System.UInt64 InUGCID, Action<SFMessage>? callback = null )
-		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID InTransactionID = NewTransactionID();
-			return RequestUGCZoneInstanceCmd(InTransactionID, InUGCID, callback);
-		} // public int  RequestUGCZoneInstanceCmd( System.UInt64 InUGCID, Action<SFMessage>? callback = null )
-		public int  RequestUGCZoneInstanceCmd( SF.TransactionID InTransactionID, System.UInt64 InUGCID, Action<SFMessage>? callback = null )
-		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			int result;
-			{
-			result = CSSFNetAdapter_GameRequestUGCZoneInstanceCmd(m_Connection.NativeHandle,ref InTransactionID, InUGCID);
-			}
-			m_Connection.HandleSentMessage(result, InTransactionID, MessageIDGame.RequestUGCZoneInstanceCmd, callback);
-			return result;
-		} // public int  RequestUGCZoneInstanceCmd( SF.TransactionID InTransactionID, System.UInt64 InUGCID, Action<SFMessage>? callback = null )
-
-		// Cmd: Request ugc zone instance
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
 		public int  RequestUGCZoneInstanceCmd( System.UInt64 InUGCID, Action<SFMessage>? callback = null )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
@@ -1324,12 +1306,7 @@ namespace SF.Net
 		static extern int CSSFNetAdapter_GameDownloadUGCContentCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InUGCID, System.Byte InIsIncludeMetaData );
 
 
-		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameRequestUGCZoneInstanceCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameRequestUGCZoneInstanceCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InUGCID );
-
-
-		// Cmd: Request ugc zone instance
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameRequestUGCZoneInstanceCmd", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_GameRequestUGCZoneInstanceCmd(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.UInt64 InUGCID );
 
@@ -2184,22 +2161,7 @@ namespace SF.Net
 		} // public int  DownloadUGCContentRes( SF.TransactionID InTransactionID, System.Int32 InResult, SF.VariableTable InUGCMetaData )
 
 
-		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
-		public int  RequestUGCZoneInstanceRes( SF.TransactionID InTransactionID, System.Int32 InResult, SF.VariableTable InGameInstance )
-		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
-			int result;
-			var InGameInstance_ = InGameInstance.ToByteArray();
-			using (var InGameInstance_PinnedPtr_ = new PinnedByteBuffer(InGameInstance_))
-			{
-			result = CSSFNetAdapter_GameRequestUGCZoneInstanceRes(m_Connection.NativeHandle,ref InTransactionID, InResult,(ushort)InGameInstance_.Length, InGameInstance_PinnedPtr_.Ptr);
-			}
-			m_Connection.HandleSentMessage(result, TransactionID.Empty, MessageIDGame.RequestUGCZoneInstanceRes);
-			return result;
-		} // public int  RequestUGCZoneInstanceRes( SF.TransactionID InTransactionID, System.Int32 InResult, SF.VariableTable InGameInstance )
-
-
-		// Cmd: Request ugc zone instance
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
 		public int  RequestUGCZoneInstanceRes( SF.TransactionID InTransactionID, System.Int32 InResult, SF.VariableTable InGameInstance )
 		{
  			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
@@ -2857,13 +2819,7 @@ namespace SF.Net
 
 
 
-		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameRequestUGCZoneInstanceRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameRequestUGCZoneInstanceRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInGameInstance,IntPtr InGameInstance );
-
-
-
-		// Cmd: Request ugc zone instance
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameRequestUGCZoneInstanceRes", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_GameRequestUGCZoneInstanceRes(System.IntPtr InNativeConnectionHandle, ref SF.TransactionID InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInGameInstance,IntPtr InGameInstance );
 

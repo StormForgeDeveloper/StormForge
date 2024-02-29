@@ -568,20 +568,7 @@ namespace SF
 		return m_Endpoint->SendMsg(messageBuffer);
 
 	}; // Result NetPolicyGame::DownloadUGCContentCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID, const uint8_t &InIsIncludeMetaData )
-	// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
-	Result NetPolicyGame::RequestUGCZoneInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID )
-	{
- 		Result hr;
-
-		size_t messageSize = SF::Message::Game::RequestUGCZoneInstanceCmd::CalculateMessageSize(InTransactionID, InUGCID);
-		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
-		protocolCheckPtr(m_Endpoint);
-
-		protocolCheck(SF::Message::Game::RequestUGCZoneInstanceCmd::Create(messageBuffer, InTransactionID, InUGCID));
-		return m_Endpoint->SendMsg(messageBuffer);
-
-	}; // Result NetPolicyGame::RequestUGCZoneInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID )
-	// Cmd: Request ugc zone instance
+	// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
 	Result NetPolicyGame::RequestUGCZoneInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID )
 	{
  		Result hr;
@@ -1532,20 +1519,7 @@ namespace SF
 		return m_Endpoint->SendMsg(messageBuffer);
 
 	}; // Result NetSvrPolicyGame::DownloadUGCContentRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData )
-	// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
-	Result NetSvrPolicyGame::RequestUGCZoneInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
-	{
- 		Result hr;
-
-		size_t messageSize = SF::Message::Game::RequestUGCZoneInstanceRes::CalculateMessageSize(InTransactionID, InResult, InGameInstance);
-		SFNET_ALLOC_MESSAGE_FROM_STACK(messageBuffer,messageSize);
-		protocolCheckPtr(m_Endpoint);
-
-		protocolCheck(SF::Message::Game::RequestUGCZoneInstanceRes::Create(messageBuffer, InTransactionID, InResult, InGameInstance));
-		return m_Endpoint->SendMsg(messageBuffer);
-
-	}; // Result NetSvrPolicyGame::RequestUGCZoneInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
-	// Cmd: Request ugc zone instance
+	// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
 	Result NetSvrPolicyGame::RequestUGCZoneInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
 	{
  		Result hr;

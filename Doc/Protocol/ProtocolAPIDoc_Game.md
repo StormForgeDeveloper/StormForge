@@ -1096,28 +1096,7 @@ C++: Cast message to DownloadUGCContentRes to access values
 
 
 ## RequestUGCZoneInstance Request
-Request ugc zone instance. It will provision new zone instance if there is none for the player. Limit(?)
-
-1. Command interface
-
-        Result RequestUGCZoneInstanceCmd(const TransactionID &InTransactionID, const uint64_t &InUGCID)
-
-		- OutTransactionID: TransactionID type. 
-
-		- OutUGCID: uint64 type. UGC content id
-
-2. Result interface
-
-C++: Cast message to RequestUGCZoneInstanceRes to access values
-
-
-		- OutTransactionID: TransactionID type. 
-		- OutResult: Result type. 
-		- OutGameInstance: VariableTable type. Privisoned UGC zone instance information
-
-
-## RequestUGCZoneInstance Request
-Request ugc zone instance
+Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
 
 1. Command interface
 
