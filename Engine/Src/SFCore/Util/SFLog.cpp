@@ -195,7 +195,7 @@ namespace Log {
 
 		auto tm = std::localtime(&logTime);
 		pLogItem->LogStringSize = StrUtil::Format(pLogItem->LogBuff, "[{0}/{1},{2}:{3}:{4}:{5}][{6}:{7}] ",
-            tm->tm_mon, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec, milliseconds,
+            tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec, milliseconds,
             pLogItem->Channel->GetChannelNameString(), ToString(pLogItem->OutputType));
 		
 		return pLogItem->LogStringSize;
