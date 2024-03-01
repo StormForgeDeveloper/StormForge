@@ -225,7 +225,7 @@ namespace SF {
 			LogChannel* Channel{};
 			LogOutputType		OutputType{};
 			LogOutputMask		OutputMask{}; // GlobalMask & LogChannelMask
-			SystemTimeStampMS	TimeStamp{};
+            UTCTimeStampMS	TimeStamp{};
 			size_t LogStringSize = 0;
 			char	LogBuff[3 * 1024]{};
 		};

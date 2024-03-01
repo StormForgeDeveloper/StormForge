@@ -165,7 +165,7 @@ namespace Log {
 
 		auto pSpinBlock = m_LogSpinBuffer.Write_Lock();
 
-		pSpinBlock->Data.TimeStamp = std::chrono::system_clock::now();
+		pSpinBlock->Data.TimeStamp = Util::Time.GetRawUTCMs();
 
 		return pSpinBlock;
 	}
@@ -188,7 +188,6 @@ namespace Log {
 
 	size_t LogModule::WriteTimeTag(Log::LogItem* pLogItem)
 	{
-        pLogItem->TimeStamp = UTCClockType::now();
 		std::time_t logTime = UTCClockType::to_time_t(pLogItem->TimeStamp);
 
         const std::chrono::duration<double> tse = pLogItem->TimeStamp.time_since_epoch();
