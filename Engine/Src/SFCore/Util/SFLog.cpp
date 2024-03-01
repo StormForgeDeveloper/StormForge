@@ -193,21 +193,21 @@ namespace Log {
         const std::chrono::duration<double> tse = pLogItem->TimeStamp.time_since_epoch();
         long milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(tse).count() % 1000;
 
-		auto tm = std::localtime(&logTime);
+        std::tm* tm = std::gmtime(&logTime);
 		pLogItem->LogStringSize = StrUtil::Format(pLogItem->LogBuff, "[{0}/{1},{2}:{3}:{4}:{5}][{6}:{7}] ",
             tm->tm_mon + 1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec, milliseconds,
             pLogItem->Channel->GetChannelNameString(), ToString(pLogItem->OutputType));
-		
+
 		return pLogItem->LogStringSize;
 	}
 
 	// Flush log queue
 	void LogModule::Flush()
 	{
-		auto writePosition = m_LogSpinBuffer.GetWritePosition();
+        CounterType writePosition = m_LogSpinBuffer.GetWritePosition();
 		do
 		{
-			auto readPosition = m_LogSpinBuffer.GetReadPosition();
+            CounterType readPosition = m_LogSpinBuffer.GetReadPosition();
 			if (writePosition - readPosition <= 0)
 				break;
 		} while (1);
