@@ -188,7 +188,8 @@ namespace Log {
 
 	size_t LogModule::WriteTimeTag(Log::LogItem* pLogItem)
 	{
-		std::time_t logTime = std::chrono::system_clock::to_time_t(pLogItem->TimeStamp);
+        pLogItem->TimeStamp = UTCClockType::now();
+		std::time_t logTime = UTCClockType::to_time_t(pLogItem->TimeStamp);
 
         const std::chrono::duration<double> tse = pLogItem->TimeStamp.time_since_epoch();
         long milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(tse).count() % 1000;
