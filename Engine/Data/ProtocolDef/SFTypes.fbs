@@ -2,7 +2,7 @@
 namespace SF.Flat;
 
 
-struct FlatTimeSpan {
+struct TimeSpan {
     hours:int;
     minutes:int;
     seconds:int;

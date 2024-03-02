@@ -1,0 +1,46 @@
+ include "SFTypes.fbs";
+ 
+namespace SF.Flat.GameInstance;
+
+union PayloadData
+{
+    GenericError,
+    LoginRequest,
+    LoginWithSteamRequest,
+	LoginResult
+}
+
+table LoginPacket
+{
+    payload_data:PayloadData(required);
+}
+
+
+table LoginRequest {
+
+	name:string(required);
+    password:string(required);
+	game_id:string(required);
+}
+
+table LoginWithSteamRequest {
+
+    app_id:uint64;
+	steam_id:uint64;
+    steam_player_name:string(required);
+    steam_user_token:string(required);
+    game_id:string(required);
+	uid:uint64;
+}
+
+table LoginResult {
+
+    result_code:uint32;
+	account_id:uint64;
+    auth_ticket:uint64;
+    banned_reason:string;
+    game_server_address:string(required);
+}
+
+
+root_type LoginPacket;

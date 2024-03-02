@@ -21,9 +21,6 @@
 #include "Component/SFLibraryComponent.h"
 
 
-
-
-
 namespace SF {
 namespace Log {
 

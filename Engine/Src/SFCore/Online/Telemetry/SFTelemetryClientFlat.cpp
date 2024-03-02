@@ -51,7 +51,7 @@ namespace SF
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
         auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            Flat::Telemetry::EventAttributeValue_EventAttributeBool,
+            Flat::Telemetry::EventAttributeValue::EventAttributeBool,
             SF::Flat::Telemetry::CreateEventAttributeBool(m_FlatBufferBuilder, value).Union());
 
         m_Attributes.push_back(attributeOffset);
@@ -64,7 +64,7 @@ namespace SF
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
         auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            Flat::Telemetry::EventAttributeValue_EventAttributeInt,
+            Flat::Telemetry::EventAttributeValue::EventAttributeInt,
             SF::Flat::Telemetry::CreateEventAttributeInt(m_FlatBufferBuilder, value).Union());
 
         m_Attributes.push_back(attributeOffset);
@@ -76,7 +76,7 @@ namespace SF
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
         auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            Flat::Telemetry::EventAttributeValue_EventAttributeUInt,
+            Flat::Telemetry::EventAttributeValue::EventAttributeUInt,
             SF::Flat::Telemetry::CreateEventAttributeUInt(m_FlatBufferBuilder, value).Union());
 
         m_Attributes.push_back(attributeOffset);
@@ -89,7 +89,7 @@ namespace SF
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
         auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            Flat::Telemetry::EventAttributeValue_EventAttributeInt64,
+            Flat::Telemetry::EventAttributeValue::EventAttributeInt64,
             SF::Flat::Telemetry::CreateEventAttributeInt64(m_FlatBufferBuilder, value).Union());
 
         m_Attributes.push_back(attributeOffset);
@@ -102,7 +102,7 @@ namespace SF
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
         auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            Flat::Telemetry::EventAttributeValue_EventAttributeUInt64,
+            Flat::Telemetry::EventAttributeValue::EventAttributeUInt64,
             SF::Flat::Telemetry::CreateEventAttributeUInt64(m_FlatBufferBuilder, value).Union());
 
         m_Attributes.push_back(attributeOffset);
@@ -115,7 +115,7 @@ namespace SF
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
         auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            Flat::Telemetry::EventAttributeValue_EventAttributeFloat,
+            Flat::Telemetry::EventAttributeValue::EventAttributeFloat,
             SF::Flat::Telemetry::CreateEventAttributeFloat(m_FlatBufferBuilder, value).Union());
 
         m_Attributes.push_back(attributeOffset);
@@ -128,7 +128,7 @@ namespace SF
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
         auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            SF::Flat::Telemetry::EventAttributeValue_EventAttributeString,
+            SF::Flat::Telemetry::EventAttributeValue::EventAttributeString,
             SF::Flat::Telemetry::CreateEventAttributeString(m_FlatBufferBuilder, m_FlatBufferBuilder.CreateString(value)).Union()
         );
 
@@ -143,7 +143,7 @@ namespace SF
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
         auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            SF::Flat::Telemetry::EventAttributeValue_EventAttributeInt,
+            SF::Flat::Telemetry::EventAttributeValue::EventAttributeInt,
             SF::Flat::Telemetry::CreateEventAttributeInt(m_FlatBufferBuilder, value).Union()
         );
 
@@ -157,7 +157,7 @@ namespace SF
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
         auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            SF::Flat::Telemetry::EventAttributeValue_EventAttributeInt64,
+            SF::Flat::Telemetry::EventAttributeValue::EventAttributeInt64,
             SF::Flat::Telemetry::CreateEventAttributeInt64(m_FlatBufferBuilder, value).Union()
         );
 
@@ -171,7 +171,7 @@ namespace SF
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
         auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            SF::Flat::Telemetry::EventAttributeValue_EventAttributeFloat,
+            SF::Flat::Telemetry::EventAttributeValue::EventAttributeFloat,
             SF::Flat::Telemetry::CreateEventAttributeFloat(m_FlatBufferBuilder, value).Union()
         );
 
@@ -185,7 +185,7 @@ namespace SF
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
         auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            SF::Flat::Telemetry::EventAttributeValue_EventAttributeString,
+            SF::Flat::Telemetry::EventAttributeValue::EventAttributeString,
             SF::Flat::Telemetry::CreateEventAttributeString(m_FlatBufferBuilder, m_FlatBufferBuilder.CreateString(value)).Union()
         );
 
@@ -381,7 +381,7 @@ namespace SF
 
         
         ::flatbuffers::Offset<FlatTelemetryPacket> packetOffset = SF::Flat::Telemetry::CreateTelemetryPacket(packetBuilder, 
-            SF::Flat::Telemetry::PayloadData_PostEventRequest,
+            SF::Flat::Telemetry::PayloadData::PostEventRequest,
             payloadOffset.Union());
 
 

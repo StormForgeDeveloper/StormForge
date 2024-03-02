@@ -31,23 +31,23 @@ struct LoginWithSteamRequestBuilder;
 struct LoginResult;
 struct LoginResultBuilder;
 
-enum PayloadData : uint8_t {
-  PayloadData_NONE = 0,
-  PayloadData_GenericError = 1,
-  PayloadData_LoginRequest = 2,
-  PayloadData_LoginWithSteamRequest = 3,
-  PayloadData_LoginResult = 4,
-  PayloadData_MIN = PayloadData_NONE,
-  PayloadData_MAX = PayloadData_LoginResult
+enum class PayloadData : uint8_t {
+  NONE = 0,
+  GenericError = 1,
+  LoginRequest = 2,
+  LoginWithSteamRequest = 3,
+  LoginResult = 4,
+  MIN = NONE,
+  MAX = LoginResult
 };
 
 inline const PayloadData (&EnumValuesPayloadData())[5] {
   static const PayloadData values[] = {
-    PayloadData_NONE,
-    PayloadData_GenericError,
-    PayloadData_LoginRequest,
-    PayloadData_LoginWithSteamRequest,
-    PayloadData_LoginResult
+    PayloadData::NONE,
+    PayloadData::GenericError,
+    PayloadData::LoginRequest,
+    PayloadData::LoginWithSteamRequest,
+    PayloadData::LoginResult
   };
   return values;
 }
@@ -65,36 +65,37 @@ inline const char * const *EnumNamesPayloadData() {
 }
 
 inline const char *EnumNamePayloadData(PayloadData e) {
-  if (::flatbuffers::IsOutRange(e, PayloadData_NONE, PayloadData_LoginResult)) return "";
+  if (::flatbuffers::IsOutRange(e, PayloadData::NONE, PayloadData::LoginResult)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesPayloadData()[index];
 }
 
 template<typename T> struct PayloadDataTraits {
-  static const PayloadData enum_value = PayloadData_NONE;
+  static const PayloadData enum_value = PayloadData::NONE;
 };
 
 template<> struct PayloadDataTraits<SF::Flat::GenericError> {
-  static const PayloadData enum_value = PayloadData_GenericError;
+  static const PayloadData enum_value = PayloadData::GenericError;
 };
 
 template<> struct PayloadDataTraits<SF::Flat::Login::LoginRequest> {
-  static const PayloadData enum_value = PayloadData_LoginRequest;
+  static const PayloadData enum_value = PayloadData::LoginRequest;
 };
 
 template<> struct PayloadDataTraits<SF::Flat::Login::LoginWithSteamRequest> {
-  static const PayloadData enum_value = PayloadData_LoginWithSteamRequest;
+  static const PayloadData enum_value = PayloadData::LoginWithSteamRequest;
 };
 
 template<> struct PayloadDataTraits<SF::Flat::Login::LoginResult> {
-  static const PayloadData enum_value = PayloadData_LoginResult;
+  static const PayloadData enum_value = PayloadData::LoginResult;
 };
 
 bool VerifyPayloadData(::flatbuffers::Verifier &verifier, const void *obj, PayloadData type);
-bool VerifyPayloadDataVector(::flatbuffers::Verifier &verifier, const ::flatbuffers::Vector<::flatbuffers::Offset<void>> *values, const ::flatbuffers::Vector<uint8_t> *types);
+bool VerifyPayloadDataVector(::flatbuffers::Verifier &verifier, const ::flatbuffers::Vector<::flatbuffers::Offset<void>> *values, const ::flatbuffers::Vector<PayloadData> *types);
 
 struct LoginPacket FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef LoginPacketBuilder Builder;
+  struct Traits;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_PAYLOAD_DATA_TYPE = 4,
     VT_PAYLOAD_DATA = 6
@@ -107,16 +108,22 @@ struct LoginPacket FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   template<typename T> const T *payload_data_as() const;
   const SF::Flat::GenericError *payload_data_as_GenericError() const {
-    return payload_data_type() == SF::Flat::Login::PayloadData_GenericError ? static_cast<const SF::Flat::GenericError *>(payload_data()) : nullptr;
+    return payload_data_type() == SF::Flat::Login::PayloadData::GenericError ? static_cast<const SF::Flat::GenericError *>(payload_data()) : nullptr;
   }
   const SF::Flat::Login::LoginRequest *payload_data_as_LoginRequest() const {
-    return payload_data_type() == SF::Flat::Login::PayloadData_LoginRequest ? static_cast<const SF::Flat::Login::LoginRequest *>(payload_data()) : nullptr;
+    return payload_data_type() == SF::Flat::Login::PayloadData::LoginRequest ? static_cast<const SF::Flat::Login::LoginRequest *>(payload_data()) : nullptr;
   }
   const SF::Flat::Login::LoginWithSteamRequest *payload_data_as_LoginWithSteamRequest() const {
-    return payload_data_type() == SF::Flat::Login::PayloadData_LoginWithSteamRequest ? static_cast<const SF::Flat::Login::LoginWithSteamRequest *>(payload_data()) : nullptr;
+    return payload_data_type() == SF::Flat::Login::PayloadData::LoginWithSteamRequest ? static_cast<const SF::Flat::Login::LoginWithSteamRequest *>(payload_data()) : nullptr;
   }
   const SF::Flat::Login::LoginResult *payload_data_as_LoginResult() const {
-    return payload_data_type() == SF::Flat::Login::PayloadData_LoginResult ? static_cast<const SF::Flat::Login::LoginResult *>(payload_data()) : nullptr;
+    return payload_data_type() == SF::Flat::Login::PayloadData::LoginResult ? static_cast<const SF::Flat::Login::LoginResult *>(payload_data()) : nullptr;
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return payload_data_type();
+    else if constexpr (Index == 1) return payload_data();
+    else static_assert(Index != Index, "Invalid Field Index");
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -167,7 +174,7 @@ struct LoginPacketBuilder {
 
 inline ::flatbuffers::Offset<LoginPacket> CreateLoginPacket(
     ::flatbuffers::FlatBufferBuilder &_fbb,
-    SF::Flat::Login::PayloadData payload_data_type = SF::Flat::Login::PayloadData_NONE,
+    SF::Flat::Login::PayloadData payload_data_type = SF::Flat::Login::PayloadData::NONE,
     ::flatbuffers::Offset<void> payload_data = 0) {
   LoginPacketBuilder builder_(_fbb);
   builder_.add_payload_data(payload_data);
@@ -175,8 +182,23 @@ inline ::flatbuffers::Offset<LoginPacket> CreateLoginPacket(
   return builder_.Finish();
 }
 
+struct LoginPacket::Traits {
+  using type = LoginPacket;
+  static auto constexpr Create = CreateLoginPacket;
+  static constexpr auto name = "LoginPacket";
+  static constexpr auto fully_qualified_name = "SF.Flat.Login.LoginPacket";
+  static constexpr size_t fields_number = 2;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "payload_data_type",
+    "payload_data"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
 struct LoginRequest FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef LoginRequestBuilder Builder;
+  struct Traits;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NAME = 4,
     VT_PASSWORD = 6,
@@ -190,6 +212,13 @@ struct LoginRequest FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   const ::flatbuffers::String *game_id() const {
     return GetPointer<const ::flatbuffers::String *>(VT_GAME_ID);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return name();
+    else if constexpr (Index == 1) return password();
+    else if constexpr (Index == 2) return game_id();
+    else static_assert(Index != Index, "Invalid Field Index");
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -242,6 +271,21 @@ inline ::flatbuffers::Offset<LoginRequest> CreateLoginRequest(
   return builder_.Finish();
 }
 
+struct LoginRequest::Traits {
+  using type = LoginRequest;
+  static auto constexpr Create = CreateLoginRequest;
+  static constexpr auto name = "LoginRequest";
+  static constexpr auto fully_qualified_name = "SF.Flat.Login.LoginRequest";
+  static constexpr size_t fields_number = 3;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "name",
+    "password",
+    "game_id"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
 inline ::flatbuffers::Offset<LoginRequest> CreateLoginRequestDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const char *name = nullptr,
@@ -259,6 +303,7 @@ inline ::flatbuffers::Offset<LoginRequest> CreateLoginRequestDirect(
 
 struct LoginWithSteamRequest FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef LoginWithSteamRequestBuilder Builder;
+  struct Traits;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_APP_ID = 4,
     VT_STEAM_ID = 6,
@@ -284,6 +329,16 @@ struct LoginWithSteamRequest FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Ta
   }
   uint64_t uid() const {
     return GetField<uint64_t>(VT_UID, 0);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return app_id();
+    else if constexpr (Index == 1) return steam_id();
+    else if constexpr (Index == 2) return steam_player_name();
+    else if constexpr (Index == 3) return steam_user_token();
+    else if constexpr (Index == 4) return game_id();
+    else if constexpr (Index == 5) return uid();
+    else static_assert(Index != Index, "Invalid Field Index");
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -354,6 +409,24 @@ inline ::flatbuffers::Offset<LoginWithSteamRequest> CreateLoginWithSteamRequest(
   return builder_.Finish();
 }
 
+struct LoginWithSteamRequest::Traits {
+  using type = LoginWithSteamRequest;
+  static auto constexpr Create = CreateLoginWithSteamRequest;
+  static constexpr auto name = "LoginWithSteamRequest";
+  static constexpr auto fully_qualified_name = "SF.Flat.Login.LoginWithSteamRequest";
+  static constexpr size_t fields_number = 6;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "app_id",
+    "steam_id",
+    "steam_player_name",
+    "steam_user_token",
+    "game_id",
+    "uid"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
 inline ::flatbuffers::Offset<LoginWithSteamRequest> CreateLoginWithSteamRequestDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     uint64_t app_id = 0,
@@ -377,6 +450,7 @@ inline ::flatbuffers::Offset<LoginWithSteamRequest> CreateLoginWithSteamRequestD
 
 struct LoginResult FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef LoginResultBuilder Builder;
+  struct Traits;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_RESULT_CODE = 4,
     VT_ACCOUNT_ID = 6,
@@ -398,6 +472,15 @@ struct LoginResult FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   const ::flatbuffers::String *game_server_address() const {
     return GetPointer<const ::flatbuffers::String *>(VT_GAME_SERVER_ADDRESS);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return result_code();
+    else if constexpr (Index == 1) return account_id();
+    else if constexpr (Index == 2) return auth_ticket();
+    else if constexpr (Index == 3) return banned_reason();
+    else if constexpr (Index == 4) return game_server_address();
+    else static_assert(Index != Index, "Invalid Field Index");
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -459,6 +542,23 @@ inline ::flatbuffers::Offset<LoginResult> CreateLoginResult(
   return builder_.Finish();
 }
 
+struct LoginResult::Traits {
+  using type = LoginResult;
+  static auto constexpr Create = CreateLoginResult;
+  static constexpr auto name = "LoginResult";
+  static constexpr auto fully_qualified_name = "SF.Flat.Login.LoginResult";
+  static constexpr size_t fields_number = 5;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "result_code",
+    "account_id",
+    "auth_ticket",
+    "banned_reason",
+    "game_server_address"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
 inline ::flatbuffers::Offset<LoginResult> CreateLoginResultDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     uint32_t result_code = 0,
@@ -479,22 +579,22 @@ inline ::flatbuffers::Offset<LoginResult> CreateLoginResultDirect(
 
 inline bool VerifyPayloadData(::flatbuffers::Verifier &verifier, const void *obj, PayloadData type) {
   switch (type) {
-    case PayloadData_NONE: {
+    case PayloadData::NONE: {
       return true;
     }
-    case PayloadData_GenericError: {
+    case PayloadData::GenericError: {
       auto ptr = reinterpret_cast<const SF::Flat::GenericError *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case PayloadData_LoginRequest: {
+    case PayloadData::LoginRequest: {
       auto ptr = reinterpret_cast<const SF::Flat::Login::LoginRequest *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case PayloadData_LoginWithSteamRequest: {
+    case PayloadData::LoginWithSteamRequest: {
       auto ptr = reinterpret_cast<const SF::Flat::Login::LoginWithSteamRequest *>(obj);
       return verifier.VerifyTable(ptr);
     }
-    case PayloadData_LoginResult: {
+    case PayloadData::LoginResult: {
       auto ptr = reinterpret_cast<const SF::Flat::Login::LoginResult *>(obj);
       return verifier.VerifyTable(ptr);
     }
@@ -502,7 +602,7 @@ inline bool VerifyPayloadData(::flatbuffers::Verifier &verifier, const void *obj
   }
 }
 
-inline bool VerifyPayloadDataVector(::flatbuffers::Verifier &verifier, const ::flatbuffers::Vector<::flatbuffers::Offset<void>> *values, const ::flatbuffers::Vector<uint8_t> *types) {
+inline bool VerifyPayloadDataVector(::flatbuffers::Verifier &verifier, const ::flatbuffers::Vector<::flatbuffers::Offset<void>> *values, const ::flatbuffers::Vector<PayloadData> *types) {
   if (!values || !types) return !values && !types;
   if (values->size() != types->size()) return false;
   for (::flatbuffers::uoffset_t i = 0; i < values->size(); ++i) {

@@ -16,24 +16,25 @@ static_assert(FLATBUFFERS_VERSION_MAJOR == 23 &&
 namespace SF {
 namespace Flat {
 
-struct FlatTimeSpan;
+struct TimeSpan;
 
 struct GenericError;
 struct GenericErrorBuilder;
 
-FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) FlatTimeSpan FLATBUFFERS_FINAL_CLASS {
+FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) TimeSpan FLATBUFFERS_FINAL_CLASS {
  private:
   int32_t hours_;
   int32_t minutes_;
   int32_t seconds_;
 
  public:
-  FlatTimeSpan()
+  struct Traits;
+  TimeSpan()
       : hours_(0),
         minutes_(0),
         seconds_(0) {
   }
-  FlatTimeSpan(int32_t _hours, int32_t _minutes, int32_t _seconds)
+  TimeSpan(int32_t _hours, int32_t _minutes, int32_t _seconds)
       : hours_(::flatbuffers::EndianScalar(_hours)),
         minutes_(::flatbuffers::EndianScalar(_minutes)),
         seconds_(::flatbuffers::EndianScalar(_seconds)) {
@@ -47,16 +48,43 @@ FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) FlatTimeSpan FLATBUFFERS_FINAL_CLASS {
   int32_t seconds() const {
     return ::flatbuffers::EndianScalar(seconds_);
   }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return hours();
+    else if constexpr (Index == 1) return minutes();
+    else if constexpr (Index == 2) return seconds();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
 };
-FLATBUFFERS_STRUCT_END(FlatTimeSpan, 12);
+FLATBUFFERS_STRUCT_END(TimeSpan, 12);
+
+struct TimeSpan::Traits {
+  using type = TimeSpan;
+  static constexpr auto name = "TimeSpan";
+  static constexpr auto fully_qualified_name = "SF.Flat.TimeSpan";
+  static constexpr size_t fields_number = 3;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "hours",
+    "minutes",
+    "seconds"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
 
 struct GenericError FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef GenericErrorBuilder Builder;
+  struct Traits;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_REASON = 4
   };
   const ::flatbuffers::String *reason() const {
     return GetPointer<const ::flatbuffers::String *>(VT_REASON);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return reason();
+    else static_assert(Index != Index, "Invalid Field Index");
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -92,6 +120,19 @@ inline ::flatbuffers::Offset<GenericError> CreateGenericError(
   builder_.add_reason(reason);
   return builder_.Finish();
 }
+
+struct GenericError::Traits {
+  using type = GenericError;
+  static auto constexpr Create = CreateGenericError;
+  static constexpr auto name = "GenericError";
+  static constexpr auto fully_qualified_name = "SF.Flat.GenericError";
+  static constexpr size_t fields_number = 1;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "reason"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
 
 inline ::flatbuffers::Offset<GenericError> CreateGenericErrorDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,

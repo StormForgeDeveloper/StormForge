@@ -109,7 +109,7 @@ namespace SF
             }
 
             Flat::Login::PayloadData payloadType = responsePacket->payload_data_type();
-            if (payloadType != Flat::Login::PayloadData::PayloadData_LoginResult)
+            if (payloadType != Flat::Login::PayloadData::LoginResult)
             {
                 defCheck(ResultCode::INVALID_FORMAT);
             }
