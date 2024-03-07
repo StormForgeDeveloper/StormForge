@@ -3,10 +3,10 @@ namespace SF.Flat.Telemetry;
 
 table PostEventCmd
 {
- 	event_name:string(required);
+ 	event_name:string;
 	time_stamp:uint64;
-	app_id:string(required);
-	machine_id:string(required);
+	app_id:string;
+	machine_id:string;
 	event_id:uint32;
 	account_id:uint64;
 	is_play_event:bool;

@@ -124,7 +124,7 @@ namespace SF {
         constexpr uint GetMsgID() const { return IDSeq.MsgID; }
 
         // Remove sequence from message id
-        constexpr uint GetMsgIDOnly() const { return static_cast<uint32_t>(IDSeq.MsgID) & NET_ID_MASK; }
+        constexpr uint GetMsgIDOnly() const { return ID & NET_ID_MASK; }
 
         constexpr operator uint32_t() const { return ID; }
 

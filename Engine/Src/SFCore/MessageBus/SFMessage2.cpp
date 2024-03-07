@@ -41,14 +41,8 @@ namespace SF
         // Update size
         MessageSize = (uint16_t)(packetBuilder.GetSize() + sizeof(MessageHeader2));
 
-        packetBuilder.PushElement(MessageId.ID);
-        packetBuilder.PushElement(TransactionId.ID);
-        packetBuilder.PushElement(MessageSize);
+        packetBuilder.PushBytes((const uint8_t*)this, sizeof(MessageHeader2));
     }
 
-    void MessageHeader2::ReadFrom(const Array<uint8_t>& recvData)
-    {
-
-    }
 
 } // SF

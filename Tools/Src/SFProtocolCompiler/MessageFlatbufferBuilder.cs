@@ -184,18 +184,12 @@ namespace ProtocolCompiler
             
             var typeInfo = SystemTypeInfo.GetParameterInfo(parameter);
 
-            string required = string.Empty;// (typeInfo.IsString || typeInfo.IsCSharpStruct) ? "(required)" : string.Empty;
+            string required = string.Empty;
 
             flatTypeName = ConvertTypes(parameter.TypeName, ref required);
-            //if (typeInfo.IsCSharpStruct || typeInfo.IsEnum)
-            //{
-            //    flatTypeName = ConvertTypes(parameter.TypeName);
-            //}
-            //else
-            //{
-            //    // Using csharp type because CSharp has non-c++ type style
-            //    flatTypeName = ConvertTypes(parameter.TypeName);
-            //}
+
+            // We need to control per parameter basis. disabling for now
+            required = string.Empty;
 
             if (parameter.IsArray && !flatTypeName.StartsWith('['))
             {

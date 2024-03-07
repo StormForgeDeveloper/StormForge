@@ -598,12 +598,12 @@ struct JoinGameServerRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table 
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_RESULT, 4) &&
-           VerifyOffsetRequired(verifier, VT_NICK_NAME) &&
+           VerifyOffset(verifier, VT_NICK_NAME) &&
            verifier.VerifyString(nick_name()) &&
            VerifyField<uint64_t>(verifier, VT_GAME_UID, 8) &&
            VerifyField<uint64_t>(verifier, VT_PARTY_UID, 8) &&
            VerifyField<uint64_t>(verifier, VT_PARTY_LEADER_ID, 8) &&
-           VerifyFieldRequired<SF::Flat::MatchingQueueTicket>(verifier, VT_MATCHING_TICKET, 8) &&
+           VerifyField<SF::Flat::MatchingQueueTicket>(verifier, VT_MATCHING_TICKET, 8) &&
            verifier.EndTable();
   }
 };
@@ -637,8 +637,6 @@ struct JoinGameServerResBuilder {
   ::flatbuffers::Offset<JoinGameServerRes> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<JoinGameServerRes>(end);
-    fbb_.Required(o, JoinGameServerRes::VT_NICK_NAME);
-    fbb_.Required(o, JoinGameServerRes::VT_MATCHING_TICKET);
     return o;
   }
 };
@@ -804,7 +802,7 @@ struct GetAchievementStatsRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::T
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_RESULT, 4) &&
-           VerifyOffsetRequired(verifier, VT_ACHIEVEMENT_STATS) &&
+           VerifyOffset(verifier, VT_ACHIEVEMENT_STATS) &&
            verifier.VerifyVector(achievement_stats()) &&
            verifier.VerifyVectorOfTables(achievement_stats()) &&
            verifier.EndTable();
@@ -828,7 +826,6 @@ struct GetAchievementStatsResBuilder {
   ::flatbuffers::Offset<GetAchievementStatsRes> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<GetAchievementStatsRes>(end);
-    fbb_.Required(o, GetAchievementStatsRes::VT_ACHIEVEMENT_STATS);
     return o;
   }
 };
@@ -884,7 +881,7 @@ struct Dummy1Cmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffsetRequired(verifier, VT_COMPLITION_STATE) &&
+           VerifyOffset(verifier, VT_COMPLITION_STATE) &&
            verifier.VerifyString(complition_state()) &&
            verifier.EndTable();
   }
@@ -904,7 +901,6 @@ struct Dummy1CmdBuilder {
   ::flatbuffers::Offset<Dummy1Cmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<Dummy1Cmd>(end);
-    fbb_.Required(o, Dummy1Cmd::VT_COMPLITION_STATE);
     return o;
   }
 };
@@ -1015,7 +1011,7 @@ struct RegisterGCMCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffsetRequired(verifier, VT_GCMREGISTERED_ID) &&
+           VerifyOffset(verifier, VT_GCMREGISTERED_ID) &&
            verifier.VerifyString(gcmregistered_id()) &&
            verifier.EndTable();
   }
@@ -1035,7 +1031,6 @@ struct RegisterGCMCmdBuilder {
   ::flatbuffers::Offset<RegisterGCMCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<RegisterGCMCmd>(end);
-    fbb_.Required(o, RegisterGCMCmd::VT_GCMREGISTERED_ID);
     return o;
   }
 };
@@ -1146,7 +1141,7 @@ struct UnregisterGCMCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffsetRequired(verifier, VT_GCMREGISTERED_ID) &&
+           VerifyOffset(verifier, VT_GCMREGISTERED_ID) &&
            verifier.VerifyString(gcmregistered_id()) &&
            verifier.EndTable();
   }
@@ -1166,7 +1161,6 @@ struct UnregisterGCMCmdBuilder {
   ::flatbuffers::Offset<UnregisterGCMCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<UnregisterGCMCmd>(end);
-    fbb_.Required(o, UnregisterGCMCmd::VT_GCMREGISTERED_ID);
     return o;
   }
 };
@@ -1403,7 +1397,7 @@ struct AcceptFriendRequestCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::T
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_INVITER_ID, 8) &&
-           VerifyFieldRequired<SF::Flat::PlayerPlatformID>(verifier, VT_INVITER_PLATFORM_ID, 8) &&
+           VerifyField<SF::Flat::PlayerPlatformID>(verifier, VT_INVITER_PLATFORM_ID, 8) &&
            verifier.EndTable();
   }
 };
@@ -1425,7 +1419,6 @@ struct AcceptFriendRequestCmdBuilder {
   ::flatbuffers::Offset<AcceptFriendRequestCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<AcceptFriendRequestCmd>(end);
-    fbb_.Required(o, AcceptFriendRequestCmd::VT_INVITER_PLATFORM_ID);
     return o;
   }
 };
@@ -1476,7 +1469,7 @@ struct AcceptFriendRequestRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::T
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_RESULT, 4) &&
-           VerifyOffsetRequired(verifier, VT_NEW_FRIEND) &&
+           VerifyOffset(verifier, VT_NEW_FRIEND) &&
            verifier.VerifyTable(new_friend()) &&
            verifier.EndTable();
   }
@@ -1499,7 +1492,6 @@ struct AcceptFriendRequestResBuilder {
   ::flatbuffers::Offset<AcceptFriendRequestRes> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<AcceptFriendRequestRes>(end);
-    fbb_.Required(o, AcceptFriendRequestRes::VT_NEW_FRIEND);
     return o;
   }
 };
@@ -1544,7 +1536,7 @@ struct FriendRequestAcceptedS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffe
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffsetRequired(verifier, VT_ACCEPTER) &&
+           VerifyOffset(verifier, VT_ACCEPTER) &&
            verifier.VerifyTable(accepter()) &&
            verifier.EndTable();
   }
@@ -1564,7 +1556,6 @@ struct FriendRequestAcceptedS2CEvtBuilder {
   ::flatbuffers::Offset<FriendRequestAcceptedS2CEvt> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<FriendRequestAcceptedS2CEvt>(end);
-    fbb_.Required(o, FriendRequestAcceptedS2CEvt::VT_ACCEPTER);
     return o;
   }
 };
@@ -1894,7 +1885,7 @@ struct GetFriendListRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            VerifyField<uint16_t>(verifier, VT_MAX_FRIEND_SLOT, 2) &&
            VerifyField<uint16_t>(verifier, VT_TOTAL_NUMBER_OF_FRIENDS, 2) &&
            VerifyField<uint16_t>(verifier, VT_START_INDEX, 2) &&
-           VerifyOffsetRequired(verifier, VT_FRIEND_LIST) &&
+           VerifyOffset(verifier, VT_FRIEND_LIST) &&
            verifier.VerifyVector(friend_list()) &&
            verifier.VerifyVectorOfTables(friend_list()) &&
            verifier.EndTable();
@@ -1927,7 +1918,6 @@ struct GetFriendListResBuilder {
   ::flatbuffers::Offset<GetFriendListRes> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<GetFriendListRes>(end);
-    fbb_.Required(o, GetFriendListRes::VT_FRIEND_LIST);
     return o;
   }
 };
@@ -2619,7 +2609,7 @@ struct FindPlayerByPlatformIdCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyFieldRequired<SF::Flat::PlayerPlatformID>(verifier, VT_PLATFORM_PLAYER_ID, 8) &&
+           VerifyField<SF::Flat::PlayerPlatformID>(verifier, VT_PLATFORM_PLAYER_ID, 8) &&
            verifier.EndTable();
   }
 };
@@ -2638,7 +2628,6 @@ struct FindPlayerByPlatformIdCmdBuilder {
   ::flatbuffers::Offset<FindPlayerByPlatformIdCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<FindPlayerByPlatformIdCmd>(end);
-    fbb_.Required(o, FindPlayerByPlatformIdCmd::VT_PLATFORM_PLAYER_ID);
     return o;
   }
 };
@@ -2692,7 +2681,7 @@ struct FindPlayerByPlatformIdRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_RESULT, 4) &&
            VerifyField<uint64_t>(verifier, VT_PLAYER_ID, 8) &&
-           VerifyFieldRequired<SF::Flat::PlayerPlatformID>(verifier, VT_PLAYER_PLATFORM_ID, 8) &&
+           VerifyField<SF::Flat::PlayerPlatformID>(verifier, VT_PLAYER_PLATFORM_ID, 8) &&
            verifier.EndTable();
   }
 };
@@ -2717,7 +2706,6 @@ struct FindPlayerByPlatformIdResBuilder {
   ::flatbuffers::Offset<FindPlayerByPlatformIdRes> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<FindPlayerByPlatformIdRes>(end);
-    fbb_.Required(o, FindPlayerByPlatformIdRes::VT_PLAYER_PLATFORM_ID);
     return o;
   }
 };
@@ -2765,7 +2753,7 @@ struct FindPlayerByCharacterNameCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuff
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffsetRequired(verifier, VT_CHARACTER_NAME) &&
+           VerifyOffset(verifier, VT_CHARACTER_NAME) &&
            verifier.VerifyString(character_name()) &&
            verifier.EndTable();
   }
@@ -2785,7 +2773,6 @@ struct FindPlayerByCharacterNameCmdBuilder {
   ::flatbuffers::Offset<FindPlayerByCharacterNameCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<FindPlayerByCharacterNameCmd>(end);
-    fbb_.Required(o, FindPlayerByCharacterNameCmd::VT_CHARACTER_NAME);
     return o;
   }
 };
@@ -2914,7 +2901,7 @@ struct FindPlayerByPlatformUserNameCmd FLATBUFFERS_FINAL_CLASS : private ::flatb
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint8_t>(verifier, VT_PLATFORM_TYPE, 1) &&
-           VerifyOffsetRequired(verifier, VT_PLATFORM_USER_NAME) &&
+           VerifyOffset(verifier, VT_PLATFORM_USER_NAME) &&
            verifier.VerifyString(platform_user_name()) &&
            verifier.EndTable();
   }
@@ -2937,7 +2924,6 @@ struct FindPlayerByPlatformUserNameCmdBuilder {
   ::flatbuffers::Offset<FindPlayerByPlatformUserNameCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<FindPlayerByPlatformUserNameCmd>(end);
-    fbb_.Required(o, FindPlayerByPlatformUserNameCmd::VT_PLATFORM_USER_NAME);
     return o;
   }
 };
@@ -3005,7 +2991,7 @@ struct FindPlayerByPlatformUserNameRes FLATBUFFERS_FINAL_CLASS : private ::flatb
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_RESULT, 4) &&
            VerifyField<uint64_t>(verifier, VT_PLAYER_ID, 8) &&
-           VerifyFieldRequired<SF::Flat::PlayerPlatformID>(verifier, VT_PLAYER_PLATFORM_ID, 8) &&
+           VerifyField<SF::Flat::PlayerPlatformID>(verifier, VT_PLAYER_PLATFORM_ID, 8) &&
            verifier.EndTable();
   }
 };
@@ -3030,7 +3016,6 @@ struct FindPlayerByPlatformUserNameResBuilder {
   ::flatbuffers::Offset<FindPlayerByPlatformUserNameRes> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<FindPlayerByPlatformUserNameRes>(end);
-    fbb_.Required(o, FindPlayerByPlatformUserNameRes::VT_PLAYER_PLATFORM_ID);
     return o;
   }
 };
@@ -3078,7 +3063,7 @@ struct FindPlayerByEMailCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tab
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffsetRequired(verifier, VT_PLAYER_EMAIL) &&
+           VerifyOffset(verifier, VT_PLAYER_EMAIL) &&
            verifier.VerifyString(player_email()) &&
            verifier.EndTable();
   }
@@ -3098,7 +3083,6 @@ struct FindPlayerByEMailCmdBuilder {
   ::flatbuffers::Offset<FindPlayerByEMailCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<FindPlayerByEMailCmd>(end);
-    fbb_.Required(o, FindPlayerByEMailCmd::VT_PLAYER_EMAIL);
     return o;
   }
 };
@@ -3155,7 +3139,7 @@ struct FindPlayerByEMailRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tab
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_RESULT, 4) &&
-           VerifyOffsetRequired(verifier, VT_PLAYER) &&
+           VerifyOffset(verifier, VT_PLAYER) &&
            verifier.VerifyTable(player()) &&
            verifier.EndTable();
   }
@@ -3178,7 +3162,6 @@ struct FindPlayerByEMailResBuilder {
   ::flatbuffers::Offset<FindPlayerByEMailRes> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<FindPlayerByEMailRes>(end);
-    fbb_.Required(o, FindPlayerByEMailRes::VT_PLAYER);
     return o;
   }
 };
@@ -3289,7 +3272,7 @@ struct FindPlayerByPlayerIDRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_RESULT, 4) &&
-           VerifyOffsetRequired(verifier, VT_PLAYER) &&
+           VerifyOffset(verifier, VT_PLAYER) &&
            verifier.VerifyTable(player()) &&
            verifier.EndTable();
   }
@@ -3312,7 +3295,6 @@ struct FindPlayerByPlayerIDResBuilder {
   ::flatbuffers::Offset<FindPlayerByPlayerIDRes> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<FindPlayerByPlayerIDRes>(end);
-    fbb_.Required(o, FindPlayerByPlayerIDRes::VT_PLAYER);
     return o;
   }
 };
@@ -3661,7 +3643,7 @@ struct GetRankingListRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table 
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_RESULT, 4) &&
-           VerifyOffsetRequired(verifier, VT_RANKING) &&
+           VerifyOffset(verifier, VT_RANKING) &&
            verifier.VerifyVector(ranking()) &&
            verifier.VerifyVectorOfTables(ranking()) &&
            verifier.EndTable();
@@ -3685,7 +3667,6 @@ struct GetRankingListResBuilder {
   ::flatbuffers::Offset<GetRankingListRes> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<GetRankingListRes>(end);
-    fbb_.Required(o, GetRankingListRes::VT_RANKING);
     return o;
   }
 };
@@ -4099,7 +4080,7 @@ struct SetNickNameCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffsetRequired(verifier, VT_NICK_NAME) &&
+           VerifyOffset(verifier, VT_NICK_NAME) &&
            verifier.VerifyString(nick_name()) &&
            VerifyField<uint8_t>(verifier, VT_IS_COST_FREE, 1) &&
            verifier.EndTable();
@@ -4123,7 +4104,6 @@ struct SetNickNameCmdBuilder {
   ::flatbuffers::Offset<SetNickNameCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<SetNickNameCmd>(end);
-    fbb_.Required(o, SetNickNameCmd::VT_NICK_NAME);
     return o;
   }
 };
@@ -4564,7 +4544,7 @@ struct PartyPlayerJoinedS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_PARTY_UID, 8) &&
-           VerifyOffsetRequired(verifier, VT_JOINED_PLAYER) &&
+           VerifyOffset(verifier, VT_JOINED_PLAYER) &&
            verifier.VerifyTable(joined_player()) &&
            verifier.EndTable();
   }
@@ -4587,7 +4567,6 @@ struct PartyPlayerJoinedS2CEvtBuilder {
   ::flatbuffers::Offset<PartyPlayerJoinedS2CEvt> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<PartyPlayerJoinedS2CEvt>(end);
-    fbb_.Required(o, PartyPlayerJoinedS2CEvt::VT_JOINED_PLAYER);
     return o;
   }
 };
@@ -5255,7 +5234,7 @@ struct PartyInviteRequestedS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffer
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_INVITER_ID, 8) &&
-           VerifyOffsetRequired(verifier, VT_INVITER_NAME) &&
+           VerifyOffset(verifier, VT_INVITER_NAME) &&
            verifier.VerifyString(inviter_name()) &&
            VerifyField<uint64_t>(verifier, VT_PARTY_TO_JOIN_UID, 8) &&
            verifier.EndTable();
@@ -5282,7 +5261,6 @@ struct PartyInviteRequestedS2CEvtBuilder {
   ::flatbuffers::Offset<PartyInviteRequestedS2CEvt> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<PartyInviteRequestedS2CEvt>(end);
-    fbb_.Required(o, PartyInviteRequestedS2CEvt::VT_INVITER_NAME);
     return o;
   }
 };
@@ -5535,7 +5513,7 @@ struct PartyChatMessageCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tabl
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffsetRequired(verifier, VT_CHAT_MESSAGE) &&
+           VerifyOffset(verifier, VT_CHAT_MESSAGE) &&
            verifier.VerifyString(chat_message()) &&
            verifier.EndTable();
   }
@@ -5555,7 +5533,6 @@ struct PartyChatMessageCmdBuilder {
   ::flatbuffers::Offset<PartyChatMessageCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<PartyChatMessageCmd>(end);
-    fbb_.Required(o, PartyChatMessageCmd::VT_CHAT_MESSAGE);
     return o;
   }
 };
@@ -5677,9 +5654,9 @@ struct PartyChatMessageS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::T
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_SENDER_ID, 8) &&
-           VerifyOffsetRequired(verifier, VT_SENDER_NAME) &&
+           VerifyOffset(verifier, VT_SENDER_NAME) &&
            verifier.VerifyString(sender_name()) &&
-           VerifyOffsetRequired(verifier, VT_CHAT_MESSAGE) &&
+           VerifyOffset(verifier, VT_CHAT_MESSAGE) &&
            verifier.VerifyString(chat_message()) &&
            verifier.EndTable();
   }
@@ -5705,8 +5682,6 @@ struct PartyChatMessageS2CEvtBuilder {
   ::flatbuffers::Offset<PartyChatMessageS2CEvt> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<PartyChatMessageS2CEvt>(end);
-    fbb_.Required(o, PartyChatMessageS2CEvt::VT_SENDER_NAME);
-    fbb_.Required(o, PartyChatMessageS2CEvt::VT_CHAT_MESSAGE);
     return o;
   }
 };
@@ -5840,7 +5815,7 @@ struct JoinGameInstanceRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tabl
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_RESULT, 4) &&
            VerifyField<uint64_t>(verifier, VT_INS_UID, 8) &&
-           VerifyOffsetRequired(verifier, VT_SERVER_PUBLIC_ADDRESS) &&
+           VerifyOffset(verifier, VT_SERVER_PUBLIC_ADDRESS) &&
            verifier.VerifyString(server_public_address()) &&
            verifier.EndTable();
   }
@@ -5866,7 +5841,6 @@ struct JoinGameInstanceResBuilder {
   ::flatbuffers::Offset<JoinGameInstanceRes> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<JoinGameInstanceRes>(end);
-    fbb_.Required(o, JoinGameInstanceRes::VT_SERVER_PUBLIC_ADDRESS);
     return o;
   }
 };
@@ -6052,7 +6026,7 @@ struct SearchGameInstanceCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Ta
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffsetRequired(verifier, VT_SEARCH_KEYWORD) &&
+           VerifyOffset(verifier, VT_SEARCH_KEYWORD) &&
            verifier.VerifyString(search_keyword()) &&
            VerifyField<uint32_t>(verifier, VT_ZONE_TABLE_ID, 4) &&
            verifier.EndTable();
@@ -6076,7 +6050,6 @@ struct SearchGameInstanceCmdBuilder {
   ::flatbuffers::Offset<SearchGameInstanceCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<SearchGameInstanceCmd>(end);
-    fbb_.Required(o, SearchGameInstanceCmd::VT_SEARCH_KEYWORD);
     return o;
   }
 };
@@ -7033,7 +7006,7 @@ struct GetUGCTemplatesCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffsetRequired(verifier, VT_TAGS) &&
+           VerifyOffset(verifier, VT_TAGS) &&
            verifier.VerifyVector(tags()) &&
            verifier.VerifyVectorOfStrings(tags()) &&
            verifier.EndTable();
@@ -7054,7 +7027,6 @@ struct GetUGCTemplatesCmdBuilder {
   ::flatbuffers::Offset<GetUGCTemplatesCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<GetUGCTemplatesCmd>(end);
-    fbb_.Required(o, GetUGCTemplatesCmd::VT_TAGS);
     return o;
   }
 };
@@ -7335,7 +7307,7 @@ struct SearchUGCCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffsetRequired(verifier, VT_TAGS) &&
+           VerifyOffset(verifier, VT_TAGS) &&
            verifier.VerifyVector(tags()) &&
            verifier.VerifyVectorOfStrings(tags()) &&
            verifier.EndTable();
@@ -7356,7 +7328,6 @@ struct SearchUGCCmdBuilder {
   ::flatbuffers::Offset<SearchUGCCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<SearchUGCCmd>(end);
-    fbb_.Required(o, SearchUGCCmd::VT_TAGS);
     return o;
   }
 };
@@ -7983,7 +7954,7 @@ struct BuyShopItemPrepareRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Ta
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_RESULT, 4) &&
            VerifyField<uint32_t>(verifier, VT_SHOP_ITEM_ID, 4) &&
-           VerifyOffsetRequired(verifier, VT_PURCHASE_ID) &&
+           VerifyOffset(verifier, VT_PURCHASE_ID) &&
            verifier.VerifyString(purchase_id()) &&
            verifier.EndTable();
   }
@@ -8009,7 +7980,6 @@ struct BuyShopItemPrepareResBuilder {
   ::flatbuffers::Offset<BuyShopItemPrepareRes> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<BuyShopItemPrepareRes>(end);
-    fbb_.Required(o, BuyShopItemPrepareRes::VT_PURCHASE_ID);
     return o;
   }
 };
@@ -8091,11 +8061,11 @@ struct BuyShopItemCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_SHOP_ITEM_ID, 4) &&
-           VerifyOffsetRequired(verifier, VT_PLATFORM) &&
+           VerifyOffset(verifier, VT_PLATFORM) &&
            verifier.VerifyString(platform()) &&
-           VerifyOffsetRequired(verifier, VT_PACKAGE_NAME) &&
+           VerifyOffset(verifier, VT_PACKAGE_NAME) &&
            verifier.VerifyString(package_name()) &&
-           VerifyOffsetRequired(verifier, VT_PURCHASE_TRANSACTION_ID) &&
+           VerifyOffset(verifier, VT_PURCHASE_TRANSACTION_ID) &&
            verifier.VerifyString(purchase_transaction_id()) &&
            VerifyOffset(verifier, VT_PURCHASE_TOKEN) &&
            verifier.VerifyVector(purchase_token()) &&
@@ -8129,9 +8099,6 @@ struct BuyShopItemCmdBuilder {
   ::flatbuffers::Offset<BuyShopItemCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<BuyShopItemCmd>(end);
-    fbb_.Required(o, BuyShopItemCmd::VT_PLATFORM);
-    fbb_.Required(o, BuyShopItemCmd::VT_PACKAGE_NAME);
-    fbb_.Required(o, BuyShopItemCmd::VT_PURCHASE_TRANSACTION_ID);
     return o;
   }
 };
@@ -8282,9 +8249,9 @@ struct CreateOrJoinChatChannelCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffer
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffsetRequired(verifier, VT_CHANNEL_NAME) &&
+           VerifyOffset(verifier, VT_CHANNEL_NAME) &&
            verifier.VerifyString(channel_name()) &&
-           VerifyOffsetRequired(verifier, VT_PASSCODE) &&
+           VerifyOffset(verifier, VT_PASSCODE) &&
            verifier.VerifyString(passcode()) &&
            verifier.EndTable();
   }
@@ -8307,8 +8274,6 @@ struct CreateOrJoinChatChannelCmdBuilder {
   ::flatbuffers::Offset<CreateOrJoinChatChannelCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<CreateOrJoinChatChannelCmd>(end);
-    fbb_.Required(o, CreateOrJoinChatChannelCmd::VT_CHANNEL_NAME);
-    fbb_.Required(o, CreateOrJoinChatChannelCmd::VT_PASSCODE);
     return o;
   }
 };
@@ -8461,7 +8426,7 @@ struct JoinChatChannelCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_CHAT_UID, 8) &&
            VerifyField<uint64_t>(verifier, VT_INVITER_ID, 8) &&
-           VerifyOffsetRequired(verifier, VT_PASSCODE) &&
+           VerifyOffset(verifier, VT_PASSCODE) &&
            verifier.VerifyString(passcode()) &&
            verifier.EndTable();
   }
@@ -8487,7 +8452,6 @@ struct JoinChatChannelCmdBuilder {
   ::flatbuffers::Offset<JoinChatChannelCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<JoinChatChannelCmd>(end);
-    fbb_.Required(o, JoinChatChannelCmd::VT_PASSCODE);
     return o;
   }
 };
@@ -8638,7 +8602,7 @@ struct ChatChannelPlayerJoinedS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuf
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_CHAT_UID, 8) &&
-           VerifyOffsetRequired(verifier, VT_JOINED_PLAYER) &&
+           VerifyOffset(verifier, VT_JOINED_PLAYER) &&
            verifier.VerifyTable(joined_player()) &&
            verifier.EndTable();
   }
@@ -8661,7 +8625,6 @@ struct ChatChannelPlayerJoinedS2CEvtBuilder {
   ::flatbuffers::Offset<ChatChannelPlayerJoinedS2CEvt> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<ChatChannelPlayerJoinedS2CEvt>(end);
-    fbb_.Required(o, ChatChannelPlayerJoinedS2CEvt::VT_JOINED_PLAYER);
     return o;
   }
 };
@@ -9211,7 +9174,7 @@ struct ChatChannelChatMessageCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers
            VerifyField<uint64_t>(verifier, VT_CHAT_UID, 8) &&
            VerifyOffset(verifier, VT_CHAT_META_DATA) &&
            verifier.VerifyVector(chat_meta_data()) &&
-           VerifyOffsetRequired(verifier, VT_CHAT_MESSAGE) &&
+           VerifyOffset(verifier, VT_CHAT_MESSAGE) &&
            verifier.VerifyString(chat_message()) &&
            verifier.EndTable();
   }
@@ -9237,7 +9200,6 @@ struct ChatChannelChatMessageCmdBuilder {
   ::flatbuffers::Offset<ChatChannelChatMessageCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<ChatChannelChatMessageCmd>(end);
-    fbb_.Required(o, ChatChannelChatMessageCmd::VT_CHAT_MESSAGE);
     return o;
   }
 };
@@ -9372,7 +9334,7 @@ struct ChatChannelChatMessageS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuff
            VerifyField<uint64_t>(verifier, VT_SENDER_ID, 8) &&
            VerifyOffset(verifier, VT_CHAT_META_DATA) &&
            verifier.VerifyVector(chat_meta_data()) &&
-           VerifyOffsetRequired(verifier, VT_CHAT_MESSAGE) &&
+           VerifyOffset(verifier, VT_CHAT_MESSAGE) &&
            verifier.VerifyString(chat_message()) &&
            verifier.EndTable();
   }
@@ -9398,7 +9360,6 @@ struct ChatChannelChatMessageS2CEvtBuilder {
   ::flatbuffers::Offset<ChatChannelChatMessageS2CEvt> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<ChatChannelChatMessageS2CEvt>(end);
-    fbb_.Required(o, ChatChannelChatMessageS2CEvt::VT_CHAT_MESSAGE);
     return o;
   }
 };
@@ -9476,11 +9437,11 @@ struct WhisperMessageCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table 
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_RECEIVER_ID, 8) &&
-           VerifyOffsetRequired(verifier, VT_RECEIVER_NAME) &&
+           VerifyOffset(verifier, VT_RECEIVER_NAME) &&
            verifier.VerifyString(receiver_name()) &&
            VerifyOffset(verifier, VT_CHAT_META_DATA) &&
            verifier.VerifyVector(chat_meta_data()) &&
-           VerifyOffsetRequired(verifier, VT_CHAT_MESSAGE) &&
+           VerifyOffset(verifier, VT_CHAT_MESSAGE) &&
            verifier.VerifyString(chat_message()) &&
            verifier.EndTable();
   }
@@ -9509,8 +9470,6 @@ struct WhisperMessageCmdBuilder {
   ::flatbuffers::Offset<WhisperMessageCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<WhisperMessageCmd>(end);
-    fbb_.Required(o, WhisperMessageCmd::VT_RECEIVER_NAME);
-    fbb_.Required(o, WhisperMessageCmd::VT_CHAT_MESSAGE);
     return o;
   }
 };
@@ -9651,7 +9610,7 @@ struct WhisperMessageS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tab
            VerifyField<uint64_t>(verifier, VT_SENDER_ID, 8) &&
            VerifyOffset(verifier, VT_CHAT_META_DATA) &&
            verifier.VerifyVector(chat_meta_data()) &&
-           VerifyOffsetRequired(verifier, VT_CHAT_MESSAGE) &&
+           VerifyOffset(verifier, VT_CHAT_MESSAGE) &&
            verifier.VerifyString(chat_message()) &&
            verifier.EndTable();
   }
@@ -9677,7 +9636,6 @@ struct WhisperMessageS2CEvtBuilder {
   ::flatbuffers::Offset<WhisperMessageS2CEvt> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<WhisperMessageS2CEvt>(end);
-    fbb_.Required(o, WhisperMessageS2CEvt::VT_CHAT_MESSAGE);
     return o;
   }
 };
@@ -9749,7 +9707,7 @@ struct CreateCharacterCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffsetRequired(verifier, VT_CHARACTER_NAME) &&
+           VerifyOffset(verifier, VT_CHARACTER_NAME) &&
            verifier.VerifyString(character_name()) &&
            VerifyOffset(verifier, VT_PUBLIC_DATA) &&
            verifier.VerifyVector(public_data()) &&
@@ -9779,7 +9737,6 @@ struct CreateCharacterCmdBuilder {
   ::flatbuffers::Offset<CreateCharacterCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<CreateCharacterCmd>(end);
-    fbb_.Required(o, CreateCharacterCmd::VT_CHARACTER_NAME);
     return o;
   }
 };
@@ -10580,7 +10537,7 @@ struct ServerNoticeS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<int8_t>(verifier, VT_NOTICE_CATEGORY, 1) &&
-           VerifyOffsetRequired(verifier, VT_SERVER_NOTICE_MESSAGE) &&
+           VerifyOffset(verifier, VT_SERVER_NOTICE_MESSAGE) &&
            verifier.VerifyString(server_notice_message()) &&
            verifier.EndTable();
   }
@@ -10603,7 +10560,6 @@ struct ServerNoticeS2CEvtBuilder {
   ::flatbuffers::Offset<ServerNoticeS2CEvt> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<ServerNoticeS2CEvt>(end);
-    fbb_.Required(o, ServerNoticeS2CEvt::VT_SERVER_NOTICE_MESSAGE);
     return o;
   }
 };

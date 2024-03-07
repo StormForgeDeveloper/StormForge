@@ -81,12 +81,12 @@ struct PostEventCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffsetRequired(verifier, VT_EVENT_NAME) &&
+           VerifyOffset(verifier, VT_EVENT_NAME) &&
            verifier.VerifyString(event_name()) &&
            VerifyField<uint64_t>(verifier, VT_TIME_STAMP, 8) &&
-           VerifyOffsetRequired(verifier, VT_APP_ID) &&
+           VerifyOffset(verifier, VT_APP_ID) &&
            verifier.VerifyString(app_id()) &&
-           VerifyOffsetRequired(verifier, VT_MACHINE_ID) &&
+           VerifyOffset(verifier, VT_MACHINE_ID) &&
            verifier.VerifyString(machine_id()) &&
            VerifyField<uint32_t>(verifier, VT_EVENT_ID, 4) &&
            VerifyField<uint64_t>(verifier, VT_ACCOUNT_ID, 8) &&
@@ -138,9 +138,6 @@ struct PostEventCmdBuilder {
   ::flatbuffers::Offset<PostEventCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<PostEventCmd>(end);
-    fbb_.Required(o, PostEventCmd::VT_EVENT_NAME);
-    fbb_.Required(o, PostEventCmd::VT_APP_ID);
-    fbb_.Required(o, PostEventCmd::VT_MACHINE_ID);
     return o;
   }
 };

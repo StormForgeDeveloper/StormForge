@@ -3,38 +3,38 @@ namespace SF.Flat.Login;
 
 table LoginCmd
 {
- 	user_id:string(required);
-	password:string(required);
-	game_id:string(required);
+ 	user_id:string;
+	password:string;
+	game_id:string;
 } // table LoginCmd
 
 table LoginRes
 {
  	result:uint32;
-	nick_name:string(required);
+	nick_name:string;
 	account_id:uint64;
 	auth_ticket:uint64;
-	banned_reason:string(required);
-	game_server_address:string(required);
+	banned_reason:string;
+	game_server_address:string;
 } // table LoginRes
 
 table LoginWithSteamCmd
 {
  	steam_app_id:uint64;
 	steam_player_id:uint64;
-	steam_player_name:string(required);
-	steam_player_token:string(required);
-	game_id:string(required);
+	steam_player_name:string;
+	steam_player_token:string;
+	game_id:string;
 } // table LoginWithSteamCmd
 
 table LoginWithSteamRes
 {
  	result:uint32;
-	nick_name:string(required);
+	nick_name:string;
 	account_id:uint64;
 	auth_ticket:uint64;
-	banned_reason:string(required);
-	game_server_address:string(required);
+	banned_reason:string;
+	game_server_address:string;
 } // table LoginWithSteamRes
 
 root_type LoginWithSteamRes;

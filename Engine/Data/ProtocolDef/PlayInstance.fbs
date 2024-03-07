@@ -5,7 +5,7 @@ table JoinPlayInstanceCmd
 {
  	play_instance_uid:uint64;
 	player_id:uint64;
-	player_identifier:string(required);
+	player_identifier:string;
 } // table JoinPlayInstanceCmd
 
 table JoinPlayInstanceRes
@@ -15,7 +15,7 @@ table JoinPlayInstanceRes
 	player_id:uint64;
 	character_id:uint32;
 	character_private_data:[ubyte];
-	movement:ActorMovement(required);
+	movement:ActorMovement;
 } // table JoinPlayInstanceRes
 
 table PlayerKickedS2CEvt
@@ -36,10 +36,10 @@ table NewActorInViewS2CEvt
 {
  	play_instance_uid:uint64;
 	player_id:uint64;
-	player_platform_id:PlayerPlatformID(required);
+	player_platform_id:PlayerPlatformID;
 	public_data:[ubyte];
 	equip_data:[ubyte];
-	movement:ActorMovement(required);
+	movement:ActorMovement;
 	state:uint32;
 	state_values:[ubyte];
 } // table NewActorInViewS2CEvt
@@ -54,19 +54,19 @@ table PlayerMovementC2SEvt
 {
  	play_instance_uid:uint64;
 	player_id:uint64;
-	movement:ActorMovement(required);
+	movement:ActorMovement;
 } // table PlayerMovementC2SEvt
 
 table ActorMovementS2CEvt
 {
  	play_instance_uid:uint64;
-	movement:ActorMovement(required);
+	movement:ActorMovement;
 } // table ActorMovementS2CEvt
 
 table ActorMovementsS2CEvt
 {
  	play_instance_uid:uint64;
-	movement:[ActorMovement](required);
+	movement:[ActorMovement];
 } // table ActorMovementsS2CEvt
 
 table PlayerStateChangedS2CEvt
@@ -75,7 +75,7 @@ table PlayerStateChangedS2CEvt
 	player_id:uint64;
 	state:uint32;
 	move_frame:uint32;
-	position:Vector4(required);
+	position:Vector4;
 	state_values:[ubyte];
 } // table PlayerStateChangedS2CEvt
 
@@ -97,7 +97,7 @@ table SetCharacterPublicMessageCmd
 {
  	play_instance_uid:uint64;
 	player_id:uint64;
-	public_message:string(required);
+	public_message:string;
 } // table SetCharacterPublicMessageCmd
 
 table SetCharacterPublicMessageRes
@@ -298,7 +298,7 @@ table ZoneChatCmd
 	player_id:uint64;
 	message_type:int8;
 	chat_meta_data:[ubyte];
-	chat_message:string(required);
+	chat_message:string;
 } // table ZoneChatCmd
 
 table ZoneChatRes
@@ -312,7 +312,7 @@ table ZoneChatS2CEvt
 	sender_id:uint64;
 	message_type:int8;
 	chat_meta_data:[ubyte];
-	chat_message:string(required);
+	chat_message:string;
 } // table ZoneChatS2CEvt
 
 table LevelUpS2CEvt
@@ -354,37 +354,37 @@ table VoiceDataS2CEvt
 table CreateStreamCmd
 {
  	ticket:uint64;
-	stream_name:string(required);
+	stream_name:string;
 } // table CreateStreamCmd
 
 table CreateStreamRes
 {
  	result:uint32;
-	stream_name:string(required);
+	stream_name:string;
 } // table CreateStreamRes
 
 table FindStreamCmd
 {
  	ticket:uint64;
-	stream_name:string(required);
+	stream_name:string;
 } // table FindStreamCmd
 
 table FindStreamRes
 {
  	result:uint32;
-	stream_name:string(required);
+	stream_name:string;
 } // table FindStreamRes
 
 table DeleteStreamCmd
 {
  	ticket:uint64;
-	stream_name:string(required);
+	stream_name:string;
 } // table DeleteStreamCmd
 
 table DeleteStreamRes
 {
  	result:uint32;
-	stream_name:string(required);
+	stream_name:string;
 } // table DeleteStreamRes
 
 table GetStreamListCmd
@@ -395,7 +395,7 @@ table GetStreamListCmd
 table GetStreamListRes
 {
  	result:uint32;
-	stream_names:[string](required);
+	stream_names:[string];
 } // table GetStreamListRes
 
 root_type GetStreamListRes;

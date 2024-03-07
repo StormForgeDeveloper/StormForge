@@ -38,14 +38,14 @@ namespace SF {
         TransactionID TransactionId;
 
         // Data length including header
-        uint32_t MessageSize = 0;
+        uint16_t MessageSize = 0;
 
         constexpr size_t GetHeaderSize() const { return sizeof(MessageHeader2); }
 
         SF_FORCEINLINE void SetIDNLen(uint id, uint msgLen)
         {
             MessageId.ID = id;
-            MessageSize = msgLen;
+            MessageSize = (decltype(MessageSize))msgLen;
         }
 
         SF_FORCEINLINE void* GetPayloadPtr() const
@@ -75,10 +75,9 @@ namespace SF {
         // Update size and write to flat packet builder
         void UpdateNWriteTo(::flatbuffers::FlatBufferBuilder& packetBuilder);
 
-        void ReadFrom(const Array<uint8_t>& recvData);
     };
 
-    static_assert((sizeof(uint64_t) * 2) == sizeof(MessageHeader2), "MessageHeader should fit");
+    static_assert((sizeof(uint16_t) * 7) == sizeof(MessageHeader2), "MessageHeader should fit");
 
 #pragma pack(pop)
 

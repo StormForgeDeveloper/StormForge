@@ -218,7 +218,7 @@ struct JoinPlayInstanceCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tabl
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_PLAY_INSTANCE_UID, 8) &&
            VerifyField<uint64_t>(verifier, VT_PLAYER_ID, 8) &&
-           VerifyOffsetRequired(verifier, VT_PLAYER_IDENTIFIER) &&
+           VerifyOffset(verifier, VT_PLAYER_IDENTIFIER) &&
            verifier.VerifyString(player_identifier()) &&
            verifier.EndTable();
   }
@@ -244,7 +244,6 @@ struct JoinPlayInstanceCmdBuilder {
   ::flatbuffers::Offset<JoinPlayInstanceCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<JoinPlayInstanceCmd>(end);
-    fbb_.Required(o, JoinPlayInstanceCmd::VT_PLAYER_IDENTIFIER);
     return o;
   }
 };
@@ -336,7 +335,7 @@ struct JoinPlayInstanceRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tabl
            VerifyField<uint32_t>(verifier, VT_CHARACTER_ID, 4) &&
            VerifyOffset(verifier, VT_CHARACTER_PRIVATE_DATA) &&
            verifier.VerifyVector(character_private_data()) &&
-           VerifyOffsetRequired(verifier, VT_MOVEMENT) &&
+           VerifyOffset(verifier, VT_MOVEMENT) &&
            verifier.VerifyTable(movement()) &&
            verifier.EndTable();
   }
@@ -371,7 +370,6 @@ struct JoinPlayInstanceResBuilder {
   ::flatbuffers::Offset<JoinPlayInstanceRes> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<JoinPlayInstanceRes>(end);
-    fbb_.Required(o, JoinPlayInstanceRes::VT_MOVEMENT);
     return o;
   }
 };
@@ -668,12 +666,12 @@ struct NewActorInViewS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tab
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_PLAY_INSTANCE_UID, 8) &&
            VerifyField<uint64_t>(verifier, VT_PLAYER_ID, 8) &&
-           VerifyFieldRequired<SF::Flat::PlayerPlatformID>(verifier, VT_PLAYER_PLATFORM_ID, 8) &&
+           VerifyField<SF::Flat::PlayerPlatformID>(verifier, VT_PLAYER_PLATFORM_ID, 8) &&
            VerifyOffset(verifier, VT_PUBLIC_DATA) &&
            verifier.VerifyVector(public_data()) &&
            VerifyOffset(verifier, VT_EQUIP_DATA) &&
            verifier.VerifyVector(equip_data()) &&
-           VerifyOffsetRequired(verifier, VT_MOVEMENT) &&
+           VerifyOffset(verifier, VT_MOVEMENT) &&
            verifier.VerifyTable(movement()) &&
            VerifyField<uint32_t>(verifier, VT_STATE, 4) &&
            VerifyOffset(verifier, VT_STATE_VALUES) &&
@@ -717,8 +715,6 @@ struct NewActorInViewS2CEvtBuilder {
   ::flatbuffers::Offset<NewActorInViewS2CEvt> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<NewActorInViewS2CEvt>(end);
-    fbb_.Required(o, NewActorInViewS2CEvt::VT_PLAYER_PLATFORM_ID);
-    fbb_.Required(o, NewActorInViewS2CEvt::VT_MOVEMENT);
     return o;
   }
 };
@@ -890,7 +886,7 @@ struct PlayerMovementC2SEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tab
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_PLAY_INSTANCE_UID, 8) &&
            VerifyField<uint64_t>(verifier, VT_PLAYER_ID, 8) &&
-           VerifyOffsetRequired(verifier, VT_MOVEMENT) &&
+           VerifyOffset(verifier, VT_MOVEMENT) &&
            verifier.VerifyTable(movement()) &&
            verifier.EndTable();
   }
@@ -916,7 +912,6 @@ struct PlayerMovementC2SEvtBuilder {
   ::flatbuffers::Offset<PlayerMovementC2SEvt> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<PlayerMovementC2SEvt>(end);
-    fbb_.Required(o, PlayerMovementC2SEvt::VT_MOVEMENT);
     return o;
   }
 };
@@ -970,7 +965,7 @@ struct ActorMovementS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tabl
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_PLAY_INSTANCE_UID, 8) &&
-           VerifyOffsetRequired(verifier, VT_MOVEMENT) &&
+           VerifyOffset(verifier, VT_MOVEMENT) &&
            verifier.VerifyTable(movement()) &&
            verifier.EndTable();
   }
@@ -993,7 +988,6 @@ struct ActorMovementS2CEvtBuilder {
   ::flatbuffers::Offset<ActorMovementS2CEvt> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<ActorMovementS2CEvt>(end);
-    fbb_.Required(o, ActorMovementS2CEvt::VT_MOVEMENT);
     return o;
   }
 };
@@ -1044,7 +1038,7 @@ struct ActorMovementsS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tab
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_PLAY_INSTANCE_UID, 8) &&
-           VerifyOffsetRequired(verifier, VT_MOVEMENT) &&
+           VerifyOffset(verifier, VT_MOVEMENT) &&
            verifier.VerifyVector(movement()) &&
            verifier.VerifyVectorOfTables(movement()) &&
            verifier.EndTable();
@@ -1068,7 +1062,6 @@ struct ActorMovementsS2CEvtBuilder {
   ::flatbuffers::Offset<ActorMovementsS2CEvt> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<ActorMovementsS2CEvt>(end);
-    fbb_.Required(o, ActorMovementsS2CEvt::VT_MOVEMENT);
     return o;
   }
 };
@@ -1153,7 +1146,7 @@ struct PlayerStateChangedS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers:
            VerifyField<uint64_t>(verifier, VT_PLAYER_ID, 8) &&
            VerifyField<uint32_t>(verifier, VT_STATE, 4) &&
            VerifyField<uint32_t>(verifier, VT_MOVE_FRAME, 4) &&
-           VerifyFieldRequired<SF::Flat::Vector4>(verifier, VT_POSITION, 4) &&
+           VerifyField<SF::Flat::Vector4>(verifier, VT_POSITION, 4) &&
            VerifyOffset(verifier, VT_STATE_VALUES) &&
            verifier.VerifyVector(state_values()) &&
            verifier.EndTable();
@@ -1189,7 +1182,6 @@ struct PlayerStateChangedS2CEvtBuilder {
   ::flatbuffers::Offset<PlayerStateChangedS2CEvt> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<PlayerStateChangedS2CEvt>(end);
-    fbb_.Required(o, PlayerStateChangedS2CEvt::VT_POSITION);
     return o;
   }
 };
@@ -1473,7 +1465,7 @@ struct SetCharacterPublicMessageCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuff
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_PLAY_INSTANCE_UID, 8) &&
            VerifyField<uint64_t>(verifier, VT_PLAYER_ID, 8) &&
-           VerifyOffsetRequired(verifier, VT_PUBLIC_MESSAGE) &&
+           VerifyOffset(verifier, VT_PUBLIC_MESSAGE) &&
            verifier.VerifyString(public_message()) &&
            verifier.EndTable();
   }
@@ -1499,7 +1491,6 @@ struct SetCharacterPublicMessageCmdBuilder {
   ::flatbuffers::Offset<SetCharacterPublicMessageCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<SetCharacterPublicMessageCmd>(end);
-    fbb_.Required(o, SetCharacterPublicMessageCmd::VT_PUBLIC_MESSAGE);
     return o;
   }
 };
@@ -4041,7 +4032,7 @@ struct ZoneChatCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            VerifyField<int8_t>(verifier, VT_MESSAGE_TYPE, 1) &&
            VerifyOffset(verifier, VT_CHAT_META_DATA) &&
            verifier.VerifyVector(chat_meta_data()) &&
-           VerifyOffsetRequired(verifier, VT_CHAT_MESSAGE) &&
+           VerifyOffset(verifier, VT_CHAT_MESSAGE) &&
            verifier.VerifyString(chat_message()) &&
            verifier.EndTable();
   }
@@ -4073,7 +4064,6 @@ struct ZoneChatCmdBuilder {
   ::flatbuffers::Offset<ZoneChatCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<ZoneChatCmd>(end);
-    fbb_.Required(o, ZoneChatCmd::VT_CHAT_MESSAGE);
     return o;
   }
 };
@@ -4230,7 +4220,7 @@ struct ZoneChatS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            VerifyField<int8_t>(verifier, VT_MESSAGE_TYPE, 1) &&
            VerifyOffset(verifier, VT_CHAT_META_DATA) &&
            verifier.VerifyVector(chat_meta_data()) &&
-           VerifyOffsetRequired(verifier, VT_CHAT_MESSAGE) &&
+           VerifyOffset(verifier, VT_CHAT_MESSAGE) &&
            verifier.VerifyString(chat_message()) &&
            verifier.EndTable();
   }
@@ -4262,7 +4252,6 @@ struct ZoneChatS2CEvtBuilder {
   ::flatbuffers::Offset<ZoneChatS2CEvt> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<ZoneChatS2CEvt>(end);
-    fbb_.Required(o, ZoneChatS2CEvt::VT_CHAT_MESSAGE);
     return o;
   }
 };
@@ -4828,7 +4817,7 @@ struct CreateStreamCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_TICKET, 8) &&
-           VerifyOffsetRequired(verifier, VT_STREAM_NAME) &&
+           VerifyOffset(verifier, VT_STREAM_NAME) &&
            verifier.VerifyString(stream_name()) &&
            verifier.EndTable();
   }
@@ -4851,7 +4840,6 @@ struct CreateStreamCmdBuilder {
   ::flatbuffers::Offset<CreateStreamCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<CreateStreamCmd>(end);
-    fbb_.Required(o, CreateStreamCmd::VT_STREAM_NAME);
     return o;
   }
 };
@@ -4913,7 +4901,7 @@ struct CreateStreamRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_RESULT, 4) &&
-           VerifyOffsetRequired(verifier, VT_STREAM_NAME) &&
+           VerifyOffset(verifier, VT_STREAM_NAME) &&
            verifier.VerifyString(stream_name()) &&
            verifier.EndTable();
   }
@@ -4936,7 +4924,6 @@ struct CreateStreamResBuilder {
   ::flatbuffers::Offset<CreateStreamRes> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<CreateStreamRes>(end);
-    fbb_.Required(o, CreateStreamRes::VT_STREAM_NAME);
     return o;
   }
 };
@@ -4998,7 +4985,7 @@ struct FindStreamCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_TICKET, 8) &&
-           VerifyOffsetRequired(verifier, VT_STREAM_NAME) &&
+           VerifyOffset(verifier, VT_STREAM_NAME) &&
            verifier.VerifyString(stream_name()) &&
            verifier.EndTable();
   }
@@ -5021,7 +5008,6 @@ struct FindStreamCmdBuilder {
   ::flatbuffers::Offset<FindStreamCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<FindStreamCmd>(end);
-    fbb_.Required(o, FindStreamCmd::VT_STREAM_NAME);
     return o;
   }
 };
@@ -5083,7 +5069,7 @@ struct FindStreamRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_RESULT, 4) &&
-           VerifyOffsetRequired(verifier, VT_STREAM_NAME) &&
+           VerifyOffset(verifier, VT_STREAM_NAME) &&
            verifier.VerifyString(stream_name()) &&
            verifier.EndTable();
   }
@@ -5106,7 +5092,6 @@ struct FindStreamResBuilder {
   ::flatbuffers::Offset<FindStreamRes> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<FindStreamRes>(end);
-    fbb_.Required(o, FindStreamRes::VT_STREAM_NAME);
     return o;
   }
 };
@@ -5168,7 +5153,7 @@ struct DeleteStreamCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_TICKET, 8) &&
-           VerifyOffsetRequired(verifier, VT_STREAM_NAME) &&
+           VerifyOffset(verifier, VT_STREAM_NAME) &&
            verifier.VerifyString(stream_name()) &&
            verifier.EndTable();
   }
@@ -5191,7 +5176,6 @@ struct DeleteStreamCmdBuilder {
   ::flatbuffers::Offset<DeleteStreamCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<DeleteStreamCmd>(end);
-    fbb_.Required(o, DeleteStreamCmd::VT_STREAM_NAME);
     return o;
   }
 };
@@ -5253,7 +5237,7 @@ struct DeleteStreamRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_RESULT, 4) &&
-           VerifyOffsetRequired(verifier, VT_STREAM_NAME) &&
+           VerifyOffset(verifier, VT_STREAM_NAME) &&
            verifier.VerifyString(stream_name()) &&
            verifier.EndTable();
   }
@@ -5276,7 +5260,6 @@ struct DeleteStreamResBuilder {
   ::flatbuffers::Offset<DeleteStreamRes> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<DeleteStreamRes>(end);
-    fbb_.Required(o, DeleteStreamRes::VT_STREAM_NAME);
     return o;
   }
 };
@@ -5398,7 +5381,7 @@ struct GetStreamListRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_RESULT, 4) &&
-           VerifyOffsetRequired(verifier, VT_STREAM_NAMES) &&
+           VerifyOffset(verifier, VT_STREAM_NAMES) &&
            verifier.VerifyVector(stream_names()) &&
            verifier.VerifyVectorOfStrings(stream_names()) &&
            verifier.EndTable();
@@ -5422,7 +5405,6 @@ struct GetStreamListResBuilder {
   ::flatbuffers::Offset<GetStreamListRes> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<GetStreamListRes>(end);
-    fbb_.Required(o, GetStreamListRes::VT_STREAM_NAMES);
     return o;
   }
 };

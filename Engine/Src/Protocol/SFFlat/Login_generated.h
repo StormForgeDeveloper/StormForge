@@ -57,11 +57,11 @@ struct LoginCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffsetRequired(verifier, VT_USER_ID) &&
+           VerifyOffset(verifier, VT_USER_ID) &&
            verifier.VerifyString(user_id()) &&
-           VerifyOffsetRequired(verifier, VT_PASSWORD) &&
+           VerifyOffset(verifier, VT_PASSWORD) &&
            verifier.VerifyString(password()) &&
-           VerifyOffsetRequired(verifier, VT_GAME_ID) &&
+           VerifyOffset(verifier, VT_GAME_ID) &&
            verifier.VerifyString(game_id()) &&
            verifier.EndTable();
   }
@@ -87,9 +87,6 @@ struct LoginCmdBuilder {
   ::flatbuffers::Offset<LoginCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<LoginCmd>(end);
-    fbb_.Required(o, LoginCmd::VT_USER_ID);
-    fbb_.Required(o, LoginCmd::VT_PASSWORD);
-    fbb_.Required(o, LoginCmd::VT_GAME_ID);
     return o;
   }
 };
@@ -178,13 +175,13 @@ struct LoginRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_RESULT, 4) &&
-           VerifyOffsetRequired(verifier, VT_NICK_NAME) &&
+           VerifyOffset(verifier, VT_NICK_NAME) &&
            verifier.VerifyString(nick_name()) &&
            VerifyField<uint64_t>(verifier, VT_ACCOUNT_ID, 8) &&
            VerifyField<uint64_t>(verifier, VT_AUTH_TICKET, 8) &&
-           VerifyOffsetRequired(verifier, VT_BANNED_REASON) &&
+           VerifyOffset(verifier, VT_BANNED_REASON) &&
            verifier.VerifyString(banned_reason()) &&
-           VerifyOffsetRequired(verifier, VT_GAME_SERVER_ADDRESS) &&
+           VerifyOffset(verifier, VT_GAME_SERVER_ADDRESS) &&
            verifier.VerifyString(game_server_address()) &&
            verifier.EndTable();
   }
@@ -219,9 +216,6 @@ struct LoginResBuilder {
   ::flatbuffers::Offset<LoginRes> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<LoginRes>(end);
-    fbb_.Required(o, LoginRes::VT_NICK_NAME);
-    fbb_.Required(o, LoginRes::VT_BANNED_REASON);
-    fbb_.Required(o, LoginRes::VT_GAME_SERVER_ADDRESS);
     return o;
   }
 };
@@ -321,11 +315,11 @@ struct LoginWithSteamCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table 
     return VerifyTableStart(verifier) &&
            VerifyField<uint64_t>(verifier, VT_STEAM_APP_ID, 8) &&
            VerifyField<uint64_t>(verifier, VT_STEAM_PLAYER_ID, 8) &&
-           VerifyOffsetRequired(verifier, VT_STEAM_PLAYER_NAME) &&
+           VerifyOffset(verifier, VT_STEAM_PLAYER_NAME) &&
            verifier.VerifyString(steam_player_name()) &&
-           VerifyOffsetRequired(verifier, VT_STEAM_PLAYER_TOKEN) &&
+           VerifyOffset(verifier, VT_STEAM_PLAYER_TOKEN) &&
            verifier.VerifyString(steam_player_token()) &&
-           VerifyOffsetRequired(verifier, VT_GAME_ID) &&
+           VerifyOffset(verifier, VT_GAME_ID) &&
            verifier.VerifyString(game_id()) &&
            verifier.EndTable();
   }
@@ -357,9 +351,6 @@ struct LoginWithSteamCmdBuilder {
   ::flatbuffers::Offset<LoginWithSteamCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<LoginWithSteamCmd>(end);
-    fbb_.Required(o, LoginWithSteamCmd::VT_STEAM_PLAYER_NAME);
-    fbb_.Required(o, LoginWithSteamCmd::VT_STEAM_PLAYER_TOKEN);
-    fbb_.Required(o, LoginWithSteamCmd::VT_GAME_ID);
     return o;
   }
 };
@@ -458,13 +449,13 @@ struct LoginWithSteamRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table 
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint32_t>(verifier, VT_RESULT, 4) &&
-           VerifyOffsetRequired(verifier, VT_NICK_NAME) &&
+           VerifyOffset(verifier, VT_NICK_NAME) &&
            verifier.VerifyString(nick_name()) &&
            VerifyField<uint64_t>(verifier, VT_ACCOUNT_ID, 8) &&
            VerifyField<uint64_t>(verifier, VT_AUTH_TICKET, 8) &&
-           VerifyOffsetRequired(verifier, VT_BANNED_REASON) &&
+           VerifyOffset(verifier, VT_BANNED_REASON) &&
            verifier.VerifyString(banned_reason()) &&
-           VerifyOffsetRequired(verifier, VT_GAME_SERVER_ADDRESS) &&
+           VerifyOffset(verifier, VT_GAME_SERVER_ADDRESS) &&
            verifier.VerifyString(game_server_address()) &&
            verifier.EndTable();
   }
@@ -499,9 +490,6 @@ struct LoginWithSteamResBuilder {
   ::flatbuffers::Offset<LoginWithSteamRes> Finish() {
     const auto end = fbb_.EndTable(start_);
     auto o = ::flatbuffers::Offset<LoginWithSteamRes>(end);
-    fbb_.Required(o, LoginWithSteamRes::VT_NICK_NAME);
-    fbb_.Required(o, LoginWithSteamRes::VT_BANNED_REASON);
-    fbb_.Required(o, LoginWithSteamRes::VT_GAME_SERVER_ADDRESS);
     return o;
   }
 };

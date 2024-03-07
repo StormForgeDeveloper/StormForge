@@ -15,11 +15,11 @@ table JoinGameServerCmd
 table JoinGameServerRes
 {
  	result:uint32;
-	nick_name:string(required);
+	nick_name:string;
 	game_uid:uint64;
 	party_uid:uint64;
 	party_leader_id:uint64;
-	matching_ticket:MatchingQueueTicket(required);
+	matching_ticket:MatchingQueueTicket;
 } // table JoinGameServerRes
 
 table GetAchievementStatsCmd
@@ -32,12 +32,12 @@ table GetAchievementStatsCmd
 table GetAchievementStatsRes
 {
  	result:uint32;
-	achievement_stats:[AchievementStat](required);
+	achievement_stats:[AchievementStat];
 } // table GetAchievementStatsRes
 
 table Dummy1Cmd
 {
- 	complition_state:string(required);
+ 	complition_state:string;
 } // table Dummy1Cmd
 
 table Dummy1Res
@@ -47,7 +47,7 @@ table Dummy1Res
 
 table RegisterGCMCmd
 {
- 	gcmregistered_id:string(required);
+ 	gcmregistered_id:string;
 } // table RegisterGCMCmd
 
 table RegisterGCMRes
@@ -57,7 +57,7 @@ table RegisterGCMRes
 
 table UnregisterGCMCmd
 {
- 	gcmregistered_id:string(required);
+ 	gcmregistered_id:string;
 } // table UnregisterGCMCmd
 
 table UnregisterGCMRes
@@ -78,18 +78,18 @@ table InviteFriendRes
 table AcceptFriendRequestCmd
 {
  	inviter_id:uint64;
-	inviter_platform_id:PlayerPlatformID(required);
+	inviter_platform_id:PlayerPlatformID;
 } // table AcceptFriendRequestCmd
 
 table AcceptFriendRequestRes
 {
  	result:uint32;
-	new_friend:PlayerInformation(required);
+	new_friend:PlayerInformation;
 } // table AcceptFriendRequestRes
 
 table FriendRequestAcceptedS2CEvt
 {
- 	accepter:PlayerInformation(required);
+ 	accepter:PlayerInformation;
 } // table FriendRequestAcceptedS2CEvt
 
 table RemoveFriendCmd
@@ -120,7 +120,7 @@ table GetFriendListRes
 	max_friend_slot:uint16;
 	total_number_of_friends:uint16;
 	start_index:uint16;
-	friend_list:[PlayerInformation](required);
+	friend_list:[PlayerInformation];
 } // table GetFriendListRes
 
 table GetNotificationListCmd
@@ -176,19 +176,19 @@ table NotifyS2CEvt
 
 table FindPlayerByPlatformIdCmd
 {
- 	platform_player_id:PlayerPlatformID(required);
+ 	platform_player_id:PlayerPlatformID;
 } // table FindPlayerByPlatformIdCmd
 
 table FindPlayerByPlatformIdRes
 {
  	result:uint32;
 	player_id:uint64;
-	player_platform_id:PlayerPlatformID(required);
+	player_platform_id:PlayerPlatformID;
 } // table FindPlayerByPlatformIdRes
 
 table FindPlayerByCharacterNameCmd
 {
- 	character_name:string(required);
+ 	character_name:string;
 } // table FindPlayerByCharacterNameCmd
 
 table FindPlayerByCharacterNameRes
@@ -200,25 +200,25 @@ table FindPlayerByCharacterNameRes
 table FindPlayerByPlatformUserNameCmd
 {
  	platform_type:uint8;
-	platform_user_name:string(required);
+	platform_user_name:string;
 } // table FindPlayerByPlatformUserNameCmd
 
 table FindPlayerByPlatformUserNameRes
 {
  	result:uint32;
 	player_id:uint64;
-	player_platform_id:PlayerPlatformID(required);
+	player_platform_id:PlayerPlatformID;
 } // table FindPlayerByPlatformUserNameRes
 
 table FindPlayerByEMailCmd
 {
- 	player_email:string(required);
+ 	player_email:string;
 } // table FindPlayerByEMailCmd
 
 table FindPlayerByEMailRes
 {
  	result:uint32;
-	player:PlayerInformation(required);
+	player:PlayerInformation;
 } // table FindPlayerByEMailRes
 
 table FindPlayerByPlayerIDCmd
@@ -229,7 +229,7 @@ table FindPlayerByPlayerIDCmd
 table FindPlayerByPlayerIDRes
 {
  	result:uint32;
-	player:PlayerInformation(required);
+	player:PlayerInformation;
 } // table FindPlayerByPlayerIDRes
 
 table RequestPlayerStatusUpdateCmd
@@ -259,7 +259,7 @@ table GetRankingListCmd
 table GetRankingListRes
 {
  	result:uint32;
-	ranking:[TotalRankingPlayerInformation](required);
+	ranking:[TotalRankingPlayerInformation];
 } // table GetRankingListRes
 
 table GetUserGamePlayerInfoCmd
@@ -292,7 +292,7 @@ table LevelUpS2CEvt
 
 table SetNickNameCmd
 {
- 	nick_name:string(required);
+ 	nick_name:string;
 	is_cost_free:uint8;
 } // table SetNickNameCmd
 
@@ -330,7 +330,7 @@ table JoinPartyRes
 table PartyPlayerJoinedS2CEvt
 {
  	party_uid:uint64;
-	joined_player:PlayerInformation(required);
+	joined_player:PlayerInformation;
 } // table PartyPlayerJoinedS2CEvt
 
 table PartyLeaderChangedS2CEvt
@@ -387,7 +387,7 @@ table PartyInviteRes
 table PartyInviteRequestedS2CEvt
 {
  	inviter_id:uint64;
-	inviter_name:string(required);
+	inviter_name:string;
 	party_to_join_uid:uint64;
 } // table PartyInviteRequestedS2CEvt
 
@@ -409,7 +409,7 @@ table PartyQuickChatMessageS2CEvt
 
 table PartyChatMessageCmd
 {
- 	chat_message:string(required);
+ 	chat_message:string;
 } // table PartyChatMessageCmd
 
 table PartyChatMessageRes
@@ -420,8 +420,8 @@ table PartyChatMessageRes
 table PartyChatMessageS2CEvt
 {
  	sender_id:uint64;
-	sender_name:string(required);
-	chat_message:string(required);
+	sender_name:string;
+	chat_message:string;
 } // table PartyChatMessageS2CEvt
 
 table JoinGameInstanceCmd
@@ -433,7 +433,7 @@ table JoinGameInstanceRes
 {
  	result:uint32;
 	ins_uid:uint64;
-	server_public_address:string(required);
+	server_public_address:string;
 } // table JoinGameInstanceRes
 
 table LeaveGameInstanceCmd
@@ -448,7 +448,7 @@ table LeaveGameInstanceRes
 
 table SearchGameInstanceCmd
 {
- 	search_keyword:string(required);
+ 	search_keyword:string;
 	zone_table_id:uint32;
 } // table SearchGameInstanceCmd
 
@@ -526,7 +526,7 @@ table GameMatchingCanceledS2CEvt
 
 table GetUGCTemplatesCmd
 {
- 	tags:[string](required);
+ 	tags:[string];
 } // table GetUGCTemplatesCmd
 
 table GetUGCTemplatesRes
@@ -549,7 +549,7 @@ table SaveUGCRes
 
 table SearchUGCCmd
 {
- 	tags:[string](required);
+ 	tags:[string];
 } // table SearchUGCCmd
 
 table SearchUGCRes
@@ -600,15 +600,15 @@ table BuyShopItemPrepareRes
 {
  	result:uint32;
 	shop_item_id:uint32;
-	purchase_id:string(required);
+	purchase_id:string;
 } // table BuyShopItemPrepareRes
 
 table BuyShopItemCmd
 {
  	shop_item_id:uint32;
-	platform:string(required);
-	package_name:string(required);
-	purchase_transaction_id:string(required);
+	platform:string;
+	package_name:string;
+	purchase_transaction_id:string;
 	purchase_token:[uint8];
 } // table BuyShopItemCmd
 
@@ -620,8 +620,8 @@ table BuyShopItemRes
 
 table CreateOrJoinChatChannelCmd
 {
- 	channel_name:string(required);
-	passcode:string(required);
+ 	channel_name:string;
+	passcode:string;
 } // table CreateOrJoinChatChannelCmd
 
 table CreateOrJoinChatChannelRes
@@ -635,7 +635,7 @@ table JoinChatChannelCmd
 {
  	chat_uid:uint64;
 	inviter_id:uint64;
-	passcode:string(required);
+	passcode:string;
 } // table JoinChatChannelCmd
 
 table JoinChatChannelRes
@@ -648,7 +648,7 @@ table JoinChatChannelRes
 table ChatChannelPlayerJoinedS2CEvt
 {
  	chat_uid:uint64;
-	joined_player:PlayerInformation(required);
+	joined_player:PlayerInformation;
 } // table ChatChannelPlayerJoinedS2CEvt
 
 table ChatChannelLeaderChangedS2CEvt
@@ -696,7 +696,7 @@ table ChatChannelChatMessageCmd
 {
  	chat_uid:uint64;
 	chat_meta_data:[ubyte];
-	chat_message:string(required);
+	chat_message:string;
 } // table ChatChannelChatMessageCmd
 
 table ChatChannelChatMessageRes
@@ -708,15 +708,15 @@ table ChatChannelChatMessageS2CEvt
 {
  	sender_id:uint64;
 	chat_meta_data:[ubyte];
-	chat_message:string(required);
+	chat_message:string;
 } // table ChatChannelChatMessageS2CEvt
 
 table WhisperMessageCmd
 {
  	receiver_id:uint64;
-	receiver_name:string(required);
+	receiver_name:string;
 	chat_meta_data:[ubyte];
-	chat_message:string(required);
+	chat_message:string;
 } // table WhisperMessageCmd
 
 table WhisperMessageRes
@@ -728,12 +728,12 @@ table WhisperMessageS2CEvt
 {
  	sender_id:uint64;
 	chat_meta_data:[ubyte];
-	chat_message:string(required);
+	chat_message:string;
 } // table WhisperMessageS2CEvt
 
 table CreateCharacterCmd
 {
- 	character_name:string(required);
+ 	character_name:string;
 	public_data:[ubyte];
 	private_data:[ubyte];
 } // table CreateCharacterCmd
@@ -800,7 +800,7 @@ table RequestServerNoticeUpdateRes
 table ServerNoticeS2CEvt
 {
  	notice_category:int8;
-	server_notice_message:string(required);
+	server_notice_message:string;
 } // table ServerNoticeS2CEvt
 
 table CallFunctionCmd
