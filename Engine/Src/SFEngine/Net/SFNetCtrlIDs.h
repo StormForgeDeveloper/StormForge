@@ -13,7 +13,7 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 
 
 
@@ -47,20 +47,20 @@ namespace Net {
 		NetCtrlCode_Max,
 	};
 
-    static constexpr MessageID PACKET_NETCTRL_NONE = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_NONE, NetCtrlCode_None);
-    static constexpr MessageID PACKET_NETCTRL_ACK = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_NONE, NetCtrlCode_Ack);
-    static constexpr MessageID PACKET_NETCTRL_NACK = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_NONE, NetCtrlCode_Nack);
-    static constexpr MessageID PACKET_NETCTRL_HEARTBEAT = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_NONE, NetCtrlCode_Heartbeat);
-    static constexpr MessageID PACKET_NETCTRL_DISCONNECT = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_NONE, NetCtrlCode_Disconnect);
-    static constexpr MessageID PACKET_NETCTRL_CONNECT = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_NONE, NetCtrlCode_Connect);
-    static constexpr MessageID PACKET_NETCTRL_CONNECTPEER = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_NONE, NetCtrlCode_ConnectPeer);
-    static constexpr MessageID PACKET_NETCTRL_SYNCRELIABLE = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_NONE, NetCtrlCode_SyncReliable);
-    static constexpr MessageID PACKET_NETCTRL_TIMESYNC = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_NONE, NetCtrlCode_TimeSync);
-    static constexpr MessageID PACKET_NETCTRL_TIMESYNC_RTN = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_NONE, NetCtrlCode_TimeSyncRtn);
-	static constexpr MessageID PACKET_NETCTRL_SEQUENCE_FRAME   = MessageID(MSGTYPE_EVENT,      MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_NONE, NetCtrlCode_SequenceFrame);
+    static constexpr MessageID PACKET_NETCTRL_NONE = MessageID(MessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_None);
+    static constexpr MessageID PACKET_NETCTRL_ACK = MessageID(MessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_Ack);
+    static constexpr MessageID PACKET_NETCTRL_NACK = MessageID(MessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_Nack);
+    static constexpr MessageID PACKET_NETCTRL_HEARTBEAT = MessageID(MessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_Heartbeat);
+    static constexpr MessageID PACKET_NETCTRL_DISCONNECT = MessageID(MessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_Disconnect);
+    static constexpr MessageID PACKET_NETCTRL_CONNECT = MessageID(MessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_Connect);
+    static constexpr MessageID PACKET_NETCTRL_CONNECTPEER = MessageID(MessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_ConnectPeer);
+    static constexpr MessageID PACKET_NETCTRL_SYNCRELIABLE = MessageID(MessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_SyncReliable);
+    static constexpr MessageID PACKET_NETCTRL_TIMESYNC = MessageID(MessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_TimeSync);
+    static constexpr MessageID PACKET_NETCTRL_TIMESYNC_RTN = MessageID(MessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_TimeSyncRtn);
+	static constexpr MessageID PACKET_NETCTRL_SEQUENCE_FRAME   = MessageID(MessageType::Event,      MSGTYPE_RELIABLE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_SequenceFrame);
 
-    static constexpr MessageID PACKET_NETEXT_QOS = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_NONE, NetExt_QOS);
-    static constexpr MessageID PACKET_NETEXT_STUN = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_NONE, NetExt_Stun);
+    static constexpr MessageID PACKET_NETEXT_QOS = MessageID(MessageType::Event, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetExt_QOS);
+    static constexpr MessageID PACKET_NETEXT_STUN = MessageID(MessageType::Event, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetExt_Stun);
 
 } // namespace Net
 } // namespace SF

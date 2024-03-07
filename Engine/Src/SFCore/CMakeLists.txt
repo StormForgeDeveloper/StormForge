@@ -354,6 +354,10 @@ set(SUBOnline_FILES
 	Online/HTTP/SFHTTPClientCurl.cpp
 	Online/HTTP/SFHTTPClientSystemCurl.h
 	Online/HTTP/SFHTTPClientSystemCurl.cpp
+	MessageBus/SFMessage2.h
+	MessageBus/SFMessage2.cpp
+	MessageBus/SFMessageDelegateMap.h
+	MessageBus/SFMessageDelegateMap.cpp
   )
 
 source_group(Online FILES

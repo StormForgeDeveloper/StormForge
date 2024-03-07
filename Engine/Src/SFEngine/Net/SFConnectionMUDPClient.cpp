@@ -18,7 +18,7 @@
 #include "Util/SFLog.h"
 #include "Util/SFToString.h"
 #include "Util/SFHasher32.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 
 #include "Net/SFConnectionMUDP.h"
 #include "Net/SFNetDef.h"

@@ -10,13 +10,14 @@
 
 #pragma once
 
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 #include "Net/SFMessage.h"
 #include "Types/SFEngineTypedefs.h"
 #include "Variable/SFVariableTable.h"
 #include "Container/SFArray.h"
 #include "Actor/Movement/SFActorMovement.h"
 #include "Variable/SFVariableMapBuilder.h"
+#include "Protocol/GenericMessageID.h"
 
 
 
@@ -30,7 +31,7 @@ namespace SF
 			class GenericFailureCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GenericFailureCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -70,7 +71,7 @@ namespace SF
 			class GenericFailureRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GenericFailureRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{

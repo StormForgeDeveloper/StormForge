@@ -857,7 +857,7 @@ namespace SF
 
 	}; // Result NetSvrPolicyGame::InviteFriendRes( const TransactionID &InTransactionID, const Result &InResult )
 	// Cmd: Accept friend request
-	Result NetSvrPolicyGame::AcceptFriendRequestRes( const TransactionID &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend )
+	Result NetSvrPolicyGame::AcceptFriendRequestRes( const TransactionID &InTransactionID, const Result &InResult, const PlayerInformation &InNewFriend )
 	{
  		Result hr;
 
@@ -868,9 +868,9 @@ namespace SF
 		protocolCheck(SF::Message::Game::AcceptFriendRequestRes::Create(messageBuffer, InTransactionID, InResult, InNewFriend));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyGame::AcceptFriendRequestRes( const TransactionID &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend )
+	}; // Result NetSvrPolicyGame::AcceptFriendRequestRes( const TransactionID &InTransactionID, const Result &InResult, const PlayerInformation &InNewFriend )
 	// S2C: Notification for friend request is accepted
-	Result NetSvrPolicyGame::FriendRequestAcceptedS2CEvt( const FriendInformation &InAccepter )
+	Result NetSvrPolicyGame::FriendRequestAcceptedS2CEvt( const PlayerInformation &InAccepter )
 	{
  		Result hr;
 
@@ -881,7 +881,7 @@ namespace SF
 		protocolCheck(SF::Message::Game::FriendRequestAcceptedS2CEvt::Create(messageBuffer, InAccepter));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyGame::FriendRequestAcceptedS2CEvt( const FriendInformation &InAccepter )
+	}; // Result NetSvrPolicyGame::FriendRequestAcceptedS2CEvt( const PlayerInformation &InAccepter )
 	// Cmd: Remove friden form the friend list
 	Result NetSvrPolicyGame::RemoveFriendRes( const TransactionID &InTransactionID, const Result &InResult, const AccountID &InFriendID )
 	{
@@ -909,7 +909,7 @@ namespace SF
 
 	}; // Result NetSvrPolicyGame::FriendRemovedS2CEvt( const AccountID &InFriendID )
 	// Cmd: Get friend list
-	Result NetSvrPolicyGame::GetFriendListRes( const TransactionID &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList )
+	Result NetSvrPolicyGame::GetFriendListRes( const TransactionID &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<PlayerInformation>& InFriendList )
 	{
  		Result hr;
 
@@ -920,7 +920,7 @@ namespace SF
 		protocolCheck(SF::Message::Game::GetFriendListRes::Create(messageBuffer, InTransactionID, InResult, InMaxFriendSlot, InTotalNumberOfFriends, InStartIndex, InFriendList));
 		return m_Endpoint->SendMsg(messageBuffer);
 
-	}; // Result NetSvrPolicyGame::GetFriendListRes( const TransactionID &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList )
+	}; // Result NetSvrPolicyGame::GetFriendListRes( const TransactionID &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<PlayerInformation>& InFriendList )
 	// Cmd: Query notification list
 	Result NetSvrPolicyGame::GetNotificationListRes( const TransactionID &InTransactionID, const Result &InResult )
 	{

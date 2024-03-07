@@ -11,7 +11,7 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 #include "Net/SFNetDef.h"
 #include "Protocol/GameMsgClass.h"
 

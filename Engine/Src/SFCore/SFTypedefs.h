@@ -653,6 +653,13 @@ namespace SF {
 	template<class ToDurationType, class InputType>
 	ToDurationType DurationCast(InputType Value) { return std::chrono::duration_cast<ToDurationType>(Value); }
 
+    struct TimeSpan
+    {
+        long milliseconds{};
+
+        DurationMS ToDuration() const { return DurationMS(milliseconds); }
+    };
+
 
 	extern const TimeStampMS TimeStampMS_Zero;
 	extern const DurationMS  DurationMS_Zero;

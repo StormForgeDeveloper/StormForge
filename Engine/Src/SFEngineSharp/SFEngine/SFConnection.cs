@@ -84,7 +84,7 @@ namespace SF
         public SFIMessageRouter MessageRouter { get { return m_MessageRouter; } }
 
 
-        public void HandleSentMessage(int result, TransactionID transId, int messageID, Action<SFMessage>? callback = null)
+        public void HandleSentMessage(Result result, TransactionID transId, MessageID messageID, Action<SFMessage>? callback = null)
         {
             if (m_MessageRouter != null)
             {
@@ -257,7 +257,7 @@ namespace SF
 #endif
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void SET_MESSAGE_FUNCTION(UInt32 messageID);
+        public delegate void SET_MESSAGE_FUNCTION(MessageID messageID);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void SET_FUNCTION([MarshalAs(UnmanagedType.LPStr)] string stringHash, [MarshalAs(UnmanagedType.LPStr)] string typeNameHash, IntPtr Value);

@@ -14,11 +14,58 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
+
 #nullable enable
 
 namespace SF {
 	public struct Result
     {
+        #region Constants
+
+        static readonly int CodeBits = 16;
+        static readonly int CodeMask = (1 << CodeBits) - 1;
+        static readonly int CodeShift = 0;
+
+        static readonly int FacilityBits = 12;
+        static readonly int FacilityMask = (1 << FacilityBits) - 1;
+        static readonly int FacilityShift = (CodeBits + CodeShift);
+
+        static readonly int ReservedBits = 1;
+        static readonly int ReservedMask = (1 << ReservedBits) - 1;
+        static readonly int ReserveShift = (FacilityBits + FacilityShift);
+
+        static readonly int CustomBits = 1;
+        static readonly int CustomMask = (1 << CustomBits) - 1;
+        static readonly int CustomShift = (ReservedBits + ReserveShift);
+
+        static readonly int SeverityBits = 2;
+        static readonly int SeverityMask = (1 << SeverityBits) - 1;
+        static readonly int SeverityShift = (CustomBits + CustomShift);
+
+        #endregion
+
+        public enum SeverityType
+        {
+            Success,
+            Informational,
+            Warning,
+            Error
+        };
+
+        public static string ServerityToDefineString(SeverityType serverity)
+        {
+            switch (serverity)
+            {
+                case SeverityType.Success: return "SUCCESS_";
+                case SeverityType.Informational: return "I_";
+                case SeverityType.Warning: return "W_";
+                case SeverityType.Error:
+                default:
+                    return "";
+            }
+        }
+
+
         #region Static result code table
 
         static Dictionary<int, string> stm_ResultCodeTable;
@@ -58,6 +105,30 @@ namespace SF {
 
         public bool IsSucceeded { get { return Code >= 0; } }
 
+
+        public SeverityType Severity
+        {
+            get { return (SeverityType)((Code >> SeverityShift) & SeverityMask); }
+            set { Code = (Code & (~(SeverityMask << SeverityShift))) | (((int)value & SeverityMask) << SeverityShift); }
+        }
+
+        public bool Custom
+        {
+            get { return ((Code >> CustomShift) & CustomMask) != 0; }
+            set { Code = (Code & (~(CustomMask << CustomShift))) | (((value ? 1 : 0) & CustomMask) << CustomShift); }
+        }
+
+        public int Facility
+        {
+            get { return (Code >> FacilityShift) & FacilityMask; }
+            set { Code = (Code & (~(FacilityMask << FacilityShift))) | ((value & FacilityMask) << FacilityShift); }
+        }
+
+        public int CodeIndex
+        {
+            get { return (Code >> CodeShift) & CodeMask; }
+            set { Code = (Code & (~(CodeMask << CodeShift))) | ((value & CodeMask) << CodeShift); }
+        }
         public override string ToString()
         {
             string? strValue;

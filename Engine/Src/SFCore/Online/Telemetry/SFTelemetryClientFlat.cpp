@@ -14,8 +14,9 @@
 #include "Online/Telemetry/SFTelemetryClientFlat.h"
 #include "Util/SFStringFormat.h"
 #include "Util/SFLog.h"
-#include "SFFlat/SFFlatPacketHeader.h"
 #include "flatbuffers/base.h"
+#include "MessageBus/SFMessage2.h"
+#include "Protocol/TelemetryMessageID.h"
 
 namespace SF
 {
@@ -50,9 +51,9 @@ namespace SF
     {
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
-        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            Flat::Telemetry::EventAttributeValue::EventAttributeBool,
-            SF::Flat::Telemetry::CreateEventAttributeBool(m_FlatBufferBuilder, value).Union());
+        auto attributeOffset = SF::Flat::CreateNamedVariable(m_FlatBufferBuilder, nameOffset,
+            Flat::NamedVariableValue::NamedVariableBool,
+            SF::Flat::CreateNamedVariableBool(m_FlatBufferBuilder, value).Union());
 
         m_Attributes.push_back(attributeOffset);
 
@@ -63,9 +64,9 @@ namespace SF
     {
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
-        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            Flat::Telemetry::EventAttributeValue::EventAttributeInt,
-            SF::Flat::Telemetry::CreateEventAttributeInt(m_FlatBufferBuilder, value).Union());
+        auto attributeOffset = SF::Flat::CreateNamedVariable(m_FlatBufferBuilder, nameOffset,
+            Flat::NamedVariableValue::NamedVariableInt,
+            SF::Flat::CreateNamedVariableInt(m_FlatBufferBuilder, value).Union());
 
         m_Attributes.push_back(attributeOffset);
         return *this;
@@ -75,9 +76,9 @@ namespace SF
     {
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
-        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            Flat::Telemetry::EventAttributeValue::EventAttributeUInt,
-            SF::Flat::Telemetry::CreateEventAttributeUInt(m_FlatBufferBuilder, value).Union());
+        auto attributeOffset = SF::Flat::CreateNamedVariable(m_FlatBufferBuilder, nameOffset,
+            Flat::NamedVariableValue::NamedVariableUInt,
+            SF::Flat::CreateNamedVariableUInt(m_FlatBufferBuilder, value).Union());
 
         m_Attributes.push_back(attributeOffset);
 
@@ -88,9 +89,9 @@ namespace SF
     {
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
-        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            Flat::Telemetry::EventAttributeValue::EventAttributeInt64,
-            SF::Flat::Telemetry::CreateEventAttributeInt64(m_FlatBufferBuilder, value).Union());
+        auto attributeOffset = SF::Flat::CreateNamedVariable(m_FlatBufferBuilder, nameOffset,
+            Flat::NamedVariableValue::NamedVariableInt64,
+            SF::Flat::CreateNamedVariableInt64(m_FlatBufferBuilder, value).Union());
 
         m_Attributes.push_back(attributeOffset);
 
@@ -101,9 +102,9 @@ namespace SF
     {
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
-        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            Flat::Telemetry::EventAttributeValue::EventAttributeUInt64,
-            SF::Flat::Telemetry::CreateEventAttributeUInt64(m_FlatBufferBuilder, value).Union());
+        auto attributeOffset = SF::Flat::CreateNamedVariable(m_FlatBufferBuilder, nameOffset,
+            Flat::NamedVariableValue::NamedVariableUInt64,
+            SF::Flat::CreateNamedVariableUInt64(m_FlatBufferBuilder, value).Union());
 
         m_Attributes.push_back(attributeOffset);
 
@@ -114,9 +115,9 @@ namespace SF
     {
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
-        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            Flat::Telemetry::EventAttributeValue::EventAttributeFloat,
-            SF::Flat::Telemetry::CreateEventAttributeFloat(m_FlatBufferBuilder, value).Union());
+        auto attributeOffset = SF::Flat::CreateNamedVariable(m_FlatBufferBuilder, nameOffset,
+            Flat::NamedVariableValue::NamedVariableFloat,
+            SF::Flat::CreateNamedVariableFloat(m_FlatBufferBuilder, value).Union());
 
         m_Attributes.push_back(attributeOffset);
 
@@ -127,9 +128,9 @@ namespace SF
     {
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
-        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            SF::Flat::Telemetry::EventAttributeValue::EventAttributeString,
-            SF::Flat::Telemetry::CreateEventAttributeString(m_FlatBufferBuilder, m_FlatBufferBuilder.CreateString(value)).Union()
+        auto attributeOffset = SF::Flat::CreateNamedVariable(m_FlatBufferBuilder, nameOffset,
+            SF::Flat::NamedVariableValue::NamedVariableString,
+            SF::Flat::CreateNamedVariableString(m_FlatBufferBuilder, m_FlatBufferBuilder.CreateString(value)).Union()
         );
 
         m_Attributes.push_back(attributeOffset);
@@ -142,9 +143,9 @@ namespace SF
     {
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
-        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            SF::Flat::Telemetry::EventAttributeValue::EventAttributeInt,
-            SF::Flat::Telemetry::CreateEventAttributeInt(m_FlatBufferBuilder, value).Union()
+        auto attributeOffset = SF::Flat::CreateNamedVariable(m_FlatBufferBuilder, nameOffset,
+            SF::Flat::NamedVariableValue::NamedVariableInt,
+            SF::Flat::CreateNamedVariableInt(m_FlatBufferBuilder, value).Union()
         );
 
         m_Attributes.push_back(attributeOffset);
@@ -156,9 +157,9 @@ namespace SF
     {
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
-        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            SF::Flat::Telemetry::EventAttributeValue::EventAttributeInt64,
-            SF::Flat::Telemetry::CreateEventAttributeInt64(m_FlatBufferBuilder, value).Union()
+        auto attributeOffset = SF::Flat::CreateNamedVariable(m_FlatBufferBuilder, nameOffset,
+            SF::Flat::NamedVariableValue::NamedVariableInt64,
+            SF::Flat::CreateNamedVariableInt64(m_FlatBufferBuilder, value).Union()
         );
 
         m_Attributes.push_back(attributeOffset);
@@ -170,9 +171,9 @@ namespace SF
     {
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
-        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            SF::Flat::Telemetry::EventAttributeValue::EventAttributeFloat,
-            SF::Flat::Telemetry::CreateEventAttributeFloat(m_FlatBufferBuilder, value).Union()
+        auto attributeOffset = SF::Flat::CreateNamedVariable(m_FlatBufferBuilder, nameOffset,
+            SF::Flat::NamedVariableValue::NamedVariableFloat,
+            SF::Flat::CreateNamedVariableFloat(m_FlatBufferBuilder, value).Union()
         );
 
         m_Attributes.push_back(attributeOffset);
@@ -184,9 +185,9 @@ namespace SF
     {
         auto nameOffset = m_FlatBufferBuilder.CreateString(name);
 
-        auto attributeOffset = SF::Flat::Telemetry::CreateEventAttribute(m_FlatBufferBuilder, nameOffset,
-            SF::Flat::Telemetry::EventAttributeValue::EventAttributeString,
-            SF::Flat::Telemetry::CreateEventAttributeString(m_FlatBufferBuilder, m_FlatBufferBuilder.CreateString(value)).Union()
+        auto attributeOffset = SF::Flat::CreateNamedVariable(m_FlatBufferBuilder, nameOffset,
+            SF::Flat::NamedVariableValue::NamedVariableString,
+            SF::Flat::CreateNamedVariableString(m_FlatBufferBuilder, m_FlatBufferBuilder.CreateString(value)).Union()
         );
 
         m_Attributes.push_back(attributeOffset);
@@ -369,9 +370,9 @@ namespace SF
         ArrayView<const uint8_t> sessionIdView(sizeof(Guid), (uint8_t*)sessionId.data);
         ::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> sessionIdOffset = packetBuilder.CreateVector(sessionIdView.data(), sessionIdView.size());
 
-        ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::Telemetry::EventAttribute>>> attributesOffset = packetBuilder.CreateVector(pEvent->GetAttributeOffesets());
+        ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::NamedVariable>>> attributesOffset = packetBuilder.CreateVector(pEvent->GetAttributeOffesets());
 
-        ::flatbuffers::Offset<FlatPostEventRequest> payloadOffset = SF::Flat::Telemetry::CreatePostEventRequest(packetBuilder,
+        ::flatbuffers::Offset<FlatPostEventRequest> payloadOffset = SF::Flat::Telemetry::CreatePostEventCmd(packetBuilder,
             packetBuilder.CreateString(pEvent->GetEventName().data()), Util::Time.GetRawUTCMs().time_since_epoch().count(),
             packetBuilder.CreateString(GetApplicationId().data()),
             packetBuilder.CreateString(GetMachineId().data()),
@@ -379,18 +380,12 @@ namespace SF
             sessionIdOffset, attributesOffset
             );
 
-        
-        ::flatbuffers::Offset<FlatTelemetryPacket> packetOffset = SF::Flat::Telemetry::CreateTelemetryPacket(packetBuilder, 
-            SF::Flat::Telemetry::PayloadData::PostEventRequest,
-            payloadOffset.Union());
+        packetBuilder.Finish(payloadOffset);
 
-
-        packetBuilder.Finish(packetOffset);
-
-        SFFlatPacketHeader packetHeader;
-        packetHeader.RequestId = (uint16_t)eventId;
-        packetHeader.Signature = SFFlatPacketSignature::Telemetry;
-        packetHeader.WriteHeader(packetBuilder);
+        MessageHeader2 packetHeader;
+        packetHeader.TransactionId = TransactionID(eventId);
+        packetHeader.MessageId = Message::Telemetry::MID_PostEventCmd;
+        packetHeader.UpdateNWriteTo(packetBuilder);
 
         ArrayView<uint8_t> packetBufferView(packetBuilder.GetSize(), (uint8_t*)packetBuilder.GetBufferPointer());
 
@@ -407,29 +402,29 @@ namespace SF
         if (recvData.size() == 0)
             return hr;
 
-        SFFlatPacketHeader header;
-        header.ReadHeader(recvData);
+        const MessageHeader2* messageHeader = reinterpret_cast<const MessageHeader2*>(recvData.data());
 
-        uint expectedSize = header.Size;
+        uint expectedSize = messageHeader->MessageSize;
         if (recvData.size() != expectedSize)
         {
             SFLog(System, Warning, "Telemetry received unexpected data size: expected:{0}, received:{1}", expectedSize, recvData.size());
             return ResultCode::INVALID_FORMAT;
         }
 
-        if (header.Signature != SFFlatPacketSignature::Telemetry)
+        if (messageHeader->MessageId.GetMsgIDOnly() != SF::Message::Telemetry::MID_PostEventRes)
         {
-            SFLog(System, Warning, "Telemetry received unexpected signature: expected:{0}, received:{1}", SFFlatPacketSignature::Telemetry, header.Signature);
+            SFLog(System, Warning, "Telemetry received unexpected message: received:{0}", messageHeader->MessageId);
             return ResultCode::INVALID_FORMAT;
         }
 
-        const Flat::Telemetry::TelemetryPacket* requestPacket = Flat::Telemetry::GetTelemetryPacket((const void*)(recvData.data() + SFFlatPacketHeader::HeaderSize));
-        if (requestPacket == nullptr)
+        const Flat::Telemetry::PostEventRes* response = Flat::Telemetry::GetPostEventRes(messageHeader->GetPayloadPtr());
+        if (response == nullptr)
         {
             return ResultCode::INVALID_FORMAT;
         }
 
-        uint16_t eventId = header.RequestId;
+        // We just use 32bits
+        uint32_t eventId = static_cast<uint32_t>(messageHeader->TransactionId.ID);
 
         m_EventQueue.FreePostedEvents(eventId);
 

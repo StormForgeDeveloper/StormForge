@@ -1,0 +1,405 @@
+﻿include "LocalTypes.fbs";
+namespace SF.Flat.PlayInstance;
+
+table JoinPlayInstanceCmd
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	player_identifier:string(required);
+} // table JoinPlayInstanceCmd
+
+table JoinPlayInstanceRes
+{
+ 	result:uint32;
+	play_instance_uid:uint64;
+	player_id:uint64;
+	character_id:uint32;
+	character_private_data:[ubyte];
+	movement:ActorMovement(required);
+} // table JoinPlayInstanceRes
+
+table PlayerKickedS2CEvt
+{
+ 	play_instance_uid:uint64;
+	kicked_player_id:uint64;
+} // table PlayerKickedS2CEvt
+
+table PlayPacketC2SEvt
+{
+ 	play_instance_uid:uint64;
+	sender_endpoint_id:uint32;
+	target_endpoint_mask:uint32;
+	payload:[uint8];
+} // table PlayPacketC2SEvt
+
+table NewActorInViewS2CEvt
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	player_platform_id:PlayerPlatformID(required);
+	public_data:[ubyte];
+	equip_data:[ubyte];
+	movement:ActorMovement(required);
+	state:uint32;
+	state_values:[ubyte];
+} // table NewActorInViewS2CEvt
+
+table RemoveActorFromViewS2CEvt
+{
+ 	play_instance_uid:uint64;
+	actor_id:uint32;
+} // table RemoveActorFromViewS2CEvt
+
+table PlayerMovementC2SEvt
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	movement:ActorMovement(required);
+} // table PlayerMovementC2SEvt
+
+table ActorMovementS2CEvt
+{
+ 	play_instance_uid:uint64;
+	movement:ActorMovement(required);
+} // table ActorMovementS2CEvt
+
+table ActorMovementsS2CEvt
+{
+ 	play_instance_uid:uint64;
+	movement:[ActorMovement](required);
+} // table ActorMovementsS2CEvt
+
+table PlayerStateChangedS2CEvt
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	state:uint32;
+	move_frame:uint32;
+	position:Vector4(required);
+	state_values:[ubyte];
+} // table PlayerStateChangedS2CEvt
+
+table ClientSyncReliableC2SEvt
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	sync_data:[ubyte];
+} // table ClientSyncReliableC2SEvt
+
+table ClientSyncC2SEvt
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	sync_data:[ubyte];
+} // table ClientSyncC2SEvt
+
+table SetCharacterPublicMessageCmd
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	public_message:string(required);
+} // table SetCharacterPublicMessageCmd
+
+table SetCharacterPublicMessageRes
+{
+ 	result:uint32;
+} // table SetCharacterPublicMessageRes
+
+table CharacterPrivateDataChangedS2CEvt
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	character_id:uint32;
+	private_data:[ubyte];
+} // table CharacterPrivateDataChangedS2CEvt
+
+table CharacterPublicDataChangedS2CEvt
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	public_data:[ubyte];
+} // table CharacterPublicDataChangedS2CEvt
+
+table RequestWhiteboardSharingCmd
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	target_player_id:uint64;
+	whiteboard_info:[ubyte];
+} // table RequestWhiteboardSharingCmd
+
+table RequestWhiteboardSharingRes
+{
+ 	result:uint32;
+} // table RequestWhiteboardSharingRes
+
+table AcceptWhiteboardSharingCmd
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	requested_player_id:uint64;
+	answer:uint8;
+} // table AcceptWhiteboardSharingCmd
+
+table AcceptWhiteboardSharingRes
+{
+ 	result:uint32;
+} // table AcceptWhiteboardSharingRes
+
+table CloseWhiteboardSharingCmd
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+} // table CloseWhiteboardSharingCmd
+
+table CloseWhiteboardSharingRes
+{
+ 	result:uint32;
+} // table CloseWhiteboardSharingRes
+
+table AddWhiteboardSharingLogEntryCmd
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	log_entry:[ubyte];
+} // table AddWhiteboardSharingLogEntryCmd
+
+table AddWhiteboardSharingLogEntryRes
+{
+ 	result:uint32;
+	log_entry_id:uint32;
+} // table AddWhiteboardSharingLogEntryRes
+
+table UpdateWhiteboardSharingLogEntryCmd
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	log_entry:[ubyte];
+} // table UpdateWhiteboardSharingLogEntryCmd
+
+table UpdateWhiteboardSharingLogEntryRes
+{
+ 	result:uint32;
+} // table UpdateWhiteboardSharingLogEntryRes
+
+table RemoveWhiteboardSharingLogEntryCmd
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	log_entry_id:uint32;
+} // table RemoveWhiteboardSharingLogEntryCmd
+
+table RemoveWhiteboardSharingLogEntryRes
+{
+ 	result:uint32;
+} // table RemoveWhiteboardSharingLogEntryRes
+
+table WhiteboardSharingRequestedS2CEvt
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	requested_player_id:uint64;
+} // table WhiteboardSharingRequestedS2CEvt
+
+table WhiteboardSharingRejectedS2CEvt
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	rejected_player_id:uint64;
+} // table WhiteboardSharingRejectedS2CEvt
+
+table WhiteboardSharingStartedS2CEvt
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	other_player_id:uint64;
+	whiteboard_info:[ubyte];
+} // table WhiteboardSharingStartedS2CEvt
+
+table WhiteboardSharingHasClosedS2CEvt
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	closed_player_id:uint64;
+} // table WhiteboardSharingHasClosedS2CEvt
+
+table WhiteboardSharingNewLogEntryAddedS2CEvt
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	log_entry:[ubyte];
+} // table WhiteboardSharingNewLogEntryAddedS2CEvt
+
+table WhiteboardSharingNewLogEntryRemovedS2CEvt
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	log_entry_id:uint32;
+} // table WhiteboardSharingNewLogEntryRemovedS2CEvt
+
+table WhiteboardSharingNewLogEntryUpdatedS2CEvt
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	log_entry:[ubyte];
+} // table WhiteboardSharingNewLogEntryUpdatedS2CEvt
+
+table OccupyMapObjectCmd
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	map_object_id:uint32;
+	usage_id:uint32;
+} // table OccupyMapObjectCmd
+
+table OccupyMapObjectRes
+{
+ 	result:uint32;
+	play_instance_uid:uint64;
+	player_id:uint64;
+	map_object_id:uint32;
+} // table OccupyMapObjectRes
+
+table UnoccupyMapObjectCmd
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	map_object_id:uint32;
+} // table UnoccupyMapObjectCmd
+
+table UnoccupyMapObjectRes
+{
+ 	result:uint32;
+	play_instance_uid:uint64;
+	player_id:uint64;
+	map_object_id:uint32;
+} // table UnoccupyMapObjectRes
+
+table UseMapObjectCmd
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	map_object_id:uint32;
+	use_parameters:[ubyte];
+} // table UseMapObjectCmd
+
+table UseMapObjectRes
+{
+ 	result:uint32;
+	play_instance_uid:uint64;
+	player_id:uint64;
+	map_object_id:uint32;
+	result_attributes:[ubyte];
+} // table UseMapObjectRes
+
+table ZoneChatCmd
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	message_type:int8;
+	chat_meta_data:[ubyte];
+	chat_message:string(required);
+} // table ZoneChatCmd
+
+table ZoneChatRes
+{
+ 	result:uint32;
+} // table ZoneChatRes
+
+table ZoneChatS2CEvt
+{
+ 	play_instance_uid:uint64;
+	sender_id:uint64;
+	message_type:int8;
+	chat_meta_data:[ubyte];
+	chat_message:string(required);
+} // table ZoneChatS2CEvt
+
+table LevelUpS2CEvt
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	current_exp:int64;
+	current_level:int;
+} // table LevelUpS2CEvt
+
+table CallFunctionCmd
+{
+ 	function_name:uint32;
+	player_id:uint64;
+	parameters:[ubyte];
+} // table CallFunctionCmd
+
+table CallFunctionRes
+{
+ 	result:uint32;
+	results:[ubyte];
+} // table CallFunctionRes
+
+table SendVoiceDataC2SEvt
+{
+ 	play_instance_uid:uint64;
+	player_id:uint64;
+	frame_index:uint16;
+	voice_data:[uint8];
+} // table SendVoiceDataC2SEvt
+
+table VoiceDataS2CEvt
+{
+ 	actor_id:uint32;
+	frame_index:uint16;
+	voice_data:[uint8];
+} // table VoiceDataS2CEvt
+
+table CreateStreamCmd
+{
+ 	ticket:uint64;
+	stream_name:string(required);
+} // table CreateStreamCmd
+
+table CreateStreamRes
+{
+ 	result:uint32;
+	stream_name:string(required);
+} // table CreateStreamRes
+
+table FindStreamCmd
+{
+ 	ticket:uint64;
+	stream_name:string(required);
+} // table FindStreamCmd
+
+table FindStreamRes
+{
+ 	result:uint32;
+	stream_name:string(required);
+} // table FindStreamRes
+
+table DeleteStreamCmd
+{
+ 	ticket:uint64;
+	stream_name:string(required);
+} // table DeleteStreamCmd
+
+table DeleteStreamRes
+{
+ 	result:uint32;
+	stream_name:string(required);
+} // table DeleteStreamRes
+
+table GetStreamListCmd
+{
+ 	ticket:uint64;
+} // table GetStreamListCmd
+
+table GetStreamListRes
+{
+ 	result:uint32;
+	stream_names:[string](required);
+} // table GetStreamListRes
+
+root_type GetStreamListRes;
+
+
+
+

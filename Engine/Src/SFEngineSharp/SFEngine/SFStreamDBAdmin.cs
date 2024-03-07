@@ -91,7 +91,7 @@ namespace SF
 
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void SET_MESSAGE_FUNCTION(UInt32 messageID);
+        public delegate void SET_MESSAGE_FUNCTION(MessageID messageID);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void SET_FUNCTION([MarshalAs(UnmanagedType.LPStr)] string stringHash, [MarshalAs(UnmanagedType.LPStr)] string typeNameHash, IntPtr Value);

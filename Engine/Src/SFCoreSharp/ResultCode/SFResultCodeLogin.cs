@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -15,31 +15,31 @@ namespace SF {
 	public partial struct ResultCode {
 
 		// Invalid username 
-		public const int LOGIN_INVALID_USERNAME =                           unchecked((int)0xE7060000); 
+		public static readonly Result LOGIN_INVALID_USERNAME =              new Result(unchecked((int)0xE7060000)); 
 
 		// Invalid password 
-		public const int LOGIN_INVALID_PASSWORD =                           unchecked((int)0xE7060001); 
+		public static readonly Result LOGIN_INVALID_PASSWORD =              new Result(unchecked((int)0xE7060001)); 
 
 		// Already logged in 
-		public const int LOGIN_ALREADY_LOGGEDIN =                           unchecked((int)0xE7060002); 
+		public static readonly Result LOGIN_ALREADY_LOGGEDIN =              new Result(unchecked((int)0xE7060002)); 
 
 		// Already logged in at another place, and failed to kick 
-		public const int LOGIN_ALREADY_LOGGEDIN_OTHERPLACE =                unchecked((int)0xE7060003); 
+		public static readonly Result LOGIN_ALREADY_LOGGEDIN_OTHERPLACE =   new Result(unchecked((int)0xE7060003)); 
 
 		// Invalid user signature 
-		public const int LOGIN_INVALID_SIGNATURE =                          unchecked((int)0xE7060004); 
+		public static readonly Result LOGIN_INVALID_SIGNATURE =             new Result(unchecked((int)0xE7060004)); 
 
 		// The user doesn't have app ownership 
-		public const int LOGIN_NO_APP_OWNERSHIP =                           unchecked((int)0xE7060005); 
+		public static readonly Result LOGIN_NO_APP_OWNERSHIP =              new Result(unchecked((int)0xE7060005)); 
 
 		// The user is blocked 
-		public const int LOGIN_ACCOUNT_BLOCKED =                            unchecked((int)0xE7060006); 
+		public static readonly Result LOGIN_ACCOUNT_BLOCKED =               new Result(unchecked((int)0xE7060006)); 
 
 		// The user is not exist 
-		public const int LOGIN_ACCOUNT_DOES_NOT_EXIST =                     unchecked((int)0xE7060007); 
+		public static readonly Result LOGIN_ACCOUNT_DOES_NOT_EXIST =        new Result(unchecked((int)0xE7060007)); 
 
 		// The user's platform login is invalid 
-		public const int LOGIN_INVALID_PLATFORM_LOGIN =                     unchecked((int)0xE7060008); 
+		public static readonly Result LOGIN_INVALID_PLATFORM_LOGIN =        new Result(unchecked((int)0xE7060008)); 
 
 	}
 }

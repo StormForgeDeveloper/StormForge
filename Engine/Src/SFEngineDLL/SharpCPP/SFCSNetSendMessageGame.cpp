@@ -863,7 +863,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameInviteFriendRes( intptr_t InNativeConnectio
 
 
 // Cmd: Accept friend request
-SFDLL_EXPORT int  CSSFNetAdapter_GameAcceptFriendRequestRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, const FriendInformation& InNewFriend )
+SFDLL_EXPORT int  CSSFNetAdapter_GameAcceptFriendRequestRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, const PlayerInformation& InNewFriend )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
@@ -872,12 +872,12 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameAcceptFriendRequestRes( intptr_t InNativeCo
 	Result hr = SF::Message::Game::AcceptFriendRequestRes::Create(pMessage, InTransactionID, InResult,InNewFriend);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (int32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameAcceptFriendRequestRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, const FriendInformation& InNewFriend )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameAcceptFriendRequestRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, const PlayerInformation& InNewFriend )
 
 
 
 // S2C: Notification for friend request is accepted
-SFDLL_EXPORT int  CSSFNetAdapter_GameFriendRequestAcceptedS2CEvt( intptr_t InNativeConnectionHandle, const FriendInformation& InAccepter )
+SFDLL_EXPORT int  CSSFNetAdapter_GameFriendRequestAcceptedS2CEvt( intptr_t InNativeConnectionHandle, const PlayerInformation& InAccepter )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
@@ -886,7 +886,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameFriendRequestAcceptedS2CEvt( intptr_t InNat
 	Result hr = SF::Message::Game::FriendRequestAcceptedS2CEvt::Create(pMessage, InAccepter);
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (int32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameFriendRequestAcceptedS2CEvt( intptr_t InNativeConnectionHandle, const FriendInformation& InAccepter )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameFriendRequestAcceptedS2CEvt( intptr_t InNativeConnectionHandle, const PlayerInformation& InAccepter )
 
 
 
@@ -919,16 +919,16 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameFriendRemovedS2CEvt( intptr_t InNativeConne
 
 
 // Cmd: Get friend list
-SFDLL_EXPORT int  CSSFNetAdapter_GameGetFriendListRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t InMaxFriendSlot, uint16_t InTotalNumberOfFriends, uint16_t InStartIndex, uint16_t _sizeOfInFriendList,const FriendInformation* InFriendList )
+SFDLL_EXPORT int  CSSFNetAdapter_GameGetFriendListRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t InMaxFriendSlot, uint16_t InTotalNumberOfFriends, uint16_t InStartIndex, uint16_t _sizeOfInFriendList,const PlayerInformation* InFriendList )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return (int)ResultCode::INVALID_POINTER;
-	size_t messageSize = SF::Message::Game::GetFriendListRes::CalculateMessageSize(InTransactionID, InResult, InMaxFriendSlot, InTotalNumberOfFriends, InStartIndex,SF::ArrayView<FriendInformation>(_sizeOfInFriendList, _sizeOfInFriendList, const_cast<FriendInformation*>(InFriendList)));
+	size_t messageSize = SF::Message::Game::GetFriendListRes::CalculateMessageSize(InTransactionID, InResult, InMaxFriendSlot, InTotalNumberOfFriends, InStartIndex,SF::ArrayView<PlayerInformation>(_sizeOfInFriendList, _sizeOfInFriendList, const_cast<PlayerInformation*>(InFriendList)));
 	SFNET_ALLOC_MESSAGE_FROM_STACK(pMessage,messageSize);
-	Result hr = SF::Message::Game::GetFriendListRes::Create(pMessage, InTransactionID, InResult, InMaxFriendSlot, InTotalNumberOfFriends, InStartIndex,SF::ArrayView<FriendInformation>(_sizeOfInFriendList, _sizeOfInFriendList, const_cast<FriendInformation*>(InFriendList)));
+	Result hr = SF::Message::Game::GetFriendListRes::Create(pMessage, InTransactionID, InResult, InMaxFriendSlot, InTotalNumberOfFriends, InStartIndex,SF::ArrayView<PlayerInformation>(_sizeOfInFriendList, _sizeOfInFriendList, const_cast<PlayerInformation*>(InFriendList)));
 	if (hr) hr = pConnection->SendMsg(pMessage);
 	return (int32_t)hr;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameGetFriendListRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t InMaxFriendSlot, uint16_t InTotalNumberOfFriends, uint16_t InStartIndex, uint16_t _sizeOfInFriendList,const FriendInformation* InFriendList )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameGetFriendListRes( intptr_t InNativeConnectionHandle, const TransactionID& InTransactionID, Result InResult, uint16_t InMaxFriendSlot, uint16_t InTotalNumberOfFriends, uint16_t InStartIndex, uint16_t _sizeOfInFriendList,const PlayerInformation* InFriendList )
 
 
 

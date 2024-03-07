@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -15,34 +15,34 @@ namespace SF {
 	public partial struct ResultCode {
 
 		// Engine initialization is failed 
-		public const int ENGINE_INITIALIZATION_FAILED =                     unchecked((int)0xE7020000); 
+		public static readonly Result ENGINE_INITIALIZATION_FAILED =        new Result(unchecked((int)0xE7020000)); 
 
 		// Invalid configuration 
-		public const int ENGINE_INVALID_CONFIG =                            unchecked((int)0xE7020001); 
+		public static readonly Result ENGINE_INVALID_CONFIG =               new Result(unchecked((int)0xE7020001)); 
 
 		// Connection failed 
-		public const int ENGINE_CONNECTION_FAILED =                         unchecked((int)0xE7020002); 
+		public static readonly Result ENGINE_CONNECTION_FAILED =            new Result(unchecked((int)0xE7020002)); 
 
 		// Connectionlost 
-		public const int ENGINE_CONNECTION_LOST =                           unchecked((int)0xE7020003); 
+		public static readonly Result ENGINE_CONNECTION_LOST =              new Result(unchecked((int)0xE7020003)); 
 
 		// Invalid character data 
-		public const int ENGINE_INVALID_CHARACTER =                         unchecked((int)0xE7020004); 
+		public static readonly Result ENGINE_INVALID_CHARACTER =            new Result(unchecked((int)0xE7020004)); 
 
 		// Invalid table id 
-		public const int ENGINE_INVALID_TABLE_ID =                          unchecked((int)0xE7020005); 
+		public static readonly Result ENGINE_INVALID_TABLE_ID =             new Result(unchecked((int)0xE7020005)); 
 
 		// Invalid platform 
-		public const int ENGINE_INVALID_PLATFORM =                          unchecked((int)0xE7020006); 
+		public static readonly Result ENGINE_INVALID_PLATFORM =             new Result(unchecked((int)0xE7020006)); 
 
 		// Already Used Item 
-		public const int ENGINE_ALREADY_USED_ITEM =                         unchecked((int)0xE7020007); 
+		public static readonly Result ENGINE_ALREADY_USED_ITEM =            new Result(unchecked((int)0xE7020007)); 
 
 		// Already Used Key 
-		public const int ENGINE_ALREADY_USED_KEY =                          unchecked((int)0xE7020008); 
+		public static readonly Result ENGINE_ALREADY_USED_KEY =             new Result(unchecked((int)0xE7020008)); 
 
 		// Invalid online session. probably kicked 
-		public const int ENGINE_INVALID_ONLINE_SESSION =                    unchecked((int)0xE7020009); 
+		public static readonly Result ENGINE_INVALID_ONLINE_SESSION =       new Result(unchecked((int)0xE7020009)); 
 
 	}
 }

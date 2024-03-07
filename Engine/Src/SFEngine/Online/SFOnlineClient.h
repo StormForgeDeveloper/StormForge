@@ -20,6 +20,8 @@
 #include "Online/SFOnlineActor.h"
 #include "SFOnlineClientComponent.h"
 #include "Net/SFConnection.h"
+#include "MessageBus/SFMessageDelegateMap.h"
+
 
 namespace SF
 {
@@ -271,7 +273,7 @@ namespace SF
         ComponentManager m_ComponentManager;
 
         // message handler
-        Net::MessageDelegateByMsgID m_MessageHandlerMap;
+        MessageDelegateMap m_MessageHandlerMap;
 
 	};
 

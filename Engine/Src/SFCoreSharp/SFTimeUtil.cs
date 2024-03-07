@@ -121,13 +121,13 @@ namespace SF
 
         static public ulong FromDateTimeMs(DateTime date)
         {
-            TimeSpan diff = date.ToUniversalTime() - ReferenceYear;
+            System.TimeSpan diff = date.ToUniversalTime() - ReferenceYear;
             return (ulong)diff.TotalMilliseconds;
         }
 
         static public ulong FromDateTimeSec(DateTime date)
         {
-            TimeSpan diff = date.ToUniversalTime() - ReferenceYear;
+            System.TimeSpan diff = date.ToUniversalTime() - ReferenceYear;
             return (ulong)diff.TotalSeconds;
         }
 

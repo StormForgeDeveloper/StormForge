@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -22,7 +22,6 @@ namespace ProtocolCompiler
         public MessageDebugBuilder(Dictionary<string, string> settings)
             : base(settings)
         {
-            BasePath = BasePath + "Message";
         }
 
         public string BuilderNamespace
@@ -54,7 +53,7 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#pragma once");
             OutStream.WriteLine("");
             OutStream.WriteLine("#include \"SFTypedefs.h\"");
-            OutStream.WriteLine("#include \"Protocol/SFProtocol.h\"");
+            OutStream.WriteLine("#include \"SFProtocol.h\"");
             OutStream.WriteLine("#include \"Net/SFNetDef.h\"");
             OutStream.WriteLine("#include \"Protocol/{0}MsgClass.h\"", Group.Name);
             NewLine(3);
@@ -80,7 +79,7 @@ namespace ProtocolCompiler
             OutStream.WriteLine("");
             OutStream.WriteLine("#include \"{0}\"", PreCompiledHeader);
             OutStream.WriteLine("#include \"SFTypedefs.h\"");
-            OutStream.WriteLine("#include \"Protocol/SFProtocol.h\"");
+            OutStream.WriteLine("#include \"SFProtocol.h\"");
             OutStream.WriteLine("#include \"Net/SFNetDef.h\"");
             OutStream.WriteLine("#include \"Protocol/{0}\"", OutputHeaderName());
             OutStream.WriteLine("#include \"Protocol/{0}MsgClass.h\"", Group.Name);

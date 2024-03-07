@@ -17,7 +17,7 @@
 #include "ResultCode/SFResultCodeLibrary.h"
 #include "Util/SFLog.h"
 #include "Util/SFTimeUtil.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 #include "Service/SFEngineService.h"
 
 #include "Net/SFNetConst.h"

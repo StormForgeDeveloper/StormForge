@@ -25,7 +25,7 @@
 #include "Util/SFToString.h"
 #include "Net/SFNetToString.h"
 #include "Net/SFConnectionActions.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 
 
 // define if emulate packet loss

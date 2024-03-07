@@ -20,21 +20,20 @@ namespace SF
 
     public class SFMessage : SFObject
     {
-        int m_MessageID;
+        MessageID m_MessageID;
 
         Dictionary<string, Object?> m_Values = new ();
 
-        public SFMessage(int messageID)
+        public SFMessage(MessageID messageID)
         {
             m_MessageID = messageID;
         }
 
         public SFMessage()
         {
-            m_MessageID = 0;
         }
 
-        public int GetMessageID()
+        public MessageID GetMessageID()
         {
             return m_MessageID;
         }

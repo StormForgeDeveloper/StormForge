@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -21,7 +21,7 @@ namespace SF.Table
 {
     public partial class ResultCodesResultCodeItem
     {
-        public ResultCode ResultCode;
+        public Result ResultCode;
     }
     
 }

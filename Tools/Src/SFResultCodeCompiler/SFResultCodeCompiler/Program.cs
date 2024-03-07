@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -75,7 +75,8 @@ namespace SFResultCodeCompiler
                         memoryStream = new MemoryStream();
                         resultCodeProcessor.GenerateCPPHeaders(memoryStream);
                         outPath = Path.Combine(outDir, headerFileName);
-                        FileUtil.WriteIfChanged(outPath, memoryStream.GetBuffer(), memoryStream.Length);
+                        Console.WriteLine($"Writing if changed {outPath}");
+                        File.WriteAllBytes(outPath, memoryStream.GetBuffer());
                     }
 
                     if (!string.IsNullOrEmpty(outDir))
@@ -83,7 +84,8 @@ namespace SFResultCodeCompiler
                         memoryStream = new MemoryStream();
                         resultCodeProcessor.GenerateCPPImplementation(memoryStream, headerFileName);
                         outPath = Path.Combine(outDir, string.Format("SF{0}.cpp", inputName));
-                        FileUtil.WriteIfChanged(outPath, memoryStream.GetBuffer(), memoryStream.Length);
+                        Console.WriteLine($"Writing if changed {outPath}");
+                        File.WriteAllBytes(outPath, memoryStream.GetBuffer());
                     }
 
 
@@ -92,7 +94,8 @@ namespace SFResultCodeCompiler
                         memoryStream = new MemoryStream();
                         resultCodeProcessor.GenerateSharp(memoryStream);
                         outPath = Path.Combine(outDirSharp, string.Format("SF{0}.cs", inputName));
-                        FileUtil.WriteIfChanged(outPath, memoryStream.GetBuffer(), memoryStream.Length);
+                        Console.WriteLine($"Writing if changed {outPath}");
+                        File.WriteAllBytes(outPath, memoryStream.GetBuffer());
                     }
                 }
 

@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -69,16 +69,16 @@ namespace SF
             }
         }
 
-        ResultCode.SeverityType ToLocalSeverityType(SF.Table.Severity serverity)
+        Result.SeverityType ToLocalSeverityType(SF.Table.Severity serverity)
         {
             switch (serverity)
             {
-                case Severity.Success: return ResultCode.SeverityType.Success;
-                case Severity.Informational: return ResultCode.SeverityType.Informational;
-                case Severity.Warning: return ResultCode.SeverityType.Warning;
+                case Severity.Success: return Result.SeverityType.Success;
+                case Severity.Informational: return Result.SeverityType.Informational;
+                case Severity.Warning: return Result.SeverityType.Warning;
                 case Severity.Error:
                 default:
-                    return ResultCode.SeverityType.Error;
+                    return Result.SeverityType.Error;
             }
         }
 
@@ -94,7 +94,7 @@ namespace SF
             int facilityValue = Convert.ToInt32(facilityID.Value, 16);
             m_Codes.FacilityCode = facilityValue;
 
-            ResultCode codeValue = new ResultCode();
+            Result codeValue = new Result();
             codeValue.Facility = facilityValue;
             codeValue.Custom = Codes.Custom;
 
@@ -102,7 +102,7 @@ namespace SF
             foreach (var codeItem in m_Codes.ResultCodeItem)
             {
                 codeValue.Severity = ToLocalSeverityType(codeItem.Severity);
-                codeValue.Code = codeIndex;
+                codeValue.CodeIndex = codeIndex;
                 codeIndex++;
 
                 codeItem.ResultCode = codeValue;

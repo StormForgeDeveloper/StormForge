@@ -18,7 +18,7 @@
 #include "Util/SFLog.h"
 #include "Util/SFUtility.h"
 #include "Util/SFTimeUtil.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 #include "Util/SFToString.h"
 #include "Net/SFNetToString.h"
 
@@ -51,7 +51,7 @@ namespace Net {
 		auto socketType = GetSocketType();
 
 		const MsgNetCtrl* pNetCtrl = reinterpret_cast<const MsgNetCtrl*>(pHeader->GetDataPtr());
-		if (pNetCtrl->rtnMsgID.IDs.Type == MSGTYPE_NETCONTROL)// connecting process
+		if (pNetCtrl->rtnMsgID.GetMessageType() == MessageType::NetCtrl)// connecting process
 		{
 			GetConnection()->OnHeartbeatPacket();
 
@@ -119,7 +119,7 @@ namespace Net {
 		Result hr;
 
 		const MsgNetCtrl* pNetCtrl = (MsgNetCtrl*)(pHeader->GetDataPtr());
-		if (pNetCtrl->rtnMsgID.IDs.Type == MSGTYPE_NETCONTROL)// connecting process
+		if (pNetCtrl->rtnMsgID.GetMessageType() == MessageType::NetCtrl)// connecting process
 		{
 			GetConnection()->OnHeartbeatPacket();
 
@@ -174,7 +174,7 @@ namespace Net {
 		Result hr;
 
 		const MsgNetCtrl* pNetCtrl = (MsgNetCtrl*)(pHeader->GetDataPtr());
-		if (pNetCtrl->rtnMsgID.IDs.Type == MSGTYPE_NETCONTROL)// connecting process
+		if (pNetCtrl->rtnMsgID.GetMessageType() == MessageType::NetCtrl)// connecting process
 		{
 			switch (pNetCtrl->rtnMsgID.IDs.MsgCode)
 			{
@@ -201,7 +201,7 @@ namespace Net {
 		Result hr;
 
 		const MsgNetCtrl* pNetCtrl = (MsgNetCtrl*)(pHeader->GetDataPtr());
-		if (pNetCtrl->rtnMsgID.IDs.Type == MSGTYPE_NETCONTROL)// connecting process
+		if (pNetCtrl->rtnMsgID.GetMessageType() == MessageType::NetCtrl)// connecting process
 		{
 			switch (pNetCtrl->rtnMsgID.IDs.MsgCode)
 			{

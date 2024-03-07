@@ -264,16 +264,16 @@ namespace SF {
 	union TransactionID
 	{
 		struct TransactionIDComponent {
-			EntityID	EntID;
-			uint32_t	TransID = 0;
+            uint32_t	TransID = 0;
+            EntityID	EntityId;
 
 			TransactionIDComponent() {}
 			TransactionIDComponent(EntityID InEntID, uint32_t InTransID)
-				: EntID(InEntID)
+				: EntityId(InEntID)
 				, TransID(InTransID)
 			{}
 			TransactionIDComponent(const TransactionIDComponent& src)
-				: EntID(src.EntID)
+				: EntityId(src.EntityId)
 				, TransID(src.TransID)
 			{}
 
@@ -287,7 +287,7 @@ namespace SF {
 
 		inline bool IsValid() const;
 
-		EntityID GetEntityID() const { return Components.EntID; }
+		EntityID GetEntityID() const { return Components.EntityId; }
 		uint32_t GetTransactionIndex() const { return Components.TransID; }
 
 		inline TransactionID& operator = (const TransactionID& transID);
@@ -397,7 +397,7 @@ namespace SF {
 		bool operator == (const PlayerInformation& src) const;
 	};
 
-
+    // deprecated
 	struct RankingPlayerInformation : public PlayerInformation
 	{
 		uint32_t			WeeklyWin;
@@ -411,7 +411,7 @@ namespace SF {
 	};
 
 
-
+    // deprecated
 	struct FriendInformation : public RankingPlayerInformation
 	{
 		uint64_t			LastStaminaSent;
@@ -424,7 +424,7 @@ namespace SF {
 	};
 
 	
-
+    // deprecated
 	struct TotalRankingPlayerInformation
 	{
 		enum {
@@ -548,7 +548,7 @@ namespace SF {
 	{
 		Zone,
 		ZoneGlobal,
-		Wisper,
+		Whisper,
 		Channel,
 		System,
 		Max

@@ -3,8 +3,6 @@
 set(SFPROTOCOL_LIB_FILES
   	SFProtocolPCH.h
 
-  	Protocol/SFGenericMessageClass.cpp
-	
 	Protocol/GameMsgClass.cpp
 	Protocol/GameMsgDebug.cpp
 	Protocol/GameMsgParsing.cpp
@@ -33,10 +31,11 @@ set(SFPROTOCOL_LIB_FILES
 	Protocol/GameNetPolicy.cpp
 	Protocol/GameNetPolicy.h
 
-	Protocol/SFProtocol.cpp
-	Protocol/SFGenericMessageClass.h
-	Protocol/SFProtocolHelper.h
-	Protocol/SFProtocol.h
+	SFGenericMessageClass.h
+  	SFGenericMessageClass.cpp
+	SFProtocolHelper.h
+	SFProtocol.h
+	SFProtocol.cpp
 	
 	SFFlat/Login_generated.h
 	SFFlat/Telemetry_generated.h

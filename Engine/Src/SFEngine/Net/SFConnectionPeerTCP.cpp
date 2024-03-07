@@ -19,7 +19,7 @@
 #include "Util/SFLog.h"
 #include "Util/SFStrUtil.h"
 #include "Util/SFToString.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 
 #include "Net/SFConnection.h"
 #include "Net/SFConnectionTCP.h"

@@ -99,7 +99,7 @@ namespace SF
 		return m_EventBufferQueue.PeekNext(eventItem);
 	}
 
-	bool TelemetryEventQueue::FreePostedEvents(uint16_t eventId)
+	bool TelemetryEventQueue::FreePostedEvents(uint32_t eventId)
 	{
 		{
 			MutexScopeLock scopeLock(GetReadLock());
@@ -107,7 +107,7 @@ namespace SF
 			EventItemReadPtr eventItem = m_EventBufferQueue.DequeueRead();
 			for (; eventItem; eventItem = m_EventBufferQueue.DequeueRead())
 			{
-				auto curEventId = *(uint16_t*)eventItem.data();
+                uint32_t curEventId = *(uint32_t*)eventItem.data();
 				if (int16_t(curEventId - eventId) > 0)
 				{
                     eventItem.CancelRead();

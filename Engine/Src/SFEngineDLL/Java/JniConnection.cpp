@@ -33,7 +33,7 @@
 #include "Service/SFEngineService.h"
 #include "Net/SFConnectionMUDP.h"
 #include "Net/SFMessage.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 
 #include "JniUtil.h"
 

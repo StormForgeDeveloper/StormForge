@@ -20,16 +20,16 @@ namespace ResultCode {
 	void InitializeResultCodeEngine() {
 
 		auto& codeMap = ResultTable::GetOrAddFacility(1794);
-		codeMap.Insert((uint32_t)ENGINE_INITIALIZATION_FAILED, {"ENGINE_INITIALIZATION_FAILED", "Engine initialization is failed"});
-		codeMap.Insert((uint32_t)ENGINE_INVALID_CONFIG, {"ENGINE_INVALID_CONFIG", "Invalid configuration"});
-		codeMap.Insert((uint32_t)ENGINE_CONNECTION_FAILED, {"ENGINE_CONNECTION_FAILED", "Connection failed"});
-		codeMap.Insert((uint32_t)ENGINE_CONNECTION_LOST, {"ENGINE_CONNECTION_LOST", "Connectionlost"});
-		codeMap.Insert((uint32_t)ENGINE_INVALID_CHARACTER, {"ENGINE_INVALID_CHARACTER", "Invalid character data"});
-		codeMap.Insert((uint32_t)ENGINE_INVALID_TABLE_ID, {"ENGINE_INVALID_TABLE_ID", "Invalid table id"});
-		codeMap.Insert((uint32_t)ENGINE_INVALID_PLATFORM, {"ENGINE_INVALID_PLATFORM", "Invalid platform"});
-		codeMap.Insert((uint32_t)ENGINE_ALREADY_USED_ITEM, {"ENGINE_ALREADY_USED_ITEM", "Already Used Item"});
-		codeMap.Insert((uint32_t)ENGINE_ALREADY_USED_KEY, {"ENGINE_ALREADY_USED_KEY", "Already Used Key"});
-		codeMap.Insert((uint32_t)ENGINE_INVALID_ONLINE_SESSION, {"ENGINE_INVALID_ONLINE_SESSION", "Invalid online session. probably kicked"});
+		codeMap.Insert((uint32_t)			ENGINE_INITIALIZATION_FAILED        , {"			ENGINE_INITIALIZATION_FAILED        ", "Engine initialization is failed"});
+		codeMap.Insert((uint32_t)			ENGINE_INVALID_CONFIG        , {"			ENGINE_INVALID_CONFIG        ", "Invalid configuration"});
+		codeMap.Insert((uint32_t)			ENGINE_CONNECTION_FAILED        , {"			ENGINE_CONNECTION_FAILED        ", "Connection failed"});
+		codeMap.Insert((uint32_t)			ENGINE_CONNECTION_LOST        , {"			ENGINE_CONNECTION_LOST        ", "Connectionlost"});
+		codeMap.Insert((uint32_t)			ENGINE_INVALID_CHARACTER        , {"			ENGINE_INVALID_CHARACTER        ", "Invalid character data"});
+		codeMap.Insert((uint32_t)			ENGINE_INVALID_TABLE_ID        , {"			ENGINE_INVALID_TABLE_ID        ", "Invalid table id"});
+		codeMap.Insert((uint32_t)			ENGINE_INVALID_PLATFORM        , {"			ENGINE_INVALID_PLATFORM        ", "Invalid platform"});
+		codeMap.Insert((uint32_t)			ENGINE_ALREADY_USED_ITEM        , {"			ENGINE_ALREADY_USED_ITEM        ", "Already Used Item"});
+		codeMap.Insert((uint32_t)			ENGINE_ALREADY_USED_KEY        , {"			ENGINE_ALREADY_USED_KEY        ", "Already Used Key"});
+		codeMap.Insert((uint32_t)			ENGINE_INVALID_ONLINE_SESSION        , {"			ENGINE_INVALID_ONLINE_SESSION        ", "Invalid online session. probably kicked"});
 
 	}//InitializeResultCode 
 }//namespace ResultCode 

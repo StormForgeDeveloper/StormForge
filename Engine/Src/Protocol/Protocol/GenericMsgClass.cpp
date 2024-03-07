@@ -10,11 +10,11 @@
 
 
 #include "SFProtocolPCH.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 #include "Util/SFToString.h"
 #include "Net/SFNetToString.h"
 #include "Container/SFArray.h"
-#include "Protocol/SFProtocolHelper.h"
+#include "SFProtocolHelper.h"
 #include "Protocol/GenericMsgClass.h"
 
 
@@ -26,7 +26,6 @@ namespace SF
  		namespace Generic
 		{
  			// Cmd: Generic failure message
-			const MessageID GenericFailureCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GENERIC, 0);
 			Result GenericFailureCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -118,7 +117,6 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GenericFailureCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID GenericFailureRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GENERIC, 0);
 			Result GenericFailureRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;

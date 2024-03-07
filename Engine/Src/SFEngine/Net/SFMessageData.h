@@ -18,7 +18,7 @@
 #include "Net/SFMessage.h"
 #include "Object/SFSharedObject.h"
 #include "Object/SFSharedPointer.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 
 
 namespace SF {

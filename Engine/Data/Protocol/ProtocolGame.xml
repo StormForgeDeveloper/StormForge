@@ -73,12 +73,12 @@
 				<Params TypeName="PlayerPlatformID" Name="InviterPlatformId" Desc="Inviter player ID"/>
 			</Cmd>
 			<Res>
-				<Params TypeName="FriendInformation" Name="NewFriend" Desc="FriendInformation of the player"/>
+				<Params TypeName="PlayerInformation" Name="NewFriend" Desc="PlayerInformation of the player"/>
 			</Res>
 		</Command>
 
 		<S2CEvent Name="FriendRequestAccepted" Reliable="true" Crypto="No" Trace="Debug1" Desc="Notification for friend request is accepted">
-			<Params TypeName="FriendInformation" Name="Accepter" Desc="Accepted player's information"/>
+			<Params TypeName="PlayerInformation" Name="Accepter" Desc="Accepted player's information"/>
 		</S2CEvent>
 
 		<Command Name="RemoveFriend" Reliable="true" Crypto="No" Trace="Debug1" Desc="Remove friden form the friend list">
@@ -103,7 +103,7 @@
 				<Params TypeName="uint16" Name="MaxFriendSlot" Desc="Maximum friend list"/>
 				<Params TypeName="uint16" Name="TotalNumberOfFriends" Desc="Maximum friend list"/>
 				<Params TypeName="uint16" Name="StartIndex" Desc="Friend list start index"/>
-				<Params TypeName="FriendInformation" IsArray="true" Name="FriendList" Desc="Friend list"/>
+				<Params TypeName="PlayerInformation" IsArray="true" Name="FriendList" Desc="Friend list"/>
 			</Res>
 		</Command>
 

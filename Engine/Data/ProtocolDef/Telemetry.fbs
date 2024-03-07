@@ -1,88 +1,26 @@
- include "SFTypes.fbs";
-
+﻿include "LocalTypes.fbs";
 namespace SF.Flat.Telemetry;
 
-union PayloadData
+table PostEventCmd
 {
-    GenericError,
-    PostEventRequest, PostEventResult
-}
+ 	event_name:string(required);
+	time_stamp:uint64;
+	app_id:string(required);
+	machine_id:string(required);
+	event_id:uint32;
+	account_id:uint64;
+	is_play_event:bool;
+	session_id:[uint8];
+	attributes:[NamedVariable];
+} // table PostEventCmd
 
-table TelemetryPacket
+table PostEventRes
 {
-    payload_data:PayloadData;
-}
+ 	result:uint32;
+} // table PostEventRes
 
-table EventAttributeString
-{
-    value:string(required);
-}
-
-table EventAttributeInt
-{
-    value:int;
-}
-
-table EventAttributeUInt
-{
-    value:uint;
-}
-
-table EventAttributeInt64
-{
-    value:int64;
-}
-
-table EventAttributeUInt64
-{
-    value:uint64;
-}
-
-table EventAttributeFloat
-{
-    value:float;
-}
-
-table EventAttributeDouble
-{
-    value:double;
-}
-
-table EventAttributeBool
-{
-    value:bool;
-}
-
-union EventAttributeValue
-{
-    EventAttributeString, EventAttributeBool,
-    EventAttributeFloat, EventAttributeDouble,
-    EventAttributeInt, EventAttributeUInt,
-    EventAttributeInt64, EventAttributeUInt64
-}
-
-table EventAttribute
-{
-    name:string(required);
-    value:EventAttributeValue(required);
-}
+root_type PostEventRes;
 
 
-table PostEventRequest {
 
-	event_name:string(required);
-    time_stamp:uint64;
-    app_id:string;
-    machine_id:string;
-    event_id:uint32;
-    account_id:uint64;
-    is_play_event:bool;
-    session_id:[ubyte](required);
-	attributes:[EventAttribute];
-}
 
-table PostEventResult {
-
-}
-
-root_type TelemetryPacket;

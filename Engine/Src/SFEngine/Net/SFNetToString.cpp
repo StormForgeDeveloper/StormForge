@@ -77,7 +77,7 @@ namespace SF {
 		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(")))
 			return ResultCode::FAIL;
 
-		if (!(_IToA(context, value.IDs.Policy)))
+		if (!(_IToA(context, value.IDs.Protocol)))
 			return ResultCode::FAIL;
 
 		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))

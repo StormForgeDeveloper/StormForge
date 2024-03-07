@@ -34,10 +34,8 @@ namespace SF
 
     class TelemetryClientFlat;
 
-    using FlatTelemetryPacketBuilder = SF::Flat::Telemetry::TelemetryPacketBuilder;
-    using FlatTelemetryPacket = SF::Flat::Telemetry::TelemetryPacket;
-    using FlatPostEventRequest = SF::Flat::Telemetry::PostEventRequest;
-    using FlatPostEventResult = SF::Flat::Telemetry::PostEventResult;
+    using FlatPostEventRequest = SF::Flat::Telemetry::PostEventCmd;
+    using FlatPostEventResult = SF::Flat::Telemetry::PostEventRes;
 
 
     // Event creation wrapper for Avro data
@@ -50,7 +48,7 @@ namespace SF
         friend class TelemetryClientFlat;
 
         SF_FORCEINLINE ::flatbuffers::FlatBufferBuilder& GetPacketBuilder() { return m_FlatBufferBuilder; }
-        SF_FORCEINLINE std::vector<::flatbuffers::Offset<SF::Flat::Telemetry::EventAttribute>>& GetAttributeOffesets() { return m_Attributes; }
+        SF_FORCEINLINE std::vector<::flatbuffers::Offset<SF::Flat::NamedVariable>>& GetAttributeOffesets() { return m_Attributes; }
 
     public:
         ~TelemetryEventFlat();
@@ -74,7 +72,7 @@ namespace SF
         // Flat buffer builder
         ::flatbuffers::FlatBufferBuilder m_FlatBufferBuilder;
 
-        std::vector<::flatbuffers::Offset<SF::Flat::Telemetry::EventAttribute>> m_Attributes;
+        std::vector<::flatbuffers::Offset<SF::Flat::NamedVariable>> m_Attributes;
     };
 
 

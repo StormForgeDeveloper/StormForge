@@ -37,10 +37,10 @@ namespace SF
 #if UNITY_STANDALONE
         [AOT.MonoPInvokeCallback(typeof(SFConnection.SET_MESSAGE_FUNCTION))]
 #endif
-        static internal void MessageParseCreateCallback(UInt32 messageID)
+        static internal void MessageParseCreateCallback(MessageID messageID)
         {
             System.Diagnostics.Debug.Assert(stm_ParsingMessage == null);
-            stm_ParsingMessage = new SFMessage((int)messageID);
+            stm_ParsingMessage = new SFMessage(messageID);
         }
 
 

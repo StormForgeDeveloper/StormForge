@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Protocols xmlns="http://www.StormForge.com/XMLProtocol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.StormForge.com/XMLProtocol ProtocolDef.xsd">
+	<ProtocolGroup Name="Login" Desc="Login Server Protocol.">
+    <!-- ===================================================  Login  ========================================================= -->
+
+
+		<Command Name="Login" Reliable="true" Crypto="No" Trace="Debug1" Desc="Login with ID/PW request">
+			<Cmd>
+				<Params TypeName="String" Name="user_id" Desc="Login user id"/>
+				<Params TypeName="String" Name="password" Desc="Login password"/>
+				<Params TypeName="String" Name="GameID" Desc="GameID/AppID"/>
+			</Cmd>
+			<Res>
+				<Params TypeName="String" Name="NickName" Desc="Nickname of the player"/>
+				<Params TypeName="AccountID" Name="AccountID" Desc="AccountID"/>
+				<Params TypeName="AuthTicket" Name="AuthTicket" Desc="Login ticket"/>
+				<Params TypeName="String" Name="BannedReason" Desc="Banned reason if the account is banned"/>
+				<Params TypeName="String" Name="GameServerAddress" Desc="Game server network address to connect"/>
+			</Res>
+		</Command>
+
+
+		<Command Name="LoginWithSteam" Reliable="true" Crypto="No" Trace="Debug1" Desc="Login with steam login info">
+			<Cmd>
+				<Params TypeName="uint64" Name="SteamAppID" Desc="Steam application id"/>
+				<Params TypeName="uint64" Name="SteamPlayerID" Desc="Steam player id"/>
+				<Params TypeName="String" Name="SteamPlayerName" Desc="Steam player profile name"/>
+				<Params TypeName="String" Name="SteamPlayerToken" Desc="Steam player login token"/>
+				<Params TypeName="String" Name="GameID" Desc="GameID/AppID"/>
+				
+			</Cmd>
+			<Res>
+			<!-- Just PH, we shares LoginRes -->
+				<Params TypeName="String" Name="NickName" Desc="Nickname of the player"/>
+				<Params TypeName="AccountID" Name="AccountID" Desc="AccountID"/>
+				<Params TypeName="AuthTicket" Name="AuthTicket" Desc="Login ticket"/>
+				<Params TypeName="String" Name="BannedReason" Desc="Banned reason if the account is banned"/>
+				<Params TypeName="String" Name="GameServerAddress" Desc="Game server network address to connect"/>
+			</Res>
+		</Command>
+
+
+	</ProtocolGroup>
+</Protocols>

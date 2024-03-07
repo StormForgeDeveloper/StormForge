@@ -21,7 +21,7 @@
 #include "Net/SFConnectionMUDP.h"
 #include "Net/SFConnectionTCP.h"
 #include "Net/SFMessage.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 
 #include "Interfaces/Sharp/SFCSUtil.h"
 

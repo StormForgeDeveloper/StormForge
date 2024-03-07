@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\3rdParties\src\flatbuffer\flatbuffers\net\FlatBuffers\Google.FlatBuffers.csproj" />
     <ProjectReference Include="..\SFCoreSharp\SFCoreSharp.csproj" />
+    <ProjectReference Include="..\SFEngineSharp\SFEngineSharp.csproj" />
   </ItemGroup>
 
 </Project>

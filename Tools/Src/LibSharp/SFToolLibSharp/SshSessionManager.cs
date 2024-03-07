@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -90,7 +90,7 @@ namespace SF
         }
 
 
-        TimeSpan m_WaitTime = new TimeSpan(0, 0, 2);
+        System.TimeSpan m_WaitTime = new System.TimeSpan(0, 0, 2);
 
         void FlushCommandResultLines(ShellStream stream)
         {

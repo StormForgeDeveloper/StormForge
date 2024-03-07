@@ -47,9 +47,9 @@ namespace SF
                 m_PendingRequests[transId.TransactionId] = callback;
             }
 
-            public override void HandleSentMessage(int result, TransactionID transId, int messageID, Action<SFMessage>? callback)
+            public override void HandleSentMessage(Result result, TransactionID transId, MessageID messageID, Action<SFMessage>? callback)
             {
-                if (result < 0 || transId.TransactionId == 0 || callback == null)
+                if (result.IsFailure || transId.TransactionId == 0 || callback == null)
                 {
                     return;
                 }
@@ -66,7 +66,7 @@ namespace SF
                 {
                     if (result.IsFailure)
                     {
-                        int messageId = message.GetMessageID();
+                        MessageID messageId = message.GetMessageID();
                         SF.Log.Error($"Server request has failed, transactionId:{transactionId}, messageId:{messageId}");
                     }
                 }

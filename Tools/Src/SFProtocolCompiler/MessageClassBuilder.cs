@@ -21,10 +21,10 @@ namespace ProtocolCompiler
     {
         // Msg type string
         static string[] MsgTypeString = new string[] {
-                    "MSGTYPE_NETCONTROL",
-                    "MSGTYPE_COMMAND",
-                    "MSGTYPE_RESULT",
-                    "MSGTYPE_EVENT",
+                    "MessageType::NetCtrl",
+                    "MessageType::Command",
+                    "MessageType::Result",
+                    "MessageType::Event",
                 };
 
         // Message guaranteed level string
@@ -49,7 +49,6 @@ namespace ProtocolCompiler
         public MessageClassBuilder(Dictionary<string, string> settings)
             : base(settings)
         {
-            BasePath = BasePath + "Message";
             GenParameterRouteHopCount = true;
             IsCPPOut = true;
             LogFunctionPrefix = AppConfig.GetValueString("LogFuncPrefix", "SFLog(Net,");
@@ -84,7 +83,7 @@ namespace ProtocolCompiler
             OutStream.WriteLine("");
             OutStream.WriteLine("#pragma once");
             OutStream.WriteLine("");
-            OutStream.WriteLine("#include \"Protocol/SFProtocol.h\"");
+            OutStream.WriteLine("#include \"SFProtocol.h\"");
             OutStream.WriteLine("#include \"Net/SFMessage.h\"");
             OutStream.WriteLine("#include \"Types/SFEngineTypedefs.h\"");
             OutStream.WriteLine("#include \"Variable/SFVariableTable.h\"");
@@ -99,6 +98,8 @@ namespace ProtocolCompiler
             {
                 OutStream.WriteLine("#include \"{0}\"", itCppInclude);
             }
+
+            OutStream.WriteLine($"#include \"Protocol/{Group.Name}MessageID.h\"");
             NewLine(3);
 
             // namespace definition
@@ -121,11 +122,11 @@ namespace ProtocolCompiler
             OutStream.WriteLine("");
             OutStream.WriteLine("");
             OutStream.WriteLine("#include \"{0}\"", PreCompiledHeader );
-            OutStream.WriteLine("#include \"Protocol/SFProtocol.h\"");
+            OutStream.WriteLine("#include \"SFProtocol.h\"");
             OutStream.WriteLine("#include \"Util/SFToString.h\"");
             OutStream.WriteLine("#include \"Net/SFNetToString.h\"");
             OutStream.WriteLine("#include \"Container/SFArray.h\"");
-            OutStream.WriteLine("#include \"Protocol/SFProtocolHelper.h\"");
+            OutStream.WriteLine("#include \"SFProtocolHelper.h\"");
             OutStream.WriteLine("#include \"Protocol/{0}\"", HeaderName);
 
             NewLine(3);
@@ -213,13 +214,7 @@ namespace ProtocolCompiler
         // Make message ID macro string 
         string MakeMsgIDStr(MsgType type, bool reliablity, bool broadcast, string MsgName)
         {
-            string strRes = string.Format("MessageID({0}, {1}, {2}, PROTOCOLID_{3}, {4})",
-                MsgTypeString[(int)type],
-                MsgReliablityString[reliablity ? 1 : 0],
-                MsgBroadcastString[broadcast ? 1 : 0],
-                Group.Name.ToUpper(),
-                m_MessageCodeIndex);
-            return strRes;
+            return $"MessageID({MsgTypeString[(int)type]}, {MsgReliablityString[reliablity ? 1 : 0]}, {MsgBroadcastString[broadcast ? 1 : 0]}, MessageProtocol::{Group.Name}, {m_MessageCodeIndex})";
         }
 
         static Parameter[] GenerateParameterTypeInfoList = new Parameter[]
@@ -250,7 +245,7 @@ namespace ProtocolCompiler
             OpenSection("class", strClassName + " : public MessageBase");
             MatchIndent(-1); OutStream.WriteLine("public:");
 
-            MatchIndent(); OutStream.WriteLine("static const MessageID MID;");
+            MatchIndent(); OutStream.WriteLine($"static constexpr MessageID MID = MID_{strClassName};");
 
             // Generate parameter Indicators for Template implementations
             MatchIndent(); OutStream.WriteLine("// Parameter type informations for template");
@@ -453,10 +448,6 @@ namespace ProtocolCompiler
             }
         }
 
-        void BuildMessageIDImpl(MessageBase msg, MsgType msgType, string typeName)
-        {
-            MatchIndent(); OutStream.WriteLine("const MessageID {0}::MID = {1};", MsgClassName(msg.Name, typeName), MakeMsgIDStr(msgType, msg.Reliable, false/*broadcast*/, msg.Name));
-        }
 
         void BuildGetFunctionImpl(string Name, string typeName, Parameter[] parameters)
         {
@@ -1000,7 +991,6 @@ namespace ProtocolCompiler
                     MatchIndent(); OutStream.WriteLine("// Cmd: " + baseMsg.Desc);
                     ProtocolsProtocolGroupCommand msg = baseMsg as ProtocolsProtocolGroupCommand;
 
-                    BuildMessageIDImpl( msg, MsgType.Cmd, "Cmd" );
                     newparams = MakeParameters(MsgType.Cmd, msg.Cmd);
                     BuildGetFunctionImpl(msg.Name, "Cmd", newparams);
                     BuildParserImpl(msg.Name, "Cmd", newparams); NewLine();
@@ -1014,7 +1004,6 @@ namespace ProtocolCompiler
                     //BuildOverrideRouteHopCountImpl(msg.Name, "Cmd", newparams); NewLine();
                     BuildMessageTrace(msg.Name, "Cmd", msg.Trace.ToString(), newparams);
 
-                    BuildMessageIDImpl( msg, MsgType.Res, "Res" );
                     newparams = MakeParameters(MsgType.Res, msg.Res);
                     BuildGetFunctionImpl(msg.Name, "Res", newparams);
                     BuildParserImpl(msg.Name, "Res", newparams); NewLine();
@@ -1035,7 +1024,6 @@ namespace ProtocolCompiler
                     MatchIndent(); OutStream.WriteLine("// C2S: " + baseMsg.Desc);
                     ProtocolsProtocolGroupC2SEvent msg = baseMsg as ProtocolsProtocolGroupC2SEvent;
 
-                    BuildMessageIDImpl( msg, MsgType.Evt, "C2SEvt" );
                     newparams = MakeParameters(MsgType.Evt, msg.Params);
                     BuildGetFunctionImpl(msg.Name, "C2SEvt", newparams);
                     BuildParserImpl(msg.Name, "C2SEvt", newparams); NewLine();
@@ -1055,7 +1043,6 @@ namespace ProtocolCompiler
                     MatchIndent(); OutStream.WriteLine("// S2C: " + baseMsg.Desc);
                     ProtocolsProtocolGroupS2CEvent msg = baseMsg as ProtocolsProtocolGroupS2CEvent;
 
-                    BuildMessageIDImpl(msg, MsgType.Evt, "S2CEvt");
                     newparams = MakeParameters(MsgType.Evt, msg.Params);
                     BuildGetFunctionImpl(msg.Name, "S2CEvt", newparams);
                     BuildParserImpl(msg.Name, "S2CEvt", newparams); NewLine();

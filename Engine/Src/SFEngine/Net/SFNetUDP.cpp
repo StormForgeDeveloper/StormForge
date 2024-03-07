@@ -14,7 +14,7 @@
 #include "SFEnginePCH.h"
 #include "ResultCode/SFResultCodeEngine.h"
 #include "Multithread/SFThread.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 #include "Service/SFEngineService.h"
 #include "Util/SFToString.h"
 #include "Util/SFStrUtil.h"

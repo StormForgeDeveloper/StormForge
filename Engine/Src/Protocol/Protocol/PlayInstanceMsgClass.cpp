@@ -10,11 +10,11 @@
 
 
 #include "SFProtocolPCH.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 #include "Util/SFToString.h"
 #include "Net/SFNetToString.h"
 #include "Container/SFArray.h"
-#include "Protocol/SFProtocolHelper.h"
+#include "SFProtocolHelper.h"
 #include "Protocol/PlayInstanceMsgClass.h"
 
 
@@ -26,7 +26,6 @@ namespace SF
  		namespace PlayInstance
 		{
  			// Cmd: Player Join request.
-			const MessageID JoinPlayInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 0);
 			Result JoinPlayInstanceCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -129,7 +128,6 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result JoinPlayInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID JoinPlayInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 0);
 			const VariableTable& JoinPlayInstanceRes::GetCharacterPrivateData() const
 			{
  				if (!m_CharacterPrivateDataHasParsed)
@@ -306,7 +304,6 @@ namespace SF
 			}; // Result JoinPlayInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Player kicked event. this event will be broadcasted when a player kicked.
-			const MessageID PlayerKickedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 1);
 			Result PlayerKickedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -399,7 +396,6 @@ namespace SF
 			}; // Result PlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// C2S: Play packet
-			const MessageID PlayPacketC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 2);
 			Result PlayPacketC2SEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -505,7 +501,6 @@ namespace SF
 			}; // Result PlayPacketC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: New actor in get view
-			const MessageID NewActorInViewS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 3);
 			const VariableTable& NewActorInViewS2CEvt::GetPublicData() const
 			{
  				if (!m_PublicDataHasParsed)
@@ -727,7 +722,6 @@ namespace SF
 			}; // Result NewActorInViewS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Remove actor from view
-			const MessageID RemoveActorFromViewS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 4);
 			Result RemoveActorFromViewS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -820,7 +814,6 @@ namespace SF
 			}; // Result RemoveActorFromViewS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// C2S: Player Movement
-			const MessageID PlayerMovementC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 5);
 			Result PlayerMovementC2SEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -918,7 +911,6 @@ namespace SF
 			}; // Result PlayerMovementC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Player Movement
-			const MessageID ActorMovementS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 6);
 			Result ActorMovementS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -1011,7 +1003,6 @@ namespace SF
 			}; // Result ActorMovementS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Player Movement
-			const MessageID ActorMovementsS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 7);
 			Result ActorMovementsS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -1107,7 +1098,6 @@ namespace SF
 			}; // Result ActorMovementsS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Player state change
-			const MessageID PlayerStateChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 8);
 			const VariableTable& PlayerStateChangedS2CEvt::GetStateValues() const
 			{
  				if (!m_StateValuesHasParsed)
@@ -1277,7 +1267,6 @@ namespace SF
 			}; // Result PlayerStateChangedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// C2S: Repliable player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
-			const MessageID ClientSyncReliableC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 9);
 			const VariableTable& ClientSyncReliableC2SEvt::GetSyncData() const
 			{
  				if (!m_SyncDataHasParsed)
@@ -1426,7 +1415,6 @@ namespace SF
 			}; // Result ClientSyncReliableC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// C2S: Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
-			const MessageID ClientSyncC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 10);
 			const VariableTable& ClientSyncC2SEvt::GetSyncData() const
 			{
  				if (!m_SyncDataHasParsed)
@@ -1575,7 +1563,6 @@ namespace SF
 			}; // Result ClientSyncC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Set character public message. Server will broadcast CharacterPublicDataChanged, NewActorInView should have updated value as well
-			const MessageID SetCharacterPublicMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
 			Result SetCharacterPublicMessageCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -1678,7 +1665,6 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result SetCharacterPublicMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID SetCharacterPublicMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
 			Result SetCharacterPublicMessageRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -1771,7 +1757,6 @@ namespace SF
 			}; // Result SetCharacterPublicMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Character's private data has changed
-			const MessageID CharacterPrivateDataChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 12);
 			const VariableTable& CharacterPrivateDataChangedS2CEvt::GetPrivateData() const
 			{
  				if (!m_PrivateDataHasParsed)
@@ -1927,7 +1912,6 @@ namespace SF
 			}; // Result CharacterPrivateDataChangedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Player public data has been changed
-			const MessageID CharacterPublicDataChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 13);
 			const VariableTable& CharacterPublicDataChangedS2CEvt::GetPublicData() const
 			{
  				if (!m_PublicDataHasParsed)
@@ -2076,7 +2060,6 @@ namespace SF
 			}; // Result CharacterPublicDataChangedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Request WhiteboardSharing
-			const MessageID RequestWhiteboardSharingCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 14);
 			const VariableTable& RequestWhiteboardSharingCmd::GetWhiteboardInfo() const
 			{
  				if (!m_WhiteboardInfoHasParsed)
@@ -2238,7 +2221,6 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result RequestWhiteboardSharingCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID RequestWhiteboardSharingRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 14);
 			Result RequestWhiteboardSharingRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -2331,7 +2313,6 @@ namespace SF
 			}; // Result RequestWhiteboardSharingRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Accept WhiteboardSharing
-			const MessageID AcceptWhiteboardSharingCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 15);
 			Result AcceptWhiteboardSharingCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -2438,7 +2419,6 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result AcceptWhiteboardSharingCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID AcceptWhiteboardSharingRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 15);
 			Result AcceptWhiteboardSharingRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -2531,7 +2511,6 @@ namespace SF
 			}; // Result AcceptWhiteboardSharingRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Close WhiteboardSharing. Both clients will receive WhiteboardSharingHasClosed
-			const MessageID CloseWhiteboardSharingCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 16);
 			Result CloseWhiteboardSharingCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -2628,7 +2607,6 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CloseWhiteboardSharingCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID CloseWhiteboardSharingRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 16);
 			Result CloseWhiteboardSharingRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -2721,7 +2699,6 @@ namespace SF
 			}; // Result CloseWhiteboardSharingRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
-			const MessageID AddWhiteboardSharingLogEntryCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 17);
 			const VariableTable& AddWhiteboardSharingLogEntryCmd::GetLogEntry() const
 			{
  				if (!m_LogEntryHasParsed)
@@ -2876,7 +2853,6 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result AddWhiteboardSharingLogEntryCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID AddWhiteboardSharingLogEntryRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 17);
 			Result AddWhiteboardSharingLogEntryRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -2974,7 +2950,6 @@ namespace SF
 			}; // Result AddWhiteboardSharingLogEntryRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
-			const MessageID UpdateWhiteboardSharingLogEntryCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 18);
 			const VariableTable& UpdateWhiteboardSharingLogEntryCmd::GetLogEntry() const
 			{
  				if (!m_LogEntryHasParsed)
@@ -3129,7 +3104,6 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result UpdateWhiteboardSharingLogEntryCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID UpdateWhiteboardSharingLogEntryRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 18);
 			Result UpdateWhiteboardSharingLogEntryRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -3222,7 +3196,6 @@ namespace SF
 			}; // Result UpdateWhiteboardSharingLogEntryRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Update whiteboard log entry
-			const MessageID RemoveWhiteboardSharingLogEntryCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 19);
 			Result RemoveWhiteboardSharingLogEntryCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -3324,7 +3297,6 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result RemoveWhiteboardSharingLogEntryCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID RemoveWhiteboardSharingLogEntryRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 19);
 			Result RemoveWhiteboardSharingLogEntryRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -3417,7 +3389,6 @@ namespace SF
 			}; // Result RemoveWhiteboardSharingLogEntryRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: WhiteboardSharing has been requested
-			const MessageID WhiteboardSharingRequestedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 20);
 			Result WhiteboardSharingRequestedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -3515,7 +3486,6 @@ namespace SF
 			}; // Result WhiteboardSharingRequestedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: WhiteboardSharing has been requested
-			const MessageID WhiteboardSharingRejectedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 21);
 			Result WhiteboardSharingRejectedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -3613,7 +3583,6 @@ namespace SF
 			}; // Result WhiteboardSharingRejectedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: WhiteboardSharing has been started
-			const MessageID WhiteboardSharingStartedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 22);
 			const VariableTable& WhiteboardSharingStartedS2CEvt::GetWhiteboardInfo() const
 			{
  				if (!m_WhiteboardInfoHasParsed)
@@ -3769,7 +3738,6 @@ namespace SF
 			}; // Result WhiteboardSharingStartedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: WhiteboardSharing has been closed
-			const MessageID WhiteboardSharingHasClosedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 23);
 			Result WhiteboardSharingHasClosedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -3867,7 +3835,6 @@ namespace SF
 			}; // Result WhiteboardSharingHasClosedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: WhiteboardSharing new log entry has been added
-			const MessageID WhiteboardSharingNewLogEntryAddedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 24);
 			const VariableTable& WhiteboardSharingNewLogEntryAddedS2CEvt::GetLogEntry() const
 			{
  				if (!m_LogEntryHasParsed)
@@ -4016,7 +3983,6 @@ namespace SF
 			}; // Result WhiteboardSharingNewLogEntryAddedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: WhiteboardSharing new log entry has been removed
-			const MessageID WhiteboardSharingNewLogEntryRemovedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 25);
 			Result WhiteboardSharingNewLogEntryRemovedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -4114,7 +4080,6 @@ namespace SF
 			}; // Result WhiteboardSharingNewLogEntryRemovedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: WhiteboardSharing new log entry has been updated
-			const MessageID WhiteboardSharingNewLogEntryUpdatedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 26);
 			const VariableTable& WhiteboardSharingNewLogEntryUpdatedS2CEvt::GetLogEntry() const
 			{
  				if (!m_LogEntryHasParsed)
@@ -4263,7 +4228,6 @@ namespace SF
 			}; // Result WhiteboardSharingNewLogEntryUpdatedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Occupy map object
-			const MessageID OccupyMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 27);
 			Result OccupyMapObjectCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -4370,7 +4334,6 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result OccupyMapObjectCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID OccupyMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 27);
 			Result OccupyMapObjectRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -4478,7 +4441,6 @@ namespace SF
 			}; // Result OccupyMapObjectRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Unoccupy map object
-			const MessageID UnoccupyMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 28);
 			Result UnoccupyMapObjectCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -4580,7 +4542,6 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result UnoccupyMapObjectCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID UnoccupyMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 28);
 			Result UnoccupyMapObjectRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -4688,7 +4649,6 @@ namespace SF
 			}; // Result UnoccupyMapObjectRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Use map object
-			const MessageID UseMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 29);
 			const VariableTable& UseMapObjectCmd::GetUseParameters() const
 			{
  				if (!m_UseParametersHasParsed)
@@ -4850,7 +4810,6 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result UseMapObjectCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID UseMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 29);
 			const VariableTable& UseMapObjectRes::GetResultAttributes() const
 			{
  				if (!m_ResultAttributesHasParsed)
@@ -5020,7 +4979,6 @@ namespace SF
 			}; // Result UseMapObjectRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Send zone chatting
-			const MessageID ZoneChatCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 30);
 			const VariableTable& ZoneChatCmd::GetChatMetaData() const
 			{
  				if (!m_ChatMetaDataHasParsed)
@@ -5190,7 +5148,6 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result ZoneChatCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID ZoneChatRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 30);
 			Result ZoneChatRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -5283,7 +5240,6 @@ namespace SF
 			}; // Result ZoneChatRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Player state change
-			const MessageID ZoneChatS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 31);
 			const VariableTable& ZoneChatS2CEvt::GetChatMetaData() const
 			{
  				if (!m_ChatMetaDataHasParsed)
@@ -5447,7 +5403,6 @@ namespace SF
 			}; // Result ZoneChatS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Effect modifier initial sync
-			const MessageID LevelUpS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 32);
 			Result LevelUpS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -5550,7 +5505,6 @@ namespace SF
 			}; // Result LevelUpS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: To call general functionality
-			const MessageID CallFunctionCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 33);
 			const VariableTable& CallFunctionCmd::GetParameters() const
 			{
  				if (!m_ParametersHasParsed)
@@ -5705,7 +5659,6 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CallFunctionCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID CallFunctionRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 33);
 			const VariableTable& CallFunctionRes::GetResults() const
 			{
  				if (!m_ResultsHasParsed)
@@ -5854,7 +5807,6 @@ namespace SF
 			}; // Result CallFunctionRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// C2S: Send coded voice data to server
-			const MessageID SendVoiceDataC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 34);
 			Result SendVoiceDataC2SEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -5960,7 +5912,6 @@ namespace SF
 			}; // Result SendVoiceDataC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Voice data
-			const MessageID VoiceDataS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 35);
 			Result VoiceDataS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -6061,7 +6012,6 @@ namespace SF
 			}; // Result VoiceDataS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Create stream instance
-			const MessageID CreateStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 36);
 			Result CreateStreamCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -6159,7 +6109,6 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CreateStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID CreateStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 36);
 			Result CreateStreamRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -6258,7 +6207,6 @@ namespace SF
 			}; // Result CreateStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Open stream instance
-			const MessageID FindStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 37);
 			Result FindStreamCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -6356,7 +6304,6 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result FindStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID FindStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 37);
 			Result FindStreamRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -6455,7 +6402,6 @@ namespace SF
 			}; // Result FindStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Delete stream instance
-			const MessageID DeleteStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 38);
 			Result DeleteStreamCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -6553,7 +6499,6 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result DeleteStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID DeleteStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 38);
 			Result DeleteStreamRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -6652,7 +6597,6 @@ namespace SF
 			}; // Result DeleteStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Get stream list
-			const MessageID GetStreamListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 39);
 			Result GetStreamListCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;
@@ -6744,7 +6688,6 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetStreamListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
-			const MessageID GetStreamListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 39);
 			Result GetStreamListRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				Result hr;

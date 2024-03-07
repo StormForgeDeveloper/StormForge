@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2018 Kyungkun Ko
 // 
@@ -46,7 +46,7 @@ namespace SF.Asset
             return Dependencies.TryGetValue(dependency.SourcePath, out existDependency);
         }
 
-        public ResultCode AddDependency(AssetGraphNode dependency)
+        public Result AddDependency(AssetGraphNode dependency)
         {
             var added = Dependencies.AddOrUpdate(dependency.SourcePath, dependency, (x, oldValue) => {
                 ToolDebug.Assert(oldValue == dependency);
@@ -55,7 +55,7 @@ namespace SF.Asset
 
             if (added != dependency)
             {
-                return new ResultCode(ResultCode.SUCCESS_FALSE);
+                return ResultCode.SUCCESS_FALSE;
             }
 
             dependency.References.AddOrUpdate(SourcePath, this, (x, oldValue) => {
@@ -63,7 +63,7 @@ namespace SF.Asset
                 return this;
             });
 
-            return new ResultCode(ResultCode.SUCCESS);
+            return ResultCode.SUCCESS;
         }
 
         public void RemoveDependency(AssetGraphNode dependencyToRemove)

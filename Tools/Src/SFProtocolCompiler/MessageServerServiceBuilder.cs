@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -26,7 +26,6 @@ namespace ProtocolCompiler
         public MessageServerServiceBuilder(Dictionary<string, string> settings)
             : base(settings)
         {
-            BasePath = BasePath + "ServerService";
             GenParameterRouteHopCount = true;
             m_ParameterRouteHopContext = ParamRouteContext;
             ParamRouteContext = null;
@@ -65,7 +64,7 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#pragma once");
             OutStream.WriteLine("");
             OutStream.WriteLine("#include \"SFTypedefs.h\"");
-            OutStream.WriteLine("#include \"Protocol/SFProtocol.h\"");
+            OutStream.WriteLine("#include \"SFProtocol.h\"");
             OutStream.WriteLine("#include \"ServerService/ServerServiceBase.h\"");
 
             OutStream.WriteLine("#include \"Net/SFNetDef.h\"");
@@ -92,7 +91,7 @@ namespace ProtocolCompiler
             OutStream.WriteLine("");
             OutStream.WriteLine("#include \"{0}\"", PreCompiledHeader);
             OutStream.WriteLine("#include \"SFTypedefs.h\"");
-            OutStream.WriteLine("#include \"Protocol/SFProtocol.h\"");
+            OutStream.WriteLine("#include \"SFProtocol.h\"");
             OutStream.WriteLine("#include \"Net/SFMessageEndpoint.h\"");
             OutStream.WriteLine("#include \"Server/BrServer.h\"");
             OutStream.WriteLine("#include \"Server/BrServerUtil.h\"");

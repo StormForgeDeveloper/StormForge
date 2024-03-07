@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -87,11 +87,13 @@ namespace SF
             foreach (var codeItem in m_Codes.ResultCodeItem)
             {
                 var codeValue = codeItem.ResultCode;
+                string isSuccessString = codeValue.IsSucceeded ? "SUCCESS_" : string.Empty;
+
                 string strDefine = "";
                 if (m_Codes.UseFacilityName)
-                    strDefine = string.Format("{0}{1}_{2}", ResultCode.ServerityToDefineString(codeValue.Severity), facilityUpr, codeItem.CodeName.ToUpper());
+                    strDefine = $"\t\t\t{Result.ServerityToDefineString(codeValue.Severity)}{facilityUpr}_{codeItem.CodeName.ToUpper()}        ";
                 else
-                    strDefine = string.Format("{0}{1}", ResultCode.ServerityToDefineString(codeValue.Severity), codeItem.CodeName.ToUpper());
+                    strDefine = $"\t\t\t{Result.ServerityToDefineString(codeValue.Severity)}{codeItem.CodeName.ToUpper()}        ";
 
                 output.AppendFormat("\t\tcodeMap.Insert((uint32_t){0}, {{\"{1}\", \"{2}\"}});\n", strDefine, strDefine, string.IsNullOrEmpty(codeItem.Desc) ? "" : codeItem.Desc);
             }

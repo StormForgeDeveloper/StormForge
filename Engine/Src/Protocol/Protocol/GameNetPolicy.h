@@ -11,7 +11,7 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 #include "Net/SFNetDef.h"
 
 
@@ -174,15 +174,15 @@ namespace SF
 		// Cmd: Invite friend
 		Result InviteFriendRes( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: Accept friend request
-		Result AcceptFriendRequestRes( const TransactionID &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend );
+		Result AcceptFriendRequestRes( const TransactionID &InTransactionID, const Result &InResult, const PlayerInformation &InNewFriend );
 		// S2C: Notification for friend request is accepted
-		Result FriendRequestAcceptedS2CEvt( const FriendInformation &InAccepter );
+		Result FriendRequestAcceptedS2CEvt( const PlayerInformation &InAccepter );
 		// Cmd: Remove friden form the friend list
 		Result RemoveFriendRes( const TransactionID &InTransactionID, const Result &InResult, const AccountID &InFriendID );
 		// S2C: Friend removed
 		Result FriendRemovedS2CEvt( const AccountID &InFriendID );
 		// Cmd: Get friend list
-		Result GetFriendListRes( const TransactionID &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList );
+		Result GetFriendListRes( const TransactionID &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<PlayerInformation>& InFriendList );
 		// Cmd: Query notification list
 		Result GetNotificationListRes( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: Delete notification

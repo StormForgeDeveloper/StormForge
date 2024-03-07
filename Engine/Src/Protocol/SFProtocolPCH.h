@@ -27,7 +27,7 @@
 #include "ResultCode/SFResultCodeEngine.h"
 #include "ResultCode/SFResultCodeLibrary.h"
 
-#include "Protocol/SFProtocolHelper.h"
+#include "SFProtocolHelper.h"
 
 
 

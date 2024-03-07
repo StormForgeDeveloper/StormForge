@@ -25,7 +25,6 @@ namespace ProtocolCompiler
         public MessageParserCSharpBuilder(Dictionary<string, string> settings)
             : base(settings)
         {
-            BasePath = BasePath + "CSharp";
         }
 
         public string BuilderNamespace

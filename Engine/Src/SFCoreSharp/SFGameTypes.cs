@@ -26,9 +26,6 @@ namespace SF
     {
     }
 
-    public class NativeWrapperAttribute : Attribute
-    {
-    }
 
     [Struct()]
     [StructLayout(LayoutKind.Sequential)]
@@ -97,6 +94,14 @@ namespace SF
         public bool IsValid => TransactionId != 0;
     }
 
+    // PH, don't use it directly
+    [Struct()]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct NamedVariable
+    {
+        public UInt64 UID;
+    }
+
     // Player Role
     public enum PlayerRole
     {
@@ -113,6 +118,15 @@ namespace SF
         //Friend,
         World,
     };
+
+    [Struct()]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct MatchingPlayerInformation
+    {
+        UInt64 PlayerUID;
+        UInt64 PlayerID;
+        byte RequestedRole;
+    }
 
 
     // Notification message
@@ -176,7 +190,7 @@ namespace SF
     {
         Zone,
 		ZoneGlobal,
-		Wisper,
+		Whisper,
 		Channel,
 		System,
 		Max

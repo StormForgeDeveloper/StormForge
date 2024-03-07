@@ -18,7 +18,7 @@
 #include "Util/SFTimeUtil.h"
 #include "Util/SFToString.h"
 #include "Service/SFEngineService.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 #include "Net/SFNetConst.h"
 #include "Net/SFNetSystem.h"
 #include "Net/SFNetCtrl.h"
@@ -550,9 +550,9 @@ namespace SF {
                 || pMsgHeader->Length > 1024 // Multiple sub framed message can't have crc value. each sub frame does
                 || pMsgHeader->Crc32 != 0); // Crc should have value
 
-            uint uiPolicy = msgID.IDs.Policy;
+            uint uiPolicy = msgID.IDs.Protocol;
             if (uiPolicy == 0 // Net control
-                || uiPolicy >= PROTOCOLID_NETMAX) // invalid policy
+                || uiPolicy >= MessageProtocol::Max) // invalid policy
             {
                 netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
             }

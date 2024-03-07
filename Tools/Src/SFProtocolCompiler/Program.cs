@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -27,9 +27,7 @@ namespace ProtocolCompiler
     {
         static ProtocolData m_protocolData;
 
-        static string stm_CPPOut = "../../Test";
-        static string stm_CSOut = "../../Test";
-        static string stm_Out = "../../Test";
+        static string stm_Out = "Out/";
         static string strTempPath = "Temp/";
 
 
@@ -47,12 +45,7 @@ namespace ProtocolCompiler
 
             try
             {
-                stm_CPPOut = AppConfig.GetValueString("dir");
                 stm_Out = AppConfig.GetValueString("out", stm_Out);
-                if (string.IsNullOrEmpty(stm_CPPOut))
-                    stm_CPPOut = AppConfig.GetValueString("outCPP", stm_CPPOut);
-
-                stm_CSOut = AppConfig.GetValueString("outSharp", stm_CSOut);
 
                 var typeDefs = AppConfig.GetValueSet("TypeDef");
                 if (typeDefs != null)
@@ -73,7 +66,8 @@ namespace ProtocolCompiler
 
                 // setup settings
                 Dictionary<string, string> settings = new Dictionary<string, string>();
-                settings["BasePath"] = strTempPath;
+                settings["BasePath"] = stm_Out;
+                settings["CSharpProtocolNamespace"] = AppConfig.GetValueString("CSharpProtocolNamespace");
 
                 // create builders
                 var generators = AppConfig.GetValueSet("gen");
@@ -105,17 +99,13 @@ namespace ProtocolCompiler
                 {
                     foreach (Builder builder in builders)
                     {
+                        Console.WriteLine($"Running builder:{builder.GetType().Name}");
+
                         builder.Group = group;
                         builder.Build();
                     }
                 }
 
-                // copy only changed file
-                string[] files = Directory.GetFiles(strTempPath, "*.*", SearchOption.AllDirectories);
-                foreach (string file in files)
-                {
-                    CopyIfChanged(file);
-                }
            }
             catch (System.IO.IOException sysex)
             {
@@ -135,89 +125,5 @@ namespace ProtocolCompiler
             }
         }
 
-        // copy if changed
-        static void CopyIfChanged(string sourceFilePath)
-        {
-            string strTargetPath = stm_Out;
-            switch (Path.GetExtension(sourceFilePath))
-            {
-                case ".cs":
-                    strTargetPath = stm_CSOut;
-                    break;
-                case ".cpp":
-                case ".h":
-                case ".inl":
-                    strTargetPath = stm_CPPOut;
-                    break;
-            }
-
-            if(string.IsNullOrEmpty(strTargetPath))
-            {
-                throw new Exception(string.Format("Invalid target path for {0}", sourceFilePath));
-            }
-
-            string targetFilePath = Path.Combine(strTargetPath, Path.GetFileName(sourceFilePath));//sourceFilePath.Remove(0,strTempPath.Length);
-            string targetDir = Path.GetDirectoryName(targetFilePath);
-
-            Directory.CreateDirectory(targetDir);
-
-            char[] sourceFileBuffer = new char[7 * 1024];
-            int sourceFileReadSize = 0;
-            char[] targetFileBuffer = new char[7 * 1024];
-            int targetFileReadSize = 0;
-
-            bool bIsMissMatched = false;
-            using (FileStream source = new FileStream(sourceFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (StreamReader sourceFile = new StreamReader(source, Encoding.UTF8))
-            {
-                try
-                {
-                    using (FileStream target = new FileStream(targetFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    using (StreamReader targetFile = new StreamReader(target, Encoding.UTF8))
-                    {
-                        while (!bIsMissMatched)
-                        {
-                            sourceFileReadSize = sourceFile.Read(sourceFileBuffer, 0, sourceFileBuffer.Length);
-                            targetFileReadSize = targetFile.Read(targetFileBuffer, 0, targetFileBuffer.Length);
-                            if (targetFileReadSize != sourceFileReadSize)
-                            {
-                                bIsMissMatched = true;
-                                break;
-                            }
-                            else if (targetFileReadSize == 0)
-                            {
-                                break;
-                            }
-
-                            int iChar = 0;
-                            for (iChar = 0; iChar < sourceFileReadSize; iChar++)
-                            {
-                                if (sourceFileBuffer[iChar] != targetFileBuffer[iChar])
-                                {
-                                    bIsMissMatched = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (System.IO.IOException)
-                {
-                    // maybe file not exist, create new one
-                    bIsMissMatched = true;
-                }
-            }
-
-            if( !bIsMissMatched )
-                return;
-
-            Console.WriteLine( "Copying : " + targetFilePath );
-
-            File.Copy(sourceFilePath, targetFilePath, true);
-
-            // Delete temp file
-            File.Delete(sourceFilePath);
-        }
-   
     }
 }

@@ -20,7 +20,6 @@ namespace ProtocolCompiler
         public MessageNetPolicyBuilder(Dictionary<string, string> settings)
             : base(settings)
         {
-            BasePath = BasePath + "Lib/Protocol/Policy";
         }
 
         public virtual string OutputHeaderName()
@@ -53,7 +52,7 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#pragma once");
             OutStream.WriteLine("");
             OutStream.WriteLine("#include \"SFTypedefs.h\"");
-            OutStream.WriteLine("#include \"Protocol/SFProtocol.h\"");
+            OutStream.WriteLine("#include \"SFProtocol.h\"");
             OutStream.WriteLine("#include \"Net/SFNetDef.h\"");
             NewLine(3);
 

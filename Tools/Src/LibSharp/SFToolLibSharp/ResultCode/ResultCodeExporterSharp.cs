@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -48,7 +48,7 @@ namespace SF
         {
             output.Append("////////////////////////////////////////////////////////////////////////////////\n");
             output.Append("// \n");
-            output.Append("// CopyRight (c) 2016 Kyungkun Ko\n");
+            output.Append("// CopyRight (c) Kyungkun Ko\n");
             output.Append("// \n");
             output.Append("// Author : KyungKun Ko\n");
             output.Append("//\n");
@@ -73,18 +73,19 @@ namespace SF
             foreach (var codeItem in m_Codes.ResultCodeItem)
             {
                 var codeValue = codeItem.ResultCode;
+
                 string strDefine = "";
                 if(m_Codes.UseFacilityName)
-                    strDefine = string.Format("\t\tpublic const int {0}{1}_{2} = ", ResultCode.ServerityToDefineString(codeValue.Severity), facilityUpr, codeItem.CodeName.ToUpper());
+                    strDefine = $"\t\tpublic static readonly Result {Result.ServerityToDefineString(codeValue.Severity)}{facilityUpr}_{codeItem.CodeName.ToUpper()} = ";
                 else
-                    strDefine = string.Format("\t\tpublic const int {0}{1} = ", ResultCode.ServerityToDefineString(codeValue.Severity), codeItem.CodeName.ToUpper());
+                    strDefine = $"\t\tpublic static readonly Result {Result.ServerityToDefineString(codeValue.Severity)}{codeItem.CodeName.ToUpper()} = ";
 
                 output.AppendFormat("\n");
                 output.AppendFormat("\t\t// {0} \n", string.IsNullOrEmpty(codeItem.Desc) ? "" : codeItem.Desc);
                 output.AppendFormat("{0}", strDefine);
                 if(strDefine.Length <= tabSize)
                     output.Append(' ', tabSize - strDefine.Length);
-                output.AppendFormat("unchecked((int)0x{0:X8}); \n", codeValue.ID);
+                output.AppendFormat("new Result(unchecked((int)0x{0:X8})); \n", codeValue.Code);
             }
 
             output.AppendLine("");

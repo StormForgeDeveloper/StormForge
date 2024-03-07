@@ -12,7 +12,7 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 #include "Net/SFMessage.h"
 #include "Net/SFNetCtrlIDs.h"
 #if SF_PLATFORM != SF_PLATFORM_WINDOWS

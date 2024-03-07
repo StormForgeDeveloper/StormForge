@@ -13,939 +13,20 @@ static_assert(FLATBUFFERS_VERSION_MAJOR == 23 &&
               FLATBUFFERS_VERSION_REVISION == 26,
              "Non-compatible flatbuffers version included");
 
-#include "SFTypes_generated.h"
+#include "LocalTypes_generated.h"
 
 namespace SF {
 namespace Flat {
 namespace Telemetry {
 
-struct TelemetryPacket;
-struct TelemetryPacketBuilder;
+struct PostEventCmd;
+struct PostEventCmdBuilder;
 
-struct EventAttributeString;
-struct EventAttributeStringBuilder;
+struct PostEventRes;
+struct PostEventResBuilder;
 
-struct EventAttributeInt;
-struct EventAttributeIntBuilder;
-
-struct EventAttributeUInt;
-struct EventAttributeUIntBuilder;
-
-struct EventAttributeInt64;
-struct EventAttributeInt64Builder;
-
-struct EventAttributeUInt64;
-struct EventAttributeUInt64Builder;
-
-struct EventAttributeFloat;
-struct EventAttributeFloatBuilder;
-
-struct EventAttributeDouble;
-struct EventAttributeDoubleBuilder;
-
-struct EventAttributeBool;
-struct EventAttributeBoolBuilder;
-
-struct EventAttribute;
-struct EventAttributeBuilder;
-
-struct PostEventRequest;
-struct PostEventRequestBuilder;
-
-struct PostEventResult;
-struct PostEventResultBuilder;
-
-enum class PayloadData : uint8_t {
-  NONE = 0,
-  GenericError = 1,
-  PostEventRequest = 2,
-  PostEventResult = 3,
-  MIN = NONE,
-  MAX = PostEventResult
-};
-
-inline const PayloadData (&EnumValuesPayloadData())[4] {
-  static const PayloadData values[] = {
-    PayloadData::NONE,
-    PayloadData::GenericError,
-    PayloadData::PostEventRequest,
-    PayloadData::PostEventResult
-  };
-  return values;
-}
-
-inline const char * const *EnumNamesPayloadData() {
-  static const char * const names[5] = {
-    "NONE",
-    "GenericError",
-    "PostEventRequest",
-    "PostEventResult",
-    nullptr
-  };
-  return names;
-}
-
-inline const char *EnumNamePayloadData(PayloadData e) {
-  if (::flatbuffers::IsOutRange(e, PayloadData::NONE, PayloadData::PostEventResult)) return "";
-  const size_t index = static_cast<size_t>(e);
-  return EnumNamesPayloadData()[index];
-}
-
-template<typename T> struct PayloadDataTraits {
-  static const PayloadData enum_value = PayloadData::NONE;
-};
-
-template<> struct PayloadDataTraits<SF::Flat::GenericError> {
-  static const PayloadData enum_value = PayloadData::GenericError;
-};
-
-template<> struct PayloadDataTraits<SF::Flat::Telemetry::PostEventRequest> {
-  static const PayloadData enum_value = PayloadData::PostEventRequest;
-};
-
-template<> struct PayloadDataTraits<SF::Flat::Telemetry::PostEventResult> {
-  static const PayloadData enum_value = PayloadData::PostEventResult;
-};
-
-bool VerifyPayloadData(::flatbuffers::Verifier &verifier, const void *obj, PayloadData type);
-bool VerifyPayloadDataVector(::flatbuffers::Verifier &verifier, const ::flatbuffers::Vector<::flatbuffers::Offset<void>> *values, const ::flatbuffers::Vector<PayloadData> *types);
-
-enum class EventAttributeValue : uint8_t {
-  NONE = 0,
-  EventAttributeString = 1,
-  EventAttributeBool = 2,
-  EventAttributeFloat = 3,
-  EventAttributeDouble = 4,
-  EventAttributeInt = 5,
-  EventAttributeUInt = 6,
-  EventAttributeInt64 = 7,
-  EventAttributeUInt64 = 8,
-  MIN = NONE,
-  MAX = EventAttributeUInt64
-};
-
-inline const EventAttributeValue (&EnumValuesEventAttributeValue())[9] {
-  static const EventAttributeValue values[] = {
-    EventAttributeValue::NONE,
-    EventAttributeValue::EventAttributeString,
-    EventAttributeValue::EventAttributeBool,
-    EventAttributeValue::EventAttributeFloat,
-    EventAttributeValue::EventAttributeDouble,
-    EventAttributeValue::EventAttributeInt,
-    EventAttributeValue::EventAttributeUInt,
-    EventAttributeValue::EventAttributeInt64,
-    EventAttributeValue::EventAttributeUInt64
-  };
-  return values;
-}
-
-inline const char * const *EnumNamesEventAttributeValue() {
-  static const char * const names[10] = {
-    "NONE",
-    "EventAttributeString",
-    "EventAttributeBool",
-    "EventAttributeFloat",
-    "EventAttributeDouble",
-    "EventAttributeInt",
-    "EventAttributeUInt",
-    "EventAttributeInt64",
-    "EventAttributeUInt64",
-    nullptr
-  };
-  return names;
-}
-
-inline const char *EnumNameEventAttributeValue(EventAttributeValue e) {
-  if (::flatbuffers::IsOutRange(e, EventAttributeValue::NONE, EventAttributeValue::EventAttributeUInt64)) return "";
-  const size_t index = static_cast<size_t>(e);
-  return EnumNamesEventAttributeValue()[index];
-}
-
-template<typename T> struct EventAttributeValueTraits {
-  static const EventAttributeValue enum_value = EventAttributeValue::NONE;
-};
-
-template<> struct EventAttributeValueTraits<SF::Flat::Telemetry::EventAttributeString> {
-  static const EventAttributeValue enum_value = EventAttributeValue::EventAttributeString;
-};
-
-template<> struct EventAttributeValueTraits<SF::Flat::Telemetry::EventAttributeBool> {
-  static const EventAttributeValue enum_value = EventAttributeValue::EventAttributeBool;
-};
-
-template<> struct EventAttributeValueTraits<SF::Flat::Telemetry::EventAttributeFloat> {
-  static const EventAttributeValue enum_value = EventAttributeValue::EventAttributeFloat;
-};
-
-template<> struct EventAttributeValueTraits<SF::Flat::Telemetry::EventAttributeDouble> {
-  static const EventAttributeValue enum_value = EventAttributeValue::EventAttributeDouble;
-};
-
-template<> struct EventAttributeValueTraits<SF::Flat::Telemetry::EventAttributeInt> {
-  static const EventAttributeValue enum_value = EventAttributeValue::EventAttributeInt;
-};
-
-template<> struct EventAttributeValueTraits<SF::Flat::Telemetry::EventAttributeUInt> {
-  static const EventAttributeValue enum_value = EventAttributeValue::EventAttributeUInt;
-};
-
-template<> struct EventAttributeValueTraits<SF::Flat::Telemetry::EventAttributeInt64> {
-  static const EventAttributeValue enum_value = EventAttributeValue::EventAttributeInt64;
-};
-
-template<> struct EventAttributeValueTraits<SF::Flat::Telemetry::EventAttributeUInt64> {
-  static const EventAttributeValue enum_value = EventAttributeValue::EventAttributeUInt64;
-};
-
-bool VerifyEventAttributeValue(::flatbuffers::Verifier &verifier, const void *obj, EventAttributeValue type);
-bool VerifyEventAttributeValueVector(::flatbuffers::Verifier &verifier, const ::flatbuffers::Vector<::flatbuffers::Offset<void>> *values, const ::flatbuffers::Vector<EventAttributeValue> *types);
-
-struct TelemetryPacket FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef TelemetryPacketBuilder Builder;
-  struct Traits;
-  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_PAYLOAD_DATA_TYPE = 4,
-    VT_PAYLOAD_DATA = 6
-  };
-  SF::Flat::Telemetry::PayloadData payload_data_type() const {
-    return static_cast<SF::Flat::Telemetry::PayloadData>(GetField<uint8_t>(VT_PAYLOAD_DATA_TYPE, 0));
-  }
-  const void *payload_data() const {
-    return GetPointer<const void *>(VT_PAYLOAD_DATA);
-  }
-  template<typename T> const T *payload_data_as() const;
-  const SF::Flat::GenericError *payload_data_as_GenericError() const {
-    return payload_data_type() == SF::Flat::Telemetry::PayloadData::GenericError ? static_cast<const SF::Flat::GenericError *>(payload_data()) : nullptr;
-  }
-  const SF::Flat::Telemetry::PostEventRequest *payload_data_as_PostEventRequest() const {
-    return payload_data_type() == SF::Flat::Telemetry::PayloadData::PostEventRequest ? static_cast<const SF::Flat::Telemetry::PostEventRequest *>(payload_data()) : nullptr;
-  }
-  const SF::Flat::Telemetry::PostEventResult *payload_data_as_PostEventResult() const {
-    return payload_data_type() == SF::Flat::Telemetry::PayloadData::PostEventResult ? static_cast<const SF::Flat::Telemetry::PostEventResult *>(payload_data()) : nullptr;
-  }
-  template<size_t Index>
-  auto get_field() const {
-         if constexpr (Index == 0) return payload_data_type();
-    else if constexpr (Index == 1) return payload_data();
-    else static_assert(Index != Index, "Invalid Field Index");
-  }
-  bool Verify(::flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           VerifyField<uint8_t>(verifier, VT_PAYLOAD_DATA_TYPE, 1) &&
-           VerifyOffset(verifier, VT_PAYLOAD_DATA) &&
-           VerifyPayloadData(verifier, payload_data(), payload_data_type()) &&
-           verifier.EndTable();
-  }
-};
-
-template<> inline const SF::Flat::GenericError *TelemetryPacket::payload_data_as<SF::Flat::GenericError>() const {
-  return payload_data_as_GenericError();
-}
-
-template<> inline const SF::Flat::Telemetry::PostEventRequest *TelemetryPacket::payload_data_as<SF::Flat::Telemetry::PostEventRequest>() const {
-  return payload_data_as_PostEventRequest();
-}
-
-template<> inline const SF::Flat::Telemetry::PostEventResult *TelemetryPacket::payload_data_as<SF::Flat::Telemetry::PostEventResult>() const {
-  return payload_data_as_PostEventResult();
-}
-
-struct TelemetryPacketBuilder {
-  typedef TelemetryPacket Table;
-  ::flatbuffers::FlatBufferBuilder &fbb_;
-  ::flatbuffers::uoffset_t start_;
-  void add_payload_data_type(SF::Flat::Telemetry::PayloadData payload_data_type) {
-    fbb_.AddElement<uint8_t>(TelemetryPacket::VT_PAYLOAD_DATA_TYPE, static_cast<uint8_t>(payload_data_type), 0);
-  }
-  void add_payload_data(::flatbuffers::Offset<void> payload_data) {
-    fbb_.AddOffset(TelemetryPacket::VT_PAYLOAD_DATA, payload_data);
-  }
-  explicit TelemetryPacketBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  ::flatbuffers::Offset<TelemetryPacket> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<TelemetryPacket>(end);
-    return o;
-  }
-};
-
-inline ::flatbuffers::Offset<TelemetryPacket> CreateTelemetryPacket(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    SF::Flat::Telemetry::PayloadData payload_data_type = SF::Flat::Telemetry::PayloadData::NONE,
-    ::flatbuffers::Offset<void> payload_data = 0) {
-  TelemetryPacketBuilder builder_(_fbb);
-  builder_.add_payload_data(payload_data);
-  builder_.add_payload_data_type(payload_data_type);
-  return builder_.Finish();
-}
-
-struct TelemetryPacket::Traits {
-  using type = TelemetryPacket;
-  static auto constexpr Create = CreateTelemetryPacket;
-  static constexpr auto name = "TelemetryPacket";
-  static constexpr auto fully_qualified_name = "SF.Flat.Telemetry.TelemetryPacket";
-  static constexpr size_t fields_number = 2;
-  static constexpr std::array<const char *, fields_number> field_names = {
-    "payload_data_type",
-    "payload_data"
-  };
-  template<size_t Index>
-  using FieldType = decltype(std::declval<type>().get_field<Index>());
-};
-
-struct EventAttributeString FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef EventAttributeStringBuilder Builder;
-  struct Traits;
-  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_VALUE = 4
-  };
-  const ::flatbuffers::String *value() const {
-    return GetPointer<const ::flatbuffers::String *>(VT_VALUE);
-  }
-  template<size_t Index>
-  auto get_field() const {
-         if constexpr (Index == 0) return value();
-    else static_assert(Index != Index, "Invalid Field Index");
-  }
-  bool Verify(::flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           VerifyOffsetRequired(verifier, VT_VALUE) &&
-           verifier.VerifyString(value()) &&
-           verifier.EndTable();
-  }
-};
-
-struct EventAttributeStringBuilder {
-  typedef EventAttributeString Table;
-  ::flatbuffers::FlatBufferBuilder &fbb_;
-  ::flatbuffers::uoffset_t start_;
-  void add_value(::flatbuffers::Offset<::flatbuffers::String> value) {
-    fbb_.AddOffset(EventAttributeString::VT_VALUE, value);
-  }
-  explicit EventAttributeStringBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  ::flatbuffers::Offset<EventAttributeString> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<EventAttributeString>(end);
-    fbb_.Required(o, EventAttributeString::VT_VALUE);
-    return o;
-  }
-};
-
-inline ::flatbuffers::Offset<EventAttributeString> CreateEventAttributeString(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    ::flatbuffers::Offset<::flatbuffers::String> value = 0) {
-  EventAttributeStringBuilder builder_(_fbb);
-  builder_.add_value(value);
-  return builder_.Finish();
-}
-
-struct EventAttributeString::Traits {
-  using type = EventAttributeString;
-  static auto constexpr Create = CreateEventAttributeString;
-  static constexpr auto name = "EventAttributeString";
-  static constexpr auto fully_qualified_name = "SF.Flat.Telemetry.EventAttributeString";
-  static constexpr size_t fields_number = 1;
-  static constexpr std::array<const char *, fields_number> field_names = {
-    "value"
-  };
-  template<size_t Index>
-  using FieldType = decltype(std::declval<type>().get_field<Index>());
-};
-
-inline ::flatbuffers::Offset<EventAttributeString> CreateEventAttributeStringDirect(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    const char *value = nullptr) {
-  auto value__ = value ? _fbb.CreateString(value) : 0;
-  return SF::Flat::Telemetry::CreateEventAttributeString(
-      _fbb,
-      value__);
-}
-
-struct EventAttributeInt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef EventAttributeIntBuilder Builder;
-  struct Traits;
-  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_VALUE = 4
-  };
-  int32_t value() const {
-    return GetField<int32_t>(VT_VALUE, 0);
-  }
-  template<size_t Index>
-  auto get_field() const {
-         if constexpr (Index == 0) return value();
-    else static_assert(Index != Index, "Invalid Field Index");
-  }
-  bool Verify(::flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           VerifyField<int32_t>(verifier, VT_VALUE, 4) &&
-           verifier.EndTable();
-  }
-};
-
-struct EventAttributeIntBuilder {
-  typedef EventAttributeInt Table;
-  ::flatbuffers::FlatBufferBuilder &fbb_;
-  ::flatbuffers::uoffset_t start_;
-  void add_value(int32_t value) {
-    fbb_.AddElement<int32_t>(EventAttributeInt::VT_VALUE, value, 0);
-  }
-  explicit EventAttributeIntBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  ::flatbuffers::Offset<EventAttributeInt> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<EventAttributeInt>(end);
-    return o;
-  }
-};
-
-inline ::flatbuffers::Offset<EventAttributeInt> CreateEventAttributeInt(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    int32_t value = 0) {
-  EventAttributeIntBuilder builder_(_fbb);
-  builder_.add_value(value);
-  return builder_.Finish();
-}
-
-struct EventAttributeInt::Traits {
-  using type = EventAttributeInt;
-  static auto constexpr Create = CreateEventAttributeInt;
-  static constexpr auto name = "EventAttributeInt";
-  static constexpr auto fully_qualified_name = "SF.Flat.Telemetry.EventAttributeInt";
-  static constexpr size_t fields_number = 1;
-  static constexpr std::array<const char *, fields_number> field_names = {
-    "value"
-  };
-  template<size_t Index>
-  using FieldType = decltype(std::declval<type>().get_field<Index>());
-};
-
-struct EventAttributeUInt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef EventAttributeUIntBuilder Builder;
-  struct Traits;
-  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_VALUE = 4
-  };
-  uint32_t value() const {
-    return GetField<uint32_t>(VT_VALUE, 0);
-  }
-  template<size_t Index>
-  auto get_field() const {
-         if constexpr (Index == 0) return value();
-    else static_assert(Index != Index, "Invalid Field Index");
-  }
-  bool Verify(::flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           VerifyField<uint32_t>(verifier, VT_VALUE, 4) &&
-           verifier.EndTable();
-  }
-};
-
-struct EventAttributeUIntBuilder {
-  typedef EventAttributeUInt Table;
-  ::flatbuffers::FlatBufferBuilder &fbb_;
-  ::flatbuffers::uoffset_t start_;
-  void add_value(uint32_t value) {
-    fbb_.AddElement<uint32_t>(EventAttributeUInt::VT_VALUE, value, 0);
-  }
-  explicit EventAttributeUIntBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  ::flatbuffers::Offset<EventAttributeUInt> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<EventAttributeUInt>(end);
-    return o;
-  }
-};
-
-inline ::flatbuffers::Offset<EventAttributeUInt> CreateEventAttributeUInt(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    uint32_t value = 0) {
-  EventAttributeUIntBuilder builder_(_fbb);
-  builder_.add_value(value);
-  return builder_.Finish();
-}
-
-struct EventAttributeUInt::Traits {
-  using type = EventAttributeUInt;
-  static auto constexpr Create = CreateEventAttributeUInt;
-  static constexpr auto name = "EventAttributeUInt";
-  static constexpr auto fully_qualified_name = "SF.Flat.Telemetry.EventAttributeUInt";
-  static constexpr size_t fields_number = 1;
-  static constexpr std::array<const char *, fields_number> field_names = {
-    "value"
-  };
-  template<size_t Index>
-  using FieldType = decltype(std::declval<type>().get_field<Index>());
-};
-
-struct EventAttributeInt64 FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef EventAttributeInt64Builder Builder;
-  struct Traits;
-  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_VALUE = 4
-  };
-  int64_t value() const {
-    return GetField<int64_t>(VT_VALUE, 0);
-  }
-  template<size_t Index>
-  auto get_field() const {
-         if constexpr (Index == 0) return value();
-    else static_assert(Index != Index, "Invalid Field Index");
-  }
-  bool Verify(::flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           VerifyField<int64_t>(verifier, VT_VALUE, 8) &&
-           verifier.EndTable();
-  }
-};
-
-struct EventAttributeInt64Builder {
-  typedef EventAttributeInt64 Table;
-  ::flatbuffers::FlatBufferBuilder &fbb_;
-  ::flatbuffers::uoffset_t start_;
-  void add_value(int64_t value) {
-    fbb_.AddElement<int64_t>(EventAttributeInt64::VT_VALUE, value, 0);
-  }
-  explicit EventAttributeInt64Builder(::flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  ::flatbuffers::Offset<EventAttributeInt64> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<EventAttributeInt64>(end);
-    return o;
-  }
-};
-
-inline ::flatbuffers::Offset<EventAttributeInt64> CreateEventAttributeInt64(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    int64_t value = 0) {
-  EventAttributeInt64Builder builder_(_fbb);
-  builder_.add_value(value);
-  return builder_.Finish();
-}
-
-struct EventAttributeInt64::Traits {
-  using type = EventAttributeInt64;
-  static auto constexpr Create = CreateEventAttributeInt64;
-  static constexpr auto name = "EventAttributeInt64";
-  static constexpr auto fully_qualified_name = "SF.Flat.Telemetry.EventAttributeInt64";
-  static constexpr size_t fields_number = 1;
-  static constexpr std::array<const char *, fields_number> field_names = {
-    "value"
-  };
-  template<size_t Index>
-  using FieldType = decltype(std::declval<type>().get_field<Index>());
-};
-
-struct EventAttributeUInt64 FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef EventAttributeUInt64Builder Builder;
-  struct Traits;
-  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_VALUE = 4
-  };
-  uint64_t value() const {
-    return GetField<uint64_t>(VT_VALUE, 0);
-  }
-  template<size_t Index>
-  auto get_field() const {
-         if constexpr (Index == 0) return value();
-    else static_assert(Index != Index, "Invalid Field Index");
-  }
-  bool Verify(::flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           VerifyField<uint64_t>(verifier, VT_VALUE, 8) &&
-           verifier.EndTable();
-  }
-};
-
-struct EventAttributeUInt64Builder {
-  typedef EventAttributeUInt64 Table;
-  ::flatbuffers::FlatBufferBuilder &fbb_;
-  ::flatbuffers::uoffset_t start_;
-  void add_value(uint64_t value) {
-    fbb_.AddElement<uint64_t>(EventAttributeUInt64::VT_VALUE, value, 0);
-  }
-  explicit EventAttributeUInt64Builder(::flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  ::flatbuffers::Offset<EventAttributeUInt64> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<EventAttributeUInt64>(end);
-    return o;
-  }
-};
-
-inline ::flatbuffers::Offset<EventAttributeUInt64> CreateEventAttributeUInt64(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    uint64_t value = 0) {
-  EventAttributeUInt64Builder builder_(_fbb);
-  builder_.add_value(value);
-  return builder_.Finish();
-}
-
-struct EventAttributeUInt64::Traits {
-  using type = EventAttributeUInt64;
-  static auto constexpr Create = CreateEventAttributeUInt64;
-  static constexpr auto name = "EventAttributeUInt64";
-  static constexpr auto fully_qualified_name = "SF.Flat.Telemetry.EventAttributeUInt64";
-  static constexpr size_t fields_number = 1;
-  static constexpr std::array<const char *, fields_number> field_names = {
-    "value"
-  };
-  template<size_t Index>
-  using FieldType = decltype(std::declval<type>().get_field<Index>());
-};
-
-struct EventAttributeFloat FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef EventAttributeFloatBuilder Builder;
-  struct Traits;
-  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_VALUE = 4
-  };
-  float value() const {
-    return GetField<float>(VT_VALUE, 0.0f);
-  }
-  template<size_t Index>
-  auto get_field() const {
-         if constexpr (Index == 0) return value();
-    else static_assert(Index != Index, "Invalid Field Index");
-  }
-  bool Verify(::flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           VerifyField<float>(verifier, VT_VALUE, 4) &&
-           verifier.EndTable();
-  }
-};
-
-struct EventAttributeFloatBuilder {
-  typedef EventAttributeFloat Table;
-  ::flatbuffers::FlatBufferBuilder &fbb_;
-  ::flatbuffers::uoffset_t start_;
-  void add_value(float value) {
-    fbb_.AddElement<float>(EventAttributeFloat::VT_VALUE, value, 0.0f);
-  }
-  explicit EventAttributeFloatBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  ::flatbuffers::Offset<EventAttributeFloat> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<EventAttributeFloat>(end);
-    return o;
-  }
-};
-
-inline ::flatbuffers::Offset<EventAttributeFloat> CreateEventAttributeFloat(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    float value = 0.0f) {
-  EventAttributeFloatBuilder builder_(_fbb);
-  builder_.add_value(value);
-  return builder_.Finish();
-}
-
-struct EventAttributeFloat::Traits {
-  using type = EventAttributeFloat;
-  static auto constexpr Create = CreateEventAttributeFloat;
-  static constexpr auto name = "EventAttributeFloat";
-  static constexpr auto fully_qualified_name = "SF.Flat.Telemetry.EventAttributeFloat";
-  static constexpr size_t fields_number = 1;
-  static constexpr std::array<const char *, fields_number> field_names = {
-    "value"
-  };
-  template<size_t Index>
-  using FieldType = decltype(std::declval<type>().get_field<Index>());
-};
-
-struct EventAttributeDouble FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef EventAttributeDoubleBuilder Builder;
-  struct Traits;
-  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_VALUE = 4
-  };
-  double value() const {
-    return GetField<double>(VT_VALUE, 0.0);
-  }
-  template<size_t Index>
-  auto get_field() const {
-         if constexpr (Index == 0) return value();
-    else static_assert(Index != Index, "Invalid Field Index");
-  }
-  bool Verify(::flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           VerifyField<double>(verifier, VT_VALUE, 8) &&
-           verifier.EndTable();
-  }
-};
-
-struct EventAttributeDoubleBuilder {
-  typedef EventAttributeDouble Table;
-  ::flatbuffers::FlatBufferBuilder &fbb_;
-  ::flatbuffers::uoffset_t start_;
-  void add_value(double value) {
-    fbb_.AddElement<double>(EventAttributeDouble::VT_VALUE, value, 0.0);
-  }
-  explicit EventAttributeDoubleBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  ::flatbuffers::Offset<EventAttributeDouble> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<EventAttributeDouble>(end);
-    return o;
-  }
-};
-
-inline ::flatbuffers::Offset<EventAttributeDouble> CreateEventAttributeDouble(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    double value = 0.0) {
-  EventAttributeDoubleBuilder builder_(_fbb);
-  builder_.add_value(value);
-  return builder_.Finish();
-}
-
-struct EventAttributeDouble::Traits {
-  using type = EventAttributeDouble;
-  static auto constexpr Create = CreateEventAttributeDouble;
-  static constexpr auto name = "EventAttributeDouble";
-  static constexpr auto fully_qualified_name = "SF.Flat.Telemetry.EventAttributeDouble";
-  static constexpr size_t fields_number = 1;
-  static constexpr std::array<const char *, fields_number> field_names = {
-    "value"
-  };
-  template<size_t Index>
-  using FieldType = decltype(std::declval<type>().get_field<Index>());
-};
-
-struct EventAttributeBool FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef EventAttributeBoolBuilder Builder;
-  struct Traits;
-  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_VALUE = 4
-  };
-  bool value() const {
-    return GetField<uint8_t>(VT_VALUE, 0) != 0;
-  }
-  template<size_t Index>
-  auto get_field() const {
-         if constexpr (Index == 0) return value();
-    else static_assert(Index != Index, "Invalid Field Index");
-  }
-  bool Verify(::flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           VerifyField<uint8_t>(verifier, VT_VALUE, 1) &&
-           verifier.EndTable();
-  }
-};
-
-struct EventAttributeBoolBuilder {
-  typedef EventAttributeBool Table;
-  ::flatbuffers::FlatBufferBuilder &fbb_;
-  ::flatbuffers::uoffset_t start_;
-  void add_value(bool value) {
-    fbb_.AddElement<uint8_t>(EventAttributeBool::VT_VALUE, static_cast<uint8_t>(value), 0);
-  }
-  explicit EventAttributeBoolBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  ::flatbuffers::Offset<EventAttributeBool> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<EventAttributeBool>(end);
-    return o;
-  }
-};
-
-inline ::flatbuffers::Offset<EventAttributeBool> CreateEventAttributeBool(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    bool value = false) {
-  EventAttributeBoolBuilder builder_(_fbb);
-  builder_.add_value(value);
-  return builder_.Finish();
-}
-
-struct EventAttributeBool::Traits {
-  using type = EventAttributeBool;
-  static auto constexpr Create = CreateEventAttributeBool;
-  static constexpr auto name = "EventAttributeBool";
-  static constexpr auto fully_qualified_name = "SF.Flat.Telemetry.EventAttributeBool";
-  static constexpr size_t fields_number = 1;
-  static constexpr std::array<const char *, fields_number> field_names = {
-    "value"
-  };
-  template<size_t Index>
-  using FieldType = decltype(std::declval<type>().get_field<Index>());
-};
-
-struct EventAttribute FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef EventAttributeBuilder Builder;
-  struct Traits;
-  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_NAME = 4,
-    VT_VALUE_TYPE = 6,
-    VT_VALUE = 8
-  };
-  const ::flatbuffers::String *name() const {
-    return GetPointer<const ::flatbuffers::String *>(VT_NAME);
-  }
-  SF::Flat::Telemetry::EventAttributeValue value_type() const {
-    return static_cast<SF::Flat::Telemetry::EventAttributeValue>(GetField<uint8_t>(VT_VALUE_TYPE, 0));
-  }
-  const void *value() const {
-    return GetPointer<const void *>(VT_VALUE);
-  }
-  template<typename T> const T *value_as() const;
-  const SF::Flat::Telemetry::EventAttributeString *value_as_EventAttributeString() const {
-    return value_type() == SF::Flat::Telemetry::EventAttributeValue::EventAttributeString ? static_cast<const SF::Flat::Telemetry::EventAttributeString *>(value()) : nullptr;
-  }
-  const SF::Flat::Telemetry::EventAttributeBool *value_as_EventAttributeBool() const {
-    return value_type() == SF::Flat::Telemetry::EventAttributeValue::EventAttributeBool ? static_cast<const SF::Flat::Telemetry::EventAttributeBool *>(value()) : nullptr;
-  }
-  const SF::Flat::Telemetry::EventAttributeFloat *value_as_EventAttributeFloat() const {
-    return value_type() == SF::Flat::Telemetry::EventAttributeValue::EventAttributeFloat ? static_cast<const SF::Flat::Telemetry::EventAttributeFloat *>(value()) : nullptr;
-  }
-  const SF::Flat::Telemetry::EventAttributeDouble *value_as_EventAttributeDouble() const {
-    return value_type() == SF::Flat::Telemetry::EventAttributeValue::EventAttributeDouble ? static_cast<const SF::Flat::Telemetry::EventAttributeDouble *>(value()) : nullptr;
-  }
-  const SF::Flat::Telemetry::EventAttributeInt *value_as_EventAttributeInt() const {
-    return value_type() == SF::Flat::Telemetry::EventAttributeValue::EventAttributeInt ? static_cast<const SF::Flat::Telemetry::EventAttributeInt *>(value()) : nullptr;
-  }
-  const SF::Flat::Telemetry::EventAttributeUInt *value_as_EventAttributeUInt() const {
-    return value_type() == SF::Flat::Telemetry::EventAttributeValue::EventAttributeUInt ? static_cast<const SF::Flat::Telemetry::EventAttributeUInt *>(value()) : nullptr;
-  }
-  const SF::Flat::Telemetry::EventAttributeInt64 *value_as_EventAttributeInt64() const {
-    return value_type() == SF::Flat::Telemetry::EventAttributeValue::EventAttributeInt64 ? static_cast<const SF::Flat::Telemetry::EventAttributeInt64 *>(value()) : nullptr;
-  }
-  const SF::Flat::Telemetry::EventAttributeUInt64 *value_as_EventAttributeUInt64() const {
-    return value_type() == SF::Flat::Telemetry::EventAttributeValue::EventAttributeUInt64 ? static_cast<const SF::Flat::Telemetry::EventAttributeUInt64 *>(value()) : nullptr;
-  }
-  template<size_t Index>
-  auto get_field() const {
-         if constexpr (Index == 0) return name();
-    else if constexpr (Index == 1) return value_type();
-    else if constexpr (Index == 2) return value();
-    else static_assert(Index != Index, "Invalid Field Index");
-  }
-  bool Verify(::flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           VerifyOffsetRequired(verifier, VT_NAME) &&
-           verifier.VerifyString(name()) &&
-           VerifyField<uint8_t>(verifier, VT_VALUE_TYPE, 1) &&
-           VerifyOffsetRequired(verifier, VT_VALUE) &&
-           VerifyEventAttributeValue(verifier, value(), value_type()) &&
-           verifier.EndTable();
-  }
-};
-
-template<> inline const SF::Flat::Telemetry::EventAttributeString *EventAttribute::value_as<SF::Flat::Telemetry::EventAttributeString>() const {
-  return value_as_EventAttributeString();
-}
-
-template<> inline const SF::Flat::Telemetry::EventAttributeBool *EventAttribute::value_as<SF::Flat::Telemetry::EventAttributeBool>() const {
-  return value_as_EventAttributeBool();
-}
-
-template<> inline const SF::Flat::Telemetry::EventAttributeFloat *EventAttribute::value_as<SF::Flat::Telemetry::EventAttributeFloat>() const {
-  return value_as_EventAttributeFloat();
-}
-
-template<> inline const SF::Flat::Telemetry::EventAttributeDouble *EventAttribute::value_as<SF::Flat::Telemetry::EventAttributeDouble>() const {
-  return value_as_EventAttributeDouble();
-}
-
-template<> inline const SF::Flat::Telemetry::EventAttributeInt *EventAttribute::value_as<SF::Flat::Telemetry::EventAttributeInt>() const {
-  return value_as_EventAttributeInt();
-}
-
-template<> inline const SF::Flat::Telemetry::EventAttributeUInt *EventAttribute::value_as<SF::Flat::Telemetry::EventAttributeUInt>() const {
-  return value_as_EventAttributeUInt();
-}
-
-template<> inline const SF::Flat::Telemetry::EventAttributeInt64 *EventAttribute::value_as<SF::Flat::Telemetry::EventAttributeInt64>() const {
-  return value_as_EventAttributeInt64();
-}
-
-template<> inline const SF::Flat::Telemetry::EventAttributeUInt64 *EventAttribute::value_as<SF::Flat::Telemetry::EventAttributeUInt64>() const {
-  return value_as_EventAttributeUInt64();
-}
-
-struct EventAttributeBuilder {
-  typedef EventAttribute Table;
-  ::flatbuffers::FlatBufferBuilder &fbb_;
-  ::flatbuffers::uoffset_t start_;
-  void add_name(::flatbuffers::Offset<::flatbuffers::String> name) {
-    fbb_.AddOffset(EventAttribute::VT_NAME, name);
-  }
-  void add_value_type(SF::Flat::Telemetry::EventAttributeValue value_type) {
-    fbb_.AddElement<uint8_t>(EventAttribute::VT_VALUE_TYPE, static_cast<uint8_t>(value_type), 0);
-  }
-  void add_value(::flatbuffers::Offset<void> value) {
-    fbb_.AddOffset(EventAttribute::VT_VALUE, value);
-  }
-  explicit EventAttributeBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  ::flatbuffers::Offset<EventAttribute> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<EventAttribute>(end);
-    fbb_.Required(o, EventAttribute::VT_NAME);
-    fbb_.Required(o, EventAttribute::VT_VALUE);
-    return o;
-  }
-};
-
-inline ::flatbuffers::Offset<EventAttribute> CreateEventAttribute(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    ::flatbuffers::Offset<::flatbuffers::String> name = 0,
-    SF::Flat::Telemetry::EventAttributeValue value_type = SF::Flat::Telemetry::EventAttributeValue::NONE,
-    ::flatbuffers::Offset<void> value = 0) {
-  EventAttributeBuilder builder_(_fbb);
-  builder_.add_value(value);
-  builder_.add_name(name);
-  builder_.add_value_type(value_type);
-  return builder_.Finish();
-}
-
-struct EventAttribute::Traits {
-  using type = EventAttribute;
-  static auto constexpr Create = CreateEventAttribute;
-  static constexpr auto name = "EventAttribute";
-  static constexpr auto fully_qualified_name = "SF.Flat.Telemetry.EventAttribute";
-  static constexpr size_t fields_number = 3;
-  static constexpr std::array<const char *, fields_number> field_names = {
-    "name",
-    "value_type",
-    "value"
-  };
-  template<size_t Index>
-  using FieldType = decltype(std::declval<type>().get_field<Index>());
-};
-
-inline ::flatbuffers::Offset<EventAttribute> CreateEventAttributeDirect(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    const char *name = nullptr,
-    SF::Flat::Telemetry::EventAttributeValue value_type = SF::Flat::Telemetry::EventAttributeValue::NONE,
-    ::flatbuffers::Offset<void> value = 0) {
-  auto name__ = name ? _fbb.CreateString(name) : 0;
-  return SF::Flat::Telemetry::CreateEventAttribute(
-      _fbb,
-      name__,
-      value_type,
-      value);
-}
-
-struct PostEventRequest FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef PostEventRequestBuilder Builder;
+struct PostEventCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef PostEventCmdBuilder Builder;
   struct Traits;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_EVENT_NAME = 4,
@@ -982,8 +63,8 @@ struct PostEventRequest FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const ::flatbuffers::Vector<uint8_t> *session_id() const {
     return GetPointer<const ::flatbuffers::Vector<uint8_t> *>(VT_SESSION_ID);
   }
-  const ::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::Telemetry::EventAttribute>> *attributes() const {
-    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::Telemetry::EventAttribute>> *>(VT_ATTRIBUTES);
+  const ::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::NamedVariable>> *attributes() const {
+    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::NamedVariable>> *>(VT_ATTRIBUTES);
   }
   template<size_t Index>
   auto get_field() const {
@@ -1003,14 +84,14 @@ struct PostEventRequest FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            VerifyOffsetRequired(verifier, VT_EVENT_NAME) &&
            verifier.VerifyString(event_name()) &&
            VerifyField<uint64_t>(verifier, VT_TIME_STAMP, 8) &&
-           VerifyOffset(verifier, VT_APP_ID) &&
+           VerifyOffsetRequired(verifier, VT_APP_ID) &&
            verifier.VerifyString(app_id()) &&
-           VerifyOffset(verifier, VT_MACHINE_ID) &&
+           VerifyOffsetRequired(verifier, VT_MACHINE_ID) &&
            verifier.VerifyString(machine_id()) &&
            VerifyField<uint32_t>(verifier, VT_EVENT_ID, 4) &&
            VerifyField<uint64_t>(verifier, VT_ACCOUNT_ID, 8) &&
            VerifyField<uint8_t>(verifier, VT_IS_PLAY_EVENT, 1) &&
-           VerifyOffsetRequired(verifier, VT_SESSION_ID) &&
+           VerifyOffset(verifier, VT_SESSION_ID) &&
            verifier.VerifyVector(session_id()) &&
            VerifyOffset(verifier, VT_ATTRIBUTES) &&
            verifier.VerifyVector(attributes()) &&
@@ -1019,51 +100,52 @@ struct PostEventRequest FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
 };
 
-struct PostEventRequestBuilder {
-  typedef PostEventRequest Table;
+struct PostEventCmdBuilder {
+  typedef PostEventCmd Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
   void add_event_name(::flatbuffers::Offset<::flatbuffers::String> event_name) {
-    fbb_.AddOffset(PostEventRequest::VT_EVENT_NAME, event_name);
+    fbb_.AddOffset(PostEventCmd::VT_EVENT_NAME, event_name);
   }
   void add_time_stamp(uint64_t time_stamp) {
-    fbb_.AddElement<uint64_t>(PostEventRequest::VT_TIME_STAMP, time_stamp, 0);
+    fbb_.AddElement<uint64_t>(PostEventCmd::VT_TIME_STAMP, time_stamp, 0);
   }
   void add_app_id(::flatbuffers::Offset<::flatbuffers::String> app_id) {
-    fbb_.AddOffset(PostEventRequest::VT_APP_ID, app_id);
+    fbb_.AddOffset(PostEventCmd::VT_APP_ID, app_id);
   }
   void add_machine_id(::flatbuffers::Offset<::flatbuffers::String> machine_id) {
-    fbb_.AddOffset(PostEventRequest::VT_MACHINE_ID, machine_id);
+    fbb_.AddOffset(PostEventCmd::VT_MACHINE_ID, machine_id);
   }
   void add_event_id(uint32_t event_id) {
-    fbb_.AddElement<uint32_t>(PostEventRequest::VT_EVENT_ID, event_id, 0);
+    fbb_.AddElement<uint32_t>(PostEventCmd::VT_EVENT_ID, event_id, 0);
   }
   void add_account_id(uint64_t account_id) {
-    fbb_.AddElement<uint64_t>(PostEventRequest::VT_ACCOUNT_ID, account_id, 0);
+    fbb_.AddElement<uint64_t>(PostEventCmd::VT_ACCOUNT_ID, account_id, 0);
   }
   void add_is_play_event(bool is_play_event) {
-    fbb_.AddElement<uint8_t>(PostEventRequest::VT_IS_PLAY_EVENT, static_cast<uint8_t>(is_play_event), 0);
+    fbb_.AddElement<uint8_t>(PostEventCmd::VT_IS_PLAY_EVENT, static_cast<uint8_t>(is_play_event), 0);
   }
   void add_session_id(::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> session_id) {
-    fbb_.AddOffset(PostEventRequest::VT_SESSION_ID, session_id);
+    fbb_.AddOffset(PostEventCmd::VT_SESSION_ID, session_id);
   }
-  void add_attributes(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::Telemetry::EventAttribute>>> attributes) {
-    fbb_.AddOffset(PostEventRequest::VT_ATTRIBUTES, attributes);
+  void add_attributes(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::NamedVariable>>> attributes) {
+    fbb_.AddOffset(PostEventCmd::VT_ATTRIBUTES, attributes);
   }
-  explicit PostEventRequestBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+  explicit PostEventCmdBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ::flatbuffers::Offset<PostEventRequest> Finish() {
+  ::flatbuffers::Offset<PostEventCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<PostEventRequest>(end);
-    fbb_.Required(o, PostEventRequest::VT_EVENT_NAME);
-    fbb_.Required(o, PostEventRequest::VT_SESSION_ID);
+    auto o = ::flatbuffers::Offset<PostEventCmd>(end);
+    fbb_.Required(o, PostEventCmd::VT_EVENT_NAME);
+    fbb_.Required(o, PostEventCmd::VT_APP_ID);
+    fbb_.Required(o, PostEventCmd::VT_MACHINE_ID);
     return o;
   }
 };
 
-inline ::flatbuffers::Offset<PostEventRequest> CreatePostEventRequest(
+inline ::flatbuffers::Offset<PostEventCmd> CreatePostEventCmd(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     ::flatbuffers::Offset<::flatbuffers::String> event_name = 0,
     uint64_t time_stamp = 0,
@@ -1073,8 +155,8 @@ inline ::flatbuffers::Offset<PostEventRequest> CreatePostEventRequest(
     uint64_t account_id = 0,
     bool is_play_event = false,
     ::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> session_id = 0,
-    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::Telemetry::EventAttribute>>> attributes = 0) {
-  PostEventRequestBuilder builder_(_fbb);
+    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::NamedVariable>>> attributes = 0) {
+  PostEventCmdBuilder builder_(_fbb);
   builder_.add_account_id(account_id);
   builder_.add_time_stamp(time_stamp);
   builder_.add_attributes(attributes);
@@ -1087,11 +169,11 @@ inline ::flatbuffers::Offset<PostEventRequest> CreatePostEventRequest(
   return builder_.Finish();
 }
 
-struct PostEventRequest::Traits {
-  using type = PostEventRequest;
-  static auto constexpr Create = CreatePostEventRequest;
-  static constexpr auto name = "PostEventRequest";
-  static constexpr auto fully_qualified_name = "SF.Flat.Telemetry.PostEventRequest";
+struct PostEventCmd::Traits {
+  using type = PostEventCmd;
+  static auto constexpr Create = CreatePostEventCmd;
+  static constexpr auto name = "PostEventCmd";
+  static constexpr auto fully_qualified_name = "SF.Flat.Telemetry.PostEventCmd";
   static constexpr size_t fields_number = 9;
   static constexpr std::array<const char *, fields_number> field_names = {
     "event_name",
@@ -1108,7 +190,7 @@ struct PostEventRequest::Traits {
   using FieldType = decltype(std::declval<type>().get_field<Index>());
 };
 
-inline ::flatbuffers::Offset<PostEventRequest> CreatePostEventRequestDirect(
+inline ::flatbuffers::Offset<PostEventCmd> CreatePostEventCmdDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const char *event_name = nullptr,
     uint64_t time_stamp = 0,
@@ -1118,13 +200,13 @@ inline ::flatbuffers::Offset<PostEventRequest> CreatePostEventRequestDirect(
     uint64_t account_id = 0,
     bool is_play_event = false,
     const std::vector<uint8_t> *session_id = nullptr,
-    const std::vector<::flatbuffers::Offset<SF::Flat::Telemetry::EventAttribute>> *attributes = nullptr) {
+    const std::vector<::flatbuffers::Offset<SF::Flat::NamedVariable>> *attributes = nullptr) {
   auto event_name__ = event_name ? _fbb.CreateString(event_name) : 0;
   auto app_id__ = app_id ? _fbb.CreateString(app_id) : 0;
   auto machine_id__ = machine_id ? _fbb.CreateString(machine_id) : 0;
   auto session_id__ = session_id ? _fbb.CreateVector<uint8_t>(*session_id) : 0;
-  auto attributes__ = attributes ? _fbb.CreateVector<::flatbuffers::Offset<SF::Flat::Telemetry::EventAttribute>>(*attributes) : 0;
-  return SF::Flat::Telemetry::CreatePostEventRequest(
+  auto attributes__ = attributes ? _fbb.CreateVector<::flatbuffers::Offset<SF::Flat::NamedVariable>>(*attributes) : 0;
+  return SF::Flat::Telemetry::CreatePostEventCmd(
       _fbb,
       event_name__,
       time_stamp,
@@ -1137,158 +219,93 @@ inline ::flatbuffers::Offset<PostEventRequest> CreatePostEventRequestDirect(
       attributes__);
 }
 
-struct PostEventResult FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef PostEventResultBuilder Builder;
+struct PostEventRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef PostEventResBuilder Builder;
   struct Traits;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_RESULT = 4
+  };
+  uint32_t result() const {
+    return GetField<uint32_t>(VT_RESULT, 0);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return result();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
+           VerifyField<uint32_t>(verifier, VT_RESULT, 4) &&
            verifier.EndTable();
   }
 };
 
-struct PostEventResultBuilder {
-  typedef PostEventResult Table;
+struct PostEventResBuilder {
+  typedef PostEventRes Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
-  explicit PostEventResultBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+  void add_result(uint32_t result) {
+    fbb_.AddElement<uint32_t>(PostEventRes::VT_RESULT, result, 0);
+  }
+  explicit PostEventResBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ::flatbuffers::Offset<PostEventResult> Finish() {
+  ::flatbuffers::Offset<PostEventRes> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<PostEventResult>(end);
+    auto o = ::flatbuffers::Offset<PostEventRes>(end);
     return o;
   }
 };
 
-inline ::flatbuffers::Offset<PostEventResult> CreatePostEventResult(
-    ::flatbuffers::FlatBufferBuilder &_fbb) {
-  PostEventResultBuilder builder_(_fbb);
+inline ::flatbuffers::Offset<PostEventRes> CreatePostEventRes(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint32_t result = 0) {
+  PostEventResBuilder builder_(_fbb);
+  builder_.add_result(result);
   return builder_.Finish();
 }
 
-struct PostEventResult::Traits {
-  using type = PostEventResult;
-  static auto constexpr Create = CreatePostEventResult;
-  static constexpr auto name = "PostEventResult";
-  static constexpr auto fully_qualified_name = "SF.Flat.Telemetry.PostEventResult";
-  static constexpr size_t fields_number = 0;
-  static constexpr std::array<const char *, fields_number> field_names = {};
+struct PostEventRes::Traits {
+  using type = PostEventRes;
+  static auto constexpr Create = CreatePostEventRes;
+  static constexpr auto name = "PostEventRes";
+  static constexpr auto fully_qualified_name = "SF.Flat.Telemetry.PostEventRes";
+  static constexpr size_t fields_number = 1;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "result"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
 };
 
-inline bool VerifyPayloadData(::flatbuffers::Verifier &verifier, const void *obj, PayloadData type) {
-  switch (type) {
-    case PayloadData::NONE: {
-      return true;
-    }
-    case PayloadData::GenericError: {
-      auto ptr = reinterpret_cast<const SF::Flat::GenericError *>(obj);
-      return verifier.VerifyTable(ptr);
-    }
-    case PayloadData::PostEventRequest: {
-      auto ptr = reinterpret_cast<const SF::Flat::Telemetry::PostEventRequest *>(obj);
-      return verifier.VerifyTable(ptr);
-    }
-    case PayloadData::PostEventResult: {
-      auto ptr = reinterpret_cast<const SF::Flat::Telemetry::PostEventResult *>(obj);
-      return verifier.VerifyTable(ptr);
-    }
-    default: return true;
-  }
+inline const SF::Flat::Telemetry::PostEventRes *GetPostEventRes(const void *buf) {
+  return ::flatbuffers::GetRoot<SF::Flat::Telemetry::PostEventRes>(buf);
 }
 
-inline bool VerifyPayloadDataVector(::flatbuffers::Verifier &verifier, const ::flatbuffers::Vector<::flatbuffers::Offset<void>> *values, const ::flatbuffers::Vector<PayloadData> *types) {
-  if (!values || !types) return !values && !types;
-  if (values->size() != types->size()) return false;
-  for (::flatbuffers::uoffset_t i = 0; i < values->size(); ++i) {
-    if (!VerifyPayloadData(
-        verifier,  values->Get(i), types->GetEnum<PayloadData>(i))) {
-      return false;
-    }
-  }
-  return true;
+inline const SF::Flat::Telemetry::PostEventRes *GetSizePrefixedPostEventRes(const void *buf) {
+  return ::flatbuffers::GetSizePrefixedRoot<SF::Flat::Telemetry::PostEventRes>(buf);
 }
 
-inline bool VerifyEventAttributeValue(::flatbuffers::Verifier &verifier, const void *obj, EventAttributeValue type) {
-  switch (type) {
-    case EventAttributeValue::NONE: {
-      return true;
-    }
-    case EventAttributeValue::EventAttributeString: {
-      auto ptr = reinterpret_cast<const SF::Flat::Telemetry::EventAttributeString *>(obj);
-      return verifier.VerifyTable(ptr);
-    }
-    case EventAttributeValue::EventAttributeBool: {
-      auto ptr = reinterpret_cast<const SF::Flat::Telemetry::EventAttributeBool *>(obj);
-      return verifier.VerifyTable(ptr);
-    }
-    case EventAttributeValue::EventAttributeFloat: {
-      auto ptr = reinterpret_cast<const SF::Flat::Telemetry::EventAttributeFloat *>(obj);
-      return verifier.VerifyTable(ptr);
-    }
-    case EventAttributeValue::EventAttributeDouble: {
-      auto ptr = reinterpret_cast<const SF::Flat::Telemetry::EventAttributeDouble *>(obj);
-      return verifier.VerifyTable(ptr);
-    }
-    case EventAttributeValue::EventAttributeInt: {
-      auto ptr = reinterpret_cast<const SF::Flat::Telemetry::EventAttributeInt *>(obj);
-      return verifier.VerifyTable(ptr);
-    }
-    case EventAttributeValue::EventAttributeUInt: {
-      auto ptr = reinterpret_cast<const SF::Flat::Telemetry::EventAttributeUInt *>(obj);
-      return verifier.VerifyTable(ptr);
-    }
-    case EventAttributeValue::EventAttributeInt64: {
-      auto ptr = reinterpret_cast<const SF::Flat::Telemetry::EventAttributeInt64 *>(obj);
-      return verifier.VerifyTable(ptr);
-    }
-    case EventAttributeValue::EventAttributeUInt64: {
-      auto ptr = reinterpret_cast<const SF::Flat::Telemetry::EventAttributeUInt64 *>(obj);
-      return verifier.VerifyTable(ptr);
-    }
-    default: return true;
-  }
-}
-
-inline bool VerifyEventAttributeValueVector(::flatbuffers::Verifier &verifier, const ::flatbuffers::Vector<::flatbuffers::Offset<void>> *values, const ::flatbuffers::Vector<EventAttributeValue> *types) {
-  if (!values || !types) return !values && !types;
-  if (values->size() != types->size()) return false;
-  for (::flatbuffers::uoffset_t i = 0; i < values->size(); ++i) {
-    if (!VerifyEventAttributeValue(
-        verifier,  values->Get(i), types->GetEnum<EventAttributeValue>(i))) {
-      return false;
-    }
-  }
-  return true;
-}
-
-inline const SF::Flat::Telemetry::TelemetryPacket *GetTelemetryPacket(const void *buf) {
-  return ::flatbuffers::GetRoot<SF::Flat::Telemetry::TelemetryPacket>(buf);
-}
-
-inline const SF::Flat::Telemetry::TelemetryPacket *GetSizePrefixedTelemetryPacket(const void *buf) {
-  return ::flatbuffers::GetSizePrefixedRoot<SF::Flat::Telemetry::TelemetryPacket>(buf);
-}
-
-inline bool VerifyTelemetryPacketBuffer(
+inline bool VerifyPostEventResBuffer(
     ::flatbuffers::Verifier &verifier) {
-  return verifier.VerifyBuffer<SF::Flat::Telemetry::TelemetryPacket>(nullptr);
+  return verifier.VerifyBuffer<SF::Flat::Telemetry::PostEventRes>(nullptr);
 }
 
-inline bool VerifySizePrefixedTelemetryPacketBuffer(
+inline bool VerifySizePrefixedPostEventResBuffer(
     ::flatbuffers::Verifier &verifier) {
-  return verifier.VerifySizePrefixedBuffer<SF::Flat::Telemetry::TelemetryPacket>(nullptr);
+  return verifier.VerifySizePrefixedBuffer<SF::Flat::Telemetry::PostEventRes>(nullptr);
 }
 
-inline void FinishTelemetryPacketBuffer(
+inline void FinishPostEventResBuffer(
     ::flatbuffers::FlatBufferBuilder &fbb,
-    ::flatbuffers::Offset<SF::Flat::Telemetry::TelemetryPacket> root) {
+    ::flatbuffers::Offset<SF::Flat::Telemetry::PostEventRes> root) {
   fbb.Finish(root);
 }
 
-inline void FinishSizePrefixedTelemetryPacketBuffer(
+inline void FinishSizePrefixedPostEventResBuffer(
     ::flatbuffers::FlatBufferBuilder &fbb,
-    ::flatbuffers::Offset<SF::Flat::Telemetry::TelemetryPacket> root) {
+    ::flatbuffers::Offset<SF::Flat::Telemetry::PostEventRes> root) {
   fbb.FinishSizePrefixed(root);
 }
 

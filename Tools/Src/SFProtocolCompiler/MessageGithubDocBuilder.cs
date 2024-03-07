@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2018 Kyungkun Ko
 // 
@@ -102,7 +102,7 @@ namespace ProtocolCompiler
             // Parameter descriptions
             foreach (var parameter in cmdParameters)
             {
-                OutStream.WriteLine("\t\t- Out{0}: {1} type. {2}", parameter.Name, parameter.TypeName, parameter.Desc);
+                OutStream.WriteLine($"\t\t- {parameter.Name}: type:{parameter.TypeName}, {parameter.Desc}");
                 NewLine();
             }
 
@@ -116,7 +116,7 @@ namespace ProtocolCompiler
             // Parameter descriptions
             foreach (var parameter in resultParameters)
             {
-                OutStream.WriteLine("\t\t- Out{0}: {1} type. {2}", parameter.Name, parameter.TypeName, parameter.Desc);
+                OutStream.WriteLine($"\t\t- {parameter.Name}: type:{parameter.TypeName}, {parameter.Desc}");
             }
             NewLine();
         }

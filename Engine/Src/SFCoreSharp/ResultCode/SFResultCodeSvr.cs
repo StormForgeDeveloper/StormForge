@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -15,106 +15,106 @@ namespace SF {
 	public partial struct ResultCode {
 
 		// Server service failed 
-		public const int SVR_SERVICE_FAILED =                               unchecked((int)0xE7120000); 
+		public static readonly Result SVR_SERVICE_FAILED =                  new Result(unchecked((int)0xE7120000)); 
 
 		// Timed out 
-		public const int SVR_TIMEOUT =                                      unchecked((int)0xE7120001); 
+		public static readonly Result SVR_TIMEOUT =                         new Result(unchecked((int)0xE7120001)); 
 
 		// Transaction has invalid state transition 
-		public const int SVR_TRANSACTION_INVALID_STATE =                    unchecked((int)0xE7120002); 
+		public static readonly Result SVR_TRANSACTION_INVALID_STATE =       new Result(unchecked((int)0xE7120002)); 
 
 		// Server Transaction timed out 
-		public const int SVR_INVALID_TRANSITION =                           unchecked((int)0xE7120003); 
+		public static readonly Result SVR_INVALID_TRANSITION =              new Result(unchecked((int)0xE7120003)); 
 
 		// Transaction process Time out 
-		public const int SVR_TRANSACTION_TIMEOUT =                          unchecked((int)0xE7120004); 
+		public static readonly Result SVR_TRANSACTION_TIMEOUT =             new Result(unchecked((int)0xE7120004)); 
 
 		// Failed to route message 
-		public const int SVR_ROUTEMSG_FAILED =                              unchecked((int)0xE7120005); 
+		public static readonly Result SVR_ROUTEMSG_FAILED =                 new Result(unchecked((int)0xE7120005)); 
 
 		// No result handler 
-		public const int SVR_NO_RESULT_HANDLER =                            unchecked((int)0xE7120006); 
+		public static readonly Result SVR_NO_RESULT_HANDLER =               new Result(unchecked((int)0xE7120006)); 
 
 		// No message handler 
-		public const int SVR_NO_MESSAGE_HANDLER =                           unchecked((int)0xE7120007); 
+		public static readonly Result SVR_NO_MESSAGE_HANDLER =              new Result(unchecked((int)0xE7120007)); 
 
 		// Invalid server ID 
-		public const int SVR_INVALID_SERVERID =                             unchecked((int)0xE7120008); 
+		public static readonly Result SVR_INVALID_SERVERID =                new Result(unchecked((int)0xE7120008)); 
 
 		// Player not found 
-		public const int SVR_PLAYER_NOT_FOUND =                             unchecked((int)0xE7120009); 
+		public static readonly Result SVR_PLAYER_NOT_FOUND =                new Result(unchecked((int)0xE7120009)); 
 
 		// Player state is invalid 
-		public const int SVR_INVALID_PLAYER_STATE =                         unchecked((int)0xE712000A); 
+		public static readonly Result SVR_INVALID_PLAYER_STATE =            new Result(unchecked((int)0xE712000A)); 
 
 		// Invalid player game db data 
-		public const int SVR_INVALID_PLAYER_GAMEDB =                        unchecked((int)0xE712000B); 
+		public static readonly Result SVR_INVALID_PLAYER_GAMEDB =           new Result(unchecked((int)0xE712000B)); 
 
 		// Not expected server message 
-		public const int SVR_NOTEXPECTED_MESSAGE =                          unchecked((int)0xE712000C); 
+		public static readonly Result SVR_NOTEXPECTED_MESSAGE =             new Result(unchecked((int)0xE712000C)); 
 
 		// Invalid entity UID 
-		public const int SVR_INVALID_ENTITYUID =                            unchecked((int)0xE712000D); 
+		public static readonly Result SVR_INVALID_ENTITYUID =               new Result(unchecked((int)0xE712000D)); 
 
 		// Cluster service not ready 
-		public const int SVR_CLUSTER_NOTREADY =                             unchecked((int)0xE712000E); 
+		public static readonly Result SVR_CLUSTER_NOTREADY =                new Result(unchecked((int)0xE712000E)); 
 
 		// Invalid cluster type 
-		public const int SVR_INVALID_CLUSTERTYPE =                          unchecked((int)0xE712000F); 
+		public static readonly Result SVR_INVALID_CLUSTERTYPE =             new Result(unchecked((int)0xE712000F)); 
 
 		// Invalid cluster ID 
-		public const int SVR_INVALID_CLUSTERID =                            unchecked((int)0xE7120010); 
+		public static readonly Result SVR_INVALID_CLUSTERID =               new Result(unchecked((int)0xE7120010)); 
 
 		// Invalid queue item 
-		public const int SVR_INVALID_QUEUEITEM =                            unchecked((int)0xE7120011); 
+		public static readonly Result SVR_INVALID_QUEUEITEM =               new Result(unchecked((int)0xE7120011)); 
 
 		// Queue item is canceled 
-		public const int SVR_QUEUEITEM_CANCELED =                           unchecked((int)0xE7120012); 
+		public static readonly Result SVR_QUEUEITEM_CANCELED =              new Result(unchecked((int)0xE7120012)); 
 
 		// There is no item in queue 
-		public const int SVR_NOITEM_INQUEUE =                               unchecked((int)0xE7120013); 
+		public static readonly Result SVR_NOITEM_INQUEUE =                  new Result(unchecked((int)0xE7120013)); 
 
 		// Already in queue 
-		public const int SVR_ALREADY_INQUEUE =                              unchecked((int)0xE7120014); 
+		public static readonly Result SVR_ALREADY_INQUEUE =                 new Result(unchecked((int)0xE7120014)); 
 
 		// Queue item is reserved 
-		public const int SVR_RESERVED_QUEUEITEM =                           unchecked((int)0xE7120015); 
+		public static readonly Result SVR_RESERVED_QUEUEITEM =              new Result(unchecked((int)0xE7120015)); 
 
 		// Cluster doesn't have any assigned master 
-		public const int SVR_CLUSTER_NOMASTER =                             unchecked((int)0xE7120016); 
+		public static readonly Result SVR_CLUSTER_NOMASTER =                new Result(unchecked((int)0xE7120016)); 
 
 		// Queue item is reserved for cancel 
-		public const int SUCCESS_SVR_QUEUEITEM_CANCEL_PENDED =              unchecked((int)0x27120017); 
+		public static readonly Result SUCCESS_SVR_QUEUEITEM_CANCEL_PENDED = new Result(unchecked((int)0x27120017)); 
 
 		// Purchase canceled 
-		public const int SVR_PURCHASE_CANCELED =                            unchecked((int)0xE7120018); 
+		public static readonly Result SVR_PURCHASE_CANCELED =               new Result(unchecked((int)0xE7120018)); 
 
 		// Invalid purchase info 
-		public const int SVR_INVALID_PURCHASE_INFO =                        unchecked((int)0xE7120019); 
+		public static readonly Result SVR_INVALID_PURCHASE_INFO =           new Result(unchecked((int)0xE7120019)); 
 
 		// Invalid duplicated purchase 
-		public const int SVR_INVALID_PURCHASE_DUPLICATED =                  unchecked((int)0xE712001A); 
+		public static readonly Result SVR_INVALID_PURCHASE_DUPLICATED =     new Result(unchecked((int)0xE712001A)); 
 
 		// External auth fail 
-		public const int SVR_INVALID_EXTERNAL_AUTH =                        unchecked((int)0xE712001B); 
+		public static readonly Result SVR_INVALID_EXTERNAL_AUTH =           new Result(unchecked((int)0xE712001B)); 
 
 		// External server is not available 
-		public const int SVR_EXTERNAL_SERVER_UNAVALIABLE =                  unchecked((int)0xE712001C); 
+		public static readonly Result SVR_EXTERNAL_SERVER_UNAVALIABLE =     new Result(unchecked((int)0xE712001C)); 
 
 		// Invalid purchase result from server 
-		public const int SVR_INVALID_PURCHASE_FORMAT =                      unchecked((int)0xE712001D); 
+		public static readonly Result SVR_INVALID_PURCHASE_FORMAT =         new Result(unchecked((int)0xE712001D)); 
 
 		// Invalid state transition 
-		public const int SVR_INVALID_STATE =                                unchecked((int)0xE712001E); 
+		public static readonly Result SVR_INVALID_STATE =                   new Result(unchecked((int)0xE712001E)); 
 
 		// Invalid purchase environment(public/test) 
-		public const int SVR_INVALID_PURCHASE_MODE =                        unchecked((int)0xE712001F); 
+		public static readonly Result SVR_INVALID_PURCHASE_MODE =           new Result(unchecked((int)0xE712001F)); 
 
 		// Invalid Task group ID 
-		public const int SVR_INVALID_TASK_GROUPID =                         unchecked((int)0xE7120020); 
+		public static readonly Result SVR_INVALID_TASK_GROUPID =            new Result(unchecked((int)0xE7120020)); 
 
 		// The user's login token is invlaid 
-		public const int SVR_INVALID_1STPARTY_LOGIN =                       unchecked((int)0xE7120021); 
+		public static readonly Result SVR_INVALID_1STPARTY_LOGIN =          new Result(unchecked((int)0xE7120021)); 
 
 	}
 }

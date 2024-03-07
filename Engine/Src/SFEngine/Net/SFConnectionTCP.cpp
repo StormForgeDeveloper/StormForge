@@ -20,7 +20,7 @@
 #include "ResultCode/SFResultCodeLibrary.h"
 #include "Util/SFLog.h"
 #include "Util/SFToString.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 
 #include "Net/SFNetToString.h"
 #include "Net/SFConnection.h"
@@ -570,7 +570,7 @@ namespace Net {
 	{
 		Result hr = ResultCode::SUCCESS;
 
-		if( pMsgHeader->msgID.IDs.Type == MSGTYPE_NETCONTROL )
+		if( pMsgHeader->msgID.GetMessageType() == MessageType::NetCtrl )
 		{
 			SFLog(Net, Debug5, "TCP Ctrl Recv ip:{0}, msg:{1}, Len:{2}",
 				GetRemoteInfo().PeerAddress, 
@@ -628,9 +628,9 @@ namespace Net {
         netCheckMem(pMsgHeader);
         MessageID msgID = pMsgHeader->msgID;
 
-        uint uiPolicy = msgID.IDs.Policy;
+        uint uiPolicy = msgID.IDs.Protocol;
         if ((uiPolicy == 0 && msgID.IDs.Type != 0)
-            || uiPolicy >= PROTOCOLID_NETMAX) // invalid policy
+            || uiPolicy >= MessageProtocol::Max) // invalid policy
         {
             netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
         }
@@ -651,7 +651,7 @@ namespace Net {
 
         MessageHeader* pNewHeader = reinterpret_cast<MessageHeader*>(pSendBuffer + 1);
         memcpy(pNewHeader, pMsgHeader, pMsgHeader->Length);
-        if (msgID.IDs.Type == MSGTYPE_NETCONTROL)
+        if (msgID.GetMessageType() == MessageType::NetCtrl)
         {
             pNewHeader->UpdateChecksum();
         }
@@ -710,7 +710,7 @@ namespace Net {
             {
                 if (hr)
                 {
-                    if (msgID.IDs.Type == MSGTYPE_NETCONTROL)
+                    if (msgID.GetMessageType() == MessageType::NetCtrl)
                     {
                         SFLog(Net, Debug6, "TCP Ctrl CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
                     }
@@ -727,7 +727,7 @@ namespace Net {
 
         msgID = pMsgHeader->msgID;
 
-        if ((pMsgHeader->msgID.IDs.Type != MSGTYPE_NETCONTROL && GetConnectionState() == ConnectionState::DISCONNECTING)
+        if ((pMsgHeader->msgID.GetMessageType() != MessageType::NetCtrl && GetConnectionState() == ConnectionState::DISCONNECTING)
             || GetConnectionState() == ConnectionState::DISCONNECTED)
         {
             // Send fail by connection closed

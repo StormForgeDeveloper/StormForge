@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2018 Kyungkun Ko
 // 
@@ -36,7 +36,7 @@ namespace SF.Asset
 
         public ToolSetting ParameterSetting { get; private set; }
 
-        public ResultCode ProcessResult { get; protected set; }
+        public Result ProcessResult { get; protected set; }
 
         public Type[] GetInputAssetTypes()
         {
@@ -66,7 +66,7 @@ namespace SF.Asset
             Name = GetType().Name;
             ParameterSetting = new ToolSetting();
             AvailablePlatforms = new List<BuildPlatform>();
-            ProcessResult = new ResultCode(ResultCode.SUCCESS_FALSE);
+            ProcessResult = ResultCode.SUCCESS_FALSE;
         }
 
         public abstract void Start(AssetBuildContext context);
@@ -200,14 +200,14 @@ namespace SF.Asset
                 if(!m_RunningProcess.HasExited)
                 {
                     m_RunningProcess.Kill();
-                    ProcessResult = new ResultCode(ResultCode.FAIL);
+                    ProcessResult = ResultCode.FAIL;
                 }
                 else
                 {
                     if (m_RunningProcess.ExitCode != 0)
-                        ProcessResult = new ResultCode(ResultCode.FAIL);
+                        ProcessResult = ResultCode.FAIL;
                     else
-                        ProcessResult = new ResultCode(ResultCode.SUCCESS);
+                        ProcessResult = ResultCode.SUCCESS;
                 }
 
                 m_RunningProcess.Dispose();

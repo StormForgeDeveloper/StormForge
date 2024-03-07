@@ -49,24 +49,24 @@ namespace SF
             m_MessageRouters.Remove(router);
         }
 
-        public override void RegisterMessageHandler(int messageID, int priority, Action<SFMessage> handler)
+        public override void RegisterMessageHandler(MessageID messageID, int priority, Action<SFMessage> handler)
         {
             throw new NotImplementedException("We don't support directly registering message handlers");
         }
 
         // This method will clear whole message handler with same priority
-        public override void UnregisterMessageHandler(int messageID, int priority)
+        public override void UnregisterMessageHandler(MessageID messageID, int priority)
         {
             throw new NotImplementedException("We don't support directly unregistering message handlers");
         }
 
         // This method will clear whole message handler with same priority
-        public override void UnregisterMessageHandler(int messageID, Action<SFMessage> handler)
+        public override void UnregisterMessageHandler(MessageID messageID, Action<SFMessage> handler)
         {
             throw new NotImplementedException("We don't support directly unregistering message handlers");
         }
 
-        public override void HandleSentMessage(int result, TransactionID transId, int messageID, Action<SFMessage>? callback)
+        public override void HandleSentMessage(Result result, TransactionID transId, MessageID messageID, Action<SFMessage>? callback)
         {
             foreach (var router in m_MessageRouters)
                 router.HandleSentMessage(result, transId, messageID, callback);

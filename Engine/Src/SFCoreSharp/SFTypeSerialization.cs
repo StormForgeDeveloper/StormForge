@@ -468,6 +468,21 @@ namespace SF
                     return (UInt32)Marshal.ReadInt32(valuePtr);
                 }),
 
+            new TypeInfo(typeof(SF.TimeSpan), "TimeSpan",
+                (writer, value) =>
+                {
+                    writer.Write(((SF.TimeSpan)value).MilliSeconds);
+                },
+                (reader) =>
+                {
+                    return new SF.TimeSpan(){ MilliSeconds = reader.ReadInt64() };
+                },
+                (ref IntPtr valuePtr) =>
+                {
+                    return new SF.TimeSpan(){ MilliSeconds = ReadInt64(ref valuePtr) };
+                }
+                ),
+
         };
 
         static Dictionary<Type, TypeInfo> TypeInfoByType;

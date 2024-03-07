@@ -36,7 +36,6 @@ namespace ProtocolCompiler
         public MessageAdapterCSharpBuilder(Dictionary<string, string> settings)
             : base(settings)
         {
-            BasePath = BasePath + "CSharp";
         }
 
         public string BuilderNamespace
@@ -584,7 +583,7 @@ namespace ProtocolCompiler
                 paramCallString += ", ";
             paramCallString += "callback";
 
-            OpenSection("public int ",$"{SendFuncName(baseMsg, msgTypeName)}( {paramInString} )", false);
+            OpenSection("public Result ",$"{SendFuncName(baseMsg, msgTypeName)}( {paramInString} )", false);
 
             MatchIndent(); OutStream.WriteLine("if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;");
             MatchIndent(); OutStream.WriteLine("TransactionID InTransactionID = NewTransactionID();");
@@ -605,18 +604,18 @@ namespace ProtocolCompiler
                 paramInString += ", Action<SFMessage>? callback = null";
             }
 
-            OpenSection("public int ",
+            OpenSection("public Result ",
                 $"{SendFuncName(baseMsg, msgTypeName)}( {paramInString} )",
                 false);
             ParameterMode = TypeUsage.CSharpNative;
 
             MatchIndent(); OutStream.WriteLine("if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;");
-            MatchIndent(); OutStream.WriteLine("int result;");
+            MatchIndent(); OutStream.WriteLine("Result result;");
 
             PrepareCallNative(parameters);
 
             MatchIndent(); OutStream.WriteLine("{");
-            MatchIndent(); OutStream.WriteLine("result = {0}({1});", NativeFuncName(baseMsg, msgTypeName), CallNativeParameterStringWithNativeHandle(parameters));
+            MatchIndent(); OutStream.WriteLine("result = new Result({0}({1}));", NativeFuncName(baseMsg, msgTypeName), CallNativeParameterStringWithNativeHandle(parameters));
             MatchIndent(); OutStream.WriteLine("}");
 
             string contextInParam = ", TransactionID.Empty";
@@ -889,9 +888,6 @@ namespace ProtocolCompiler
 
         public override void Build()
         {
-            if (!Group.GenCSharp)
-                return;
-
             // Build C# policy class
             IsCPPOut = false;
             ParameterMode = TypeUsage.CSharp;
@@ -905,20 +901,6 @@ namespace ProtocolCompiler
 
             NewLine(2);
             BuildCSPostfix();
-            CloseOutFile();
-
-
-            // Build C++ native policy class
-            IsCPPOut = true;
-            OpenOutFile(OutputFileNameCPP());
-
-            BuildCPPPrefix();
-            NewLine(2);
-
-            BuildSendAdapterCPP();
-            NewLine(2);
-
-            NewLine(2);
             CloseOutFile();
         }
 

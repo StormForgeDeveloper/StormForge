@@ -11,7 +11,7 @@
 
 #include "SFProtocolPCH.h"
 #include "SFTypedefs.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 #include "Net/SFNetDef.h"
 #include "Protocol/GenericMsgParsing.h"
 #include "Protocol/GenericMsgClass.h"

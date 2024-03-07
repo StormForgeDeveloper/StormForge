@@ -1,0 +1,17 @@
+﻿include "LocalTypes.fbs";
+namespace SF.Flat.Generic;
+
+table GenericFailureCmd
+{
+ } // table GenericFailureCmd
+
+table GenericFailureRes
+{
+ 	result:uint32;
+} // table GenericFailureRes
+
+root_type GenericFailureRes;
+
+
+
+

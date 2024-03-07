@@ -69,13 +69,6 @@ namespace SF
 	};
 
 
-    [StructLayout(LayoutKind.Sequential)]
-    public class ServerFriendInformation : FriendInformation
-    {
-        public UInt32 ShardID;
-    }
-
-
 
     [Struct()]
     [StructLayout(LayoutKind.Sequential)]
@@ -84,14 +77,6 @@ namespace SF
         public EntityUID EntityUID;
     }
 
-    [Struct()]
-    [StructLayout(LayoutKind.Sequential)]
-    public struct MatchingPlayerInformation
-    {
-        EntityUID PlayerUID;
-        AccountID PlayerID;
-        byte RequestedRole;
-    }
 
 
 
@@ -101,6 +86,7 @@ namespace SF
     {
         public UInt64 UID;
     }
+
 
 
     [Struct()]
@@ -181,6 +167,8 @@ namespace SF
             new TypeMap( "String", true, typeof(String), cppTypeName:"const char*" ),
             new TypeMap( "int8", false, typeof(SByte), cppTypeName:"int8_t" ),
             new TypeMap( "uint8", false, typeof(Byte), cppTypeName:"uint8_t" ),
+            new TypeMap( "byte", false, typeof(Byte), cppTypeName:"uint8_t" ),
+            new TypeMap( "sbyte", false, typeof(SByte), cppTypeName:"int8_t" ),
             new TypeMap( "int16", false, typeof(Int16), cppTypeName:"int16_t" ),
             new TypeMap( "uint16", false, typeof(UInt16), cppTypeName:"uint16_t" ),
             new TypeMap( "int32", false, typeof(Int32), cppTypeName:"int32_t" ),
@@ -240,13 +228,16 @@ namespace SF
             new TypeMap( "PlayerInformation", false, typeof(PlayerInformation) ),
             new TypeMap( "RankingPlayerInformation", false, typeof(RankingPlayerInformation) ),
             new TypeMap( "FriendInformation", false, typeof(FriendInformation) ),
-            new TypeMap( "ServerFriendInformation", false, typeof(ServerFriendInformation) ),
             new TypeMap( "TotalRankingPlayerInformation", false, typeof(TotalRankingPlayerInformation) ),
             new TypeMap( "PerformanceCounterInfo", false, typeof(PerformanceCounterInfo) ),
             new TypeMap( "PerformanceCounterInstanceInfo", false, typeof(PerformanceCounterInstanceInfo) ),
             new TypeMap( "RelayPlayerInfo", false, typeof(RelayPlayerInfo) ),
             new TypeMap( "AchievementStat", false, typeof(AchievementStat), InUseGenericVariableBuilderInterface:true ),
             new TypeMap( "LogEntryID", false, typeof(UInt32), InUseGenericVariableBuilderInterface:true ),
+            new TypeMap( "TimeSpan", false, typeof(SF.TimeSpan), "TimeSpan", InUseGenericVariableBuilderInterface:true ),
+            new TypeMap( "bool", false, typeof(byte), "uint8", InUseGenericVariableBuilderInterface:true ),
+            new TypeMap( "ObjectInformation", false, typeof(BR.ObjectInformation), InUseGenericVariableBuilderInterface:true ),
+            new TypeMap( "NamedVariable", false, typeof(SF.NamedVariable), InUseGenericVariableBuilderInterface:true ),
         };
 
         static Dictionary<string, TypeMap> MapToCSharp = new Dictionary<string, TypeMap>();

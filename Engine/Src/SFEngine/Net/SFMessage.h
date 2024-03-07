@@ -17,18 +17,28 @@
 #include "SFAssert.h"
 #include "Container/SFArray.h"
 
-
 namespace SF {
 	
 	////////////////////////////////////////////////////////////////////////////////
 	//
 	//	Network Packet Message ID definition
 	//
+    constexpr uint NET_PROTOCOL_BITS = 7;
 
+    constexpr uint NET_SEQUENCE_BITS = 12;
+    constexpr uint NET_SEQUENCE_MASK = (1 << NET_SEQUENCE_BITS) - 1;
+    constexpr uint NET_SEQUENCE_MAX_DIFF = NET_SEQUENCE_MASK >> 1;
 
-#define NET_SEQUENCE_BITS		12
-#define NET_SEQUENCE_MASK		((1<<NET_SEQUENCE_BITS)-1)
-#define NET_SEQUENCE_MAX_DIFF	(NET_SEQUENCE_MASK >> 1)
+    constexpr uint NET_ID_MASK = ~NET_SEQUENCE_MASK;
+
+    enum class MessageType : uint8_t
+    {
+        NetCtrl,
+        Event,
+        Command,
+        Result
+    };
+
 
 #if !defined(SWIG)
 	// Because we pass net class in sequence id, NetClass::Max must be fit in the bits
@@ -62,8 +72,8 @@ namespace SF {
             uint32_t Type : 2;
             // MsgCode - Message ID, 0 is not used
             uint32_t MsgCode : 9;
-            // Policy - Protocol Policy ID
-            uint32_t Policy : 7;
+            // Protocol ID
+            uint32_t Protocol : NET_PROTOCOL_BITS;
 
             uint32_t : 0;
         } IDs;
@@ -73,30 +83,37 @@ namespace SF {
         } IDSeq;
         uint32_t ID;
 
+        MessageType GetMessageType() const { return (MessageType)IDs.Type; }
+
         constexpr MessageID() : ID(0) {}
         constexpr MessageID(uint32_t uiID) : ID(uiID) {}
-        constexpr MessageID(uint uiType, uint uiReliability, uint uiBroadcast, uint uiPolicy, uint uiCode)
-            : IDs({ 0, uiBroadcast, uiReliability, uiType, uiCode, uiPolicy })
+        constexpr MessageID(MessageType type, uint uiReliability, uint uiBroadcast, uint uiProtocol, uint uiCode)
+            : IDs({ 0, uiBroadcast, uiReliability, (uint)type, uiCode, uiProtocol })
         {
         }
 
-        uint32_t SetMessageID(uint uiType, uint uiReliability, uint uiBroadcast, uint uiPolicy, uint uiCode)
+        constexpr MessageID(MessageType type, uint uiReliability, uint uiProtocol, uint uiCode)
+            : IDs({ 0, 0, uiReliability, (uint)type, uiCode, uiProtocol })
+        {
+        }
+
+        uint32_t SetMessageID(MessageType type, uint uiReliability, uint uiBroadcast, uint uiProtocol, uint uiCode)
         {
             IDs.MsgCode = uiCode;
-            IDs.Policy = uiPolicy;
+            IDs.Protocol = uiProtocol;
             IDs.Broadcast = uiBroadcast;
             IDs.Reliability = uiReliability;
-            IDs.Type = uiType;
+            IDs.Type = (uint)type;
             IDs.Sequence = 0;// uiSeq;
 
             return ID;
         }
 
-        SF_FORCEINLINE void ValidateMessageID(uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode) const
+        SF_FORCEINLINE void ValidateMessageID(MessageType uiType, uint uiReliability, uint uiMobility, uint uiProtocol, uint uiCode) const
         {
 #if DEBUG
             MessageID Temp;
-            Temp.SetMessageID(uiType, uiReliability, uiMobility, uiPolicy, uiCode);
+            Temp.SetMessageID(uiType, uiReliability, uiMobility, uiProtocol, uiCode);
             assert(Temp == *this);
 #endif
         }
@@ -107,7 +124,7 @@ namespace SF {
         constexpr uint GetMsgID() const { return IDSeq.MsgID; }
 
         // Remove sequence from message id
-        constexpr uint GetMsgIDOnly() const { return static_cast<uint32_t>(IDSeq.MsgID) << NET_SEQUENCE_BITS; }
+        constexpr uint GetMsgIDOnly() const { return static_cast<uint32_t>(IDSeq.MsgID) & NET_ID_MASK; }
 
         constexpr operator uint32_t() const { return ID; }
 
@@ -119,28 +136,17 @@ namespace SF {
 #pragma GCC diagnostic pop
 #endif
 
-
 	////////////////////////////////////////////////////////////////////////////////
 	//
 	//	Network Message Constants
 	//
-	enum
-	{
-		MAX_MESSAGE_SIZE = (1 << 14) - 1,
-		MAX_SUBFRAME_SIZE = 1200 - 128,
+    constexpr int MAX_MESSAGE_SIZE = (1 << 14) - 1;
+	constexpr int MAX_SUBFRAME_SIZE = 1200 - 128;
 
-		MSGTYPE_NONE			= 0,	
+	constexpr int MSGTYPE_NONE			= 0;
 
-		// Packet type
-		MSGTYPE_NETCONTROL		= 0,	// Net Control
-		MSGTYPE_EVENT			= 1,	// Event
-		MSGTYPE_COMMAND			= 2,	// Command
-		MSGTYPE_RESULT			= 3,	// Result
-
-		MSGTYPE_RELIABLE		= 1,	// Reliable messages
-
-		MSGTYPE_BROADCAST		= 1,	// broadcast mode
-	};
+	constexpr int MSGTYPE_RELIABLE		= 1;	// Reliable messages
+	constexpr int MSGTYPE_BROADCAST		= 1;	// broadcast mode
 
 
 	
@@ -219,8 +225,12 @@ namespace SF {
         MessageHeader* Clone(IHeap& heap);
     };
 
-    static_assert((sizeof(uint32_t)*2) == sizeof(MessageHeader), "MessageHeader should fit in 8bytes");
+    static_assert((sizeof(uint32_t)*2) == sizeof(MessageHeader), "MessageHeader should fit");
 
+    namespace Message
+    {
+        constexpr size_t HeaderSize = sizeof(MessageHeader);
+    }
 #pragma pack(pop)
 
 
@@ -271,10 +281,6 @@ namespace SF {
     };
 
 
-    namespace Message
-    {
-        static constexpr size_t HeaderSize = sizeof(MessageHeader);
-    } // Message
 } // SF
 
 #define SFNET_ALLOC_MESSAGE_FROM_STACK(messageBufferVar, messageSize) \

@@ -1,0 +1,44 @@
+﻿include "LocalTypes.fbs";
+namespace SF.Flat.Login;
+
+table LoginCmd
+{
+ 	user_id:string(required);
+	password:string(required);
+	game_id:string(required);
+} // table LoginCmd
+
+table LoginRes
+{
+ 	result:uint32;
+	nick_name:string(required);
+	account_id:uint64;
+	auth_ticket:uint64;
+	banned_reason:string(required);
+	game_server_address:string(required);
+} // table LoginRes
+
+table LoginWithSteamCmd
+{
+ 	steam_app_id:uint64;
+	steam_player_id:uint64;
+	steam_player_name:string(required);
+	steam_player_token:string(required);
+	game_id:string(required);
+} // table LoginWithSteamCmd
+
+table LoginWithSteamRes
+{
+ 	result:uint32;
+	nick_name:string(required);
+	account_id:uint64;
+	auth_ticket:uint64;
+	banned_reason:string(required);
+	game_server_address:string(required);
+} // table LoginWithSteamRes
+
+root_type LoginWithSteamRes;
+
+
+
+

@@ -132,11 +132,14 @@ namespace ProtocolCompiler
         }
 
         // Generate parameter route hop count
-        public bool GenParameterRouteHopCount
+        public virtual bool GenParameterRouteHopCount
         {
             get { return m_group.GenParameterRouteHopCount && m_GenParameterRouteHopCount; }
             set { m_GenParameterRouteHopCount = value; }
         }
+
+        public virtual bool GenParameterRouteContext => m_group.GenParameterRouteContext;
+        public virtual bool GenParameterContext => m_group.GenParameterContext;
 
         public bool IsCSharpNative { get; set; }
 
@@ -209,7 +212,9 @@ namespace ProtocolCompiler
             }
             Directory.CreateDirectory(strFilePath);
 
-            strFilePath += OutputFileName;
+            strFilePath = Path.Combine(strFilePath, OutputFileName);
+
+            Console.WriteLine($"Writing {strFilePath}");
 
             m_OutFile = new FileStream( strFilePath, FileMode.Create, FileAccess.Write, FileShare.Read );
             m_OutStream = new StreamWriter( m_OutFile, Encoding.UTF8 );
@@ -407,28 +412,28 @@ namespace ProtocolCompiler
             List<Parameter> newParams = new List<Parameter>();
 
             // Route context need to be the first
-            if (m_group.GenParameterRouteContext && m_ParamRouteContext != null)
+            if (GenParameterRouteContext && m_ParamRouteContext != null)
             {
                 newParams.Add(m_ParamRouteContext);
             }
 
             if (MsgType.Cmd == type)
             {
-                if (m_group.GenParameterContext)
+                if (GenParameterContext)
                 {
                     newParams.Add(m_ParamContext);
                 }
             }
             else if (MsgType.Res == type)
             {
-                if (m_group.GenParameterContext)
+                if (GenParameterContext)
                 {
                     newParams.Add(m_ParamContext);
                 }
                 newParams.Add(m_ParamResult);
             }
 
-            if (Group.GenParameterRouteHopCount && type != MsgType.Res)
+            if (GenParameterRouteHopCount && type != MsgType.Res)
             {
                 newParams.Add(m_ParamRouteHopCount);
             }

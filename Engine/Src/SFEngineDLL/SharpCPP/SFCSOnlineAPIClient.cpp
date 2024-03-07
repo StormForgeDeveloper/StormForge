@@ -19,7 +19,7 @@
 #include "Service/SFEngineService.h"
 #include "Net/SFConnection.h"
 #include "Net/SFMessage.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 #include "Online/SFOnlineAPIClient.h"
 #include "Interfaces/Sharp/SFCSUtil.h"
 

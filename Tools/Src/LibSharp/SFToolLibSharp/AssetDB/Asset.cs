@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2018 Kyungkun Ko
 // 
@@ -93,34 +93,34 @@ namespace SF.Asset
         }
 
         // manually added dependencies
-        public ResultCode AddDependency(Asset dependency)
+        public Result AddDependency(Asset dependency)
         {
             var result = Dependencies.AddDependency(dependency.Dependencies);
-            if (!result.IsSuccessed())
+            if (result.IsFailure)
             {
                 ToolDebug.Error("Add dependency is failed: {0} <-> {1}", Name, dependency.Name);
                 return result;
             }
 
-            return new ResultCode(ResultCode.SUCCESS);
+            return ResultCode.SUCCESS;
         }
 
         // dependencies calculated during built
         // This will be updated when it rebuilt
-        public ResultCode AddBuildDependency(Asset dependency)
+        public Result AddBuildDependency(Asset dependency)
         {
             // Skip if they are already depend on each other
             if(Dependencies.Contains(dependency.Dependencies))
-                return new ResultCode(ResultCode.SUCCESS);
+                return ResultCode.SUCCESS;
 
             var result = BuildDependencies.AddDependency(dependency.BuildDependencies);
-            if (!result.IsSuccessed())
+            if (result.IsFailure)
             {
                 ToolDebug.Error("Add dependency is failed: {0} <-> {1}", Name, dependency.Name);
                 return result;
             }
 
-            return new ResultCode(ResultCode.SUCCESS);
+            return ResultCode.SUCCESS;
         }
 
 

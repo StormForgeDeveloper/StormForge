@@ -26,7 +26,8 @@
 #include "Online/HTTP/SFHTTPClientSystem.h"
 #include "SFFlat/Login_generated.h"
 #include "Util/SFStringFormat.h"
-#include "SFFlat/SFFlatPacketHeader.h"
+#include "MessageBus/SFMessage2.h"
+
 
 namespace SF
 {
@@ -92,35 +93,22 @@ namespace SF
         {
             Result hr;
 
-            SFFlatPacketHeader header;
-            header.ReadHeader(recvData);
+            const MessageHeader2* messageHeader = reinterpret_cast<const MessageHeader2*>(recvData.data());
 
-            uint expectedSize = header.Size;
+            uint expectedSize = messageHeader->MessageSize;
             if (recvData.size() != expectedSize)
             {
                 SFLog(System, Warning, "ObjectDirectory received unexpected data size: expected:{0}, received:{1}", expectedSize, recvData.size());
                 defCheck(ResultCode::INVALID_FORMAT);
             }
 
-            const Flat::Login::LoginPacket* responsePacket = Flat::Login::GetLoginPacket((const void*)(recvData.data() + SFFlatPacketHeader::HeaderSize));
-            if (responsePacket == nullptr)
-            {
-                defCheck(ResultCode::INVALID_FORMAT);
-            }
+            const Flat::Login::LoginRes* response = ::flatbuffers::GetRoot<Flat::Login::LoginRes>(messageHeader->GetPayloadPtr());
+            defCheckPtr(response);
 
-            Flat::Login::PayloadData payloadType = responsePacket->payload_data_type();
-            if (payloadType != Flat::Login::PayloadData::LoginResult)
-            {
-                defCheck(ResultCode::INVALID_FORMAT);
-            }
-
-            const SF::Flat::Login::LoginResult* resultData = responsePacket->payload_data_as_LoginResult();
-            defCheckPtr(resultData);
-
-            m_Owner.m_GameServerAddress = resultData->game_server_address()->c_str();
-            m_Owner.m_AccountId = resultData->account_id();
-            m_Owner.m_AuthTicket = resultData->auth_ticket();
-            Result loginResult = resultData->result_code();
+            m_Owner.m_GameServerAddress = response->game_server_address()->c_str();
+            m_Owner.m_AccountId = response->account_id();
+            m_Owner.m_AuthTicket = response->auth_ticket();
+            Result loginResult = response->result();
 
             if (!loginResult)
             {
@@ -302,7 +290,7 @@ namespace SF
         NetAddress m_GameServerNetAddress{};
 
 
-        Net::MessageDelegateByMsgID m_MessageHandlerMap;
+        MessageDelegateMap m_MessageHandlerMap;
 
 	public:
 
@@ -310,8 +298,8 @@ namespace SF
 			: ClientTask(owner, transactionId)
 		{
             m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-                Message::Game::JoinGameServerRes::MID.GetMsgID(),
-                [this](Net::Connection*, const MessageHeader* pHeader)
+                Message::Game::JoinGameServerRes::MID,
+                [this](const MessageHeader* pHeader)
                 {
                     OnJoinGameServerRes(pHeader);
                 });
@@ -393,7 +381,7 @@ namespace SF
                     SharedPointerT<ClientTask_JoinGameServer> This = WeakThis.AsSharedPtr<ClientTask_JoinGameServer>();
                     if (This.IsValid())
                     {
-                        This->m_MessageHandlerMap.OnMessage(pConnection, pMessageHeader);
+                        This->m_MessageHandlerMap.OnMessage(pMessageHeader);
                     }
                 });
 
@@ -524,7 +512,7 @@ namespace SF
 
     private:
 
-        Net::MessageDelegateByMsgID m_MessageHandlerMap;
+        MessageDelegateMap m_MessageHandlerMap;
 
 	public:
 
@@ -533,15 +521,15 @@ namespace SF
 		{
 
             m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-                Message::PlayInstance::JoinPlayInstanceRes::MID.GetMsgID(),
-                [this](Net::Connection*, const MessageHeader* pHeader)
+                Message::PlayInstance::JoinPlayInstanceRes::MID,
+                [this](const MessageHeader* pHeader)
                 {
                     OnPlayInstanceJoinGameInstanceRes(pHeader);
                 });
 
             m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-                Message::Game::JoinGameInstanceRes::MID.GetMsgID(),
-                [this](Net::Connection*, const MessageHeader* pHeader)
+                Message::Game::JoinGameInstanceRes::MID,
+                [this](const MessageHeader* pHeader)
                 {
                     OnJoinGameInstanceRes(pHeader);
                 });
@@ -623,7 +611,7 @@ namespace SF
                     SharedPointerT<ClientTask_JoinGameInstanceServer> This = WeakThis.AsSharedPtr<ClientTask_JoinGameInstanceServer>();
                     if (This.IsValid())
                     {
-                        This->m_MessageHandlerMap.OnMessage(pConnection, pMessageHeader);
+                        This->m_MessageHandlerMap.OnMessage(pMessageHeader);
                     }
                 });
 
@@ -632,7 +620,7 @@ namespace SF
                     SharedPointerT<ClientTask_JoinGameInstanceServer> This = WeakThis.AsSharedPtr<ClientTask_JoinGameInstanceServer>();
                     if (This.IsValid())
                     {
-                        This->m_MessageHandlerMap.OnMessage(pConnection, pMessageHeader);
+                        This->m_MessageHandlerMap.OnMessage(pMessageHeader);
                     }
                 });
 
@@ -814,8 +802,8 @@ namespace SF
 
 
         m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-            Message::Game::SelectCharacterRes::MID.GetMsgID(),
-            [this](Net::Connection*, const MessageHeader* pMsgData)
+            Message::Game::SelectCharacterRes::MID,
+            [this](const MessageHeader* pMsgData)
             {
                 Message::Game::SelectCharacterRes msg;
                 if (msg.ParseMessage(pMsgData))
@@ -826,8 +814,8 @@ namespace SF
 
 
         m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-            Message::Game::LeaveGameInstanceRes::MID.GetMsgID(),
-            [this](Net::Connection*, const MessageHeader* pMsgData)
+            Message::Game::LeaveGameInstanceRes::MID,
+            [this](const MessageHeader* pMsgData)
             {
                 m_GameInstanceUID = 0;
                 switch (GetOnlineState())
@@ -849,43 +837,43 @@ namespace SF
 
 
         m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-            Message::PlayInstance::NewActorInViewS2CEvt::MID.GetMsgID(),
-            [this](Net::Connection*, const MessageHeader* pMsgData)
+            Message::PlayInstance::NewActorInViewS2CEvt::MID,
+            [this](const MessageHeader* pMsgData)
             {
                 OnActorInView(pMsgData);
             });
 
         m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-            Message::PlayInstance::RemoveActorFromViewS2CEvt::MID.GetMsgID(),
-            [this](Net::Connection*, const MessageHeader* pMsgData)
+            Message::PlayInstance::RemoveActorFromViewS2CEvt::MID,
+            [this](const MessageHeader* pMsgData)
             {
                 OnActorOutofView(pMsgData);
             });
 
         m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-            Message::PlayInstance::ActorMovementS2CEvt::MID.GetMsgID(),
-            [this](Net::Connection*, const MessageHeader* pMsgData)
+            Message::PlayInstance::ActorMovementS2CEvt::MID,
+            [this](const MessageHeader* pMsgData)
             {
                 OnActorMovement(pMsgData);
             });
 
         m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-            Message::PlayInstance::ActorMovementsS2CEvt::MID.GetMsgID(),
-            [this](Net::Connection*, const MessageHeader* pMsgData)
+            Message::PlayInstance::ActorMovementsS2CEvt::MID,
+            [this](const MessageHeader* pMsgData)
             {
                 OnActorMovements(pMsgData);
             });
 
         m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-            Message::PlayInstance::VoiceDataS2CEvt::MID.GetMsgID(),
-            [this](Net::Connection*, const MessageHeader* pMsgData)
+            Message::PlayInstance::VoiceDataS2CEvt::MID,
+            [this](const MessageHeader* pMsgData)
             {
                 OnVoiceData(pMsgData);
             });
 
         m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-            Message::PlayInstance::PlayerStateChangedS2CEvt::MID.GetMsgID(),
-            [this](Net::Connection*, const MessageHeader* pMsgData)
+            Message::PlayInstance::PlayerStateChangedS2CEvt::MID,
+            [this](const MessageHeader* pMsgData)
             {
                 OnPlayerStateChanged(pMsgData);
             });
@@ -936,7 +924,7 @@ namespace SF
                 //SharedPointerT<ClientTask_JoinGameServer> This = WeakThis.AsSharedPtr<ClientTask_JoinGameServer>();
                 //if (This.IsValid())
                 {
-                    m_MessageHandlerMap.OnMessage(pConnection, pMessageHeader);
+                    m_MessageHandlerMap.OnMessage(pMessageHeader);
                 }
             });
 
@@ -955,7 +943,7 @@ namespace SF
                 //SharedPointerT<ClientTask_JoinGameServer> This = WeakThis.AsSharedPtr<ClientTask_JoinGameServer>();
                 //if (This.IsValid())
                 {
-                    m_MessageHandlerMap.OnMessage(pConnection, pMessageHeader);
+                    m_MessageHandlerMap.OnMessage(pMessageHeader);
                 }
             });
 

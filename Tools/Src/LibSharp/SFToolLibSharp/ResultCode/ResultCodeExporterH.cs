@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -79,18 +79,19 @@ namespace SF
             foreach (var codeItem in m_Codes.ResultCodeItem)
             {
                 var codeValue = codeItem.ResultCode;
+
                 string strDefine = "";
                 if (m_Codes.UseFacilityName)
-                    strDefine = string.Format("\t\t\t{0}{1}_{2}        ", ResultCode.ServerityToDefineString(codeValue.Severity), facilityUpr, codeItem.CodeName.ToUpper());
+                    strDefine = $"\t\t\t{Result.ServerityToDefineString(codeValue.Severity)}{facilityUpr}_{codeItem.CodeName.ToUpper()}        ";
                 else
-                    strDefine = string.Format("\t\t\t{0}{1}        ", ResultCode.ServerityToDefineString(codeValue.Severity), codeItem.CodeName.ToUpper());
+                    strDefine = $"\t\t\t{Result.ServerityToDefineString(codeValue.Severity)}{codeItem.CodeName.ToUpper()}        ";
 
                 output.AppendFormat("\n");
                 output.AppendFormat("\t\t\t// {0} \n", string.IsNullOrEmpty(codeItem.Desc) ? "" : codeItem.Desc);
                 output.AppendFormat("\t\t\tconstexpr Result {0}", strDefine);
                 if(strDefine.Length <= tabSize)
                     output.Append(' ', tabSize - strDefine.Length);
-                output.AppendFormat("((int32_t)0x{0:X8}L);\n", codeValue.ID);
+                output.AppendFormat("((int32_t)0x{0:X8}L);\n", codeValue.Code);
             }
 
 

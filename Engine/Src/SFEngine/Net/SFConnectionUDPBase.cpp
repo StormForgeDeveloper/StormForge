@@ -17,7 +17,7 @@
 #include "Util/SFLog.h"
 #include "Util/SFTimeUtil.h"
 #include "Util/SFToString.h"
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 
 #include "Net/SFNetToString.h"
 #include "Net/SFConnectionUDPBase.h"
@@ -533,7 +533,7 @@ namespace Net {
             {
                 if (hr)
                 {
-                    if (msgID.IDs.Type == MSGTYPE_NETCONTROL)
+                    if (msgID.GetMessageType() == MessageType::NetCtrl)
                     {
                         SFLog(Net, Debug6, "TCP Ctrl CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
                     }
@@ -552,7 +552,7 @@ namespace Net {
         msgID = pMsgHeader->msgID;
         uiMsgLen = pMsgHeader->Length;
 
-        if ((msgID.IDs.Type != MSGTYPE_NETCONTROL && GetConnectionState() == ConnectionState::DISCONNECTING)
+        if ((msgID.GetMessageType() != MessageType::NetCtrl && GetConnectionState() == ConnectionState::DISCONNECTING)
             || GetConnectionState() == ConnectionState::DISCONNECTED)
         {
             // Send fail by connection closed
@@ -578,8 +578,7 @@ namespace Net {
             netCheck(ResultCode::IO_SEND_FAIL);
         }
 
-
-        if (msgID.IDs.Type == MSGTYPE_NETCONTROL)
+        if (msgID.GetMessageType() == MessageType::NetCtrl)
         {
             netCheck(SendRaw(pMsgHeader));
         }
@@ -729,7 +728,7 @@ namespace Net {
 
 			ResetZeroRecvCount();
 
-			if (pMsgHeader->msgID.IDs.Type == MSGTYPE_NETCONTROL) // if net control message then process immediately
+			if (pMsgHeader->msgID.GetMessageType() == MessageType::NetCtrl) // if net control message then process immediately
 			{
 				netChk(ProcNetCtrl(reinterpret_cast<const MsgNetCtrlBuffer*>(pMsgHeader)));
 			}

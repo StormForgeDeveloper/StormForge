@@ -39,7 +39,7 @@ namespace SF
             }
         }
         // Message handler map
-        Dictionary<int, SortedList<int, Action<SFMessage>>> m_MessageHandlerMap = new Dictionary<int, SortedList<int, Action<SFMessage>>>();
+        Dictionary<MessageID, SortedList<int, Action<SFMessage>>> m_MessageHandlerMap = new ();
 
 
 
@@ -58,7 +58,7 @@ namespace SF
             m_MessageHandlerMap.Clear();
         }
 
-        public override void RegisterMessageHandler(int messageID, int priority, Action<SFMessage> handler)
+        public override void RegisterMessageHandler(MessageID messageID, int priority, Action<SFMessage> handler)
         {
             SortedList<int, Action<SFMessage>>? handlerList = null;
             lock(m_MessageHandlerMap)
@@ -77,7 +77,7 @@ namespace SF
         }
 
         // This method will clear whole message handler with same priority
-        public override void UnregisterMessageHandler(int messageID, int priority)
+        public override void UnregisterMessageHandler(MessageID messageID, int priority)
         {
             SortedList<int, Action<SFMessage>>? handlerList = null;
             lock (m_MessageHandlerMap)
@@ -96,7 +96,7 @@ namespace SF
         }
 
         // This method will clear whole message handler with same priority
-        public override void UnregisterMessageHandler(int messageID, Action<SFMessage> handler)
+        public override void UnregisterMessageHandler(MessageID messageID, Action<SFMessage> handler)
         {
             SortedList<int, Action<SFMessage>>? handlerList = null;
             lock (m_MessageHandlerMap)
@@ -122,7 +122,7 @@ namespace SF
             }
         }
 
-        public override void HandleSentMessage(int result, TransactionID transId, int messageID, Action<SFMessage>? callback)
+        public override void HandleSentMessage(Result result, TransactionID transId, MessageID messageID, Action<SFMessage>? callback)
         {
             if (OnMessageSent != null) OnMessageSent(result, transId, messageID, callback);
         }

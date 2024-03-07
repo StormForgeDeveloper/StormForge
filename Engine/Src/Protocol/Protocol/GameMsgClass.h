@@ -10,13 +10,14 @@
 
 #pragma once
 
-#include "Protocol/SFProtocol.h"
+#include "SFProtocol.h"
 #include "Net/SFMessage.h"
 #include "Types/SFEngineTypedefs.h"
 #include "Variable/SFVariableTable.h"
 #include "Container/SFArray.h"
 #include "Actor/Movement/SFActorMovement.h"
 #include "Variable/SFVariableMapBuilder.h"
+#include "Protocol/GameMessageID.h"
 
 
 
@@ -30,7 +31,7 @@ namespace SF
 			class HeartbeatC2SEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_HeartbeatC2SEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -69,7 +70,7 @@ namespace SF
 			class JoinGameServerCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_JoinGameServerCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -114,7 +115,7 @@ namespace SF
 			class JoinGameServerRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_JoinGameServerRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -166,7 +167,7 @@ namespace SF
 			class GetAchievementStatsCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetAchievementStatsCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -211,7 +212,7 @@ namespace SF
 			class GetAchievementStatsRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetAchievementStatsRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -255,7 +256,7 @@ namespace SF
 			class Dummy1Cmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_Dummy1Cmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -296,7 +297,7 @@ namespace SF
 			class Dummy1Res : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_Dummy1Res;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -338,7 +339,7 @@ namespace SF
 			class RegisterGCMCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_RegisterGCMCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -379,7 +380,7 @@ namespace SF
 			class RegisterGCMRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_RegisterGCMRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -421,7 +422,7 @@ namespace SF
 			class UnregisterGCMCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_UnregisterGCMCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -462,7 +463,7 @@ namespace SF
 			class UnregisterGCMRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_UnregisterGCMRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -504,7 +505,7 @@ namespace SF
 			class InviteFriendCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_InviteFriendCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -545,7 +546,7 @@ namespace SF
 			class InviteFriendRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_InviteFriendRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -587,7 +588,7 @@ namespace SF
 			class AcceptFriendRequestCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_AcceptFriendRequestCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -630,7 +631,7 @@ namespace SF
 			class AcceptFriendRequestRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_AcceptFriendRequestRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -642,7 +643,7 @@ namespace SF
 			private:
 				TransactionID m_TransactionID{};
 				Result m_Result{};
-				FriendInformation m_NewFriend{};
+				PlayerInformation m_NewFriend{};
 			public:
 				AcceptFriendRequestRes()
 					{}
@@ -657,7 +658,7 @@ namespace SF
 
 				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
-				const FriendInformation& GetNewFriend() const	{ return m_NewFriend; };
+				const PlayerInformation& GetNewFriend() const	{ return m_NewFriend; };
 
 				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
@@ -665,8 +666,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend );
-				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const PlayerInformation &InNewFriend );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const PlayerInformation &InNewFriend );
 
 			}; // class AcceptFriendRequestRes : public MessageBase
 
@@ -674,7 +675,7 @@ namespace SF
 			class FriendRequestAcceptedS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_FriendRequestAcceptedS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -685,7 +686,7 @@ namespace SF
 				TransactionID GetTransactionID() { return TransactionID{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
 			private:
-				FriendInformation m_Accepter{};
+				PlayerInformation m_Accepter{};
 			public:
 				FriendRequestAcceptedS2CEvt()
 					{}
@@ -698,7 +699,7 @@ namespace SF
 					: MessageBase(pHeader)
 					{}
 
-				const FriendInformation& GetAccepter() const	{ return m_Accepter; };
+				const PlayerInformation& GetAccepter() const	{ return m_Accepter; };
 
 				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
@@ -706,8 +707,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const FriendInformation &InAccepter );
-				static Result Create( MessageHeader* messageBuffer, const FriendInformation &InAccepter );
+				static size_t CalculateMessageSize( const PlayerInformation &InAccepter );
+				static Result Create( MessageHeader* messageBuffer, const PlayerInformation &InAccepter );
 
 			}; // class FriendRequestAcceptedS2CEvt : public MessageBase
 
@@ -715,7 +716,7 @@ namespace SF
 			class RemoveFriendCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_RemoveFriendCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -756,7 +757,7 @@ namespace SF
 			class RemoveFriendRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_RemoveFriendRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -800,7 +801,7 @@ namespace SF
 			class FriendRemovedS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_FriendRemovedS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -841,7 +842,7 @@ namespace SF
 			class GetFriendListCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetFriendListCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -884,7 +885,7 @@ namespace SF
 			class GetFriendListRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetFriendListRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -899,7 +900,7 @@ namespace SF
 				uint16_t m_MaxFriendSlot{};
 				uint16_t m_TotalNumberOfFriends{};
 				uint16_t m_StartIndex{};
-				ArrayView<FriendInformation> m_FriendList;
+				ArrayView<PlayerInformation> m_FriendList;
 			public:
 				GetFriendListRes()
 					{}
@@ -917,7 +918,7 @@ namespace SF
 				const uint16_t& GetMaxFriendSlot() const	{ return m_MaxFriendSlot; };
 				const uint16_t& GetTotalNumberOfFriends() const	{ return m_TotalNumberOfFriends; };
 				const uint16_t& GetStartIndex() const	{ return m_StartIndex; };
-				const Array<FriendInformation>& GetFriendList() const	{ return m_FriendList; };
+				const Array<PlayerInformation>& GetFriendList() const	{ return m_FriendList; };
 
 				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
@@ -925,8 +926,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
-				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList );
-				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList );
+				static size_t CalculateMessageSize( const TransactionID &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<PlayerInformation>& InFriendList );
+				static Result Create( MessageHeader* messageBuffer, const TransactionID &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<PlayerInformation>& InFriendList );
 
 			}; // class GetFriendListRes : public MessageBase
 
@@ -934,7 +935,7 @@ namespace SF
 			class GetNotificationListCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetNotificationListCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -973,7 +974,7 @@ namespace SF
 			class GetNotificationListRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetNotificationListRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1015,7 +1016,7 @@ namespace SF
 			class DeleteNotificationCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_DeleteNotificationCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1056,7 +1057,7 @@ namespace SF
 			class DeleteNotificationRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_DeleteNotificationRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1100,7 +1101,7 @@ namespace SF
 			class SetNotificationReadCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_SetNotificationReadCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1141,7 +1142,7 @@ namespace SF
 			class SetNotificationReadRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_SetNotificationReadRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1185,7 +1186,7 @@ namespace SF
 			class AcceptNotificationCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_AcceptNotificationCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1226,7 +1227,7 @@ namespace SF
 			class AcceptNotificationRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_AcceptNotificationRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1270,7 +1271,7 @@ namespace SF
 			class NotifyS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_NotifyS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1324,7 +1325,7 @@ namespace SF
 			class FindPlayerByPlatformIdCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_FindPlayerByPlatformIdCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1365,7 +1366,7 @@ namespace SF
 			class FindPlayerByPlatformIdRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_FindPlayerByPlatformIdRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1411,7 +1412,7 @@ namespace SF
 			class FindPlayerByCharacterNameCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_FindPlayerByCharacterNameCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1452,7 +1453,7 @@ namespace SF
 			class FindPlayerByCharacterNameRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_FindPlayerByCharacterNameRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1496,7 +1497,7 @@ namespace SF
 			class FindPlayerByPlatformUserNameCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_FindPlayerByPlatformUserNameCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1539,7 +1540,7 @@ namespace SF
 			class FindPlayerByPlatformUserNameRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_FindPlayerByPlatformUserNameRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1585,7 +1586,7 @@ namespace SF
 			class FindPlayerByEMailCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_FindPlayerByEMailCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1626,7 +1627,7 @@ namespace SF
 			class FindPlayerByEMailRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_FindPlayerByEMailRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1670,7 +1671,7 @@ namespace SF
 			class FindPlayerByPlayerIDCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_FindPlayerByPlayerIDCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1711,7 +1712,7 @@ namespace SF
 			class FindPlayerByPlayerIDRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_FindPlayerByPlayerIDRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1755,7 +1756,7 @@ namespace SF
 			class RequestPlayerStatusUpdateCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_RequestPlayerStatusUpdateCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1796,7 +1797,7 @@ namespace SF
 			class RequestPlayerStatusUpdateRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_RequestPlayerStatusUpdateRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1838,7 +1839,7 @@ namespace SF
 			class NotifyPlayerStatusUpdatedS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_NotifyPlayerStatusUpdatedS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1883,7 +1884,7 @@ namespace SF
 			class GetRankingListCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetRankingListCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1928,7 +1929,7 @@ namespace SF
 			class GetRankingListRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetRankingListRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -1972,7 +1973,7 @@ namespace SF
 			class GetUserGamePlayerInfoCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetUserGamePlayerInfoCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2011,7 +2012,7 @@ namespace SF
 			class GetUserGamePlayerInfoRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetUserGamePlayerInfoRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2060,7 +2061,7 @@ namespace SF
 			class GetGamePlayerInfoCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetGamePlayerInfoCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2101,7 +2102,7 @@ namespace SF
 			class GetGamePlayerInfoRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetGamePlayerInfoRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2152,7 +2153,7 @@ namespace SF
 			class LevelUpS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_LevelUpS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2195,7 +2196,7 @@ namespace SF
 			class SetNickNameCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_SetNickNameCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2238,7 +2239,7 @@ namespace SF
 			class SetNickNameRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_SetNickNameRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2284,7 +2285,7 @@ namespace SF
 			class CreatePartyCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_CreatePartyCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2323,7 +2324,7 @@ namespace SF
 			class CreatePartyRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_CreatePartyRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2367,7 +2368,7 @@ namespace SF
 			class JoinPartyCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_JoinPartyCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2410,7 +2411,7 @@ namespace SF
 			class JoinPartyRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_JoinPartyRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2458,7 +2459,7 @@ namespace SF
 			class PartyPlayerJoinedS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_PartyPlayerJoinedS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2501,7 +2502,7 @@ namespace SF
 			class PartyLeaderChangedS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_PartyLeaderChangedS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2544,7 +2545,7 @@ namespace SF
 			class LeavePartyCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_LeavePartyCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2587,7 +2588,7 @@ namespace SF
 			class LeavePartyRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_LeavePartyRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2629,7 +2630,7 @@ namespace SF
 			class PartyPlayerLeftS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_PartyPlayerLeftS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2672,7 +2673,7 @@ namespace SF
 			class PartyKickPlayerCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_PartyKickPlayerCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2717,7 +2718,7 @@ namespace SF
 			class PartyKickPlayerRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_PartyKickPlayerRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2759,7 +2760,7 @@ namespace SF
 			class PartyPlayerKickedS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_PartyPlayerKickedS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2802,7 +2803,7 @@ namespace SF
 			class PartyInviteCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_PartyInviteCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2843,7 +2844,7 @@ namespace SF
 			class PartyInviteRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_PartyInviteRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2885,7 +2886,7 @@ namespace SF
 			class PartyInviteRequestedS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_PartyInviteRequestedS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2930,7 +2931,7 @@ namespace SF
 			class PartyQuickChatMessageCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_PartyQuickChatMessageCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -2971,7 +2972,7 @@ namespace SF
 			class PartyQuickChatMessageRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_PartyQuickChatMessageRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3013,7 +3014,7 @@ namespace SF
 			class PartyQuickChatMessageS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_PartyQuickChatMessageS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3056,7 +3057,7 @@ namespace SF
 			class PartyChatMessageCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_PartyChatMessageCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3097,7 +3098,7 @@ namespace SF
 			class PartyChatMessageRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_PartyChatMessageRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3139,7 +3140,7 @@ namespace SF
 			class PartyChatMessageS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_PartyChatMessageS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3184,7 +3185,7 @@ namespace SF
 			class JoinGameInstanceCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_JoinGameInstanceCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3225,7 +3226,7 @@ namespace SF
 			class JoinGameInstanceRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_JoinGameInstanceRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3271,7 +3272,7 @@ namespace SF
 			class LeaveGameInstanceCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_LeaveGameInstanceCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3312,7 +3313,7 @@ namespace SF
 			class LeaveGameInstanceRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_LeaveGameInstanceRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3354,7 +3355,7 @@ namespace SF
 			class SearchGameInstanceCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_SearchGameInstanceCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3397,7 +3398,7 @@ namespace SF
 			class SearchGameInstanceRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_SearchGameInstanceRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3441,7 +3442,7 @@ namespace SF
 			class GetCharacterDataInGameInstanceCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetCharacterDataInGameInstanceCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3484,7 +3485,7 @@ namespace SF
 			class GetCharacterDataInGameInstanceRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetCharacterDataInGameInstanceRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3535,7 +3536,7 @@ namespace SF
 			class RequestGameMatchCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_RequestGameMatchCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3578,7 +3579,7 @@ namespace SF
 			class RequestGameMatchRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_RequestGameMatchRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3624,7 +3625,7 @@ namespace SF
 			class GameMatchedS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GameMatchedS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3691,7 +3692,7 @@ namespace SF
 			class GameMatchFailedS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GameMatchFailedS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3732,7 +3733,7 @@ namespace SF
 			class GameMatchingStartedS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GameMatchingStartedS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3771,7 +3772,7 @@ namespace SF
 			class CancelGameMatchCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_CancelGameMatchCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3810,7 +3811,7 @@ namespace SF
 			class CancelGameMatchRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_CancelGameMatchRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3852,7 +3853,7 @@ namespace SF
 			class GameMatchingCanceledS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GameMatchingCanceledS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3891,7 +3892,7 @@ namespace SF
 			class GetUGCTemplatesCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetUGCTemplatesCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3932,7 +3933,7 @@ namespace SF
 			class GetUGCTemplatesRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetUGCTemplatesRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -3976,7 +3977,7 @@ namespace SF
 			class SaveUGCCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_SaveUGCCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4027,7 +4028,7 @@ namespace SF
 			class SaveUGCRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_SaveUGCRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4071,7 +4072,7 @@ namespace SF
 			class SearchUGCCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_SearchUGCCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4112,7 +4113,7 @@ namespace SF
 			class SearchUGCRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_SearchUGCRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4154,7 +4155,7 @@ namespace SF
 			class GetUGCContentInfoCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetUGCContentInfoCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4195,7 +4196,7 @@ namespace SF
 			class GetUGCContentInfoRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetUGCContentInfoRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4244,7 +4245,7 @@ namespace SF
 			class DownloadUGCContentCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_DownloadUGCContentCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4287,7 +4288,7 @@ namespace SF
 			class DownloadUGCContentRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_DownloadUGCContentRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4336,7 +4337,7 @@ namespace SF
 			class RequestUGCZoneInstanceCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_RequestUGCZoneInstanceCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4377,7 +4378,7 @@ namespace SF
 			class RequestUGCZoneInstanceRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_RequestUGCZoneInstanceRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4426,7 +4427,7 @@ namespace SF
 			class BuyShopItemPrepareCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_BuyShopItemPrepareCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4467,7 +4468,7 @@ namespace SF
 			class BuyShopItemPrepareRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_BuyShopItemPrepareRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4513,7 +4514,7 @@ namespace SF
 			class BuyShopItemCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_BuyShopItemCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4562,7 +4563,7 @@ namespace SF
 			class BuyShopItemRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_BuyShopItemRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4606,7 +4607,7 @@ namespace SF
 			class CreateOrJoinChatChannelCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_CreateOrJoinChatChannelCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4649,7 +4650,7 @@ namespace SF
 			class CreateOrJoinChatChannelRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_CreateOrJoinChatChannelRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4695,7 +4696,7 @@ namespace SF
 			class JoinChatChannelCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_JoinChatChannelCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4740,7 +4741,7 @@ namespace SF
 			class JoinChatChannelRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_JoinChatChannelRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4786,7 +4787,7 @@ namespace SF
 			class ChatChannelPlayerJoinedS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_ChatChannelPlayerJoinedS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4829,7 +4830,7 @@ namespace SF
 			class ChatChannelLeaderChangedS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_ChatChannelLeaderChangedS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4872,7 +4873,7 @@ namespace SF
 			class LeaveChatChannelCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_LeaveChatChannelCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4915,7 +4916,7 @@ namespace SF
 			class LeaveChatChannelRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_LeaveChatChannelRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -4957,7 +4958,7 @@ namespace SF
 			class ChatChannelPlayerLeftS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_ChatChannelPlayerLeftS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5000,7 +5001,7 @@ namespace SF
 			class ChatChannelKickPlayerCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_ChatChannelKickPlayerCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5045,7 +5046,7 @@ namespace SF
 			class ChatChannelKickPlayerRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_ChatChannelKickPlayerRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5087,7 +5088,7 @@ namespace SF
 			class ChatChannelPlayerKickedS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_ChatChannelPlayerKickedS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5130,7 +5131,7 @@ namespace SF
 			class ChatChannelChatMessageCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_ChatChannelChatMessageCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5180,7 +5181,7 @@ namespace SF
 			class ChatChannelChatMessageRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_ChatChannelChatMessageRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5222,7 +5223,7 @@ namespace SF
 			class ChatChannelChatMessageS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_ChatChannelChatMessageS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5272,7 +5273,7 @@ namespace SF
 			class WhisperMessageCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_WhisperMessageCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5324,7 +5325,7 @@ namespace SF
 			class WhisperMessageRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_WhisperMessageRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5366,7 +5367,7 @@ namespace SF
 			class WhisperMessageS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_WhisperMessageS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5416,7 +5417,7 @@ namespace SF
 			class CreateCharacterCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_CreateCharacterCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5469,7 +5470,7 @@ namespace SF
 			class CreateCharacterRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_CreateCharacterRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5513,7 +5514,7 @@ namespace SF
 			class DeleteCharacterCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_DeleteCharacterCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5554,7 +5555,7 @@ namespace SF
 			class DeleteCharacterRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_DeleteCharacterRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5596,7 +5597,7 @@ namespace SF
 			class GetCharacterListCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetCharacterListCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5635,7 +5636,7 @@ namespace SF
 			class GetCharacterListRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetCharacterListRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5679,7 +5680,7 @@ namespace SF
 			class GetCharacterDataCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetCharacterDataCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5720,7 +5721,7 @@ namespace SF
 			class GetCharacterDataRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_GetCharacterDataRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5774,7 +5775,7 @@ namespace SF
 			class SelectCharacterCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_SelectCharacterCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5815,7 +5816,7 @@ namespace SF
 			class SelectCharacterRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_SelectCharacterRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5866,7 +5867,7 @@ namespace SF
 			class RequestServerNoticeUpdateCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_RequestServerNoticeUpdateCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5905,7 +5906,7 @@ namespace SF
 			class RequestServerNoticeUpdateRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_RequestServerNoticeUpdateRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5947,7 +5948,7 @@ namespace SF
 			class ServerNoticeS2CEvt : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_ServerNoticeS2CEvt;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -5990,7 +5991,7 @@ namespace SF
 			class CallFunctionCmd : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_CallFunctionCmd;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
@@ -6038,7 +6039,7 @@ namespace SF
 			class CallFunctionRes : public MessageBase
 			{
  			public:
-				static const MessageID MID;
+				static constexpr MessageID MID = MID_CallFunctionRes;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
