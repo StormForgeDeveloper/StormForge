@@ -189,3 +189,17 @@ TEST_F(StringTest, SFStringConverter)
     EXPECT_EQ(6, C.GetLength());
     EXPECT_GE(6 + 1, C.GetBufferLength());
 }
+
+TEST_F(StringTest, ToLowerToUpper)
+{
+    String A("Ab1cd2ef3gZ");
+    String B;
+
+    B = A;
+
+    B.ToLowerInline();
+    A.ToUpperInline();
+
+    EXPECT_EQ(A.IsEqual("AB1CD2EF3GZ"), true);
+    EXPECT_EQ(B.IsEqual("ab1cd2ef3gz"), true);
+}

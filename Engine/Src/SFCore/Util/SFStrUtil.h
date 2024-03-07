@@ -235,12 +235,12 @@ namespace StrUtil
 
 	// String convert to lower case 
 	// szSrc(In/Out)		: Source string to convert
-	inline Result StringLower( char* szSrc, int iBuffLen );
-	inline Result StringLower( wchar_t* szSrc, int iBuffLen );
+	inline Result StringLowerInline( char* szSrc, int iBuffLen );
+	inline Result StringLowerInline( wchar_t* szSrc, int iBuffLen );
 	template<int iBuffLen>
-	inline Result StringLower( char (&szSrc)[iBuffLen] );
+	inline Result StringLowerInline( char (&szSrc)[iBuffLen] );
 	template<int iBuffLen>
-	inline Result StringLower( wchar_t (&szSrc)[iBuffLen] );
+	inline Result StringLowerInline( wchar_t (&szSrc)[iBuffLen] );
 
 	// String convert to lower case with reallocation with destination pointer and length update
 	// szSrc				: Source string to convert
@@ -264,12 +264,12 @@ namespace StrUtil
 
 	// String convert to uppercase 
 	// szSrc(In/Out)		: Source string to convert
-	inline Result StringUpper( char* szSrc, int iBuffLen );
-	inline Result StringUpper( wchar_t* szSrc, int iBuffLen );
+	inline Result StringUpperInline( char* szSrc, int iBuffLen );
+	inline Result StringUpperInline( wchar_t* szSrc, int iBuffLen );
 	template<int iBuffLen>
-	inline Result StringUpper( char (&szSrc)[iBuffLen] );
+	inline Result StringUpperInline( char (&szSrc)[iBuffLen] );
 	template<int iBuffLen>
-	inline Result StringUpper( wchar_t (&szSrc)[iBuffLen] );
+	inline Result StringUpperInline( wchar_t (&szSrc)[iBuffLen] );
 
 	// String convert to uppercase with reallocation, if source string longer then destination buffer
 	// szSrc				: Source string to convert

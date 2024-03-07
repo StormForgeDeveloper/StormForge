@@ -50,7 +50,7 @@ namespace SF
 				*value = '\0';
 				value++;
 			}
-			StrUtil::StringLower(key, (int)strlen(key));
+			StrUtil::StringLowerInline(key, (int)strlen(key));
 
 			if (value == nullptr)
 			{

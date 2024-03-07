@@ -342,7 +342,7 @@ namespace SF {
 
 		// String convert to lower case 
 		// szSrc(In/Out)		: Source string to convert
-		Result StringLower(char* szSrc, int iBuffLen)
+		Result StringLowerInline(char* szSrc, int iBuffLen)
 		{
 			if (szSrc == nullptr)
 				return ResultCode::INVALID_ARG;
@@ -361,7 +361,7 @@ namespace SF {
 			return ResultCode::SUCCESS;
 		}
 
-		Result StringLower(wchar_t* szSrc, int iBuffLen)
+		Result StringLowerInline(wchar_t* szSrc, int iBuffLen)
 		{
 			if (szSrc == nullptr)
 				return ResultCode::INVALID_ARG;
@@ -381,15 +381,15 @@ namespace SF {
 		}
 
 		template<int iBuffLen>
-		Result StringLower(char(&szSrc)[iBuffLen])
+		Result StringLowerInline(char(&szSrc)[iBuffLen])
 		{
-			return StringLower(szSrc, iBuffLen);
+			return StringLowerInline(szSrc, iBuffLen);
 		}
 
 		template<int iBuffLen>
-		Result StringLower(wchar_t(&szSrc)[iBuffLen])
+		Result StringLowerInline(wchar_t(&szSrc)[iBuffLen])
 		{
-			return StringLower(szSrc, iBuffLen);
+			return StringLowerInline(szSrc, iBuffLen);
 		}
 
 
@@ -420,7 +420,7 @@ namespace SF {
 				//iBuffLen = iSrcBuffLen;
 			}
 
-			return StringLower(szDest, iBuffLen);
+			return StringLowerInline(szDest, iBuffLen);
 		}
 
 		Result StringLower(wchar_t* &szDest, int &iBuffLen, const wchar_t* szSrc)
@@ -446,7 +446,7 @@ namespace SF {
 				//iBuffLen = iSrcBuffLen;
 			}
 
-			return StringLower(szDest, iBuffLen);
+			return StringLowerInline(szDest, iBuffLen);
 		}
 
 
@@ -461,7 +461,7 @@ namespace SF {
 			hr = StringCopyEx(szDest, iBuffLen, szSrc);
 			if (hr.IsFailure()) return hr;
 
-			return StringLower(szDest, iBuffLen);
+			return StringLowerInline(szDest, iBuffLen);
 		}
 
 		Result StringLwrEx(wchar_t* &szDest, int &iBuffLen, const wchar_t* szSrc)
@@ -475,7 +475,7 @@ namespace SF {
 			hr = StringCopyEx(szDest, iBuffLen, szSrc);
 			if (hr.IsFailure()) return hr;
 
-			return StringLower(szDest, iBuffLen);
+			return StringLowerInline(szDest, iBuffLen);
 		}
 
 		// String convert to lower case with truncate, if source string longer then testination buffer
@@ -499,7 +499,7 @@ namespace SF {
 				if (hr.IsFailure()) return hr;
 			}
 
-			return StringLower(szDest, iConvLen);
+			return StringLowerInline(szDest, iConvLen);
 		}
 
 		template<int iBuffLen>
@@ -520,7 +520,7 @@ namespace SF {
 				if (hr.IsFailure()) return hr;
 			}
 
-			return StringLower(wszDest, iConvLen);
+			return StringLowerInline(wszDest, iConvLen);
 		}
 
 
@@ -529,53 +529,50 @@ namespace SF {
 
 		// String convert to lower case 
 		// szSrc(In/Out)		: Source string to convert
-		Result StringUpper(char* szSrc, int iBuffLen)
+		Result StringUpperInline(char* szSrc, int iBuffLen)
 		{
 			if (szSrc == nullptr)
 				return ResultCode::INVALID_ARG;
 
 			if (iBuffLen <= 0) iBuffLen = (int)strlen(szSrc);
 
-			for (int iConv = 0; iConv < iBuffLen && szSrc[0] != '\0'; iConv++)
+			for (int iConv = 0; iConv < iBuffLen && szSrc[0] != '\0'; iConv++, szSrc++)
 			{
 				int srcChar = szSrc[0];
 				if (srcChar >= 'a' && srcChar <= 'z')
-					srcChar = srcChar - 'a' + 'A';
-
-				szSrc++;
+                    szSrc[0] = static_cast<char>(srcChar - 'a' + 'A');
 			}
 
 			return ResultCode::SUCCESS;
 		}
 
-		Result StringUpper(wchar_t* szSrc, int iBuffLen)
+		Result StringUpperInline(wchar_t* szSrc, int iBuffLen)
 		{
 			if (szSrc == nullptr)
 				return ResultCode::INVALID_ARG;
 
 			if (iBuffLen <= 0) iBuffLen = (int)wcslen(szSrc);
 
-			for (int iConv = 0; iConv < iBuffLen && szSrc[0] != L'\0'; iConv++)
+			for (int iConv = 0; iConv < iBuffLen && szSrc[0] != L'\0'; iConv++, szSrc++)
 			{
-				if (szSrc[0] >= 'a' && szSrc[0] <= 'z')
-					szSrc[0] = szSrc[0] - 'a' + 'A';
-
-				szSrc++;
+                int srcChar = szSrc[0];
+                if (srcChar >= 'a' && srcChar <= 'z')
+                    szSrc[0] = static_cast<char>(srcChar - 'a' + 'A');
 			}
 
 			return ResultCode::SUCCESS;
 		}
 
 		template<int iBuffLen>
-		Result StringUpper(char(&szSrc)[iBuffLen])
+		Result StringUpperInline(char(&szSrc)[iBuffLen])
 		{
-			return StringUpper(szSrc, iBuffLen);
+			return StringUpperInline(szSrc, iBuffLen);
 		}
 
 		template<int iBuffLen>
-		Result StringUpper(wchar_t(&szSrc)[iBuffLen])
+		Result StringUpperInline(wchar_t(&szSrc)[iBuffLen])
 		{
-			return StringUpper(szSrc, iBuffLen);
+			return StringUpperInline(szSrc, iBuffLen);
 		}
 
 
@@ -606,7 +603,7 @@ namespace SF {
 				//iBuffLen = iSrcBuffLen;
 			}
 
-			return StringUpper(szDest, iBuffLen);
+			return StringUpperInline(szDest, iBuffLen);
 		}
 
 		Result StringUpper(wchar_t* &szDest, int &iBuffLen, const wchar_t* szSrc)
@@ -632,7 +629,7 @@ namespace SF {
 				//iBuffLen = iSrcBuffLen;
 			}
 
-			return StringUpper(szDest, iBuffLen);
+			return StringUpperInline(szDest, iBuffLen);
 		}
 
 		// String convert to lower case with truncate, if source string longer then testination buffer
@@ -656,7 +653,7 @@ namespace SF {
 				if (hr.IsFailure()) return hr;
 			}
 
-			return StringUpper(szDest, iConvLen);
+			return StringUpperInline(szDest, iConvLen);
 		}
 
 		template<int iBuffLen>
@@ -677,7 +674,7 @@ namespace SF {
 				if (hr.IsFailure()) return hr;
 			}
 
-			return StringUpper(wszDest, iConvLen);
+			return StringUpperInline(wszDest, iConvLen);
 		}
 
 
