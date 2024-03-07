@@ -111,7 +111,7 @@ namespace SF {
 
 		public:
 
-			SortedMap(IHeap& heap);
+			SortedMap(IHeap& heap = GetSystemHeap());
 			~SortedMap();
 
 			IHeap& GetHeap() const { return m_Heap; }
