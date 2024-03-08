@@ -20,13 +20,13 @@ using System.Text;
 namespace SF
 {
 
-    static internal class SFMessageParsingUtil
+    static public class SFMessageParsingUtil
     {
 
 #if UNITY_STANDALONE
         [AOT.MonoPInvokeCallback(typeof(SFConnection.SET_MESSAGE_FUNCTION))]
 #endif
-        static internal void MessageParseSetEventCallback(SFConnection.EventTypes eventType, int result, SFConnection.ConnectionState state)
+        static public void MessageParseSetEventCallback(SFConnection.EventTypes eventType, int result, SFConnection.ConnectionState state)
         {
             System.Diagnostics.Debug.Assert(stm_Event.EventType == SFConnection.EventTypes.EVT_NONE);
             stm_Event.EventType = eventType;
@@ -37,7 +37,7 @@ namespace SF
 #if UNITY_STANDALONE
         [AOT.MonoPInvokeCallback(typeof(SFConnection.SET_MESSAGE_FUNCTION))]
 #endif
-        static internal void MessageParseCreateCallback(MessageID messageID)
+        static public void MessageParseCreateCallback(MessageID messageID)
         {
             System.Diagnostics.Debug.Assert(stm_ParsingMessage == null);
             stm_ParsingMessage = new SFMessage(messageID);
@@ -47,7 +47,7 @@ namespace SF
 #if UNITY_STANDALONE
         [AOT.MonoPInvokeCallback(typeof(SFConnection.SET_FUNCTION))]
 #endif
-        static internal void MessageParseSetValue(string stringHash, string typeNameHash, IntPtr Value)
+        static public void MessageParseSetValue(string stringHash, string typeNameHash, IntPtr Value)
         {
             System.Diagnostics.Debug.Assert(stm_ParsingMessage != null);
             switch (typeNameHash)
@@ -135,7 +135,7 @@ namespace SF
 #if UNITY_STANDALONE
         [AOT.MonoPInvokeCallback(typeof(SFConnection.SET_ARRAY_FUNCTION))]
 #endif
-        static internal void MessageParseSetArray(string stringHash, string typeNameHash, int arrayCount, IntPtr Value)
+        static public void MessageParseSetArray(string stringHash, string typeNameHash, int arrayCount, IntPtr Value)
         {
             if (stm_ParsingMessage == null)
                 return;
@@ -475,10 +475,10 @@ namespace SF
         }
 
         // IOS IL2CPP doesn't support native callback of instance, so it has to be static
-        static internal byte[] StringDecodeBuffer = new byte[32 * 1024];
-        static internal SFMessage? stm_ParsingMessage = null;
-        static internal object stm_ParsingLock = new object();
-        static internal SFConnection.Event stm_Event;
+        static public byte[] StringDecodeBuffer = new byte[32 * 1024];
+        static public SFMessage? stm_ParsingMessage = null;
+        static public object stm_ParsingLock = new object();
+        static public SFConnection.Event stm_Event;
 
 
     }

@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SFCoreSharp\SFCoreSharp.csproj" />
+    <ProjectReference Include="..\SFProtocolSharp\SFProtocolSharp.csproj" />
   </ItemGroup>
 
   <ItemGroup>

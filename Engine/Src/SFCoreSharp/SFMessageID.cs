@@ -29,8 +29,9 @@ namespace SF
         public static readonly uint PlayInstance = 5;
         public static readonly uint Telemetry = 6;
         public static readonly uint Relay = 7;
-        public static readonly uint GameExt = 10;
-        public static readonly uint PlayInstanceExt = 11;
+
+        //public static readonly uint GameExt = 12;
+        //public static readonly uint PlayInstanceExt = 13;
 
         // client max 100
         public static readonly uint ClientMax = 100;
