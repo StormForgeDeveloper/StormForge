@@ -3,7 +3,7 @@
 #This is only for c# referencing
 
 if [ ! -d "flatbuffers" ]; then
-	git clone https://github.com/google/flatbuffers.git
+	git clone --depth 1 --branch v24.3.7 https://github.com/google/flatbuffers.git
 else
 	pushd flatbuffers
 	git pull
