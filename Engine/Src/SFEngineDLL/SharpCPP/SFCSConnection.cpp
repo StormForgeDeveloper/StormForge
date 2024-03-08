@@ -157,7 +157,7 @@ SFDLL_EXPORT bool SFConnection_NativeDequeueMessage(intptr_t nativeHandle, SET_M
 
     const MessageHeader* pHeader = reinterpret_cast<const MessageHeader * >(itemPtr.data());
 
-	setMessageFunc(pHeader->msgID.IDSeq.MsgID);
+	setMessageFunc(pHeader->GetMessageID());
 
 	// Fill parameters
 	VariableMapBuilderCS builder(setValueFunc, setArrayValueFunc);
@@ -173,7 +173,7 @@ SFDLL_EXPORT bool SFConnection_NativeTimeSync(intptr_t nativeHandle)
 	if (nativeHandle == 0)
 		return false;
 
-	auto pConnection = NativeToObject<Net::Connection>(nativeHandle);
+	Net::Connection* pConnection = NativeToObject<Net::Connection>(nativeHandle);
 
 
 	return pConnection->TimeSync().IsSuccess();

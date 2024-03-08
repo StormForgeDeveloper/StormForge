@@ -86,14 +86,14 @@ namespace Protocol {
 		if(pHeader == nullptr )
 			return;
 
-		auto itFound = MessageDebugTraceMap.find(pHeader->msgID.IDSeq.MsgID);
+		auto itFound = MessageDebugTraceMap.find(pHeader->GetMessageID());
 		if (itFound != MessageDebugTraceMap.end())
 		{
 			((itFound->second))(preFix, pHeader);
 		}
 		else
 		{
-			SFLog(Net, Error, "PrintDebugMessage failed, can't find message handler prefix:{0} for msgId:{1}", preFix, pHeader->msgID);
+			SFLog(Net, Error, "PrintDebugMessage failed, can't find message handler prefix:{0} for msgId:{1}", preFix, pHeader->GetMessageID());
 		}
 	}
 	
@@ -102,14 +102,14 @@ namespace Protocol {
 		if (pHeader == nullptr)
 			return ResultCode::INVALID_POINTER;
 
-		auto itFound = MessageParseToVariableMap.find(pHeader->msgID.IDSeq.MsgID);
+		auto itFound = MessageParseToVariableMap.find(pHeader->GetMessageID());
 		if (itFound != MessageParseToVariableMap.end())
 		{
 			return (itFound->second)(pHeader, variableMap);
 		}
 		else
 		{
-			SFLog(Net, Error, "ParseMessage(GenVariableTable) failed, can't find message handler for 0x{0:X8}", pHeader->msgID.GetMsgIDOnly());
+			SFLog(Net, Error, "ParseMessage(GenVariableTable) failed, can't find message handler for 0x{0:X8}", pHeader->GetMessageID());
 		}
 
 		return ResultCode::IO_BADPACKET;
@@ -122,14 +122,14 @@ namespace Protocol {
 		if (pHeader == nullptr)
 			return ResultCode::INVALID_POINTER;
 
-		auto itFound = MessageParseToMessageBaseMap.find(pHeader->msgID.IDSeq.MsgID);
+		auto itFound = MessageParseToMessageBaseMap.find(pHeader->GetMessageID());
 		if (itFound != MessageParseToMessageBaseMap.end())
 		{
 			return (itFound->second)(memoryManager, pHeader, pMsgBase);
 		}
 		else
 		{
-			SFLog(Net, Error, "ParseMessage failed, can't find message handler for 0x{0:X8}", pHeader->msgID.GetMsgIDOnly());
+			SFLog(Net, Error, "ParseMessage failed, can't find message handler for 0x{0:X8}", pHeader->GetMessageID());
 		}
 
 		return ResultCode::IO_BADPACKET;

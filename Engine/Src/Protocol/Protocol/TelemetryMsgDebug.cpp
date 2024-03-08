@@ -29,8 +29,8 @@ namespace SF
 		void RegisterDebugTraceTelemetry()
 		{
  			// Cmd: Post telemetry event
-			MessageDebugTraceMap.insert(std::make_pair(Message::Telemetry::PostEventCmd::MID.IDSeq.MsgID,&Message::Telemetry::PostEventCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Telemetry::PostEventRes::MID.IDSeq.MsgID,&Message::Telemetry::PostEventRes::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Telemetry::PostEventCmd::MID.ID,&Message::Telemetry::PostEventCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Telemetry::PostEventRes::MID.ID,&Message::Telemetry::PostEventRes::TraceOut));
 		}; // void RegisterDebugTraceTelemetry()
 
 

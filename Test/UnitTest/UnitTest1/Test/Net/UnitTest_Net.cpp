@@ -84,12 +84,12 @@ TEST_F(NetTest, MessageCollection)
     auto itMsg = pBuffer->begin();
     EXPECT_TRUE(itMsg);
     const MessageHeader* pMessageRead = itMsg;
-    EXPECT_TRUE(pMessageRead->msgID == Message::PlayInstance::PlayerStateChangedS2CEvt::MID);
+    EXPECT_TRUE(pMessageRead->GetMessageID() == Message::PlayInstance::PlayerStateChangedS2CEvt::MID);
 
     ++itMsg;
     EXPECT_TRUE(itMsg);
     pMessageRead = itMsg;
-    EXPECT_TRUE(itMsg->msgID == Message::PlayInstance::ActorMovementS2CEvt::MID);
+    EXPECT_TRUE(itMsg->GetMessageID() == Message::PlayInstance::ActorMovementS2CEvt::MID);
 
     ++itMsg;
     EXPECT_FALSE(itMsg);

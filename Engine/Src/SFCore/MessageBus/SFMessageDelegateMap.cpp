@@ -25,7 +25,7 @@ namespace SF
         if (pMsgHeader != nullptr) // if it hasn't consumed yet, call next callback
         {
             RecvMessageDelegates* pMessageDelegate = nullptr;
-            m_RecvMessageDelegatesByMsgId.Find(pMsgHeader->msgID.GetMsgID(), pMessageDelegate);
+            m_RecvMessageDelegatesByMsgId.Find(pMsgHeader->GetMessageID(), pMessageDelegate);
             if (pMessageDelegate)
                 pMessageDelegate->Invoke(pMsgHeader);
         }
@@ -61,7 +61,7 @@ namespace SF
         if (pMsgHeader != nullptr) // if it hasn't consumed yet, call next callback
         {
             RecvMessageDelegates* pMessageDelegate = nullptr;
-            m_RecvMessageDelegatesByMsgId.Find(pMsgHeader->MessageId.GetMsgIDOnly(), pMessageDelegate);
+            m_RecvMessageDelegatesByMsgId.Find(pMsgHeader->GetMessageID(), pMessageDelegate);
             if (pMessageDelegate)
                 pMessageDelegate->Invoke(pMsgHeader);
             else

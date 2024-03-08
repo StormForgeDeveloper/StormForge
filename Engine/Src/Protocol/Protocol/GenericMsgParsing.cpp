@@ -32,10 +32,10 @@ namespace SF
 		void RegisterParserGeneric()
 		{
  			// Cmd: Generic failure message
-			MessageParseToVariableMap.insert(std::make_pair(Message::Generic::GenericFailureCmd::MID.IDSeq.MsgID,&Message::Generic::GenericFailureCmd::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Generic::GenericFailureCmd::MID.IDSeq.MsgID,&Message::Generic::GenericFailureCmd::ParseMessageToMessageBase));
-			MessageParseToVariableMap.insert(std::make_pair(Message::Generic::GenericFailureRes::MID.IDSeq.MsgID,&Message::Generic::GenericFailureRes::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Generic::GenericFailureRes::MID.IDSeq.MsgID,&Message::Generic::GenericFailureRes::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Generic::GenericFailureCmd::MID.ID,&Message::Generic::GenericFailureCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Generic::GenericFailureCmd::MID.ID,&Message::Generic::GenericFailureCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Generic::GenericFailureRes::MID.ID,&Message::Generic::GenericFailureRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Generic::GenericFailureRes::MID.ID,&Message::Generic::GenericFailureRes::ParseMessageToMessageBase));
 		}; // void RegisterParserGeneric()
 
 

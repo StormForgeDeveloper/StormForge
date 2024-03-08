@@ -40,7 +40,7 @@ namespace SF
 
         memcpy(reinterpret_cast<uint8_t*>(this + 1) + UsedSize, pMessage, pMessage->Length);
 
-        SFLog(Net, Debug8, "MessageCollection::AddMessage msgid:{0}, size:{1}, Offset:{2}", pMessage->msgID, pMessage->Length, UsedSize);
+        SFLog(Net, Debug8, "MessageCollection::AddMessage msgid:{0}, size:{1}, Offset:{2}", pMessage->MessageId, pMessage->Length, UsedSize);
 
         UsedSize += pMessage->Length;
 
@@ -98,7 +98,7 @@ namespace SF
         {
             if (m_MessageCollections.size() >= m_MaxPacketBufferCount)
             {
-                SFLog(Net, Debug3, "MessageCollectionArray::MaxPacket msgid:{0}, numCollection:{1}", pMessage->msgID, m_MessageCollections.size());
+                SFLog(Net, Debug3, "MessageCollectionArray::MaxPacket msgid:{0}, numCollection:{1}", pMessage->MessageId, m_MessageCollections.size());
                 return ResultCode::MAX_PACKET;
             }
 
@@ -112,7 +112,7 @@ namespace SF
             }
         }
 
-        SFLog(Net, Debug8, "MessageCollectionArray::AddMessage msgid:{0}, numCollection:{1}", pMessage->msgID, m_MessageCollections.size());
+        SFLog(Net, Debug8, "MessageCollectionArray::AddMessage msgid:{0}, numCollection:{1}", pMessage->MessageId, m_MessageCollections.size());
 
         return ResultCode::SUCCESS;
     }

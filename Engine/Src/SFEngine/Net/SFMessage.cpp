@@ -152,7 +152,7 @@ namespace SF
 		{
 			memset( GetMessageHeader(), 0, sizeof(MessageHeader) );
 			// Make sure the sequence is cleared
-			Assert(GetMessageHeader()->msgID.IDSeq.Sequence == 0);
+			Assert(GetMessageHeader()->GetSequence() == 0);
 		}
 
 		GetMessageHeader()->SetIDNLen(uiMsgID, uiMsgBufSize);
@@ -178,7 +178,7 @@ namespace SF
 		Assert(m_bIsSequenceAssigned == false);
 		m_bIsSequenceAssigned = true;
 
-		GetMessageHeader()->msgID.SetSequence(sequence);
+		GetMessageHeader()->SetSequence(sequence);
 	}
 
 	void MessageData::ClearAssignedSequence()
@@ -186,12 +186,12 @@ namespace SF
 		// sequence must not assigned twice
 		m_bIsSequenceAssigned = false;
 
-		GetMessageHeader()->msgID.IDSeq.Sequence = 0;
+		GetMessageHeader()->SetSequence(0);
 	}
 
     MessageData* MessageData::NewMessage(IHeap& heap, const MessageHeader* pHeader)
     {
-        return NewMessage(heap, pHeader->msgID, pHeader->Length, reinterpret_cast<const uint8_t*>(pHeader));
+        return NewMessage(heap, pHeader->GetMessageID(), pHeader->Length, reinterpret_cast<const uint8_t*>(pHeader));
     }
 
 	// Initialize message buffer
@@ -231,8 +231,8 @@ namespace SF
 		if( m_pMsgHeader == nullptr || m_pMsgHeader->Length == 0 )
 			return nullptr;
 
-		MessageData* pMessage = NewMessage(memoryManager, m_pMsgHeader->msgID.ID, m_pMsgHeader->Length, (uint8_t*)m_pMsgHeader );
-		pMessage->GetMessageHeader()->msgID.IDSeq.Sequence = 0;
+		MessageData* pMessage = NewMessage(memoryManager, m_pMsgHeader->GetMessageID().ID, m_pMsgHeader->Length, (uint8_t*)m_pMsgHeader );
+		pMessage->GetMessageHeader()->SetSequence(0);
 
 		return pMessage;
 	}

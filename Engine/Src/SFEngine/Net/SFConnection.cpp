@@ -220,8 +220,8 @@ namespace SF {
             Result hr;
 
             assert(pHeader->Length >= sizeof(MsgNetCtrlBuffer)); // the available buffer should be bigger than we need
-            pHeader->msgID = uiCtrlCode;
-            pHeader->msgID.SetSequence(uiSequence);
+            pHeader->MessageId = uiCtrlCode;
+            pHeader->SetSequence(uiSequence);
             pHeader->Length = pHeader->GetHeaderSize();
 
             if (uiCtrlCode == PACKET_NETCTRL_SYNCRELIABLE)
@@ -243,7 +243,7 @@ namespace SF {
                 pCtlMsg->rtnMsgID = returnMsgID;
                 pHeader->Length += sizeof(MsgNetCtrl);
 
-                if (uiCtrlCode == PACKET_NETCTRL_CONNECT || returnMsgID.GetMsgIDOnly() == PACKET_NETCTRL_CONNECT)
+                if (uiCtrlCode == PACKET_NETCTRL_CONNECT || returnMsgID.GetMessageID() == PACKET_NETCTRL_CONNECT)
                 {
                     MsgNetCtrlConnect* pConMsg = reinterpret_cast<MsgNetCtrlConnect*>(pCtlMsg + 1);
                     pConMsg->ProtocolVersion = SF_PROTOCOL_VERSION;
@@ -385,14 +385,14 @@ namespace SF {
 				netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 			}
 
-            if (pNetCtrlBuffer->Header.msgID.IDs.MsgCode >= countof(m_NetCtrlAction))
+            if (pNetCtrlBuffer->Header.GetMessageID().IDs.MsgCode >= countof(m_NetCtrlAction))
             {
-                SFLog(Net, Error, "Invalid packet CID:{0}, Addr:{1}, msgId:{2}", GetCID(), GetRemoteInfo().PeerAddress, pNetCtrlBuffer->Header.msgID);
+                SFLog(Net, Error, "Invalid packet CID:{0}, Addr:{1}, msgId:{2}", GetCID(), GetRemoteInfo().PeerAddress, pNetCtrlBuffer->Header.GetMessageID());
                 netCheck(Disconnect("Invalid packet"));
                 netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
             }
 
-			pAction = m_NetCtrlAction[pNetCtrlBuffer->Header.msgID.IDs.MsgCode];
+			pAction = m_NetCtrlAction[pNetCtrlBuffer->Header.GetMessageID().IDs.MsgCode];
 			if (pAction != nullptr)
 			{
 				return pAction->Run(&pNetCtrlBuffer->Header);
@@ -540,7 +540,7 @@ namespace SF {
 			if (pMsgHeader == nullptr)
 				return hr;
 
-			MessageID msgID = pMsgHeader->msgID;
+			MessageID msgID = pMsgHeader->GetMessageID();
 
 			// 
 			Protocol::PrintDebugMessage("Recv", pMsgHeader);

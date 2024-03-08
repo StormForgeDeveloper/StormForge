@@ -411,7 +411,7 @@ namespace SF
             return ResultCode::INVALID_FORMAT;
         }
 
-        if (messageHeader->MessageId.GetMsgIDOnly() != SF::Message::Telemetry::MID_PostEventRes)
+        if (messageHeader->GetMessageID() != SF::Message::Telemetry::MID_PostEventRes)
         {
             SFLog(System, Warning, "Telemetry received unexpected message: received:{0}", messageHeader->MessageId);
             return ResultCode::INVALID_FORMAT;

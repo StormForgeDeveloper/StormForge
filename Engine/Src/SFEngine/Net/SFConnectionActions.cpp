@@ -96,9 +96,9 @@ namespace Net {
 			if (pNetCtrl->rtnMsgID.IDs.Reliability)
 			{
 				auto* pConUDP = static_cast<ConnectionUDPBase*>(GetConnection());
-				auto hrTem = pConUDP->GetSendReliableWindow().QueueReleasedSequence(pHeader->msgID.IDSeq.Sequence);
+				auto hrTem = pConUDP->GetSendReliableWindow().QueueReleasedSequence(pHeader->GetSequence());
 				SFLog(Net, Debug5, "NetCtrl Recv GuaAck : CID:{0}:{1}, seq:{2}, rtnmsg:{3}, hr={4:X8}, windows status, baseSeq:{5}, headSeq:{6}, remain:{7}, msgCount:{8}",
-					GetCID(), pHeader->msgID.IDSeq.Sequence, pHeader->msgID.IDSeq.Sequence, pNetCtrl->rtnMsgID, hrTem,
+					GetCID(), pHeader->GetSequence(), pHeader->GetSequence(), pNetCtrl->rtnMsgID, hrTem,
 					pConUDP->GetSendReliableWindow().GetBaseSequence(), pConUDP->GetSendReliableWindow().GetHeadSequence(), 
 					pConUDP->GetSendReliableWindow().GetRemainSequenceCount(), pConUDP->GetSendReliableWindow().GetMsgCount());
 				netCheck(hrTem);
@@ -226,7 +226,7 @@ namespace Net {
 
 		GetConnection()->OnHeartbeatPacket();
 		SFLog(Net, Debug3, "Heartbeat CID:{0}, socketType:{1}", GetCID(), GetSocketType());
-		netCheck(SendNetCtrl(PACKET_NETCTRL_ACK, pHeader->msgID.IDSeq.Sequence, pHeader->msgID));
+		netCheck(SendNetCtrl(PACKET_NETCTRL_ACK, pHeader->GetSequence(), pHeader->GetMessageID()));
 
 		return hr;
 	}
@@ -282,16 +282,16 @@ namespace Net {
 		if (pHeader->Length != sizeof(MsgMobileNetCtrlSync))
 			netCheck(ResultCode::IO_BADPACKET_SIZE);
 
-		hrTem = sendWindow.QueueReleasedSequence(pHeader->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask);
+		hrTem = sendWindow.QueueReleasedSequence(pHeader->GetSequence(), pSyncCtrl->MessageMask);
 		if (hrTem)
 		{
 			SFLog(Net, Debug2, "NetCtrl Recv SendMask : CID:{0}: mySeq:{1}, seq:{2}, mask:{3:X8}",
-				GetCID(), sendWindow.GetBaseSequence(), pHeader->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask);
+				GetCID(), sendWindow.GetBaseSequence(), pHeader->GetSequence(), pSyncCtrl->MessageMask);
 		}
 		else
 		{
 			SFLog(Net, Debug2, "NetCtrl Recv SendMask Failed : CID:{0} mySeq:{1}, seq:{2}, mask:{3:X8}, hr={4:X8}",
-				GetCID(), sendWindow.GetBaseSequence(), pHeader->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask, hrTem);
+				GetCID(), sendWindow.GetBaseSequence(), pHeader->GetSequence(), pSyncCtrl->MessageMask, hrTem);
 		}
 
 		if (hrTem == Result(ResultCode::UNEXPECTED))
@@ -320,9 +320,9 @@ namespace Net {
 		if (pHeader->Length != sizeof(MsgMobileNetCtrlSync))
 			netCheck(ResultCode::IO_BADPACKET_SIZE);
 
-		hrTem = sendReliableWindow.QueueReleasedSequence(pHeader->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask);
+		hrTem = sendReliableWindow.QueueReleasedSequence(pHeader->GetSequence(), pSyncCtrl->MessageMask);
 		SFLog(Net, Custom10, "NetCtrl Recv SendReliableMask : CID:{0}:{1}, seq:{2}, mask:{3:X8}, hr={4:X8}",
-			GetCID(), sendReliableWindow.GetBaseSequence(), pHeader->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask, hrTem);
+			GetCID(), sendReliableWindow.GetBaseSequence(), pHeader->GetSequence(), pSyncCtrl->MessageMask, hrTem);
 
 		if (hrTem == ResultCode::UNEXPECTED)
 			CloseConnection("Unexpected send window sequence");
@@ -352,7 +352,7 @@ namespace Net {
 		case  ConnectionState::CONNECTING:
 			if (ProtocolVersion != SF_PROTOCOL_VERSION)
 			{
-				netCheck(SendNetCtrl(PACKET_NETCTRL_NACK, pHeader->msgID.IDSeq.Sequence, pHeader->msgID));
+				netCheck(SendNetCtrl(PACKET_NETCTRL_NACK, pHeader->GetSequence(), pHeader->MessageId));
                 SFLog(Net, Warning, "Protocol version mismatch CID:{0}, RecvVer:{1}, Expected:{2}", GetCID(), pNetCtrlConnect->ProtocolVersion, SF_PROTOCOL_VERSION);
 				OnConnectionResult(ResultCode::IO_PROTOCOL_VERSION_MISMATCH);
 				netCheck(Disconnect("Protocol mismatch"));
@@ -360,13 +360,13 @@ namespace Net {
 			}
 			else if (GetRemoteInfo().PeerClass != NetClass::Unknown && RemoteClass != GetRemoteInfo().PeerClass)
 			{
-				netCheck(SendNetCtrl(PACKET_NETCTRL_NACK, pHeader->msgID.IDSeq.Sequence, pHeader->msgID));
+				netCheck(SendNetCtrl(PACKET_NETCTRL_NACK, pHeader->GetSequence(), pHeader->MessageId));
 				OnConnectionResult(ResultCode::IO_INVALID_NETCLASS);
 				netCheck(Disconnect("Invalid netclass"));
 				break;
 			}
 
-			netCheck(SendNetCtrl(PACKET_NETCTRL_ACK, 0, pHeader->msgID));
+			netCheck(SendNetCtrl(PACKET_NETCTRL_ACK, 0, pHeader->MessageId));
 
 			SFLog(Net, Debug3, "UDP Recv Connecting CID({0}) : C:{1}, Ver:{2})", GetCID(), RemoteClass, ProtocolVersion);
 			GetConnection()->SetRemoteInfo(RemoteClass, pNetCtrlConnect->Peer.PeerID);
@@ -375,7 +375,7 @@ namespace Net {
 			OnConnectionResult(ResultCode::SUCCESS);
 			break;
 		case ConnectionState::CONNECTED:
-			netCheck(SendNetCtrl(PACKET_NETCTRL_ACK, 0, pHeader->msgID));
+			netCheck(SendNetCtrl(PACKET_NETCTRL_ACK, 0, pHeader->MessageId));
 			break;
 		default:
 			break;
@@ -403,14 +403,14 @@ namespace Net {
 		case  ConnectionState::CONNECTING:
 			if (pNetCtrlConnect->ProtocolVersion != SF_PROTOCOL_VERSION)
 			{
-				netCheck(SendNetCtrl(PACKET_NETCTRL_NACK, pHeader->msgID.IDSeq.Sequence, pHeader->msgID));
+				netCheck(SendNetCtrl(PACKET_NETCTRL_NACK, pHeader->GetSequence(), pHeader->MessageId));
                 SFLog(Net, Warning, "Protocol version mismatch CID:{0}, RecvVer:{1}, Expected:{2}", GetCID(), pNetCtrlConnect->ProtocolVersion, SF_PROTOCOL_VERSION);
                 OnConnectionResult(ResultCode::IO_PROTOCOL_VERSION_MISMATCH);
 				netCheck(Disconnect("Protocol mismatch"));
 				break;
 			}
 
-			netCheck(SendNetCtrl(PACKET_NETCTRL_ACK, (uint)GetLocalInfo().PeerClass, pHeader->msgID));
+			netCheck(SendNetCtrl(PACKET_NETCTRL_ACK, (uint)GetLocalInfo().PeerClass, pHeader->MessageId));
 
 			SFLog(Net, Debug3, "Recv Connecting CID({0}) : C:{1}, Ver:{2})", GetCID(), pNetCtrlConnect->Peer.PeerClass, pNetCtrlConnect->ProtocolVersion);
 			GetConnection()->SetRemoteInfo(pNetCtrlConnect->Peer.PeerClass, pNetCtrlConnect->Peer.PeerID);
@@ -421,7 +421,7 @@ namespace Net {
             SFLog(Net, Info, "Connection connected CID({0}), State:{1}", GetCID(), GetConnectionState());
 			break;
 		case ConnectionState::CONNECTED:
-			netCheck(SendNetCtrl(PACKET_NETCTRL_ACK, (uint)GetLocalInfo().PeerClass, pHeader->msgID));
+			netCheck(SendNetCtrl(PACKET_NETCTRL_ACK, (uint)GetLocalInfo().PeerClass, pHeader->MessageId));
 			break;
 		default:
 			break;
@@ -434,7 +434,7 @@ namespace Net {
 	{
 		Result hr;
 
-        netCheck(SendNetCtrl(PACKET_NETCTRL_ACK, pHeader->msgID.IDSeq.Sequence, pHeader->msgID, GetLocalInfo().PeerID));
+        netCheck(SendNetCtrl(PACKET_NETCTRL_ACK, pHeader->GetSequence(), pHeader->MessageId, GetLocalInfo().PeerID));
 		SFLog(Net, Info, "Disconnect from remote CID:{0}", GetCID());
 		netCheck(CloseConnection("Received disconnect"));
 
@@ -688,9 +688,9 @@ namespace Net {
 				break;
 
 			auto pMsgHeader = pIMsg->GetMessageHeader();
-			auto msgID = pIMsg->GetMessageHeader()->msgID;
+			auto msgID = pIMsg->GetMessageHeader()->MessageId;
 			assert(msgID.IDs.Reliability);
-			AssertRel(msgID.IDSeq.Sequence == 0);
+			AssertRel(pMsgHeader->GetSequence() == 0);
 
 			if (pMsgHeader->Length > Const::INTER_PACKET_SIZE_MAX)
 			{
@@ -705,8 +705,8 @@ namespace Net {
 
 			SFLog(Net, Debug4, "SENDENQReliable : CID:{0}, seq:{1}, msg:{2}, len:{3}",
 				GetCID(),
-				msgID.IDSeq.Sequence,
-				msgID,
+                msgID.GetSequence(),
+                msgID,
 				pMsgHeader->Length);
 
 			// don't bother network with might not be able to processed
@@ -765,8 +765,8 @@ namespace Net {
 
 			SFLog(Net, Debug2, "SENDReliableRetry : CID:{0}, seq:{1}, msg:{2}, len:{3}",
 				GetCID(),
-				pHeader->msgID.IDSeq.Sequence,
-				pHeader->msgID,
+				pHeader->GetSequence(),
+				pHeader->MessageId,
 				pHeader->Length);
 
 			pMessageElement->ulTimeStamp = ulTimeCur;

@@ -251,7 +251,7 @@ namespace Net {
 
 		SFLog(Net, Debug2, "SEND Spliting : CID:{0}, msg:{1}, len:{2}",
 			GetCID(),
-			pSrcMsgHeader->msgID,
+			pSrcMsgHeader->MessageId,
 			pSrcMsgHeader->Length);
 
         uint16_t subFrameSerial = uint16_t(++m_SubframePacketSerial);
@@ -277,13 +277,13 @@ namespace Net {
 
 			SFLog(Net, Debug3, "Send subframe: CID:{0}, seq:{1}, msg:{2}, len:{3}",
 				GetCID(),
-				pSubframeMessage->GetMessageHeader()->msgID.IDSeq.Sequence,
-				pSubframeMessage->GetMessageHeader()->msgID,
+				pSubframeMessage->GetMessageHeader()->GetSequence(),
+				pSubframeMessage->GetMessageHeader()->GetMessageID(),
 				pSubframeMessage->GetMessageHeader()->Length);
 
             if (iSequence == 0)
             {
-                ((MessageHeader*)(pCurrentFrame + 1))->msgID.IDSeq.Sequence = 0;
+                ((MessageHeader*)(pCurrentFrame + 1))->SetSequence(0);
             }
 
 			pSubframeMessage->UpdateChecksumNEncrypt();
@@ -320,7 +320,7 @@ namespace Net {
         uint blockIndex = pCurrentFrame->Offset / MAX_SUBFRAME_SIZE;
 
         SFLog(Net, Log, "OnFrameSequenceMessage: MsgSeq:{0}, MainSeq:{1}, ChunkSize:{2}, Offset:{3}, TotalSize:{4}, block:{5}/{6}",
-            pMsg->msgID.IDSeq.Sequence, pCurrentFrame->SubframeId, pCurrentFrame->ChunkSize, pCurrentFrame->Offset, pCurrentFrame->TotalSize, blockIndex, totalBlockCount);
+            pMsg->GetSequence(), pCurrentFrame->SubframeId, pCurrentFrame->ChunkSize, pCurrentFrame->Offset, pCurrentFrame->TotalSize, blockIndex, totalBlockCount);
 
         // Mostly the array size should be 0 or 1, rarely 2
         SubframeRecvState* pCurSubframeState{};
@@ -358,7 +358,7 @@ namespace Net {
         if (blockIndex >= (sizeof(SubframeRecvState::ReceivedBlockMask) * 8))
         {
             SFLog(Net, Error, "OnFrameSequenceMessage: MsgSeq:{0}, MainSeq:{1}, ChunkSize:{2}, Offset:{3}, TotalSize:{4}, Too big blockIndex:{5}",
-                pMsg->msgID.IDSeq.Sequence, pCurrentFrame->SubframeId, pCurrentFrame->ChunkSize, pCurrentFrame->Offset, pCurrentFrame->TotalSize, blockIndex);
+                pMsg->GetSequence(), pCurrentFrame->SubframeId, pCurrentFrame->ChunkSize, pCurrentFrame->Offset, pCurrentFrame->TotalSize, blockIndex);
 
             netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
         }
@@ -368,7 +368,7 @@ namespace Net {
         if ((pCurSubframeState->ReceivedBlockMask & pCurSubframeState->FullyReceivedBlockMask) == pCurSubframeState->FullyReceivedBlockMask)
         {
             SFLog(Net, Log, "OnFrameSequenceMessage: MsgSeq:{0}, MainSeq:{1}, ChunkSize:{2}, Offset:{3}, TotalSize:{4}, blockIndex:{5}/{6} finished",
-                pMsg->msgID.IDSeq.Sequence, pCurrentFrame->SubframeId, pCurrentFrame->ChunkSize, pCurrentFrame->Offset, pCurrentFrame->TotalSize, blockIndex, totalBlockCount);
+                pMsg->GetSequence(), pCurrentFrame->SubframeId, pCurrentFrame->ChunkSize, pCurrentFrame->Offset, pCurrentFrame->TotalSize, blockIndex, totalBlockCount);
 
             // done
             super::OnRecv(messageHeader);
@@ -453,7 +453,7 @@ namespace Net {
 			netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 		}
 
-		pAction = m_NetCtrlAction[pNetCtrl->Header.msgID.IDs.MsgCode];
+		pAction = m_NetCtrlAction[pNetCtrl->Header.MessageId.IDs.MsgCode];
 		if (pAction != nullptr)
 		{
 			return pAction->Run(&pNetCtrl->Header);
@@ -473,8 +473,8 @@ namespace Net {
 	{
 		Result hr;
 
-		MessageID msgID = pHeader->msgID;
-		uint seq = pHeader->msgID.IDSeq.Sequence;
+		MessageID msgID = pHeader->MessageId;
+		uint seq = pHeader->GetSequence();
         uint len = pHeader->Length;
 
 		Result hrTem = m_RecvReliableWindow.AddMsg(pHeader);
@@ -507,7 +507,7 @@ namespace Net {
             while (m_RecvReliableWindow.PopMsg(messageItemPtr))
             {
                 MessageHeader* pPopHeader = reinterpret_cast<MessageHeader*>(messageItemPtr.data());
-                if (pPopHeader->msgID.GetMsgID() == PACKET_NETCTRL_SEQUENCE_FRAME.GetMsgID())
+                if (pPopHeader->GetMessageID() == PACKET_NETCTRL_SEQUENCE_FRAME)
                 {
                     hr = OnFrameSequenceMessage(pHeader);
                 }
@@ -523,7 +523,7 @@ namespace Net {
 
 	Result ConnectionUDPBase::SendReliableMessageAck(MessageID msgID)
 	{
-		return SendNetCtrl(PACKET_NETCTRL_ACK, msgID.IDSeq.Sequence, msgID);
+		return SendNetCtrl(PACKET_NETCTRL_ACK, msgID.GetSequence(), msgID);
 	}
 
     Result ConnectionUDPBase::SendMsg(const MessageHeader* pMsgHeader)
@@ -549,7 +549,7 @@ namespace Net {
         if (GetConnectionState() == ConnectionState::DISCONNECTED)
             return ResultCode::SUCCESS_FALSE;
 
-        msgID = pMsgHeader->msgID;
+        msgID = pMsgHeader->MessageId;
         uiMsgLen = pMsgHeader->Length;
 
         if ((msgID.GetMessageType() != MessageType::NetCtrl && GetConnectionState() == ConnectionState::DISCONNECTING)
@@ -563,7 +563,7 @@ namespace Net {
         {
             SFLog(Net, Warning, "Too big packet: msg:{0}, seq:{1}, len:{2}",
                 msgID,
-                msgID.IDSeq.Sequence,
+                msgID.GetSequence(),
                 uiMsgLen);
 
             netCheck(ResultCode::IO_BADPACKET_TOOBIG);
@@ -604,7 +604,7 @@ namespace Net {
                 memcpy(itemWritePtr.data(), pMsgHeader, pMsgHeader->Length);
 
                 MessageHeader* pCopiedMessage = reinterpret_cast<MessageHeader*>(itemWritePtr.data());
-                pCopiedMessage->msgID.SetSequence(NewSeqNone());
+                pCopiedMessage->SetSequence(NewSeqNone());
                 pCopiedMessage->UpdateChecksumNEncrypt();
 
                 itemWritePtr.Reset();
@@ -632,7 +632,7 @@ namespace Net {
                 {
                     MessageDataPtr msgDataPtr = MessageData::NewMessage(GetSystemHeap(), pMsgHeader);
                     // For relay message the message could have sequence which need to be cleared
-                    msgDataPtr->GetMessageHeader()->msgID.IDSeq.Sequence = 0;
+                    msgDataPtr->GetMessageHeader()->SetSequence(0);
                     msgDataPtr->UpdateChecksumNEncrypt();
 
                     netCheck(m_SendGuaQueue.Enqueue(std::forward<MessageDataPtr>(msgDataPtr)));
@@ -708,7 +708,7 @@ namespace Net {
             pMsgHeader = reinterpret_cast<MessageHeader*>(pBuff);
         }
 
-        SFLog(Net, Debug4, "UDP Recv ip:{0}, msg:{1}, seq:{2}, len:{3}", GetRemoteInfo().PeerAddress, pMsgHeader->msgID, pMsgHeader->msgID.IDSeq.Sequence, uiBuffSize);
+        SFLog(Net, Debug4, "UDP Recv ip:{0}, msg:{1}, seq:{2}, len:{3}", GetRemoteInfo().PeerAddress, pMsgHeader->MessageId, pMsgHeader->GetSequence(), uiBuffSize);
 
 		MutexScopeLock scopeLock(GetUpdateLock());
 
@@ -728,7 +728,7 @@ namespace Net {
 
 			ResetZeroRecvCount();
 
-			if (pMsgHeader->msgID.GetMessageType() == MessageType::NetCtrl) // if net control message then process immediately
+			if (pMsgHeader->MessageId.GetMessageType() == MessageType::NetCtrl) // if net control message then process immediately
 			{
 				netChk(ProcNetCtrl(reinterpret_cast<const MsgNetCtrlBuffer*>(pMsgHeader)));
 			}
@@ -782,12 +782,12 @@ namespace Net {
 			return hr;
 		}
 
-		if (pMsgHeader->msgID.IDs.Reliability)
+		if (pMsgHeader->MessageId.IDs.Reliability)
 		{
 			SFLog(Net, Debug5, "RECVGua    : CID:{0} msg:{1}, seq:{2}, len:{3}",
 				GetCID(),
-				pMsgHeader->msgID,
-				pMsgHeader->msgID.IDSeq.Sequence,
+				pMsgHeader->MessageId,
+				pMsgHeader->GetSequence(),
 				pMsgHeader->Length);
 
 			netCheck(OnGuaranteedMessageRecv(pMsgHeader));

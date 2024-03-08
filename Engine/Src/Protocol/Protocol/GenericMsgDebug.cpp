@@ -29,8 +29,8 @@ namespace SF
 		void RegisterDebugTraceGeneric()
 		{
  			// Cmd: Generic failure message
-			MessageDebugTraceMap.insert(std::make_pair(Message::Generic::GenericFailureCmd::MID.IDSeq.MsgID,&Message::Generic::GenericFailureCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Generic::GenericFailureRes::MID.IDSeq.MsgID,&Message::Generic::GenericFailureRes::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Generic::GenericFailureCmd::MID.ID,&Message::Generic::GenericFailureCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Generic::GenericFailureRes::MID.ID,&Message::Generic::GenericFailureRes::TraceOut));
 		}; // void RegisterDebugTraceGeneric()
 
 

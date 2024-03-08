@@ -62,7 +62,7 @@ namespace Net {
 	Result RecvMsgWindow::AddMsg( SharedPointerT<MessageData>& pIMsg )
 	{
 		Result hr = ResultCode::SUCCESS;
-		auto msgSeq = pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence;
+		auto msgSeq = pIMsg->GetMessageHeader()->GetSequence();
 
 		// Base sequence should be locked until actual swap is happened
 		// There is a chance m_uiBaseSequence increase before the message is actually added if a message is added on different thread at the same time.
@@ -127,7 +127,7 @@ namespace Net {
 			return ResultCode::FAIL;
 
 		// If the message is not the one with correct sequence, it is wrong and need to be dropped
-		if (MessageSequence::Difference(pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence, baseSequence) != 0)
+		if (MessageSequence::Difference(pIMsg->GetMessageHeader()->GetSequence(), baseSequence) != 0)
 		{
 			pIMsg = nullptr;
 			return ResultCode::FAIL;
@@ -232,7 +232,7 @@ namespace Net {
     {
         Result hr;
 
-        MessageSequence msgSeq = pHeader->msgID.IDSeq.Sequence;
+        MessageSequence msgSeq = pHeader->GetSequence();
 
         // Base sequence should be locked until actual swap is happened
         // There is a chance m_uiBaseSequence increase before the message is actually added if a message is added on different thread at the same time.
@@ -311,7 +311,7 @@ namespace Net {
 
         const MessageHeader* pHeader = reinterpret_cast<const MessageHeader*>(messageData.data());
         // If the message is not the one with correct sequence, it is wrong and need to be dropped
-        if (MessageSequence::Difference(pHeader->msgID.IDSeq.Sequence, baseSequence) != 0)
+        if (MessageSequence::Difference(pHeader->GetSequence(), baseSequence) != 0)
         {
             messageData.Reset();
             return ResultCode::FAIL;
@@ -448,7 +448,7 @@ namespace Net {
 			return ResultCode::INVALID_POINTER;
 
 		// assign head sequence
-		AssertRel(pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence == 0);
+		AssertRel(pIMsg->GetMessageHeader()->GetSequence() == 0);
 		pIMsg->AssignSequence( m_uiHeadSequence );
 
 		iIdx = MessageSequence::Difference(m_uiHeadSequence, m_uiBaseSequence);

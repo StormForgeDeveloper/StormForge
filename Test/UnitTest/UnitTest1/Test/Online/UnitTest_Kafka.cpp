@@ -186,7 +186,7 @@ TEST_F(KafkaTest, DirectoryBroker)
 	GTEST_ASSERT_EQ(streamDB->RequestStreamList(), ResultCode::SUCCESS);
 
     SF::MessageDataPtr pMsg;
-    auto StartTime = SF::Util::Time.GetRawTimeMs();
+    TimeStampMS StartTime = SF::Util::Time.GetRawTimeMs();
     while (!streamDB->PollMessage(pMsg))
     {
         auto CurTime = SF::Util::Time.GetRawTimeMs();
@@ -196,8 +196,8 @@ TEST_F(KafkaTest, DirectoryBroker)
 
     if (pMsg != nullptr)
     {
-        auto msgId = pMsg->GetMessageHeader()->msgID;
-        if (msgId.GetMsgIDOnly() == SF::Message::PlayInstance::FindStreamRes::MID)
+        MessageID msgId = pMsg->GetMessageHeader()->GetMessageID();
+        if (msgId == SF::Message::PlayInstance::FindStreamRes::MID)
         {
             SF::Message::PlayInstance::FindStreamRes msg(std::forward<MessageDataPtr>(pMsg));
             GTEST_ASSERT_EQ(msg.ParseMsg(), ResultCode::SUCCESS);
@@ -205,7 +205,7 @@ TEST_F(KafkaTest, DirectoryBroker)
             // TODO:
             //msg.Get
         }
-        else if (msgId.GetMsgIDOnly() == SF::Message::PlayInstance::GetStreamListRes::MID)
+        else if (msgId == SF::Message::PlayInstance::GetStreamListRes::MID)
         {
             SF::Message::PlayInstance::GetStreamListRes msg(std::forward<MessageDataPtr>(pMsg));
             GTEST_ASSERT_EQ(msg.ParseMsg(), ResultCode::SUCCESS);

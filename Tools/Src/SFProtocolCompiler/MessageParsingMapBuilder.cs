@@ -116,7 +116,7 @@ namespace ProtocolCompiler
 
             newparams = MakeParameters(type, inparam);
             string strMsgClass = string.Format("{0}::{1}", Group.Name, MsgClassName(Name, typeString));
-            string strKey = string.Format("Message::{0}::MID.IDSeq.MsgID", strMsgClass);
+            string strKey = string.Format("Message::{0}::MID.ID", strMsgClass);
             string strFunction = string.Format("Message::{0}::ParseMessageTo", strMsgClass);
 
             if (AppConfig.GetValue("VariableMapParser", false))

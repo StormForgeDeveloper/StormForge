@@ -124,7 +124,7 @@ SFDLL_EXPORT int32_t StreamDBDirectory_NativePollMessage(intptr_t nativeHandle, 
 	if (!pDirectoryBase->PollMessage(pIMsg))
 		return (int)ResultCode::NO_DATA_EXIST;
 
-	setMessageFunc(pIMsg->GetMessageHeader()->msgID.IDSeq.MsgID);
+	setMessageFunc(pIMsg->GetMessageHeader()->GetMessageID());
 
 	// Fill parameters
 	VariableMapBuilderCS builder(setValueFunc, setArrayValueFunc);

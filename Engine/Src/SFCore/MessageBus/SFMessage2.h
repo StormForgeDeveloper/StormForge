@@ -42,6 +42,18 @@ namespace SF {
 
         constexpr size_t GetHeaderSize() const { return sizeof(MessageHeader2); }
 
+        constexpr MessageID GetMessageID() const { return MessageId.GetMessageID(); }
+
+        constexpr uint16_t GetSequence() const
+        {
+            return MessageId.GetSequence();
+        }
+
+        SF_FORCEINLINE void SetSequence(uint sequence)
+        {
+            MessageId.IDSeq.Sequence = sequence;
+        }
+
         SF_FORCEINLINE void SetIDNLen(uint id, uint msgLen)
         {
             MessageId.ID = id;

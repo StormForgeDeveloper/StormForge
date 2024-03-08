@@ -570,11 +570,11 @@ namespace Net {
 	{
 		Result hr = ResultCode::SUCCESS;
 
-		if( pMsgHeader->msgID.GetMessageType() == MessageType::NetCtrl )
+		if( pMsgHeader->MessageId.GetMessageType() == MessageType::NetCtrl )
 		{
 			SFLog(Net, Debug5, "TCP Ctrl Recv ip:{0}, msg:{1}, Len:{2}",
 				GetRemoteInfo().PeerAddress, 
-				pMsgHeader->msgID, pMsgHeader->Length );
+				pMsgHeader->MessageId, pMsgHeader->Length );
 
 			netCheck( ProcNetCtrl(reinterpret_cast<const MsgNetCtrlBuffer*>(pMsgHeader)) );
 		}
@@ -626,7 +626,7 @@ namespace Net {
             return ResultCode::SUCCESS_FALSE;
 
         netCheckMem(pMsgHeader);
-        MessageID msgID = pMsgHeader->msgID;
+        MessageID msgID = pMsgHeader->MessageId;
 
         uint uiPolicy = msgID.IDs.Protocol;
         if ((uiPolicy == 0 && msgID.IDs.Type != 0)
@@ -638,7 +638,7 @@ namespace Net {
         CircularBufferQueue::ItemWritePtr itemWritePtr = m_SendBufferQueue.AllocateWrite(sizeof(IOBUFFER_WRITE) + pMsgHeader->Length);
         if (!itemWritePtr)
         {
-            if (pMsgHeader->msgID.IDs.Reliability)
+            if (pMsgHeader->MessageId.IDs.Reliability)
             {
                 SFLog(Net, Warning, "ConnectionTCP::SendRaw, Send buffer overflow");
             }
@@ -725,9 +725,9 @@ namespace Net {
         if (GetConnectionState() == ConnectionState::DISCONNECTED)
             return hr = ResultCode::IO_NOT_CONNECTED;
 
-        msgID = pMsgHeader->msgID;
+        msgID = pMsgHeader->MessageId;
 
-        if ((pMsgHeader->msgID.GetMessageType() != MessageType::NetCtrl && GetConnectionState() == ConnectionState::DISCONNECTING)
+        if ((pMsgHeader->MessageId.GetMessageType() != MessageType::NetCtrl && GetConnectionState() == ConnectionState::DISCONNECTING)
             || GetConnectionState() == ConnectionState::DISCONNECTED)
         {
             // Send fail by connection closed

@@ -101,7 +101,7 @@ namespace SF
 					+ SerializedSizeOf(InPlayerIdentifier)
 				);
 
-				messageBuffer->msgID = JoinPlayInstanceCmd::MID;
+				messageBuffer->MessageId = JoinPlayInstanceCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -235,7 +235,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InCharacterID, InCharacterPrivateData, InMovement);
 
-				messageBuffer->msgID = JoinPlayInstanceRes::MID;
+				messageBuffer->MessageId = JoinPlayInstanceRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -272,7 +272,7 @@ namespace SF
 					+ SerializedSizeOf(InMovement)
 				);
 
-				messageBuffer->msgID = JoinPlayInstanceRes::MID;
+				messageBuffer->MessageId = JoinPlayInstanceRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -370,7 +370,7 @@ namespace SF
 					+ SerializedSizeOf(InKickedPlayerID)
 				);
 
-				messageBuffer->msgID = PlayerKickedS2CEvt::MID;
+				messageBuffer->MessageId = PlayerKickedS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -473,7 +473,7 @@ namespace SF
 					+ SerializedSizeOf(InPayload)
 				);
 
-				messageBuffer->msgID = PlayPacketC2SEvt::MID;
+				messageBuffer->MessageId = PlayPacketC2SEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -644,7 +644,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InPlayerID, InPlayerPlatformId, InPublicData, InEquipData, InMovement, InState, InStateValues);
 
-				messageBuffer->msgID = NewActorInViewS2CEvt::MID;
+				messageBuffer->MessageId = NewActorInViewS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -687,7 +687,7 @@ namespace SF
 					+ serializedSizeOfInStateValues
 				);
 
-				messageBuffer->msgID = NewActorInViewS2CEvt::MID;
+				messageBuffer->MessageId = NewActorInViewS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -788,7 +788,7 @@ namespace SF
 					+ SerializedSizeOf(InActorID)
 				);
 
-				messageBuffer->msgID = RemoveActorFromViewS2CEvt::MID;
+				messageBuffer->MessageId = RemoveActorFromViewS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -884,7 +884,7 @@ namespace SF
 					+ SerializedSizeOf(InMovement)
 				);
 
-				messageBuffer->msgID = PlayerMovementC2SEvt::MID;
+				messageBuffer->MessageId = PlayerMovementC2SEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -977,7 +977,7 @@ namespace SF
 					+ SerializedSizeOf(InMovement)
 				);
 
-				messageBuffer->msgID = ActorMovementS2CEvt::MID;
+				messageBuffer->MessageId = ActorMovementS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1072,7 +1072,7 @@ namespace SF
 					+ SerializedSizeOf(InMovement)
 				);
 
-				messageBuffer->msgID = ActorMovementsS2CEvt::MID;
+				messageBuffer->MessageId = ActorMovementsS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1201,7 +1201,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InPlayerID, InState, InMoveFrame, InPosition, InStateValues);
 
-				messageBuffer->msgID = PlayerStateChangedS2CEvt::MID;
+				messageBuffer->MessageId = PlayerStateChangedS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1236,7 +1236,7 @@ namespace SF
 					+ serializedSizeOfInStateValues
 				);
 
-				messageBuffer->msgID = PlayerStateChangedS2CEvt::MID;
+				messageBuffer->MessageId = PlayerStateChangedS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1358,7 +1358,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InPlayerID, InSyncData);
 
-				messageBuffer->msgID = ClientSyncReliableC2SEvt::MID;
+				messageBuffer->MessageId = ClientSyncReliableC2SEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1387,7 +1387,7 @@ namespace SF
 					+ serializedSizeOfInSyncData
 				);
 
-				messageBuffer->msgID = ClientSyncReliableC2SEvt::MID;
+				messageBuffer->MessageId = ClientSyncReliableC2SEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1506,7 +1506,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InPlayerID, InSyncData);
 
-				messageBuffer->msgID = ClientSyncC2SEvt::MID;
+				messageBuffer->MessageId = ClientSyncC2SEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1535,7 +1535,7 @@ namespace SF
 					+ serializedSizeOfInSyncData
 				);
 
-				messageBuffer->msgID = ClientSyncC2SEvt::MID;
+				messageBuffer->MessageId = ClientSyncC2SEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1638,7 +1638,7 @@ namespace SF
 					+ SerializedSizeOf(InPublicMessage)
 				);
 
-				messageBuffer->msgID = SetCharacterPublicMessageCmd::MID;
+				messageBuffer->MessageId = SetCharacterPublicMessageCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1731,7 +1731,7 @@ namespace SF
 					+ SerializedSizeOf(InResult)
 				);
 
-				messageBuffer->msgID = SetCharacterPublicMessageRes::MID;
+				messageBuffer->MessageId = SetCharacterPublicMessageRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1852,7 +1852,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InPlayerID, InCharacterID, InPrivateData);
 
-				messageBuffer->msgID = CharacterPrivateDataChangedS2CEvt::MID;
+				messageBuffer->MessageId = CharacterPrivateDataChangedS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -1883,7 +1883,7 @@ namespace SF
 					+ serializedSizeOfInPrivateData
 				);
 
-				messageBuffer->msgID = CharacterPrivateDataChangedS2CEvt::MID;
+				messageBuffer->MessageId = CharacterPrivateDataChangedS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -2003,7 +2003,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InPlayerID, InPublicData);
 
-				messageBuffer->msgID = CharacterPublicDataChangedS2CEvt::MID;
+				messageBuffer->MessageId = CharacterPublicDataChangedS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -2032,7 +2032,7 @@ namespace SF
 					+ serializedSizeOfInPublicData
 				);
 
-				messageBuffer->msgID = CharacterPublicDataChangedS2CEvt::MID;
+				messageBuffer->MessageId = CharacterPublicDataChangedS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -2159,7 +2159,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InTargetPlayerID, InWhiteboardInfo);
 
-				messageBuffer->msgID = RequestWhiteboardSharingCmd::MID;
+				messageBuffer->MessageId = RequestWhiteboardSharingCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -2192,7 +2192,7 @@ namespace SF
 					+ serializedSizeOfInWhiteboardInfo
 				);
 
-				messageBuffer->msgID = RequestWhiteboardSharingCmd::MID;
+				messageBuffer->MessageId = RequestWhiteboardSharingCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -2287,7 +2287,7 @@ namespace SF
 					+ SerializedSizeOf(InResult)
 				);
 
-				messageBuffer->msgID = RequestWhiteboardSharingRes::MID;
+				messageBuffer->MessageId = RequestWhiteboardSharingRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -2391,7 +2391,7 @@ namespace SF
 					+ SerializedSizeOf(InAnswer)
 				);
 
-				messageBuffer->msgID = AcceptWhiteboardSharingCmd::MID;
+				messageBuffer->MessageId = AcceptWhiteboardSharingCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -2485,7 +2485,7 @@ namespace SF
 					+ SerializedSizeOf(InResult)
 				);
 
-				messageBuffer->msgID = AcceptWhiteboardSharingRes::MID;
+				messageBuffer->MessageId = AcceptWhiteboardSharingRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -2581,7 +2581,7 @@ namespace SF
 					+ SerializedSizeOf(InPlayerID)
 				);
 
-				messageBuffer->msgID = CloseWhiteboardSharingCmd::MID;
+				messageBuffer->MessageId = CloseWhiteboardSharingCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -2673,7 +2673,7 @@ namespace SF
 					+ SerializedSizeOf(InResult)
 				);
 
-				messageBuffer->msgID = CloseWhiteboardSharingRes::MID;
+				messageBuffer->MessageId = CloseWhiteboardSharingRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -2794,7 +2794,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InLogEntry);
 
-				messageBuffer->msgID = AddWhiteboardSharingLogEntryCmd::MID;
+				messageBuffer->MessageId = AddWhiteboardSharingLogEntryCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -2825,7 +2825,7 @@ namespace SF
 					+ serializedSizeOfInLogEntry
 				);
 
-				messageBuffer->msgID = AddWhiteboardSharingLogEntryCmd::MID;
+				messageBuffer->MessageId = AddWhiteboardSharingLogEntryCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -2923,7 +2923,7 @@ namespace SF
 					+ SerializedSizeOf(InLogEntryID)
 				);
 
-				messageBuffer->msgID = AddWhiteboardSharingLogEntryRes::MID;
+				messageBuffer->MessageId = AddWhiteboardSharingLogEntryRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -3045,7 +3045,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InLogEntry);
 
-				messageBuffer->msgID = UpdateWhiteboardSharingLogEntryCmd::MID;
+				messageBuffer->MessageId = UpdateWhiteboardSharingLogEntryCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -3076,7 +3076,7 @@ namespace SF
 					+ serializedSizeOfInLogEntry
 				);
 
-				messageBuffer->msgID = UpdateWhiteboardSharingLogEntryCmd::MID;
+				messageBuffer->MessageId = UpdateWhiteboardSharingLogEntryCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -3170,7 +3170,7 @@ namespace SF
 					+ SerializedSizeOf(InResult)
 				);
 
-				messageBuffer->msgID = UpdateWhiteboardSharingLogEntryRes::MID;
+				messageBuffer->MessageId = UpdateWhiteboardSharingLogEntryRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -3270,7 +3270,7 @@ namespace SF
 					+ SerializedSizeOf(InLogEntryID)
 				);
 
-				messageBuffer->msgID = RemoveWhiteboardSharingLogEntryCmd::MID;
+				messageBuffer->MessageId = RemoveWhiteboardSharingLogEntryCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -3363,7 +3363,7 @@ namespace SF
 					+ SerializedSizeOf(InResult)
 				);
 
-				messageBuffer->msgID = RemoveWhiteboardSharingLogEntryRes::MID;
+				messageBuffer->MessageId = RemoveWhiteboardSharingLogEntryRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -3459,7 +3459,7 @@ namespace SF
 					+ SerializedSizeOf(InRequestedPlayerID)
 				);
 
-				messageBuffer->msgID = WhiteboardSharingRequestedS2CEvt::MID;
+				messageBuffer->MessageId = WhiteboardSharingRequestedS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -3556,7 +3556,7 @@ namespace SF
 					+ SerializedSizeOf(InRejectedPlayerID)
 				);
 
-				messageBuffer->msgID = WhiteboardSharingRejectedS2CEvt::MID;
+				messageBuffer->MessageId = WhiteboardSharingRejectedS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -3678,7 +3678,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InPlayerID, InOtherPlayerID, InWhiteboardInfo);
 
-				messageBuffer->msgID = WhiteboardSharingStartedS2CEvt::MID;
+				messageBuffer->MessageId = WhiteboardSharingStartedS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -3709,7 +3709,7 @@ namespace SF
 					+ serializedSizeOfInWhiteboardInfo
 				);
 
-				messageBuffer->msgID = WhiteboardSharingStartedS2CEvt::MID;
+				messageBuffer->MessageId = WhiteboardSharingStartedS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -3808,7 +3808,7 @@ namespace SF
 					+ SerializedSizeOf(InClosedPlayerID)
 				);
 
-				messageBuffer->msgID = WhiteboardSharingHasClosedS2CEvt::MID;
+				messageBuffer->MessageId = WhiteboardSharingHasClosedS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -3926,7 +3926,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InPlayerID, InLogEntry);
 
-				messageBuffer->msgID = WhiteboardSharingNewLogEntryAddedS2CEvt::MID;
+				messageBuffer->MessageId = WhiteboardSharingNewLogEntryAddedS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -3955,7 +3955,7 @@ namespace SF
 					+ serializedSizeOfInLogEntry
 				);
 
-				messageBuffer->msgID = WhiteboardSharingNewLogEntryAddedS2CEvt::MID;
+				messageBuffer->MessageId = WhiteboardSharingNewLogEntryAddedS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -4053,7 +4053,7 @@ namespace SF
 					+ SerializedSizeOf(InLogEntryID)
 				);
 
-				messageBuffer->msgID = WhiteboardSharingNewLogEntryRemovedS2CEvt::MID;
+				messageBuffer->MessageId = WhiteboardSharingNewLogEntryRemovedS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -4171,7 +4171,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InPlayerID, InLogEntry);
 
-				messageBuffer->msgID = WhiteboardSharingNewLogEntryUpdatedS2CEvt::MID;
+				messageBuffer->MessageId = WhiteboardSharingNewLogEntryUpdatedS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -4200,7 +4200,7 @@ namespace SF
 					+ serializedSizeOfInLogEntry
 				);
 
-				messageBuffer->msgID = WhiteboardSharingNewLogEntryUpdatedS2CEvt::MID;
+				messageBuffer->MessageId = WhiteboardSharingNewLogEntryUpdatedS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -4306,7 +4306,7 @@ namespace SF
 					+ SerializedSizeOf(InUsageId)
 				);
 
-				messageBuffer->msgID = OccupyMapObjectCmd::MID;
+				messageBuffer->MessageId = OccupyMapObjectCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -4412,7 +4412,7 @@ namespace SF
 					+ SerializedSizeOf(InMapObjectId)
 				);
 
-				messageBuffer->msgID = OccupyMapObjectRes::MID;
+				messageBuffer->MessageId = OccupyMapObjectRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -4515,7 +4515,7 @@ namespace SF
 					+ SerializedSizeOf(InMapObjectId)
 				);
 
-				messageBuffer->msgID = UnoccupyMapObjectCmd::MID;
+				messageBuffer->MessageId = UnoccupyMapObjectCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -4620,7 +4620,7 @@ namespace SF
 					+ SerializedSizeOf(InMapObjectId)
 				);
 
-				messageBuffer->msgID = UnoccupyMapObjectRes::MID;
+				messageBuffer->MessageId = UnoccupyMapObjectRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -4748,7 +4748,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId, InUseParameters);
 
-				messageBuffer->msgID = UseMapObjectCmd::MID;
+				messageBuffer->MessageId = UseMapObjectCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -4781,7 +4781,7 @@ namespace SF
 					+ serializedSizeOfInUseParameters
 				);
 
-				messageBuffer->msgID = UseMapObjectCmd::MID;
+				messageBuffer->MessageId = UseMapObjectCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -4913,7 +4913,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId, InResultAttributes);
 
-				messageBuffer->msgID = UseMapObjectRes::MID;
+				messageBuffer->MessageId = UseMapObjectRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -4948,7 +4948,7 @@ namespace SF
 					+ serializedSizeOfInResultAttributes
 				);
 
-				messageBuffer->msgID = UseMapObjectRes::MID;
+				messageBuffer->MessageId = UseMapObjectRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -5083,7 +5083,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InMessageType, InChatMetaData, InChatMessage);
 
-				messageBuffer->msgID = ZoneChatCmd::MID;
+				messageBuffer->MessageId = ZoneChatCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -5118,7 +5118,7 @@ namespace SF
 					+ SerializedSizeOf(InChatMessage)
 				);
 
-				messageBuffer->msgID = ZoneChatCmd::MID;
+				messageBuffer->MessageId = ZoneChatCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -5214,7 +5214,7 @@ namespace SF
 					+ SerializedSizeOf(InResult)
 				);
 
-				messageBuffer->msgID = ZoneChatRes::MID;
+				messageBuffer->MessageId = ZoneChatRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -5340,7 +5340,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InSenderID, InMessageType, InChatMetaData, InChatMessage);
 
-				messageBuffer->msgID = ZoneChatS2CEvt::MID;
+				messageBuffer->MessageId = ZoneChatS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -5373,7 +5373,7 @@ namespace SF
 					+ SerializedSizeOf(InChatMessage)
 				);
 
-				messageBuffer->msgID = ZoneChatS2CEvt::MID;
+				messageBuffer->MessageId = ZoneChatS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -5477,7 +5477,7 @@ namespace SF
 					+ SerializedSizeOf(InCurrentLevel)
 				);
 
-				messageBuffer->msgID = LevelUpS2CEvt::MID;
+				messageBuffer->MessageId = LevelUpS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -5600,7 +5600,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InFunctionName, InPlayerID, InParameters);
 
-				messageBuffer->msgID = CallFunctionCmd::MID;
+				messageBuffer->MessageId = CallFunctionCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -5631,7 +5631,7 @@ namespace SF
 					+ serializedSizeOfInParameters
 				);
 
-				messageBuffer->msgID = CallFunctionCmd::MID;
+				messageBuffer->MessageId = CallFunctionCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -5750,7 +5750,7 @@ namespace SF
 
 				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InResult, InResults);
 
-				messageBuffer->msgID = CallFunctionRes::MID;
+				messageBuffer->MessageId = CallFunctionRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -5779,7 +5779,7 @@ namespace SF
 					+ serializedSizeOfInResults
 				);
 
-				messageBuffer->msgID = CallFunctionRes::MID;
+				messageBuffer->MessageId = CallFunctionRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -5884,7 +5884,7 @@ namespace SF
 					+ SerializedSizeOf(InVoiceData)
 				);
 
-				messageBuffer->msgID = SendVoiceDataC2SEvt::MID;
+				messageBuffer->MessageId = SendVoiceDataC2SEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -5985,7 +5985,7 @@ namespace SF
 					+ SerializedSizeOf(InVoiceData)
 				);
 
-				messageBuffer->msgID = VoiceDataS2CEvt::MID;
+				messageBuffer->MessageId = VoiceDataS2CEvt::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -6083,7 +6083,7 @@ namespace SF
 					+ SerializedSizeOf(InStreamName)
 				);
 
-				messageBuffer->msgID = CreateStreamCmd::MID;
+				messageBuffer->MessageId = CreateStreamCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -6180,7 +6180,7 @@ namespace SF
 					+ SerializedSizeOf(InStreamName)
 				);
 
-				messageBuffer->msgID = CreateStreamRes::MID;
+				messageBuffer->MessageId = CreateStreamRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -6278,7 +6278,7 @@ namespace SF
 					+ SerializedSizeOf(InStreamName)
 				);
 
-				messageBuffer->msgID = FindStreamCmd::MID;
+				messageBuffer->MessageId = FindStreamCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -6375,7 +6375,7 @@ namespace SF
 					+ SerializedSizeOf(InStreamName)
 				);
 
-				messageBuffer->msgID = FindStreamRes::MID;
+				messageBuffer->MessageId = FindStreamRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -6473,7 +6473,7 @@ namespace SF
 					+ SerializedSizeOf(InStreamName)
 				);
 
-				messageBuffer->msgID = DeleteStreamCmd::MID;
+				messageBuffer->MessageId = DeleteStreamCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -6570,7 +6570,7 @@ namespace SF
 					+ SerializedSizeOf(InStreamName)
 				);
 
-				messageBuffer->msgID = DeleteStreamRes::MID;
+				messageBuffer->MessageId = DeleteStreamRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -6663,7 +6663,7 @@ namespace SF
 					+ SerializedSizeOf(InTicket)
 				);
 
-				messageBuffer->msgID = GetStreamListCmd::MID;
+				messageBuffer->MessageId = GetStreamListCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -6758,7 +6758,7 @@ namespace SF
 					+ SerializedSizeOf(InStreamNames)
 				);
 
-				messageBuffer->msgID = GetStreamListRes::MID;
+				messageBuffer->MessageId = GetStreamListRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else

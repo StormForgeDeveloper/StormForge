@@ -64,7 +64,6 @@ namespace SF
 
         void WriteBody(StringBuilder output)
         {
-            const int tabSize = 70;
             var facility = m_Codes.Facility;
             var facilityUpr = facility.ToUpper();
 

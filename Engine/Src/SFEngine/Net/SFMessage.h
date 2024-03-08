@@ -79,7 +79,7 @@ namespace SF {
         } IDs;
         struct {
             uint32_t Sequence : NET_SEQUENCE_BITS;
-            uint32_t MsgID : 32 - NET_SEQUENCE_BITS;
+            uint32_t MesssageIdPart : 32 - NET_SEQUENCE_BITS;
         } IDSeq;
         uint32_t ID;
 
@@ -120,11 +120,10 @@ namespace SF {
 
         void SetSequence(uint sequence) { IDSeq.Sequence = sequence; }
 
-        // Only MsgID part, no sequence or length. result will be shifted
-        constexpr uint GetMsgID() const { return IDSeq.MsgID; }
-
         // Remove sequence from message id
-        constexpr uint GetMsgIDOnly() const { return ID & NET_ID_MASK; }
+        constexpr uint GetMessageID() const { return ID & NET_ID_MASK; }
+
+        constexpr uint16_t GetSequence() const { return IDSeq.Sequence; }
 
         constexpr operator uint32_t() const { return ID; }
 
@@ -170,7 +169,7 @@ namespace SF {
 	struct MessageHeader
 	{
 		// Message ID
-		MessageID	msgID;
+		MessageID	MessageId;
 
 		// Data length
 		uint32_t		Length	: 16;
@@ -185,8 +184,23 @@ namespace SF {
 
         SF_FORCEINLINE void SetIDNLen(uint id, uint msgLen)
         {
-            msgID.ID = id;
+            MessageId.ID = id;
             Length = msgLen;
+        }
+
+        constexpr MessageID GetMessageID() const
+        {
+            return MessageId.GetMessageID();
+        }
+
+        constexpr uint16_t GetSequence() const
+        {
+            return MessageId.GetSequence();
+        }
+
+        SF_FORCEINLINE void SetSequence(uint sequence)
+        {
+            MessageId.IDSeq.Sequence = sequence;
         }
 
         SF_FORCEINLINE void* GetDataPtr() const

@@ -32,10 +32,10 @@ namespace SF
 		void RegisterParserTelemetry()
 		{
  			// Cmd: Post telemetry event
-			MessageParseToVariableMap.insert(std::make_pair(Message::Telemetry::PostEventCmd::MID.IDSeq.MsgID,&Message::Telemetry::PostEventCmd::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Telemetry::PostEventCmd::MID.IDSeq.MsgID,&Message::Telemetry::PostEventCmd::ParseMessageToMessageBase));
-			MessageParseToVariableMap.insert(std::make_pair(Message::Telemetry::PostEventRes::MID.IDSeq.MsgID,&Message::Telemetry::PostEventRes::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Telemetry::PostEventRes::MID.IDSeq.MsgID,&Message::Telemetry::PostEventRes::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Telemetry::PostEventCmd::MID.ID,&Message::Telemetry::PostEventCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Telemetry::PostEventCmd::MID.ID,&Message::Telemetry::PostEventCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Telemetry::PostEventRes::MID.ID,&Message::Telemetry::PostEventRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Telemetry::PostEventRes::MID.ID,&Message::Telemetry::PostEventRes::ParseMessageToMessageBase));
 		}; // void RegisterParserTelemetry()
 
 

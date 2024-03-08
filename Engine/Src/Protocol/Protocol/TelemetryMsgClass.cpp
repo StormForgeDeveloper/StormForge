@@ -133,7 +133,7 @@ namespace SF
 					+ SerializedSizeOf(InAttributes)
 				);
 
-				messageBuffer->msgID = PostEventCmd::MID;
+				messageBuffer->MessageId = PostEventCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -232,7 +232,7 @@ namespace SF
 					+ SerializedSizeOf(InResult)
 				);
 
-				messageBuffer->msgID = PostEventRes::MID;
+				messageBuffer->MessageId = PostEventRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else

@@ -318,7 +318,7 @@ namespace SF
         {
             // TODO: change PollMessage interface
             const MessageHeader* pHeader = reinterpret_cast<const MessageHeader*>(itemPtr.data());
-            pIMsg = MessageData::NewMessage(GetHeap(), pHeader->msgID, pHeader->Length, reinterpret_cast<const uint8_t*>(pHeader));
+            pIMsg = MessageData::NewMessage(GetHeap(), pHeader->MessageId, pHeader->Length, reinterpret_cast<const uint8_t*>(pHeader));
             return ResultCode::SUCCESS;
         }
         else

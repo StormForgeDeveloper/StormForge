@@ -80,7 +80,7 @@ TEST_F(NetTest, RecvMessageWindowSimple)
 			EXPECT_TRUE(pResult != nullptr);
 			EXPECT_TRUE(hr.IsSuccess());
 
-			EXPECT_TRUE(MessageSequence::Difference(pResult->GetMessageHeader()->msgID.IDSeq.Sequence, uiSequence++) == 0);
+			EXPECT_TRUE(MessageSequence::Difference(pResult->GetMessageHeader()->GetSequence(), uiSequence++) == 0);
 		}
 		else
 		{
@@ -124,7 +124,7 @@ TEST_F(NetTest, RecvMessageWindowSimple2)
 			{
 				EXPECT_TRUE(pResult != nullptr);
 
-				EXPECT_TRUE(MessageSequence::Difference(pResult->GetMessageHeader()->msgID.IDSeq.Sequence, releaseSequence++) == 0);
+				EXPECT_TRUE(MessageSequence::Difference(pResult->GetMessageHeader()->GetSequence(), releaseSequence++) == 0);
 			}
 			else
 			{
@@ -182,7 +182,7 @@ TEST_F(NetTest, RecvMessageWindowSimple3)
 			{
 				EXPECT_TRUE(pResult != nullptr);
 
-				EXPECT_TRUE(MessageSequence::Difference(pResult->GetMessageHeader()->msgID.IDSeq.Sequence, releaseSequence++) == 0);
+				EXPECT_TRUE(MessageSequence::Difference(pResult->GetMessageHeader()->GetSequence(), releaseSequence++) == 0);
 			}
 			else
 			{
@@ -255,7 +255,7 @@ TEST_F(NetTest, RecvMessageWindowOutOfRange)
 		auto hRes = recvMessage.PopMsg(pIMsg);
 		if (pIMsg != nullptr)
 		{
-			EXPECT_EQ(MessageSequence::Difference(pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence, uiSequence), 0);
+			EXPECT_EQ(MessageSequence::Difference(pIMsg->GetMessageHeader()->GetSequence(), uiSequence), 0);
 		}
 		else
 		{
@@ -324,7 +324,7 @@ TEST_F(NetTest, RecvMessageWindowMT)
 				{
 					EXPECT_TRUE(pResult != nullptr);
 
-					EXPECT_TRUE(MessageSequence::Difference(pResult->GetMessageHeader()->msgID.IDSeq.Sequence, sequence) == 0);
+					EXPECT_TRUE(MessageSequence::Difference(pResult->GetMessageHeader()->GetSequence(), sequence) == 0);
 					pResult = nullptr;
 					sequence = releaseSequence.fetch_add(1, std::memory_order_relaxed);
 				}
@@ -416,7 +416,7 @@ TEST_F(NetTest, RecvMessageWindowMT2)
 				{
 					EXPECT_TRUE(pResult != nullptr);
 
-					EXPECT_TRUE(MessageSequence::Difference(pResult->GetMessageHeader()->msgID.IDSeq.Sequence, (uint)sequence) == 0);
+					EXPECT_TRUE(MessageSequence::Difference(pResult->GetMessageHeader()->GetSequence(), (uint)sequence) == 0);
 					pResult = nullptr;
 					if ((sequence % 10000) == 0)
 					{
@@ -477,7 +477,7 @@ TEST_F(NetTest, RecvMessageWindow2Simple)
             EXPECT_TRUE(messageData);
             EXPECT_TRUE(hr);
             MessageHeader* pHeader = reinterpret_cast<MessageHeader*>(messageData.data());
-            EXPECT_TRUE(MessageSequence::Difference(pHeader->msgID.IDSeq.Sequence, uiSequence++) == 0);
+            EXPECT_TRUE(MessageSequence::Difference(pHeader->GetSequence(), uiSequence++) == 0);
         }
         else
         {
@@ -521,7 +521,7 @@ TEST_F(NetTest, RecvMessageWindow2Simple2)
             {
                 EXPECT_TRUE(messageData);
                 MessageHeader* pHeader = reinterpret_cast<MessageHeader*>(messageData.data());
-                EXPECT_TRUE(MessageSequence::Difference(pHeader->msgID.IDSeq.Sequence, releaseSequence++) == 0);
+                EXPECT_TRUE(MessageSequence::Difference(pHeader->GetSequence(), releaseSequence++) == 0);
             }
             else
             {
@@ -579,7 +579,7 @@ TEST_F(NetTest, RecvMessageWindow2Simple3)
             {
                 EXPECT_TRUE(messageData);
                 MessageHeader* pHeader = reinterpret_cast<MessageHeader*>(messageData.data());
-                EXPECT_TRUE(MessageSequence::Difference(pHeader->msgID.IDSeq.Sequence, releaseSequence++) == 0);
+                EXPECT_TRUE(MessageSequence::Difference(pHeader->GetSequence(), releaseSequence++) == 0);
             }
             else
             {
@@ -653,7 +653,7 @@ TEST_F(NetTest, RecvMessageWindow2OutOfRange)
         if (messageData)
         {
             MessageHeader* pHeader = reinterpret_cast<MessageHeader*>(messageData.data());
-            EXPECT_EQ(MessageSequence::Difference(pHeader->msgID.IDSeq.Sequence, uiSequence), 0);
+            EXPECT_EQ(MessageSequence::Difference(pHeader->GetSequence(), uiSequence), 0);
         }
         else
         {
@@ -722,7 +722,7 @@ TEST_F(NetTest, RecvMessageWindow2MT)
                         EXPECT_TRUE(messageData);
                         MessageHeader* pHeader = reinterpret_cast<MessageHeader*>(messageData.data());
 
-                        EXPECT_TRUE(MessageSequence::Difference(pHeader->msgID.IDSeq.Sequence, sequence) == 0);
+                        EXPECT_TRUE(MessageSequence::Difference(pHeader->GetSequence(), sequence) == 0);
                         messageData.Reset();
                         sequence = releaseSequence.fetch_add(1, std::memory_order_relaxed);
                     }
@@ -814,7 +814,7 @@ TEST_F(NetTest, RecvMessageWindow2MT2)
                         EXPECT_TRUE(messageData);
 
                         MessageHeader* pHeader = reinterpret_cast<MessageHeader*>(messageData.data());
-                        EXPECT_TRUE(MessageSequence::Difference(pHeader->msgID.IDSeq.Sequence, (uint)sequence) == 0);
+                        EXPECT_TRUE(MessageSequence::Difference(pHeader->GetSequence(), (uint)sequence) == 0);
 
                         if ((sequence % 10000) == 0)
                         {

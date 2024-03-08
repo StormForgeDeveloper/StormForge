@@ -29,11 +29,11 @@ namespace SF
 		void RegisterDebugTraceLogin()
 		{
  			// Cmd: Login with ID/PW request
-			MessageDebugTraceMap.insert(std::make_pair(Message::Login::LoginCmd::MID.IDSeq.MsgID,&Message::Login::LoginCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Login::LoginRes::MID.IDSeq.MsgID,&Message::Login::LoginRes::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Login::LoginCmd::MID.ID,&Message::Login::LoginCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Login::LoginRes::MID.ID,&Message::Login::LoginRes::TraceOut));
 			// Cmd: Login with steam login info
-			MessageDebugTraceMap.insert(std::make_pair(Message::Login::LoginWithSteamCmd::MID.IDSeq.MsgID,&Message::Login::LoginWithSteamCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Login::LoginWithSteamRes::MID.IDSeq.MsgID,&Message::Login::LoginWithSteamRes::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Login::LoginWithSteamCmd::MID.ID,&Message::Login::LoginWithSteamCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Login::LoginWithSteamRes::MID.ID,&Message::Login::LoginWithSteamRes::TraceOut));
 		}; // void RegisterDebugTraceLogin()
 
 

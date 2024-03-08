@@ -103,7 +103,7 @@ namespace SF
 					+ SerializedSizeOf(InGameID)
 				);
 
-				messageBuffer->msgID = LoginCmd::MID;
+				messageBuffer->MessageId = LoginCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -219,7 +219,7 @@ namespace SF
 					+ SerializedSizeOf(InGameServerAddress)
 				);
 
-				messageBuffer->msgID = LoginRes::MID;
+				messageBuffer->MessageId = LoginRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -335,7 +335,7 @@ namespace SF
 					+ SerializedSizeOf(InGameID)
 				);
 
-				messageBuffer->msgID = LoginWithSteamCmd::MID;
+				messageBuffer->MessageId = LoginWithSteamCmd::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
@@ -453,7 +453,7 @@ namespace SF
 					+ SerializedSizeOf(InGameServerAddress)
 				);
 
-				messageBuffer->msgID = LoginWithSteamRes::MID;
+				messageBuffer->MessageId = LoginWithSteamRes::MID;
 				if (messageBuffer->Length < __uiMessageSize)
 					return ResultCode::UNEXPECTED;
 				else
