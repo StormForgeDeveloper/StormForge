@@ -75,11 +75,11 @@ fi
 popd
 
 
-# pushd src/flatbuffer
+pushd src/flatbuffer
 
-# ./download.sh
+./download.sh
 
-# popd
+popd
 
 
 
