@@ -15,667 +15,888 @@ namespace SF {
 	public partial struct ResultCode {
 
 		// Invalid byte sequence. usually caused by invalid data stream 
-		public static readonly Result INVALID_BYTE_SEQUENCE =               new Result(unchecked((int)0xE7010000)); 
+		 public const int _INVALID_BYTE_SEQUENCE = (unchecked((int)0xE7010000)); 
+		public static readonly Result INVALID_BYTE_SEQUENCE = new Result(_INVALID_BYTE_SEQUENCE); 
 
 		// You can not register same name or type component 
-		public static readonly Result DUPLICATE_COMPONENT =                 new Result(unchecked((int)0xE7010001)); 
+		 public const int _DUPLICATE_COMPONENT = (unchecked((int)0xE7010001)); 
+		public static readonly Result DUPLICATE_COMPONENT = new Result(_DUPLICATE_COMPONENT); 
 
 		// Called without initialization. 
-		public static readonly Result NOT_INITIALIZED =                     new Result(unchecked((int)0xE7010002)); 
+		 public const int _NOT_INITIALIZED = (unchecked((int)0xE7010002)); 
+		public static readonly Result NOT_INITIALIZED = new Result(_NOT_INITIALIZED); 
 
 		// The version not available or miss match with system. 
-		public static readonly Result VERSION_NOT_AVAIL =                   new Result(unchecked((int)0xE7010003)); 
+		 public const int _VERSION_NOT_AVAIL = (unchecked((int)0xE7010003)); 
+		public static readonly Result VERSION_NOT_AVAIL = new Result(_VERSION_NOT_AVAIL); 
 
 		// Invalid Cluster Master server 
-		public static readonly Result INVALID_CLUSTERMASTER =               new Result(unchecked((int)0xE7010004)); 
+		 public const int _INVALID_CLUSTERMASTER = (unchecked((int)0xE7010004)); 
+		public static readonly Result INVALID_CLUSTERMASTER = new Result(_INVALID_CLUSTERMASTER); 
 
 		// The version not available or miss match with system. 
-		public static readonly Result INVALID_STATE =                       new Result(unchecked((int)0xE7010005)); 
+		 public const int _INVALID_STATE = (unchecked((int)0xE7010005)); 
+		public static readonly Result INVALID_STATE = new Result(_INVALID_STATE); 
 
 		// Invalid string format. 
-		public static readonly Result INVALID_STR_FORMAT =                  new Result(unchecked((int)0xE7010006)); 
+		 public const int _INVALID_STR_FORMAT = (unchecked((int)0xE7010006)); 
+		public static readonly Result INVALID_STR_FORMAT = new Result(_INVALID_STR_FORMAT); 
 
 		// ServerID is duplicated. 
-		public static readonly Result DUPLICATED_SERVERID =                 new Result(unchecked((int)0xE7010007)); 
+		 public const int _DUPLICATED_SERVERID = (unchecked((int)0xE7010007)); 
+		public static readonly Result DUPLICATED_SERVERID = new Result(_DUPLICATED_SERVERID); 
 
 		// Invalid entity 
-		public static readonly Result INVALID_ENTITY =                      new Result(unchecked((int)0xE7010008)); 
+		 public const int _INVALID_ENTITY = (unchecked((int)0xE7010008)); 
+		public static readonly Result INVALID_ENTITY = new Result(_INVALID_ENTITY); 
 
 		// Invalid duplicated entity 
-		public static readonly Result DUPLICATED_ENTITY =                   new Result(unchecked((int)0xE7010009)); 
+		 public const int _DUPLICATED_ENTITY = (unchecked((int)0xE7010009)); 
+		public static readonly Result DUPLICATED_ENTITY = new Result(_DUPLICATED_ENTITY); 
 
 		// Invalid duplicated entity 
-		public static readonly Result DUPLICATED_ENTITYID =                 new Result(unchecked((int)0xE701000A)); 
+		 public const int _DUPLICATED_ENTITYID = (unchecked((int)0xE701000A)); 
+		public static readonly Result DUPLICATED_ENTITYID = new Result(_DUPLICATED_ENTITYID); 
 
 		// Duplicated Account ID 
-		public static readonly Result DUPLICATED_ACCOUNTID =                new Result(unchecked((int)0xE701000B)); 
+		 public const int _DUPLICATED_ACCOUNTID = (unchecked((int)0xE701000B)); 
+		public static readonly Result DUPLICATED_ACCOUNTID = new Result(_DUPLICATED_ACCOUNTID); 
 
 		// Duplicated Player ID 
-		public static readonly Result DUPLICATED_PLAYERID =                 new Result(unchecked((int)0xE701000C)); 
+		 public const int _DUPLICATED_PLAYERID = (unchecked((int)0xE701000C)); 
+		public static readonly Result DUPLICATED_PLAYERID = new Result(_DUPLICATED_PLAYERID); 
 
 		// Duplicated name 
-		public static readonly Result DUPLICATED_NAME =                     new Result(unchecked((int)0xE701000D)); 
+		 public const int _DUPLICATED_NAME = (unchecked((int)0xE701000D)); 
+		public static readonly Result DUPLICATED_NAME = new Result(_DUPLICATED_NAME); 
 
 		// Duplicated ID 
-		public static readonly Result DUPLICATED_ID =                       new Result(unchecked((int)0xE701000E)); 
+		 public const int _DUPLICATED_ID = (unchecked((int)0xE701000E)); 
+		public static readonly Result DUPLICATED_ID = new Result(_DUPLICATED_ID); 
 
 		// Invalid duplicated entity 
-		public static readonly Result INVALID_ACCOUNTID =                   new Result(unchecked((int)0xE701000F)); 
+		 public const int _INVALID_ACCOUNTID = (unchecked((int)0xE701000F)); 
+		public static readonly Result INVALID_ACCOUNTID = new Result(_INVALID_ACCOUNTID); 
 
 		// Invalid ticket 
-		public static readonly Result INVALID_TICKET =                      new Result(unchecked((int)0xE7010010)); 
+		 public const int _INVALID_TICKET = (unchecked((int)0xE7010010)); 
+		public static readonly Result INVALID_TICKET = new Result(_INVALID_TICKET); 
 
 		// Invalid player ID 
-		public static readonly Result INVALID_PLAYERID =                    new Result(unchecked((int)0xE7010011)); 
+		 public const int _INVALID_PLAYERID = (unchecked((int)0xE7010011)); 
+		public static readonly Result INVALID_PLAYERID = new Result(_INVALID_PLAYERID); 
 
 		// Invalid value 
-		public static readonly Result INVALID_VALUE =                       new Result(unchecked((int)0xE7010012)); 
+		 public const int _INVALID_VALUE = (unchecked((int)0xE7010012)); 
+		public static readonly Result INVALID_VALUE = new Result(_INVALID_VALUE); 
 
 		// Invalid class value 
-		public static readonly Result INVALID_CLASS =                       new Result(unchecked((int)0xE7010013)); 
+		 public const int _INVALID_CLASS = (unchecked((int)0xE7010013)); 
+		public static readonly Result INVALID_CLASS = new Result(_INVALID_CLASS); 
 
 		// Invalid Difficulty 
-		public static readonly Result INVALID_DIFFICULTY =                  new Result(unchecked((int)0xE7010014)); 
+		 public const int _INVALID_DIFFICULTY = (unchecked((int)0xE7010014)); 
+		public static readonly Result INVALID_DIFFICULTY = new Result(_INVALID_DIFFICULTY); 
 
 		// Invalid registration to play 
-		public static readonly Result INVALID_REGISTRATION =                new Result(unchecked((int)0xE7010015)); 
+		 public const int _INVALID_REGISTRATION = (unchecked((int)0xE7010015)); 
+		public static readonly Result INVALID_REGISTRATION = new Result(_INVALID_REGISTRATION); 
 
 		// Invalid Channel ID 
-		public static readonly Result INVALID_CHANNELID =                   new Result(unchecked((int)0xE7010016)); 
+		 public const int _INVALID_CHANNELID = (unchecked((int)0xE7010016)); 
+		public static readonly Result INVALID_CHANNELID = new Result(_INVALID_CHANNELID); 
 
 		// Invalid Zone instance ID 
-		public static readonly Result INVALID_INSTANCEID =                  new Result(unchecked((int)0xE7010017)); 
+		 public const int _INVALID_INSTANCEID = (unchecked((int)0xE7010017)); 
+		public static readonly Result INVALID_INSTANCEID = new Result(_INVALID_INSTANCEID); 
 
 		// Duplicated component 
-		public static readonly Result DUPLICATED_COMPONENT =                new Result(unchecked((int)0xE7010018)); 
+		 public const int _DUPLICATED_COMPONENT = (unchecked((int)0xE7010018)); 
+		public static readonly Result DUPLICATED_COMPONENT = new Result(_DUPLICATED_COMPONENT); 
 
 		// Maximum friend 
-		public static readonly Result MAX_FRIEND =                          new Result(unchecked((int)0xE7010019)); 
+		 public const int _MAX_FRIEND = (unchecked((int)0xE7010019)); 
+		public static readonly Result MAX_FRIEND = new Result(_MAX_FRIEND); 
 
 		// Invalid player count for service 
-		public static readonly Result INVALID_PLAYER_COUNT =                new Result(unchecked((int)0xE701001A)); 
+		 public const int _INVALID_PLAYER_COUNT = (unchecked((int)0xE701001A)); 
+		public static readonly Result INVALID_PLAYER_COUNT = new Result(_INVALID_PLAYER_COUNT); 
 
 		// Invalid player level 
-		public static readonly Result INVALID_PLAYER_LEVEL =                new Result(unchecked((int)0xE701001B)); 
+		 public const int _INVALID_PLAYER_LEVEL = (unchecked((int)0xE701001B)); 
+		public static readonly Result INVALID_PLAYER_LEVEL = new Result(_INVALID_PLAYER_LEVEL); 
 
 		// Invalid player nick 
-		public static readonly Result INVALID_PLAYER_NICK =                 new Result(unchecked((int)0xE701001C)); 
+		 public const int _INVALID_PLAYER_NICK = (unchecked((int)0xE701001C)); 
+		public static readonly Result INVALID_PLAYER_NICK = new Result(_INVALID_PLAYER_NICK); 
 
 		// Invalid Notification ID 
-		public static readonly Result INVALID_NOTIFICATIONID =              new Result(unchecked((int)0xE701001D)); 
+		 public const int _INVALID_NOTIFICATIONID = (unchecked((int)0xE701001D)); 
+		public static readonly Result INVALID_NOTIFICATIONID = new Result(_INVALID_NOTIFICATIONID); 
 
 		// Invalid Ranking range 
-		public static readonly Result INVALID_RANKING_RANGE =               new Result(unchecked((int)0xE701001E)); 
+		 public const int _INVALID_RANKING_RANGE = (unchecked((int)0xE701001E)); 
+		public static readonly Result INVALID_RANKING_RANGE = new Result(_INVALID_RANKING_RANGE); 
 
 		// Target Maximum friend 
-		public static readonly Result TARGET_MAX_FRIEND =                   new Result(unchecked((int)0xE701001F)); 
+		 public const int _TARGET_MAX_FRIEND = (unchecked((int)0xE701001F)); 
+		public static readonly Result TARGET_MAX_FRIEND = new Result(_TARGET_MAX_FRIEND); 
 
 		// Invalid string data. 
-		public static readonly Result INVALID_STR_DATA =                    new Result(unchecked((int)0xE7010020)); 
+		 public const int _INVALID_STR_DATA = (unchecked((int)0xE7010020)); 
+		public static readonly Result INVALID_STR_DATA = new Result(_INVALID_STR_DATA); 
 
 		// Not authorized 
-		public static readonly Result NOT_AUTORIZED =                       new Result(unchecked((int)0xE7010021)); 
+		 public const int _NOT_AUTORIZED = (unchecked((int)0xE7010021)); 
+		public static readonly Result NOT_AUTORIZED = new Result(_NOT_AUTORIZED); 
 
 		// No permition 
-		public static readonly Result NO_PERMITION =                        new Result(unchecked((int)0xE7010022)); 
+		 public const int _NO_PERMITION = (unchecked((int)0xE7010022)); 
+		public static readonly Result NO_PERMITION = new Result(_NO_PERMITION); 
 
 		// No file or directory 
-		public static readonly Result NO_FILE_OR_DIR =                      new Result(unchecked((int)0xE7010023)); 
+		 public const int _NO_FILE_OR_DIR = (unchecked((int)0xE7010023)); 
+		public static readonly Result NO_FILE_OR_DIR = new Result(_NO_FILE_OR_DIR); 
 
 		// No such process 
-		public static readonly Result NO_SUCH_PROCESS =                     new Result(unchecked((int)0xE7010024)); 
+		 public const int _NO_SUCH_PROCESS = (unchecked((int)0xE7010024)); 
+		public static readonly Result NO_SUCH_PROCESS = new Result(_NO_SUCH_PROCESS); 
 
 		// Interrupted system call 
-		public static readonly Result INTERRUPTED_SYSCALL =                 new Result(unchecked((int)0xE7010025)); 
+		 public const int _INTERRUPTED_SYSCALL = (unchecked((int)0xE7010025)); 
+		public static readonly Result INTERRUPTED_SYSCALL = new Result(_INTERRUPTED_SYSCALL); 
 
 		// I/O error 
-		public static readonly Result IO_ERROR =                            new Result(unchecked((int)0xE7010026)); 
+		 public const int _IO_ERROR = (unchecked((int)0xE7010026)); 
+		public static readonly Result IO_ERROR = new Result(_IO_ERROR); 
 
 		// No such device or address 
-		public static readonly Result NOT_DEVICE =                          new Result(unchecked((int)0xE7010027)); 
+		 public const int _NOT_DEVICE = (unchecked((int)0xE7010027)); 
+		public static readonly Result NOT_DEVICE = new Result(_NOT_DEVICE); 
 
 		// Arg list too long 
-		public static readonly Result TOO_MANY_ARGLIST =                    new Result(unchecked((int)0xE7010028)); 
+		 public const int _TOO_MANY_ARGLIST = (unchecked((int)0xE7010028)); 
+		public static readonly Result TOO_MANY_ARGLIST = new Result(_TOO_MANY_ARGLIST); 
 
 		// Exec format error 
-		public static readonly Result INVALID_EXEC_FROMAT =                 new Result(unchecked((int)0xE7010029)); 
+		 public const int _INVALID_EXEC_FROMAT = (unchecked((int)0xE7010029)); 
+		public static readonly Result INVALID_EXEC_FROMAT = new Result(_INVALID_EXEC_FROMAT); 
 
 		// Bad file number 
-		public static readonly Result INVALID_FILE_HANDLE =                 new Result(unchecked((int)0xE701002A)); 
+		 public const int _INVALID_FILE_HANDLE = (unchecked((int)0xE701002A)); 
+		public static readonly Result INVALID_FILE_HANDLE = new Result(_INVALID_FILE_HANDLE); 
 
 		// No child process 
-		public static readonly Result NO_CHILD_PROCESS =                    new Result(unchecked((int)0xE701002B)); 
+		 public const int _NO_CHILD_PROCESS = (unchecked((int)0xE701002B)); 
+		public static readonly Result NO_CHILD_PROCESS = new Result(_NO_CHILD_PROCESS); 
 
 		// Block device required 
-		public static readonly Result NOT_BLOCK =                           new Result(unchecked((int)0xE701002C)); 
+		 public const int _NOT_BLOCK = (unchecked((int)0xE701002C)); 
+		public static readonly Result NOT_BLOCK = new Result(_NOT_BLOCK); 
 
 		// Not exist 
-		public static readonly Result NOT_EXIST =                           new Result(unchecked((int)0xE701002D)); 
+		 public const int _NOT_EXIST = (unchecked((int)0xE701002D)); 
+		public static readonly Result NOT_EXIST = new Result(_NOT_EXIST); 
 
 		// Busy 
-		public static readonly Result BUSY =                                new Result(unchecked((int)0xE701002E)); 
+		 public const int _BUSY = (unchecked((int)0xE701002E)); 
+		public static readonly Result BUSY = new Result(_BUSY); 
 
 		// File exists 
-		public static readonly Result FILE_EXISTS =                         new Result(unchecked((int)0xE701002F)); 
+		 public const int _FILE_EXISTS = (unchecked((int)0xE701002F)); 
+		public static readonly Result FILE_EXISTS = new Result(_FILE_EXISTS); 
 
 		// Cross-device link 
-		public static readonly Result CROSS_LINK =                          new Result(unchecked((int)0xE7010030)); 
+		 public const int _CROSS_LINK = (unchecked((int)0xE7010030)); 
+		public static readonly Result CROSS_LINK = new Result(_CROSS_LINK); 
 
 		// No such device 
-		public static readonly Result INVALID_DEVICE =                      new Result(unchecked((int)0xE7010031)); 
+		 public const int _INVALID_DEVICE = (unchecked((int)0xE7010031)); 
+		public static readonly Result INVALID_DEVICE = new Result(_INVALID_DEVICE); 
 
 		// Not a directory 
-		public static readonly Result INVALID_DIRECTORY =                   new Result(unchecked((int)0xE7010032)); 
+		 public const int _INVALID_DIRECTORY = (unchecked((int)0xE7010032)); 
+		public static readonly Result INVALID_DIRECTORY = new Result(_INVALID_DIRECTORY); 
 
 		// Is a directory 
-		public static readonly Result DIRECTORY =                           new Result(unchecked((int)0xE7010033)); 
+		 public const int _DIRECTORY = (unchecked((int)0xE7010033)); 
+		public static readonly Result DIRECTORY = new Result(_DIRECTORY); 
 
 		// File table overflow 
-		public static readonly Result NOT_ENOUGH_FILE_TABLE =               new Result(unchecked((int)0xE7010034)); 
+		 public const int _NOT_ENOUGH_FILE_TABLE = (unchecked((int)0xE7010034)); 
+		public static readonly Result NOT_ENOUGH_FILE_TABLE = new Result(_NOT_ENOUGH_FILE_TABLE); 
 
 		// Too many open files 
-		public static readonly Result TOO_MANY_OPENED_FILE =                new Result(unchecked((int)0xE7010035)); 
+		 public const int _TOO_MANY_OPENED_FILE = (unchecked((int)0xE7010035)); 
+		public static readonly Result TOO_MANY_OPENED_FILE = new Result(_TOO_MANY_OPENED_FILE); 
 
 		// Not a typewriter 
-		public static readonly Result INVALID_TYPEWRITER =                  new Result(unchecked((int)0xE7010036)); 
+		 public const int _INVALID_TYPEWRITER = (unchecked((int)0xE7010036)); 
+		public static readonly Result INVALID_TYPEWRITER = new Result(_INVALID_TYPEWRITER); 
 
 		// Text file busy 
-		public static readonly Result BUSY_FILE =                           new Result(unchecked((int)0xE7010037)); 
+		 public const int _BUSY_FILE = (unchecked((int)0xE7010037)); 
+		public static readonly Result BUSY_FILE = new Result(_BUSY_FILE); 
 
 		// File too large 
-		public static readonly Result TOO_BIG_FILE =                        new Result(unchecked((int)0xE7010038)); 
+		 public const int _TOO_BIG_FILE = (unchecked((int)0xE7010038)); 
+		public static readonly Result TOO_BIG_FILE = new Result(_TOO_BIG_FILE); 
 
 		// No space left on device 
-		public static readonly Result NOT_ENOUGH_SPACE =                    new Result(unchecked((int)0xE7010039)); 
+		 public const int _NOT_ENOUGH_SPACE = (unchecked((int)0xE7010039)); 
+		public static readonly Result NOT_ENOUGH_SPACE = new Result(_NOT_ENOUGH_SPACE); 
 
 		// Illegal seek 
-		public static readonly Result INVALID_SEEK =                        new Result(unchecked((int)0xE701003A)); 
+		 public const int _INVALID_SEEK = (unchecked((int)0xE701003A)); 
+		public static readonly Result INVALID_SEEK = new Result(_INVALID_SEEK); 
 
 		// Read-only file system 
-		public static readonly Result READ_ONLY =                           new Result(unchecked((int)0xE701003B)); 
+		 public const int _READ_ONLY = (unchecked((int)0xE701003B)); 
+		public static readonly Result READ_ONLY = new Result(_READ_ONLY); 
 
 		// Too many links 
-		public static readonly Result TOO_MANY_LINK =                       new Result(unchecked((int)0xE701003C)); 
+		 public const int _TOO_MANY_LINK = (unchecked((int)0xE701003C)); 
+		public static readonly Result TOO_MANY_LINK = new Result(_TOO_MANY_LINK); 
 
 		// Broken pipe 
-		public static readonly Result INVALID_PIPE =                        new Result(unchecked((int)0xE701003D)); 
+		 public const int _INVALID_PIPE = (unchecked((int)0xE701003D)); 
+		public static readonly Result INVALID_PIPE = new Result(_INVALID_PIPE); 
 
 		// Math argument out of domain of func 
-		public static readonly Result INVALID_MATH_DOMAIN =                 new Result(unchecked((int)0xE701003E)); 
+		 public const int _INVALID_MATH_DOMAIN = (unchecked((int)0xE701003E)); 
+		public static readonly Result INVALID_MATH_DOMAIN = new Result(_INVALID_MATH_DOMAIN); 
 
 		// Math result not representable 
-		public static readonly Result INVALID_NUMERIC =                     new Result(unchecked((int)0xE701003F)); 
+		 public const int _INVALID_NUMERIC = (unchecked((int)0xE701003F)); 
+		public static readonly Result INVALID_NUMERIC = new Result(_INVALID_NUMERIC); 
 
 		// Invalid password 
-		public static readonly Result INVALID_PASSWORD =                    new Result(unchecked((int)0xE7010040)); 
+		 public const int _INVALID_PASSWORD = (unchecked((int)0xE7010040)); 
+		public static readonly Result INVALID_PASSWORD = new Result(_INVALID_PASSWORD); 
 
 		// Target already in friends list 
-		public static readonly Result ALREADY_IN_FRIEND =                   new Result(unchecked((int)0xE7010041)); 
+		 public const int _ALREADY_IN_FRIEND = (unchecked((int)0xE7010041)); 
+		public static readonly Result ALREADY_IN_FRIEND = new Result(_ALREADY_IN_FRIEND); 
 
 		// Thread is wrong, running on wrong thread? 
-		public static readonly Result INVALID_THREAD =                      new Result(unchecked((int)0xE7010042)); 
+		 public const int _INVALID_THREAD = (unchecked((int)0xE7010042)); 
+		public static readonly Result INVALID_THREAD = new Result(_INVALID_THREAD); 
 
 		// Requested object already exist 
-		public static readonly Result ALREADY_EXIST =                       new Result(unchecked((int)0xE7010043)); 
+		 public const int _ALREADY_EXIST = (unchecked((int)0xE7010043)); 
+		public static readonly Result ALREADY_EXIST = new Result(_ALREADY_EXIST); 
 
 		// Network sequence already processed 
-		public static readonly Result SUCCESS_IO_PROCESSED_SEQUENCE =       new Result(unchecked((int)0x27010044)); 
+		 public const int _SUCCESS_IO_PROCESSED_SEQUENCE = (unchecked((int)0x27010044)); 
+		public static readonly Result SUCCESS_IO_PROCESSED_SEQUENCE = new Result(_SUCCESS_IO_PROCESSED_SEQUENCE); 
 
 		// The version not available or miss match with system. 
-		public static readonly Result IO_PROTOCOL_VERSION_MISMATCH =        new Result(unchecked((int)0xE7010045)); 
+		 public const int _IO_PROTOCOL_VERSION_MISMATCH = (unchecked((int)0xE7010045)); 
+		public static readonly Result IO_PROTOCOL_VERSION_MISMATCH = new Result(_IO_PROTOCOL_VERSION_MISMATCH); 
 
 		// Network is not initialized 
-		public static readonly Result IO_NOTINITIALIZED =                   new Result(unchecked((int)0xE7010046)); 
+		 public const int _IO_NOTINITIALIZED = (unchecked((int)0xE7010046)); 
+		public static readonly Result IO_NOTINITIALIZED = new Result(_IO_NOTINITIALIZED); 
 
 		// The version not available or miss match with system. 
-		public static readonly Result IO_INVALID_NETCLASS =                 new Result(unchecked((int)0xE7010047)); 
+		 public const int _IO_INVALID_NETCLASS = (unchecked((int)0xE7010047)); 
+		public static readonly Result IO_INVALID_NETCLASS = new Result(_IO_INVALID_NETCLASS); 
 
 		// Not enough space in sliding window 
-		public static readonly Result IO_NOT_ENOUGH_WINDOWSPACE =           new Result(unchecked((int)0xE7010048)); 
+		 public const int _IO_NOT_ENOUGH_WINDOWSPACE = (unchecked((int)0xE7010048)); 
+		public static readonly Result IO_NOT_ENOUGH_WINDOWSPACE = new Result(_IO_NOT_ENOUGH_WINDOWSPACE); 
 
 		// Network IO aborted 
-		public static readonly Result IO_IO_ABORTED =                       new Result(unchecked((int)0xE7010049)); 
+		 public const int _IO_IO_ABORTED = (unchecked((int)0xE7010049)); 
+		public static readonly Result IO_IO_ABORTED = new Result(_IO_IO_ABORTED); 
 
 		// Network IO send failed 
-		public static readonly Result IO_IO_SEND_FAIL =                     new Result(unchecked((int)0xE701004A)); 
+		 public const int _IO_IO_SEND_FAIL = (unchecked((int)0xE701004A)); 
+		public static readonly Result IO_IO_SEND_FAIL = new Result(_IO_IO_SEND_FAIL); 
 
 		// Network IO recv failed 
-		public static readonly Result IO_IO_RECV_FAIL =                     new Result(unchecked((int)0xE701004B)); 
+		 public const int _IO_IO_RECV_FAIL = (unchecked((int)0xE701004B)); 
+		public static readonly Result IO_IO_RECV_FAIL = new Result(_IO_IO_RECV_FAIL); 
 
 		// Network send failed 
-		public static readonly Result IO_SEND_FAIL =                        new Result(unchecked((int)0xE701004C)); 
+		 public const int _IO_SEND_FAIL = (unchecked((int)0xE701004C)); 
+		public static readonly Result IO_SEND_FAIL = new Result(_IO_SEND_FAIL); 
 
 		// Network recv failed 
-		public static readonly Result IO_RECV_FAIL =                        new Result(unchecked((int)0xE701004D)); 
+		 public const int _IO_RECV_FAIL = (unchecked((int)0xE701004D)); 
+		public static readonly Result IO_RECV_FAIL = new Result(_IO_RECV_FAIL); 
 
 		// Network Message sequence is invalid 
-		public static readonly Result IO_INVALID_SEQUENCE =                 new Result(unchecked((int)0xE701004E)); 
+		 public const int _IO_INVALID_SEQUENCE = (unchecked((int)0xE701004E)); 
+		public static readonly Result IO_INVALID_SEQUENCE = new Result(_IO_INVALID_SEQUENCE); 
 
 		// Network Message not expected bad packet size 
-		public static readonly Result IO_BADPACKET_SIZE =                   new Result(unchecked((int)0xE701004F)); 
+		 public const int _IO_BADPACKET_SIZE = (unchecked((int)0xE701004F)); 
+		public static readonly Result IO_BADPACKET_SIZE = new Result(_IO_BADPACKET_SIZE); 
 
 		// Network connection closed 
-		public static readonly Result IO_CONNECTION_CLOSED =                new Result(unchecked((int)0xE7010050)); 
+		 public const int _IO_CONNECTION_CLOSED = (unchecked((int)0xE7010050)); 
+		public static readonly Result IO_CONNECTION_CLOSED = new Result(_IO_CONNECTION_CLOSED); 
 
 		// Network connection is never made 
-		public static readonly Result IO_NOT_CONNECTED =                    new Result(unchecked((int)0xE7010051)); 
+		 public const int _IO_NOT_CONNECTED = (unchecked((int)0xE7010051)); 
+		public static readonly Result IO_NOT_CONNECTED = new Result(_IO_NOT_CONNECTED); 
 
 		// Network connection ID is invalid 
-		public static readonly Result IO_INVALID_CID =                      new Result(unchecked((int)0xE7010052)); 
+		 public const int _IO_INVALID_CID = (unchecked((int)0xE7010052)); 
+		public static readonly Result IO_INVALID_CID = new Result(_IO_INVALID_CID); 
 
 		// Network Connection timeout 
-		public static readonly Result IO_CONNECTION_TIMEOUT =               new Result(unchecked((int)0xE7010053)); 
+		 public const int _IO_CONNECTION_TIMEOUT = (unchecked((int)0xE7010053)); 
+		public static readonly Result IO_CONNECTION_TIMEOUT = new Result(_IO_CONNECTION_TIMEOUT); 
 
 		// Network connection is failed 
-		public static readonly Result IO_CONNECTION_FAIL =                  new Result(unchecked((int)0xE7010054)); 
+		 public const int _IO_CONNECTION_FAIL = (unchecked((int)0xE7010054)); 
+		public static readonly Result IO_CONNECTION_FAIL = new Result(_IO_CONNECTION_FAIL); 
 
 		// Too big packet data 
-		public static readonly Result IO_BADPACKET_TOOBIG =                 new Result(unchecked((int)0xE7010055)); 
+		 public const int _IO_BADPACKET_TOOBIG = (unchecked((int)0xE7010055)); 
+		public static readonly Result IO_BADPACKET_TOOBIG = new Result(_IO_BADPACKET_TOOBIG); 
 
 		// Network Message not expected bad packet 
-		public static readonly Result IO_BADPACKET_NOTEXPECTED =            new Result(unchecked((int)0xE7010056)); 
+		 public const int _IO_BADPACKET_NOTEXPECTED = (unchecked((int)0xE7010056)); 
+		public static readonly Result IO_BADPACKET_NOTEXPECTED = new Result(_IO_BADPACKET_NOTEXPECTED); 
 
 		// Checksum value of the message is invalid 
-		public static readonly Result IO_INVALID_MESSAGE_CHECKSUM =         new Result(unchecked((int)0xE7010057)); 
+		 public const int _IO_INVALID_MESSAGE_CHECKSUM = (unchecked((int)0xE7010057)); 
+		public static readonly Result IO_INVALID_MESSAGE_CHECKSUM = new Result(_IO_INVALID_MESSAGE_CHECKSUM); 
 
 		// Message encryption is invalid 
-		public static readonly Result IO_INVALID_MESSAGE_ENCRYPTION =       new Result(unchecked((int)0xE7010058)); 
+		 public const int _IO_INVALID_MESSAGE_ENCRYPTION = (unchecked((int)0xE7010058)); 
+		public static readonly Result IO_INVALID_MESSAGE_ENCRYPTION = new Result(_IO_INVALID_MESSAGE_ENCRYPTION); 
 
 		// Invalid connection state 
-		public static readonly Result IO_INVALID_CONNECTION_STATE =         new Result(unchecked((int)0xE7010059)); 
+		 public const int _IO_INVALID_CONNECTION_STATE = (unchecked((int)0xE7010059)); 
+		public static readonly Result IO_INVALID_CONNECTION_STATE = new Result(_IO_INVALID_CONNECTION_STATE); 
 
 		// Too big sequence id 
-		public static readonly Result IO_SEQUENCE_OVERFLOW =                new Result(unchecked((int)0xE701005A)); 
+		 public const int _IO_SEQUENCE_OVERFLOW = (unchecked((int)0xE701005A)); 
+		public static readonly Result IO_SEQUENCE_OVERFLOW = new Result(_IO_SEQUENCE_OVERFLOW); 
 
 		// A non-blocking socket operation could not be completed immediately. 
-		public static readonly Result IO_WOULDBLOCK =                       new Result(unchecked((int)0xE701005B)); 
+		 public const int _IO_WOULDBLOCK = (unchecked((int)0xE701005B)); 
+		public static readonly Result IO_WOULDBLOCK = new Result(_IO_WOULDBLOCK); 
 
 		// A blocking operation is currently executing. 
-		public static readonly Result IO_INPROGRESS =                       new Result(unchecked((int)0xE701005C)); 
+		 public const int _IO_INPROGRESS = (unchecked((int)0xE701005C)); 
+		public static readonly Result IO_INPROGRESS = new Result(_IO_INPROGRESS); 
 
 		// An operation was attempted on a non-blocking socket that already had an operation in progress. 
-		public static readonly Result IO_ALREADY =                          new Result(unchecked((int)0xE701005D)); 
+		 public const int _IO_ALREADY = (unchecked((int)0xE701005D)); 
+		public static readonly Result IO_ALREADY = new Result(_IO_ALREADY); 
 
 		// An operation was attempted on something that is not a socket. 
-		public static readonly Result IO_NOTSOCK =                          new Result(unchecked((int)0xE701005E)); 
+		 public const int _IO_NOTSOCK = (unchecked((int)0xE701005E)); 
+		public static readonly Result IO_NOTSOCK = new Result(_IO_NOTSOCK); 
 
 		// A required address was omitted from an operation on a socket. 
-		public static readonly Result IO_DESTADDRREQ =                      new Result(unchecked((int)0xE701005F)); 
+		 public const int _IO_DESTADDRREQ = (unchecked((int)0xE701005F)); 
+		public static readonly Result IO_DESTADDRREQ = new Result(_IO_DESTADDRREQ); 
 
 		// A socket operation encountered a dead network. 
-		public static readonly Result IO_NETDOWN =                          new Result(unchecked((int)0xE7010060)); 
+		 public const int _IO_NETDOWN = (unchecked((int)0xE7010060)); 
+		public static readonly Result IO_NETDOWN = new Result(_IO_NETDOWN); 
 
 		// A socket operation was attempted to an unreachable network. 
-		public static readonly Result IO_NETUNREACH =                       new Result(unchecked((int)0xE7010061)); 
+		 public const int _IO_NETUNREACH = (unchecked((int)0xE7010061)); 
+		public static readonly Result IO_NETUNREACH = new Result(_IO_NETUNREACH); 
 
 		// The connection has been broken due to keep-alive activity detecting a failure while the operation was in progress. 
-		public static readonly Result IO_NETRESET =                         new Result(unchecked((int)0xE7010062)); 
+		 public const int _IO_NETRESET = (unchecked((int)0xE7010062)); 
+		public static readonly Result IO_NETRESET = new Result(_IO_NETRESET); 
 
 		// An established connection was aborted by the software in your host machine. 
-		public static readonly Result IO_CONNABORTED =                      new Result(unchecked((int)0xE7010063)); 
+		 public const int _IO_CONNABORTED = (unchecked((int)0xE7010063)); 
+		public static readonly Result IO_CONNABORTED = new Result(_IO_CONNABORTED); 
 
 		// An existing connection was forcibly closed by the remote host. 
-		public static readonly Result IO_CONNRESET =                        new Result(unchecked((int)0xE7010064)); 
+		 public const int _IO_CONNRESET = (unchecked((int)0xE7010064)); 
+		public static readonly Result IO_CONNRESET = new Result(_IO_CONNRESET); 
 
 		// An operation on a socket could not be performed because the system lacked sufficient buffer space or because a queue was full. 
-		public static readonly Result IO_NOBUFS =                           new Result(unchecked((int)0xE7010065)); 
+		 public const int _IO_NOBUFS = (unchecked((int)0xE7010065)); 
+		public static readonly Result IO_NOBUFS = new Result(_IO_NOBUFS); 
 
 		// A connect request was made on an already connected socket. 
-		public static readonly Result IO_ISCONN =                           new Result(unchecked((int)0xE7010066)); 
+		 public const int _IO_ISCONN = (unchecked((int)0xE7010066)); 
+		public static readonly Result IO_ISCONN = new Result(_IO_ISCONN); 
 
 		// A request to send or receive data was disallowed because the socket is not connected and (when sending on a datagram socket using a sendto call) no address was supplied. 
-		public static readonly Result IO_NOTCONN =                          new Result(unchecked((int)0xE7010067)); 
+		 public const int _IO_NOTCONN = (unchecked((int)0xE7010067)); 
+		public static readonly Result IO_NOTCONN = new Result(_IO_NOTCONN); 
 
 		// A request to send or receive data was disallowed because the socket had already been shut down in that direction with a previous shutdown call. 
-		public static readonly Result IO_SHUTDOWN =                         new Result(unchecked((int)0xE7010068)); 
+		 public const int _IO_SHUTDOWN = (unchecked((int)0xE7010068)); 
+		public static readonly Result IO_SHUTDOWN = new Result(_IO_SHUTDOWN); 
 
 		// Too many references to some kernel object. 
-		public static readonly Result IO_TOOMANYREFS =                      new Result(unchecked((int)0xE7010069)); 
+		 public const int _IO_TOOMANYREFS = (unchecked((int)0xE7010069)); 
+		public static readonly Result IO_TOOMANYREFS = new Result(_IO_TOOMANYREFS); 
 
 		// A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond. 
-		public static readonly Result IO_TIMEDOUT =                         new Result(unchecked((int)0xE701006A)); 
+		 public const int _IO_TIMEDOUT = (unchecked((int)0xE701006A)); 
+		public static readonly Result IO_TIMEDOUT = new Result(_IO_TIMEDOUT); 
 
 		// No connection could be made because the target machine actively refused it. 
-		public static readonly Result IO_CONNECTION_REFUSSED =              new Result(unchecked((int)0xE701006B)); 
+		 public const int _IO_CONNECTION_REFUSSED = (unchecked((int)0xE701006B)); 
+		public static readonly Result IO_CONNECTION_REFUSSED = new Result(_IO_CONNECTION_REFUSSED); 
 
 		// Cannot translate name. 
-		public static readonly Result IO_LOOP =                             new Result(unchecked((int)0xE701006C)); 
+		 public const int _IO_LOOP = (unchecked((int)0xE701006C)); 
+		public static readonly Result IO_LOOP = new Result(_IO_LOOP); 
 
 		// Name component or name was too long. 
-		public static readonly Result IO_NAMETOOLONG =                      new Result(unchecked((int)0xE701006D)); 
+		 public const int _IO_NAMETOOLONG = (unchecked((int)0xE701006D)); 
+		public static readonly Result IO_NAMETOOLONG = new Result(_IO_NAMETOOLONG); 
 
 		// A socket operation failed because the destination host was down. 
-		public static readonly Result IO_HOSTDOWN =                         new Result(unchecked((int)0xE701006E)); 
+		 public const int _IO_HOSTDOWN = (unchecked((int)0xE701006E)); 
+		public static readonly Result IO_HOSTDOWN = new Result(_IO_HOSTDOWN); 
 
 		// A socket operation was attempted to an unreachable host. 
-		public static readonly Result IO_HOSTUNREACH =                      new Result(unchecked((int)0xE701006F)); 
+		 public const int _IO_HOSTUNREACH = (unchecked((int)0xE701006F)); 
+		public static readonly Result IO_HOSTUNREACH = new Result(_IO_HOSTUNREACH); 
 
 		// Cannot remove a directory that is not empty. 
-		public static readonly Result IO_NOTEMPTY =                         new Result(unchecked((int)0xE7010070)); 
+		 public const int _IO_NOTEMPTY = (unchecked((int)0xE7010070)); 
+		public static readonly Result IO_NOTEMPTY = new Result(_IO_NOTEMPTY); 
 
 		// A Windows Sockets implementation may have a limit on the number of applications that may use it simultaneously. 
-		public static readonly Result IO_PROCLIM =                          new Result(unchecked((int)0xE7010071)); 
+		 public const int _IO_PROCLIM = (unchecked((int)0xE7010071)); 
+		public static readonly Result IO_PROCLIM = new Result(_IO_PROCLIM); 
 
 		// WSAStartup cannot function at this time because the underlying system it uses to provide network services is currently unavailable. 
-		public static readonly Result IO_SYSNOTREADY =                      new Result(unchecked((int)0xE7010072)); 
+		 public const int _IO_SYSNOTREADY = (unchecked((int)0xE7010072)); 
+		public static readonly Result IO_SYSNOTREADY = new Result(_IO_SYSNOTREADY); 
 
 		// The Windows Sockets version requested is not supported. 
-		public static readonly Result IO_VERNOTSUPPORTED =                  new Result(unchecked((int)0xE7010073)); 
+		 public const int _IO_VERNOTSUPPORTED = (unchecked((int)0xE7010073)); 
+		public static readonly Result IO_VERNOTSUPPORTED = new Result(_IO_VERNOTSUPPORTED); 
 
 		// Either the application has not called WSAStartup, or WSAStartup failed. 
-		public static readonly Result IO_NOTINITIALISED =                   new Result(unchecked((int)0xE7010074)); 
+		 public const int _IO_NOTINITIALISED = (unchecked((int)0xE7010074)); 
+		public static readonly Result IO_NOTINITIALISED = new Result(_IO_NOTINITIALISED); 
 
 		// Returned by WSARecv or WSARecvFrom to indicate the remote party has initiated a graceful shutdown sequence. 
-		public static readonly Result IO_DISCON =                           new Result(unchecked((int)0xE7010075)); 
+		 public const int _IO_DISCON = (unchecked((int)0xE7010075)); 
+		public static readonly Result IO_DISCON = new Result(_IO_DISCON); 
 
 		// A system call has failed. 
-		public static readonly Result IO_SYSCALLFAILURE =                   new Result(unchecked((int)0xE7010076)); 
+		 public const int _IO_SYSCALLFAILURE = (unchecked((int)0xE7010076)); 
+		public static readonly Result IO_SYSCALLFAILURE = new Result(_IO_SYSCALLFAILURE); 
 
 		// Host not found. 
-		public static readonly Result IO_HOST_NOT_FOUND =                   new Result(unchecked((int)0xE7010077)); 
+		 public const int _IO_HOST_NOT_FOUND = (unchecked((int)0xE7010077)); 
+		public static readonly Result IO_HOST_NOT_FOUND = new Result(_IO_HOST_NOT_FOUND); 
 
 		// Try again 
-		public static readonly Result IO_TRY_AGAIN =                        new Result(unchecked((int)0xE7010078)); 
+		 public const int _IO_TRY_AGAIN = (unchecked((int)0xE7010078)); 
+		public static readonly Result IO_TRY_AGAIN = new Result(_IO_TRY_AGAIN); 
 
 		// IOPending 
-		public static readonly Result IO_IO_PENDING =                       new Result(unchecked((int)0xE7010079)); 
+		 public const int _IO_IO_PENDING = (unchecked((int)0xE7010079)); 
+		public static readonly Result IO_IO_PENDING = new Result(_IO_IO_PENDING); 
 
 		// No such host is known securely. 
-		public static readonly Result IO_SECURE_HOST_NOT_FOUND =            new Result(unchecked((int)0xE701007A)); 
+		 public const int _IO_SECURE_HOST_NOT_FOUND = (unchecked((int)0xE701007A)); 
+		public static readonly Result IO_SECURE_HOST_NOT_FOUND = new Result(_IO_SECURE_HOST_NOT_FOUND); 
 
 		// Protocol error 
-		public static readonly Result IO_PROTO =                            new Result(unchecked((int)0xE701007B)); 
+		 public const int _IO_PROTO = (unchecked((int)0xE701007B)); 
+		public static readonly Result IO_PROTO = new Result(_IO_PROTO); 
 
 		// Protocol wrong type for socket. 
-		public static readonly Result IO_PROTOTYPE =                        new Result(unchecked((int)0xE701007C)); 
+		 public const int _IO_PROTOTYPE = (unchecked((int)0xE701007C)); 
+		public static readonly Result IO_PROTOTYPE = new Result(_IO_PROTOTYPE); 
 
 		// Protocol not available 
-		public static readonly Result IO_NOPROTOOPT =                       new Result(unchecked((int)0xE701007D)); 
+		 public const int _IO_NOPROTOOPT = (unchecked((int)0xE701007D)); 
+		public static readonly Result IO_NOPROTOOPT = new Result(_IO_NOPROTOOPT); 
 
 		// Machine is not on the network 
-		public static readonly Result IO_NONET =                            new Result(unchecked((int)0xE701007E)); 
+		 public const int _IO_NONET = (unchecked((int)0xE701007E)); 
+		public static readonly Result IO_NONET = new Result(_IO_NONET); 
 
 		// Operation not supported on socket 
-		public static readonly Result IO_OPNOTSUPP =                        new Result(unchecked((int)0xE701007F)); 
+		 public const int _IO_OPNOTSUPP = (unchecked((int)0xE701007F)); 
+		public static readonly Result IO_OPNOTSUPP = new Result(_IO_OPNOTSUPP); 
 
 		// An invalid value was provided for the ai_flags member of the pHints parameter. 
-		public static readonly Result IO_BADFLAGS =                         new Result(unchecked((int)0xE7010080)); 
+		 public const int _IO_BADFLAGS = (unchecked((int)0xE7010080)); 
+		public static readonly Result IO_BADFLAGS = new Result(_IO_BADFLAGS); 
 
 		// Bad network family 
-		public static readonly Result IO_FAMILY =                           new Result(unchecked((int)0xE7010081)); 
+		 public const int _IO_FAMILY = (unchecked((int)0xE7010081)); 
+		public static readonly Result IO_FAMILY = new Result(_IO_FAMILY); 
 
 		// The pServiceName parameter is not supported for the specified ai_socktype member of the pHints parameter. 
-		public static readonly Result IO_INVALID_SERVICE =                  new Result(unchecked((int)0xE7010082)); 
+		 public const int _IO_INVALID_SERVICE = (unchecked((int)0xE7010082)); 
+		public static readonly Result IO_INVALID_SERVICE = new Result(_IO_INVALID_SERVICE); 
 
 		// Invalid network address 
-		public static readonly Result IO_INVALID_ADDRESS =                  new Result(unchecked((int)0xE7010083)); 
+		 public const int _IO_INVALID_ADDRESS = (unchecked((int)0xE7010083)); 
+		public static readonly Result IO_INVALID_ADDRESS = new Result(_IO_INVALID_ADDRESS); 
 
 		// Address in use 
-		public static readonly Result IO_ADDRINUSE =                        new Result(unchecked((int)0xE7010084)); 
+		 public const int _IO_ADDRINUSE = (unchecked((int)0xE7010084)); 
+		public static readonly Result IO_ADDRINUSE = new Result(_IO_ADDRINUSE); 
 
 		// Network Message not expected packet data 
-		public static readonly Result IO_BADPACKET =                        new Result(unchecked((int)0xE7010085)); 
+		 public const int _IO_BADPACKET = (unchecked((int)0xE7010085)); 
+		public static readonly Result IO_BADPACKET = new Result(_IO_BADPACKET); 
 
 		// Disconnected 
-		public static readonly Result IO_DISCONNECTED =                     new Result(unchecked((int)0xE7010086)); 
+		 public const int _IO_DISCONNECTED = (unchecked((int)0xE7010086)); 
+		public static readonly Result IO_DISCONNECTED = new Result(_IO_DISCONNECTED); 
 
 		// Canceled 
-		public static readonly Result IO_CANCELED =                         new Result(unchecked((int)0xE7010087)); 
+		 public const int _IO_CANCELED = (unchecked((int)0xE7010087)); 
+		public static readonly Result IO_CANCELED = new Result(_IO_CANCELED); 
 
 		// Zookeeper System and server-side errors. 
-		public static readonly Result ZK_SYSTEM =                           new Result(unchecked((int)0xE7010088)); 
+		 public const int _ZK_SYSTEM = (unchecked((int)0xE7010088)); 
+		public static readonly Result ZK_SYSTEM = new Result(_ZK_SYSTEM); 
 
 		// Zookeeper  A runtime inconsistency was found 
-		public static readonly Result ZK_ZRUNTIMEINCONSISTENCY =            new Result(unchecked((int)0xE7010089)); 
+		 public const int _ZK_ZRUNTIMEINCONSISTENCY = (unchecked((int)0xE7010089)); 
+		public static readonly Result ZK_ZRUNTIMEINCONSISTENCY = new Result(_ZK_ZRUNTIMEINCONSISTENCY); 
 
 		// Zookeeper A data inconsistency was found 
-		public static readonly Result ZK_ZDATAINCONSISTENCY =               new Result(unchecked((int)0xE701008A)); 
+		 public const int _ZK_ZDATAINCONSISTENCY = (unchecked((int)0xE701008A)); 
+		public static readonly Result ZK_ZDATAINCONSISTENCY = new Result(_ZK_ZDATAINCONSISTENCY); 
 
 		// Zookeeper Connection to the server has been lost 
-		public static readonly Result ZK_ZCONNECTIONLOSS =                  new Result(unchecked((int)0xE701008B)); 
+		 public const int _ZK_ZCONNECTIONLOSS = (unchecked((int)0xE701008B)); 
+		public static readonly Result ZK_ZCONNECTIONLOSS = new Result(_ZK_ZCONNECTIONLOSS); 
 
 		// Zookeeper Error while marshalling or unmarshalling data 
-		public static readonly Result ZK_ZMARSHALLINGERROR =                new Result(unchecked((int)0xE701008C)); 
+		 public const int _ZK_ZMARSHALLINGERROR = (unchecked((int)0xE701008C)); 
+		public static readonly Result ZK_ZMARSHALLINGERROR = new Result(_ZK_ZMARSHALLINGERROR); 
 
 		// Zookeeper Operation is unimplemented 
-		public static readonly Result ZK_ZUNIMPLEMENTED =                   new Result(unchecked((int)0xE701008D)); 
+		 public const int _ZK_ZUNIMPLEMENTED = (unchecked((int)0xE701008D)); 
+		public static readonly Result ZK_ZUNIMPLEMENTED = new Result(_ZK_ZUNIMPLEMENTED); 
 
 		// Zookeeper Operation timeout 
-		public static readonly Result ZK_ZOPERATIONTIMEOUT =                new Result(unchecked((int)0xE701008E)); 
+		 public const int _ZK_ZOPERATIONTIMEOUT = (unchecked((int)0xE701008E)); 
+		public static readonly Result ZK_ZOPERATIONTIMEOUT = new Result(_ZK_ZOPERATIONTIMEOUT); 
 
 		// Zookeeper Invalid arguments 
-		public static readonly Result ZK_ZBADARGUMENTS =                    new Result(unchecked((int)0xE701008F)); 
+		 public const int _ZK_ZBADARGUMENTS = (unchecked((int)0xE701008F)); 
+		public static readonly Result ZK_ZBADARGUMENTS = new Result(_ZK_ZBADARGUMENTS); 
 
 		// Zookeeper Invliad zhandle state 
-		public static readonly Result ZK_ZINVALIDSTATE =                    new Result(unchecked((int)0xE7010090)); 
+		 public const int _ZK_ZINVALIDSTATE = (unchecked((int)0xE7010090)); 
+		public static readonly Result ZK_ZINVALIDSTATE = new Result(_ZK_ZINVALIDSTATE); 
 
 		// Zookeeper API errors. 
-		public static readonly Result ZK_ZAPIERROR =                        new Result(unchecked((int)0xE7010091)); 
+		 public const int _ZK_ZAPIERROR = (unchecked((int)0xE7010091)); 
+		public static readonly Result ZK_ZAPIERROR = new Result(_ZK_ZAPIERROR); 
 
 		// Zookeeper Node does not exist 
-		public static readonly Result ZK_ZNONODE =                          new Result(unchecked((int)0xE7010092)); 
+		 public const int _ZK_ZNONODE = (unchecked((int)0xE7010092)); 
+		public static readonly Result ZK_ZNONODE = new Result(_ZK_ZNONODE); 
 
 		// Zookeeper Not authenticated 
-		public static readonly Result ZK_ZNOAUTH =                          new Result(unchecked((int)0xE7010093)); 
+		 public const int _ZK_ZNOAUTH = (unchecked((int)0xE7010093)); 
+		public static readonly Result ZK_ZNOAUTH = new Result(_ZK_ZNOAUTH); 
 
 		// Zookeeper Version conflict 
-		public static readonly Result ZK_ZBADVERSION =                      new Result(unchecked((int)0xE7010094)); 
+		 public const int _ZK_ZBADVERSION = (unchecked((int)0xE7010094)); 
+		public static readonly Result ZK_ZBADVERSION = new Result(_ZK_ZBADVERSION); 
 
 		// Zookeeper Ephemeral nodes may not have children 
-		public static readonly Result ZK_ZNOCHILDRENFOREPHEMERALS =         new Result(unchecked((int)0xE7010095)); 
+		 public const int _ZK_ZNOCHILDRENFOREPHEMERALS = (unchecked((int)0xE7010095)); 
+		public static readonly Result ZK_ZNOCHILDRENFOREPHEMERALS = new Result(_ZK_ZNOCHILDRENFOREPHEMERALS); 
 
 		// Zookeeper The node already exists 
-		public static readonly Result ZK_ZNODEEXISTS =                      new Result(unchecked((int)0xE7010096)); 
+		 public const int _ZK_ZNODEEXISTS = (unchecked((int)0xE7010096)); 
+		public static readonly Result ZK_ZNODEEXISTS = new Result(_ZK_ZNODEEXISTS); 
 
 		// Zookeeper The node has children 
-		public static readonly Result ZK_ZNOTEMPTY =                        new Result(unchecked((int)0xE7010097)); 
+		 public const int _ZK_ZNOTEMPTY = (unchecked((int)0xE7010097)); 
+		public static readonly Result ZK_ZNOTEMPTY = new Result(_ZK_ZNOTEMPTY); 
 
 		// Zookeeper The session has been expired by the server 
-		public static readonly Result ZK_ZSESSIONEXPIRED =                  new Result(unchecked((int)0xE7010098)); 
+		 public const int _ZK_ZSESSIONEXPIRED = (unchecked((int)0xE7010098)); 
+		public static readonly Result ZK_ZSESSIONEXPIRED = new Result(_ZK_ZSESSIONEXPIRED); 
 
 		// Zookeeper Invalid callback specified 
-		public static readonly Result ZK_ZINVALIDCALLBACK =                 new Result(unchecked((int)0xE7010099)); 
+		 public const int _ZK_ZINVALIDCALLBACK = (unchecked((int)0xE7010099)); 
+		public static readonly Result ZK_ZINVALIDCALLBACK = new Result(_ZK_ZINVALIDCALLBACK); 
 
 		// Zookeeper Invalid ACL specified 
-		public static readonly Result ZK_ZINVALIDACL =                      new Result(unchecked((int)0xE701009A)); 
+		 public const int _ZK_ZINVALIDACL = (unchecked((int)0xE701009A)); 
+		public static readonly Result ZK_ZINVALIDACL = new Result(_ZK_ZINVALIDACL); 
 
 		// Zookeeper Client authentication failed 
-		public static readonly Result ZK_ZAUTHFAILED =                      new Result(unchecked((int)0xE701009B)); 
+		 public const int _ZK_ZAUTHFAILED = (unchecked((int)0xE701009B)); 
+		public static readonly Result ZK_ZAUTHFAILED = new Result(_ZK_ZAUTHFAILED); 
 
 		// Zookeeper Zookeeper is closing 
-		public static readonly Result ZK_ZCLOSING =                         new Result(unchecked((int)0xE701009C)); 
+		 public const int _ZK_ZCLOSING = (unchecked((int)0xE701009C)); 
+		public static readonly Result ZK_ZCLOSING = new Result(_ZK_ZCLOSING); 
 
 		// Zookeeper (not error) no server responses to process 
-		public static readonly Result ZK_ZNOTHING =                         new Result(unchecked((int)0xE701009D)); 
+		 public const int _ZK_ZNOTHING = (unchecked((int)0xE701009D)); 
+		public static readonly Result ZK_ZNOTHING = new Result(_ZK_ZNOTHING); 
 
 		// Zookeeper session moved to another server, so operation is ignored 
-		public static readonly Result ZK_ZSESSIONMOVED =                    new Result(unchecked((int)0xE701009E)); 
+		 public const int _ZK_ZSESSIONMOVED = (unchecked((int)0xE701009E)); 
+		public static readonly Result ZK_ZSESSIONMOVED = new Result(_ZK_ZSESSIONMOVED); 
 
 		// End of stream 
-		public static readonly Result END_OF_STREAM =                       new Result(unchecked((int)0xE701009F)); 
+		 public const int _END_OF_STREAM = (unchecked((int)0xE701009F)); 
+		public static readonly Result END_OF_STREAM = new Result(_END_OF_STREAM); 
 
 		// End of file 
-		public static readonly Result END_OF_FILE =                         new Result(unchecked((int)0xE70100A0)); 
+		 public const int _END_OF_FILE = (unchecked((int)0xE70100A0)); 
+		public static readonly Result END_OF_FILE = new Result(_END_OF_FILE); 
 
 		// Out of reserved memory 
-		public static readonly Result OUT_OF_RESERVED_MEMORY =              new Result(unchecked((int)0xE70100A1)); 
+		 public const int _OUT_OF_RESERVED_MEMORY = (unchecked((int)0xE70100A1)); 
+		public static readonly Result OUT_OF_RESERVED_MEMORY = new Result(_OUT_OF_RESERVED_MEMORY); 
 
 		// The object not initialized or opened 
-		public static readonly Result NOT_OPENED =                          new Result(unchecked((int)0xE70100A2)); 
+		 public const int _NOT_OPENED = (unchecked((int)0xE70100A2)); 
+		public static readonly Result NOT_OPENED = new Result(_NOT_OPENED); 
 
 		// Operation is canceled 
-		public static readonly Result SUCCESS_CANCELED =                    new Result(unchecked((int)0x270100A3)); 
+		 public const int _SUCCESS_CANCELED = (unchecked((int)0x270100A3)); 
+		public static readonly Result SUCCESS_CANCELED = new Result(_SUCCESS_CANCELED); 
 
 		// stream doesn't exist 
-		public static readonly Result STREAM_NOT_EXIST =                    new Result(unchecked((int)0xE70100A4)); 
+		 public const int _STREAM_NOT_EXIST = (unchecked((int)0xE70100A4)); 
+		public static readonly Result STREAM_NOT_EXIST = new Result(_STREAM_NOT_EXIST); 
 
 		// Operation is not supported 
-		public static readonly Result NOT_SUPPORTED =                       new Result(unchecked((int)0xE70100A5)); 
+		 public const int _NOT_SUPPORTED = (unchecked((int)0xE70100A5)); 
+		public static readonly Result NOT_SUPPORTED = new Result(_NOT_SUPPORTED); 
 
 		// Format is not supported 
-		public static readonly Result NOT_SUPPORTED_FORMAT =                new Result(unchecked((int)0xE70100A6)); 
+		 public const int _NOT_SUPPORTED_FORMAT = (unchecked((int)0xE70100A6)); 
+		public static readonly Result NOT_SUPPORTED_FORMAT = new Result(_NOT_SUPPORTED_FORMAT); 
 
 		// Format is not valid 
-		public static readonly Result INVALID_FORMAT =                      new Result(unchecked((int)0xE70100A7)); 
+		 public const int _INVALID_FORMAT = (unchecked((int)0xE70100A7)); 
+		public static readonly Result INVALID_FORMAT = new Result(_INVALID_FORMAT); 
 
 		// Failed to open file 
-		public static readonly Result INVALID_FILE =                        new Result(unchecked((int)0xE70100A8)); 
+		 public const int _INVALID_FILE = (unchecked((int)0xE70100A8)); 
+		public static readonly Result INVALID_FILE = new Result(_INVALID_FILE); 
 
 		// Invalid frame 
-		public static readonly Result INVALID_FRAME =                       new Result(unchecked((int)0xE70100A9)); 
+		 public const int _INVALID_FRAME = (unchecked((int)0xE70100A9)); 
+		public static readonly Result INVALID_FRAME = new Result(_INVALID_FRAME); 
 
 		// Specific variable not found 
-		public static readonly Result VARIABLE_NOT_FOUND =                  new Result(unchecked((int)0xE70100AA)); 
+		 public const int _VARIABLE_NOT_FOUND = (unchecked((int)0xE70100AA)); 
+		public static readonly Result VARIABLE_NOT_FOUND = new Result(_VARIABLE_NOT_FOUND); 
 
 		// Specific function not found 
-		public static readonly Result FUNCTION_NOT_FOUND =                  new Result(unchecked((int)0xE70100AB)); 
+		 public const int _FUNCTION_NOT_FOUND = (unchecked((int)0xE70100AB)); 
+		public static readonly Result FUNCTION_NOT_FOUND = new Result(_FUNCTION_NOT_FOUND); 
 
 		// Specific object not found 
-		public static readonly Result OBJECT_NOT_FOUND =                    new Result(unchecked((int)0xE70100AC)); 
+		 public const int _OBJECT_NOT_FOUND = (unchecked((int)0xE70100AC)); 
+		public static readonly Result OBJECT_NOT_FOUND = new Result(_OBJECT_NOT_FOUND); 
 
 		// Invalid stream ID 
-		public static readonly Result INVALID_STREAMID =                    new Result(unchecked((int)0xE70100AD)); 
+		 public const int _INVALID_STREAMID = (unchecked((int)0xE70100AD)); 
+		public static readonly Result INVALID_STREAMID = new Result(_INVALID_STREAMID); 
 
 		// Generic DB failure 
-		public static readonly Result DB_FAILURE =                          new Result(unchecked((int)0xE70100AE)); 
+		 public const int _DB_FAILURE = (unchecked((int)0xE70100AE)); 
+		public static readonly Result DB_FAILURE = new Result(_DB_FAILURE); 
 
 		// Service is not available 
-		public static readonly Result SERVICE_NOT_AVAILABLE =               new Result(unchecked((int)0xE70100AF)); 
+		 public const int _SERVICE_NOT_AVAILABLE = (unchecked((int)0xE70100AF)); 
+		public static readonly Result SERVICE_NOT_AVAILABLE = new Result(_SERVICE_NOT_AVAILABLE); 
 
 		// Invalid character ID 
-		public static readonly Result INVALID_CHARACTERID =                 new Result(unchecked((int)0xE70100B0)); 
+		 public const int _INVALID_CHARACTERID = (unchecked((int)0xE70100B0)); 
+		public static readonly Result INVALID_CHARACTERID = new Result(_INVALID_CHARACTERID); 
 
 		// Character hasn't selected 
-		public static readonly Result CHARACTER_NOT_SELECTED =              new Result(unchecked((int)0xE70100B1)); 
+		 public const int _CHARACTER_NOT_SELECTED = (unchecked((int)0xE70100B1)); 
+		public static readonly Result CHARACTER_NOT_SELECTED = new Result(_CHARACTER_NOT_SELECTED); 
 
 		// Invalid version 
-		public static readonly Result INVALID_VERSION =                     new Result(unchecked((int)0xE70100B2)); 
+		 public const int _INVALID_VERSION = (unchecked((int)0xE70100B2)); 
+		public static readonly Result INVALID_VERSION = new Result(_INVALID_VERSION); 
 
 		// Server internal error 
-		public static readonly Result SERVER_INTERNAL_ERROR =               new Result(unchecked((int)0xE70100B3)); 
+		 public const int _SERVER_INTERNAL_ERROR = (unchecked((int)0xE70100B3)); 
+		public static readonly Result SERVER_INTERNAL_ERROR = new Result(_SERVER_INTERNAL_ERROR); 
 
 		// Generic Server error 
-		public static readonly Result GENERIC_SERVER_ERROR =                new Result(unchecked((int)0xE70100B4)); 
+		 public const int _GENERIC_SERVER_ERROR = (unchecked((int)0xE70100B4)); 
+		public static readonly Result GENERIC_SERVER_ERROR = new Result(_GENERIC_SERVER_ERROR); 
 
 		// Specified key not found 
-		public static readonly Result KEY_NOTFOUND =                        new Result(unchecked((int)0xE70100B5)); 
+		 public const int _KEY_NOTFOUND = (unchecked((int)0xE70100B5)); 
+		public static readonly Result KEY_NOTFOUND = new Result(_KEY_NOTFOUND); 
 
 		// Specified key has invalid data 
-		public static readonly Result INVALID_KEY =                         new Result(unchecked((int)0xE70100B6)); 
+		 public const int _INVALID_KEY = (unchecked((int)0xE70100B6)); 
+		public static readonly Result INVALID_KEY = new Result(_INVALID_KEY); 
 
 		// Invalid protocol has specified 
-		public static readonly Result INVALID_PROTOCOL =                    new Result(unchecked((int)0xE70100B7)); 
+		 public const int _INVALID_PROTOCOL = (unchecked((int)0xE70100B7)); 
+		public static readonly Result INVALID_PROTOCOL = new Result(_INVALID_PROTOCOL); 
 
 		// Too big parameter has assigned 
-		public static readonly Result TOO_BIG_PARAMETER =                   new Result(unchecked((int)0xE70100B8)); 
+		 public const int _TOO_BIG_PARAMETER = (unchecked((int)0xE70100B8)); 
+		public static readonly Result TOO_BIG_PARAMETER = new Result(_TOO_BIG_PARAMETER); 
 
 		// Deprecated 
-		public static readonly Result DEPRECATED_FEATURE =                  new Result(unchecked((int)0xE70100B9)); 
+		 public const int _DEPRECATED_FEATURE = (unchecked((int)0xE70100B9)); 
+		public static readonly Result DEPRECATED_FEATURE = new Result(_DEPRECATED_FEATURE); 
 
 		// In progress 
-		public static readonly Result IN_PROGRESS =                         new Result(unchecked((int)0xE70100BA)); 
+		 public const int _IN_PROGRESS = (unchecked((int)0xE70100BA)); 
+		public static readonly Result IN_PROGRESS = new Result(_IN_PROGRESS); 
 
 		// Invalid data 
-		public static readonly Result INVALID_DATA =                        new Result(unchecked((int)0xE70100BB)); 
+		 public const int _INVALID_DATA = (unchecked((int)0xE70100BB)); 
+		public static readonly Result INVALID_DATA = new Result(_INVALID_DATA); 
 
 		// Invalid response data 
-		public static readonly Result INVALID_RESPONSE_DATA =               new Result(unchecked((int)0xE70100BC)); 
+		 public const int _INVALID_RESPONSE_DATA = (unchecked((int)0xE70100BC)); 
+		public static readonly Result INVALID_RESPONSE_DATA = new Result(_INVALID_RESPONSE_DATA); 
 
 		// Invalid cache data 
-		public static readonly Result INVALID_CACHE_DATA =                  new Result(unchecked((int)0xE70100BD)); 
+		 public const int _INVALID_CACHE_DATA = (unchecked((int)0xE70100BD)); 
+		public static readonly Result INVALID_CACHE_DATA = new Result(_INVALID_CACHE_DATA); 
 
 		// Invalid schema data 
-		public static readonly Result INVALID_SCHEMA =                      new Result(unchecked((int)0xE70100BE)); 
+		 public const int _INVALID_SCHEMA = (unchecked((int)0xE70100BE)); 
+		public static readonly Result INVALID_SCHEMA = new Result(_INVALID_SCHEMA); 
 
 		// Invalid type 
-		public static readonly Result INVALID_TYPE =                        new Result(unchecked((int)0xE70100BF)); 
+		 public const int _INVALID_TYPE = (unchecked((int)0xE70100BF)); 
+		public static readonly Result INVALID_TYPE = new Result(_INVALID_TYPE); 
 
 		// Maximum packet 
-		public static readonly Result MAX_PACKET =                          new Result(unchecked((int)0xE70100C0)); 
+		 public const int _MAX_PACKET = (unchecked((int)0xE70100C0)); 
+		public static readonly Result MAX_PACKET = new Result(_MAX_PACKET); 
 
 		// The protocol is not supported. 
-		public static readonly Result HTTP_UNSUPPORTED_PROTOCOL =           new Result(unchecked((int)0xE70100C1)); 
+		 public const int _HTTP_UNSUPPORTED_PROTOCOL = (unchecked((int)0xE70100C1)); 
+		public static readonly Result HTTP_UNSUPPORTED_PROTOCOL = new Result(_HTTP_UNSUPPORTED_PROTOCOL); 
 
 		// CURL initialization is failed. 
-		public static readonly Result HTTP_FAILED_INIT =                    new Result(unchecked((int)0xE70100C2)); 
+		 public const int _HTTP_FAILED_INIT = (unchecked((int)0xE70100C2)); 
+		public static readonly Result HTTP_FAILED_INIT = new Result(_HTTP_FAILED_INIT); 
 
 		// Invalid URL format. 
-		public static readonly Result HTTP_URL_MALFORMAT =                  new Result(unchecked((int)0xE70100C3)); 
+		 public const int _HTTP_URL_MALFORMAT = (unchecked((int)0xE70100C3)); 
+		public static readonly Result HTTP_URL_MALFORMAT = new Result(_HTTP_URL_MALFORMAT); 
 
 		// Not a build-in feature. 
-		public static readonly Result HTTP_NOT_BUILT_IN =                   new Result(unchecked((int)0xE70100C4)); 
+		 public const int _HTTP_NOT_BUILT_IN = (unchecked((int)0xE70100C4)); 
+		public static readonly Result HTTP_NOT_BUILT_IN = new Result(_HTTP_NOT_BUILT_IN); 
 
 		// Failed to resolve URL. 
-		public static readonly Result HTTP_COULDNT_RESOLVE_PROXY =          new Result(unchecked((int)0xE70100C5)); 
+		 public const int _HTTP_COULDNT_RESOLVE_PROXY = (unchecked((int)0xE70100C5)); 
+		public static readonly Result HTTP_COULDNT_RESOLVE_PROXY = new Result(_HTTP_COULDNT_RESOLVE_PROXY); 
 
 		// Failed to resolve URL. 
-		public static readonly Result HTTP_COULDNT_RESOLVE_HOST =           new Result(unchecked((int)0xE70100C6)); 
+		 public const int _HTTP_COULDNT_RESOLVE_HOST = (unchecked((int)0xE70100C6)); 
+		public static readonly Result HTTP_COULDNT_RESOLVE_HOST = new Result(_HTTP_COULDNT_RESOLVE_HOST); 
 
 		// Connection is failed 
-		public static readonly Result HTTP_COULDNT_CONNECT =                new Result(unchecked((int)0xE70100C7)); 
+		 public const int _HTTP_COULDNT_CONNECT = (unchecked((int)0xE70100C7)); 
+		public static readonly Result HTTP_COULDNT_CONNECT = new Result(_HTTP_COULDNT_CONNECT); 
 
 		// HTTP Post can't be done. 
-		public static readonly Result HTTP_HTTP_POST_ERROR =                new Result(unchecked((int)0xE70100C8)); 
+		 public const int _HTTP_HTTP_POST_ERROR = (unchecked((int)0xE70100C8)); 
+		public static readonly Result HTTP_HTTP_POST_ERROR = new Result(_HTTP_HTTP_POST_ERROR); 
 
 		// Not supported SSL type. 
-		public static readonly Result HTTP_SSL_ENGINE_NOTFOUND =            new Result(unchecked((int)0xE70100C9)); 
+		 public const int _HTTP_SSL_ENGINE_NOTFOUND = (unchecked((int)0xE70100C9)); 
+		public static readonly Result HTTP_SSL_ENGINE_NOTFOUND = new Result(_HTTP_SSL_ENGINE_NOTFOUND); 
 
 		// Not supported SSL type. 
-		public static readonly Result HTTP_SSL_ENGINE_SETFAILED =           new Result(unchecked((int)0xE70100CA)); 
+		 public const int _HTTP_SSL_ENGINE_SETFAILED = (unchecked((int)0xE70100CA)); 
+		public static readonly Result HTTP_SSL_ENGINE_SETFAILED = new Result(_HTTP_SSL_ENGINE_SETFAILED); 
 
 		// Network send failed 
-		public static readonly Result HTTP_SEND_ERROR =                     new Result(unchecked((int)0xE70100CB)); 
+		 public const int _HTTP_SEND_ERROR = (unchecked((int)0xE70100CB)); 
+		public static readonly Result HTTP_SEND_ERROR = new Result(_HTTP_SEND_ERROR); 
 
 		// Network receive failed 
-		public static readonly Result HTTP_RECV_ERROR =                     new Result(unchecked((int)0xE70100CC)); 
+		 public const int _HTTP_RECV_ERROR = (unchecked((int)0xE70100CC)); 
+		public static readonly Result HTTP_RECV_ERROR = new Result(_HTTP_RECV_ERROR); 
 
 		// Invalid SSL setting. 
-		public static readonly Result HTTP_USE_SSL_FAILED =                 new Result(unchecked((int)0xE70100CD)); 
+		 public const int _HTTP_USE_SSL_FAILED = (unchecked((int)0xE70100CD)); 
+		public static readonly Result HTTP_USE_SSL_FAILED = new Result(_HTTP_USE_SSL_FAILED); 
 
 		// No Connection is available now. 
-		public static readonly Result HTTP_NO_CONNECTION_AVAILABLE =        new Result(unchecked((int)0xE70100CE)); 
+		 public const int _HTTP_NO_CONNECTION_AVAILABLE = (unchecked((int)0xE70100CE)); 
+		public static readonly Result HTTP_NO_CONNECTION_AVAILABLE = new Result(_HTTP_NO_CONNECTION_AVAILABLE); 
 
 		// SSL error 
-		public static readonly Result HTTP_SSL_CONNECT_ERROR =              new Result(unchecked((int)0xE70100CF)); 
+		 public const int _HTTP_SSL_CONNECT_ERROR = (unchecked((int)0xE70100CF)); 
+		public static readonly Result HTTP_SSL_CONNECT_ERROR = new Result(_HTTP_SSL_CONNECT_ERROR); 
 
 		// please call curl_multi_perform() or curl_multi_socket*() soon 
-		public static readonly Result HTTP_CALL_MULTI_PERFORM =             new Result(unchecked((int)0xE70100D0)); 
+		 public const int _HTTP_CALL_MULTI_PERFORM = (unchecked((int)0xE70100D0)); 
+		public static readonly Result HTTP_CALL_MULTI_PERFORM = new Result(_HTTP_CALL_MULTI_PERFORM); 
 
 		// the passed-in handle is not a valid CURLM handle 
-		public static readonly Result HTTP_BAD_HANDLE =                     new Result(unchecked((int)0xE70100D1)); 
+		 public const int _HTTP_BAD_HANDLE = (unchecked((int)0xE70100D1)); 
+		public static readonly Result HTTP_BAD_HANDLE = new Result(_HTTP_BAD_HANDLE); 
 
 		// an easy handle was not good/valid 
-		public static readonly Result HTTP_BAD_EASY_HANDLE =                new Result(unchecked((int)0xE70100D2)); 
+		 public const int _HTTP_BAD_EASY_HANDLE = (unchecked((int)0xE70100D2)); 
+		public static readonly Result HTTP_BAD_EASY_HANDLE = new Result(_HTTP_BAD_EASY_HANDLE); 
 
 		// this is a libcurl bug 
-		public static readonly Result HTTP_INTERNAL_ERROR =                 new Result(unchecked((int)0xE70100D3)); 
+		 public const int _HTTP_INTERNAL_ERROR = (unchecked((int)0xE70100D3)); 
+		public static readonly Result HTTP_INTERNAL_ERROR = new Result(_HTTP_INTERNAL_ERROR); 
 
 		// the passed in socket argument did not match 
-		public static readonly Result HTTP_BAD_SOCKET =                     new Result(unchecked((int)0xE70100D4)); 
+		 public const int _HTTP_BAD_SOCKET = (unchecked((int)0xE70100D4)); 
+		public static readonly Result HTTP_BAD_SOCKET = new Result(_HTTP_BAD_SOCKET); 
 
 		// curl_multi_setopt() with unsupported option 
-		public static readonly Result HTTP_UNKNOWN_OPTION =                 new Result(unchecked((int)0xE70100D5)); 
+		 public const int _HTTP_UNKNOWN_OPTION = (unchecked((int)0xE70100D5)); 
+		public static readonly Result HTTP_UNKNOWN_OPTION = new Result(_HTTP_UNKNOWN_OPTION); 
 
 		// an easy handle already added to a multi handle was attempted to get added - again 
-		public static readonly Result HTTP_ADDED_ALREADY =                  new Result(unchecked((int)0xE70100D6)); 
+		 public const int _HTTP_ADDED_ALREADY = (unchecked((int)0xE70100D6)); 
+		public static readonly Result HTTP_ADDED_ALREADY = new Result(_HTTP_ADDED_ALREADY); 
 
 		// an api function was called from inside a callback 
-		public static readonly Result HTTP_RECURSIVE_API_CALL =             new Result(unchecked((int)0xE70100D7)); 
+		 public const int _HTTP_RECURSIVE_API_CALL = (unchecked((int)0xE70100D7)); 
+		public static readonly Result HTTP_RECURSIVE_API_CALL = new Result(_HTTP_RECURSIVE_API_CALL); 
 
 		// wakeup is unavailable or failed 
-		public static readonly Result HTTP_WAKEUP_FAILURE =                 new Result(unchecked((int)0xE70100D8)); 
+		 public const int _HTTP_WAKEUP_FAILURE = (unchecked((int)0xE70100D8)); 
+		public static readonly Result HTTP_WAKEUP_FAILURE = new Result(_HTTP_WAKEUP_FAILURE); 
 
 		// function called with a bad parameter 
-		public static readonly Result HTTP_BAD_FUNCTION_ARGUMENT =          new Result(unchecked((int)0xE70100D9)); 
+		 public const int _HTTP_BAD_FUNCTION_ARGUMENT = (unchecked((int)0xE70100D9)); 
+		public static readonly Result HTTP_BAD_FUNCTION_ARGUMENT = new Result(_HTTP_BAD_FUNCTION_ARGUMENT); 
 
 		// ? 
-		public static readonly Result HTTP_ABORTED_BY_CALLBACK =            new Result(unchecked((int)0xE70100DA)); 
+		 public const int _HTTP_ABORTED_BY_CALLBACK = (unchecked((int)0xE70100DA)); 
+		public static readonly Result HTTP_ABORTED_BY_CALLBACK = new Result(_HTTP_ABORTED_BY_CALLBACK); 
 
 		// ? 
-		public static readonly Result HTTP_UNRECOVERABLE_POLL =             new Result(unchecked((int)0xE70100DB)); 
+		 public const int _HTTP_UNRECOVERABLE_POLL = (unchecked((int)0xE70100DB)); 
+		public static readonly Result HTTP_UNRECOVERABLE_POLL = new Result(_HTTP_UNRECOVERABLE_POLL); 
 
 		// Canceled  
-		public static readonly Result HTTP_CANCELED =                       new Result(unchecked((int)0xE70100DC)); 
+		 public const int _HTTP_CANCELED = (unchecked((int)0xE70100DC)); 
+		public static readonly Result HTTP_CANCELED = new Result(_HTTP_CANCELED); 
 
 	}
 }

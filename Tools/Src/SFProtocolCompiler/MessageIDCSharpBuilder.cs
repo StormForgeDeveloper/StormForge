@@ -90,6 +90,12 @@ namespace ProtocolCompiler
             return $"MessageID.MakeMessageID(MessageType.{typeString}, {reliable}, {ProtocolNamespace}.{Group.Name}, {m_iCode})";
         }
 
+        void PrintMessageCode(MessageBase msg, string postfix, MessageType messageType)
+        {
+            MatchIndent(); OutStream.WriteLine($"public static const UInt32 _{AccessPropertyName(msg, postfix)} = {MakeMessageID(msg, messageType)};");
+            MatchIndent(); OutStream.WriteLine($"public static readonly MessageID {AccessPropertyName(msg, postfix)} = {MakeMessageID(msg, messageType)};");
+        }
+
         void BuildMessageIDClassCSharp()
         {
             // Packer interface

@@ -15,37 +15,48 @@ namespace SF {
 	public partial struct ResultCode {
 
 		// Database connection failed 
-		public static readonly Result DB_INVALID_CONFIG =                   new Result(unchecked((int)0xE7110000)); 
+		 public const int _DB_INVALID_CONFIG = (unchecked((int)0xE7110000)); 
+		public static readonly Result DB_INVALID_CONFIG = new Result(_DB_INVALID_CONFIG); 
 
 		// Database connection failed 
-		public static readonly Result DB_CONNECTION_FAILED =                new Result(unchecked((int)0xE7110001)); 
+		 public const int _DB_CONNECTION_FAILED = (unchecked((int)0xE7110001)); 
+		public static readonly Result DB_CONNECTION_FAILED = new Result(_DB_CONNECTION_FAILED); 
 
 		// Database connection lost 
-		public static readonly Result DB_CONNECTION_LOST =                  new Result(unchecked((int)0xE7110002)); 
+		 public const int _DB_CONNECTION_LOST = (unchecked((int)0xE7110002)); 
+		public static readonly Result DB_CONNECTION_LOST = new Result(_DB_CONNECTION_LOST); 
 
 		// Database statement prepare is failed 
-		public static readonly Result DB_STATEMENT_PREPARE_FAILED =         new Result(unchecked((int)0xE7110003)); 
+		 public const int _DB_STATEMENT_PREPARE_FAILED = (unchecked((int)0xE7110003)); 
+		public static readonly Result DB_STATEMENT_PREPARE_FAILED = new Result(_DB_STATEMENT_PREPARE_FAILED); 
 
 		// Database parameter binding is failed 
-		public static readonly Result DB_PARAMETER_BIND_FAILED =            new Result(unchecked((int)0xE7110004)); 
+		 public const int _DB_PARAMETER_BIND_FAILED = (unchecked((int)0xE7110004)); 
+		public static readonly Result DB_PARAMETER_BIND_FAILED = new Result(_DB_PARAMETER_BIND_FAILED); 
 
 		// Database result patch is failed 
-		public static readonly Result DB_RESULT_PATCH_FAILED =              new Result(unchecked((int)0xE7110005)); 
+		 public const int _DB_RESULT_PATCH_FAILED = (unchecked((int)0xE7110005)); 
+		public static readonly Result DB_RESULT_PATCH_FAILED = new Result(_DB_RESULT_PATCH_FAILED); 
 
 		// Database result column count is mismatched 
-		public static readonly Result DB_RESULT_COUNT_MISMATCH =            new Result(unchecked((int)0xE7110006)); 
+		 public const int _DB_RESULT_COUNT_MISMATCH = (unchecked((int)0xE7110006)); 
+		public static readonly Result DB_RESULT_COUNT_MISMATCH = new Result(_DB_RESULT_COUNT_MISMATCH); 
 
 		// Database result column type is mismatched 
-		public static readonly Result DB_RESULT_FIELDTYPE_MISMATCH =        new Result(unchecked((int)0xE7110007)); 
+		 public const int _DB_RESULT_FIELDTYPE_MISMATCH = (unchecked((int)0xE7110007)); 
+		public static readonly Result DB_RESULT_FIELDTYPE_MISMATCH = new Result(_DB_RESULT_FIELDTYPE_MISMATCH); 
 
 		// Duplicated Database source is specified 
-		public static readonly Result DB_DUPLICATED_SOURCE =                new Result(unchecked((int)0xE7110008)); 
+		 public const int _DB_DUPLICATED_SOURCE = (unchecked((int)0xE7110008)); 
+		public static readonly Result DB_DUPLICATED_SOURCE = new Result(_DB_DUPLICATED_SOURCE); 
 
 		// Invalid partitioning ID 
-		public static readonly Result DB_INVALID_PARTITIONINGID =           new Result(unchecked((int)0xE7110009)); 
+		 public const int _DB_INVALID_PARTITIONINGID = (unchecked((int)0xE7110009)); 
+		public static readonly Result DB_INVALID_PARTITIONINGID = new Result(_DB_INVALID_PARTITIONINGID); 
 
 		// Database not connected 
-		public static readonly Result DB_NOT_CONNECTED =                    new Result(unchecked((int)0xE711000A)); 
+		 public const int _DB_NOT_CONNECTED = (unchecked((int)0xE711000A)); 
+		public static readonly Result DB_NOT_CONNECTED = new Result(_DB_NOT_CONNECTED); 
 
 	}
 }

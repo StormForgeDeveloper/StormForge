@@ -15,31 +15,40 @@ namespace SF {
 	public partial struct ResultCode {
 
 		// Invalid username 
-		public static readonly Result LOGIN_INVALID_USERNAME =              new Result(unchecked((int)0xE7060000)); 
+		 public const int _LOGIN_INVALID_USERNAME = (unchecked((int)0xE7060000)); 
+		public static readonly Result LOGIN_INVALID_USERNAME = new Result(_LOGIN_INVALID_USERNAME); 
 
 		// Invalid password 
-		public static readonly Result LOGIN_INVALID_PASSWORD =              new Result(unchecked((int)0xE7060001)); 
+		 public const int _LOGIN_INVALID_PASSWORD = (unchecked((int)0xE7060001)); 
+		public static readonly Result LOGIN_INVALID_PASSWORD = new Result(_LOGIN_INVALID_PASSWORD); 
 
 		// Already logged in 
-		public static readonly Result LOGIN_ALREADY_LOGGEDIN =              new Result(unchecked((int)0xE7060002)); 
+		 public const int _LOGIN_ALREADY_LOGGEDIN = (unchecked((int)0xE7060002)); 
+		public static readonly Result LOGIN_ALREADY_LOGGEDIN = new Result(_LOGIN_ALREADY_LOGGEDIN); 
 
 		// Already logged in at another place, and failed to kick 
-		public static readonly Result LOGIN_ALREADY_LOGGEDIN_OTHERPLACE =   new Result(unchecked((int)0xE7060003)); 
+		 public const int _LOGIN_ALREADY_LOGGEDIN_OTHERPLACE = (unchecked((int)0xE7060003)); 
+		public static readonly Result LOGIN_ALREADY_LOGGEDIN_OTHERPLACE = new Result(_LOGIN_ALREADY_LOGGEDIN_OTHERPLACE); 
 
 		// Invalid user signature 
-		public static readonly Result LOGIN_INVALID_SIGNATURE =             new Result(unchecked((int)0xE7060004)); 
+		 public const int _LOGIN_INVALID_SIGNATURE = (unchecked((int)0xE7060004)); 
+		public static readonly Result LOGIN_INVALID_SIGNATURE = new Result(_LOGIN_INVALID_SIGNATURE); 
 
 		// The user doesn't have app ownership 
-		public static readonly Result LOGIN_NO_APP_OWNERSHIP =              new Result(unchecked((int)0xE7060005)); 
+		 public const int _LOGIN_NO_APP_OWNERSHIP = (unchecked((int)0xE7060005)); 
+		public static readonly Result LOGIN_NO_APP_OWNERSHIP = new Result(_LOGIN_NO_APP_OWNERSHIP); 
 
 		// The user is blocked 
-		public static readonly Result LOGIN_ACCOUNT_BLOCKED =               new Result(unchecked((int)0xE7060006)); 
+		 public const int _LOGIN_ACCOUNT_BLOCKED = (unchecked((int)0xE7060006)); 
+		public static readonly Result LOGIN_ACCOUNT_BLOCKED = new Result(_LOGIN_ACCOUNT_BLOCKED); 
 
 		// The user is not exist 
-		public static readonly Result LOGIN_ACCOUNT_DOES_NOT_EXIST =        new Result(unchecked((int)0xE7060007)); 
+		 public const int _LOGIN_ACCOUNT_DOES_NOT_EXIST = (unchecked((int)0xE7060007)); 
+		public static readonly Result LOGIN_ACCOUNT_DOES_NOT_EXIST = new Result(_LOGIN_ACCOUNT_DOES_NOT_EXIST); 
 
 		// The user's platform login is invalid 
-		public static readonly Result LOGIN_INVALID_PLATFORM_LOGIN =        new Result(unchecked((int)0xE7060008)); 
+		 public const int _LOGIN_INVALID_PLATFORM_LOGIN = (unchecked((int)0xE7060008)); 
+		public static readonly Result LOGIN_INVALID_PLATFORM_LOGIN = new Result(_LOGIN_INVALID_PLATFORM_LOGIN); 
 
 	}
 }

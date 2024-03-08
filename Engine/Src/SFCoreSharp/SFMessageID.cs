@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Transactions;
 
 #nullable enable
 
@@ -34,7 +35,7 @@ namespace SF
         //public static readonly uint PlayInstanceExt = 13;
 
         // client max 100
-        public static readonly uint ClientMax = 100;
+        public static readonly uint ClientMax = 50;
     }
 
     public enum MessageType
@@ -75,9 +76,15 @@ namespace SF
         const uint NET_BROADCAST_MASK = ((uint)(1 << (int)NET_BROADCAST_BITS) - 1) << (int)NET_BROADCAST_SHIFT;
 
         public uint ProtocolId => ((MessageIdRaw & NET_PROTOCOL_MASK) >> (int)NET_PROTOCOL_SHIFT);
+        public uint CodeIndex => ((MessageIdRaw & NET_CODE_MASK) >> (int)NET_CODE_SHIFT);
         public MessageType Type => (MessageType)((MessageIdRaw & NET_TYPE_MASK) >> (int)NET_TYPE_SHIFT);
         public UInt32 IDOnly => MessageIdRaw & (~NET_SEQUENCE_MASK);
         public UInt32 Sequence => MessageIdRaw & NET_SEQUENCE_MASK;
+
+        public MessageID(UInt32 messageRawId)
+        {
+            MessageIdRaw = messageRawId;
+        }
 
         public static MessageID MakeMessageID(MessageType type, uint uiReliability, uint uiProtocol, uint uiCode)
         {
@@ -90,14 +97,41 @@ namespace SF
                     | (((uint)type << (int)NET_TYPE_SHIFT) & NET_TYPE_MASK)
                     | ((uiReliability << (int)NET_RELIABILITY_SHIFT) & NET_RELIABILITY_MASK)
                     | ((uiBroadcast << (int)NET_BROADCAST_SHIFT) & NET_BROADCAST_MASK)
-                    
+
             };
         }
 
-        public new int GetHashCode()
+        public override int GetHashCode()
         {
-            return (int)IDOnly;
+            return (int)MessageIdRaw;
         }
+
+        public bool Equals(MessageID p)
+        {
+            return MessageIdRaw == p.MessageIdRaw;
+        }
+        public override bool Equals(object? obj)
+        {
+            if (obj == null)
+                return false; 
+            return MessageIdRaw == ((MessageID)obj).MessageIdRaw;
+        }
+
+        public static bool operator ==(MessageID c1, MessageID c2)
+        {
+            return c1.MessageIdRaw == c2.MessageIdRaw;
+        }
+
+        public static bool operator !=(MessageID c1, MessageID c2)
+        {
+            return c1.MessageIdRaw != c2.MessageIdRaw;
+        }
+
+        public new string ToString()
+        {
+            return $"(MID:{Type},{ProtocolId},{CodeIndex})";
+        }
+
     }
 
 }

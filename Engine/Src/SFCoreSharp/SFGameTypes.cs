@@ -92,6 +92,11 @@ namespace SF
         public ulong TransactionId;
 
         public bool IsValid => TransactionId != 0;
+
+        public new string ToString()
+        {
+            return $"(TransID:{TransactionId})";
+        }
     }
 
     // PH, don't use it directly

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30517.126
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34607.119
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ATF", "ATF", "{2F71C0B2-A1CE-43CB-A37D-61268AC3CAF3}"
 EndProject
@@ -29,7 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{1DE7C6E1-7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SF", "SF", "{672ACC08-7342-416F-BB6C-5B45DF896AD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFCoreSharp", "Engine\Src\SFCoreSharp\SFCoreSharp.csproj", "{DE89B4BF-FEB7-4FEE-AB5F-85D286295BD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFCoreSharp", "Engine\Src\SFCoreSharp\SFCoreSharp.csproj", "{DE89B4BF-FEB7-4FEE-AB5F-85D286295BD7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NetTest", "NetTest", "{BE8A90CB-375D-4C05-BA4D-6B0983265583}"
 EndProject
@@ -41,7 +41,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Stream", "Stream", "{557376
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestNet2.WinSharp", "Test\TestNet\TestNet2.WinSharp\TestNet2.WinSharp.csproj", "{30AB3587-A03F-4649-9231-F1E98E6089EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFEngineSharp", "Engine\Src\SFEngineSharp\SFEngineSharp.csproj", "{3AD8FFE5-EB9C-4086-B344-AD1C15EB8856}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFEngineSharp", "Engine\Src\SFEngineSharp\SFEngineSharp.csproj", "{3AD8FFE5-EB9C-4086-B344-AD1C15EB8856}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFProtocolSharp", "Engine\Src\SFProtocolSharp\SFProtocolSharp.csproj", "{D0A4E746-5D94-49EC-B84C-7CA7E2358399}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -231,6 +233,18 @@ Global
 		{3AD8FFE5-EB9C-4086-B344-AD1C15EB8856}.Release|x64.Build.0 = Release|x64
 		{3AD8FFE5-EB9C-4086-B344-AD1C15EB8856}.Release|x86.ActiveCfg = Release|Any CPU
 		{3AD8FFE5-EB9C-4086-B344-AD1C15EB8856}.Release|x86.Build.0 = Release|Any CPU
+		{D0A4E746-5D94-49EC-B84C-7CA7E2358399}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0A4E746-5D94-49EC-B84C-7CA7E2358399}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0A4E746-5D94-49EC-B84C-7CA7E2358399}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D0A4E746-5D94-49EC-B84C-7CA7E2358399}.Debug|x64.Build.0 = Debug|Any CPU
+		{D0A4E746-5D94-49EC-B84C-7CA7E2358399}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D0A4E746-5D94-49EC-B84C-7CA7E2358399}.Debug|x86.Build.0 = Debug|Any CPU
+		{D0A4E746-5D94-49EC-B84C-7CA7E2358399}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0A4E746-5D94-49EC-B84C-7CA7E2358399}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0A4E746-5D94-49EC-B84C-7CA7E2358399}.Release|x64.ActiveCfg = Release|Any CPU
+		{D0A4E746-5D94-49EC-B84C-7CA7E2358399}.Release|x64.Build.0 = Release|Any CPU
+		{D0A4E746-5D94-49EC-B84C-7CA7E2358399}.Release|x86.ActiveCfg = Release|Any CPU
+		{D0A4E746-5D94-49EC-B84C-7CA7E2358399}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -253,6 +267,7 @@ Global
 		{55737608-8652-440F-BF43-5C244DFA1609} = {1DE7C6E1-71C6-4A98-BD90-BCA20B620D2D}
 		{30AB3587-A03F-4649-9231-F1E98E6089EC} = {BE8A90CB-375D-4C05-BA4D-6B0983265583}
 		{3AD8FFE5-EB9C-4086-B344-AD1C15EB8856} = {672ACC08-7342-416F-BB6C-5B45DF896AD3}
+		{D0A4E746-5D94-49EC-B84C-7CA7E2358399} = {672ACC08-7342-416F-BB6C-5B45DF896AD3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C928778B-94E5-4DA3-9952-77D994D195AA}

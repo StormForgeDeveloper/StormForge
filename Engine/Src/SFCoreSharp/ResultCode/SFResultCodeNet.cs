@@ -15,223 +15,296 @@ namespace SF {
 	public partial struct ResultCode {
 
 		// Network sequence already processed 
-		public static readonly Result SUCCESS_NET_PROCESSED_SEQUENCE =      new Result(unchecked((int)0x27030000)); 
+		 public const int _SUCCESS_NET_PROCESSED_SEQUENCE = (unchecked((int)0x27030000)); 
+		public static readonly Result SUCCESS_NET_PROCESSED_SEQUENCE = new Result(_SUCCESS_NET_PROCESSED_SEQUENCE); 
 
 		// The version not available or miss match with system. 
-		public static readonly Result NET_PROTOCOL_VERSION_MISMATCH =       new Result(unchecked((int)0xE7030001)); 
+		 public const int _NET_PROTOCOL_VERSION_MISMATCH = (unchecked((int)0xE7030001)); 
+		public static readonly Result NET_PROTOCOL_VERSION_MISMATCH = new Result(_NET_PROTOCOL_VERSION_MISMATCH); 
 
 		// Network is not initialized 
-		public static readonly Result NET_NOTINITIALIZED =                  new Result(unchecked((int)0xE7030002)); 
+		 public const int _NET_NOTINITIALIZED = (unchecked((int)0xE7030002)); 
+		public static readonly Result NET_NOTINITIALIZED = new Result(_NET_NOTINITIALIZED); 
 
 		// The version not available or miss match with system. 
-		public static readonly Result NET_INVALID_NETCLASS =                new Result(unchecked((int)0xE7030003)); 
+		 public const int _NET_INVALID_NETCLASS = (unchecked((int)0xE7030003)); 
+		public static readonly Result NET_INVALID_NETCLASS = new Result(_NET_INVALID_NETCLASS); 
 
 		// Not enough space in sliding window 
-		public static readonly Result NET_NOT_ENOUGH_WINDOWSPACE =          new Result(unchecked((int)0xE7030004)); 
+		 public const int _NET_NOT_ENOUGH_WINDOWSPACE = (unchecked((int)0xE7030004)); 
+		public static readonly Result NET_NOT_ENOUGH_WINDOWSPACE = new Result(_NET_NOT_ENOUGH_WINDOWSPACE); 
 
 		// Network IO aborted 
-		public static readonly Result NET_IO_ABORTED =                      new Result(unchecked((int)0xE7030005)); 
+		 public const int _NET_IO_ABORTED = (unchecked((int)0xE7030005)); 
+		public static readonly Result NET_IO_ABORTED = new Result(_NET_IO_ABORTED); 
 
 		// Network IO send failed 
-		public static readonly Result NET_IO_SEND_FAIL =                    new Result(unchecked((int)0xE7030006)); 
+		 public const int _NET_IO_SEND_FAIL = (unchecked((int)0xE7030006)); 
+		public static readonly Result NET_IO_SEND_FAIL = new Result(_NET_IO_SEND_FAIL); 
 
 		// Network IO recv failed 
-		public static readonly Result NET_IO_RECV_FAIL =                    new Result(unchecked((int)0xE7030007)); 
+		 public const int _NET_IO_RECV_FAIL = (unchecked((int)0xE7030007)); 
+		public static readonly Result NET_IO_RECV_FAIL = new Result(_NET_IO_RECV_FAIL); 
 
 		// Network send failed 
-		public static readonly Result NET_SEND_FAIL =                       new Result(unchecked((int)0xE7030008)); 
+		 public const int _NET_SEND_FAIL = (unchecked((int)0xE7030008)); 
+		public static readonly Result NET_SEND_FAIL = new Result(_NET_SEND_FAIL); 
 
 		// Network recv failed 
-		public static readonly Result NET_RECV_FAIL =                       new Result(unchecked((int)0xE7030009)); 
+		 public const int _NET_RECV_FAIL = (unchecked((int)0xE7030009)); 
+		public static readonly Result NET_RECV_FAIL = new Result(_NET_RECV_FAIL); 
 
 		// Network Message sequence is invalid 
-		public static readonly Result NET_INVALID_SEQUENCE =                new Result(unchecked((int)0xE703000A)); 
+		 public const int _NET_INVALID_SEQUENCE = (unchecked((int)0xE703000A)); 
+		public static readonly Result NET_INVALID_SEQUENCE = new Result(_NET_INVALID_SEQUENCE); 
 
 		// Network Message not expected bad packet size 
-		public static readonly Result NET_BADPACKET_SIZE =                  new Result(unchecked((int)0xE703000B)); 
+		 public const int _NET_BADPACKET_SIZE = (unchecked((int)0xE703000B)); 
+		public static readonly Result NET_BADPACKET_SIZE = new Result(_NET_BADPACKET_SIZE); 
 
 		// Network connection closed 
-		public static readonly Result NET_CONNECTION_CLOSED =               new Result(unchecked((int)0xE703000C)); 
+		 public const int _NET_CONNECTION_CLOSED = (unchecked((int)0xE703000C)); 
+		public static readonly Result NET_CONNECTION_CLOSED = new Result(_NET_CONNECTION_CLOSED); 
 
 		// Network connection is never made 
-		public static readonly Result NET_NOT_CONNECTED =                   new Result(unchecked((int)0xE703000D)); 
+		 public const int _NET_NOT_CONNECTED = (unchecked((int)0xE703000D)); 
+		public static readonly Result NET_NOT_CONNECTED = new Result(_NET_NOT_CONNECTED); 
 
 		// Network connection ID is invalid 
-		public static readonly Result NET_INVALID_CID =                     new Result(unchecked((int)0xE703000E)); 
+		 public const int _NET_INVALID_CID = (unchecked((int)0xE703000E)); 
+		public static readonly Result NET_INVALID_CID = new Result(_NET_INVALID_CID); 
 
 		// Network Connection timeout 
-		public static readonly Result NET_CONNECTION_TIMEOUT =              new Result(unchecked((int)0xE703000F)); 
+		 public const int _NET_CONNECTION_TIMEOUT = (unchecked((int)0xE703000F)); 
+		public static readonly Result NET_CONNECTION_TIMEOUT = new Result(_NET_CONNECTION_TIMEOUT); 
 
 		// Network connection is failed 
-		public static readonly Result NET_CONNECTION_FAIL =                 new Result(unchecked((int)0xE7030010)); 
+		 public const int _NET_CONNECTION_FAIL = (unchecked((int)0xE7030010)); 
+		public static readonly Result NET_CONNECTION_FAIL = new Result(_NET_CONNECTION_FAIL); 
 
 		// Too big packet data 
-		public static readonly Result NET_BADPACKET_TOOBIG =                new Result(unchecked((int)0xE7030011)); 
+		 public const int _NET_BADPACKET_TOOBIG = (unchecked((int)0xE7030011)); 
+		public static readonly Result NET_BADPACKET_TOOBIG = new Result(_NET_BADPACKET_TOOBIG); 
 
 		// Network Message not expected bad packet 
-		public static readonly Result NET_BADPACKET_NOTEXPECTED =           new Result(unchecked((int)0xE7030012)); 
+		 public const int _NET_BADPACKET_NOTEXPECTED = (unchecked((int)0xE7030012)); 
+		public static readonly Result NET_BADPACKET_NOTEXPECTED = new Result(_NET_BADPACKET_NOTEXPECTED); 
 
 		// Checksum value of the message is invalid 
-		public static readonly Result NET_INVALID_MESSAGE_CHECKSUM =        new Result(unchecked((int)0xE7030013)); 
+		 public const int _NET_INVALID_MESSAGE_CHECKSUM = (unchecked((int)0xE7030013)); 
+		public static readonly Result NET_INVALID_MESSAGE_CHECKSUM = new Result(_NET_INVALID_MESSAGE_CHECKSUM); 
 
 		// Message encryption is invalid 
-		public static readonly Result NET_INVALID_MESSAGE_ENCRYPTION =      new Result(unchecked((int)0xE7030014)); 
+		 public const int _NET_INVALID_MESSAGE_ENCRYPTION = (unchecked((int)0xE7030014)); 
+		public static readonly Result NET_INVALID_MESSAGE_ENCRYPTION = new Result(_NET_INVALID_MESSAGE_ENCRYPTION); 
 
 		// Invalid connection state 
-		public static readonly Result NET_INVALID_CONNECTION_STATE =        new Result(unchecked((int)0xE7030015)); 
+		 public const int _NET_INVALID_CONNECTION_STATE = (unchecked((int)0xE7030015)); 
+		public static readonly Result NET_INVALID_CONNECTION_STATE = new Result(_NET_INVALID_CONNECTION_STATE); 
 
 		// Too big sequence id 
-		public static readonly Result NET_SEQUENCE_OVERFLOW =               new Result(unchecked((int)0xE7030016)); 
+		 public const int _NET_SEQUENCE_OVERFLOW = (unchecked((int)0xE7030016)); 
+		public static readonly Result NET_SEQUENCE_OVERFLOW = new Result(_NET_SEQUENCE_OVERFLOW); 
 
 		// A blocking operation was interrupted by a call to WSACancelBlockingCall. 
-		public static readonly Result NET_INTR =                            new Result(unchecked((int)0xE7030017)); 
+		 public const int _NET_INTR = (unchecked((int)0xE7030017)); 
+		public static readonly Result NET_INTR = new Result(_NET_INTR); 
 
 		// The file handle supplied is not valid. 
-		public static readonly Result NET_BADF =                            new Result(unchecked((int)0xE7030018)); 
+		 public const int _NET_BADF = (unchecked((int)0xE7030018)); 
+		public static readonly Result NET_BADF = new Result(_NET_BADF); 
 
 		// An attempt was made to access a socket in a way forbidden by its access permissions 
-		public static readonly Result NET_ACCES =                           new Result(unchecked((int)0xE7030019)); 
+		 public const int _NET_ACCES = (unchecked((int)0xE7030019)); 
+		public static readonly Result NET_ACCES = new Result(_NET_ACCES); 
 
 		// The system detected an invalid pointer address in attempting to use a pointer argument in a call. 
-		public static readonly Result NET_FAULT =                           new Result(unchecked((int)0xE703001A)); 
+		 public const int _NET_FAULT = (unchecked((int)0xE703001A)); 
+		public static readonly Result NET_FAULT = new Result(_NET_FAULT); 
 
 		// An invalid argument was supplied. 
-		public static readonly Result NET_INVAL =                           new Result(unchecked((int)0xE703001B)); 
+		 public const int _NET_INVAL = (unchecked((int)0xE703001B)); 
+		public static readonly Result NET_INVAL = new Result(_NET_INVAL); 
 
 		// Too many open sockets. 
-		public static readonly Result NET_MFILE =                           new Result(unchecked((int)0xE703001C)); 
+		 public const int _NET_MFILE = (unchecked((int)0xE703001C)); 
+		public static readonly Result NET_MFILE = new Result(_NET_MFILE); 
 
 		// A non-blocking socket operation could not be completed immediately. 
-		public static readonly Result NET_WOULDBLOCK =                      new Result(unchecked((int)0xE703001D)); 
+		 public const int _NET_WOULDBLOCK = (unchecked((int)0xE703001D)); 
+		public static readonly Result NET_WOULDBLOCK = new Result(_NET_WOULDBLOCK); 
 
 		// A blocking operation is currently executing. 
-		public static readonly Result NET_INPROGRESS =                      new Result(unchecked((int)0xE703001E)); 
+		 public const int _NET_INPROGRESS = (unchecked((int)0xE703001E)); 
+		public static readonly Result NET_INPROGRESS = new Result(_NET_INPROGRESS); 
 
 		// An operation was attempted on a non-blocking socket that already had an operation in progress. 
-		public static readonly Result NET_ALREADY =                         new Result(unchecked((int)0xE703001F)); 
+		 public const int _NET_ALREADY = (unchecked((int)0xE703001F)); 
+		public static readonly Result NET_ALREADY = new Result(_NET_ALREADY); 
 
 		// An operation was attempted on something that is not a socket. 
-		public static readonly Result NET_NOTSOCK =                         new Result(unchecked((int)0xE7030020)); 
+		 public const int _NET_NOTSOCK = (unchecked((int)0xE7030020)); 
+		public static readonly Result NET_NOTSOCK = new Result(_NET_NOTSOCK); 
 
 		// A required address was omitted from an operation on a socket. 
-		public static readonly Result NET_DESTADDRREQ =                     new Result(unchecked((int)0xE7030021)); 
+		 public const int _NET_DESTADDRREQ = (unchecked((int)0xE7030021)); 
+		public static readonly Result NET_DESTADDRREQ = new Result(_NET_DESTADDRREQ); 
 
 		// A socket operation encountered a dead network. 
-		public static readonly Result NET_NETDOWN =                         new Result(unchecked((int)0xE7030022)); 
+		 public const int _NET_NETDOWN = (unchecked((int)0xE7030022)); 
+		public static readonly Result NET_NETDOWN = new Result(_NET_NETDOWN); 
 
 		// A socket operation was attempted to an unreachable network. 
-		public static readonly Result NET_NETUNREACH =                      new Result(unchecked((int)0xE7030023)); 
+		 public const int _NET_NETUNREACH = (unchecked((int)0xE7030023)); 
+		public static readonly Result NET_NETUNREACH = new Result(_NET_NETUNREACH); 
 
 		// The connection has been broken due to keep-alive activity detecting a failure while the operation was in progress. 
-		public static readonly Result NET_NETRESET =                        new Result(unchecked((int)0xE7030024)); 
+		 public const int _NET_NETRESET = (unchecked((int)0xE7030024)); 
+		public static readonly Result NET_NETRESET = new Result(_NET_NETRESET); 
 
 		// An established connection was aborted by the software in your host machine. 
-		public static readonly Result NET_CONNABORTED =                     new Result(unchecked((int)0xE7030025)); 
+		 public const int _NET_CONNABORTED = (unchecked((int)0xE7030025)); 
+		public static readonly Result NET_CONNABORTED = new Result(_NET_CONNABORTED); 
 
 		// An existing connection was forcibly closed by the remote host. 
-		public static readonly Result NET_CONNRESET =                       new Result(unchecked((int)0xE7030026)); 
+		 public const int _NET_CONNRESET = (unchecked((int)0xE7030026)); 
+		public static readonly Result NET_CONNRESET = new Result(_NET_CONNRESET); 
 
 		// An operation on a socket could not be performed because the system lacked sufficient buffer space or because a queue was full. 
-		public static readonly Result NET_NOBUFS =                          new Result(unchecked((int)0xE7030027)); 
+		 public const int _NET_NOBUFS = (unchecked((int)0xE7030027)); 
+		public static readonly Result NET_NOBUFS = new Result(_NET_NOBUFS); 
 
 		// A connect request was made on an already connected socket. 
-		public static readonly Result NET_ISCONN =                          new Result(unchecked((int)0xE7030028)); 
+		 public const int _NET_ISCONN = (unchecked((int)0xE7030028)); 
+		public static readonly Result NET_ISCONN = new Result(_NET_ISCONN); 
 
 		// A request to send or receive data was disallowed because the socket is not connected and (when sending on a datagram socket using a sendto call) no address was supplied. 
-		public static readonly Result NET_NOTCONN =                         new Result(unchecked((int)0xE7030029)); 
+		 public const int _NET_NOTCONN = (unchecked((int)0xE7030029)); 
+		public static readonly Result NET_NOTCONN = new Result(_NET_NOTCONN); 
 
 		// A request to send or receive data was disallowed because the socket had already been shut down in that direction with a previous shutdown call. 
-		public static readonly Result NET_SHUTDOWN =                        new Result(unchecked((int)0xE703002A)); 
+		 public const int _NET_SHUTDOWN = (unchecked((int)0xE703002A)); 
+		public static readonly Result NET_SHUTDOWN = new Result(_NET_SHUTDOWN); 
 
 		// Too many references to some kernel object. 
-		public static readonly Result NET_TOOMANYREFS =                     new Result(unchecked((int)0xE703002B)); 
+		 public const int _NET_TOOMANYREFS = (unchecked((int)0xE703002B)); 
+		public static readonly Result NET_TOOMANYREFS = new Result(_NET_TOOMANYREFS); 
 
 		// A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond. 
-		public static readonly Result NET_TIMEDOUT =                        new Result(unchecked((int)0xE703002C)); 
+		 public const int _NET_TIMEDOUT = (unchecked((int)0xE703002C)); 
+		public static readonly Result NET_TIMEDOUT = new Result(_NET_TIMEDOUT); 
 
 		// No connection could be made because the target machine actively refused it. 
-		public static readonly Result NET_CONNECTION_REFUSSED =             new Result(unchecked((int)0xE703002D)); 
+		 public const int _NET_CONNECTION_REFUSSED = (unchecked((int)0xE703002D)); 
+		public static readonly Result NET_CONNECTION_REFUSSED = new Result(_NET_CONNECTION_REFUSSED); 
 
 		// Cannot translate name. 
-		public static readonly Result NET_LOOP =                            new Result(unchecked((int)0xE703002E)); 
+		 public const int _NET_LOOP = (unchecked((int)0xE703002E)); 
+		public static readonly Result NET_LOOP = new Result(_NET_LOOP); 
 
 		// Name component or name was too long. 
-		public static readonly Result NET_NAMETOOLONG =                     new Result(unchecked((int)0xE703002F)); 
+		 public const int _NET_NAMETOOLONG = (unchecked((int)0xE703002F)); 
+		public static readonly Result NET_NAMETOOLONG = new Result(_NET_NAMETOOLONG); 
 
 		// A socket operation failed because the destination host was down. 
-		public static readonly Result NET_HOSTDOWN =                        new Result(unchecked((int)0xE7030030)); 
+		 public const int _NET_HOSTDOWN = (unchecked((int)0xE7030030)); 
+		public static readonly Result NET_HOSTDOWN = new Result(_NET_HOSTDOWN); 
 
 		// A socket operation was attempted to an unreachable host. 
-		public static readonly Result NET_HOSTUNREACH =                     new Result(unchecked((int)0xE7030031)); 
+		 public const int _NET_HOSTUNREACH = (unchecked((int)0xE7030031)); 
+		public static readonly Result NET_HOSTUNREACH = new Result(_NET_HOSTUNREACH); 
 
 		// Cannot remove a directory that is not empty. 
-		public static readonly Result NET_NOTEMPTY =                        new Result(unchecked((int)0xE7030032)); 
+		 public const int _NET_NOTEMPTY = (unchecked((int)0xE7030032)); 
+		public static readonly Result NET_NOTEMPTY = new Result(_NET_NOTEMPTY); 
 
 		// A Windows Sockets implementation may have a limit on the number of applications that may use it simultaneously. 
-		public static readonly Result NET_PROCLIM =                         new Result(unchecked((int)0xE7030033)); 
+		 public const int _NET_PROCLIM = (unchecked((int)0xE7030033)); 
+		public static readonly Result NET_PROCLIM = new Result(_NET_PROCLIM); 
 
 		// WSAStartup cannot function at this time because the underlying system it uses to provide network services is currently unavailable. 
-		public static readonly Result NET_SYSNOTREADY =                     new Result(unchecked((int)0xE7030034)); 
+		 public const int _NET_SYSNOTREADY = (unchecked((int)0xE7030034)); 
+		public static readonly Result NET_SYSNOTREADY = new Result(_NET_SYSNOTREADY); 
 
 		// The Windows Sockets version requested is not supported. 
-		public static readonly Result NET_VERNOTSUPPORTED =                 new Result(unchecked((int)0xE7030035)); 
+		 public const int _NET_VERNOTSUPPORTED = (unchecked((int)0xE7030035)); 
+		public static readonly Result NET_VERNOTSUPPORTED = new Result(_NET_VERNOTSUPPORTED); 
 
 		// Either the application has not called WSAStartup, or WSAStartup failed. 
-		public static readonly Result NET_NOTINITIALISED =                  new Result(unchecked((int)0xE7030036)); 
+		 public const int _NET_NOTINITIALISED = (unchecked((int)0xE7030036)); 
+		public static readonly Result NET_NOTINITIALISED = new Result(_NET_NOTINITIALISED); 
 
 		// Returned by WSARecv or WSARecvFrom to indicate the remote party has initiated a graceful shutdown sequence. 
-		public static readonly Result NET_DISCON =                          new Result(unchecked((int)0xE7030037)); 
+		 public const int _NET_DISCON = (unchecked((int)0xE7030037)); 
+		public static readonly Result NET_DISCON = new Result(_NET_DISCON); 
 
 		// A system call has failed. 
-		public static readonly Result NET_SYSCALLFAILURE =                  new Result(unchecked((int)0xE7030038)); 
+		 public const int _NET_SYSCALLFAILURE = (unchecked((int)0xE7030038)); 
+		public static readonly Result NET_SYSCALLFAILURE = new Result(_NET_SYSCALLFAILURE); 
 
 		// Host not found. 
-		public static readonly Result NET_HOST_NOT_FOUND =                  new Result(unchecked((int)0xE7030039)); 
+		 public const int _NET_HOST_NOT_FOUND = (unchecked((int)0xE7030039)); 
+		public static readonly Result NET_HOST_NOT_FOUND = new Result(_NET_HOST_NOT_FOUND); 
 
 		// Try again 
-		public static readonly Result NET_TRY_AGAIN =                       new Result(unchecked((int)0xE703003A)); 
+		 public const int _NET_TRY_AGAIN = (unchecked((int)0xE703003A)); 
+		public static readonly Result NET_TRY_AGAIN = new Result(_NET_TRY_AGAIN); 
 
 		// IOPending 
-		public static readonly Result NET_IO_PENDING =                      new Result(unchecked((int)0xE703003B)); 
+		 public const int _NET_IO_PENDING = (unchecked((int)0xE703003B)); 
+		public static readonly Result NET_IO_PENDING = new Result(_NET_IO_PENDING); 
 
 		// No such host is known securely. 
-		public static readonly Result NET_SECURE_HOST_NOT_FOUND =           new Result(unchecked((int)0xE703003C)); 
+		 public const int _NET_SECURE_HOST_NOT_FOUND = (unchecked((int)0xE703003C)); 
+		public static readonly Result NET_SECURE_HOST_NOT_FOUND = new Result(_NET_SECURE_HOST_NOT_FOUND); 
 
 		// Protocol error 
-		public static readonly Result NET_PROTO =                           new Result(unchecked((int)0xE703003D)); 
+		 public const int _NET_PROTO = (unchecked((int)0xE703003D)); 
+		public static readonly Result NET_PROTO = new Result(_NET_PROTO); 
 
 		// Protocol wrong type for socket. 
-		public static readonly Result NET_PROTOTYPE =                       new Result(unchecked((int)0xE703003E)); 
+		 public const int _NET_PROTOTYPE = (unchecked((int)0xE703003E)); 
+		public static readonly Result NET_PROTOTYPE = new Result(_NET_PROTOTYPE); 
 
 		// Protocol not available 
-		public static readonly Result NET_NOPROTOOPT =                      new Result(unchecked((int)0xE703003F)); 
+		 public const int _NET_NOPROTOOPT = (unchecked((int)0xE703003F)); 
+		public static readonly Result NET_NOPROTOOPT = new Result(_NET_NOPROTOOPT); 
 
 		// Machine is not on the network 
-		public static readonly Result NET_NONET =                           new Result(unchecked((int)0xE7030040)); 
+		 public const int _NET_NONET = (unchecked((int)0xE7030040)); 
+		public static readonly Result NET_NONET = new Result(_NET_NONET); 
 
 		// Operation not supported on socket 
-		public static readonly Result NET_OPNOTSUPP =                       new Result(unchecked((int)0xE7030041)); 
+		 public const int _NET_OPNOTSUPP = (unchecked((int)0xE7030041)); 
+		public static readonly Result NET_OPNOTSUPP = new Result(_NET_OPNOTSUPP); 
 
 		// An invalid value was provided for the ai_flags member of the pHints parameter. 
-		public static readonly Result NET_BADFLAGS =                        new Result(unchecked((int)0xE7030042)); 
+		 public const int _NET_BADFLAGS = (unchecked((int)0xE7030042)); 
+		public static readonly Result NET_BADFLAGS = new Result(_NET_BADFLAGS); 
 
 		// Bad network family 
-		public static readonly Result NET_FAMILY =                          new Result(unchecked((int)0xE7030043)); 
+		 public const int _NET_FAMILY = (unchecked((int)0xE7030043)); 
+		public static readonly Result NET_FAMILY = new Result(_NET_FAMILY); 
 
 		// The pServiceName parameter is not supported for the specified ai_socktype member of the pHints parameter. 
-		public static readonly Result NET_INVALID_SERVICE =                 new Result(unchecked((int)0xE7030044)); 
+		 public const int _NET_INVALID_SERVICE = (unchecked((int)0xE7030044)); 
+		public static readonly Result NET_INVALID_SERVICE = new Result(_NET_INVALID_SERVICE); 
 
 		// Invalid network address 
-		public static readonly Result NET_INVALID_ADDRESS =                 new Result(unchecked((int)0xE7030045)); 
+		 public const int _NET_INVALID_ADDRESS = (unchecked((int)0xE7030045)); 
+		public static readonly Result NET_INVALID_ADDRESS = new Result(_NET_INVALID_ADDRESS); 
 
 		// Address in use 
-		public static readonly Result NET_ADDRINUSE =                       new Result(unchecked((int)0xE7030046)); 
+		 public const int _NET_ADDRINUSE = (unchecked((int)0xE7030046)); 
+		public static readonly Result NET_ADDRINUSE = new Result(_NET_ADDRINUSE); 
 
 		// Network Message not expected packet data 
-		public static readonly Result NET_BADPACKET =                       new Result(unchecked((int)0xE7030047)); 
+		 public const int _NET_BADPACKET = (unchecked((int)0xE7030047)); 
+		public static readonly Result NET_BADPACKET = new Result(_NET_BADPACKET); 
 
 		// Disconnected 
-		public static readonly Result NET_DISCONNECTED =                    new Result(unchecked((int)0xE7030048)); 
+		 public const int _NET_DISCONNECTED = (unchecked((int)0xE7030048)); 
+		public static readonly Result NET_DISCONNECTED = new Result(_NET_DISCONNECTED); 
 
 	}
 }

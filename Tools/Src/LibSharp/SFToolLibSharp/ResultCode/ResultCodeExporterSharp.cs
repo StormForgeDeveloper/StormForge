@@ -19,6 +19,7 @@ using SF.Table;
 
 using System.IO;
 using System.Diagnostics;
+using Microsoft.Extensions.Primitives;
 
 
 namespace SF
@@ -74,18 +75,21 @@ namespace SF
             {
                 var codeValue = codeItem.ResultCode;
 
-                string strDefine = "";
-                if(m_Codes.UseFacilityName)
-                    strDefine = $"\t\tpublic static readonly Result {Result.ServerityToDefineString(codeValue.Severity)}{facilityUpr}_{codeItem.CodeName.ToUpper()} = ";
-                else
-                    strDefine = $"\t\tpublic static readonly Result {Result.ServerityToDefineString(codeValue.Severity)}{codeItem.CodeName.ToUpper()} = ";
+                string variableName = m_Codes.UseFacilityName ?
+                    $"{Result.ServerityToDefineString(codeValue.Severity)}{facilityUpr}_{codeItem.CodeName.ToUpper()}"
+                    : $"{Result.ServerityToDefineString(codeValue.Severity)}{codeItem.CodeName.ToUpper()}";
 
+
+                // Description
+                string strDefine = $"\t\tpublic static readonly Result {variableName} = ";
                 output.AppendFormat("\n");
                 output.AppendFormat("\t\t// {0} \n", string.IsNullOrEmpty(codeItem.Desc) ? "" : codeItem.Desc);
-                output.AppendFormat("{0}", strDefine);
-                if(strDefine.Length <= tabSize)
-                    output.Append(' ', tabSize - strDefine.Length);
-                output.AppendFormat("new Result(unchecked((int)0x{0:X8})); \n", codeValue.Code);
+
+                // Constant definition
+                output.Append($"\t\t public const int _{variableName} = (unchecked((int)0x{codeValue.Code:X8})); \n");
+
+                // Result definition
+                output.Append($"\t\tpublic static readonly Result {variableName} = new Result(_{variableName}); \n");
             }
 
             output.AppendLine("");
