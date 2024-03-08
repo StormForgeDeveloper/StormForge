@@ -13,7 +13,7 @@ public struct LoginWithSteamRes : IFlatbufferObject
 {
   private Table __p;
   public ByteBuffer ByteBuffer { get { return __p.bb; } }
-  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_23_5_26(); }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_24_3_7(); }
   public static LoginWithSteamRes GetRootAsLoginWithSteamRes(ByteBuffer _bb) { return GetRootAsLoginWithSteamRes(_bb, new LoginWithSteamRes()); }
   public static LoginWithSteamRes GetRootAsLoginWithSteamRes(ByteBuffer _bb, LoginWithSteamRes obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
   public static bool VerifyLoginWithSteamRes(ByteBuffer _bb) {Google.FlatBuffers.Verifier verifier = new Google.FlatBuffers.Verifier(_bb); return verifier.VerifyBuffer("", false, LoginWithSteamResVerify.Verify); }

@@ -13,7 +13,7 @@ public struct ChatChannelPlayerJoinedS2CEvt : IFlatbufferObject
 {
   private Table __p;
   public ByteBuffer ByteBuffer { get { return __p.bb; } }
-  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_23_5_26(); }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_24_3_7(); }
   public static ChatChannelPlayerJoinedS2CEvt GetRootAsChatChannelPlayerJoinedS2CEvt(ByteBuffer _bb) { return GetRootAsChatChannelPlayerJoinedS2CEvt(_bb, new ChatChannelPlayerJoinedS2CEvt()); }
   public static ChatChannelPlayerJoinedS2CEvt GetRootAsChatChannelPlayerJoinedS2CEvt(ByteBuffer _bb, ChatChannelPlayerJoinedS2CEvt obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }

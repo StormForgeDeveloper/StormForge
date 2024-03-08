@@ -19,4 +19,44 @@ public enum NamedVariableValue : byte
 };
 
 
+
+static public class NamedVariableValueVerify
+{
+  static public bool Verify(Google.FlatBuffers.Verifier verifier, byte typeId, uint tablePos)
+  {
+    bool result = true;
+    switch((NamedVariableValue)typeId)
+    {
+      case NamedVariableValue.NamedVariableString:
+        result = SF.Flat.NamedVariableStringVerify.Verify(verifier, tablePos);
+        break;
+      case NamedVariableValue.NamedVariableBool:
+        result = SF.Flat.NamedVariableBoolVerify.Verify(verifier, tablePos);
+        break;
+      case NamedVariableValue.NamedVariableFloat:
+        result = SF.Flat.NamedVariableFloatVerify.Verify(verifier, tablePos);
+        break;
+      case NamedVariableValue.NamedVariableDouble:
+        result = SF.Flat.NamedVariableDoubleVerify.Verify(verifier, tablePos);
+        break;
+      case NamedVariableValue.NamedVariableInt:
+        result = SF.Flat.NamedVariableIntVerify.Verify(verifier, tablePos);
+        break;
+      case NamedVariableValue.NamedVariableUInt:
+        result = SF.Flat.NamedVariableUIntVerify.Verify(verifier, tablePos);
+        break;
+      case NamedVariableValue.NamedVariableInt64:
+        result = SF.Flat.NamedVariableInt64Verify.Verify(verifier, tablePos);
+        break;
+      case NamedVariableValue.NamedVariableUInt64:
+        result = SF.Flat.NamedVariableUInt64Verify.Verify(verifier, tablePos);
+        break;
+      default: result = true;
+        break;
+    }
+    return result;
+  }
+}
+
+
 }

@@ -13,7 +13,7 @@ public struct PlayerMovementC2SEvt : IFlatbufferObject
 {
   private Table __p;
   public ByteBuffer ByteBuffer { get { return __p.bb; } }
-  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_23_5_26(); }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_24_3_7(); }
   public static PlayerMovementC2SEvt GetRootAsPlayerMovementC2SEvt(ByteBuffer _bb) { return GetRootAsPlayerMovementC2SEvt(_bb, new PlayerMovementC2SEvt()); }
   public static PlayerMovementC2SEvt GetRootAsPlayerMovementC2SEvt(ByteBuffer _bb, PlayerMovementC2SEvt obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }

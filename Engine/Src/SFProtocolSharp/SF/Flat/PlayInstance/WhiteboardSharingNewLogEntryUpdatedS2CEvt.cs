@@ -13,7 +13,7 @@ public struct WhiteboardSharingNewLogEntryUpdatedS2CEvt : IFlatbufferObject
 {
   private Table __p;
   public ByteBuffer ByteBuffer { get { return __p.bb; } }
-  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_23_5_26(); }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_24_3_7(); }
   public static WhiteboardSharingNewLogEntryUpdatedS2CEvt GetRootAsWhiteboardSharingNewLogEntryUpdatedS2CEvt(ByteBuffer _bb) { return GetRootAsWhiteboardSharingNewLogEntryUpdatedS2CEvt(_bb, new WhiteboardSharingNewLogEntryUpdatedS2CEvt()); }
   public static WhiteboardSharingNewLogEntryUpdatedS2CEvt GetRootAsWhiteboardSharingNewLogEntryUpdatedS2CEvt(ByteBuffer _bb, WhiteboardSharingNewLogEntryUpdatedS2CEvt obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }

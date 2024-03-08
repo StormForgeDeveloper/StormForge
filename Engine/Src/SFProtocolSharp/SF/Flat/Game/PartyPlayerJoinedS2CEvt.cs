@@ -13,7 +13,7 @@ public struct PartyPlayerJoinedS2CEvt : IFlatbufferObject
 {
   private Table __p;
   public ByteBuffer ByteBuffer { get { return __p.bb; } }
-  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_23_5_26(); }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_24_3_7(); }
   public static PartyPlayerJoinedS2CEvt GetRootAsPartyPlayerJoinedS2CEvt(ByteBuffer _bb) { return GetRootAsPartyPlayerJoinedS2CEvt(_bb, new PartyPlayerJoinedS2CEvt()); }
   public static PartyPlayerJoinedS2CEvt GetRootAsPartyPlayerJoinedS2CEvt(ByteBuffer _bb, PartyPlayerJoinedS2CEvt obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }

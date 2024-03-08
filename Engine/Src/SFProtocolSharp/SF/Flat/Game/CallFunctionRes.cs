@@ -13,7 +13,7 @@ public struct CallFunctionRes : IFlatbufferObject
 {
   private Table __p;
   public ByteBuffer ByteBuffer { get { return __p.bb; } }
-  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_23_5_26(); }
+  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_24_3_7(); }
   public static CallFunctionRes GetRootAsCallFunctionRes(ByteBuffer _bb) { return GetRootAsCallFunctionRes(_bb, new CallFunctionRes()); }
   public static CallFunctionRes GetRootAsCallFunctionRes(ByteBuffer _bb, CallFunctionRes obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
   public static bool VerifyCallFunctionRes(ByteBuffer _bb) {Google.FlatBuffers.Verifier verifier = new Google.FlatBuffers.Verifier(_bb); return verifier.VerifyBuffer("", false, CallFunctionResVerify.Verify); }
