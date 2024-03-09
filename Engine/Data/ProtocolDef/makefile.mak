@@ -11,6 +11,7 @@ PARAMETER_CPP=-o $(OUTPUT_CPP_PATH) --cpp --cpp-str-flex-ctor --cpp-std c++17 --
 
 SOURCES=SFTypes.fbs \
 	LocalTypes.fbs \
+	Generic.fbs \
 	Login.fbs \
 	Telemetry.fbs \
 	Game.fbs \

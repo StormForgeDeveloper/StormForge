@@ -2,6 +2,9 @@
 
 set(SFPROTOCOL_LIB_FILES
   	SFProtocolPCH.h
+	
+	SFFlat/SFTypes_generated.h
+	SFFlat/LocalTypes_generated.h
 
 	Protocol/GameMsgClass.cpp
 	Protocol/GameMsgDebug.cpp
@@ -9,6 +12,11 @@ set(SFPROTOCOL_LIB_FILES
 	Protocol/GameMsgClass.h
 	Protocol/GameMsgDebug.h
 	Protocol/GameMsgParsing.h
+	Protocol/GameNetPolicy.cpp
+	Protocol/GameNetPolicy.h
+
+	SFFlat/Game_generated.h
+	Protocol/GameMessageID.h
 
 	Protocol/PlayInstanceMsgClass.cpp
 	Protocol/PlayInstanceMsgClass.h
@@ -18,7 +26,10 @@ set(SFPROTOCOL_LIB_FILES
 	Protocol/PlayInstanceMsgParsing.h
    	Protocol/PlayInstanceNetPolicy.cpp
 	Protocol/PlayInstanceNetPolicy.h
-
+	
+	SFFlat/PlayInstance_generated.h
+	Protocol/PlayInstanceMessageID.h
+	
 	Protocol/GenericMsgClass.cpp
 	Protocol/GenericMsgClass.h
 	Protocol/GenericMsgDebug.cpp
@@ -28,8 +39,9 @@ set(SFPROTOCOL_LIB_FILES
    	Protocol/GenericNetPolicy.cpp
 	Protocol/GenericNetPolicy.h
 
-	Protocol/GameNetPolicy.cpp
-	Protocol/GameNetPolicy.h
+	SFFlat/Generic_generated.h
+	Protocol/GenericMessageID.h
+	
 
 	SFGenericMessageClass.h
   	SFGenericMessageClass.cpp
@@ -38,7 +50,10 @@ set(SFPROTOCOL_LIB_FILES
 	SFProtocol.cpp
 	
 	SFFlat/Login_generated.h
+	Protocol/LoginMessageID.h
+
 	SFFlat/Telemetry_generated.h
+	Protocol/TelemetryMessageID.h
 
   )
 
