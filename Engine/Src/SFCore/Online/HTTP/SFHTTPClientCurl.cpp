@@ -14,6 +14,7 @@
 #include "Online/HTTP/SFHTTPClientSystemCurl.h"
 #include "Util/SFTrace.h"
 #include "ResultCode/SFResultCodeLibrary.h"
+#include "openssl/ssl.h"
 
 namespace SF
 {
@@ -47,6 +48,33 @@ namespace SF
         stream->push_back(size * nmemb, (uint8_t*)data);
 
         return (int)(size * nmemb);
+    }
+
+    CURLcode HTTPClientCurl::SSLCTXCallback(CURL* curl, void* sslctx, void* parm)
+    {
+        (void)curl;
+        (void)parm;
+
+        // Add additional trusted cert to the callback
+        X509_STORE* cts = SSL_CTX_get_cert_store((SSL_CTX*)sslctx);
+
+        for (STACK_OF(X509_INFO)* x509Stack : Service::HTTP->GetTrustedCerts())
+        {
+            for (int i = 0; i < sk_X509_INFO_num(x509Stack); i++)
+            {
+                X509_INFO* itmp = sk_X509_INFO_value(x509Stack, i);
+                if (itmp->x509)
+                {
+                    X509_STORE_add_cert(cts, itmp->x509);
+                }
+                if (itmp->crl)
+                {
+                    X509_STORE_add_crl(cts, itmp->crl);
+                }
+            }
+        }
+
+        return CURLE_OK;
     }
 
     Result HTTPClientCurl::SetPostFieldData(const Array<const char>& postFieldData)
@@ -117,13 +145,15 @@ namespace SF
         m_CurlResult = curl_easy_setopt(m_Curl, CURLOPT_URL, (const char*)m_URL);
         defCheck(HTTPCurlImpl::CurlCodeToResult(m_CurlResult));
 
-        // TODO: need to have root certificate list
         // for release build peer also need to be turned off
-        m_CurlResult = curl_easy_setopt(m_Curl, CURLOPT_SSL_VERIFYPEER, false);
+        m_CurlResult = curl_easy_setopt(m_Curl, CURLOPT_SSL_VERIFYPEER, true);
         defCheck(HTTPCurlImpl::CurlCodeToResult(m_CurlResult));
 
-        m_CurlResult = curl_easy_setopt(m_Curl, CURLOPT_SSL_VERIFYHOST, 0L);
+        m_CurlResult = curl_easy_setopt(m_Curl, CURLOPT_SSL_VERIFYHOST, 1L);
         defCheck(HTTPCurlImpl::CurlCodeToResult(m_CurlResult));
+
+        // Handle additional cert
+        m_CurlResult = curl_easy_setopt(m_Curl, CURLOPT_SSL_CTX_FUNCTION, SSLCTXCallback);
 
         curl_easy_setopt(m_Curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);
 

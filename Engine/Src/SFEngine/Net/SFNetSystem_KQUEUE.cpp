@@ -177,7 +177,7 @@ namespace Net {
 					// toss data to working thread
 					if (pReadBuffer != nullptr)
 					{
-						SFLog(Net, Debug3, "Recv From:{0}, To:{1}, Size{2}", pReadBuffer->NetAddr.From, pReadBuffer->NetAddr.To, pReadBuffer->TransferredSize);
+						SFLog(Net, Debug5, "Recv From:{0}, To:{1}, Size{2}", pReadBuffer->NetAddr.From, pReadBuffer->NetAddr.To, pReadBuffer->TransferredSize);
 						netChk(pCallBack->OnIORecvCompleted(hrErr, pReadBuffer));
 					}
 					pReadBuffer = nullptr;

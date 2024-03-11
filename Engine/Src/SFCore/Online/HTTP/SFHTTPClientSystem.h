@@ -15,6 +15,7 @@
 #include "Online/HTTP/SFHTTPClient.h"
 #include "Service/SFService.h"
 #include "Object/SFSharedObjectManager.h"
+#include "openssl/pem.h"
 
 namespace SF
 {
@@ -33,6 +34,11 @@ namespace SF
         // Create Http client
         HTTPClientPtr CreateHTTPClient();
 
+        // Add X509 cert to OpenSSL CA list
+        virtual Result AddTrustedCert(const String& certString);
+
+        virtual const Array<STACK_OF(X509_INFO)*> GetTrustedCerts() const { return m_AdditionalCert; }
+
         // Tick update
         virtual void TickUpdate();
 
@@ -48,6 +54,9 @@ namespace SF
 
         // Finished HTTPCLients
         CircularPageQueue<SharedPointerAtomicT<HTTPClient>> m_PendingEvent;
+
+        // 
+        DynamicArray<STACK_OF(X509_INFO)*> m_AdditionalCert;
     };
 
     namespace Service

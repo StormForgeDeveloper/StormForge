@@ -14,6 +14,7 @@
 #include "Online/HTTP/SFHTTPClientSystemCurl.h"
 #include "Util/SFTrace.h"
 #include "ResultCode/SFResultCodeLibrary.h"
+#include "openssl/ssl.h"
 
 namespace SF
 {
@@ -111,6 +112,8 @@ namespace SF
             {
                 OnHTTPClientDestroy(static_cast<HTTPClientCurl*>(pObj));
             });
+
+
     }
 
     HTTPClientSystemCurl::~HTTPClientSystemCurl()

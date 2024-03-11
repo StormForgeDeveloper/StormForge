@@ -51,6 +51,9 @@ namespace SF
         // Result writer
         static int ResultWriter(char* data, size_t size, size_t nmemb, void* param);
 
+        // SSL context callback
+        static CURLcode SSLCTXCallback(CURL* curl, void* sslctx, void* parm);
+
     protected:
         // Curl manager system
         HTTPClientSystemCurl* m_CurlSystem{};

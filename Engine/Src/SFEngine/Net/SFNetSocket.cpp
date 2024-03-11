@@ -204,7 +204,7 @@ namespace Net {
 	{
 		ScopeContext hr([&pRecvBuffer](Result hr)
 			{
-				SFLog(Net, Debug3, "SocketIOUDP::PendingRecv hr:{0}", hr);
+				SFLog(Net, Debug4, "SocketIOUDP::PendingRecv hr:{0}", hr);
 				IHeap::Delete(pRecvBuffer);
 			});
 		Result hrErr = ResultCode::SUCCESS;
@@ -507,7 +507,7 @@ namespace Net {
 		}
 		else
 		{
-			SFLog(Net, Debug3, "Pending Recv CID:{0}, pending:{1}, hr:{2:X8}", GetUserSocketID(), GetPendingRecvCount(), hr);
+			SFLog(Net, Debug5, "Pending Recv CID:{0}, pending:{1}, hr:{2:X8}", GetUserSocketID(), GetPendingRecvCount(), hr);
 		}
 
 		return hr;

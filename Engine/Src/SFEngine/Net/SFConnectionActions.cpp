@@ -225,7 +225,7 @@ namespace Net {
 		Result hr;
 
 		GetConnection()->OnHeartbeatPacket();
-		SFLog(Net, Debug3, "Heartbeat CID:{0}, socketType:{1}", GetCID(), GetSocketType());
+		SFLog(Net, Debug4, "Heartbeat CID:{0}, socketType:{1}", GetCID(), GetSocketType());
 		netCheck(SendNetCtrl(PACKET_NETCTRL_ACK, pHeader->GetSequence(), pHeader->GetMessageID()));
 
 		return hr;
