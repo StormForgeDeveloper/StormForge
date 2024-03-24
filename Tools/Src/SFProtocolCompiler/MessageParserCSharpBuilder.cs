@@ -313,7 +313,7 @@ namespace ProtocolCompiler
 
             NewLine();
             MatchIndent(); OutStream.WriteLine("public static MessageID MID = new MessageID(MSGTYPE.{0}, {1}, {2}, POLICY.{3}, {4});",
-                typeName.ToUpper(), baseMsg.Reliable.ToString().ToLower(), Group.IsMobile.ToString().ToLower(), Group.Name.ToUpper(), MessageCodeIndex);
+                typeName.ToUpper(), baseMsg.Reliable.ToString().ToLower(), false.ToString().ToLower(), Group.Name.ToUpper(), MessageCodeIndex);
             NewLine();
 
             // member section
@@ -485,9 +485,6 @@ namespace ProtocolCompiler
 
         public override void Build()
         {
-            if (!Group.GenCSharp)
-                return;
-
             // Build Parser class
             OpenOutFile(OutputFileName());
 

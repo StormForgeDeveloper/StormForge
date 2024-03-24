@@ -1,4 +1,4 @@
-﻿include "LocalTypes.fbs";
+﻿include "SFTypes.fbs";
 namespace SF.Flat.Generic;
 
 table GenericFailureCmd
@@ -7,10 +7,21 @@ table GenericFailureCmd
 
 table GenericFailureRes
 {
- 	result:uint32;
+ 	result:int;
 } // table GenericFailureRes
 
-root_type GenericFailureRes;
+table GenericTransactionCmd
+{
+ } // table GenericTransactionCmd
+
+table GenericTransactionRes
+{
+ 	result:int;
+	finished_transaction:TransactionID;
+	signature:string;
+} // table GenericTransactionRes
+
+root_type GenericTransactionRes;
 
 
 

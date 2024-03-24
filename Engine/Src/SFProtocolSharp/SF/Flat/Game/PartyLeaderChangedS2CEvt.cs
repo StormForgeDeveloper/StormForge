@@ -20,20 +20,11 @@ public struct PartyLeaderChangedS2CEvt : IFlatbufferObject
   public PartyLeaderChangedS2CEvt __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public ulong PartyUid { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-  public ulong NewLeaderId { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-
-  public static Offset<SF.Flat.Game.PartyLeaderChangedS2CEvt> CreatePartyLeaderChangedS2CEvt(FlatBufferBuilder builder,
-      ulong party_uid = 0,
-      ulong new_leader_id = 0) {
-    builder.StartTable(2);
-    PartyLeaderChangedS2CEvt.AddNewLeaderId(builder, new_leader_id);
-    PartyLeaderChangedS2CEvt.AddPartyUid(builder, party_uid);
-    return PartyLeaderChangedS2CEvt.EndPartyLeaderChangedS2CEvt(builder);
-  }
+  public SF.Flat.AccountID? NewLeaderId { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
 
   public static void StartPartyLeaderChangedS2CEvt(FlatBufferBuilder builder) { builder.StartTable(2); }
   public static void AddPartyUid(FlatBufferBuilder builder, ulong partyUid) { builder.AddUlong(0, partyUid, 0); }
-  public static void AddNewLeaderId(FlatBufferBuilder builder, ulong newLeaderId) { builder.AddUlong(1, newLeaderId, 0); }
+  public static void AddNewLeaderId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> newLeaderIdOffset) { builder.AddStruct(1, newLeaderIdOffset.Value, 0); }
   public static Offset<SF.Flat.Game.PartyLeaderChangedS2CEvt> EndPartyLeaderChangedS2CEvt(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.PartyLeaderChangedS2CEvt>(o);
@@ -47,7 +38,7 @@ static public class PartyLeaderChangedS2CEvtVerify
   {
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyField(tablePos, 4 /*PartyUid*/, 8 /*ulong*/, 8, false)
-      && verifier.VerifyField(tablePos, 6 /*NewLeaderId*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyField(tablePos, 6 /*NewLeaderId*/, 16 /*SF.Flat.AccountID*/, 8, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

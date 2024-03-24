@@ -19,7 +19,7 @@ public struct GameMatchedS2CEvt : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public GameMatchedS2CEvt __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ulong InsUid { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
+  public SF.Flat.GameInstanceUID? InsUid { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.GameInstanceUID?)(new SF.Flat.GameInstanceUID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public uint TimeStamp { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
   public SF.Flat.GameStateID GameState { get { int o = __p.__offset(8); return o != 0 ? (SF.Flat.GameStateID)__p.bb.GetSbyte(o + __p.bb_pos) : SF.Flat.GameStateID.None; } }
   public byte Day { get { int o = __p.__offset(10); return o != 0 ? __p.bb.Get(o + __p.bb_pos) : (byte)0; } }
@@ -48,41 +48,8 @@ public struct GameMatchedS2CEvt : IFlatbufferObject
   public ulong TotalGem { get { int o = __p.__offset(28); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
   public ulong TotalGameMoney { get { int o = __p.__offset(30); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
 
-  public static Offset<SF.Flat.Game.GameMatchedS2CEvt> CreateGameMatchedS2CEvt(FlatBufferBuilder builder,
-      ulong ins_uid = 0,
-      uint time_stamp = 0,
-      SF.Flat.GameStateID game_state = SF.Flat.GameStateID.None,
-      byte day = 0,
-      byte max_player = 0,
-      byte player_index = 0,
-      byte player_character = 0,
-      byte role = 0,
-      byte dead = 0,
-      VectorOffset chat_history_dataOffset = default(VectorOffset),
-      VectorOffset game_log_dataOffset = default(VectorOffset),
-      uint stamina = 0,
-      ulong total_gem = 0,
-      ulong total_game_money = 0) {
-    builder.StartTable(14);
-    GameMatchedS2CEvt.AddTotalGameMoney(builder, total_game_money);
-    GameMatchedS2CEvt.AddTotalGem(builder, total_gem);
-    GameMatchedS2CEvt.AddInsUid(builder, ins_uid);
-    GameMatchedS2CEvt.AddStamina(builder, stamina);
-    GameMatchedS2CEvt.AddGameLogData(builder, game_log_dataOffset);
-    GameMatchedS2CEvt.AddChatHistoryData(builder, chat_history_dataOffset);
-    GameMatchedS2CEvt.AddTimeStamp(builder, time_stamp);
-    GameMatchedS2CEvt.AddDead(builder, dead);
-    GameMatchedS2CEvt.AddRole(builder, role);
-    GameMatchedS2CEvt.AddPlayerCharacter(builder, player_character);
-    GameMatchedS2CEvt.AddPlayerIndex(builder, player_index);
-    GameMatchedS2CEvt.AddMaxPlayer(builder, max_player);
-    GameMatchedS2CEvt.AddDay(builder, day);
-    GameMatchedS2CEvt.AddGameState(builder, game_state);
-    return GameMatchedS2CEvt.EndGameMatchedS2CEvt(builder);
-  }
-
   public static void StartGameMatchedS2CEvt(FlatBufferBuilder builder) { builder.StartTable(14); }
-  public static void AddInsUid(FlatBufferBuilder builder, ulong insUid) { builder.AddUlong(0, insUid, 0); }
+  public static void AddInsUid(FlatBufferBuilder builder, Offset<SF.Flat.GameInstanceUID> insUidOffset) { builder.AddStruct(0, insUidOffset.Value, 0); }
   public static void AddTimeStamp(FlatBufferBuilder builder, uint timeStamp) { builder.AddUint(1, timeStamp, 0); }
   public static void AddGameState(FlatBufferBuilder builder, SF.Flat.GameStateID gameState) { builder.AddSbyte(2, (sbyte)gameState, 0); }
   public static void AddDay(FlatBufferBuilder builder, byte day) { builder.AddByte(3, day, 0); }
@@ -118,7 +85,7 @@ static public class GameMatchedS2CEvtVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*InsUid*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyField(tablePos, 4 /*InsUid*/, 4 /*SF.Flat.GameInstanceUID*/, 4, false)
       && verifier.VerifyField(tablePos, 6 /*TimeStamp*/, 4 /*uint*/, 4, false)
       && verifier.VerifyField(tablePos, 8 /*GameState*/, 1 /*SF.Flat.GameStateID*/, 1, false)
       && verifier.VerifyField(tablePos, 10 /*Day*/, 1 /*byte*/, 1, false)

@@ -108,21 +108,6 @@ namespace ProtocolCompiler
             get { return m_ParamResult; }
         }
 
-        private Parameter m_ParamRouteContext;
-        protected Parameter ParamRouteContext
-        {
-            get { return m_ParamRouteContext; }
-            set { m_ParamRouteContext = value; }
-        }
-
-        private Parameter m_ParamRouteHopCount;
-        protected Parameter ParamRouteHopCount
-        {
-            get { return m_ParamRouteHopCount; }
-        }
-
-
-        protected bool m_GenParameterRouteHopCount;
 
         private ProtocolsProtocolGroup m_group;
         public ProtocolsProtocolGroup Group
@@ -131,14 +116,7 @@ namespace ProtocolCompiler
             set { m_group = value; }
         }
 
-        // Generate parameter route hop count
-        public virtual bool GenParameterRouteHopCount
-        {
-            get { return m_group.GenParameterRouteHopCount && m_GenParameterRouteHopCount; }
-            set { m_GenParameterRouteHopCount = value; }
-        }
 
-        public virtual bool GenParameterRouteContext => m_group.GenParameterRouteContext;
         public virtual bool GenParameterContext => m_group.GenParameterContext;
 
         public bool IsCSharpNative { get; set; }
@@ -160,9 +138,6 @@ namespace ProtocolCompiler
             m_iIndent = 0;
             m_SectionStack = new Stack<string>();
 
-            // default turned off so that it will not generate route hop parameter if the group option is off
-            m_GenParameterRouteHopCount = true;
-
             m_SettingsOrg = settings;
 
 
@@ -178,18 +153,6 @@ namespace ProtocolCompiler
             m_ParamResult.Name = "Result";
             m_ParamResult.TypeName = "Result";
 
-            m_ParamRouteContext = new Parameter();
-            m_ParamRouteContext.IsArray = false;
-            m_ParamRouteContext.IsArraySpecified = false;
-            m_ParamRouteContext.Name = "RouteContext";
-            m_ParamRouteContext.TypeName = "RouteContext";
-
-            m_ParamRouteHopCount = new Parameter();
-            m_ParamRouteHopCount.IsArray = false;
-            m_ParamRouteHopCount.IsArraySpecified = false;
-            m_ParamRouteHopCount.Name = "RouteHopCount";
-            m_ParamRouteHopCount.TypeName = "uint16";
-
         }
 
         // virtual interface for build
@@ -200,6 +163,11 @@ namespace ProtocolCompiler
         public StreamWriter OutStream
         {
             get { return m_OutStream; }
+        }
+
+        protected void WriteLineWithIndent(string line)
+        {
+            MatchIndent(); OutStream.WriteLine(line);
         }
 
         protected void OpenOutFile( string OutputFileName )
@@ -411,12 +379,6 @@ namespace ProtocolCompiler
             int iNumOrg = parameter != null ? parameter.Length : 0;
             List<Parameter> newParams = new List<Parameter>();
 
-            // Route context need to be the first
-            if (GenParameterRouteContext && m_ParamRouteContext != null)
-            {
-                newParams.Add(m_ParamRouteContext);
-            }
-
             if (MsgType.Cmd == type)
             {
                 if (GenParameterContext)
@@ -431,11 +393,6 @@ namespace ProtocolCompiler
                     newParams.Add(m_ParamContext);
                 }
                 newParams.Add(m_ParamResult);
-            }
-
-            if (GenParameterRouteHopCount && type != MsgType.Res)
-            {
-                newParams.Add(m_ParamRouteHopCount);
             }
 
             for (int iOrgParam = 0; iOrgParam < iNumOrg; iParam++, iOrgParam++)
@@ -460,9 +417,13 @@ namespace ProtocolCompiler
         }
 
 
-        public virtual string PolicyClassName
+        public virtual string RPCSendAdapterClassName
         {
-            get { return "NetPolicy" + Group.Name; }
+            get { return $"{Group.Name}RPCSendAdapter"; }
+        }
+        public virtual string SvrRPCSendAdapterClassName
+        {
+            get { return $"{Group.Name}SvrRPCSendAdapter"; }
         }
 
         public string StrTypeString(Parameter param)

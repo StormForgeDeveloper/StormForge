@@ -19,14 +19,8 @@ public struct RequestPlayerStatusUpdateCmd : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public RequestPlayerStatusUpdateCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ulong TargetPlayerId(int j) { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(__p.__vector(o) + j * 8) : (ulong)0; }
+  public SF.Flat.AccountID? TargetPlayerId(int j) { int o = __p.__offset(4); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(__p.__vector(o) + j * 16, __p.bb) : null; }
   public int TargetPlayerIdLength { get { int o = __p.__offset(4); return o != 0 ? __p.__vector_len(o) : 0; } }
-#if ENABLE_SPAN_T
-  public Span<ulong> GetTargetPlayerIdBytes() { return __p.__vector_as_span<ulong>(4, 8); }
-#else
-  public ArraySegment<byte>? GetTargetPlayerIdBytes() { return __p.__vector_as_arraysegment(4); }
-#endif
-  public ulong[] GetTargetPlayerIdArray() { return __p.__vector_as_array<ulong>(4); }
 
   public static Offset<SF.Flat.Game.RequestPlayerStatusUpdateCmd> CreateRequestPlayerStatusUpdateCmd(FlatBufferBuilder builder,
       VectorOffset target_player_idOffset = default(VectorOffset)) {
@@ -37,11 +31,7 @@ public struct RequestPlayerStatusUpdateCmd : IFlatbufferObject
 
   public static void StartRequestPlayerStatusUpdateCmd(FlatBufferBuilder builder) { builder.StartTable(1); }
   public static void AddTargetPlayerId(FlatBufferBuilder builder, VectorOffset targetPlayerIdOffset) { builder.AddOffset(0, targetPlayerIdOffset.Value, 0); }
-  public static VectorOffset CreateTargetPlayerIdVector(FlatBufferBuilder builder, ulong[] data) { builder.StartVector(8, data.Length, 8); for (int i = data.Length - 1; i >= 0; i--) builder.AddUlong(data[i]); return builder.EndVector(); }
-  public static VectorOffset CreateTargetPlayerIdVectorBlock(FlatBufferBuilder builder, ulong[] data) { builder.StartVector(8, data.Length, 8); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateTargetPlayerIdVectorBlock(FlatBufferBuilder builder, ArraySegment<ulong> data) { builder.StartVector(8, data.Count, 8); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateTargetPlayerIdVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<ulong>(dataPtr, sizeInBytes); return builder.EndVector(); }
-  public static void StartTargetPlayerIdVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(8, numElems, 8); }
+  public static void StartTargetPlayerIdVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(16, numElems, 8); }
   public static Offset<SF.Flat.Game.RequestPlayerStatusUpdateCmd> EndRequestPlayerStatusUpdateCmd(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.RequestPlayerStatusUpdateCmd>(o);
@@ -54,7 +44,7 @@ static public class RequestPlayerStatusUpdateCmdVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyVectorOfData(tablePos, 4 /*TargetPlayerId*/, 8 /*ulong*/, false)
+      && verifier.VerifyVectorOfData(tablePos, 4 /*TargetPlayerId*/, 16 /*SF.Flat.AccountID*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

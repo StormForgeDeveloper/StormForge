@@ -19,11 +19,11 @@ public struct BuyShopItemRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public BuyShopItemRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public uint Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
+  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
   public uint ShopItemId { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
 
   public static Offset<SF.Flat.Game.BuyShopItemRes> CreateBuyShopItemRes(FlatBufferBuilder builder,
-      uint result = 0,
+      int result = 0,
       uint shop_item_id = 0) {
     builder.StartTable(2);
     BuyShopItemRes.AddShopItemId(builder, shop_item_id);
@@ -32,7 +32,7 @@ public struct BuyShopItemRes : IFlatbufferObject
   }
 
   public static void StartBuyShopItemRes(FlatBufferBuilder builder) { builder.StartTable(2); }
-  public static void AddResult(FlatBufferBuilder builder, uint result) { builder.AddUint(0, result, 0); }
+  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
   public static void AddShopItemId(FlatBufferBuilder builder, uint shopItemId) { builder.AddUint(1, shopItemId, 0); }
   public static Offset<SF.Flat.Game.BuyShopItemRes> EndBuyShopItemRes(FlatBufferBuilder builder) {
     int o = builder.EndTable();
@@ -46,7 +46,7 @@ static public class BuyShopItemResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
       && verifier.VerifyField(tablePos, 6 /*ShopItemId*/, 4 /*uint*/, 4, false)
       && verifier.VerifyTableEnd(tablePos);
   }

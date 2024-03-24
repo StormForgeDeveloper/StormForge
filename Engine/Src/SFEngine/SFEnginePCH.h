@@ -52,6 +52,7 @@
 #include "Service/SFEngineServices.h"
 #include "Service/SFEngineService.h"
 #include "Types/SFEngineTypeSerialization.h"
+#include "Util/SFToStringEngineTypes.h"
 
 #include "ResultCode/SFResultCodeEngine.h"
 #include "ResultCode/SFResultCodeLibrary.h"

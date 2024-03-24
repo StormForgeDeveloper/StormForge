@@ -13,13 +13,13 @@ Telemetry Protocol
 namespace SF::Message::Telemetry
 
 
-# Protocol interface class NetPolicyTelemetry
+# Protocol interface class TelemetryRPCSendAdapter
 ## PostEvent Request
 Post telemetry event
 
 1. Command interface
 
-        Result PostEventCmd(const TransactionID &InTransactionID, const char* InEventName, const uint64_t &InTimeStamp, const char* InAppID, const char* InMachineID, const uint32_t &InEventID, const AccountID &InAccountID, const uint8 &InIsPlayEvent, const Array<uint8_t>& InSessionID, const Array<NamedVariable>& InAttributes)
+        Result PostEventCmd(const TransactionID &InTransactionID, const char* InEventName, const uint64_t &InTimeStamp, const char* InAppID, const char* InMachineID, const uint32_t &InEventID, const AccountID &InAccountID, const bool &InIsPlayEvent, const Array<uint8_t>& InSessionID, const Array<NamedVariable>& InAttributes)
 
 		- TransactionID: type:TransactionID, 
 

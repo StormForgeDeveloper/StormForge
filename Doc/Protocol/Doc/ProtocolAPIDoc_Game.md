@@ -13,7 +13,7 @@ Game Server Protocol. Interface the game client can call to the server.
 namespace SF::Message::Game
 
 
-# Protocol interface class NetPolicyGame
+# Protocol interface class GameRPCSendAdapter
 ## HeartbeatC2SEvt
 Client heartbeat
 
@@ -43,22 +43,22 @@ C++: Cast message to JoinGameServerRes to access values
 		- TransactionID: type:TransactionID, 
 		- Result: type:Result, 
 		- NickName: type:String, Nickname of the player
-		- GameUID: type:GameInsUID, Game instance UID. If the player is in a game, this value will have player's game instance id
+		- GameUID: type:GameInstanceUID, Game instance UID. If the player is in a game, this value will have player's game instance id
 		- PartyUID: type:PartyUID, PartyUID. If the player is in a party
 		- PartyLeaderID: type:AccountID, PlayerID, for now, PlayerID is same to AccountID
 		- MatchingTicket: type:MatchingQueueTicket, Matching queue ticket
 
 
 ## GetAchievementStats Request
-player complition statues
+player completion statues
 
 1. Command interface
 
-        Result GetAchievementStatsCmd(const TransactionID &InTransactionID, const uint32_t &InCharacterID, const uint32_t &InAchievementStatIDFrom, const uint32_t &InAchievementStatIDTo)
+        Result GetAchievementStatsCmd(const TransactionID &InTransactionID, const CharacterID &InCharacterID, const uint32_t &InAchievementStatIDFrom, const uint32_t &InAchievementStatIDTo)
 
 		- TransactionID: type:TransactionID, 
 
-		- CharacterID: type:uint32, Character Id to request
+		- CharacterID: type:CharacterID, Character Id to request
 
 		- AchievementStatIDFrom: type:uint32, Beginning of achievementStat Id range to query
 
@@ -807,11 +807,11 @@ Join to a game instance
 
 1. Command interface
 
-        Result JoinGameInstanceCmd(const TransactionID &InTransactionID, const uint64_t &InInsUID)
+        Result JoinGameInstanceCmd(const TransactionID &InTransactionID, const GameInstanceUID &InInsUID)
 
 		- TransactionID: type:TransactionID, 
 
-		- InsUID: type:GameInsUID, Game instance ID to join
+		- InsUID: type:GameInstanceUID, Game instance ID to join
 
 2. Result interface
 
@@ -820,7 +820,7 @@ C++: Cast message to JoinGameInstanceRes to access values
 
 		- TransactionID: type:TransactionID, 
 		- Result: type:Result, 
-		- InsUID: type:GameInsUID, Game instance ID
+		- InsUID: type:GameInstanceUID, Game instance ID
 		- ServerPublicAddress: type:String, Game instance address
 
 
@@ -829,11 +829,11 @@ Leave game instance
 
 1. Command interface
 
-        Result LeaveGameInstanceCmd(const TransactionID &InTransactionID, const uint64_t &InInsUID)
+        Result LeaveGameInstanceCmd(const TransactionID &InTransactionID, const GameInstanceUID &InInsUID)
 
 		- TransactionID: type:TransactionID, 
 
-		- InsUID: type:GameInsUID, Game instance ID to join
+		- InsUID: type:GameInstanceUID, Game instance ID to join
 
 2. Result interface
 
@@ -872,11 +872,11 @@ Search game instance
 
 1. Command interface
 
-        Result GetCharacterDataInGameInstanceCmd(const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID)
+        Result GetCharacterDataInGameInstanceCmd(const TransactionID &InTransactionID, const GameInstanceUID &InGameInstanceUID, const PlayerID &InPlayerID)
 
 		- TransactionID: type:TransactionID, 
 
-		- GameInsUID: type:GameInsUID, Game instance UID
+		- GameInstanceUID: type:GameInstanceUID, Game instance UID
 
 		- PlayerID: type:PlayerID, Player Id to get
 
@@ -918,9 +918,9 @@ C++: Cast message to RequestGameMatchRes to access values
 ## GameMatchedS2CEvt
 Game matched
 
-        Result GameMatchedS2CEvt(const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData, const uint32_t &InStamina, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney)
+        Result GameMatchedS2CEvt(const GameInstanceUID &InInsUID, const uint32_t &InTimeStamp, const GameStateID &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData, const uint32_t &InStamina, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney)
 
-		- OutInInsUID: GameInsUID type. Matched game instance ID
+		- OutInInsUID: GameInstanceUID type. Matched game instance ID
 
 		- OutInTimeStamp: uint32 type. Time stamp in UTC
 
@@ -1196,7 +1196,7 @@ Join
 
 1. Command interface
 
-        Result JoinChatChannelCmd(const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode)
+        Result JoinChatChannelCmd(const TransactionID &InTransactionID, const EntityUID &InChatUID, const AccountID &InInviterID, const char* InPasscode)
 
 		- TransactionID: type:TransactionID, 
 
@@ -1220,7 +1220,7 @@ C++: Cast message to JoinChatChannelRes to access values
 ## ChatChannelPlayerJoinedS2CEvt
 Player Joined event
 
-        Result ChatChannelPlayerJoinedS2CEvt(const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer)
+        Result ChatChannelPlayerJoinedS2CEvt(const EntityUID &InChatUID, const PlayerInformation &InJoinedPlayer)
 
 		- OutInChatUID: EntityUID type. ChatChannel UID
 
@@ -1230,7 +1230,7 @@ Player Joined event
 ## ChatChannelLeaderChangedS2CEvt
 ChatChannel leader changed event
 
-        Result ChatChannelLeaderChangedS2CEvt(const uint64_t &InChatUID, const AccountID &InNewLeaderID)
+        Result ChatChannelLeaderChangedS2CEvt(const EntityUID &InChatUID, const AccountID &InNewLeaderID)
 
 		- OutInChatUID: EntityUID type. ChatChannel UID
 
@@ -1242,7 +1242,7 @@ Leave ChatChannel command
 
 1. Command interface
 
-        Result LeaveChatChannelCmd(const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID)
+        Result LeaveChatChannelCmd(const TransactionID &InTransactionID, const EntityUID &InChatUID, const AccountID &InPlayerID)
 
 		- TransactionID: type:TransactionID, 
 
@@ -1262,7 +1262,7 @@ C++: Cast message to LeaveChatChannelRes to access values
 ## ChatChannelPlayerLeftS2CEvt
 ChatChannel Player left event
 
-        Result ChatChannelPlayerLeftS2CEvt(const uint64_t &InChatUID, const AccountID &InLeftPlayerID)
+        Result ChatChannelPlayerLeftS2CEvt(const EntityUID &InChatUID, const AccountID &InLeftPlayerID)
 
 		- OutInChatUID: EntityUID type. ChatChannel ID
 
@@ -1274,7 +1274,7 @@ Kick player from the ChatChannel
 
 1. Command interface
 
-        Result ChatChannelKickPlayerCmd(const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick)
+        Result ChatChannelKickPlayerCmd(const TransactionID &InTransactionID, const EntityUID &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick)
 
 		- TransactionID: type:TransactionID, 
 
@@ -1296,7 +1296,7 @@ C++: Cast message to ChatChannelKickPlayerRes to access values
 ## ChatChannelPlayerKickedS2CEvt
 ChatChannel Player kicked message
 
-        Result ChatChannelPlayerKickedS2CEvt(const uint64_t &InChatUID, const AccountID &InKickedPlayerID)
+        Result ChatChannelPlayerKickedS2CEvt(const EntityUID &InChatUID, const AccountID &InKickedPlayerID)
 
 		- OutInChatUID: EntityUID type. ChatChannel UID
 
@@ -1308,7 +1308,7 @@ Chat channel sending chatting message
 
 1. Command interface
 
-        Result ChatChannelChatMessageCmd(const TransactionID &InTransactionID, const uint64_t &InChatUID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
+        Result ChatChannelChatMessageCmd(const TransactionID &InTransactionID, const EntityUID &InChatUID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
 
 		- TransactionID: type:TransactionID, 
 
@@ -1399,7 +1399,7 @@ C++: Cast message to CreateCharacterRes to access values
 
 		- TransactionID: type:TransactionID, 
 		- Result: type:Result, 
-		- CharacterID: type:uint32, Created character ID
+		- CharacterID: type:CharacterID, Created character ID
 
 
 ## DeleteCharacter Request
@@ -1407,11 +1407,11 @@ Delete character
 
 1. Command interface
 
-        Result DeleteCharacterCmd(const TransactionID &InTransactionID, const uint32_t &InCharacterID)
+        Result DeleteCharacterCmd(const TransactionID &InTransactionID, const CharacterID &InCharacterID)
 
 		- TransactionID: type:TransactionID, 
 
-		- CharacterID: type:uint32, Character ID to remove
+		- CharacterID: type:CharacterID, Character ID to remove
 
 2. Result interface
 
@@ -1446,11 +1446,11 @@ C++: Cast message to GetCharacterListRes to access values
 
 1. Command interface
 
-        Result GetCharacterDataCmd(const TransactionID &InTransactionID, const uint32_t &InCharacterID)
+        Result GetCharacterDataCmd(const TransactionID &InTransactionID, const CharacterID &InCharacterID)
 
 		- TransactionID: type:TransactionID, 
 
-		- CharacterID: type:uint32, Character ID to get
+		- CharacterID: type:CharacterID, Character ID to get
 
 2. Result interface
 
@@ -1468,11 +1468,11 @@ Select character
 
 1. Command interface
 
-        Result SelectCharacterCmd(const TransactionID &InTransactionID, const uint32_t &InCharacterID)
+        Result SelectCharacterCmd(const TransactionID &InTransactionID, const CharacterID &InCharacterID)
 
 		- TransactionID: type:TransactionID, 
 
-		- CharacterID: type:uint32, Character ID to select
+		- CharacterID: type:CharacterID, Character ID to select
 
 2. Result interface
 
@@ -1481,7 +1481,7 @@ C++: Cast message to SelectCharacterRes to access values
 
 		- TransactionID: type:TransactionID, 
 		- Result: type:Result, 
-		- CharacterID: type:uint32, Selected Character ID
+		- CharacterID: type:CharacterID, Selected Character ID
 		- Attributes: type:VariableTable, Character attributes
 
 

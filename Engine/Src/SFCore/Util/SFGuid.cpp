@@ -13,11 +13,19 @@
 
 #include "SFCorePCH.h"
 #include "Util/SFGuid.h"
+#include "Util/SFGuidHelper.h"
 
 
 namespace SF
 {
+    IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Guid);
 
+    Result _ToString(ToStringContext& context, const Guid& value)
+    {
+        context.OutStream.BuffLen -= (int)value.ToString(context.OutStream.pBuffer, context.OutStream.BuffLen);
+
+        return ResultCode::SUCCESS;
+    }
 
     /*
       Converts a 128-bits unsigned int to an Guid string representation.

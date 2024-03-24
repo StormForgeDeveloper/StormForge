@@ -18,11 +18,9 @@
 #include "Net/SFNetSystem.h"
 #include "ResultCode/SFResultCodeEngine.h"
 #include "Container/SFDoubleLinkedList.h"
+#include "MessageBus/SFMessageHeader.h"
 
 namespace SF {
-
-	struct MessageHeader;
-
 namespace Net {
 
 

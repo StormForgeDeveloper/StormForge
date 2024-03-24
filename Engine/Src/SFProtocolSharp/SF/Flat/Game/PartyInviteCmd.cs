@@ -19,17 +19,10 @@ public struct PartyInviteCmd : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public PartyInviteCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ulong InviteTargetId { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-
-  public static Offset<SF.Flat.Game.PartyInviteCmd> CreatePartyInviteCmd(FlatBufferBuilder builder,
-      ulong invite_target_id = 0) {
-    builder.StartTable(1);
-    PartyInviteCmd.AddInviteTargetId(builder, invite_target_id);
-    return PartyInviteCmd.EndPartyInviteCmd(builder);
-  }
+  public SF.Flat.AccountID? InviteTargetId { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
 
   public static void StartPartyInviteCmd(FlatBufferBuilder builder) { builder.StartTable(1); }
-  public static void AddInviteTargetId(FlatBufferBuilder builder, ulong inviteTargetId) { builder.AddUlong(0, inviteTargetId, 0); }
+  public static void AddInviteTargetId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> inviteTargetIdOffset) { builder.AddStruct(0, inviteTargetIdOffset.Value, 0); }
   public static Offset<SF.Flat.Game.PartyInviteCmd> EndPartyInviteCmd(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.PartyInviteCmd>(o);
@@ -42,7 +35,7 @@ static public class PartyInviteCmdVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*InviteTargetId*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyField(tablePos, 4 /*InviteTargetId*/, 16 /*SF.Flat.AccountID*/, 8, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

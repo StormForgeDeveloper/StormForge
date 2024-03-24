@@ -19,17 +19,17 @@ public struct RemoveWhiteboardSharingLogEntryRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public RemoveWhiteboardSharingLogEntryRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public uint Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
+  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
 
   public static Offset<SF.Flat.PlayInstance.RemoveWhiteboardSharingLogEntryRes> CreateRemoveWhiteboardSharingLogEntryRes(FlatBufferBuilder builder,
-      uint result = 0) {
+      int result = 0) {
     builder.StartTable(1);
     RemoveWhiteboardSharingLogEntryRes.AddResult(builder, result);
     return RemoveWhiteboardSharingLogEntryRes.EndRemoveWhiteboardSharingLogEntryRes(builder);
   }
 
   public static void StartRemoveWhiteboardSharingLogEntryRes(FlatBufferBuilder builder) { builder.StartTable(1); }
-  public static void AddResult(FlatBufferBuilder builder, uint result) { builder.AddUint(0, result, 0); }
+  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
   public static Offset<SF.Flat.PlayInstance.RemoveWhiteboardSharingLogEntryRes> EndRemoveWhiteboardSharingLogEntryRes(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.PlayInstance.RemoveWhiteboardSharingLogEntryRes>(o);
@@ -42,7 +42,7 @@ static public class RemoveWhiteboardSharingLogEntryResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

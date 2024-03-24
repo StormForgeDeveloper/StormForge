@@ -29,103 +29,103 @@ template class SF::SharedPointerT<SF::MessageData>;
 namespace SF
 {
 
-    Result MessageHeader::ValidateChecksum()
-    {
-        ArrayView<uint8_t> payload = GetPayload();
+    //Result MessageHeader::ValidateChecksum()
+    //{
+    //    ArrayView<uint8_t> payload = GetPayload();
 
-        if (Length == 0)
-        {
-            Assert(0);
-            return ResultCode::FAIL;
-        }
+    //    if (Length == 0)
+    //    {
+    //        Assert(0);
+    //        return ResultCode::FAIL;
+    //    }
 
-        // Nothing to check
-        if (payload.size() == 0)
-            return ResultCode::SUCCESS;
+    //    // Nothing to check
+    //    if (payload.size() == 0)
+    //        return ResultCode::SUCCESS;
 
-        uint16_t ExpectedCrc32 = (uint16_t)Hasher_Crc32().Crc32(0, payload.data(), payload.size());
-        if (ExpectedCrc32 == 0) ExpectedCrc32 = ~ExpectedCrc32;
+    //    uint16_t ExpectedCrc32 = (uint16_t)Hasher_Crc32().Crc32(0, payload.data(), payload.size());
+    //    if (ExpectedCrc32 == 0) ExpectedCrc32 = ~ExpectedCrc32;
 
-        if (ExpectedCrc32 != Crc32)
-            return ResultCode::IO_INVALID_MESSAGE_CHECKSUM;
+    //    if (ExpectedCrc32 != Crc32)
+    //        return ResultCode::IO_INVALID_MESSAGE_CHECKSUM;
 
-        return ResultCode::SUCCESS;
-    }
+    //    return ResultCode::SUCCESS;
+    //}
 
-    Result MessageHeader::ValidateChecksumNDecrypt()
-    {
+    //Result MessageHeader::ValidateChecksumNDecrypt()
+    //{
 
-        if (Length == 0)
-        {
-            return ResultCode::SUCCESS_FALSE;
-        }
+    //    if (Length == 0)
+    //    {
+    //        return ResultCode::SUCCESS_FALSE;
+    //    }
 
-        ArrayView<uint8_t> payload = GetPayload();
+    //    ArrayView<uint8_t> payload = GetPayload();
 
-        // Nothing to check
-        if (payload.size() == 0)
-        {
-            return ResultCode::SUCCESS;
-        }
+    //    // Nothing to check
+    //    if (payload.size() == 0)
+    //    {
+    //        return ResultCode::SUCCESS;
+    //    }
 
-        uint16_t ExpectedCrc32 = (uint16_t)Util::Crc32NDecrypt(payload.size(), payload.data());
-        if (ExpectedCrc32 == 0) ExpectedCrc32 = ~ExpectedCrc32;
+    //    uint16_t ExpectedCrc32 = (uint16_t)Util::Crc32NDecrypt(payload.size(), payload.data());
+    //    if (ExpectedCrc32 == 0) ExpectedCrc32 = ~ExpectedCrc32;
 
-        if (ExpectedCrc32 != Crc32)
-            return ResultCode::IO_INVALID_MESSAGE_CHECKSUM;
+    //    if (ExpectedCrc32 != Crc32)
+    //        return ResultCode::IO_INVALID_MESSAGE_CHECKSUM;
 
-        return ResultCode::SUCCESS;
-    }
+    //    return ResultCode::SUCCESS;
+    //}
 
-    // Update checksum
-    void MessageHeader::UpdateChecksum()
-    {
-        ArrayView<uint8_t> payload = GetPayload();
+    //// Update checksum
+    //void MessageHeader::UpdateChecksum()
+    //{
+    //    ArrayView<uint8_t> payload = GetPayload();
 
-        if (Length == 0
-            || payload.size() == 0)
-        {
-            Crc32 = 0;
-            return;
-        }
-        else
-        {
-            Crc32 = Hasher_Crc32().Crc32(0, payload.data(), payload.size());
-            if (Crc32 == 0)
-                Crc32 = ~Crc32;
-        }
-    }
+    //    if (Length == 0
+    //        || payload.size() == 0)
+    //    {
+    //        Crc32 = 0;
+    //        return;
+    //    }
+    //    else
+    //    {
+    //        Crc32 = Hasher_Crc32().Crc32(0, payload.data(), payload.size());
+    //        if (Crc32 == 0)
+    //            Crc32 = ~Crc32;
+    //    }
+    //}
 
-    // Update checksum
-    void MessageHeader::UpdateChecksumNEncrypt()
-    {
-        ArrayView<uint8_t> payload = GetPayload();
+    //// Update checksum
+    //void MessageHeader::UpdateChecksumNEncrypt()
+    //{
+    //    ArrayView<uint8_t> payload = GetPayload();
 
-        if (Length == 0
-            || payload.size() == 0)
-        {
-            Crc32 = 0;
-        }
-        else
-        {
-            Crc32 = Util::Crc32NEncrypt(payload.size(), payload.data());
-            if (Crc32 == 0)
-                Crc32 = ~Crc32;
-        }
+    //    if (Length == 0
+    //        || payload.size() == 0)
+    //    {
+    //        Crc32 = 0;
+    //    }
+    //    else
+    //    {
+    //        Crc32 = Util::Crc32NEncrypt(payload.size(), payload.data());
+    //        if (Crc32 == 0)
+    //            Crc32 = ~Crc32;
+    //    }
 
-        assert(Crc32 != 0 || payload.size() == 0);
-    }
+    //    assert(Crc32 != 0 || payload.size() == 0);
+    //}
 
-    MessageHeader* MessageHeader::Clone(IHeap& heap)
-    {
-        MessageHeader* pNewHeader = reinterpret_cast<MessageHeader*>(heap.Alloc(Length));
-        if (pNewHeader)
-        {
-            memcpy(pNewHeader, this, Length);
-        }
+    //MessageHeader* MessageHeader::Clone(IHeap& heap)
+    //{
+    //    MessageHeader* pNewHeader = reinterpret_cast<MessageHeader*>(heap.Alloc(Length));
+    //    if (pNewHeader)
+    //    {
+    //        memcpy(pNewHeader, this, Length);
+    //    }
 
-        return pNewHeader;
-    }
+    //    return pNewHeader;
+    //}
 
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -146,7 +146,7 @@ namespace SF
 		if( pData )
 		{
 			memcpy( m_pMsgHeader, pData, uiMsgBufSize );
-			assert( m_pMsgHeader->Length == uiMsgBufSize );
+			assert( m_pMsgHeader->MessageSize == uiMsgBufSize );
 		}
 		else
 		{
@@ -157,6 +157,7 @@ namespace SF
 
 		GetMessageHeader()->SetIDNLen(uiMsgID, uiMsgBufSize);
 	}
+
 
 	MessageData::~MessageData()
 	{
@@ -169,7 +170,7 @@ namespace SF
 
 	uint MessageData::GetMessageSize() const
 	{
-		return m_pMsgHeader ? m_pMsgHeader->Length : 0;
+		return m_pMsgHeader ? m_pMsgHeader->MessageSize : 0;
 	}
 
 	void MessageData::AssignSequence( uint sequence )
@@ -191,7 +192,7 @@ namespace SF
 
     MessageData* MessageData::NewMessage(IHeap& heap, const MessageHeader* pHeader)
     {
-        return NewMessage(heap, pHeader->GetMessageID(), pHeader->Length, reinterpret_cast<const uint8_t*>(pHeader));
+        return NewMessage(heap, pHeader->GetMessageID(), pHeader->MessageSize, reinterpret_cast<const uint8_t*>(pHeader));
     }
 
 	// Initialize message buffer
@@ -228,10 +229,10 @@ namespace SF
 
 	MessageData* MessageData::Clone(IHeap& memoryManager)
 	{
-		if( m_pMsgHeader == nullptr || m_pMsgHeader->Length == 0 )
+		if( m_pMsgHeader == nullptr || m_pMsgHeader->MessageSize == 0 )
 			return nullptr;
 
-		MessageData* pMessage = NewMessage(memoryManager, m_pMsgHeader->GetMessageID().ID, m_pMsgHeader->Length, (uint8_t*)m_pMsgHeader );
+		MessageData* pMessage = NewMessage(memoryManager, m_pMsgHeader->GetMessageID().ID, m_pMsgHeader->MessageSize, (uint8_t*)m_pMsgHeader );
 		pMessage->GetMessageHeader()->SetSequence(0);
 
 		return pMessage;

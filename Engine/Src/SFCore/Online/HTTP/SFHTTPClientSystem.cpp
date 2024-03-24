@@ -61,7 +61,6 @@ namespace SF
     {
         Result hr;
         BIO* cbio = BIO_new_mem_buf((void*)certString.data(), (int)certString.GetLength());
-        int i;
         STACK_OF(X509_INFO)* inf {};
 
         if (!cbio) {

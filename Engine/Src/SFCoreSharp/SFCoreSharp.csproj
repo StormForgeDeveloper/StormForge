@@ -19,4 +19,8 @@
     <Folder Include="Properties\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\3rdParties\src\flatbuffer\flatbuffers\net\FlatBuffers\Google.FlatBuffers.csproj" />
+  </ItemGroup>
+
 </Project>

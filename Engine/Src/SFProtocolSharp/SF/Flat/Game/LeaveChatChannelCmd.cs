@@ -19,21 +19,12 @@ public struct LeaveChatChannelCmd : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public LeaveChatChannelCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ulong ChatUid { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-  public ulong PlayerId { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-
-  public static Offset<SF.Flat.Game.LeaveChatChannelCmd> CreateLeaveChatChannelCmd(FlatBufferBuilder builder,
-      ulong chat_uid = 0,
-      ulong player_id = 0) {
-    builder.StartTable(2);
-    LeaveChatChannelCmd.AddPlayerId(builder, player_id);
-    LeaveChatChannelCmd.AddChatUid(builder, chat_uid);
-    return LeaveChatChannelCmd.EndLeaveChatChannelCmd(builder);
-  }
+  public SF.Flat.EntityUID? ChatUid { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.EntityUID?)(new SF.Flat.EntityUID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public SF.Flat.AccountID? PlayerId { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
 
   public static void StartLeaveChatChannelCmd(FlatBufferBuilder builder) { builder.StartTable(2); }
-  public static void AddChatUid(FlatBufferBuilder builder, ulong chatUid) { builder.AddUlong(0, chatUid, 0); }
-  public static void AddPlayerId(FlatBufferBuilder builder, ulong playerId) { builder.AddUlong(1, playerId, 0); }
+  public static void AddChatUid(FlatBufferBuilder builder, Offset<SF.Flat.EntityUID> chatUidOffset) { builder.AddStruct(0, chatUidOffset.Value, 0); }
+  public static void AddPlayerId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> playerIdOffset) { builder.AddStruct(1, playerIdOffset.Value, 0); }
   public static Offset<SF.Flat.Game.LeaveChatChannelCmd> EndLeaveChatChannelCmd(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.LeaveChatChannelCmd>(o);
@@ -46,8 +37,8 @@ static public class LeaveChatChannelCmdVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*ChatUid*/, 8 /*ulong*/, 8, false)
-      && verifier.VerifyField(tablePos, 6 /*PlayerId*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyField(tablePos, 4 /*ChatUid*/, 4 /*SF.Flat.EntityUID*/, 4, false)
+      && verifier.VerifyField(tablePos, 6 /*PlayerId*/, 16 /*SF.Flat.AccountID*/, 8, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

@@ -19,17 +19,10 @@ public struct SelectCharacterCmd : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public SelectCharacterCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public uint CharacterId { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
-
-  public static Offset<SF.Flat.Game.SelectCharacterCmd> CreateSelectCharacterCmd(FlatBufferBuilder builder,
-      uint character_id = 0) {
-    builder.StartTable(1);
-    SelectCharacterCmd.AddCharacterId(builder, character_id);
-    return SelectCharacterCmd.EndSelectCharacterCmd(builder);
-  }
+  public SF.Flat.CharacterID? CharacterId { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.CharacterID?)(new SF.Flat.CharacterID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
 
   public static void StartSelectCharacterCmd(FlatBufferBuilder builder) { builder.StartTable(1); }
-  public static void AddCharacterId(FlatBufferBuilder builder, uint characterId) { builder.AddUint(0, characterId, 0); }
+  public static void AddCharacterId(FlatBufferBuilder builder, Offset<SF.Flat.CharacterID> characterIdOffset) { builder.AddStruct(0, characterIdOffset.Value, 0); }
   public static Offset<SF.Flat.Game.SelectCharacterCmd> EndSelectCharacterCmd(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.SelectCharacterCmd>(o);
@@ -42,7 +35,7 @@ static public class SelectCharacterCmdVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*CharacterId*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*CharacterId*/, 16 /*SF.Flat.CharacterID*/, 8, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

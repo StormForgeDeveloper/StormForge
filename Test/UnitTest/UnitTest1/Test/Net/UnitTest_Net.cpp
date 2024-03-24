@@ -15,6 +15,7 @@
 #include "Multithread/SFSystemSynchronization.h"
 #include "Multithread/SFThread.h"
 #include "Container/SFDualSortedMap.h"
+#include "Container/SFCircularPageQueue.h"
 #include "Util/SFTimeUtil.h"
 #include "Util/SFRandom.h"
 #include "Util/SFStringCrc32.h"
@@ -25,7 +26,11 @@
 #include "ResultCode/SFResultCodeLibrary.h"
 #include "ResultCode/SFResultCodeEngine.h"
 #include "UnitTest_Net.h"
-#include "Protocol/PlayInstanceMsgClass.h"
+#include "Protocol/PlayInstanceMessageID.h"
+#include "Protocol/PlayInstanceRPCSendAdapter.h"
+#include "Util/SFGuidHelper.h"
+#include "Variable/SFVariableTable.h"
+#include "Actor/Movement/SFActorMovement.h"
 
 using ::testing::EmptyTestEventListener;
 using ::testing::InitGoogleTest;
@@ -36,6 +41,65 @@ using ::testing::TestInfo;
 using ::testing::TestPartResult;
 using ::testing::UnitTest; 
 using namespace SF;
+
+
+MessageDataPtr NetTest::NewMessage(IHeap& memoryManager, uint32_t sequenceID)
+{
+    SF::PlayInstanceSvrRPCSendAdapter(m_MemoryEndpoint.get(), m_MemoryEndpoint->GetFlatBuilder()).ZoneChatS2CEvt(0, m_GuidGen.NewGuid(), 2, SF::VariableTable(), "11");
+    MessageHeader* pResult = (MessageHeader*)m_MemoryEndpoint->GetLastMessage();
+    pResult->SetSequence(sequenceID);
+
+    return MessageData::NewMessage(GetSystemHeap(), pResult);
+}
+
+MessageDataPtr NetTest::NewMessage(IHeap& memoryManager)
+{
+    SF::PlayInstanceSvrRPCSendAdapter(m_MemoryEndpoint.get(), m_MemoryEndpoint->GetFlatBuilder()).ZoneChatS2CEvt(0, m_GuidGen.NewGuid(), 2, SF::VariableTable(), "11");
+    MessageHeader* pResult = (MessageHeader*)m_MemoryEndpoint->GetLastMessage();
+
+    return MessageData::NewMessage(GetSystemHeap(), pResult);
+}
+
+
+class TestInMemoryEndpoint : public MessageEndpoint
+{
+private:
+
+    CircularPageQueue<const MessageHeader*> MessageQueue;
+
+public:
+
+    TestInMemoryEndpoint()
+    {
+
+    }
+
+    ~TestInMemoryEndpoint()
+    {
+        const MessageHeader* pMessage{};
+        while (MessageQueue.Dequeue(pMessage))
+        {
+            GetSystemHeap().Free((void*)pMessage);
+        }
+    }
+
+    Result DequeueMessage(const MessageHeader* &pMessage)
+    {
+        return MessageQueue.Dequeue(pMessage);
+    }
+
+    virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) override
+    {
+        return messageEndpoint.MessageServer == "localhost" && messageEndpoint.Channel == "0";
+    }
+
+    virtual Result SendMsg(const MessageHeader* messageData) override
+    {
+        MessageHeader* newMessage = (MessageHeader*)GetSystemHeap().Alloc(messageData->MessageSize);
+        MessageQueue.Enqueue(newMessage);
+        return ResultCode::SUCCESS;
+    }
+};
 
 
 TEST_F(NetTest, NetAddress)
@@ -59,37 +123,51 @@ TEST_F(NetTest, MessageCollection)
     MessageCollectionArray collectionArray;
     UniquePtr<MessageCollection> pBuffer(new MessageCollection);
 
-    uint8_t buffer[2048];
-    MessageHeader* pMessage = reinterpret_cast<MessageHeader*>(buffer);
-    pMessage->Length = sizeof(buffer);
-    Result hr = Message::PlayInstance::PlayerStateChangedS2CEvt::Create(pMessage,
+    SharedPointerT<TestInMemoryEndpoint> testEndPoint = new(GetSystemHeap()) TestInMemoryEndpoint();
+
+    GuidGenerator guidGen;
+    AccountID testAccountId(guidGen.NewGuid());
+
+    Result hr;
+    hr = PlayInstanceSvrRPCSendAdapter(testEndPoint.get()).PlayerStateChangedS2CEvt(
         EntityUID(),
-        1,
+        testAccountId,
         "Test1",
         2,
         Vector4(0,0,1),
-        ArrayView<uint8_t>());
+        VariableTable());
+    EXPECT_TRUE(hr);
+    const MessageHeader* pMessage{};
+    hr = testEndPoint->DequeueMessage(pMessage);
     EXPECT_TRUE(hr);
     hr = pBuffer->AddMessage(pMessage);
     EXPECT_TRUE(hr);
 
-    pMessage->Length = sizeof(buffer);
-    hr = Message::PlayInstance::ActorMovementS2CEvt::Create(pMessage,
+    GetSystemHeap().Free((void*)pMessage);
+
+    hr = PlayInstanceSvrRPCSendAdapter(testEndPoint.get()).ActorMovementS2CEvt(
         EntityUID(),
         ActorMovement());
     EXPECT_TRUE(hr);
+
+    hr = testEndPoint->DequeueMessage(pMessage);
+    EXPECT_TRUE(hr);
+
     hr = pBuffer->AddMessage(pMessage);
     EXPECT_TRUE(hr);
 
+    GetSystemHeap().Free((void*)pMessage);
+
     auto itMsg = pBuffer->begin();
     EXPECT_TRUE(itMsg);
+
     const MessageHeader* pMessageRead = itMsg;
-    EXPECT_TRUE(pMessageRead->GetMessageID() == Message::PlayInstance::PlayerStateChangedS2CEvt::MID);
+    EXPECT_TRUE(pMessageRead->GetMessageID() == Message::PlayInstance::MID_PlayerStateChangedS2CEvt);
 
     ++itMsg;
     EXPECT_TRUE(itMsg);
     pMessageRead = itMsg;
-    EXPECT_TRUE(itMsg->GetMessageID() == Message::PlayInstance::ActorMovementS2CEvt::MID);
+    EXPECT_TRUE(itMsg->GetMessageID() == Message::PlayInstance::MID_ActorMovementS2CEvt);
 
     ++itMsg;
     EXPECT_FALSE(itMsg);

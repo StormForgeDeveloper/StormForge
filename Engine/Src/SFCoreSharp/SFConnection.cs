@@ -176,14 +176,9 @@ namespace SF
 
         public void UpdateMessageQueue()
         {
-            var message = DequeueMessage();
-            while (message != null)
-            {
-                m_MessageRouter.HandleRecvMessage(message);
+            DequeueMessage();
 
-                message = DequeueMessage();
-            }
-
+            SFMessage? message = null;
             while (m_LoopBackQueue.Count > 0)
             {
                 lock (m_LoopBackQueue)
@@ -193,7 +188,8 @@ namespace SF
                     message = m_LoopBackQueue.Dequeue();
                 }
 
-                m_MessageRouter.HandleRecvMessage(message);
+                if (message != null)
+                    m_MessageRouter.HandleRecvMessage(message);
             }
         }
 
@@ -218,25 +214,31 @@ namespace SF
             return NativeTimeSync(NativeHandle);
         }
 
+        public Result SendMessage(TransactionID transactionId, ArraySegment<byte> segment)
+        {
+            if (segment.Array != null)
+            {
+                return new Result(NativeSendMessage(NativeHandle, segment.Offset, segment.Count, segment.Array));
+            }
+
+            return default(Result);
+        }
+
 
         #region Message Parsing
 
         // Message
-        public SFMessage? DequeueMessage()
+        public void DequeueMessage()
         {
             lock (SFMessageParsingUtil.stm_ParsingLock)
             {
-                System.Diagnostics.Debug.Assert(SFMessageParsingUtil.stm_ParsingMessage == null);
+                SFMessageParsingUtil.stm_MessageDequeueConnection = this;
 
                 NativeDequeueMessage(NativeHandle,
-                    SFMessageParsingUtil.MessageParseCreateCallback,
-                    SFMessageParsingUtil.MessageParseSetValue,
-                    SFMessageParsingUtil.MessageParseSetArray
+                    SFMessageParsingUtil.OnMessageData
                     );
 
-                var message = SFMessageParsingUtil.stm_ParsingMessage;
-                SFMessageParsingUtil.stm_ParsingMessage = null;
-                return message;
+                SFMessageParsingUtil.stm_MessageDequeueConnection = null;
             }
         }
 
@@ -257,13 +259,7 @@ namespace SF
 #endif
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void SET_MESSAGE_FUNCTION(MessageID messageID);
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void SET_FUNCTION([MarshalAs(UnmanagedType.LPStr)] string stringHash, [MarshalAs(UnmanagedType.LPStr)] string typeNameHash, IntPtr Value);
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void SET_ARRAY_FUNCTION([MarshalAs(UnmanagedType.LPStr)] string stringHash, [MarshalAs(UnmanagedType.LPStr)] string typeNameHash, int arrayCount, IntPtr Value);
+        public delegate void ON_MESSAGE_FUNCTION(MessageID messageID, TransactionID transactionId, uint payloadSize, IntPtr payloadPtr);
 
         [DllImport(NativeDllName, EntryPoint = "SFConnection_NativeCreateConnection", CharSet = CharSet.Auto)]
         static extern IntPtr NativeCreateConnection();
@@ -298,11 +294,14 @@ namespace SF
 
         [DllImport(NativeDllName, EntryPoint = "SFConnection_NativeDequeueMessage", CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.I1)]
-        static extern bool NativeDequeueMessage(IntPtr nativeHandle, SET_MESSAGE_FUNCTION setMessageFunc, SET_FUNCTION setValueFunc, SET_ARRAY_FUNCTION setArrayValueFunc);
+        static extern bool NativeDequeueMessage(IntPtr nativeHandle, ON_MESSAGE_FUNCTION onMessageFunc);
 
         [DllImport(NativeDllName, EntryPoint = "SFConnection_NativeTimeSync", CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.I1)]
         static extern bool NativeTimeSync(IntPtr nativeHandle);
+
+        [DllImport(NativeDllName, EntryPoint = "SFConnection_NativeSendMessage", CharSet = CharSet.Auto)]
+        static extern int NativeSendMessage(IntPtr nativeHandle, int dataOffset, int dataSize, [MarshalAs(UnmanagedType.LPArray)] byte[] dataPtr);
 
         #endregion
     }

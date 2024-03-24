@@ -22,7 +22,14 @@
 
 namespace SF
 {
+    //IMPLEMENT_BOXING_TEMPLETE_BYVALUE(AccountID);
 
+    //Result _ToString(ToStringContext& context, const AccountID& value)
+    //{
+    //    context.OutStream.BuffLen -= (int)value.ToString(context.OutStream.pBuffer, context.OutStream.BuffLen);
+
+    //    return ResultCode::SUCCESS;
+    //}
 
 
     Result _ToString(ToStringContext& context, const ClusterID& value)
@@ -45,8 +52,7 @@ namespace SF
         if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":"))
             return ResultCode::FAIL;
 
-        if (!_IToA(context, value.PlayerID))
-            return ResultCode::FAIL;
+        context.OutStream.BuffLen -= (int)value.PlayerId.ToString(context.OutStream.pBuffer, context.OutStream.BuffLen);
 
         return ResultCode::SUCCESS;
     }

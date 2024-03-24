@@ -3,57 +3,34 @@
 set(SFPROTOCOL_LIB_FILES
   	SFProtocolPCH.h
 	
-	SFFlat/SFTypes_generated.h
-	SFFlat/LocalTypes_generated.h
+	Protocol/SFTypes_generated.h
 
-	Protocol/GameMsgClass.cpp
-	Protocol/GameMsgDebug.cpp
-	Protocol/GameMsgParsing.cpp
-	Protocol/GameMsgClass.h
-	Protocol/GameMsgDebug.h
-	Protocol/GameMsgParsing.h
-	Protocol/GameNetPolicy.cpp
-	Protocol/GameNetPolicy.h
-
-	SFFlat/Game_generated.h
+	Protocol/Game_generated.h
 	Protocol/GameMessageID.h
+	Protocol/GameRPCSendAdapter.h
+	Protocol/GameRPCSendAdapter.cpp
 
-	Protocol/PlayInstanceMsgClass.cpp
-	Protocol/PlayInstanceMsgClass.h
-	Protocol/PlayInstanceMsgDebug.cpp
-	Protocol/PlayInstanceMsgDebug.h
-	Protocol/PlayInstanceMsgParsing.cpp
-	Protocol/PlayInstanceMsgParsing.h
-   	Protocol/PlayInstanceNetPolicy.cpp
-	Protocol/PlayInstanceNetPolicy.h
-	
-	SFFlat/PlayInstance_generated.h
+	Protocol/PlayInstance_generated.h
 	Protocol/PlayInstanceMessageID.h
+	Protocol/PlayInstanceRPCSendAdapter.h
+	Protocol/PlayInstanceRPCSendAdapter.cpp
 	
-	Protocol/GenericMsgClass.cpp
-	Protocol/GenericMsgClass.h
-	Protocol/GenericMsgDebug.cpp
-	Protocol/GenericMsgDebug.h
-	Protocol/GenericMsgParsing.cpp
-	Protocol/GenericMsgParsing.h
-   	Protocol/GenericNetPolicy.cpp
-	Protocol/GenericNetPolicy.h
-
-	SFFlat/Generic_generated.h
+	Protocol/Generic_generated.h
 	Protocol/GenericMessageID.h
+	Protocol/GenericRPCSendAdapter.h
+	Protocol/GenericRPCSendAdapter.cpp
 	
+	Protocol/Login_generated.h
+	Protocol/LoginMessageID.h
 
+	Protocol/Telemetry_generated.h
+	Protocol/TelemetryMessageID.h
+	
 	SFGenericMessageClass.h
   	SFGenericMessageClass.cpp
 	SFProtocolHelper.h
 	SFProtocol.h
 	SFProtocol.cpp
-	
-	SFFlat/Login_generated.h
-	Protocol/LoginMessageID.h
-
-	SFFlat/Telemetry_generated.h
-	Protocol/TelemetryMessageID.h
 
   )
 

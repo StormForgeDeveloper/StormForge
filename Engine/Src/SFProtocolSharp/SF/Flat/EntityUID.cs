@@ -17,11 +17,9 @@ public struct EntityUID : IFlatbufferObject
   public EntityUID __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public uint EntityId { get { return __p.bb.GetUint(__p.bb_pos + 0); } }
-  public uint ServerId { get { return __p.bb.GetUint(__p.bb_pos + 4); } }
 
-  public static Offset<SF.Flat.EntityUID> CreateEntityUID(FlatBufferBuilder builder, uint EntityId, uint ServerId) {
-    builder.Prep(4, 8);
-    builder.PutUint(ServerId);
+  public static Offset<SF.Flat.EntityUID> CreateEntityUID(FlatBufferBuilder builder, uint EntityId) {
+    builder.Prep(4, 4);
     builder.PutUint(EntityId);
     return new Offset<SF.Flat.EntityUID>(builder.Offset);
   }

@@ -15,7 +15,8 @@
 #include "Util/SFStringFormat.h"
 #include "Util/SFLog.h"
 #include "flatbuffers/base.h"
-#include "MessageBus/SFMessage2.h"
+#include "SFProtocolHelper.h"
+#include "MessageBus/SFMessageHeader.h"
 #include "Protocol/TelemetryMessageID.h"
 
 namespace SF
@@ -131,6 +132,20 @@ namespace SF
         auto attributeOffset = SF::Flat::CreateNamedVariable(m_FlatBufferBuilder, nameOffset,
             SF::Flat::NamedVariableValue::NamedVariableString,
             SF::Flat::CreateNamedVariableString(m_FlatBufferBuilder, m_FlatBufferBuilder.CreateString(value)).Union()
+        );
+
+        m_Attributes.push_back(attributeOffset);
+
+        return *this;
+    }
+
+    TelemetryEvent& TelemetryEventFlat::Set(const char* name, const Guid& value)
+    {
+        auto nameOffset = m_FlatBufferBuilder.CreateString(name);
+
+        auto attributeOffset = SF::Flat::CreateNamedVariable(m_FlatBufferBuilder, nameOffset,
+            SF::Flat::NamedVariableValue::NamedVariableGuid,
+            SF::Flat::CreateNamedVariableGuid(m_FlatBufferBuilder, Flat::Helper::CreateGuid(m_FlatBufferBuilder, value)).Union()
         );
 
         m_Attributes.push_back(attributeOffset);
@@ -368,15 +383,15 @@ namespace SF
 
         Guid sessionId = GetSessionId();
         ArrayView<const uint8_t> sessionIdView(sizeof(Guid), (uint8_t*)sessionId.data);
-        ::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> sessionIdOffset = packetBuilder.CreateVector(sessionIdView.data(), sessionIdView.size());
-
-        ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::NamedVariable>>> attributesOffset = packetBuilder.CreateVector(pEvent->GetAttributeOffesets());
+        auto sessionIdOffset = packetBuilder.CreateVector(sessionIdView.data(), sessionIdView.size());
+        auto attributesOffset = packetBuilder.CreateVector(pEvent->GetAttributeOffesets());
+        auto accountIdOffset = SF::Flat::Helper::CreateAccountID(packetBuilder, pInEvent->GetAccountID());
 
         ::flatbuffers::Offset<FlatPostEventRequest> payloadOffset = SF::Flat::Telemetry::CreatePostEventCmd(packetBuilder,
             packetBuilder.CreateString(pEvent->GetEventName().data()), Util::Time.GetRawUTCMs().time_since_epoch().count(),
             packetBuilder.CreateString(GetApplicationId().data()),
             packetBuilder.CreateString(GetMachineId().data()),
-            eventId, pInEvent->GetAccountID(), pEvent->IsPlayEvent(),
+            eventId, accountIdOffset, pEvent->IsPlayEvent(),
             sessionIdOffset, attributesOffset
             );
 

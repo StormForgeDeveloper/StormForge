@@ -19,7 +19,7 @@ public struct GetUserGamePlayerInfoRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public GetUserGamePlayerInfoRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public uint Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
+  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
   public byte Attributes(int j) { int o = __p.__offset(6); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
   public int AttributesLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
 #if ENABLE_SPAN_T
@@ -30,7 +30,7 @@ public struct GetUserGamePlayerInfoRes : IFlatbufferObject
   public byte[] GetAttributesArray() { return __p.__vector_as_array<byte>(6); }
 
   public static Offset<SF.Flat.Game.GetUserGamePlayerInfoRes> CreateGetUserGamePlayerInfoRes(FlatBufferBuilder builder,
-      uint result = 0,
+      int result = 0,
       VectorOffset attributesOffset = default(VectorOffset)) {
     builder.StartTable(2);
     GetUserGamePlayerInfoRes.AddAttributes(builder, attributesOffset);
@@ -39,7 +39,7 @@ public struct GetUserGamePlayerInfoRes : IFlatbufferObject
   }
 
   public static void StartGetUserGamePlayerInfoRes(FlatBufferBuilder builder) { builder.StartTable(2); }
-  public static void AddResult(FlatBufferBuilder builder, uint result) { builder.AddUint(0, result, 0); }
+  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
   public static void AddAttributes(FlatBufferBuilder builder, VectorOffset attributesOffset) { builder.AddOffset(1, attributesOffset.Value, 0); }
   public static VectorOffset CreateAttributesVector(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte(data[i]); return builder.EndVector(); }
   public static VectorOffset CreateAttributesVectorBlock(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
@@ -58,7 +58,7 @@ static public class GetUserGamePlayerInfoResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
       && verifier.VerifyVectorOfData(tablePos, 6 /*Attributes*/, 1 /*byte*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }

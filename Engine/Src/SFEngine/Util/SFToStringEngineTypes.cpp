@@ -18,7 +18,7 @@
 #include "Util/SFToStringEngineTypes.h"
 #include "Types/SFEngineTypeVariable.h"
 #include "Util/SFGuid.h"
-
+#include "Util/SFGuidHelper.h"
 
 namespace SF {
 	
@@ -29,16 +29,15 @@ namespace SF {
 	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(MatchingQueueTicket);
 	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(NotificationType);
 	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(RelayPlayerInfo);
-	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(RouteContext);
-    IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Guid);
+	//IMPLEMENT_BOXING_TEMPLETE_BYVALUE(RouteContext);
+    //IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Guid);
 
 
 
 
 	Result _ToString(ToStringContext& context, const PlayerInformation& value)
 	{
-		if (!(_IToA(context, value.PlayerID)))
-			return ResultCode::FAIL;
+        context.OutStream.BuffLen -= (int)value.PlayerID.ToString(context.OutStream.pBuffer, context.OutStream.BuffLen);
 
 		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
@@ -94,8 +93,7 @@ namespace SF {
 		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
 
-		if (!(_IToA(context, value.PlayerID)))
-			return ResultCode::FAIL;
+        context.OutStream.BuffLen -= (int)value.PlayerID.ToString(context.OutStream.pBuffer, context.OutStream.BuffLen);
 
 		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
@@ -152,35 +150,45 @@ namespace SF {
 		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
 
-		if (!(_IToA(context, value.RelayPlayerID)))
-			return ResultCode::FAIL;
+        context.OutStream.BuffLen -= (int)value.RelayPlayerID.ToString(context.OutStream.pBuffer, context.OutStream.BuffLen);
 
 		return ResultCode::SUCCESS;
 	}
 
 
-	Result _ToString(ToStringContext& context, const RouteContext& Data)
-	{
-		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(")))
-			return ResultCode::FAIL;
+	//Result _ToString(ToStringContext& context, const RouteContext& Data)
+	//{
+	//	if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(")))
+	//		return ResultCode::FAIL;
 
-		if (!(_ToString(context, Data.Components.From)))
-			return ResultCode::FAIL;
+	//	if (!(_ToString(context, Data.Components.From)))
+	//		return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
-			return ResultCode::FAIL;
+	//	if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
+	//		return ResultCode::FAIL;
 
-		if (!(_ToString(context, Data.Components.To)))
-			return ResultCode::FAIL;
+	//	if (!(_ToString(context, Data.Components.To)))
+	//		return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ")")))
-			return ResultCode::FAIL;
+	//	if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ")")))
+	//		return ResultCode::FAIL;
 
-		return ResultCode::SUCCESS;
-	}
+	//	return ResultCode::SUCCESS;
+	//}
 
 
-    Result _ToString(ToStringContext& context, const Guid& Data)
+    /*Result _ToString(ToStringContext& context, const Guid& Data)
+    {
+        char stringBuffer[128]{};
+        Data.ToString(stringBuffer);
+
+        return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, stringBuffer);
+    }*/
+
+
+    IMPLEMENT_BOXING_TEMPLETE_BYVALUE(AccountID);
+
+    Result _ToString(ToStringContext& context, const AccountID& Data)
     {
         char stringBuffer[128]{};
         Data.ToString(stringBuffer);

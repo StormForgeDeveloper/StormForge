@@ -19,17 +19,10 @@ public struct JoinGameInstanceCmd : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public JoinGameInstanceCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ulong InsUid { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-
-  public static Offset<SF.Flat.Game.JoinGameInstanceCmd> CreateJoinGameInstanceCmd(FlatBufferBuilder builder,
-      ulong ins_uid = 0) {
-    builder.StartTable(1);
-    JoinGameInstanceCmd.AddInsUid(builder, ins_uid);
-    return JoinGameInstanceCmd.EndJoinGameInstanceCmd(builder);
-  }
+  public SF.Flat.GameInstanceUID? InsUid { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.GameInstanceUID?)(new SF.Flat.GameInstanceUID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
 
   public static void StartJoinGameInstanceCmd(FlatBufferBuilder builder) { builder.StartTable(1); }
-  public static void AddInsUid(FlatBufferBuilder builder, ulong insUid) { builder.AddUlong(0, insUid, 0); }
+  public static void AddInsUid(FlatBufferBuilder builder, Offset<SF.Flat.GameInstanceUID> insUidOffset) { builder.AddStruct(0, insUidOffset.Value, 0); }
   public static Offset<SF.Flat.Game.JoinGameInstanceCmd> EndJoinGameInstanceCmd(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.JoinGameInstanceCmd>(o);
@@ -42,7 +35,7 @@ static public class JoinGameInstanceCmdVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*InsUid*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyField(tablePos, 4 /*InsUid*/, 4 /*SF.Flat.GameInstanceUID*/, 4, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

@@ -9,7 +9,7 @@
 "String"
 "PlayerKicked"
 "PlayerKickedS2CEvt"
-"GameInsUID"
+"GameInstanceUID"
 "KickedPlayerID"
 "PlayPacket"
 "PlayPacketC2SEvt"

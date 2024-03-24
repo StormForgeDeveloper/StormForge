@@ -41,7 +41,7 @@ namespace SF
 			constexpr MessageID MID_ActorMovementsS2CEvt(MessageType::Event,0,MessageProtocol::PlayInstance,7);
 			// S2C: Player state change
 			constexpr MessageID MID_PlayerStateChangedS2CEvt(MessageType::Event,1,MessageProtocol::PlayInstance,8);
-			// C2S: Repliable player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
+			// C2S: Reliable player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
 			constexpr MessageID MID_ClientSyncReliableC2SEvt(MessageType::Event,1,MessageProtocol::PlayInstance,9);
 			// C2S: Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
 			constexpr MessageID MID_ClientSyncC2SEvt(MessageType::Event,0,MessageProtocol::PlayInstance,10);

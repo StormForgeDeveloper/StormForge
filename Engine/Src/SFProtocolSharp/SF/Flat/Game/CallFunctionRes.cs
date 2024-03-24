@@ -20,7 +20,7 @@ public struct CallFunctionRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public CallFunctionRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public uint Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
+  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
   public byte Results(int j) { int o = __p.__offset(6); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
   public int ResultsLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
 #if ENABLE_SPAN_T
@@ -31,7 +31,7 @@ public struct CallFunctionRes : IFlatbufferObject
   public byte[] GetResultsArray() { return __p.__vector_as_array<byte>(6); }
 
   public static Offset<SF.Flat.Game.CallFunctionRes> CreateCallFunctionRes(FlatBufferBuilder builder,
-      uint result = 0,
+      int result = 0,
       VectorOffset resultsOffset = default(VectorOffset)) {
     builder.StartTable(2);
     CallFunctionRes.AddResults(builder, resultsOffset);
@@ -40,7 +40,7 @@ public struct CallFunctionRes : IFlatbufferObject
   }
 
   public static void StartCallFunctionRes(FlatBufferBuilder builder) { builder.StartTable(2); }
-  public static void AddResult(FlatBufferBuilder builder, uint result) { builder.AddUint(0, result, 0); }
+  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
   public static void AddResults(FlatBufferBuilder builder, VectorOffset resultsOffset) { builder.AddOffset(1, resultsOffset.Value, 0); }
   public static VectorOffset CreateResultsVector(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte(data[i]); return builder.EndVector(); }
   public static VectorOffset CreateResultsVectorBlock(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
@@ -61,7 +61,7 @@ static public class CallFunctionResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
       && verifier.VerifyVectorOfData(tablePos, 6 /*Results*/, 1 /*byte*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }

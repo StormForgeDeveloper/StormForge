@@ -20,12 +20,12 @@ public struct GetStreamListRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public GetStreamListRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public uint Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
+  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
   public string StreamNames(int j) { int o = __p.__offset(6); return o != 0 ? __p.__string(__p.__vector(o) + j * 4) : null; }
   public int StreamNamesLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
 
   public static Offset<SF.Flat.PlayInstance.GetStreamListRes> CreateGetStreamListRes(FlatBufferBuilder builder,
-      uint result = 0,
+      int result = 0,
       VectorOffset stream_namesOffset = default(VectorOffset)) {
     builder.StartTable(2);
     GetStreamListRes.AddStreamNames(builder, stream_namesOffset);
@@ -34,7 +34,7 @@ public struct GetStreamListRes : IFlatbufferObject
   }
 
   public static void StartGetStreamListRes(FlatBufferBuilder builder) { builder.StartTable(2); }
-  public static void AddResult(FlatBufferBuilder builder, uint result) { builder.AddUint(0, result, 0); }
+  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
   public static void AddStreamNames(FlatBufferBuilder builder, VectorOffset streamNamesOffset) { builder.AddOffset(1, streamNamesOffset.Value, 0); }
   public static VectorOffset CreateStreamNamesVector(FlatBufferBuilder builder, StringOffset[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
   public static VectorOffset CreateStreamNamesVectorBlock(FlatBufferBuilder builder, StringOffset[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
@@ -55,7 +55,7 @@ static public class GetStreamListResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
       && verifier.VerifyVectorOfStrings(tablePos, 6 /*StreamNames*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }

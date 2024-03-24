@@ -18,7 +18,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\BRServer\Server\LibSharp\BRServerSharp\BRServerSharp.csproj" />
     <ProjectReference Include="..\..\..\Engine\Src\SFCoreSharp\SFCoreSharp.csproj" />
     <ProjectReference Include="..\LibSharp\SFToolLibSharp\SFToolLibSharp.csproj" />
   </ItemGroup>

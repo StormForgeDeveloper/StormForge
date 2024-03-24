@@ -19,17 +19,10 @@ public struct GetGamePlayerInfoCmd : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public GetGamePlayerInfoCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ulong PlayerId { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-
-  public static Offset<SF.Flat.Game.GetGamePlayerInfoCmd> CreateGetGamePlayerInfoCmd(FlatBufferBuilder builder,
-      ulong player_id = 0) {
-    builder.StartTable(1);
-    GetGamePlayerInfoCmd.AddPlayerId(builder, player_id);
-    return GetGamePlayerInfoCmd.EndGetGamePlayerInfoCmd(builder);
-  }
+  public SF.Flat.AccountID? PlayerId { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
 
   public static void StartGetGamePlayerInfoCmd(FlatBufferBuilder builder) { builder.StartTable(1); }
-  public static void AddPlayerId(FlatBufferBuilder builder, ulong playerId) { builder.AddUlong(0, playerId, 0); }
+  public static void AddPlayerId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> playerIdOffset) { builder.AddStruct(0, playerIdOffset.Value, 0); }
   public static Offset<SF.Flat.Game.GetGamePlayerInfoCmd> EndGetGamePlayerInfoCmd(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.GetGamePlayerInfoCmd>(o);
@@ -42,7 +35,7 @@ static public class GetGamePlayerInfoCmdVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*PlayerId*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyField(tablePos, 4 /*PlayerId*/, 16 /*SF.Flat.AccountID*/, 8, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

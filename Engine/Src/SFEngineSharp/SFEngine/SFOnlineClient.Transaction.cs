@@ -60,17 +60,16 @@ namespace SF
 
             public override void HandleRecvMessage(SFMessage message)
             {
-                TransactionID transactionId = message.GetValue<TransactionID>("TransactionID");
-                Result result;
-                if (message.TryGetValue("Result", out result))
-                {
-                    if (result.IsFailure)
-                    {
-                        MessageID messageId = message.GetMessageID();
-                        SF.Log.Error($"Server request has failed, transactionId:{transactionId}, messageId:{messageId}");
-                    }
-                }
-
+                TransactionID transactionId = message.GetTransactionID();
+                //Result result;
+                //if (message.TryGetValue("Result", out result))
+                //{
+                //    if (result.IsFailure)
+                //    {
+                //        MessageID messageId = message.GetMessageID();
+                //        SF.Log.Error($"Server request has failed, transactionId:{transactionId}, messageId:{messageId}");
+                //    }
+                //}
 
                 Action<SFMessage>? outCallback = null;
                 m_PendingRequests.Remove(transactionId.TransactionId, out outCallback);

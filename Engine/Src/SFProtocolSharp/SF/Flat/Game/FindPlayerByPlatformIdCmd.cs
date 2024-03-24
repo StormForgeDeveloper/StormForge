@@ -35,7 +35,7 @@ static public class FindPlayerByPlatformIdCmdVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*PlatformPlayerId*/, 16 /*SF.Flat.PlayerPlatformID*/, 8, false)
+      && verifier.VerifyField(tablePos, 4 /*PlatformPlayerId*/, 24 /*SF.Flat.PlayerPlatformID*/, 8, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

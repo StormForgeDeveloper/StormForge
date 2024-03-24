@@ -19,7 +19,7 @@ public struct ChatChannelChatMessageCmd : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public ChatChannelChatMessageCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ulong ChatUid { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
+  public SF.Flat.EntityUID? ChatUid { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.EntityUID?)(new SF.Flat.EntityUID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public byte ChatMetaData(int j) { int o = __p.__offset(6); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
   public int ChatMetaDataLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
 #if ENABLE_SPAN_T
@@ -36,19 +36,8 @@ public struct ChatChannelChatMessageCmd : IFlatbufferObject
 #endif
   public byte[] GetChatMessageArray() { return __p.__vector_as_array<byte>(8); }
 
-  public static Offset<SF.Flat.Game.ChatChannelChatMessageCmd> CreateChatChannelChatMessageCmd(FlatBufferBuilder builder,
-      ulong chat_uid = 0,
-      VectorOffset chat_meta_dataOffset = default(VectorOffset),
-      StringOffset chat_messageOffset = default(StringOffset)) {
-    builder.StartTable(3);
-    ChatChannelChatMessageCmd.AddChatUid(builder, chat_uid);
-    ChatChannelChatMessageCmd.AddChatMessage(builder, chat_messageOffset);
-    ChatChannelChatMessageCmd.AddChatMetaData(builder, chat_meta_dataOffset);
-    return ChatChannelChatMessageCmd.EndChatChannelChatMessageCmd(builder);
-  }
-
   public static void StartChatChannelChatMessageCmd(FlatBufferBuilder builder) { builder.StartTable(3); }
-  public static void AddChatUid(FlatBufferBuilder builder, ulong chatUid) { builder.AddUlong(0, chatUid, 0); }
+  public static void AddChatUid(FlatBufferBuilder builder, Offset<SF.Flat.EntityUID> chatUidOffset) { builder.AddStruct(0, chatUidOffset.Value, 0); }
   public static void AddChatMetaData(FlatBufferBuilder builder, VectorOffset chatMetaDataOffset) { builder.AddOffset(1, chatMetaDataOffset.Value, 0); }
   public static VectorOffset CreateChatMetaDataVector(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte(data[i]); return builder.EndVector(); }
   public static VectorOffset CreateChatMetaDataVectorBlock(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
@@ -68,7 +57,7 @@ static public class ChatChannelChatMessageCmdVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*ChatUid*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyField(tablePos, 4 /*ChatUid*/, 4 /*SF.Flat.EntityUID*/, 4, false)
       && verifier.VerifyVectorOfData(tablePos, 6 /*ChatMetaData*/, 1 /*byte*/, false)
       && verifier.VerifyString(tablePos, 8 /*ChatMessage*/, false)
       && verifier.VerifyTableEnd(tablePos);

@@ -15,11 +15,10 @@
 #include "Net/SFNetDef.h"
 #include "Delegate/SFEventDelegate.h"
 #include "Container/SFDualSortedMap.h"
+#include "MessageBus/SFMessageHeader.h"
 
 namespace SF {
 
-    struct MessageHeader;
-    struct MessageHeader2;
 
     // Message delegates by MessageID
     class  MessageDelegateMap

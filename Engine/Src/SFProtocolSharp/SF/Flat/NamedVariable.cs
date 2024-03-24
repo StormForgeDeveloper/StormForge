@@ -36,6 +36,7 @@ public struct NamedVariable : IFlatbufferObject
   public SF.Flat.NamedVariableUInt ValueAsNamedVariableUInt() { return Value<SF.Flat.NamedVariableUInt>().Value; }
   public SF.Flat.NamedVariableInt64 ValueAsNamedVariableInt64() { return Value<SF.Flat.NamedVariableInt64>().Value; }
   public SF.Flat.NamedVariableUInt64 ValueAsNamedVariableUInt64() { return Value<SF.Flat.NamedVariableUInt64>().Value; }
+  public SF.Flat.NamedVariableGuid ValueAsNamedVariableGuid() { return Value<SF.Flat.NamedVariableGuid>().Value; }
 
   public static Offset<SF.Flat.NamedVariable> CreateNamedVariable(FlatBufferBuilder builder,
       StringOffset nameOffset = default(StringOffset),

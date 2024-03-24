@@ -16,6 +16,7 @@
 #include "Container/SFStaticLinkedList.h"
 #include "Net/SFNetSystem.h"
 #include "Net/SFNetConst.h"
+#include "MessageBus/SFMessageHeader.h"
 
 namespace SF {
 
@@ -43,7 +44,7 @@ namespace SF {
             const MessageHeader* pHeader = get();
             if (pHeader)
             {
-                CurPos += pHeader->Length;
+                CurPos += pHeader->MessageSize;
             }
 
             return *this;
@@ -59,7 +60,7 @@ namespace SF {
             }
 
             const MessageHeader* pHeader = reinterpret_cast<const MessageHeader*>(Buffer.data() + CurPos);
-            if ((CurPos + pHeader->Length) > Buffer.size())
+            if ((CurPos + pHeader->MessageSize) > Buffer.size())
             {
                 // Likely broken
                 assert(false);

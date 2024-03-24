@@ -21,15 +21,15 @@ public struct TotalRankingPlayerInformation : IFlatbufferObject
 
   public uint RankingId { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
   public uint Ranking { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
-  public ulong PlayerId { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
+  public SF.Flat.AccountID? PlayerId { get { int o = __p.__offset(8); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public SF.Flat.PlayerPlatformID? PlayerPlatformId { get { int o = __p.__offset(10); return o != 0 ? (SF.Flat.PlayerPlatformID?)(new SF.Flat.PlayerPlatformID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
-  public string NickName { get { int o = __p.__offset(12); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+  public string ProfileName { get { int o = __p.__offset(12); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
-  public Span<byte> GetNickNameBytes() { return __p.__vector_as_span<byte>(12, 1); }
+  public Span<byte> GetProfileNameBytes() { return __p.__vector_as_span<byte>(12, 1); }
 #else
-  public ArraySegment<byte>? GetNickNameBytes() { return __p.__vector_as_arraysegment(12); }
+  public ArraySegment<byte>? GetProfileNameBytes() { return __p.__vector_as_arraysegment(12); }
 #endif
-  public byte[] GetNickNameArray() { return __p.__vector_as_array<byte>(12); }
+  public byte[] GetProfileNameArray() { return __p.__vector_as_array<byte>(12); }
   public uint Level { get { int o = __p.__offset(14); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
   public uint ScoreLow { get { int o = __p.__offset(16); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
   public uint ScoreHigh { get { int o = __p.__offset(18); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
@@ -37,9 +37,9 @@ public struct TotalRankingPlayerInformation : IFlatbufferObject
   public static void StartTotalRankingPlayerInformation(FlatBufferBuilder builder) { builder.StartTable(8); }
   public static void AddRankingId(FlatBufferBuilder builder, uint rankingId) { builder.AddUint(0, rankingId, 0); }
   public static void AddRanking(FlatBufferBuilder builder, uint ranking) { builder.AddUint(1, ranking, 0); }
-  public static void AddPlayerId(FlatBufferBuilder builder, ulong playerId) { builder.AddUlong(2, playerId, 0); }
+  public static void AddPlayerId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> playerIdOffset) { builder.AddStruct(2, playerIdOffset.Value, 0); }
   public static void AddPlayerPlatformId(FlatBufferBuilder builder, Offset<SF.Flat.PlayerPlatformID> playerPlatformIdOffset) { builder.AddStruct(3, playerPlatformIdOffset.Value, 0); }
-  public static void AddNickName(FlatBufferBuilder builder, StringOffset nickNameOffset) { builder.AddOffset(4, nickNameOffset.Value, 0); }
+  public static void AddProfileName(FlatBufferBuilder builder, StringOffset profileNameOffset) { builder.AddOffset(4, profileNameOffset.Value, 0); }
   public static void AddLevel(FlatBufferBuilder builder, uint level) { builder.AddUint(5, level, 0); }
   public static void AddScoreLow(FlatBufferBuilder builder, uint scoreLow) { builder.AddUint(6, scoreLow, 0); }
   public static void AddScoreHigh(FlatBufferBuilder builder, uint scoreHigh) { builder.AddUint(7, scoreHigh, 0); }
@@ -58,9 +58,9 @@ static public class TotalRankingPlayerInformationVerify
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyField(tablePos, 4 /*RankingId*/, 4 /*uint*/, 4, false)
       && verifier.VerifyField(tablePos, 6 /*Ranking*/, 4 /*uint*/, 4, false)
-      && verifier.VerifyField(tablePos, 8 /*PlayerId*/, 8 /*ulong*/, 8, false)
-      && verifier.VerifyField(tablePos, 10 /*PlayerPlatformId*/, 16 /*SF.Flat.PlayerPlatformID*/, 8, true)
-      && verifier.VerifyString(tablePos, 12 /*NickName*/, false)
+      && verifier.VerifyField(tablePos, 8 /*PlayerId*/, 16 /*SF.Flat.AccountID*/, 8, false)
+      && verifier.VerifyField(tablePos, 10 /*PlayerPlatformId*/, 24 /*SF.Flat.PlayerPlatformID*/, 8, true)
+      && verifier.VerifyString(tablePos, 12 /*ProfileName*/, false)
       && verifier.VerifyField(tablePos, 14 /*Level*/, 4 /*uint*/, 4, false)
       && verifier.VerifyField(tablePos, 16 /*ScoreLow*/, 4 /*uint*/, 4, false)
       && verifier.VerifyField(tablePos, 18 /*ScoreHigh*/, 4 /*uint*/, 4, false)

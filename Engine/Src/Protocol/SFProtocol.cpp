@@ -27,14 +27,14 @@
 
 #include "SFProtocol.h"
 
-#include "Protocol/GameMsgDebug.h"
-#include "Protocol/GameMsgParsing.h"
-
-#include "Protocol/PlayInstanceMsgDebug.h"
-#include "Protocol/PlayInstanceMsgParsing.h"
-
-#include "Protocol/GenericMsgDebug.h"
-#include "Protocol/GenericMsgParsing.h"
+//#include "Protocol/GameMsgDebug.h"
+//#include "Protocol/GameMsgParsing.h"
+//
+//#include "Protocol/PlayInstanceMsgDebug.h"
+//#include "Protocol/PlayInstanceMsgParsing.h"
+//
+//#include "Protocol/GenericMsgDebug.h"
+//#include "Protocol/GenericMsgParsing.h"
 
 
 namespace SF {
@@ -63,13 +63,13 @@ namespace Protocol {
 			if (InitMode != ComponentInitializeMode::AfterRegisterComponent)
 				return false;
 
-			RegisterDebugTraceGame();
-			RegisterDebugTracePlayInstance();
-            RegisterDebugTraceGeneric();
+			//RegisterDebugTraceGame();
+			//RegisterDebugTracePlayInstance();
+   //         RegisterDebugTraceGeneric();
 
-			RegisterParserGame();
-			RegisterParserPlayInstance();
-            RegisterParserGeneric();
+			//RegisterParserGame();
+			//RegisterParserPlayInstance();
+   //         RegisterParserGeneric();
 
 			return true;
 		}

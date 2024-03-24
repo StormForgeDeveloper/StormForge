@@ -35,14 +35,14 @@ namespace SF
 
 	Result MessageCollection::AddMessage(const MessageHeader* pMessage)
 	{
-        if ((UsedSize + pMessage->Length) > CollectionBufferSize)
+        if ((UsedSize + pMessage->MessageSize) > CollectionBufferSize)
             return ResultCode::OUT_OF_MEMORY;
 
-        memcpy(reinterpret_cast<uint8_t*>(this + 1) + UsedSize, pMessage, pMessage->Length);
+        memcpy(reinterpret_cast<uint8_t*>(this + 1) + UsedSize, pMessage, pMessage->MessageSize);
 
-        SFLog(Net, Debug8, "MessageCollection::AddMessage msgid:{0}, size:{1}, Offset:{2}", pMessage->MessageId, pMessage->Length, UsedSize);
+        SFLog(Net, Debug8, "MessageCollection::AddMessage msgid:{0}, size:{1}, Offset:{2}", pMessage->MessageId, pMessage->MessageSize, UsedSize);
 
-        UsedSize += pMessage->Length;
+        UsedSize += pMessage->MessageSize;
 
         return ResultCode::SUCCESS;
 	}

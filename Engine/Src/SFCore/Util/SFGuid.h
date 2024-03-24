@@ -13,14 +13,8 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Stream/SFStream.h"
-#include "Container/SFIndexing.h"
-
-
 
 namespace SF {
-
-
 
 
     // Guid RFC-4122
@@ -59,6 +53,9 @@ namespace SF {
             auto* dwordData = reinterpret_cast<const uint32_t*>(data);
             return (dwordData[0] | dwordData[1] | dwordData[2] | dwordData[3]) != 0;
         }
+
+        uint64_t Low() const { return *((uint64_t*)data); }
+        uint64_t High() const { return *((uint64_t*)data + 8); }
 
         /* Static factory to parse an Guid from its string representation */
         static Guid Parse(const char* str)
@@ -115,6 +112,16 @@ namespace SF {
             m128itos(x, strBuff);
         }
 
+        size_t ToString(char* strBuff, size_t bufferSize) const
+        {
+            if (bufferSize <= 32)
+                return 0;
+
+            ToString(strBuff);
+
+            return 32;
+        }
+
         size_t GetHash() const
         {
             return *((uint64_t*)data) ^ *((uint64_t*)data + 8);
@@ -124,62 +131,6 @@ namespace SF {
         static __m128i stom128i(const char* mem);
 
         uint8_t data[16]{};
-    };
-
-
-    // hash support
-    template <> class hash<SF::Guid>
-    {
-        size_t operator()(const SF::Guid& guid) const
-        {
-            return guid.GetHash();
-        }
-    };
-
-    inline size_t SerializedSizeOf(const Guid& Value) { return sizeof(Value); }
-    inline Result operator >> (IInputStream& input, Guid& data) { return input.Read(&data, sizeof(data)); }
-    inline Result operator << (IOutputStream& output, const Guid& data) { return output.Write(&data, sizeof(data)); }
-
-
-
-    /*
-      Generates Guid from a provided random generator (c++11 <random> module)
-      std::mt19937_64 is highly recommended as it has a SIMD implementation that
-      makes it very fast and it produces high quality randomness.
-     */
-    template <typename RNG = std::mt19937_64>
-    class GuidGenerator {
-    public:
-        GuidGenerator()
-            : m_RandGen(new RNG(std::random_device()()))
-            , m_Distribution(std::numeric_limits<uint64_t>::min(), std::numeric_limits<uint64_t>::max())
-        {}
-
-        GuidGenerator(uint64_t seed)
-            : m_RandGen(new RNG(seed))
-            , m_Distribution(std::numeric_limits<uint64_t>::min(), std::numeric_limits<uint64_t>::max())
-        {}
-
-        GuidGenerator(RNG& gen)
-            : m_RandGen(gen)
-            , m_Distribution(std::numeric_limits<uint64_t>::min(), std::numeric_limits<uint64_t>::max())
-        {}
-
-        /* Generates a new Guid */
-        Guid NewGuid()
-        {
-            // The two masks set the uuid version (4) and variant (1)
-            const __m128i and_mask = _mm_set_epi64x(0xFFFFFFFFFFFFFF3Full, 0xFF0FFFFFFFFFFFFFull);
-            const __m128i or_mask = _mm_set_epi64x(0x0000000000000080ull, 0x0040000000000000ull);
-            __m128i n = _mm_set_epi64x(m_Distribution(*m_RandGen), m_Distribution(*m_RandGen));
-            __m128i uuid = _mm_or_si128(_mm_and_si128(n, and_mask), or_mask);
-
-            return Guid(uuid);
-        }
-
-    private:
-        std::shared_ptr<RNG> m_RandGen;
-        std::uniform_int_distribution<uint64_t> m_Distribution;
     };
 
 

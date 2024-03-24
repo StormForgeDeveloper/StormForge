@@ -19,7 +19,7 @@ public struct PartyInviteRequestedS2CEvt : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public PartyInviteRequestedS2CEvt __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ulong InviterId { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
+  public SF.Flat.AccountID? InviterId { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public string InviterName { get { int o = __p.__offset(6); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
   public Span<byte> GetInviterNameBytes() { return __p.__vector_as_span<byte>(6, 1); }
@@ -29,19 +29,8 @@ public struct PartyInviteRequestedS2CEvt : IFlatbufferObject
   public byte[] GetInviterNameArray() { return __p.__vector_as_array<byte>(6); }
   public ulong PartyToJoinUid { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
 
-  public static Offset<SF.Flat.Game.PartyInviteRequestedS2CEvt> CreatePartyInviteRequestedS2CEvt(FlatBufferBuilder builder,
-      ulong inviter_id = 0,
-      StringOffset inviter_nameOffset = default(StringOffset),
-      ulong party_to_join_uid = 0) {
-    builder.StartTable(3);
-    PartyInviteRequestedS2CEvt.AddPartyToJoinUid(builder, party_to_join_uid);
-    PartyInviteRequestedS2CEvt.AddInviterId(builder, inviter_id);
-    PartyInviteRequestedS2CEvt.AddInviterName(builder, inviter_nameOffset);
-    return PartyInviteRequestedS2CEvt.EndPartyInviteRequestedS2CEvt(builder);
-  }
-
   public static void StartPartyInviteRequestedS2CEvt(FlatBufferBuilder builder) { builder.StartTable(3); }
-  public static void AddInviterId(FlatBufferBuilder builder, ulong inviterId) { builder.AddUlong(0, inviterId, 0); }
+  public static void AddInviterId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> inviterIdOffset) { builder.AddStruct(0, inviterIdOffset.Value, 0); }
   public static void AddInviterName(FlatBufferBuilder builder, StringOffset inviterNameOffset) { builder.AddOffset(1, inviterNameOffset.Value, 0); }
   public static void AddPartyToJoinUid(FlatBufferBuilder builder, ulong partyToJoinUid) { builder.AddUlong(2, partyToJoinUid, 0); }
   public static Offset<SF.Flat.Game.PartyInviteRequestedS2CEvt> EndPartyInviteRequestedS2CEvt(FlatBufferBuilder builder) {
@@ -56,7 +45,7 @@ static public class PartyInviteRequestedS2CEvtVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*InviterId*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyField(tablePos, 4 /*InviterId*/, 16 /*SF.Flat.AccountID*/, 8, false)
       && verifier.VerifyString(tablePos, 6 /*InviterName*/, false)
       && verifier.VerifyField(tablePos, 8 /*PartyToJoinUid*/, 8 /*ulong*/, 8, false)
       && verifier.VerifyTableEnd(tablePos);

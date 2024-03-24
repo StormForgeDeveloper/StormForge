@@ -194,7 +194,7 @@ namespace SF {
 		// constructor / destructor
 		// iDataPerPage: Data count per page
 		// initialCircularPageCount: Initial circular page count, iDataPerPage * initialCircularPageCount is the maximum item count for the queue
-		CircularPageQueue(IHeap& heap, int iDataPerPage = -1, int initialCircularPageCount = 64 );
+		CircularPageQueue(IHeap& heap = GetSystemHeap(), int iDataPerPage = -1, int initialCircularPageCount = 64);
 		~CircularPageQueue(void);
 
 		// Dispose, clear all memory, after calling dispose you can't use queue anymore

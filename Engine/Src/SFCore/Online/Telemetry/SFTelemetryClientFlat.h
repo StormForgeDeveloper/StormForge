@@ -21,7 +21,8 @@
 #include "Online/Websocket/SFWebsocketClientCurl.h"
 #include "Online/Telemetry/SFTelemetryEventQueue.h"
 #include "Util/SFGuid.h"
-#include "SFFlat/Telemetry_generated.h"
+#include "Util/SFGuidHelper.h"
+#include "Protocol/Telemetry_generated.h"
 
 
 namespace SF
@@ -62,6 +63,7 @@ namespace SF
         virtual TelemetryEvent& Set(const char* name, uint64_t value) override;
         virtual TelemetryEvent& Set(const char* name, float value) override;
         virtual TelemetryEvent& Set(const char* name, const char* value) override;
+        virtual TelemetryEvent& Set(const char* name, const Guid& value) override;
         virtual TelemetryEvent& Set(const String& name, int value) override;
         virtual TelemetryEvent& Set(const String& name, int64_t value) override;
         virtual TelemetryEvent& Set(const String& name, float value) override;

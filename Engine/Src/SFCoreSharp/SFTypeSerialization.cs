@@ -10,7 +10,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -410,25 +409,75 @@ namespace SF
                     return item;
                 }),
 
-        new TypeInfo(typeof(PlayerPlatformID), "PlayerPlatformID",
+        new TypeInfo(typeof(AccountID), "AccountID",
                 (writer, value) =>
                 {
-                    var item = (PlayerPlatformID)value;
-                    writer.Write(item.PlayerID);
-                    writer.Write(item.PlatformData);
+                    var item = (AccountID)value;
+                    byte[] byteArray = item.Guid.ToByteArray();
+                    Debug.Assert(byteArray.Length == 16);
+                    writer.Write(byteArray);
                 },
                 (reader) =>
                 {
-                    var item = new PlayerPlatformID();
-                    item.PlayerID = reader.ReadUInt64();
-                    item.PlatformData = reader.ReadByte();
+                    var item = new AccountID();
+                    item = new AccountID(reader.ReadBytes(16));
                     return item;
                 },
                 (ref IntPtr valuePtr) =>
                 {
-                    var item = Marshal.PtrToStructure(valuePtr, typeof(PlayerPlatformID));
-                    //Debug.Assert(Marshal.SizeOf(item) == (Marshal.SizeOf<UInt64>() + Marshal.SizeOf<byte>()));
-                    valuePtr += Marshal.SizeOf<UInt64>() + Marshal.SizeOf<byte>();
+                    var bytes = new byte[16];
+                    var item = new AccountID();
+                    Marshal.Copy(valuePtr, bytes, 0, bytes.Length); valuePtr += bytes.Length;
+                    item.Guid = new Guid(bytes);
+                    return item;
+                }),
+
+        new TypeInfo(typeof(CharacterID), "CharacterID",
+                (writer, value) =>
+                {
+                    var item = (CharacterID)value;
+                    byte[] byteArray = item.Guid.ToByteArray();
+                    Debug.Assert(byteArray.Length == 16);
+                    writer.Write(byteArray);
+                },
+                (reader) =>
+                {
+                    var item = new CharacterID();
+                    item = new CharacterID(reader.ReadBytes(16));
+                    return item;
+                },
+                (ref IntPtr valuePtr) =>
+                {
+                    var bytes = new byte[16];
+                    var item = new CharacterID();
+                    Marshal.Copy(valuePtr, bytes, 0, bytes.Length); valuePtr += bytes.Length;
+                    item.Guid = new Guid(bytes);
+                    return item;
+                }),
+
+        new TypeInfo(typeof(PlayerPlatformID), "PlayerPlatformID",
+                (writer, value) =>
+                {
+                    var item = (PlayerPlatformID)value;
+                    writer.Write(item.PlatformData);
+                    byte[] byteArray = item.PlayerID.Guid.ToByteArray();
+                    Debug.Assert(byteArray.Length == 16);
+                    writer.Write(byteArray);
+                },
+                (reader) =>
+                {
+                    var item = new PlayerPlatformID();
+                    item.PlatformData = reader.ReadByte();
+                    item.PlayerID = new AccountID(reader.ReadBytes(16));
+                    return item;
+                },
+                (ref IntPtr valuePtr) =>
+                {
+                    var bytes = new byte[16];
+                    var item = new PlayerPlatformID();
+                    item.PlatformData = Marshal.ReadByte(valuePtr); valuePtr += 1;
+                    Marshal.Copy(valuePtr, bytes, 0, bytes.Length); valuePtr += bytes.Length;
+                    item.PlayerID.Guid = new Guid(bytes);
                     return item;
                 }),
 

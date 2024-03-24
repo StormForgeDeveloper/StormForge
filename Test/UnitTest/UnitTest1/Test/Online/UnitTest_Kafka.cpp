@@ -24,7 +24,8 @@
 #include "Online/StreamDB/SFStreamDB.h"
 #include "StreamDB/SFStreamDBDirectory.h"
 
-#include "Protocol/PlayInstanceMsgClass.h"
+#include "Protocol/PlayInstanceMessageID.h"
+#include "Protocol/PlayInstanceRPCSendAdapter.h"
 
 
 using ::testing::EmptyTestEventListener;
@@ -196,22 +197,20 @@ TEST_F(KafkaTest, DirectoryBroker)
 
     if (pMsg != nullptr)
     {
-        MessageID msgId = pMsg->GetMessageHeader()->GetMessageID();
-        if (msgId == SF::Message::PlayInstance::FindStreamRes::MID)
-        {
-            SF::Message::PlayInstance::FindStreamRes msg(std::forward<MessageDataPtr>(pMsg));
-            GTEST_ASSERT_EQ(msg.ParseMsg(), ResultCode::SUCCESS);
+        // [[Deprecated]]Stream API is deprecated indefinitely
+   //     MessageID msgId = pMsg->GetMessageHeader()->GetMessageID();
+   //     if (msgId == SF::Message::PlayInstance::MID_FindStreamRes)
+   //     {
+   //         const auto* responseData = flatbuffers::GetRoot<SF::Flat::PlayInstance::FindStreamRes>(pMsg->GetMessageHeader()->GetPayloadPtr());
+   //         EXPECT_TRUE(responseData);
+   //     }
+   //     else if (msgId == SF::Message::PlayInstance::MID_GetStreamListRes)
+   //     {
+   //         const auto* responseData = flatbuffers::GetRoot<SF::Flat::PlayInstance::GetStreamListRes>(pMsg->GetMessageHeader()->GetPayloadPtr());
+   //         EXPECT_TRUE(responseData);
 
-            // TODO:
-            //msg.Get
-        }
-        else if (msgId == SF::Message::PlayInstance::GetStreamListRes::MID)
-        {
-            SF::Message::PlayInstance::GetStreamListRes msg(std::forward<MessageDataPtr>(pMsg));
-            GTEST_ASSERT_EQ(msg.ParseMsg(), ResultCode::SUCCESS);
-
-			SFLog(Net, Info, "Stream count:{0}", msg.GetStreamNames().size());
-        }
+			//SFLog(Net, Info, "Stream count:{0}", responseData->stream_count());
+   //     }
     }
 
 }

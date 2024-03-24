@@ -26,6 +26,7 @@
 #include "Container/SFDualSortedMap.h"
 #include "Net/SFNetMessageCollection.h"
 #include "Net/SFNetPacketData.h"
+#include "MessageBus/SFMessageHeader.h"
 
 namespace SF {
 

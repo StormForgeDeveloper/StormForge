@@ -128,22 +128,32 @@ namespace SF
         //    return Marshal.PtrToStringAnsi(nativeStr);
         //}
 
+        static internal OnlineClient? stm_StaticEventReceiver = null;
 
-        public SFMessage? PollMessageData()
+        static public void OnMessageData(MessageID messageID, TransactionID transactionId, uint payloadSize, IntPtr payloadPtr)
+        {
+            SFMessage message = new SFMessage(messageID, transactionId,payloadSize, payloadPtr);
+            stm_StaticEventReceiver?.MessageRouter.HandleRecvMessage(message);
+        }
+
+
+        public void PollMessageData()
         {
             lock (SFMessageParsingUtil.stm_ParsingLock)
             {
-                System.Diagnostics.Debug.Assert(SFMessageParsingUtil.stm_ParsingMessage == null);
+                // FIXME
+                System.Diagnostics.Debug.Assert(false);
+                //System.Diagnostics.Debug.Assert(SFMessageParsingUtil.stm_ParsingMessage == null);
 
-                NativePollMessage(NativeHandle,
-                    SFMessageParsingUtil.MessageParseCreateCallback,
-                    SFMessageParsingUtil.MessageParseSetValue,
-                    SFMessageParsingUtil.MessageParseSetArray
-                    );
+                //NativePollMessage(NativeHandle,
+                //    SFMessageParsingUtil.MessageParseCreateCallback,
+                //    SFMessageParsingUtil.MessageParseSetValue,
+                //    SFMessageParsingUtil.MessageParseSetArray
+                //    );
 
-                var message = SFMessageParsingUtil.stm_ParsingMessage;
-                SFMessageParsingUtil.stm_ParsingMessage = null;
-                return message;
+                //var message = SFMessageParsingUtil.stm_ParsingMessage;
+                //SFMessageParsingUtil.stm_ParsingMessage = null;
+                //return message;
             }
         }
 

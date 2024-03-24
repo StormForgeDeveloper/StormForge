@@ -69,7 +69,7 @@ namespace Net {
 	{
         MsgNetCtrlBuffer()
         {
-            Header.Length = sizeof(MsgNetCtrlBuffer);
+            Header.MessageSize = sizeof(MsgNetCtrlBuffer);
         }
 
         // header

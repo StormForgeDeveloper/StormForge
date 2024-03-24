@@ -18,18 +18,12 @@ namespace ProtocolCompiler
 {
     class MessageServerServiceBuilder : CppBuilder
     {
-        Parameter m_ParameterRouteHopContext;
-
         Parameter m_ParamSenderEntityID;
 
         // constructor
         public MessageServerServiceBuilder(Dictionary<string, string> settings)
             : base(settings)
         {
-            GenParameterRouteHopCount = true;
-            m_ParameterRouteHopContext = ParamRouteContext;
-            ParamRouteContext = null;
-
             m_ParamSenderEntityID = new Parameter();
             m_ParamSenderEntityID.IsArray = false;
             m_ParamSenderEntityID.IsArraySpecified = false;
@@ -142,10 +136,8 @@ namespace ProtocolCompiler
                     MatchIndent(); OutStream.WriteLine("// C2S: " + baseMsg.Desc);
                     ProtocolsProtocolGroupC2SEvent msg = baseMsg as ProtocolsProtocolGroupC2SEvent;
 
-                    if( Group.GenParameterRouteContext )
-                        newparams = MakeParametersForEvent(msg.Params);
-                    else
-                        newparams = MakeParameters(MsgType.Evt, msg.Params);
+                    newparams = MakeParameters(MsgType.Evt, msg.Params);
+
                     MatchIndent(); OutStream.WriteLine("Result {0}C2SEvt( {1} );", msg.Name, ParamString(newparams));
                 }
             }
@@ -163,31 +155,7 @@ namespace ProtocolCompiler
 
             DefaultHRESULT(); NewLine();
 
-            if (Group.GenParameterRouteContext)
-            {
-                if (type == MsgType.Cmd)
-                {
-                    MatchIndent(); OutStream.WriteLine("RouteContext InRouteContext( EntityUID(GetMyServerID(),TransactionID(InTransactionID).GetEntityID()), GetServiceEntityUID() );");
-                    ParamRouteContext = m_ParameterRouteHopContext;
-                    parameters = MakeParameters(type, originalParameters);
-                    ParamRouteContext = null;
-
-                    MatchIndent(); OutStream.WriteLine("svrCheck({0}.{1}{2}( {3} ) );", NetInterfaceString, Name, typeName, ParamArgument(parameters));
-                }
-                else if (type == MsgType.Evt)
-                {
-                    MatchIndent(); OutStream.WriteLine("RouteContext InRouteContext( EntityUID(GetMyServerID(),InSenderEntityID), GetServiceEntityUID() );");
-                    ParamRouteContext = m_ParameterRouteHopContext;
-                    parameters = MakeParameters(type, originalParameters);
-                    ParamRouteContext = null;
-
-                    MatchIndent(); OutStream.WriteLine("svrCheck({0}.{1}{2}( {3} ) );", NetInterfaceString, Name, typeName, ParamArgument(parameters));
-                }
-            }
-            else
-            {
-                MatchIndent(); OutStream.WriteLine(" svrCheck({0}.{1}{2}( {3} ) );", NetInterfaceString, Name, typeName, ParamArgument(parameters));
-            }
+            MatchIndent(); OutStream.WriteLine(" svrCheck({0}.{1}{2}( {3} ) );", NetInterfaceString, Name, typeName, ParamArgument(parameters));
 
             NewLine();
             ReturnHR();
@@ -223,10 +191,7 @@ namespace ProtocolCompiler
                     MatchIndent(); OutStream.WriteLine("// C2S: " + baseMsg.Desc);
                     ProtocolsProtocolGroupC2SEvent msg = baseMsg as ProtocolsProtocolGroupC2SEvent;
 
-                    if (Group.GenParameterRouteContext)
-                        newparams = MakeParametersForEvent(msg.Params);
-                    else
-                        newparams = MakeParameters(MsgType.Evt, msg.Params);
+                    newparams = MakeParameters(MsgType.Evt, msg.Params);
                     BuildServerServiceMethodImpl(MsgType.Evt, msg.Params, msg.Name, "C2SEvt", newparams);
                 }
             }

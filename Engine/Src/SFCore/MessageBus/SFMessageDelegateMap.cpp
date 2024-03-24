@@ -14,7 +14,7 @@
 #include "SFEnginePCH.h"
 #include "Net/SFMessage.h"
 #include "Net/SFNetSystem.h"
-#include "MessageBus/SFMessage2.h"
+#include "MessageBus/SFMessageHeader.h"
 #include "MessageBus/SFMessageDelegateMap.h"
 
 

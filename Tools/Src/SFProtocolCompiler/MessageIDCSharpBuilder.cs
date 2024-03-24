@@ -34,13 +34,9 @@ namespace ProtocolCompiler
 
         public string OutputFileNameCS()
         {
-            return "SFNetMessageID" + Group.Name + ".cs";
+            return $"{Group.Name}MessageID.cs";
         }
 
-        public string OutputFileNameCPP()
-        {
-            return "SFCSNetMessageID" + Group.Name + ".cpp";
-        }
 
         void BuildCSPrefix()
         {

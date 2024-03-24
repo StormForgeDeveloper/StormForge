@@ -77,7 +77,7 @@ namespace SF {
 
             MsgNetCtrlBuffer netCtrlBuffer{};
             MessageHeader* pHeader = &netCtrlBuffer.Header;
-            pHeader->Length = sizeof(MsgNetCtrlBuffer); // PrepareGatheringBuffer guarantees it has space
+            pHeader->MessageSize = sizeof(MsgNetCtrlBuffer); // PrepareGatheringBuffer guarantees it has space
             netCheck(MakeNetCtrl(pHeader, PACKET_NETCTRL_SYNCRELIABLE, uiSequence, 0, uiSyncMask));
 
             netCheck(SendRaw(pHeader));

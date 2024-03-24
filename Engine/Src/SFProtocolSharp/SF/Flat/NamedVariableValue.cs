@@ -16,6 +16,7 @@ public enum NamedVariableValue : byte
   NamedVariableUInt = 6,
   NamedVariableInt64 = 7,
   NamedVariableUInt64 = 8,
+  NamedVariableGuid = 9,
 };
 
 
@@ -50,6 +51,9 @@ static public class NamedVariableValueVerify
         break;
       case NamedVariableValue.NamedVariableUInt64:
         result = SF.Flat.NamedVariableUInt64Verify.Verify(verifier, tablePos);
+        break;
+      case NamedVariableValue.NamedVariableGuid:
+        result = SF.Flat.NamedVariableGuidVerify.Verify(verifier, tablePos);
         break;
       default: result = true;
         break;

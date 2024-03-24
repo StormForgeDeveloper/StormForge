@@ -12,12 +12,13 @@
 #pragma once
 
 #include "SFTypedefs.h"
+#include "Types/SFEngineTypedefs.h"
 
 #include "Util/SFStringCrc32.h"
 #include "Util/SFString.h"
 #include "Task/SFTask.h"
 #include "Util/SFLog.h"
-
+#include "Util/SFGuid.h"
 
 namespace SF
 {
@@ -45,8 +46,8 @@ namespace SF
         virtual void SetPlayEvent(bool bPlayEvent) { m_bPlayEvent = bPlayEvent; }
         bool IsPlayEvent() const { return m_bPlayEvent; }
 
-        virtual void SetAccountID(uint64_t accountId) { m_AccountId = accountId; }
-        uint64_t GetAccountID() const { return m_AccountId; }
+        virtual void SetAccountID(AccountID accountId) { m_AccountId = accountId; }
+        const AccountID& GetAccountID() const { return m_AccountId; }
 
         virtual TelemetryEvent& Set(const char* name, bool value) = 0;
         virtual TelemetryEvent& Set(const char* name, int value) = 0;
@@ -55,6 +56,7 @@ namespace SF
         virtual TelemetryEvent& Set(const char* name, uint64_t value) = 0;
         virtual TelemetryEvent& Set(const char* name, float value) = 0;
         virtual TelemetryEvent& Set(const char* name, const char* value) = 0;
+        virtual TelemetryEvent& Set(const char* name, const Guid& value) = 0;
         virtual TelemetryEvent& Set(const String& name, int value) = 0;
         virtual TelemetryEvent& Set(const String& name, int64_t value) = 0;
         virtual TelemetryEvent& Set(const String& name, float value) = 0;
@@ -67,7 +69,7 @@ namespace SF
         TelemetryClient* m_pClient{};
         bool m_bSent = false;
         uint32_t m_EventId{};
-        uint64_t m_AccountId{};
+        AccountID m_AccountId{};
         String m_EventName;
         bool m_bPlayEvent{};
     };
@@ -84,8 +86,8 @@ namespace SF
         TelemetryService();
         virtual ~TelemetryService();
 
-        void SetAccountID(uint64_t accountId) { m_AccountId = accountId; }
-        uint64_t GetAccountID() const { return m_AccountId; }
+        void SetAccountID(Guid accountId) { m_AccountId = accountId; }
+        Guid GetAccountID() const { return m_AccountId; }
 
         virtual Result RegisterEventSchema(const char* eventName, const char* eventSchema) { return ResultCode::NOT_IMPLEMENTED; }
         virtual TelemetryEvent* CreateTelemetryEvent(const char* eventName) { return nullptr; }
@@ -94,7 +96,7 @@ namespace SF
 
     private:
 
-        uint64_t m_AccountId{};
+        Guid m_AccountId{};
     };
 
 

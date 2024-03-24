@@ -20,7 +20,7 @@ public struct LoginWithSteamRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public LoginWithSteamRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public uint Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
+  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
   public string NickName { get { int o = __p.__offset(6); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
   public Span<byte> GetNickNameBytes() { return __p.__vector_as_span<byte>(6, 1); }
@@ -28,7 +28,7 @@ public struct LoginWithSteamRes : IFlatbufferObject
   public ArraySegment<byte>? GetNickNameBytes() { return __p.__vector_as_arraysegment(6); }
 #endif
   public byte[] GetNickNameArray() { return __p.__vector_as_array<byte>(6); }
-  public ulong AccountId { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
+  public SF.Flat.AccountID? AccountId { get { int o = __p.__offset(8); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public ulong AuthTicket { get { int o = __p.__offset(10); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
   public string BannedReason { get { int o = __p.__offset(12); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
@@ -45,27 +45,10 @@ public struct LoginWithSteamRes : IFlatbufferObject
 #endif
   public byte[] GetGameServerAddressArray() { return __p.__vector_as_array<byte>(14); }
 
-  public static Offset<SF.Flat.Login.LoginWithSteamRes> CreateLoginWithSteamRes(FlatBufferBuilder builder,
-      uint result = 0,
-      StringOffset nick_nameOffset = default(StringOffset),
-      ulong account_id = 0,
-      ulong auth_ticket = 0,
-      StringOffset banned_reasonOffset = default(StringOffset),
-      StringOffset game_server_addressOffset = default(StringOffset)) {
-    builder.StartTable(6);
-    LoginWithSteamRes.AddAuthTicket(builder, auth_ticket);
-    LoginWithSteamRes.AddAccountId(builder, account_id);
-    LoginWithSteamRes.AddGameServerAddress(builder, game_server_addressOffset);
-    LoginWithSteamRes.AddBannedReason(builder, banned_reasonOffset);
-    LoginWithSteamRes.AddNickName(builder, nick_nameOffset);
-    LoginWithSteamRes.AddResult(builder, result);
-    return LoginWithSteamRes.EndLoginWithSteamRes(builder);
-  }
-
   public static void StartLoginWithSteamRes(FlatBufferBuilder builder) { builder.StartTable(6); }
-  public static void AddResult(FlatBufferBuilder builder, uint result) { builder.AddUint(0, result, 0); }
+  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
   public static void AddNickName(FlatBufferBuilder builder, StringOffset nickNameOffset) { builder.AddOffset(1, nickNameOffset.Value, 0); }
-  public static void AddAccountId(FlatBufferBuilder builder, ulong accountId) { builder.AddUlong(2, accountId, 0); }
+  public static void AddAccountId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> accountIdOffset) { builder.AddStruct(2, accountIdOffset.Value, 0); }
   public static void AddAuthTicket(FlatBufferBuilder builder, ulong authTicket) { builder.AddUlong(3, authTicket, 0); }
   public static void AddBannedReason(FlatBufferBuilder builder, StringOffset bannedReasonOffset) { builder.AddOffset(4, bannedReasonOffset.Value, 0); }
   public static void AddGameServerAddress(FlatBufferBuilder builder, StringOffset gameServerAddressOffset) { builder.AddOffset(5, gameServerAddressOffset.Value, 0); }
@@ -83,9 +66,9 @@ static public class LoginWithSteamResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
       && verifier.VerifyString(tablePos, 6 /*NickName*/, false)
-      && verifier.VerifyField(tablePos, 8 /*AccountId*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyField(tablePos, 8 /*AccountId*/, 16 /*SF.Flat.AccountID*/, 8, false)
       && verifier.VerifyField(tablePos, 10 /*AuthTicket*/, 8 /*ulong*/, 8, false)
       && verifier.VerifyString(tablePos, 12 /*BannedReason*/, false)
       && verifier.VerifyString(tablePos, 14 /*GameServerAddress*/, false)

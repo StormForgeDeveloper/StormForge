@@ -140,7 +140,7 @@ namespace Net {
 
             MessageHeader* pMsgHeader = reinterpret_cast<MessageHeader*>(itemReadPtr.data());
 
-            netCheck(PrepareGatheringBuffer(pMsgHeader->Length));
+            netCheck(PrepareGatheringBuffer(pMsgHeader->MessageSize));
 
             netCheckMem(m_GatheringBuffer->AddMessage(pMsgHeader));
 
@@ -246,13 +246,13 @@ namespace Net {
 	{
 		Result hr = ResultCode::SUCCESS;
 		TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
-		uint32_t remainSize = pSrcMsgHeader->Length;
+		uint32_t remainSize = pSrcMsgHeader->MessageSize;
 		unsigned offset = 0;
 
 		SFLog(Net, Debug2, "SEND Spliting : CID:{0}, msg:{1}, len:{2}",
 			GetCID(),
 			pSrcMsgHeader->MessageId,
-			pSrcMsgHeader->Length);
+			pSrcMsgHeader->MessageSize);
 
         uint16_t subFrameSerial = uint16_t(++m_SubframePacketSerial);
 		const uint8_t* pCurSrc = reinterpret_cast<const uint8_t*>(pSrcMsgHeader);
@@ -270,7 +270,7 @@ namespace Net {
             pCurrentFrame->SubframeId = subFrameSerial;
 			pCurrentFrame->Offset = uint16_t(offset);
 			pCurrentFrame->ChunkSize = uint16_t(frameSize);
-			pCurrentFrame->TotalSize = uint16_t(pSrcMsgHeader->Length);
+			pCurrentFrame->TotalSize = uint16_t(pSrcMsgHeader->MessageSize);
 
 			// copy frame size
 			memcpy(pCurrentFrame + 1, pCurSrc, frameSize);
@@ -279,7 +279,7 @@ namespace Net {
 				GetCID(),
 				pSubframeMessage->GetMessageHeader()->GetSequence(),
 				pSubframeMessage->GetMessageHeader()->GetMessageID(),
-				pSubframeMessage->GetMessageHeader()->Length);
+				pSubframeMessage->GetMessageHeader()->MessageSize);
 
             if (iSequence == 0)
             {
@@ -304,7 +304,7 @@ namespace Net {
 		if (pMsg == nullptr)
 			return ResultCode::INVALID_POINTER;
 
-        MsgNetCtrlSequenceFrame* pCurrentFrame = reinterpret_cast<MsgNetCtrlSequenceFrame*>(pMsg->GetDataPtr());
+        MsgNetCtrlSequenceFrame* pCurrentFrame = reinterpret_cast<MsgNetCtrlSequenceFrame*>(pMsg->GetPayloadPtr());
 
 		const uint8_t* dataPtr = reinterpret_cast<const uint8_t*>(pCurrentFrame + 1);
 
@@ -348,7 +348,7 @@ namespace Net {
 
         MessageHeader* messageHeader = pCurSubframeState->GetMessageHeader();
 
-		if (messageHeader->Length != 0 && messageHeader->Length != pCurrentFrame->TotalSize)
+		if (messageHeader->MessageSize != 0 && messageHeader->MessageSize != pCurrentFrame->TotalSize)
 		{
 			netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 		}
@@ -446,7 +446,7 @@ namespace Net {
 		Result hr;
 		ConnectionMessageAction* pAction = nullptr;
 
-		if (pNetCtrl->Header.Length < (sizeof(MessageHeader) + sizeof(MsgNetCtrl)))
+		if (pNetCtrl->Header.MessageSize < (sizeof(MessageHeader) + sizeof(MsgNetCtrl)))
 		{
 			SFLog(Net, Info, "HackWarn : Invalid packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);
 			netCheck(Disconnect("Invalid packet"));
@@ -475,7 +475,7 @@ namespace Net {
 
 		MessageID msgID = pHeader->MessageId;
 		uint seq = pHeader->GetSequence();
-        uint len = pHeader->Length;
+        uint len = pHeader->MessageSize;
 
 		Result hrTem = m_RecvReliableWindow.AddMsg(pHeader);
 
@@ -550,7 +550,7 @@ namespace Net {
             return ResultCode::SUCCESS_FALSE;
 
         msgID = pMsgHeader->MessageId;
-        uiMsgLen = pMsgHeader->Length;
+        uiMsgLen = pMsgHeader->MessageSize;
 
         if ((msgID.GetMessageType() != MessageType::NetCtrl && GetConnectionState() == ConnectionState::DISCONNECTING)
             || GetConnectionState() == ConnectionState::DISCONNECTED)
@@ -559,7 +559,7 @@ namespace Net {
             return hr;
         }
 
-        if (!msgID.IDs.Reliability && pMsgHeader->Length > (uint)Const::PACKET_SIZE_MAX)
+        if (!msgID.IDs.Reliability && pMsgHeader->MessageSize > (uint)Const::PACKET_SIZE_MAX)
         {
             SFLog(Net, Warning, "Too big packet: msg:{0}, seq:{1}, len:{2}",
                 msgID,
@@ -588,12 +588,12 @@ namespace Net {
             {
                 SFLog(Net, Debug4, "SEND : msg:{0}, len:{1}", msgID, uiMsgLen);
 
-                CircularBufferQueue::ItemWritePtr itemWritePtr = m_GatheringBufferQueue.AllocateWrite(pMsgHeader->Length);
+                CircularBufferQueue::ItemWritePtr itemWritePtr = m_GatheringBufferQueue.AllocateWrite(pMsgHeader->MessageSize);
                 if (!itemWritePtr)
                 {
                     // OOM? try flush out and try again
                     SendFlush();
-                    itemWritePtr = m_GatheringBufferQueue.AllocateWrite(pMsgHeader->Length);
+                    itemWritePtr = m_GatheringBufferQueue.AllocateWrite(pMsgHeader->MessageSize);
                 }
 
                 if (!itemWritePtr)
@@ -601,11 +601,10 @@ namespace Net {
                     netCheck(ResultCode::OUT_OF_RESERVED_MEMORY);
                 }
 
-                memcpy(itemWritePtr.data(), pMsgHeader, pMsgHeader->Length);
+                memcpy(itemWritePtr.data(), pMsgHeader, pMsgHeader->MessageSize);
 
                 MessageHeader* pCopiedMessage = reinterpret_cast<MessageHeader*>(itemWritePtr.data());
                 pCopiedMessage->SetSequence(NewSeqNone());
-                pCopiedMessage->UpdateChecksumNEncrypt();
 
                 itemWritePtr.Reset();
             }
@@ -624,7 +623,7 @@ namespace Net {
                     msgID,
                     uiMsgLen);
 
-                if (pMsgHeader->Length > (uint)Const::INTER_PACKET_SIZE_MAX)
+                if (pMsgHeader->MessageSize > (uint)Const::INTER_PACKET_SIZE_MAX)
                 {
                     netCheck(SendFrameSequenceMessage(pMsgHeader));
                 }
@@ -652,17 +651,17 @@ namespace Net {
 
         netCheckPtr(pMsgHeader);
 
-        if (pMsgHeader->Length > (uint)Const::PACKET_SIZE_MAX)
+        if (pMsgHeader->MessageSize > (uint)Const::PACKET_SIZE_MAX)
         {
             netCheck(ResultCode::IO_BADPACKET_TOOBIG);
         }
 
-        CircularBufferQueue::ItemWritePtr itemWritePtr = m_GatheringBufferQueue.AllocateWrite(pMsgHeader->Length);
+        CircularBufferQueue::ItemWritePtr itemWritePtr = m_GatheringBufferQueue.AllocateWrite(pMsgHeader->MessageSize);
         if (!itemWritePtr)
         {
             // OOM? try flush out and try again
             SendFlush();
-            itemWritePtr = m_GatheringBufferQueue.AllocateWrite(pMsgHeader->Length);
+            itemWritePtr = m_GatheringBufferQueue.AllocateWrite(pMsgHeader->MessageSize);
         }
 
         if (!itemWritePtr)
@@ -670,7 +669,7 @@ namespace Net {
             netCheck(ResultCode::OUT_OF_RESERVED_MEMORY);
         }
 
-        memcpy(itemWritePtr.data(), pMsgHeader, pMsgHeader->Length);
+        memcpy(itemWritePtr.data(), pMsgHeader, pMsgHeader->MessageSize);
 
         itemWritePtr.Reset();
 
@@ -715,9 +714,9 @@ namespace Net {
 		while (uiBuffSize && GetConnectionState() != ConnectionState::DISCONNECTED)
 		{
             pMsgHeader = reinterpret_cast<MessageHeader*>(pBuff);
-			if (uiBuffSize < pMsgHeader->GetHeaderSize() || uiBuffSize < pMsgHeader->Length || pMsgHeader->Length == 0)
+			if (uiBuffSize < pMsgHeader->GetHeaderSize() || uiBuffSize < pMsgHeader->MessageSize || pMsgHeader->MessageSize == 0)
 			{
-				SFLog(Net, Error, "Unexpected packet buffer size:{0}, size in header:{1}", uiBuffSize, pMsgHeader->Length);
+				SFLog(Net, Error, "Unexpected packet buffer size:{0}, size in header:{1}", uiBuffSize, pMsgHeader->MessageSize);
 				netErr(ResultCode::IO_BADPACKET_SIZE);
 			}
 
@@ -736,8 +735,6 @@ namespace Net {
 			{
 				if (GetConnectionState() == ConnectionState::CONNECTED)
 				{
-                    netCheck(pMsgHeader->ValidateChecksumNDecrypt());
-
                     hr = OnRecv(pMsgHeader);
 					netChk(hr);
 				}
@@ -754,8 +751,8 @@ namespace Net {
 			}
 
 
-			uiBuffSize -= pMsgHeader->Length;
-			pBuff += pMsgHeader->Length;
+			uiBuffSize -= pMsgHeader->MessageSize;
+			pBuff += pMsgHeader->MessageSize;
 			pMsg = nullptr;
 		}
 
@@ -788,7 +785,7 @@ namespace Net {
 				GetCID(),
 				pMsgHeader->MessageId,
 				pMsgHeader->GetSequence(),
-				pMsgHeader->Length);
+				pMsgHeader->MessageSize);
 
 			netCheck(OnGuaranteedMessageRecv(pMsgHeader));
 		}

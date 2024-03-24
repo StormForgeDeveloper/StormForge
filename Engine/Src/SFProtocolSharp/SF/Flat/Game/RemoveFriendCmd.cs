@@ -19,17 +19,10 @@ public struct RemoveFriendCmd : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public RemoveFriendCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ulong FriendId { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-
-  public static Offset<SF.Flat.Game.RemoveFriendCmd> CreateRemoveFriendCmd(FlatBufferBuilder builder,
-      ulong friend_id = 0) {
-    builder.StartTable(1);
-    RemoveFriendCmd.AddFriendId(builder, friend_id);
-    return RemoveFriendCmd.EndRemoveFriendCmd(builder);
-  }
+  public SF.Flat.AccountID? FriendId { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
 
   public static void StartRemoveFriendCmd(FlatBufferBuilder builder) { builder.StartTable(1); }
-  public static void AddFriendId(FlatBufferBuilder builder, ulong friendId) { builder.AddUlong(0, friendId, 0); }
+  public static void AddFriendId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> friendIdOffset) { builder.AddStruct(0, friendIdOffset.Value, 0); }
   public static Offset<SF.Flat.Game.RemoveFriendCmd> EndRemoveFriendCmd(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.RemoveFriendCmd>(o);
@@ -42,7 +35,7 @@ static public class RemoveFriendCmdVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*FriendId*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyField(tablePos, 4 /*FriendId*/, 16 /*SF.Flat.AccountID*/, 8, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

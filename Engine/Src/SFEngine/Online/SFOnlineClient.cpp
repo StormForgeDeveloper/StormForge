@@ -16,18 +16,22 @@
 #include "Net/SFConnection.h"
 #include "Net/SFConnectionTCP.h"
 #include "Net/SFConnectionUDP.h"
-#include "Protocol/GameNetPolicy.h"
-#include "Protocol/GameMsgClass.h"
-#include "Protocol/PlayInstanceNetPolicy.h"
-#include "Protocol/PlayInstanceMsgClass.h"
+#include "Protocol/GameRPCSendAdapter.h"
+#include "Protocol/Game_generated.h"
+#include "Protocol/PlayInstanceRPCSendAdapter.h"
+#include "Protocol/PlayInstance_generated.h"
+#include "Protocol/Login_generated.h"
+#include "SFProtocolHelper.h"
 #include "Online/Telemetry/SFTelemetryService.h"
 #include "Online/SFOnlineClientComponent.h"
 #include "Online/HTTP/SFHTTPClient.h"
 #include "Online/HTTP/SFHTTPClientSystem.h"
-#include "SFFlat/Login_generated.h"
 #include "Util/SFStringFormat.h"
-#include "MessageBus/SFMessage2.h"
+#include "MessageBus/SFMessageHeader.h"
+#include "Util/SFGuidHelper.h"
 
+#include "Protocol/GameMessageID.h"
+#include "Protocol/PlayInstanceMessageID.h"
 
 namespace SF
 {
@@ -106,7 +110,7 @@ namespace SF
             defCheckPtr(response);
 
             m_Owner.m_GameServerAddress = response->game_server_address()->c_str();
-            m_Owner.m_AccountId = response->account_id();
+            m_Owner.m_AccountId = Guid(response->account_id()->low(), response->account_id()->high());
             m_Owner.m_AuthTicket = response->auth_ticket();
             Result loginResult = response->result();
 
@@ -298,7 +302,7 @@ namespace SF
 			: ClientTask(owner, transactionId)
 		{
             m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-                Message::Game::JoinGameServerRes::MID,
+                Message::Game::MID_JoinGameServerRes,
                 [this](const MessageHeader* pHeader)
                 {
                     OnJoinGameServerRes(pHeader);
@@ -447,7 +451,7 @@ namespace SF
 				if (evt.Components.hr)
 				{
 					SetOnlineState(OnlineState::JoiningToGameServer);
-					NetPolicyGame policy(GetConnection()->GetMessageEndpoint());
+					GameRPCSendAdapter policy(GetConnection()->GetMessageEndpoint());
 					Result res = policy.JoinGameServerCmd(intptr_t(this), m_Owner.GetAccountId(), m_Owner.GetAuthTicket(), 0);
 					if (!res)
 					{
@@ -473,28 +477,29 @@ namespace SF
 
 		void OnJoinGameServerRes(const MessageHeader* pHeader)
 		{
-			Message::Game::JoinGameServerRes packet(pHeader);
-			auto result = packet.ParseMsg();
-			if (!result)
+            const auto* responseData = flatbuffers::GetRoot<Flat::Game::JoinGameServerRes>(pHeader->GetPayloadPtr());
+			if (!responseData)
 			{
-				SFLog(Net, Error, "Game::JoinGameServerRes: Packet parsing error: {0}", result);
-				SetResult(result);
+				SFLog(Net, Error, "Game::JoinGameServerRes: Packet parsing error");
+				SetResult(ResultCode::INVALID_FORMAT);
 				Disconnect();
 				return;
 			}
 
-			if (!packet.GetResult())
+            Result hr(responseData->result());
+			if (!hr)
 			{
-				SFLog(Net, Error, "Game::JoinGameServerRes: failure: {0}", packet.GetResult());
-				SetResult(packet.GetResult());
+				SFLog(Net, Error, "Game::JoinGameServerRes: failure: {0}", hr);
+				SetResult(hr);
 				Disconnect();
 				return;
 			}
 
-			m_Owner.m_NickName = packet.GetNickName();
-			m_Owner.m_GameInstanceUID = packet.GetGameUID();
-			m_Owner.m_PartyUID = packet.GetPartyUID();
-			m_Owner.m_PartyLeaderId = packet.GetPartyLeaderID();
+            m_Owner.m_NickName = responseData->nick_name()->c_str();
+			m_Owner.m_GameInstanceUID = SF::Flat::Helper::ParseGameInstanceUID(responseData->game_uid());
+            m_Owner.m_PartyUID = responseData->party_uid();
+
+            m_Owner.m_PartyLeaderId = SF::Flat::Helper::ParseAccountID(responseData->party_leader_id());
 			m_Owner.SetupInstanceInfo();
 			m_Owner.RegisterGameHandlers();
 
@@ -521,14 +526,14 @@ namespace SF
 		{
 
             m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-                Message::PlayInstance::JoinPlayInstanceRes::MID,
+                Message::PlayInstance::MID_JoinPlayInstanceRes,
                 [this](const MessageHeader* pHeader)
                 {
                     OnPlayInstanceJoinGameInstanceRes(pHeader);
                 });
 
             m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-                Message::Game::JoinGameInstanceRes::MID,
+                Message::Game::MID_JoinGameInstanceRes,
                 [this](const MessageHeader* pHeader)
                 {
                     OnJoinGameInstanceRes(pHeader);
@@ -628,7 +633,7 @@ namespace SF
 			
 
 			SetOnlineState(OnlineState::InGameJoiningGameInstance);
-			NetPolicyGame policy(m_Owner.GetConnectionGame()->GetMessageEndpoint());
+			GameRPCSendAdapter policy(m_Owner.GetConnectionGame()->GetMessageEndpoint());
 			auto res = policy.JoinGameInstanceCmd(intptr_t(this), m_Owner.GetGameInstanceUID());
 			if (!res)
 			{
@@ -649,7 +654,7 @@ namespace SF
 			{
 				if (evt.Components.hr)
 				{
-					NetPolicyPlayInstance policy(m_Owner.GetConnectionGameInstance()->GetMessageEndpoint());
+					PlayInstanceRPCSendAdapter policy(m_Owner.GetConnectionGameInstance()->GetMessageEndpoint());
 					auto res = policy.JoinPlayInstanceCmd(intptr_t(this), m_Owner.GetGameInstanceUID(), m_Owner.GetPlayerID(), "??");
 					if (!res)
 					{
@@ -679,38 +684,38 @@ namespace SF
 
 		void OnJoinGameInstanceRes(const MessageHeader* pHeader)
 		{
-			Message::Game::JoinGameInstanceRes packet(pHeader);
-			auto result = packet.ParseMsg();
-			if (!result)
+            const auto* responseData = flatbuffers::GetRoot<Flat::Game::JoinGameInstanceRes>(pHeader->GetPayloadPtr());
+            if (!responseData)
 			{
-				SFLog(Net, Error, "JoinGameInstanceRes: Packet parsing error: {0}", result);
-				SetResult(result);
+				SFLog(Net, Error, "JoinGameInstanceRes: Packet parsing error");
+				SetResult(ResultCode::INVALID_FORMAT);
 				SetOnlineState(OnlineState::InGameServer);
 				return;
 			}
 
-			if (!packet.GetResult())
+            Result hr(responseData->result());
+			if (!hr)
 			{
-				SFLog(Net, Error, "JoinGameInstanceRes: failure: {0}", packet.GetResult());
-				SetResult(packet.GetResult());
+				SFLog(Net, Error, "JoinGameInstanceRes: failure: {0}", hr);
+				SetResult(hr);
 				SetOnlineState(OnlineState::InGameServer);
 				return;
 			}
 
             m_Owner.SetupInstanceInfo();
-			m_Owner.m_GameInstanceUID = packet.GetInsUID();
-			m_Owner.m_GameInstanceAddress = packet.GetServerPublicAddress();
+            m_Owner.m_GameInstanceUID = SF::Flat::Helper::ParseGameInstanceUID(responseData->ins_uid());
+            m_Owner.m_GameInstanceAddress = responseData->server_public_address()->c_str();
 			
 			SFLog(Net, Info, "Game instance joined: {0}, game:{1}, {2}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress);
 
 			SetOnlineState(OnlineState::InGameConnectingGameInstance);
 
             DynamicArray<NetAddress> netAddresses;
-            result = NetAddress::ParseNameAddress(m_Owner.GetGameInstanceAddress(), netAddresses);
-            if (!result)
+            hr = NetAddress::ParseNameAddress(m_Owner.GetGameInstanceAddress(), netAddresses);
+            if (!hr)
             {
-                SFLog(Net, Error, "Failed to get addresses: gameId:{0}, game:{1}, hr:{2}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress, result);
-                SetResult(result);
+                SFLog(Net, Error, "Failed to get addresses: gameId:{0}, game:{1}, hr:{2}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress, hr);
+                SetResult(hr);
                 SetOnlineState(OnlineState::InGameServer);
                 return;
             }
@@ -724,8 +729,8 @@ namespace SF
             }
 
 			AuthTicket authTicket = m_Owner.GetAuthTicket();
-			result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, netAddresses[0], 0));
-			if (result)
+            hr = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, netAddresses[0], 0));
+			if (hr)
 			{
 				GetConnection()->SetTickGroup(EngineTaskTick::AsyncTick);
 			}
@@ -733,35 +738,38 @@ namespace SF
 
 		void OnPlayInstanceJoinGameInstanceRes(const MessageHeader* pHeader)
 		{
-			Message::PlayInstance::JoinPlayInstanceRes packet(pHeader);
-			auto result = packet.ParseMsg();
-			if (!result)
+            const auto* responseData = flatbuffers::GetRoot<Flat::PlayInstance::JoinPlayInstanceRes>(pHeader->GetPayloadPtr());
+			if (!responseData)
 			{
-				SFLog(Net, Error, "PlayInstance::JoinPlayInstanceRes: Packet parsing error: {0}", result);
-				SetResult(result);
+				SFLog(Net, Error, "PlayInstance::JoinPlayInstanceRes: Packet parsing error");
+				SetResult(ResultCode::INVALID_FORMAT);
 				SetOnlineState(OnlineState::InGameServer);
 				return;
 			}
 
-			if (!packet.GetResult())
+            Result hr(responseData->result());
+			if (!hr)
 			{
-				SFLog(Net, Error, "PlayInstance::JoinPlayInstanceRes: failure: {0}", packet.GetResult());
-				SetResult(packet.GetResult());
+				SFLog(Net, Error, "PlayInstance::JoinPlayInstanceRes: failure: {0}", hr);
+				SetResult(hr);
 				SetOnlineState(OnlineState::InGameServer);
 				return;
 			}
 
-			if (m_Owner.GetPlayerID() != packet.GetPlayerID())
+            PlayerID recvPlayerId = SF::Flat::Helper::ParseAccountID(responseData->player_id());
+			if (m_Owner.GetPlayerID() != recvPlayerId)
 			{
-				SFLog(Net, Error, "PlayInstance::JoinPlayInstanceRes: failure: invalid playerId, owner:{0}, packet:{1}", m_Owner.GetPlayerID(), packet.GetPlayerID());
-				SetResult(packet.GetResult());
+				SFLog(Net, Error, "PlayInstance::JoinPlayInstanceRes: failure: invalid playerId, owner:{0}, packet:{1}", m_Owner.GetPlayerID(), recvPlayerId);
+				SetResult(ResultCode::INVALID_PLAYERID);
 				SetOnlineState(OnlineState::InGameServer);
 				return;
 			}
 
-			SFLog(Net, Info, "PlayInstance::JoinPlayInstanceRes joined: {0}, F:{1:X}", m_Owner.m_GameInstanceUID, packet.GetMovement().MoveFrame);
+            ActorMovement actorMovement = SF::Flat::Helper::ParseActorMovement(responseData->movement());
 
-			m_Owner.InitMovement(packet.GetMovement().ActorId, packet.GetMovement());
+			SFLog(Net, Info, "PlayInstance::JoinPlayInstanceRes joined: {0}, F:{1:X}", m_Owner.m_GameInstanceUID, actorMovement.MoveFrame);
+
+			m_Owner.InitMovement(actorMovement.ActorId, actorMovement);
 
 			SetOnlineState(OnlineState::InGameInGameInstance);
 			SetResult(ResultCode::SUCCESS);
@@ -802,19 +810,19 @@ namespace SF
 
 
         m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-            Message::Game::SelectCharacterRes::MID,
+            Message::Game::MID_SelectCharacterRes,
             [this](const MessageHeader* pMsgData)
             {
-                Message::Game::SelectCharacterRes msg;
-                if (msg.ParseMessage(pMsgData))
+                const auto* responseData = flatbuffers::GetRoot<Flat::Game::SelectCharacterRes>(pMsgData->GetPayloadPtr());
+                if (responseData)
                 {
-                    m_CharacterId = msg.GetCharacterID();
+                    m_CharacterId = SF::Flat::Helper::ParseCharacterID(responseData->character_id());
                 }
             });
 
 
         m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-            Message::Game::LeaveGameInstanceRes::MID,
+            Message::Game::MID_LeaveGameInstanceRes,
             [this](const MessageHeader* pMsgData)
             {
                 m_GameInstanceUID = 0;
@@ -837,42 +845,42 @@ namespace SF
 
 
         m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-            Message::PlayInstance::NewActorInViewS2CEvt::MID,
+            Message::PlayInstance::MID_NewActorInViewS2CEvt,
             [this](const MessageHeader* pMsgData)
             {
                 OnActorInView(pMsgData);
             });
 
         m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-            Message::PlayInstance::RemoveActorFromViewS2CEvt::MID,
+            Message::PlayInstance::MID_RemoveActorFromViewS2CEvt,
             [this](const MessageHeader* pMsgData)
             {
                 OnActorOutofView(pMsgData);
             });
 
         m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-            Message::PlayInstance::ActorMovementS2CEvt::MID,
+            Message::PlayInstance::MID_ActorMovementS2CEvt,
             [this](const MessageHeader* pMsgData)
             {
                 OnActorMovement(pMsgData);
             });
 
         m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-            Message::PlayInstance::ActorMovementsS2CEvt::MID,
+            Message::PlayInstance::MID_ActorMovementsS2CEvt,
             [this](const MessageHeader* pMsgData)
             {
                 OnActorMovements(pMsgData);
             });
 
         m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-            Message::PlayInstance::VoiceDataS2CEvt::MID,
+            Message::PlayInstance::MID_VoiceDataS2CEvt,
             [this](const MessageHeader* pMsgData)
             {
                 OnVoiceData(pMsgData);
             });
 
         m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-            Message::PlayInstance::PlayerStateChangedS2CEvt::MID,
+            Message::PlayInstance::MID_PlayerStateChangedS2CEvt,
             [this](const MessageHeader* pMsgData)
             {
                 OnPlayerStateChanged(pMsgData);
@@ -1007,7 +1015,7 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
-	Result OnlineClient::JoinGameInstance(uint64_t transactionId, uint64_t gameInstanceId)
+	Result OnlineClient::JoinGameInstance(uint64_t transactionId, GameInstanceUID gameInstanceId)
 	{
 		if (GetOnlineState() != OnlineState::InGameServer)
 		{
@@ -1103,7 +1111,7 @@ namespace SF
 					if (Util::TimeSince(m_HeartbeatTimer) > DurationMS(15 * 1000))
 					{
 						m_HeartbeatTimer = Util::Time.GetTimeMs();
-						NetPolicyGame policy(m_Game->GetMessageEndpoint());
+						GameRPCSendAdapter policy(m_Game->GetMessageEndpoint());
 						policy.HeartbeatC2SEvt();
 					}
 				}
@@ -1204,7 +1212,7 @@ namespace SF
 
 		if (m_OutgoingMovement != nullptr && GetConnectionGameInstance() != nullptr)
 		{
-			NetPolicyPlayInstance policy(GetConnectionGameInstance()->GetMessageEndpoint());
+			PlayInstanceRPCSendAdapter policy(GetConnectionGameInstance()->GetMessageEndpoint());
 			ActorMovement pMove{};
 			if (m_MyPlayerState != nullptr) // If it is not null it means  the player is standing
 			{
@@ -1240,20 +1248,22 @@ namespace SF
 
     void OnlineClient::OnActorInView(const MessageHeader* pMsgData)
     {
-        Message::PlayInstance::NewActorInViewS2CEvt msg(pMsgData);
-        if (!msg.ParseMsg())
+        const auto* responseData = flatbuffers::GetRoot<Flat::PlayInstance::NewActorInViewS2CEvt>(pMsgData->GetPayloadPtr());
+        if (!responseData)
         {
             SFLog(Net, Info, "OnlineClient::OnActorInView Parsing error");
             return;
         }
 
-        if (msg.GetPlayInstanceUID() != m_GameInstanceUID)
+        if (SF::Flat::Helper::ParseGameInstanceUID(responseData->play_instance_uid()) != m_GameInstanceUID)
         {
             SFLog(Net, Info, "Invalid instance id, ignoring movement");
             return;
         }
 
-        auto actorId = msg.GetMovement().ActorId;
+        ActorMovement actorMovement = SF::Flat::Helper::ParseActorMovement(responseData->movement());
+
+        ActorID actorId = actorMovement.ActorId;
         OnlineActor* onlineActor{};
         if (!m_OnlineActorByActorId.Find(actorId, onlineActor))
         {
@@ -1261,26 +1271,26 @@ namespace SF
             m_OnlineActorByActorId.Emplace(actorId, onlineActor);
         }
 
-        onlineActor->SetMovement(msg.GetMovement());
+        onlineActor->SetMovement(actorMovement);
     }
 
     void OnlineClient::OnActorOutofView(const MessageHeader* pMsgData)
     {
-        Message::PlayInstance::RemoveActorFromViewS2CEvt msg(pMsgData);
-        if (!msg.ParseMsg())
+        const auto* responseData = flatbuffers::GetRoot<Flat::PlayInstance::RemoveActorFromViewS2CEvt>(pMsgData->GetPayloadPtr());
+        if (!responseData)
         {
             SFLog(Net, Info, "OnlineClient::OnActorOutofView Parsing error");
             return;
         }
 
-        if (msg.GetPlayInstanceUID() != m_GameInstanceUID)
+        if (SF::Flat::Helper::ParseGameInstanceUID(responseData->play_instance_uid()) != m_GameInstanceUID)
         {
             SFLog(Net, Info, "Invalid instance id, ignoring movement");
             return;
         }
 
         OnlineActor* onlineActor{};
-        m_OnlineActorByActorId.Remove(msg.GetActorID(), onlineActor);
+        m_OnlineActorByActorId.Remove(responseData->actor_id(), onlineActor);
         if (onlineActor)
         {
             IHeap::Delete(onlineActor);
@@ -1289,40 +1299,47 @@ namespace SF
 
     void OnlineClient::OnActorMovement(const MessageHeader* pMsgData)
     {
-        Message::PlayInstance::ActorMovementS2CEvt msg(pMsgData);
-        if (!msg.ParseMsg())
+        const auto* responseData = flatbuffers::GetRoot<Flat::PlayInstance::ActorMovementS2CEvt>(pMsgData->GetPayloadPtr());
+        if (!responseData)
         {
             SFLog(Net, Error, "OnlineClient::OnPlayerMovement Parsing error");
             return;
         }
 
-        if (msg.GetPlayInstanceUID() != m_GameInstanceUID)
+        if (SF::Flat::Helper::ParseGameInstanceUID(responseData->play_instance_uid()) != m_GameInstanceUID)
         {
             SFLog(Net, Warning, "Invalid instance id, ignoring movement");
             return;
         }
 
-        OnActorMovement(msg.GetMovement());
+        ActorMovement actorMovement = SF::Flat::Helper::ParseActorMovement(responseData->movement());
+
+        OnActorMovement(actorMovement);
     }
 
     void OnlineClient::OnActorMovements(const MessageHeader* pMsgData)
     {
-        Message::PlayInstance::ActorMovementsS2CEvt msg(pMsgData);
-        if (!msg.ParseMsg())
+        const auto* responseData = flatbuffers::GetRoot<Flat::PlayInstance::ActorMovementsS2CEvt>(pMsgData->GetPayloadPtr());
+        if (!responseData)
         {
             SFLog(Net, Error, "OnlineClient::OnPlayerMovements Parsing error");
             return;
         }
 
-        if (msg.GetPlayInstanceUID() != m_GameInstanceUID)
+        if (SF::Flat::Helper::ParseGameInstanceUID(responseData->play_instance_uid()) != m_GameInstanceUID)
         {
             SFLog(Net, Warning, "Invalid instance id, ignoring movements");
             return;
         }
 
-        for (auto& itMove : msg.GetMovement())
+        auto movementOffsets = responseData->movement();
+        if (movementOffsets)
         {
-            OnActorMovement(itMove);
+            for (auto movement : *movementOffsets)
+            {
+                ActorMovement actorMovement = SF::Flat::Helper::ParseActorMovement(movement);
+                OnActorMovement(actorMovement);
+            }
         }
     }
 
@@ -1343,40 +1360,41 @@ namespace SF
 
     void OnlineClient::OnVoiceData(const MessageHeader* pMsgData)
     {
-        Message::PlayInstance::VoiceDataS2CEvt msg(pMsgData);
-        if (!msg.ParseMsg())
+        const auto* responseData = flatbuffers::GetRoot<Flat::PlayInstance::VoiceDataS2CEvt>(pMsgData->GetPayloadPtr());
+        if (!responseData)
         {
             SFLog(Net, Error, "OnlineClient::OnPlayerMovements Parsing error");
             return;
         }
 
         OnlineActor* onlineActor{};
-        if (m_OnlineActorByActorId.Find(msg.GetActorID(), onlineActor))
+        if (m_OnlineActorByActorId.Find(responseData->actor_id(), onlineActor))
         {
-            onlineActor->OnComponentData("VoiceChat"_crc, msg.GetFrameIndex(), ArrayView<const uint8_t>(msg.GetVoiceData()));
+            auto* voiceData = responseData->voice_data();
+            onlineActor->OnComponentData("VoiceChat"_crc, responseData->frame_index(), ArrayView<const uint8_t>(voiceData->size(), voiceData->Data()));
         }
     }
 
 	void OnlineClient::OnPlayerStateChanged(const MessageHeader* pMsgData)
 	{
-		Message::PlayInstance::PlayerStateChangedS2CEvt msg(pMsgData);
-		if (!msg.ParseMsg())
+        const auto* responseData = flatbuffers::GetRoot<Flat::PlayInstance::PlayerStateChangedS2CEvt>(pMsgData->GetPayloadPtr());
+		if (!responseData)
 		{
 			SFLog(Net, Error, "OnlineClient::OnPlayerStateChanged Parsing error");
 			return;
 		}
 
-		if (msg.GetPlayInstanceUID() != m_GameInstanceUID)
+		if (SF::Flat::Helper::ParseGameInstanceUID(responseData->play_instance_uid()) != m_GameInstanceUID)
 		{
 			SFLog(Net, Warning, "Invalid instance id, ignoring movement");
 			return;
 		}
 
 		// we only interested in my player state
-		if (msg.GetPlayerID() != m_AccountId)
+		if (SF::Flat::Helper::ParseAccountID(responseData->player_id()) != m_AccountId)
 			return;
 
-		m_MyPlayerState = msg.GetState();
+		m_MyPlayerState = responseData->state();
 	}
 
 	void OnlineClient::UpdateOnlineStateByConnectionState()

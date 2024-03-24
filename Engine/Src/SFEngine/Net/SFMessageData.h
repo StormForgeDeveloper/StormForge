@@ -43,9 +43,6 @@ namespace SF {
 
 		bool					m_bIsSequenceAssigned;
 
-		// Encryption status
-        bool m_bIsEncrypted{};
-
 	private:
 		MessageData(uint32_t uiMsgID, uint uiMsgBufSize, const uint8_t* pData = nullptr);
 
@@ -73,9 +70,6 @@ namespace SF {
         SF_FORCEINLINE ArrayView<uint8_t> GetPayload() const { return m_pMsgHeader->GetPayload(); }
         SF_FORCEINLINE uint GetPayloadSize() const { return m_pMsgHeader->GetPayloadSize(); }
 
-        SF_FORCEINLINE void SetEncrypted(bool bEncrypted) { m_bIsEncrypted = bEncrypted; }
-        SF_FORCEINLINE bool IsEncrypted() const { return m_bIsEncrypted; }
-
 		// Parsing helper
 		void ClearAssignedSequence();
 		void AssignSequence(uint sequence);
@@ -93,28 +87,30 @@ namespace SF {
 
         SF_FORCEINLINE void UpdateChecksum()
         {
-            m_pMsgHeader->UpdateChecksum();
+            //m_pMsgHeader->UpdateChecksum();
         }
 
         SF_FORCEINLINE void UpdateChecksumNEncrypt()
         {
-            m_pMsgHeader->UpdateChecksumNEncrypt();
-            m_bIsEncrypted = true;
+            //m_pMsgHeader->UpdateChecksumNEncrypt();
+            //m_bIsEncrypted = true;
         }
 
         SF_FORCEINLINE Result ValidateChecksum()
         {
-            return m_pMsgHeader->ValidateChecksum();
+            return ResultCode::SUCCESS;
+            //return m_pMsgHeader->ValidateChecksum();
         }
 
         SF_FORCEINLINE Result ValidateChecksumNDecrypt()
         {
-            Result hr = m_pMsgHeader->ValidateChecksumNDecrypt();
-            if (hr)
-            {
-                m_bIsEncrypted = false;
-            }
-            return hr;
+            //Result hr = m_pMsgHeader->ValidateChecksumNDecrypt();
+            //if (hr)
+            //{
+            //    m_bIsEncrypted = false;
+            //}
+            //return hr;
+            return ResultCode::SUCCESS;
         }
 
 	};

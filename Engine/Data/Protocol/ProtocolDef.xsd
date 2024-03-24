@@ -86,27 +86,15 @@
 								<xs:documentation>No default context parameter</xs:documentation>
 							</xs:annotation>
 						</xs:attribute>
-						<xs:attribute name="GenParameterRouteContext" type="xs:boolean" use="optional" default="false">
-							<xs:annotation>
-								<xs:documentation>Description</xs:documentation>
-							</xs:annotation>
-						</xs:attribute>
-						<xs:attribute name="IsMobile" type="xs:boolean" use="optional" default="false"/>
 						<xs:attribute name="IsServer" type="xs:boolean" use="optional" default="false">
 							<xs:annotation>
 								<xs:documentation>Is server policy</xs:documentation>
 							</xs:annotation>
 						</xs:attribute>
-						<xs:attribute name="GenParameterRouteHopCount" type="xs:boolean" use="optional" default="false"/>
 
 						<xs:attribute name="GenNet" type="xs:boolean" use="optional" default="false">
 							<xs:annotation>
 								<xs:documentation>Generate Net Policy</xs:documentation>
-							</xs:annotation>
-						</xs:attribute>
-						<xs:attribute name="GenCSharp" type="xs:boolean" use="optional" default="false">
-							<xs:annotation>
-								<xs:documentation>Generate CSharp</xs:documentation>
 							</xs:annotation>
 						</xs:attribute>
 						<xs:attribute name="Desc" type="xs:string" use="required">

@@ -13,10 +13,13 @@
 #pragma once
 
 #include "SFEngineTypedefs.h"
+#include "Variable/SFVariable.h"
 #include "Variable/SFVariableBoxing.h"
 
 
 namespace SF {
+
+    template<> inline AccountID Variable::GetValue<AccountID>() const { return AccountID(GetValueGuid()); }
 
 
 	////////////////////////////////////////////////////////////////////////////////

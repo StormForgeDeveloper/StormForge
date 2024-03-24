@@ -45,21 +45,20 @@ namespace SF
             return new Result(NativeDeleteStream(NativeHandle, System.Text.Encoding.UTF8.GetBytes(streamName + "\0")));
         }
 
-        public SFMessage? PollMessageData()
+        public void PollMessageData()
         {
             lock (SFMessageParsingUtil.stm_ParsingLock)
             {
-                System.Diagnostics.Debug.Assert(SFMessageParsingUtil.stm_ParsingMessage == null);
+                // FIXME
+                System.Diagnostics.Debug.Assert(false);
 
-                NativePollMessage(NativeHandle,
-                    SFMessageParsingUtil.MessageParseCreateCallback,
-                    SFMessageParsingUtil.MessageParseSetValue,
-                    SFMessageParsingUtil.MessageParseSetArray
-                    );
+                //SFMessageParsingUtil.stm_MessageDequeueConnection = this;
 
-                var message = SFMessageParsingUtil.stm_ParsingMessage;
-                SFMessageParsingUtil.stm_ParsingMessage = null;
-                return message;
+                //NativeDequeueMessage(NativeHandle,
+                //    SFMessageParsingUtil.OnMessageData
+                //    );
+
+                //SFMessageParsingUtil.stm_MessageDequeueConnection = null;
             }
         }
 

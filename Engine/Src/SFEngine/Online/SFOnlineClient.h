@@ -123,7 +123,7 @@ namespace SF
 		Result StartConnection(uint64_t transactionId, StringCrc32 gameId, const char* loginAddress, uint64_t steamUserId, const char* steamUserName, const char* steamUserToken, const char* userId, const char* password);
 
 		// Join game instance
-		Result JoinGameInstance(uint64_t transactionId, uint64_t gameInstanceId);
+		Result JoinGameInstance(uint64_t transactionId, GameInstanceUID gameInstanceId);
 
 		// Disconnect all connection
 		void DisconnectAll();
@@ -152,14 +152,14 @@ namespace SF
 		SF_FORCEINLINE const String& GetLoginAddresses() const { return m_LoginAddresses; }
 
 		SF_FORCEINLINE const String& GetGameServerAddress() const { return m_GameServerAddress; }
-		SF_FORCEINLINE AccountID GetAccountId() const { return m_AccountId; }
+		SF_FORCEINLINE const AccountID& GetAccountId() const { return m_AccountId; }
 		SF_FORCEINLINE AuthTicket GetAuthTicket() const { return m_AuthTicket; }
-		SF_FORCEINLINE PlayerID GetPlayerID() const { return m_AccountId; }
+		SF_FORCEINLINE const PlayerID& GetPlayerID() const { return m_AccountId; }
 		ActorID GetActorID() const;
 
-		SF_FORCEINLINE uint32_t GetCharacterId() const { return m_CharacterId; }
+		SF_FORCEINLINE const CharacterID& GetCharacterId() const { return m_CharacterId; }
 
-		SF_FORCEINLINE uint64_t GetGameInstanceUID() const { return m_GameInstanceUID; }
+		SF_FORCEINLINE EntityUID GetGameInstanceUID() const { return m_GameInstanceUID; }
 		SF_FORCEINLINE const String& GetGameInstanceAddress() const { return m_GameInstanceAddress; }
 
 		SF_FORCEINLINE const SharedPointerT<Net::Connection>& GetConnectionGame() const { return m_Game; }
@@ -226,11 +226,11 @@ namespace SF
 		AuthTicket m_AuthTicket{};
 
 		String m_NickName;
-		uint32_t m_CharacterId{};
-		uint64_t m_GameInstanceUID{};
+		CharacterID m_CharacterId{};
+		GameInstanceUID m_GameInstanceUID{};
 		StringCrc32 m_MyPlayerState;
 		uint64_t m_PartyUID{};
-		uint64_t m_PartyLeaderId{};
+		AccountID m_PartyLeaderId{};
 
         String m_GameInstanceAddress;
 

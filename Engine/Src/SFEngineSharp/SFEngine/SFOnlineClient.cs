@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using SF.Flat;
 using SF.Net;
 #if UNITY_IOS
 using AOT;
@@ -68,9 +69,6 @@ namespace SF
         public event ConnectionEventHandler? OnConnectionEvent = null;
 
         // Message event
-        public delegate void MessageEventHandler(object sender, SFMessage msg);
-        public event MessageEventHandler? OnMessageEvent = null;
-
         public delegate void OnlineStateChangedHandler(object? sender, OnlineState prevState, OnlineState newState);
         public static event OnlineStateChangedHandler? OnOnlineStateChanged = null;
 
@@ -119,15 +117,15 @@ namespace SF
             return res;
         }
 
-        public Result JoinGameInstance(UInt64 gameInstanceUID, Action<SFMessage>? callback = null)
+        public Result JoinGameInstance(GameInstanceUID gameInstanceUID, Action<SFMessage>? callback = null)
         {
             TransactionID transactionId = NewTransactionID();
 
             return JoinGameInstance(transactionId, gameInstanceUID, callback);
         }
-        public Result JoinGameInstance(TransactionID transactionId, UInt64 gameInstanceUID, Action<SFMessage>? callback = null)
+        public Result JoinGameInstance(TransactionID transactionId, GameInstanceUID gameInstanceUID, Action<SFMessage>? callback = null)
         {
-            Result res = new(NativeJoinGameInstance(NativeHandle, transactionId.TransactionId, gameInstanceUID));
+            Result res = new(NativeJoinGameInstance(NativeHandle, transactionId.TransactionId, gameInstanceUID.UID));
             if (res.IsFailure)
                 return res;
 
@@ -144,9 +142,15 @@ namespace SF
             NativeDisconnectAll(NativeHandle);
         }
 
-        public UInt64 GetPlayerId()
+        public AccountID GetPlayerId()
         {
-            return NativeGetPlayerId(NativeHandle);
+            IntPtr valuePtr = NativeGetPlayerId(NativeHandle);
+            if (valuePtr == IntPtr.Zero)
+                return new AccountID();
+
+            var bytes = new byte[16];
+            Marshal.Copy(valuePtr, bytes, 0, bytes.Length);
+            return new AccountID(bytes);
         }
 
         public StringCrc32 GetGameId()
@@ -154,20 +158,32 @@ namespace SF
             return new StringCrc32(NativeGetGameId(NativeHandle));
         }
 
-        public UInt64 GetGameInstanceUID()
+        public SF.GameInstanceUID GetGameInstanceUID()
         {
-            return NativeGetGameInstanceUID(NativeHandle);
+            return new SF.GameInstanceUID(NativeGetGameInstanceUID(NativeHandle));
         }
 
-        public UInt32 GetCharacterId()
+        public CharacterID GetCharacterId()
         {
-            return NativeGetCharacterId(NativeHandle);
+            IntPtr valuePtr = NativeGetCharacterId(NativeHandle);
+            if (valuePtr == IntPtr.Zero)
+                return new CharacterID();
+
+            var bytes = new byte[16];
+            Marshal.Copy(valuePtr, bytes, 0, bytes.Length);
+            return new CharacterID(bytes);
         }
 
         public UInt32 GetActorId()
         {
             return NativeGetActorId(NativeHandle);
         }
+        static public void OnMessageData(MessageID messageID, TransactionID transactionId, uint payloadSize, IntPtr payloadPtr)
+        {
+            SFMessage message = new SFMessage(messageID, transactionId,payloadSize, payloadPtr);
+            stm_StaticEventReceiver?.MessageRouter.HandleRecvMessage(message);
+        }
+
 
         public void UpdateGameTick(out UInt32 deltaFrames)
         {
@@ -178,14 +194,10 @@ namespace SF
                 NativeUpdateGameTick(NativeHandle,
                     OnOnlineStateChanged_Internal,
                     OnEvent_Internal,
-                    SFMessageParsingUtil.MessageParseCreateCallback,
-                    SFMessageParsingUtil.MessageParseSetValue,
-                    SFMessageParsingUtil.MessageParseSetArray,
-                    OnMessageReady_Internal,
+                    OnMessageData,
                     OnTaskFinished_Internal
                     );
 
-                SFMessageParsingUtil.stm_ParsingMessage = null;
                 stm_StaticEventReceiver = null;
             }
 
@@ -216,8 +228,8 @@ namespace SF
 
         #region Connection cache
 
-        SendMessageGame? m_GameAdapterCached = null;
-        SendMessagePlayInstance? m_PlayInstanceAdapterCached = null;
+        GameRPCSendAdapter? m_GameAdapterCached = null;
+        PlayInstanceRPCSendAdapter? m_PlayInstanceAdapterCached = null;
 
         public virtual void ResetConnectionAdapter()
         {
@@ -227,7 +239,7 @@ namespace SF
 
 
         protected TAdapter? GetAdapterInternal<TAdapter>(ConnectionType conType, ref TAdapter? CachedAdapter)
-            where TAdapter : SendMessage, new()
+            where TAdapter : RPCAdapter, new()
         {
             var connectionHandle = NativeGetConnection(NativeHandle, (int)conType);
             if (connectionHandle == IntPtr.Zero)
@@ -246,19 +258,19 @@ namespace SF
             return CachedAdapter;
         }
 
-        public SendMessageGame? GameAdapter
+        public GameRPCSendAdapter? GameAdapter
         {
             get
             {
-                return GetAdapterInternal<SendMessageGame>(ConnectionType.Game, ref m_GameAdapterCached);
+                return GetAdapterInternal<GameRPCSendAdapter>(ConnectionType.Game, ref m_GameAdapterCached);
             }
         }
 
-        public SendMessagePlayInstance? PlayInstanceAdapter
+        public PlayInstanceRPCSendAdapter? PlayInstanceAdapter
         {
             get
             {
-                return GetAdapterInternal<SendMessagePlayInstance>(ConnectionType.GameInstance, ref m_PlayInstanceAdapterCached);
+                return GetAdapterInternal<PlayInstanceRPCSendAdapter>(ConnectionType.GameInstance, ref m_PlayInstanceAdapterCached);
             }
         }
 
@@ -298,34 +310,30 @@ namespace SF
 #if UNITY_STANDALONE
         [AOT.MonoPInvokeCallback(typeof(ON_READY_FUNCTION))]
 #endif
-        static internal void OnMessageReady_Internal()
-        {
-            if (stm_StaticEventReceiver == null)
-                return;
-
-            var message = SFMessageParsingUtil.stm_ParsingMessage;
-            SFMessageParsingUtil.stm_ParsingMessage = null;
-
-            if (message != null)
-            {
-                // fire message handler
-                stm_StaticEventReceiver.OnMessageEvent?.Invoke(stm_StaticEventReceiver, message);
-
-                stm_StaticEventReceiver.MessageRouter.HandleRecvMessage(message);
-            }
-        }
 
 #if UNITY_STANDALONE
         [AOT.MonoPInvokeCallback(typeof(ONLINE_TASK_FINISHED_CALLBACK))]
 #endif
-        static internal void OnTaskFinished_Internal(UInt64 transactionId, int result)
+        static internal void OnTaskFinished_Internal(TransactionID transactionId, int result)
         {
             if (stm_StaticEventReceiver != null)
             {
-                var message = new SFMessage();
+                // FIXME: We need message ID for it
+                var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 
-                message.SetValue("Result", new Result(result));
-                message.SetValue("TransactionID", new TransactionID() { TransactionId = transactionId });
+                var transactionIdOffset = builder.CreateTransactionID(transactionId);
+
+                SF.Flat.Generic.GenericTransactionRes.StartGenericTransactionRes(builder);
+                SF.Flat.Generic.GenericTransactionRes.AddResult(builder, result);
+                SF.Flat.Generic.GenericTransactionRes.AddFinishedTransaction(builder, transactionIdOffset);
+                var packetOffset = SF.Flat.Generic.GenericTransactionRes.EndGenericTransactionRes(builder);
+
+                builder.Finish(packetOffset.Value);
+
+                var buf = builder.DataBuffer;
+                var segment = buf.ToArraySegment(buf.Position, buf.Length - buf.Position);
+
+                var message = new SFMessage(SF.Net.MessageIDGeneric.GenericTransactionRes, transactionId, segment);
 
                 stm_StaticEventReceiver.MessageRouter.HandleRecvMessage(message);
             }
@@ -349,25 +357,16 @@ namespace SF
 #endif
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void ON_READY_FUNCTION();
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void SET_EVENT_FUNCTION(SFConnection.EventTypes eventType, int result, SFConnection.ConnectionState state);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void SET_MESSAGE_FUNCTION(MessageID messageID);
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void SET_FUNCTION([MarshalAs(UnmanagedType.LPStr)] string stringHash, [MarshalAs(UnmanagedType.LPStr)] string typeNameHash, IntPtr Value);
-
-        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void SET_ARRAY_FUNCTION([MarshalAs(UnmanagedType.LPStr)] string stringHash, [MarshalAs(UnmanagedType.LPStr)] string typeNameHash, int arrayCount, IntPtr Value);
+        public delegate void ON_MESSAGE_FUNCTION(MessageID messageID, TransactionID transactionId, uint payloadSize, IntPtr payloadPtr);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void ONLINE_STATECHAGED_CALLBACK(OnlineState prevState, OnlineState newState);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void ONLINE_TASK_FINISHED_CALLBACK(UInt64 transactionId, int result);
+        public delegate void ONLINE_TASK_FINISHED_CALLBACK(TransactionID transactionId, int result);
 
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeCreateOnlineClient", CharSet = CharSet.Auto)]
@@ -380,7 +379,7 @@ namespace SF
         static extern Int32 NativeStartConnectionSteam(IntPtr nativeHandle, UInt64 transactionId, [MarshalAs(UnmanagedType.LPStr)] string gameId, [MarshalAs(UnmanagedType.LPStr)] string loginAddress, UInt64 steamUserId, [MarshalAs(UnmanagedType.LPStr)] string steamUserName, [MarshalAs(UnmanagedType.LPStr)] string steamUserToken);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeJoinGameInstance", CharSet = CharSet.Auto)]
-        static extern Int32 NativeJoinGameInstance(IntPtr nativeHandle, UInt64 transactionId, UInt64 gameInstanceUID);
+        static extern Int32 NativeJoinGameInstance(IntPtr nativeHandle, UInt64 transactionId, UInt32 gameInstanceUID);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeDisconnectAll", CharSet = CharSet.Auto)]
         static extern void NativeDisconnectAll(IntPtr nativeHandle);
@@ -389,10 +388,10 @@ namespace SF
         static extern Int32 NativeGetOnlineState(IntPtr nativeHandle);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetPlayerId", CharSet = CharSet.Auto)]
-        static extern UInt64 NativeGetPlayerId(IntPtr nativeHandle);
+        static extern IntPtr NativeGetPlayerId(IntPtr nativeHandle);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetCharacterId", CharSet = CharSet.Auto)]
-        static extern UInt32 NativeGetCharacterId(IntPtr nativeHandle);
+        static extern IntPtr NativeGetCharacterId(IntPtr nativeHandle);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetActorId", CharSet = CharSet.Auto)]
         static extern UInt32 NativeGetActorId(IntPtr nativeHandle);
@@ -401,10 +400,10 @@ namespace SF
         static extern UInt32 NativeGetGameId(IntPtr nativeHandle);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetGameInstanceUID", CharSet = CharSet.Auto)]
-        static extern UInt64 NativeGetGameInstanceUID(IntPtr nativeHandle);
+        static extern UInt32 NativeGetGameInstanceUID(IntPtr nativeHandle);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeUpdateGameTick", CharSet = CharSet.Auto)]
-        static extern Int32 NativeUpdateGameTick(IntPtr nativeHandle, ONLINE_STATECHAGED_CALLBACK setOnlineStateEventFunc, SET_EVENT_FUNCTION setEventFunc, SET_MESSAGE_FUNCTION setMessageFunc, SET_FUNCTION setValueFunc, SET_ARRAY_FUNCTION setArrayValueFunc, ON_READY_FUNCTION onMessageReady, ONLINE_TASK_FINISHED_CALLBACK onTaskFinished);
+        static extern Int32 NativeUpdateGameTick(IntPtr nativeHandle, ONLINE_STATECHAGED_CALLBACK setOnlineStateEventFunc, SET_EVENT_FUNCTION setEventFunc, ON_MESSAGE_FUNCTION onMessageFunc, ONLINE_TASK_FINISHED_CALLBACK onTaskFinished);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeUpdateMovement", CharSet = CharSet.Auto)]
         static extern Int32 NativeUpdateMovement(IntPtr nativeHandle, out UInt32 deltaFrames);

@@ -23,7 +23,6 @@ namespace ProtocolCompiler
             : base(settings)
         {
             BasePath = System.IO.Path.Combine(BasePath, "Doc");
-            GenParameterRouteHopCount = true;
             IsCPPOut = true;
         }
 
@@ -126,7 +125,7 @@ namespace ProtocolCompiler
         {
             Parameter[] newparams;
             string strClassName = string.Format("{0}", Group.Name);
-            string policyClassName = PolicyClassName;
+            string policyClassName = RPCSendAdapterClassName;
 
             MatchIndent(); OutStream.WriteLine("# Protocol interface class {0}", policyClassName);
 

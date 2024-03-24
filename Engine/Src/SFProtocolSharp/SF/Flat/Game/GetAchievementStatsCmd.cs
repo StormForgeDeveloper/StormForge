@@ -19,23 +19,12 @@ public struct GetAchievementStatsCmd : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public GetAchievementStatsCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public uint CharacterId { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
+  public SF.Flat.CharacterID? CharacterId { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.CharacterID?)(new SF.Flat.CharacterID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public uint AchievementStatIdfrom { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
   public uint AchievementStatIdto { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
 
-  public static Offset<SF.Flat.Game.GetAchievementStatsCmd> CreateGetAchievementStatsCmd(FlatBufferBuilder builder,
-      uint character_id = 0,
-      uint achievement_stat_idfrom = 0,
-      uint achievement_stat_idto = 0) {
-    builder.StartTable(3);
-    GetAchievementStatsCmd.AddAchievementStatIdto(builder, achievement_stat_idto);
-    GetAchievementStatsCmd.AddAchievementStatIdfrom(builder, achievement_stat_idfrom);
-    GetAchievementStatsCmd.AddCharacterId(builder, character_id);
-    return GetAchievementStatsCmd.EndGetAchievementStatsCmd(builder);
-  }
-
   public static void StartGetAchievementStatsCmd(FlatBufferBuilder builder) { builder.StartTable(3); }
-  public static void AddCharacterId(FlatBufferBuilder builder, uint characterId) { builder.AddUint(0, characterId, 0); }
+  public static void AddCharacterId(FlatBufferBuilder builder, Offset<SF.Flat.CharacterID> characterIdOffset) { builder.AddStruct(0, characterIdOffset.Value, 0); }
   public static void AddAchievementStatIdfrom(FlatBufferBuilder builder, uint achievementStatIdfrom) { builder.AddUint(1, achievementStatIdfrom, 0); }
   public static void AddAchievementStatIdto(FlatBufferBuilder builder, uint achievementStatIdto) { builder.AddUint(2, achievementStatIdto, 0); }
   public static Offset<SF.Flat.Game.GetAchievementStatsCmd> EndGetAchievementStatsCmd(FlatBufferBuilder builder) {
@@ -50,7 +39,7 @@ static public class GetAchievementStatsCmdVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*CharacterId*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*CharacterId*/, 16 /*SF.Flat.CharacterID*/, 8, false)
       && verifier.VerifyField(tablePos, 6 /*AchievementStatIdfrom*/, 4 /*uint*/, 4, false)
       && verifier.VerifyField(tablePos, 8 /*AchievementStatIdto*/, 4 /*uint*/, 4, false)
       && verifier.VerifyTableEnd(tablePos);

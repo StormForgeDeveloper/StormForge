@@ -19,12 +19,12 @@ public struct GetRankingListRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public GetRankingListRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public uint Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
+  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
   public SF.Flat.TotalRankingPlayerInformation? Ranking(int j) { int o = __p.__offset(6); return o != 0 ? (SF.Flat.TotalRankingPlayerInformation?)(new SF.Flat.TotalRankingPlayerInformation()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
   public int RankingLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
 
   public static Offset<SF.Flat.Game.GetRankingListRes> CreateGetRankingListRes(FlatBufferBuilder builder,
-      uint result = 0,
+      int result = 0,
       VectorOffset rankingOffset = default(VectorOffset)) {
     builder.StartTable(2);
     GetRankingListRes.AddRanking(builder, rankingOffset);
@@ -33,7 +33,7 @@ public struct GetRankingListRes : IFlatbufferObject
   }
 
   public static void StartGetRankingListRes(FlatBufferBuilder builder) { builder.StartTable(2); }
-  public static void AddResult(FlatBufferBuilder builder, uint result) { builder.AddUint(0, result, 0); }
+  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
   public static void AddRanking(FlatBufferBuilder builder, VectorOffset rankingOffset) { builder.AddOffset(1, rankingOffset.Value, 0); }
   public static VectorOffset CreateRankingVector(FlatBufferBuilder builder, Offset<SF.Flat.TotalRankingPlayerInformation>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
   public static VectorOffset CreateRankingVectorBlock(FlatBufferBuilder builder, Offset<SF.Flat.TotalRankingPlayerInformation>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
@@ -52,7 +52,7 @@ static public class GetRankingListResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
       && verifier.VerifyVectorOfTables(tablePos, 6 /*Ranking*/, SF.Flat.TotalRankingPlayerInformationVerify.Verify, false)
       && verifier.VerifyTableEnd(tablePos);
   }

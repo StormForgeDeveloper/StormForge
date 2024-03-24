@@ -18,19 +18,17 @@ using SF.Tool;
 
 namespace ProtocolCompiler
 {
+    
+
     class MessageFlatbufferBuilder: Builder
     {
         // constructor
         public MessageFlatbufferBuilder(Dictionary<string, string> settings)
             : base(settings)
         {
-            GenParameterRouteHopCount = true;
             IsCPPOut = true;
         }
 
-        public override bool GenParameterRouteHopCount => false;
-
-        public override bool GenParameterRouteContext => false;
         public override bool GenParameterContext => false;
 
         public string OutputDocName()
@@ -40,7 +38,12 @@ namespace ProtocolCompiler
 
         void BuildPrefix()
         {
-            OutStream.WriteLine("include \"LocalTypes.fbs\";");
+            var includeSet = AppConfig.GetValueSet("include");
+            foreach (var include in includeSet)
+            {
+                OutStream.WriteLine($"include \"{include.Key}\";");
+            }
+
             OutStream.WriteLine($"namespace SF.Flat.{Group.Name};");
             NewLine(1);
         }
@@ -59,146 +62,12 @@ namespace ProtocolCompiler
             {
                 foreach(var parameter in parameters)
                 {
-                    MatchIndent(); OutStream.WriteLine($"{ToFlaxName(parameter.Name)}:{ToFlaxType(parameter)};");
+                    MatchIndent(); OutStream.WriteLine($"{FlatbufferUtil.ToFlatVariableName(parameter.Name)}:{FlatbufferUtil.ToFlatType(parameter)};");
                 }
             }
 
             CloseSection();
             NewLine();
-        }
-
-        string ToFlaxName(string nameString)
-        {
-            var sb = new StringBuilder();
-            sb.Capacity = nameString.Length * 2;
-            bool bPrevCap = true;
-            foreach (char c in nameString)
-            {
-                if (c >= 'A' && c <= 'Z')
-                {
-                    char curChar = char.ToLower(c);
-                    if (!bPrevCap)
-                        sb.Append('_');
-
-                    bPrevCap = true;
-                    sb.Append(curChar);
-                }
-                else
-                {
-                    bPrevCap = false;
-                    sb.Append(c);
-                }
-            }
-
-            return sb.ToString();
-
-        }
-
-        // convert special type for fbs
-        string ConvertTypes(string flatType, ref string required)
-        {
-            //if (flatType.StartsWith("SF."))
-            //    flatType = flatType.Substring(3);
-
-            switch (flatType)
-            {
-                case "String":
-                case "string":
-                    required = "(required)";
-                    return "string";
-                case "Int64":
-                case "int64":
-                    return "int64";
-                case "UInt64":
-                case "uint64":
-                    return "uint64";
-                case "int":
-                    return "int";
-                case "Int32":
-                case "int32":
-                    return "int32";
-                case "UInt32":
-                case "uint32":
-                    return "uint32";
-                case "int16":
-                case "Int16":
-                    return "int16";
-                case "uint16":
-                case "UInt16":
-                    return "uint16";
-                case "int8":
-                case "Int8":
-                    return "int8";
-                case "uint8":
-                case "UInt8":
-                    return "uint8";
-                case "Byte":
-                case "byte":
-                    return "ubyte";
-                case "SByte":
-                case "sbyte":
-                    return "byte";
-                case "bool":
-                    return "bool";
-
-                case "VariableTable":
-                    return "[ubyte]";
-
-                case "TransactionID":
-                case "AccountID":
-                case "PlayerID":
-                case "EntityUID":
-                case "GameInsUID":
-                case "StringCrc64":
-                case "AuthTicket":
-                case "PartyUID":
-                case "UGCID":
-                    return "uint64";
-
-                case "Result":
-                case "CharacterID":
-                case "LogEntryID":
-                case "StringCrc32":
-                    return "uint32";
-
-                // bypass types
-                case "GameStateID":
-                case "NamedVariable":
-                    break;
-
-                default:
-                    required = "(required)";
-                    break;
-
-                //default:
-                //    Console.Error.WriteLine($"Don't know how to convert:{flatType}.");
-                //    break;
-            }
-
-            return flatType;
-        }
-
-        string ToFlaxType(Parameter parameter)
-        {
-            string flatTypeName = string.Empty;
-            
-            var typeInfo = SystemTypeInfo.GetParameterInfo(parameter);
-
-            string required = string.Empty;
-
-            flatTypeName = ConvertTypes(parameter.TypeName, ref required);
-
-            // We need to control per parameter basis. disabling for now
-            required = string.Empty;
-
-            if (parameter.IsArray && !flatTypeName.StartsWith('['))
-            {
-                return $"[{flatTypeName}]{required}";
-            }
-            else
-            {
-                return flatTypeName + required;
-            }
         }
 
         // build parser class header

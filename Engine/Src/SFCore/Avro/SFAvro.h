@@ -13,7 +13,7 @@
 
 #include "SFTypedefs.h"
 #include "Util/SFLog.h"
-
+#include "Util/SFGuid.h"
 
 
 typedef struct avro_obj_t* avro_schema_t;
@@ -182,6 +182,7 @@ namespace SF
 		float AsFloat() const;
 		double AsDouble() const;
 		bool AsBoolean() const;
+        Guid AsGuid() const;
 		ArrayView<const uint8_t> AsBytes() const;
 
 
@@ -215,6 +216,7 @@ namespace SF
         Result SetValue(const char* Name, const String& Value);
         Result SetValue(const char* Name, float Value);
         Result SetValue(const char* Name, double Value);
+        Result SetValue(const char* Name, const Guid& Value);
         Result SetValue(const char* Name, const Array<const uint8_t>& Value);
         Result SetValue(const char* Name, const Array<uint8_t>& Value);
 

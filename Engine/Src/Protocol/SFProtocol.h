@@ -56,6 +56,7 @@ namespace SF
 	{
 		//TODO: to library object
 		void PrintDebugMessage(const char* preFix, const MessageHeader* pHeader);
+
 		Result ParseMessage(const MessageHeader* pHeader, IVariableMapBuilder& variableMap);
 		Result ParseMessage(IHeap& memoryManager, const MessageHeader* pHeader, MessageBase * &pMsgBase);
 	}

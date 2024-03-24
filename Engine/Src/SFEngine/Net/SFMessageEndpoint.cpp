@@ -85,7 +85,7 @@ namespace SF {
         SFLog(System, Debug3, "ServerMessageConsumer:SendRaw: {0}, {1}", messageData->Length, (const char*)encodedBuffer.data());
 #endif
 
-        return m_TargetEndpoint->SendRecord(ArrayView<const uint8_t>(messageData->Length, reinterpret_cast<const uint8_t*>(messageData)));
+        return m_TargetEndpoint->SendRecord(ArrayView<const uint8_t>(messageData->MessageSize, reinterpret_cast<const uint8_t*>(messageData)));
     }
 
 } // namespace SF

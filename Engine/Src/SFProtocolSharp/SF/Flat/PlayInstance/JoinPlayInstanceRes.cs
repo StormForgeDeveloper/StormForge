@@ -19,10 +19,10 @@ public struct JoinPlayInstanceRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public JoinPlayInstanceRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public uint Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
-  public ulong PlayInstanceUid { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-  public ulong PlayerId { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-  public uint CharacterId { get { int o = __p.__offset(10); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
+  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public SF.Flat.EntityUID? PlayInstanceUid { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.EntityUID?)(new SF.Flat.EntityUID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public SF.Flat.AccountID? PlayerId { get { int o = __p.__offset(8); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public SF.Flat.CharacterID? CharacterId { get { int o = __p.__offset(10); return o != 0 ? (SF.Flat.CharacterID?)(new SF.Flat.CharacterID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public byte CharacterPrivateData(int j) { int o = __p.__offset(12); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
   public int CharacterPrivateDataLength { get { int o = __p.__offset(12); return o != 0 ? __p.__vector_len(o) : 0; } }
 #if ENABLE_SPAN_T
@@ -31,37 +31,20 @@ public struct JoinPlayInstanceRes : IFlatbufferObject
   public ArraySegment<byte>? GetCharacterPrivateDataBytes() { return __p.__vector_as_arraysegment(12); }
 #endif
   public byte[] GetCharacterPrivateDataArray() { return __p.__vector_as_array<byte>(12); }
-  public SF.Flat.ActorMovement? Movement { get { int o = __p.__offset(14); return o != 0 ? (SF.Flat.ActorMovement?)(new SF.Flat.ActorMovement()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
-
-  public static Offset<SF.Flat.PlayInstance.JoinPlayInstanceRes> CreateJoinPlayInstanceRes(FlatBufferBuilder builder,
-      uint result = 0,
-      ulong play_instance_uid = 0,
-      ulong player_id = 0,
-      uint character_id = 0,
-      VectorOffset character_private_dataOffset = default(VectorOffset),
-      Offset<SF.Flat.ActorMovement> movementOffset = default(Offset<SF.Flat.ActorMovement>)) {
-    builder.StartTable(6);
-    JoinPlayInstanceRes.AddPlayerId(builder, player_id);
-    JoinPlayInstanceRes.AddPlayInstanceUid(builder, play_instance_uid);
-    JoinPlayInstanceRes.AddMovement(builder, movementOffset);
-    JoinPlayInstanceRes.AddCharacterPrivateData(builder, character_private_dataOffset);
-    JoinPlayInstanceRes.AddCharacterId(builder, character_id);
-    JoinPlayInstanceRes.AddResult(builder, result);
-    return JoinPlayInstanceRes.EndJoinPlayInstanceRes(builder);
-  }
+  public SF.Flat.ActorMovement? Movement { get { int o = __p.__offset(14); return o != 0 ? (SF.Flat.ActorMovement?)(new SF.Flat.ActorMovement()).__assign(o + __p.bb_pos, __p.bb) : null; } }
 
   public static void StartJoinPlayInstanceRes(FlatBufferBuilder builder) { builder.StartTable(6); }
-  public static void AddResult(FlatBufferBuilder builder, uint result) { builder.AddUint(0, result, 0); }
-  public static void AddPlayInstanceUid(FlatBufferBuilder builder, ulong playInstanceUid) { builder.AddUlong(1, playInstanceUid, 0); }
-  public static void AddPlayerId(FlatBufferBuilder builder, ulong playerId) { builder.AddUlong(2, playerId, 0); }
-  public static void AddCharacterId(FlatBufferBuilder builder, uint characterId) { builder.AddUint(3, characterId, 0); }
+  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
+  public static void AddPlayInstanceUid(FlatBufferBuilder builder, Offset<SF.Flat.EntityUID> playInstanceUidOffset) { builder.AddStruct(1, playInstanceUidOffset.Value, 0); }
+  public static void AddPlayerId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> playerIdOffset) { builder.AddStruct(2, playerIdOffset.Value, 0); }
+  public static void AddCharacterId(FlatBufferBuilder builder, Offset<SF.Flat.CharacterID> characterIdOffset) { builder.AddStruct(3, characterIdOffset.Value, 0); }
   public static void AddCharacterPrivateData(FlatBufferBuilder builder, VectorOffset characterPrivateDataOffset) { builder.AddOffset(4, characterPrivateDataOffset.Value, 0); }
   public static VectorOffset CreateCharacterPrivateDataVector(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte(data[i]); return builder.EndVector(); }
   public static VectorOffset CreateCharacterPrivateDataVectorBlock(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
   public static VectorOffset CreateCharacterPrivateDataVectorBlock(FlatBufferBuilder builder, ArraySegment<byte> data) { builder.StartVector(1, data.Count, 1); builder.Add(data); return builder.EndVector(); }
   public static VectorOffset CreateCharacterPrivateDataVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<byte>(dataPtr, sizeInBytes); return builder.EndVector(); }
   public static void StartCharacterPrivateDataVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(1, numElems, 1); }
-  public static void AddMovement(FlatBufferBuilder builder, Offset<SF.Flat.ActorMovement> movementOffset) { builder.AddOffset(5, movementOffset.Value, 0); }
+  public static void AddMovement(FlatBufferBuilder builder, Offset<SF.Flat.ActorMovement> movementOffset) { builder.AddStruct(5, movementOffset.Value, 0); }
   public static Offset<SF.Flat.PlayInstance.JoinPlayInstanceRes> EndJoinPlayInstanceRes(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.PlayInstance.JoinPlayInstanceRes>(o);
@@ -74,12 +57,12 @@ static public class JoinPlayInstanceResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*uint*/, 4, false)
-      && verifier.VerifyField(tablePos, 6 /*PlayInstanceUid*/, 8 /*ulong*/, 8, false)
-      && verifier.VerifyField(tablePos, 8 /*PlayerId*/, 8 /*ulong*/, 8, false)
-      && verifier.VerifyField(tablePos, 10 /*CharacterId*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
+      && verifier.VerifyField(tablePos, 6 /*PlayInstanceUid*/, 4 /*SF.Flat.EntityUID*/, 4, false)
+      && verifier.VerifyField(tablePos, 8 /*PlayerId*/, 16 /*SF.Flat.AccountID*/, 8, false)
+      && verifier.VerifyField(tablePos, 10 /*CharacterId*/, 16 /*SF.Flat.CharacterID*/, 8, false)
       && verifier.VerifyVectorOfData(tablePos, 12 /*CharacterPrivateData*/, 1 /*byte*/, false)
-      && verifier.VerifyTable(tablePos, 14 /*Movement*/, SF.Flat.ActorMovementVerify.Verify, false)
+      && verifier.VerifyField(tablePos, 14 /*Movement*/, 48 /*SF.Flat.ActorMovement*/, 4, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

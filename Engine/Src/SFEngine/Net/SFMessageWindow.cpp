@@ -270,8 +270,8 @@ namespace Net {
         // I have reserved the spot
         m_uiSyncMask.fetch_or(((uint64_t)1) << iPosIdx, std::memory_order_relaxed);
 
-        MessageBuffer::ItemWritePtr itemPtr = m_MessageDataBuffer.AllocateWrite(pHeader->Length);
-        memcpy(itemPtr.data(), pHeader, pHeader->Length);
+        MessageBuffer::ItemWritePtr itemPtr = m_MessageDataBuffer.AllocateWrite(pHeader->MessageSize);
+        memcpy(itemPtr.data(), pHeader, pHeader->MessageSize);
 
         // we already tested validity, just swap it
         assert(m_pMsgWnd[iPosIdx].pMsgData == nullptr);

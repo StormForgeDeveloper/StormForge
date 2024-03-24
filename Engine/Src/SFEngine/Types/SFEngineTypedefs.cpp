@@ -58,15 +58,16 @@ namespace SF {
         if (separatorIndex < 0)
         {
             Platform = EPlatform::BR;
-            this->PlayerID = (uint64_t)strtoll(strId, &endptr, 10);
+            this->PlayerId = AccountID(Guid::Parse(strId));
         }
         else
         {
-            char buffer[256]{};
+            char buffer[128]{};
             StrUtil::StringCopy(buffer, strId);
             buffer[separatorIndex] = '\0';
             Platform = (EPlatform)strtol(buffer, &endptr, 10);
-            this->PlayerID = (uint64_t)strtoll(buffer + separatorIndex + 1, &endptr, 10);
+
+            this->PlayerId = AccountID(Guid::Parse(buffer));
         }
     }
 

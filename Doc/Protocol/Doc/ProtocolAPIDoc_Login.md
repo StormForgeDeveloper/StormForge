@@ -13,19 +13,19 @@ Login Server Protocol.
 namespace SF::Message::Login
 
 
-# Protocol interface class NetPolicyLogin
+# Protocol interface class LoginRPCSendAdapter
 ## Login Request
 Login with ID/PW request
 
 1. Command interface
 
-        Result LoginCmd(const TransactionID &InTransactionID, const char* Inuser_id, const char* Inpassword, const char* InGameID)
+        Result LoginCmd(const TransactionID &InTransactionID, const char* InUserId, const char* InPassword, const char* InGameID)
 
 		- TransactionID: type:TransactionID, 
 
-		- user_id: type:String, Login user id
+		- UserId: type:String, Login user id
 
-		- password: type:String, Login password
+		- Password: type:String, Login password
 
 		- GameID: type:String, GameID/AppID
 

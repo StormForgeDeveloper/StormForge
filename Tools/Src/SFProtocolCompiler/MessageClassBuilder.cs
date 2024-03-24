@@ -49,7 +49,6 @@ namespace ProtocolCompiler
         public MessageClassBuilder(Dictionary<string, string> settings)
             : base(settings)
         {
-            GenParameterRouteHopCount = true;
             IsCPPOut = true;
             LogFunctionPrefix = AppConfig.GetValueString("LogFuncPrefix", "SFLog(Net,");
         }
@@ -388,20 +387,6 @@ namespace ProtocolCompiler
             }
             NewLine();
 
-            // Override route context function
-            //if (Group.GenParameterRouteContext)
-            //{
-            //    MatchIndent(); OutStream.WriteLine("Result OverrideRouteContextDestination( EntityUID to );");
-            //    NewLine();
-            //}
-
-            // Override route hop function
-            //if (Group.GenParameterRouteHopCount)
-            //{
-            //    MatchIndent(); OutStream.WriteLine("Result OverrideRouteInformation( EntityUID to, unsigned hopCount );");
-            //    NewLine();
-            //}
-
             CloseSection();
         }
 
@@ -645,78 +630,78 @@ namespace ProtocolCompiler
         // Build parser class implementation
         void BuildOverrideRouteContextImpl(string Name, string typeName, Parameter[] parameters)
         {
-            if (!Group.GenParameterRouteContext)
-                return;
+            //if (!Group.GenParameterRouteContext)
+            //    return;
 
-            string strClassName = MsgClassName(Name, typeName);
-            OpenSection("Result", strClassName + "::OverrideRouteContextDestination( EntityUID to )");
+            //string strClassName = MsgClassName(Name, typeName);
+            //OpenSection("Result", strClassName + "::OverrideRouteContextDestination( EntityUID to )");
 
-            DefaultHRESULT(); NewLine();
+            //DefaultHRESULT(); NewLine();
 
-            MatchIndent(); OutStream.WriteLine("MessageData* pIMsg = GetMessage();");
-            MatchIndent(); OutStream.WriteLine("RouteContext routeContext;");
-            NewLine();
-            MatchIndent(); OutStream.WriteLine("protocolCheckPtr(pIMsg);");
-            NewLine();
+            //MatchIndent(); OutStream.WriteLine("MessageData* pIMsg = GetMessage();");
+            //MatchIndent(); OutStream.WriteLine("RouteContext routeContext;");
+            //NewLine();
+            //MatchIndent(); OutStream.WriteLine("protocolCheckPtr(pIMsg);");
+            //NewLine();
 
-            // array len types
-            MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));");
+            //// array len types
+            //MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));");
 
-            MatchIndent(); OutStream.WriteLine("ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
-            MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
-            MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToInputStream();");
-            MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;(void)(ArrayLen);");
-            MatchIndent(); OutStream.WriteLine("const uint8_t* pCur = nullptr;(void)(pCur);");
-            NewLine();
+            //MatchIndent(); OutStream.WriteLine("ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
+            //MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
+            //MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToInputStream();");
+            //MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;(void)(ArrayLen);");
+            //MatchIndent(); OutStream.WriteLine("const uint8_t* pCur = nullptr;(void)(pCur);");
+            //NewLine();
 
-            if (parameters == null)
-            {
-                // nothing to process
-            }
-            else
-            {
-                // Just follow the same process to parsing
-                foreach (Parameter param in parameters)
-                {
-                    switch (param.TypeName)
-                    {
-                        case "String":
-                            MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
-                            MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof(char));");
-                            break;
-                        case "RouteContext":
-                            break;
-                        default:
-                            if (param.IsArray)
-                            {
-                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
-                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof({0}));", ToTargetTypeName(param));
-                            }
-                            else
-                            {
-                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(sizeof({0}));", ToTargetTypeName(param));
-                            }
-                            break;
-                    }
+            //if (parameters == null)
+            //{
+            //    // nothing to process
+            //}
+            //else
+            //{
+            //    // Just follow the same process to parsing
+            //    foreach (Parameter param in parameters)
+            //    {
+            //        switch (param.TypeName)
+            //        {
+            //            case "String":
+            //                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
+            //                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof(char));");
+            //                break;
+            //            case "RouteContext":
+            //                break;
+            //            default:
+            //                if (param.IsArray)
+            //                {
+            //                    MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
+            //                    MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof({0}));", ToTargetTypeName(param));
+            //                }
+            //                else
+            //                {
+            //                    MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(sizeof({0}));", ToTargetTypeName(param));
+            //                }
+            //                break;
+            //        }
 
-                    // All other process is same
-                    if (param.TypeName == "RouteContext")
-                    {
-                        MatchIndent(); OutStream.WriteLine("pCur = input->GetBufferPtr() + input->GetPosition();");
-                        MatchIndent(); OutStream.WriteLine("Assert(input->GetRemainSize() >= sizeof(RouteContext));");
-                        MatchIndent(); OutStream.WriteLine("memcpy( &routeContext, pCur, sizeof(RouteContext) );");
-                        MatchIndent(); OutStream.WriteLine("routeContext.Components.To = to;");
-                        MatchIndent(); OutStream.WriteLine("memcpy( pCur, &routeContext, sizeof(RouteContext) );");
-                        break;
-                    }
-                }
-            }
+            //        // All other process is same
+            //        if (param.TypeName == "RouteContext")
+            //        {
+            //            MatchIndent(); OutStream.WriteLine("pCur = input->GetBufferPtr() + input->GetPosition();");
+            //            MatchIndent(); OutStream.WriteLine("Assert(input->GetRemainSize() >= sizeof(RouteContext));");
+            //            MatchIndent(); OutStream.WriteLine("memcpy( &routeContext, pCur, sizeof(RouteContext) );");
+            //            MatchIndent(); OutStream.WriteLine("routeContext.Components.To = to;");
+            //            MatchIndent(); OutStream.WriteLine("memcpy( pCur, &routeContext, sizeof(RouteContext) );");
+            //            break;
+            //        }
+            //    }
+            //}
 
-            NewLine();
-            ReturnHR();
-            NewLine();
+            //NewLine();
+            //ReturnHR();
+            //NewLine();
 
-            CloseSection();
+            //CloseSection();
         }
 
 

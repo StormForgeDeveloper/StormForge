@@ -1,32 +1,32 @@
-﻿include "LocalTypes.fbs";
+﻿include "SFTypes.fbs";
 namespace SF.Flat.PlayInstance;
 
 table JoinPlayInstanceCmd
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
 	player_identifier:string;
 } // table JoinPlayInstanceCmd
 
 table JoinPlayInstanceRes
 {
- 	result:uint32;
-	play_instance_uid:uint64;
-	player_id:uint64;
-	character_id:uint32;
+ 	result:int;
+	play_instance_uid:EntityUID;
+	player_id:AccountID;
+	character_id:CharacterID;
 	character_private_data:[ubyte];
 	movement:ActorMovement;
 } // table JoinPlayInstanceRes
 
 table PlayerKickedS2CEvt
 {
- 	play_instance_uid:uint64;
-	kicked_player_id:uint64;
+ 	play_instance_uid:GameInstanceUID;
+	kicked_player_id:AccountID;
 } // table PlayerKickedS2CEvt
 
 table PlayPacketC2SEvt
 {
- 	play_instance_uid:uint64;
+ 	play_instance_uid:GameInstanceUID;
 	sender_endpoint_id:uint32;
 	target_endpoint_mask:uint32;
 	payload:[uint8];
@@ -34,8 +34,8 @@ table PlayPacketC2SEvt
 
 table NewActorInViewS2CEvt
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:GameInstanceUID;
+	player_id:AccountID;
 	player_platform_id:PlayerPlatformID;
 	public_data:[ubyte];
 	equip_data:[ubyte];
@@ -46,33 +46,33 @@ table NewActorInViewS2CEvt
 
 table RemoveActorFromViewS2CEvt
 {
- 	play_instance_uid:uint64;
+ 	play_instance_uid:GameInstanceUID;
 	actor_id:uint32;
 } // table RemoveActorFromViewS2CEvt
 
 table PlayerMovementC2SEvt
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:GameInstanceUID;
+	player_id:AccountID;
 	movement:ActorMovement;
 } // table PlayerMovementC2SEvt
 
 table ActorMovementS2CEvt
 {
- 	play_instance_uid:uint64;
+ 	play_instance_uid:GameInstanceUID;
 	movement:ActorMovement;
 } // table ActorMovementS2CEvt
 
 table ActorMovementsS2CEvt
 {
- 	play_instance_uid:uint64;
+ 	play_instance_uid:GameInstanceUID;
 	movement:[ActorMovement];
 } // table ActorMovementsS2CEvt
 
 table PlayerStateChangedS2CEvt
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:GameInstanceUID;
+	player_id:AccountID;
 	state:uint32;
 	move_frame:uint32;
 	position:Vector4;
@@ -81,221 +81,221 @@ table PlayerStateChangedS2CEvt
 
 table ClientSyncReliableC2SEvt
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:GameInstanceUID;
+	player_id:AccountID;
 	sync_data:[ubyte];
 } // table ClientSyncReliableC2SEvt
 
 table ClientSyncC2SEvt
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:GameInstanceUID;
+	player_id:AccountID;
 	sync_data:[ubyte];
 } // table ClientSyncC2SEvt
 
 table SetCharacterPublicMessageCmd
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
 	public_message:string;
 } // table SetCharacterPublicMessageCmd
 
 table SetCharacterPublicMessageRes
 {
- 	result:uint32;
+ 	result:int;
 } // table SetCharacterPublicMessageRes
 
 table CharacterPrivateDataChangedS2CEvt
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
-	character_id:uint32;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
+	character_id:CharacterID;
 	private_data:[ubyte];
 } // table CharacterPrivateDataChangedS2CEvt
 
 table CharacterPublicDataChangedS2CEvt
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:GameInstanceUID;
+	player_id:AccountID;
 	public_data:[ubyte];
 } // table CharacterPublicDataChangedS2CEvt
 
 table RequestWhiteboardSharingCmd
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
-	target_player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
+	target_player_id:AccountID;
 	whiteboard_info:[ubyte];
 } // table RequestWhiteboardSharingCmd
 
 table RequestWhiteboardSharingRes
 {
- 	result:uint32;
+ 	result:int;
 } // table RequestWhiteboardSharingRes
 
 table AcceptWhiteboardSharingCmd
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
-	requested_player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
+	requested_player_id:AccountID;
 	answer:uint8;
 } // table AcceptWhiteboardSharingCmd
 
 table AcceptWhiteboardSharingRes
 {
- 	result:uint32;
+ 	result:int;
 } // table AcceptWhiteboardSharingRes
 
 table CloseWhiteboardSharingCmd
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
 } // table CloseWhiteboardSharingCmd
 
 table CloseWhiteboardSharingRes
 {
- 	result:uint32;
+ 	result:int;
 } // table CloseWhiteboardSharingRes
 
 table AddWhiteboardSharingLogEntryCmd
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
 	log_entry:[ubyte];
 } // table AddWhiteboardSharingLogEntryCmd
 
 table AddWhiteboardSharingLogEntryRes
 {
- 	result:uint32;
+ 	result:int;
 	log_entry_id:uint32;
 } // table AddWhiteboardSharingLogEntryRes
 
 table UpdateWhiteboardSharingLogEntryCmd
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
 	log_entry:[ubyte];
 } // table UpdateWhiteboardSharingLogEntryCmd
 
 table UpdateWhiteboardSharingLogEntryRes
 {
- 	result:uint32;
+ 	result:int;
 } // table UpdateWhiteboardSharingLogEntryRes
 
 table RemoveWhiteboardSharingLogEntryCmd
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
 	log_entry_id:uint32;
 } // table RemoveWhiteboardSharingLogEntryCmd
 
 table RemoveWhiteboardSharingLogEntryRes
 {
- 	result:uint32;
+ 	result:int;
 } // table RemoveWhiteboardSharingLogEntryRes
 
 table WhiteboardSharingRequestedS2CEvt
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
-	requested_player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
+	requested_player_id:AccountID;
 } // table WhiteboardSharingRequestedS2CEvt
 
 table WhiteboardSharingRejectedS2CEvt
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
-	rejected_player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
+	rejected_player_id:AccountID;
 } // table WhiteboardSharingRejectedS2CEvt
 
 table WhiteboardSharingStartedS2CEvt
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
-	other_player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
+	other_player_id:AccountID;
 	whiteboard_info:[ubyte];
 } // table WhiteboardSharingStartedS2CEvt
 
 table WhiteboardSharingHasClosedS2CEvt
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
-	closed_player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
+	closed_player_id:AccountID;
 } // table WhiteboardSharingHasClosedS2CEvt
 
 table WhiteboardSharingNewLogEntryAddedS2CEvt
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
 	log_entry:[ubyte];
 } // table WhiteboardSharingNewLogEntryAddedS2CEvt
 
 table WhiteboardSharingNewLogEntryRemovedS2CEvt
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
 	log_entry_id:uint32;
 } // table WhiteboardSharingNewLogEntryRemovedS2CEvt
 
 table WhiteboardSharingNewLogEntryUpdatedS2CEvt
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
 	log_entry:[ubyte];
 } // table WhiteboardSharingNewLogEntryUpdatedS2CEvt
 
 table OccupyMapObjectCmd
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
 	map_object_id:uint32;
 	usage_id:uint32;
 } // table OccupyMapObjectCmd
 
 table OccupyMapObjectRes
 {
- 	result:uint32;
-	play_instance_uid:uint64;
-	player_id:uint64;
+ 	result:int;
+	play_instance_uid:EntityUID;
+	player_id:AccountID;
 	map_object_id:uint32;
 } // table OccupyMapObjectRes
 
 table UnoccupyMapObjectCmd
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
 	map_object_id:uint32;
 } // table UnoccupyMapObjectCmd
 
 table UnoccupyMapObjectRes
 {
- 	result:uint32;
-	play_instance_uid:uint64;
-	player_id:uint64;
+ 	result:int;
+	play_instance_uid:EntityUID;
+	player_id:AccountID;
 	map_object_id:uint32;
 } // table UnoccupyMapObjectRes
 
 table UseMapObjectCmd
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
 	map_object_id:uint32;
 	use_parameters:[ubyte];
 } // table UseMapObjectCmd
 
 table UseMapObjectRes
 {
- 	result:uint32;
-	play_instance_uid:uint64;
-	player_id:uint64;
+ 	result:int;
+	play_instance_uid:EntityUID;
+	player_id:AccountID;
 	map_object_id:uint32;
 	result_attributes:[ubyte];
 } // table UseMapObjectRes
 
 table ZoneChatCmd
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:GameInstanceUID;
+	player_id:AccountID;
 	message_type:int8;
 	chat_meta_data:[ubyte];
 	chat_message:string;
@@ -303,13 +303,13 @@ table ZoneChatCmd
 
 table ZoneChatRes
 {
- 	result:uint32;
+ 	result:int;
 } // table ZoneChatRes
 
 table ZoneChatS2CEvt
 {
- 	play_instance_uid:uint64;
-	sender_id:uint64;
+ 	play_instance_uid:GameInstanceUID;
+	sender_id:AccountID;
 	message_type:int8;
 	chat_meta_data:[ubyte];
 	chat_message:string;
@@ -317,8 +317,8 @@ table ZoneChatS2CEvt
 
 table LevelUpS2CEvt
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:EntityUID;
+	player_id:AccountID;
 	current_exp:int64;
 	current_level:int;
 } // table LevelUpS2CEvt
@@ -326,20 +326,20 @@ table LevelUpS2CEvt
 table CallFunctionCmd
 {
  	function_name:uint32;
-	player_id:uint64;
+	player_id:AccountID;
 	parameters:[ubyte];
 } // table CallFunctionCmd
 
 table CallFunctionRes
 {
- 	result:uint32;
+ 	result:int;
 	results:[ubyte];
 } // table CallFunctionRes
 
 table SendVoiceDataC2SEvt
 {
- 	play_instance_uid:uint64;
-	player_id:uint64;
+ 	play_instance_uid:GameInstanceUID;
+	player_id:AccountID;
 	frame_index:uint16;
 	voice_data:[uint8];
 } // table SendVoiceDataC2SEvt
@@ -359,7 +359,7 @@ table CreateStreamCmd
 
 table CreateStreamRes
 {
- 	result:uint32;
+ 	result:int;
 	stream_name:string;
 } // table CreateStreamRes
 
@@ -371,7 +371,7 @@ table FindStreamCmd
 
 table FindStreamRes
 {
- 	result:uint32;
+ 	result:int;
 	stream_name:string;
 } // table FindStreamRes
 
@@ -383,7 +383,7 @@ table DeleteStreamCmd
 
 table DeleteStreamRes
 {
- 	result:uint32;
+ 	result:int;
 	stream_name:string;
 } // table DeleteStreamRes
 
@@ -394,7 +394,7 @@ table GetStreamListCmd
 
 table GetStreamListRes
 {
- 	result:uint32;
+ 	result:int;
 	stream_names:[string];
 } // table GetStreamListRes
 

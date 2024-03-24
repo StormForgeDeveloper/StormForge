@@ -19,25 +19,14 @@ public struct CreateOrJoinChatChannelRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public CreateOrJoinChatChannelRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public uint Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
-  public ulong ChatUid { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-  public ulong ChannelLeaderId { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-
-  public static Offset<SF.Flat.Game.CreateOrJoinChatChannelRes> CreateCreateOrJoinChatChannelRes(FlatBufferBuilder builder,
-      uint result = 0,
-      ulong chat_uid = 0,
-      ulong channel_leader_id = 0) {
-    builder.StartTable(3);
-    CreateOrJoinChatChannelRes.AddChannelLeaderId(builder, channel_leader_id);
-    CreateOrJoinChatChannelRes.AddChatUid(builder, chat_uid);
-    CreateOrJoinChatChannelRes.AddResult(builder, result);
-    return CreateOrJoinChatChannelRes.EndCreateOrJoinChatChannelRes(builder);
-  }
+  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public SF.Flat.EntityUID? ChatUid { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.EntityUID?)(new SF.Flat.EntityUID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public SF.Flat.AccountID? ChannelLeaderId { get { int o = __p.__offset(8); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
 
   public static void StartCreateOrJoinChatChannelRes(FlatBufferBuilder builder) { builder.StartTable(3); }
-  public static void AddResult(FlatBufferBuilder builder, uint result) { builder.AddUint(0, result, 0); }
-  public static void AddChatUid(FlatBufferBuilder builder, ulong chatUid) { builder.AddUlong(1, chatUid, 0); }
-  public static void AddChannelLeaderId(FlatBufferBuilder builder, ulong channelLeaderId) { builder.AddUlong(2, channelLeaderId, 0); }
+  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
+  public static void AddChatUid(FlatBufferBuilder builder, Offset<SF.Flat.EntityUID> chatUidOffset) { builder.AddStruct(1, chatUidOffset.Value, 0); }
+  public static void AddChannelLeaderId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> channelLeaderIdOffset) { builder.AddStruct(2, channelLeaderIdOffset.Value, 0); }
   public static Offset<SF.Flat.Game.CreateOrJoinChatChannelRes> EndCreateOrJoinChatChannelRes(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.CreateOrJoinChatChannelRes>(o);
@@ -50,9 +39,9 @@ static public class CreateOrJoinChatChannelResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*uint*/, 4, false)
-      && verifier.VerifyField(tablePos, 6 /*ChatUid*/, 8 /*ulong*/, 8, false)
-      && verifier.VerifyField(tablePos, 8 /*ChannelLeaderId*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
+      && verifier.VerifyField(tablePos, 6 /*ChatUid*/, 4 /*SF.Flat.EntityUID*/, 4, false)
+      && verifier.VerifyField(tablePos, 8 /*ChannelLeaderId*/, 16 /*SF.Flat.AccountID*/, 8, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

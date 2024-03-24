@@ -11,45 +11,21 @@ using global::Google.FlatBuffers;
 
 public struct AchievementStat : IFlatbufferObject
 {
-  private Table __p;
+  private Struct __p;
   public ByteBuffer ByteBuffer { get { return __p.bb; } }
-  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_24_3_7(); }
-  public static AchievementStat GetRootAsAchievementStat(ByteBuffer _bb) { return GetRootAsAchievementStat(_bb, new AchievementStat()); }
-  public static AchievementStat GetRootAsAchievementStat(ByteBuffer _bb, AchievementStat obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
-  public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Struct(_i, _bb); }
   public AchievementStat __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public uint AchievementStatId { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
-  public int StatValue { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public uint AchievementStatId { get { return __p.bb.GetUint(__p.bb_pos + 0); } }
+  public int StatValue { get { return __p.bb.GetInt(__p.bb_pos + 4); } }
 
-  public static Offset<SF.Flat.AchievementStat> CreateAchievementStat(FlatBufferBuilder builder,
-      uint achievement_stat_id = 0,
-      int stat_value = 0) {
-    builder.StartTable(2);
-    AchievementStat.AddStatValue(builder, stat_value);
-    AchievementStat.AddAchievementStatId(builder, achievement_stat_id);
-    return AchievementStat.EndAchievementStat(builder);
-  }
-
-  public static void StartAchievementStat(FlatBufferBuilder builder) { builder.StartTable(2); }
-  public static void AddAchievementStatId(FlatBufferBuilder builder, uint achievementStatId) { builder.AddUint(0, achievementStatId, 0); }
-  public static void AddStatValue(FlatBufferBuilder builder, int statValue) { builder.AddInt(1, statValue, 0); }
-  public static Offset<SF.Flat.AchievementStat> EndAchievementStat(FlatBufferBuilder builder) {
-    int o = builder.EndTable();
-    return new Offset<SF.Flat.AchievementStat>(o);
+  public static Offset<SF.Flat.AchievementStat> CreateAchievementStat(FlatBufferBuilder builder, uint AchievementStatId, int StatValue) {
+    builder.Prep(4, 8);
+    builder.PutInt(StatValue);
+    builder.PutUint(AchievementStatId);
+    return new Offset<SF.Flat.AchievementStat>(builder.Offset);
   }
 }
 
-
-static public class AchievementStatVerify
-{
-  static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
-  {
-    return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*AchievementStatId*/, 4 /*uint*/, 4, false)
-      && verifier.VerifyField(tablePos, 6 /*StatValue*/, 4 /*int*/, 4, false)
-      && verifier.VerifyTableEnd(tablePos);
-  }
-}
 
 }

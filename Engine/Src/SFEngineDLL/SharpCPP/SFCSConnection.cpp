@@ -22,6 +22,7 @@
 #include "Net/SFConnectionTCP.h"
 #include "Net/SFMessage.h"
 #include "SFProtocol.h"
+#include "MessageBus/SFMessageHeader.h"
 
 #include "Interfaces/Sharp/SFCSUtil.h"
 
@@ -144,7 +145,7 @@ SFDLL_EXPORT bool SFConnection_NativeDequeueEvent(intptr_t nativeHandle, Net::Co
 }
 
 
-SFDLL_EXPORT bool SFConnection_NativeDequeueMessage(intptr_t nativeHandle, SET_MESSAGE_FUNCTION setMessageFunc, VariableMapBuilderCS::SET_FUNCTION setValueFunc, VariableMapBuilderCS::SET_ARRAY_FUNCTION setArrayValueFunc)
+SFDLL_EXPORT bool SFConnection_NativeDequeueMessage(intptr_t nativeHandle, ON_MESSAGE_FUNCTION onMessageFunc)
 {
 	if (nativeHandle == 0)
 		return false;
@@ -157,12 +158,7 @@ SFDLL_EXPORT bool SFConnection_NativeDequeueMessage(intptr_t nativeHandle, SET_M
 
     const MessageHeader* pHeader = reinterpret_cast<const MessageHeader * >(itemPtr.data());
 
-	setMessageFunc(pHeader->GetMessageID());
-
-	// Fill parameters
-	VariableMapBuilderCS builder(setValueFunc, setArrayValueFunc);
-	if (!SF::Protocol::ParseMessage(pHeader, builder))
-		return false;
+	onMessageFunc(pHeader->GetMessageID(), pHeader->TransactionId, pHeader->GetPayloadSize(), pHeader->GetPayloadPtr());
 
 	return true;
 }
@@ -179,4 +175,19 @@ SFDLL_EXPORT bool SFConnection_NativeTimeSync(intptr_t nativeHandle)
 	return pConnection->TimeSync().IsSuccess();
 }
 
+SFDLL_EXPORT int SFConnection_NativeSendMessage(intptr_t nativeHandle, int dataOffset, int dataSize, const uint8_t* dataPtr)
+{
+    if (nativeHandle == 0)
+        return (int)ResultCode::INVALID_POINTER;
 
+    if (dataPtr == nullptr)
+        return (int)ResultCode::INVALID_ARG;
+
+    Net::Connection* pConnection = NativeToObject<Net::Connection>(nativeHandle);
+
+    auto* messageHeader = reinterpret_cast<const MessageHeader*>(dataPtr + dataOffset);
+    if (messageHeader->MessageSize != dataSize)
+        return (int)ResultCode::INVALID_DATA;
+
+    return (int)pConnection->SendMsg(messageHeader);
+}

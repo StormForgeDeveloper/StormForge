@@ -219,36 +219,36 @@ namespace SF {
         {
             Result hr;
 
-            assert(pHeader->Length >= sizeof(MsgNetCtrlBuffer)); // the available buffer should be bigger than we need
+            assert(pHeader->MessageSize >= sizeof(MsgNetCtrlBuffer)); // the available buffer should be bigger than we need
             pHeader->MessageId = uiCtrlCode;
             pHeader->SetSequence(uiSequence);
-            pHeader->Length = pHeader->GetHeaderSize();
+            pHeader->MessageSize = pHeader->GetHeaderSize();
 
             if (uiCtrlCode == PACKET_NETCTRL_SYNCRELIABLE)
             {
-                MsgMobileNetCtrlSync* pCtlMsg = static_cast<MsgMobileNetCtrlSync*>(pHeader->GetDataPtr());
+                MsgMobileNetCtrlSync* pCtlMsg = static_cast<MsgMobileNetCtrlSync*>(pHeader->GetPayloadPtr());
                 pCtlMsg->MessageMask = parameter0;
-                pHeader->Length += sizeof(MsgMobileNetCtrlSync);
+                pHeader->MessageSize += sizeof(MsgMobileNetCtrlSync);
             }
             else if (uiCtrlCode == PACKET_NETCTRL_TIMESYNC || uiCtrlCode == PACKET_NETCTRL_TIMESYNC_RTN)
             {
-                MsgNetCtrlTimeSync* pCtlMsg = static_cast<MsgNetCtrlTimeSync*>(pHeader->GetDataPtr());
+                MsgNetCtrlTimeSync* pCtlMsg = static_cast<MsgNetCtrlTimeSync*>(pHeader->GetPayloadPtr());
                 pCtlMsg->ClientTimeStamp = returnMsgID.ID;
                 pCtlMsg->ServerTimeStamp = uint32_t(parameter0);
-                pHeader->Length += sizeof(MsgNetCtrlTimeSync);
+                pHeader->MessageSize += sizeof(MsgNetCtrlTimeSync);
             }
             else
             {
-                MsgNetCtrl* pCtlMsg = static_cast<MsgNetCtrl*>(pHeader->GetDataPtr());
+                MsgNetCtrl* pCtlMsg = static_cast<MsgNetCtrl*>(pHeader->GetPayloadPtr());
                 pCtlMsg->rtnMsgID = returnMsgID;
-                pHeader->Length += sizeof(MsgNetCtrl);
+                pHeader->MessageSize += sizeof(MsgNetCtrl);
 
                 if (uiCtrlCode == PACKET_NETCTRL_CONNECT || returnMsgID.GetMessageID() == PACKET_NETCTRL_CONNECT)
                 {
                     MsgNetCtrlConnect* pConMsg = reinterpret_cast<MsgNetCtrlConnect*>(pCtlMsg + 1);
                     pConMsg->ProtocolVersion = SF_PROTOCOL_VERSION;
                     pConMsg->Peer = GetLocalInfo();
-                    pHeader->Length += sizeof(MsgNetCtrlConnect);
+                    pHeader->MessageSize += sizeof(MsgNetCtrlConnect);
                 }
             }
 
@@ -378,7 +378,7 @@ namespace SF {
 		{
 			Result hr = ResultCode::SUCCESS;
 			ConnectionMessageAction* pAction = nullptr;
-			if (pNetCtrlBuffer->Header.Length < sizeof(MsgNetCtrl))
+			if (pNetCtrlBuffer->Header.MessageSize < sizeof(MsgNetCtrl))
 			{
 				SFLog(Net, Info, "HackWarn : Invalid packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);
 				netCheck(Disconnect("Invalid packet"));
@@ -546,9 +546,8 @@ namespace SF {
 			Protocol::PrintDebugMessage("Recv", pMsgHeader);
 
 			//Assert( MemoryPool::CheckMemoryHeader( *pMsg ) );
-			assert(pMsgHeader->GetPayloadSize() == 0 // 0 crc for zero size packet
-                || pMsgHeader->Length > 1024 // Multiple sub framed message can't have crc value. each sub frame does
-                || pMsgHeader->Crc32 != 0); // Crc should have value
+            assert(pMsgHeader->GetPayloadSize() == 0 // 0 crc for zero size packet
+                || pMsgHeader->MessageSize > 1024); // Multiple sub framed message can't have crc value. each sub frame does
 
             uint uiPolicy = msgID.IDs.Protocol;
             if (uiPolicy == 0 // Net control
@@ -563,10 +562,10 @@ namespace SF {
 			}
 			else
 			{
-                MessageItemWritePtr msgItemPtr = m_RecvMessageQueue.AllocateWrite(pMsgHeader->Length);
+                MessageItemWritePtr msgItemPtr = m_RecvMessageQueue.AllocateWrite(pMsgHeader->MessageSize);
                 if (msgItemPtr.IsValid())
                 {
-                    memcpy(msgItemPtr.data(), pMsgHeader, pMsgHeader->Length);
+                    memcpy(msgItemPtr.data(), pMsgHeader, pMsgHeader->MessageSize);
                 }
 			}
 

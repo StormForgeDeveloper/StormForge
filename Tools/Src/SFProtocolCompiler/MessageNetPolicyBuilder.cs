@@ -136,14 +136,13 @@ namespace ProtocolCompiler
         {
             Parameter[] newparams;
 
-            OpenSection("class", string.Format("{0}", SvrPolicyClassName));
-            MatchIndent(); OutStream.WriteLine("private:");
+            OpenSection("class", string.Format("{0}", SvrRPCSendAdapterClassName));
+            WriteLineWithIndent("private:");
             MatchIndent(1); OutStream.WriteLine("SharedPointerT<MessageEndpoint> m_Endpoint;");
-            MatchIndent(); OutStream.WriteLine("public:");
-            MatchIndent(); OutStream.WriteLine("// Constructor");
-            MatchIndent(); OutStream.WriteLine(
-                string.Format("{0} ( const SharedPointerT<MessageEndpoint>& pEndpoint ) : m_Endpoint(pEndpoint)", SvrPolicyClassName));
-            MatchIndent(); OutStream.WriteLine("{}");
+            WriteLineWithIndent("public:");
+            WriteLineWithIndent("// Constructor");
+            WriteLineWithIndent($"{SvrRPCSendAdapterClassName} ( const SharedPointerT<MessageEndpoint>& pEndpoint ) : m_Endpoint(pEndpoint)");
+            WriteLineWithIndent("{}");
             NewLine();
 
             foreach (MessageBase baseMsg in Group.Items)
@@ -178,13 +177,13 @@ namespace ProtocolCompiler
         {
             Parameter[] newparams;
 
-            OpenSection("class", string.Format("{0} ", PolicyClassName));
+            OpenSection("class", string.Format("{0} ", RPCSendAdapterClassName));
             MatchIndent(); OutStream.WriteLine("private:");
             MatchIndent(1); OutStream.WriteLine("SharedPointerT<MessageEndpoint> m_Endpoint;");
             MatchIndent(); OutStream.WriteLine("public:");
             MatchIndent(); OutStream.WriteLine("// Constructor");
             MatchIndent(); OutStream.WriteLine(
-                string.Format("{0} (const SharedPointerT<MessageEndpoint>& pEndpoint ) : m_Endpoint(pEndpoint)", PolicyClassName));
+                string.Format("{0} (const SharedPointerT<MessageEndpoint>& pEndpoint ) : m_Endpoint(pEndpoint)", RPCSendAdapterClassName));
             MatchIndent(); OutStream.WriteLine("{}");
             NewLine();
 
@@ -220,7 +219,7 @@ namespace ProtocolCompiler
         void BuildNetPolicyClassParserImpl( string Name, string typeName, Parameter[] parameters)
         {
             if((typeName == "Cmd") || (typeName == "C2SEvt"))
-                OpenSection("Result", string.Format("{0}::{1}{2}( {3} )", PolicyClassName, Name, typeName, ParamInString(parameters)));
+                OpenSection("Result", string.Format("{0}::{1}{2}( {3} )", RPCSendAdapterClassName, Name, typeName, ParamInString(parameters)));
             else
                 OpenSection("Result", string.Format("{0}::{1}{2}( {3} )", SvrPolicyClassName, Name, typeName, ParamInString(parameters)));
             

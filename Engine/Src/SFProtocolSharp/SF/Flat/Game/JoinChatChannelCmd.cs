@@ -19,8 +19,8 @@ public struct JoinChatChannelCmd : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public JoinChatChannelCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ulong ChatUid { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-  public ulong InviterId { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
+  public SF.Flat.EntityUID? ChatUid { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.EntityUID?)(new SF.Flat.EntityUID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public SF.Flat.AccountID? InviterId { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public string Passcode { get { int o = __p.__offset(8); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
   public Span<byte> GetPasscodeBytes() { return __p.__vector_as_span<byte>(8, 1); }
@@ -29,20 +29,9 @@ public struct JoinChatChannelCmd : IFlatbufferObject
 #endif
   public byte[] GetPasscodeArray() { return __p.__vector_as_array<byte>(8); }
 
-  public static Offset<SF.Flat.Game.JoinChatChannelCmd> CreateJoinChatChannelCmd(FlatBufferBuilder builder,
-      ulong chat_uid = 0,
-      ulong inviter_id = 0,
-      StringOffset passcodeOffset = default(StringOffset)) {
-    builder.StartTable(3);
-    JoinChatChannelCmd.AddInviterId(builder, inviter_id);
-    JoinChatChannelCmd.AddChatUid(builder, chat_uid);
-    JoinChatChannelCmd.AddPasscode(builder, passcodeOffset);
-    return JoinChatChannelCmd.EndJoinChatChannelCmd(builder);
-  }
-
   public static void StartJoinChatChannelCmd(FlatBufferBuilder builder) { builder.StartTable(3); }
-  public static void AddChatUid(FlatBufferBuilder builder, ulong chatUid) { builder.AddUlong(0, chatUid, 0); }
-  public static void AddInviterId(FlatBufferBuilder builder, ulong inviterId) { builder.AddUlong(1, inviterId, 0); }
+  public static void AddChatUid(FlatBufferBuilder builder, Offset<SF.Flat.EntityUID> chatUidOffset) { builder.AddStruct(0, chatUidOffset.Value, 0); }
+  public static void AddInviterId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> inviterIdOffset) { builder.AddStruct(1, inviterIdOffset.Value, 0); }
   public static void AddPasscode(FlatBufferBuilder builder, StringOffset passcodeOffset) { builder.AddOffset(2, passcodeOffset.Value, 0); }
   public static Offset<SF.Flat.Game.JoinChatChannelCmd> EndJoinChatChannelCmd(FlatBufferBuilder builder) {
     int o = builder.EndTable();
@@ -56,8 +45,8 @@ static public class JoinChatChannelCmdVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*ChatUid*/, 8 /*ulong*/, 8, false)
-      && verifier.VerifyField(tablePos, 6 /*InviterId*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyField(tablePos, 4 /*ChatUid*/, 4 /*SF.Flat.EntityUID*/, 4, false)
+      && verifier.VerifyField(tablePos, 6 /*InviterId*/, 16 /*SF.Flat.AccountID*/, 8, false)
       && verifier.VerifyString(tablePos, 8 /*Passcode*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }

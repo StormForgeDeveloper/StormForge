@@ -62,12 +62,12 @@ namespace SF {
 
             SF_FORCEINLINE MessageHeader* AddMessage(const MessageHeader* pMsgHeader)
             {
-                if (!CanAdd(pMsgHeader->Length))
+                if (!CanAdd(pMsgHeader->MessageSize))
                     return nullptr;
 
                 MessageHeader* pDestHeader = reinterpret_cast<MessageHeader*>(Payload.data() + Payload.size());
-                Payload.resize(Payload.size() + pMsgHeader->Length);
-                memcpy(pDestHeader, pMsgHeader, pMsgHeader->Length);
+                Payload.resize(Payload.size() + pMsgHeader->MessageSize);
+                memcpy(pDestHeader, pMsgHeader, pMsgHeader->MessageSize);
 
                 return pDestHeader;
             }

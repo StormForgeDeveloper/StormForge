@@ -27,7 +27,7 @@ namespace SF
 			constexpr MessageID MID_JoinGameServerCmd(MessageType::Command,1,MessageProtocol::Game,1);
 			constexpr MessageID MID_JoinGameServerRes(MessageType::Result,1,MessageProtocol::Game,1);
 
-			// Cmd: player complition statues
+			// Cmd: player completion statues
 			constexpr MessageID MID_GetAchievementStatsCmd(MessageType::Command,1,MessageProtocol::Game,2);
 			constexpr MessageID MID_GetAchievementStatsRes(MessageType::Result,1,MessageProtocol::Game,2);
 

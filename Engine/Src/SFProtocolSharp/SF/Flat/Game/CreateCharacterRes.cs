@@ -19,21 +19,12 @@ public struct CreateCharacterRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public CreateCharacterRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public uint Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
-  public uint CharacterId { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
-
-  public static Offset<SF.Flat.Game.CreateCharacterRes> CreateCreateCharacterRes(FlatBufferBuilder builder,
-      uint result = 0,
-      uint character_id = 0) {
-    builder.StartTable(2);
-    CreateCharacterRes.AddCharacterId(builder, character_id);
-    CreateCharacterRes.AddResult(builder, result);
-    return CreateCharacterRes.EndCreateCharacterRes(builder);
-  }
+  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public SF.Flat.CharacterID? CharacterId { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.CharacterID?)(new SF.Flat.CharacterID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
 
   public static void StartCreateCharacterRes(FlatBufferBuilder builder) { builder.StartTable(2); }
-  public static void AddResult(FlatBufferBuilder builder, uint result) { builder.AddUint(0, result, 0); }
-  public static void AddCharacterId(FlatBufferBuilder builder, uint characterId) { builder.AddUint(1, characterId, 0); }
+  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
+  public static void AddCharacterId(FlatBufferBuilder builder, Offset<SF.Flat.CharacterID> characterIdOffset) { builder.AddStruct(1, characterIdOffset.Value, 0); }
   public static Offset<SF.Flat.Game.CreateCharacterRes> EndCreateCharacterRes(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.CreateCharacterRes>(o);
@@ -46,8 +37,8 @@ static public class CreateCharacterResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*uint*/, 4, false)
-      && verifier.VerifyField(tablePos, 6 /*CharacterId*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
+      && verifier.VerifyField(tablePos, 6 /*CharacterId*/, 16 /*SF.Flat.CharacterID*/, 8, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

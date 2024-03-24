@@ -6,6 +6,27 @@ struct TimeSpan {
     milliseconds:long;
 }
 
+struct Time32
+{
+	time:uint32;
+}
+
+
+struct Time64
+{
+	time:uint64;
+}
+
+struct GameInstanceUID
+{
+    uid:uint32;
+}
+
+struct TransactionID
+{
+    transaction_id:ulong;
+}
+
 struct Vector4
 {
 	x:float;
@@ -20,6 +41,24 @@ struct UInt128
 	high:uint64;
 }
 
+struct Guid
+{
+	low:uint64;
+	high:uint64;
+}
+
+struct AccountID
+{
+	low:uint64;
+	high:uint64;
+}
+
+struct CharacterID
+{
+	low:uint64;
+	high:uint64;
+}
+
 table GenericError {
 	transaction_id:uint64;
     result_code:int32;
@@ -29,13 +68,6 @@ table GenericError {
 struct EntityUID
 {
 	entity_id:uint32;
-	server_id:uint32;
-}
-
-struct RouteContext
-{
-	from:EntityUID;
-	to:EntityUID;
 }
 
 enum Platform : byte
@@ -47,13 +79,13 @@ enum Platform : byte
 
 struct PlayerPlatformID
 {
-	player_id:uint64;
+	player_id:AccountID;
 	platform_data:Platform;
 }
 
 table PlayerInformation
 {
-	player_id:uint64;
+	player_id:AccountID;
 	player_platform_id:PlayerPlatformID(required);
 	profile_name:string;
 	last_active_time:uint64;
@@ -63,15 +95,15 @@ table TotalRankingPlayerInformation
 {
 	ranking_id:uint32;
 	ranking:uint32;
-	player_id:uint64;
+	player_id:AccountID;
 	player_platform_id:PlayerPlatformID(required);
-	nick_name:string;
+	profile_name:string;
 	level:uint32;
 	score_low:uint32;
 	score_high:uint32;
 }
 
-table AchievementStat
+struct AchievementStat
 {
 	achievement_stat_id:uint32;
 	stat_value:int32;
@@ -92,7 +124,7 @@ struct MatchingQueueTicket
 	queue_item_id:uint64;
 }
 
-table ActorMovement
+struct ActorMovement
 {
 	position:Vector4;
 	linear_velocity:Vector4;
@@ -101,7 +133,6 @@ table ActorMovement
 	move_frame:uint32;
 	movement_state:uint32;
 }
-
 
 enum ChatMessageType : byte
 {
@@ -152,16 +183,62 @@ table NamedVariableBool
     value:bool;
 }
 
+table NamedVariableGuid
+{
+    value:Guid;
+}
+
 union NamedVariableValue
 {
     NamedVariableString, NamedVariableBool,
     NamedVariableFloat, NamedVariableDouble,
     NamedVariableInt, NamedVariableUInt,
-    NamedVariableInt64, NamedVariableUInt64
+    NamedVariableInt64, NamedVariableUInt64,
+    NamedVariableGuid
 }
 
 table NamedVariable
 {
     name:string(required);
     value:NamedVariableValue(required);
+}
+
+enum NotificationType : byte
+{
+        None,				// Not used
+		MessageNotify,
+		FriendRequest,
+		GiftStamina,
+}
+
+
+// ================ Deprecated
+
+enum PlayerRole : byte
+{
+        None,
+        Villager,
+        Werewolf,
+        Seer,
+}
+
+enum GameWinner : byte
+{
+        None,
+        Werewolf,
+        Villager,
+        WereHamster,
+}
+
+enum PlayerKilledReason : byte
+{
+        Unknown,
+        BlockedByBoardGuard,
+        ByWerewolf,
+        ByHanging,
+}
+
+enum RankingType : byte
+{
+	World
 }

@@ -52,28 +52,16 @@ namespace ProtocolXml {
         
         private bool genParameterContextField;
         
-        private bool genParameterRouteContextField;
-        
-        private bool isMobileField;
-        
         private bool isServerField;
         
-        private bool genParameterRouteHopCountField;
-        
         private bool genNetField;
-        
-        private bool genCSharpField;
         
         private string descField;
         
         public ProtocolsProtocolGroup() {
             this.genParameterContextField = true;
-            this.genParameterRouteContextField = false;
-            this.isMobileField = false;
             this.isServerField = false;
-            this.genParameterRouteHopCountField = false;
             this.genNetField = false;
-            this.genCSharpField = false;
         }
         
         /// <remarks/>
@@ -115,30 +103,6 @@ namespace ProtocolXml {
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
-        public bool GenParameterRouteContext {
-            get {
-                return this.genParameterRouteContextField;
-            }
-            set {
-                this.genParameterRouteContextField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(false)]
-        public bool IsMobile {
-            get {
-                return this.isMobileField;
-            }
-            set {
-                this.isMobileField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(false)]
         public bool IsServer {
             get {
                 return this.isServerField;
@@ -151,36 +115,12 @@ namespace ProtocolXml {
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
         [System.ComponentModel.DefaultValueAttribute(false)]
-        public bool GenParameterRouteHopCount {
-            get {
-                return this.genParameterRouteHopCountField;
-            }
-            set {
-                this.genParameterRouteHopCountField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(false)]
         public bool GenNet {
             get {
                 return this.genNetField;
             }
             set {
                 this.genNetField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        [System.ComponentModel.DefaultValueAttribute(false)]
-        public bool GenCSharp {
-            get {
-                return this.genCSharpField;
-            }
-            set {
-                this.genCSharpField = value;
             }
         }
         

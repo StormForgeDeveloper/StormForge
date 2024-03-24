@@ -9,7 +9,6 @@
 #include "Net/SFMessage.h"
 #include "Net/SFMessageWindow.h"
 #include "ResultCode/SFResultCodeLibrary.h"
-#include "Protocol/PlayInstanceMsgClass.h"
 
 #include "UnitTest_Net.h"
 #include "SFEngine.h"
@@ -31,22 +30,6 @@ using namespace ::SF;
 const uint32_t TEST_COUNT = 4000 * TestScale;
 
 
-MessageDataPtr NewMessage(IHeap& memoryManager, uint32_t sequenceID)
-{
-    MessageData* pResult = MessageData::NewMessage(memoryManager, Message::PlayInstance::ZoneChatS2CEvt::MID, 2048);
-    Message::PlayInstance::ZoneChatS2CEvt::Create(pResult->GetMessageHeader(), 0, 1, 2, ArrayView<uint8_t>(0, nullptr), "11");
-	pResult->AssignSequence(sequenceID);
-
-	return MessageDataPtr(pResult);
-}
-
-MessageDataPtr NewMessage(IHeap& memoryManager)
-{
-    MessageData* pResult = MessageData::NewMessage(memoryManager, Message::PlayInstance::ZoneChatS2CEvt::MID, 2048);
-    Message::PlayInstance::ZoneChatS2CEvt::Create(pResult->GetMessageHeader(), 0, 1, 2, ArrayView<uint8_t>(0, nullptr), "11");
-
-	return MessageDataPtr(pResult);
-}
 
 
 TEST_F(NetTest, RecvMessageWindowSimple)

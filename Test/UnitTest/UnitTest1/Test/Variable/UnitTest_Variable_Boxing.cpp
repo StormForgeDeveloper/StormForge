@@ -34,10 +34,13 @@ using namespace ::SF;
 TEST_F(VariableTest, Boxing1)
 {
 	DynamicArray<FriendInformation> testFriendList(GetSystemHeap());
+
+    GuidGenerator guidGen;
+
 	FriendInformation test;
-	test.PlayerPlatformId.PlayerID = 1;
+	test.PlayerPlatformId.PlayerId = guidGen.NewGuid();
 	testFriendList.push_back(test);
-	test.PlayerPlatformId.PlayerID = 2;
+	test.PlayerPlatformId.PlayerId = guidGen.NewGuid();
 	testFriendList.push_back(test);
 
 	const Array< FriendInformation>& testFriendListC = testFriendList;

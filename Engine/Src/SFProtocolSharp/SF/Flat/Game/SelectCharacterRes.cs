@@ -19,8 +19,8 @@ public struct SelectCharacterRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public SelectCharacterRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public uint Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
-  public uint CharacterId { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
+  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
+  public SF.Flat.CharacterID? CharacterId { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.CharacterID?)(new SF.Flat.CharacterID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public byte Attributes(int j) { int o = __p.__offset(8); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
   public int AttributesLength { get { int o = __p.__offset(8); return o != 0 ? __p.__vector_len(o) : 0; } }
 #if ENABLE_SPAN_T
@@ -30,20 +30,9 @@ public struct SelectCharacterRes : IFlatbufferObject
 #endif
   public byte[] GetAttributesArray() { return __p.__vector_as_array<byte>(8); }
 
-  public static Offset<SF.Flat.Game.SelectCharacterRes> CreateSelectCharacterRes(FlatBufferBuilder builder,
-      uint result = 0,
-      uint character_id = 0,
-      VectorOffset attributesOffset = default(VectorOffset)) {
-    builder.StartTable(3);
-    SelectCharacterRes.AddAttributes(builder, attributesOffset);
-    SelectCharacterRes.AddCharacterId(builder, character_id);
-    SelectCharacterRes.AddResult(builder, result);
-    return SelectCharacterRes.EndSelectCharacterRes(builder);
-  }
-
   public static void StartSelectCharacterRes(FlatBufferBuilder builder) { builder.StartTable(3); }
-  public static void AddResult(FlatBufferBuilder builder, uint result) { builder.AddUint(0, result, 0); }
-  public static void AddCharacterId(FlatBufferBuilder builder, uint characterId) { builder.AddUint(1, characterId, 0); }
+  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
+  public static void AddCharacterId(FlatBufferBuilder builder, Offset<SF.Flat.CharacterID> characterIdOffset) { builder.AddStruct(1, characterIdOffset.Value, 0); }
   public static void AddAttributes(FlatBufferBuilder builder, VectorOffset attributesOffset) { builder.AddOffset(2, attributesOffset.Value, 0); }
   public static VectorOffset CreateAttributesVector(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte(data[i]); return builder.EndVector(); }
   public static VectorOffset CreateAttributesVectorBlock(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
@@ -62,8 +51,8 @@ static public class SelectCharacterResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*uint*/, 4, false)
-      && verifier.VerifyField(tablePos, 6 /*CharacterId*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
+      && verifier.VerifyField(tablePos, 6 /*CharacterId*/, 16 /*SF.Flat.CharacterID*/, 8, false)
       && verifier.VerifyVectorOfData(tablePos, 8 /*Attributes*/, 1 /*byte*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }

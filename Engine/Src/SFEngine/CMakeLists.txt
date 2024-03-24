@@ -50,6 +50,7 @@ set(SUBNet_FILES
 	Net/SFConnectionTCP.h
 	Net/SFConnectionUDP.h
 	Net/SFConnectionUDPBase.h
+	Net/SFMessageID.h
 	Net/SFMessage.h
 	Net/SFMessageWindow.h
 	Net/SFNetConst.h

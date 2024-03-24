@@ -19,11 +19,11 @@ public struct AcceptFriendRequestCmd : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public AcceptFriendRequestCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ulong InviterId { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
+  public SF.Flat.AccountID? InviterId { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public SF.Flat.PlayerPlatformID? InviterPlatformId { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.PlayerPlatformID?)(new SF.Flat.PlayerPlatformID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
 
   public static void StartAcceptFriendRequestCmd(FlatBufferBuilder builder) { builder.StartTable(2); }
-  public static void AddInviterId(FlatBufferBuilder builder, ulong inviterId) { builder.AddUlong(0, inviterId, 0); }
+  public static void AddInviterId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> inviterIdOffset) { builder.AddStruct(0, inviterIdOffset.Value, 0); }
   public static void AddInviterPlatformId(FlatBufferBuilder builder, Offset<SF.Flat.PlayerPlatformID> inviterPlatformIdOffset) { builder.AddStruct(1, inviterPlatformIdOffset.Value, 0); }
   public static Offset<SF.Flat.Game.AcceptFriendRequestCmd> EndAcceptFriendRequestCmd(FlatBufferBuilder builder) {
     int o = builder.EndTable();
@@ -37,8 +37,8 @@ static public class AcceptFriendRequestCmdVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*InviterId*/, 8 /*ulong*/, 8, false)
-      && verifier.VerifyField(tablePos, 6 /*InviterPlatformId*/, 16 /*SF.Flat.PlayerPlatformID*/, 8, false)
+      && verifier.VerifyField(tablePos, 4 /*InviterId*/, 16 /*SF.Flat.AccountID*/, 8, false)
+      && verifier.VerifyField(tablePos, 6 /*InviterPlatformId*/, 24 /*SF.Flat.PlayerPlatformID*/, 8, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

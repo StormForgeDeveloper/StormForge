@@ -56,7 +56,7 @@ namespace ProtocolCompiler
             {
                 foreach(var include in includeSet)
                 {
-                    OutStream.WriteLine($"#include \"{include.Value}\"");
+                    OutStream.WriteLine($"#include \"{include.Key}\"");
                 }
             }
 

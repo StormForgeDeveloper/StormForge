@@ -109,7 +109,7 @@ SFDLL_EXPORT const char* StreamDBDirectory_NativeGetTopic(intptr_t nativeHandle,
 }
 
 
-SFDLL_EXPORT int32_t StreamDBDirectory_NativePollMessage(intptr_t nativeHandle, SET_MESSAGE_FUNCTION setMessageFunc, VariableMapBuilderCS::SET_FUNCTION setValueFunc, VariableMapBuilderCS::SET_ARRAY_FUNCTION setArrayValueFunc)
+SFDLL_EXPORT int32_t StreamDBDirectory_NativePollMessage(intptr_t nativeHandle, ON_MESSAGE_FUNCTION onMessage)
 {
 	if (nativeHandle == 0)
 		return (int)ResultCode::INVALID_ARG;
@@ -124,13 +124,7 @@ SFDLL_EXPORT int32_t StreamDBDirectory_NativePollMessage(intptr_t nativeHandle, 
 	if (!pDirectoryBase->PollMessage(pIMsg))
 		return (int)ResultCode::NO_DATA_EXIST;
 
-	setMessageFunc(pIMsg->GetMessageHeader()->GetMessageID());
-
-	// Fill parameters
-	VariableMapBuilderCS builder(setValueFunc, setArrayValueFunc);
-	auto result = SF::Protocol::ParseMessage(pIMsg->GetMessageHeader(), builder);
-	if (!result)
-		return (int)result;
+    onMessage(pIMsg->GetMessageHeader()->GetMessageID(), pIMsg->GetMessageHeader()->TransactionId, pIMsg->GetPayloadSize(), pIMsg->GetPayloadPtr());
 
 	return (int)ResultCode::SUCCESS;
 }

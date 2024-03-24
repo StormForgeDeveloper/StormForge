@@ -73,7 +73,7 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnectionSteam(intptr_t nativeHa
     return (int32_t)pOnlineClient->StartConnection(transactionId, gameId, loginAddress, steamUserId, steamUserName, steamUserToken, nullptr, nullptr);
 }
 
-SFDLL_EXPORT int32_t SFOnlineClient_NativeJoinGameInstance(intptr_t nativeHandle, uint64_t transactionId, uint64_t gameInstanceUID)
+SFDLL_EXPORT int32_t SFOnlineClient_NativeJoinGameInstance(intptr_t nativeHandle, uint64_t transactionId, uint32_t gameInstanceUID)
 {
 	if (nativeHandle == 0)
 		return (int)ResultCode::NOT_INITIALIZED;
@@ -103,24 +103,24 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeGetOnlineState(intptr_t nativeHandle)
 	return int32_t(pOnlineClient->GetOnlineState());
 }
 
-SFDLL_EXPORT uint64_t SFOnlineClient_NativeGetPlayerId(intptr_t nativeHandle)
+SFDLL_EXPORT const void* SFOnlineClient_NativeGetPlayerId(intptr_t nativeHandle)
 {
-	if (nativeHandle == 0)
-		return (int)ResultCode::NOT_INITIALIZED;
+    if (nativeHandle == 0)
+        return nullptr;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
-	return pOnlineClient->GetPlayerID();
+	return reinterpret_cast<const void*>(&pOnlineClient->GetPlayerID());
 }
 
-SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetCharacterId(intptr_t nativeHandle)
+SFDLL_EXPORT const void* SFOnlineClient_NativeGetCharacterId(intptr_t nativeHandle)
 {
 	if (nativeHandle == 0)
-		return (uint)ResultCode::NOT_INITIALIZED;
+		return nullptr;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
-	return pOnlineClient->GetCharacterId();
+	return reinterpret_cast<const void*>(&pOnlineClient->GetCharacterId());
 }
 
 SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetActorId(intptr_t nativeHandle)
@@ -143,20 +143,20 @@ SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetGameId(intptr_t nativeHandle)
 	return (uint32_t)(pOnlineClient->GetGameId());
 }
 
-SFDLL_EXPORT uint64_t SFOnlineClient_NativeGetGameInstanceUID(intptr_t nativeHandle)
+SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetGameInstanceUID(intptr_t nativeHandle)
 {
 	if (nativeHandle == 0)
 		return 0;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
-	return uint64_t(pOnlineClient->GetGameInstanceUID());
+	return pOnlineClient->GetGameInstanceUID();
 }
 
 SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle, 
 	ONLINE_STATECHANGED_CALLBACK stateChangedCallback, 
 	SET_EVENT_FUNCTION setEventFunc, 
-	SET_MESSAGE_FUNCTION setMessageFunc, VariableMapBuilderCS::SET_FUNCTION setValueFunc, VariableMapBuilderCS::SET_ARRAY_FUNCTION setArrayValueFunc, ON_READY_FUNCTION onMessageReady, 
+	ON_MESSAGE_FUNCTION onMessageFunc, 
 	OnlineClient::ONLINE_TASK_FINISHED_CALLBACK onTaskFinished)
 {
 	if (nativeHandle == 0)
@@ -169,14 +169,9 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle,
 		setEventFunc(evt.Components.EventType, (int)evt.Components.hr, evt.Components.State);
 	};
 
-	auto messageHandler = [setMessageFunc, setValueFunc, setArrayValueFunc, onMessageReady](Net::Connection* pConn, const MessageHeader* pMsgData)
+	auto messageHandler = [onMessageFunc](Net::Connection* pConn, const MessageHeader* pMsgData)
 	{
-		setMessageFunc(pMsgData->GetMessageID());
-
-		VariableMapBuilderCS builder(setValueFunc, setArrayValueFunc);
-		SF::Protocol::ParseMessage(pMsgData, builder);
-
-		onMessageReady();
+            onMessageFunc(pMsgData->GetMessageID(), pMsgData->TransactionId, pMsgData->GetPayloadSize(), pMsgData->GetPayloadPtr());
 	};
 
 

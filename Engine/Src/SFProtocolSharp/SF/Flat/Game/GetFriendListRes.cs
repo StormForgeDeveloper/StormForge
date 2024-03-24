@@ -19,7 +19,7 @@ public struct GetFriendListRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public GetFriendListRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public uint Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
+  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
   public ushort MaxFriendSlot { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUshort(o + __p.bb_pos) : (ushort)0; } }
   public ushort TotalNumberOfFriends { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetUshort(o + __p.bb_pos) : (ushort)0; } }
   public ushort StartIndex { get { int o = __p.__offset(10); return o != 0 ? __p.bb.GetUshort(o + __p.bb_pos) : (ushort)0; } }
@@ -27,7 +27,7 @@ public struct GetFriendListRes : IFlatbufferObject
   public int FriendListLength { get { int o = __p.__offset(12); return o != 0 ? __p.__vector_len(o) : 0; } }
 
   public static Offset<SF.Flat.Game.GetFriendListRes> CreateGetFriendListRes(FlatBufferBuilder builder,
-      uint result = 0,
+      int result = 0,
       ushort max_friend_slot = 0,
       ushort total_number_of_friends = 0,
       ushort start_index = 0,
@@ -42,7 +42,7 @@ public struct GetFriendListRes : IFlatbufferObject
   }
 
   public static void StartGetFriendListRes(FlatBufferBuilder builder) { builder.StartTable(5); }
-  public static void AddResult(FlatBufferBuilder builder, uint result) { builder.AddUint(0, result, 0); }
+  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
   public static void AddMaxFriendSlot(FlatBufferBuilder builder, ushort maxFriendSlot) { builder.AddUshort(1, maxFriendSlot, 0); }
   public static void AddTotalNumberOfFriends(FlatBufferBuilder builder, ushort totalNumberOfFriends) { builder.AddUshort(2, totalNumberOfFriends, 0); }
   public static void AddStartIndex(FlatBufferBuilder builder, ushort startIndex) { builder.AddUshort(3, startIndex, 0); }
@@ -64,7 +64,7 @@ static public class GetFriendListResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
       && verifier.VerifyField(tablePos, 6 /*MaxFriendSlot*/, 2 /*ushort*/, 2, false)
       && verifier.VerifyField(tablePos, 8 /*TotalNumberOfFriends*/, 2 /*ushort*/, 2, false)
       && verifier.VerifyField(tablePos, 10 /*StartIndex*/, 2 /*ushort*/, 2, false)

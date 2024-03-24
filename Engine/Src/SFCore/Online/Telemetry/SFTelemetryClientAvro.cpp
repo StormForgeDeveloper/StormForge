@@ -185,6 +185,11 @@ namespace SF
         return *this;
     }
 
+    TelemetryEvent& TelemetryEventAvro::Set(const char* name, const Guid& value)
+    {
+        m_AvroValue.SetValue(name, value);
+        return *this;
+    }
 
     TelemetryEvent& TelemetryEventAvro::Set(const String& name, int value)
     {
@@ -426,9 +431,12 @@ namespace SF
             hr = avroValue.SetValue(FieldName_MachineId, GetMachineId());
             if (!hr.IsSuccess())
                 return nullptr;
-            hr = avroValue.SetValue(FieldName_AccountId, (int64_t)GetAccountID());
+
+            ArrayView<const uint8_t> accountIdView(sizeof(Guid), (uint8_t*)GetAccountID().data);
+            hr = avroValue.SetValue(FieldName_AccountId, accountIdView);
             if (!hr.IsSuccess())
                 return nullptr;
+
             hr = avroValue.SetValue(FieldName_EventName, eventName);
             if (!hr.IsSuccess())
                 return nullptr;

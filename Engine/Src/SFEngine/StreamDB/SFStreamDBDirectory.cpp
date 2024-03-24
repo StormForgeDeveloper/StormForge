@@ -15,8 +15,10 @@
 #include "StreamDB/SFStreamDBDirectory.h"
 #include "Util/SFStringFormat.h"
 #include "Net/SFConnectionTCP.h"
-#include "Protocol/PlayInstanceNetPolicy.h"
-#include "Protocol/PlayInstanceMsgClass.h"
+#include "Protocol/PlayInstanceMessageID.h"
+
+//#include "Protocol/PlayInstanceRPCSendAdapter.h"
+//#include "Protocol/PlayInstanceMsgClass.h"
 
 #ifdef USE_STREAMDB
 
@@ -186,9 +188,10 @@ namespace SF
 			m_FindRequested = false;
 			if (!RequestStreamListInternal())
 			{
-                m_ResultMessage = MessageData::NewMessage(GetHeap(), Message::PlayInstance::GetStreamListRes::MID, 1024);
-				Message::PlayInstance::GetStreamListRes::Create(m_ResultMessage->GetMessageHeader(), 0, ResultCode::NO_DATA_EXIST,
-					ArrayView<const char*>());
+                m_ResultMessage = MessageData::NewMessage(GetHeap(), Message::PlayInstance::MID_GetStreamListRes, 1024);
+                assert(!"FIXME");
+				//Message::PlayInstance::GetStreamListRes::Create(m_ResultMessage->GetMessageHeader(), 0, ResultCode::NO_DATA_EXIST,
+				//	ArrayView<const char*>());
 			}
 			else
 			{
@@ -196,9 +199,10 @@ namespace SF
 				for (auto& itString : m_TopicList)
 					TopicList.push_back(itString.data());
 
-                m_ResultMessage = MessageData::NewMessage(GetHeap(), Message::PlayInstance::GetStreamListRes::MID, 1024);
-                Message::PlayInstance::GetStreamListRes::Create(m_ResultMessage->GetMessageHeader(), 0, ResultCode::SUCCESS,
-					TopicList);
+                m_ResultMessage = MessageData::NewMessage(GetHeap(), Message::PlayInstance::MID_GetStreamListRes, 1024);
+                assert(!"FIXME");
+     //           Message::PlayInstance::GetStreamListRes::Create(m_ResultMessage->GetMessageHeader(), 0, ResultCode::SUCCESS,
+					//TopicList);
 			}
 		}
 
@@ -279,7 +283,9 @@ namespace SF
 			break;
 		}
 
-		return NetPolicyPlayInstance(m_ConnectionDirectory->GetMessageEndpoint()).GetStreamListCmd(0, 0);
+        assert(!"FIXME");
+		//return PlayInstanceRPCSendAdapter(m_ConnectionDirectory->GetMessageEndpoint()).GetStreamListCmd(0, 0);
+        return ResultCode::NOT_IMPLEMENTED;
 	}
 
 	Result StreamDBDirectoryClient::PollEvent(Event& evt)
@@ -318,7 +324,7 @@ namespace SF
         {
             // TODO: change PollMessage interface
             const MessageHeader* pHeader = reinterpret_cast<const MessageHeader*>(itemPtr.data());
-            pIMsg = MessageData::NewMessage(GetHeap(), pHeader->MessageId, pHeader->Length, reinterpret_cast<const uint8_t*>(pHeader));
+            pIMsg = MessageData::NewMessage(GetHeap(), pHeader->MessageId, pHeader->MessageSize, reinterpret_cast<const uint8_t*>(pHeader));
             return ResultCode::SUCCESS;
         }
         else

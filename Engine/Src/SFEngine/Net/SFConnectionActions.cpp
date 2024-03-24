@@ -50,7 +50,7 @@ namespace Net {
 
 		auto socketType = GetSocketType();
 
-		const MsgNetCtrl* pNetCtrl = reinterpret_cast<const MsgNetCtrl*>(pHeader->GetDataPtr());
+		const MsgNetCtrl* pNetCtrl = reinterpret_cast<const MsgNetCtrl*>(pHeader->GetPayloadPtr());
 		if (pNetCtrl->rtnMsgID.GetMessageType() == MessageType::NetCtrl)// connecting process
 		{
 			GetConnection()->OnHeartbeatPacket();
@@ -67,7 +67,7 @@ namespace Net {
 			case NetCtrlCode_Connect:
 				if (GetConnectionState() == ConnectionState::CONNECTING)
 				{
-                    const MsgNetCtrlConnect* pNetCtrlConnect = reinterpret_cast<const MsgNetCtrlConnect*>(pHeader->GetDataPtr());
+                    const MsgNetCtrlConnect* pNetCtrlConnect = reinterpret_cast<const MsgNetCtrlConnect*>(pHeader->GetPayloadPtr());
 					GetConnection()->SetRemoteInfo(pNetCtrlConnect->Peer.PeerClass, pNetCtrlConnect->Peer.PeerID);
 
 					if (GetRemoteInfo().PeerClass != NetClass::Unknown)
@@ -118,7 +118,7 @@ namespace Net {
 	{
 		Result hr;
 
-		const MsgNetCtrl* pNetCtrl = (MsgNetCtrl*)(pHeader->GetDataPtr());
+		const MsgNetCtrl* pNetCtrl = (MsgNetCtrl*)(pHeader->GetPayloadPtr());
 		if (pNetCtrl->rtnMsgID.GetMessageType() == MessageType::NetCtrl)// connecting process
 		{
 			GetConnection()->OnHeartbeatPacket();
@@ -173,7 +173,7 @@ namespace Net {
 	{
 		Result hr;
 
-		const MsgNetCtrl* pNetCtrl = (MsgNetCtrl*)(pHeader->GetDataPtr());
+		const MsgNetCtrl* pNetCtrl = (MsgNetCtrl*)(pHeader->GetPayloadPtr());
 		if (pNetCtrl->rtnMsgID.GetMessageType() == MessageType::NetCtrl)// connecting process
 		{
 			switch (pNetCtrl->rtnMsgID.IDs.MsgCode)
@@ -200,7 +200,7 @@ namespace Net {
 	{
 		Result hr;
 
-		const MsgNetCtrl* pNetCtrl = (MsgNetCtrl*)(pHeader->GetDataPtr());
+		const MsgNetCtrl* pNetCtrl = (MsgNetCtrl*)(pHeader->GetPayloadPtr());
 		if (pNetCtrl->rtnMsgID.GetMessageType() == MessageType::NetCtrl)// connecting process
 		{
 			switch (pNetCtrl->rtnMsgID.IDs.MsgCode)
@@ -237,7 +237,7 @@ namespace Net {
 		Result hr;
 
 		// Pass back the value in rtn msg id
-        MsgNetCtrlTimeSync* pNetCtrlData = (MsgNetCtrlTimeSync*)(pHeader->GetDataPtr());
+        MsgNetCtrlTimeSync* pNetCtrlData = (MsgNetCtrlTimeSync*)(pHeader->GetPayloadPtr());
 
 		netCheck(SendNetCtrl(PACKET_NETCTRL_TIMESYNC_RTN, 0, pNetCtrlData->ClientTimeStamp, Util::Time.GetRawUTCSec().time_since_epoch().count()));
 
@@ -248,7 +248,7 @@ namespace Net {
 	{
 		Result hr;
 
-        MsgNetCtrlTimeSync* pNetCtrlData = (MsgNetCtrlTimeSync*)(pHeader->GetDataPtr());
+        MsgNetCtrlTimeSync* pNetCtrlData = (MsgNetCtrlTimeSync*)(pHeader->GetPayloadPtr());
 
 		auto sentTime = TimeStampMS(DurationMS(pNetCtrlData->ClientTimeStamp));
 
@@ -274,12 +274,12 @@ namespace Net {
 		ConnectionMUDP* pConnUDP = GetConnection();
 		auto& sendWindow = pConnUDP->GetSendReliableWindow();
 		auto& recvWindow = pConnUDP->GetRecvReliableWindow();
-		const MsgNetCtrl* pNetCtrl = (MsgNetCtrl*)(pHeader->GetDataPtr());
+		const MsgNetCtrl* pNetCtrl = (MsgNetCtrl*)(pHeader->GetPayloadPtr());
 
 		//MutexScopeLock localLock(sendReliableWindow.GetLock());
 
 		MsgMobileNetCtrlSync *pSyncCtrl = (MsgMobileNetCtrlSync*)pNetCtrl;
-		if (pHeader->Length != sizeof(MsgMobileNetCtrlSync))
+		if (pHeader->MessageSize != sizeof(MsgMobileNetCtrlSync))
 			netCheck(ResultCode::IO_BADPACKET_SIZE);
 
 		hrTem = sendWindow.QueueReleasedSequence(pHeader->GetSequence(), pSyncCtrl->MessageMask);
@@ -312,12 +312,12 @@ namespace Net {
 
 		ConnectionMUDP* pConnUDP = GetConnection();
 		auto& sendReliableWindow = pConnUDP->GetSendReliableWindow();
-		const MsgNetCtrl* pNetCtrl = (MsgNetCtrl*)(pHeader->GetDataPtr());
+		const MsgNetCtrl* pNetCtrl = (MsgNetCtrl*)(pHeader->GetPayloadPtr());
 
 		//MutexScopeLock localLock(sendReliableWindow.GetLock());
 
 		MsgMobileNetCtrlSync *pSyncCtrl = (MsgMobileNetCtrlSync*)pNetCtrl;
-		if (pHeader->Length != sizeof(MsgMobileNetCtrlSync))
+		if (pHeader->MessageSize != sizeof(MsgMobileNetCtrlSync))
 			netCheck(ResultCode::IO_BADPACKET_SIZE);
 
 		hrTem = sendReliableWindow.QueueReleasedSequence(pHeader->GetSequence(), pSyncCtrl->MessageMask);
@@ -343,7 +343,7 @@ namespace Net {
 	{
 		Result hr;
 
-		const MsgNetCtrl* pNetCtrl = reinterpret_cast<MsgNetCtrl*>(pHeader->GetDataPtr());
+		const MsgNetCtrl* pNetCtrl = reinterpret_cast<MsgNetCtrl*>(pHeader->GetPayloadPtr());
         const MsgNetCtrlConnect* pNetCtrlConnect = reinterpret_cast<const MsgNetCtrlConnect*>(pNetCtrl+1);
 		uint ProtocolVersion = pNetCtrlConnect->ProtocolVersion;
 		NetClass RemoteClass = pNetCtrlConnect->Peer.PeerClass;
@@ -388,12 +388,12 @@ namespace Net {
 	{
 		Result hr;
 
-		const MsgNetCtrl* pNetCtrl = reinterpret_cast<const MsgNetCtrl*>(pHeader->GetDataPtr());
+		const MsgNetCtrl* pNetCtrl = reinterpret_cast<const MsgNetCtrl*>(pHeader->GetPayloadPtr());
         const MsgNetCtrlConnect* pNetCtrlConnect = reinterpret_cast<const MsgNetCtrlConnect*>(pNetCtrl + 1);
 
-		if (pHeader->Length < (pHeader->GetHeaderSize() + sizeof(MsgNetCtrl) + sizeof(MsgNetCtrlConnect)))
+		if (pHeader->MessageSize < (pHeader->GetHeaderSize() + sizeof(MsgNetCtrl) + sizeof(MsgNetCtrlConnect)))
 		{
-			SFLog(Net, Warning, "HackWarn : Invalid Connect packet CID:{0}, Addr:{1}, size:{2}", GetCID(), GetRemoteInfo().PeerAddress, pHeader->Length);
+			SFLog(Net, Warning, "HackWarn : Invalid Connect packet CID:{0}, Addr:{1}, size:{2}", GetCID(), GetRemoteInfo().PeerAddress, pHeader->MessageSize);
 			netCheck(CloseConnection("Invalid packet size during connect"));
 			netCheck(ResultCode::UNEXPECTED);
 		}
@@ -692,7 +692,7 @@ namespace Net {
 			assert(msgID.IDs.Reliability);
 			AssertRel(pMsgHeader->GetSequence() == 0);
 
-			if (pMsgHeader->Length > Const::INTER_PACKET_SIZE_MAX)
+			if (pMsgHeader->MessageSize > Const::INTER_PACKET_SIZE_MAX)
 			{
 				// They should be handled
 				netCheck(ResultCode::IO_BADPACKET_TOOBIG);
@@ -707,7 +707,7 @@ namespace Net {
 				GetCID(),
                 msgID.GetSequence(),
                 msgID,
-				pMsgHeader->Length);
+				pMsgHeader->MessageSize);
 
 			// don't bother network with might not be able to processed
 			if ((sendWindow.GetHeadSequence() - sendWindow.GetBaseSequence()) < GetConnection()->GetMaxGuarantedRetryAtOnce())
@@ -767,7 +767,7 @@ namespace Net {
 				GetCID(),
 				pHeader->GetSequence(),
 				pHeader->MessageId,
-				pHeader->Length);
+				pHeader->MessageSize);
 
 			pMessageElement->ulTimeStamp = ulTimeCur;
 

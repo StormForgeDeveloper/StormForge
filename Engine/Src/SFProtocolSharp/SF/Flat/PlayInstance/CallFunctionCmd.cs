@@ -20,7 +20,7 @@ public struct CallFunctionCmd : IFlatbufferObject
   public CallFunctionCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public uint FunctionName { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
-  public ulong PlayerId { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
+  public SF.Flat.AccountID? PlayerId { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public byte Parameters(int j) { int o = __p.__offset(8); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
   public int ParametersLength { get { int o = __p.__offset(8); return o != 0 ? __p.__vector_len(o) : 0; } }
 #if ENABLE_SPAN_T
@@ -30,20 +30,9 @@ public struct CallFunctionCmd : IFlatbufferObject
 #endif
   public byte[] GetParametersArray() { return __p.__vector_as_array<byte>(8); }
 
-  public static Offset<SF.Flat.PlayInstance.CallFunctionCmd> CreateCallFunctionCmd(FlatBufferBuilder builder,
-      uint function_name = 0,
-      ulong player_id = 0,
-      VectorOffset parametersOffset = default(VectorOffset)) {
-    builder.StartTable(3);
-    CallFunctionCmd.AddPlayerId(builder, player_id);
-    CallFunctionCmd.AddParameters(builder, parametersOffset);
-    CallFunctionCmd.AddFunctionName(builder, function_name);
-    return CallFunctionCmd.EndCallFunctionCmd(builder);
-  }
-
   public static void StartCallFunctionCmd(FlatBufferBuilder builder) { builder.StartTable(3); }
   public static void AddFunctionName(FlatBufferBuilder builder, uint functionName) { builder.AddUint(0, functionName, 0); }
-  public static void AddPlayerId(FlatBufferBuilder builder, ulong playerId) { builder.AddUlong(1, playerId, 0); }
+  public static void AddPlayerId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> playerIdOffset) { builder.AddStruct(1, playerIdOffset.Value, 0); }
   public static void AddParameters(FlatBufferBuilder builder, VectorOffset parametersOffset) { builder.AddOffset(2, parametersOffset.Value, 0); }
   public static VectorOffset CreateParametersVector(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte(data[i]); return builder.EndVector(); }
   public static VectorOffset CreateParametersVectorBlock(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
@@ -63,7 +52,7 @@ static public class CallFunctionCmdVerify
   {
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyField(tablePos, 4 /*FunctionName*/, 4 /*uint*/, 4, false)
-      && verifier.VerifyField(tablePos, 6 /*PlayerId*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyField(tablePos, 6 /*PlayerId*/, 16 /*SF.Flat.AccountID*/, 8, false)
       && verifier.VerifyVectorOfData(tablePos, 8 /*Parameters*/, 1 /*byte*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }

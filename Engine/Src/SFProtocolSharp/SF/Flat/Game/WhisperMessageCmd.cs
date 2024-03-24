@@ -19,7 +19,7 @@ public struct WhisperMessageCmd : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public WhisperMessageCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ulong ReceiverId { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
+  public SF.Flat.AccountID? ReceiverId { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public string ReceiverName { get { int o = __p.__offset(6); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
   public Span<byte> GetReceiverNameBytes() { return __p.__vector_as_span<byte>(6, 1); }
@@ -43,21 +43,8 @@ public struct WhisperMessageCmd : IFlatbufferObject
 #endif
   public byte[] GetChatMessageArray() { return __p.__vector_as_array<byte>(10); }
 
-  public static Offset<SF.Flat.Game.WhisperMessageCmd> CreateWhisperMessageCmd(FlatBufferBuilder builder,
-      ulong receiver_id = 0,
-      StringOffset receiver_nameOffset = default(StringOffset),
-      VectorOffset chat_meta_dataOffset = default(VectorOffset),
-      StringOffset chat_messageOffset = default(StringOffset)) {
-    builder.StartTable(4);
-    WhisperMessageCmd.AddReceiverId(builder, receiver_id);
-    WhisperMessageCmd.AddChatMessage(builder, chat_messageOffset);
-    WhisperMessageCmd.AddChatMetaData(builder, chat_meta_dataOffset);
-    WhisperMessageCmd.AddReceiverName(builder, receiver_nameOffset);
-    return WhisperMessageCmd.EndWhisperMessageCmd(builder);
-  }
-
   public static void StartWhisperMessageCmd(FlatBufferBuilder builder) { builder.StartTable(4); }
-  public static void AddReceiverId(FlatBufferBuilder builder, ulong receiverId) { builder.AddUlong(0, receiverId, 0); }
+  public static void AddReceiverId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> receiverIdOffset) { builder.AddStruct(0, receiverIdOffset.Value, 0); }
   public static void AddReceiverName(FlatBufferBuilder builder, StringOffset receiverNameOffset) { builder.AddOffset(1, receiverNameOffset.Value, 0); }
   public static void AddChatMetaData(FlatBufferBuilder builder, VectorOffset chatMetaDataOffset) { builder.AddOffset(2, chatMetaDataOffset.Value, 0); }
   public static VectorOffset CreateChatMetaDataVector(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte(data[i]); return builder.EndVector(); }
@@ -78,7 +65,7 @@ static public class WhisperMessageCmdVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*ReceiverId*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyField(tablePos, 4 /*ReceiverId*/, 16 /*SF.Flat.AccountID*/, 8, false)
       && verifier.VerifyString(tablePos, 6 /*ReceiverName*/, false)
       && verifier.VerifyVectorOfData(tablePos, 8 /*ChatMetaData*/, 1 /*byte*/, false)
       && verifier.VerifyString(tablePos, 10 /*ChatMessage*/, false)

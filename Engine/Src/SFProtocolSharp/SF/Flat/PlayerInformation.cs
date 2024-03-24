@@ -19,7 +19,7 @@ public struct PlayerInformation : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public PlayerInformation __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ulong PlayerId { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
+  public SF.Flat.AccountID? PlayerId { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public SF.Flat.PlayerPlatformID? PlayerPlatformId { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.PlayerPlatformID?)(new SF.Flat.PlayerPlatformID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public string ProfileName { get { int o = __p.__offset(8); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
@@ -31,7 +31,7 @@ public struct PlayerInformation : IFlatbufferObject
   public ulong LastActiveTime { get { int o = __p.__offset(10); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
 
   public static void StartPlayerInformation(FlatBufferBuilder builder) { builder.StartTable(4); }
-  public static void AddPlayerId(FlatBufferBuilder builder, ulong playerId) { builder.AddUlong(0, playerId, 0); }
+  public static void AddPlayerId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> playerIdOffset) { builder.AddStruct(0, playerIdOffset.Value, 0); }
   public static void AddPlayerPlatformId(FlatBufferBuilder builder, Offset<SF.Flat.PlayerPlatformID> playerPlatformIdOffset) { builder.AddStruct(1, playerPlatformIdOffset.Value, 0); }
   public static void AddProfileName(FlatBufferBuilder builder, StringOffset profileNameOffset) { builder.AddOffset(2, profileNameOffset.Value, 0); }
   public static void AddLastActiveTime(FlatBufferBuilder builder, ulong lastActiveTime) { builder.AddUlong(3, lastActiveTime, 0); }
@@ -48,8 +48,8 @@ static public class PlayerInformationVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*PlayerId*/, 8 /*ulong*/, 8, false)
-      && verifier.VerifyField(tablePos, 6 /*PlayerPlatformId*/, 16 /*SF.Flat.PlayerPlatformID*/, 8, true)
+      && verifier.VerifyField(tablePos, 4 /*PlayerId*/, 16 /*SF.Flat.AccountID*/, 8, false)
+      && verifier.VerifyField(tablePos, 6 /*PlayerPlatformId*/, 24 /*SF.Flat.PlayerPlatformID*/, 8, true)
       && verifier.VerifyString(tablePos, 8 /*ProfileName*/, false)
       && verifier.VerifyField(tablePos, 10 /*LastActiveTime*/, 8 /*ulong*/, 8, false)
       && verifier.VerifyTableEnd(tablePos);

@@ -19,20 +19,11 @@ public struct ChatChannelPlayerJoinedS2CEvt : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public ChatChannelPlayerJoinedS2CEvt __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ulong ChatUid { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
+  public SF.Flat.EntityUID? ChatUid { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.EntityUID?)(new SF.Flat.EntityUID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public SF.Flat.PlayerInformation? JoinedPlayer { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.PlayerInformation?)(new SF.Flat.PlayerInformation()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
 
-  public static Offset<SF.Flat.Game.ChatChannelPlayerJoinedS2CEvt> CreateChatChannelPlayerJoinedS2CEvt(FlatBufferBuilder builder,
-      ulong chat_uid = 0,
-      Offset<SF.Flat.PlayerInformation> joined_playerOffset = default(Offset<SF.Flat.PlayerInformation>)) {
-    builder.StartTable(2);
-    ChatChannelPlayerJoinedS2CEvt.AddChatUid(builder, chat_uid);
-    ChatChannelPlayerJoinedS2CEvt.AddJoinedPlayer(builder, joined_playerOffset);
-    return ChatChannelPlayerJoinedS2CEvt.EndChatChannelPlayerJoinedS2CEvt(builder);
-  }
-
   public static void StartChatChannelPlayerJoinedS2CEvt(FlatBufferBuilder builder) { builder.StartTable(2); }
-  public static void AddChatUid(FlatBufferBuilder builder, ulong chatUid) { builder.AddUlong(0, chatUid, 0); }
+  public static void AddChatUid(FlatBufferBuilder builder, Offset<SF.Flat.EntityUID> chatUidOffset) { builder.AddStruct(0, chatUidOffset.Value, 0); }
   public static void AddJoinedPlayer(FlatBufferBuilder builder, Offset<SF.Flat.PlayerInformation> joinedPlayerOffset) { builder.AddOffset(1, joinedPlayerOffset.Value, 0); }
   public static Offset<SF.Flat.Game.ChatChannelPlayerJoinedS2CEvt> EndChatChannelPlayerJoinedS2CEvt(FlatBufferBuilder builder) {
     int o = builder.EndTable();
@@ -46,7 +37,7 @@ static public class ChatChannelPlayerJoinedS2CEvtVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*ChatUid*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyField(tablePos, 4 /*ChatUid*/, 4 /*SF.Flat.EntityUID*/, 4, false)
       && verifier.VerifyTable(tablePos, 6 /*JoinedPlayer*/, SF.Flat.PlayerInformationVerify.Verify, false)
       && verifier.VerifyTableEnd(tablePos);
   }

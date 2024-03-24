@@ -30,12 +30,11 @@ namespace SF
     using QWORD = UInt64;
     using FLOAT = Single;
     using Context = UInt64;
-    using AccountID = UInt64;
     using AuthTicket = UInt64;
     using GameInstanceID = UInt32;
-    using GameInstanceUID = UInt64;
+    using GameInstanceUID = UInt32;
     using EntityID = UInt32;
-    using EntityUID = UInt64;
+    using EntityUID = UInt32;
     using ServerID = UInt32;
     using ServerUID = UInt64;
     using System.Runtime.InteropServices;
@@ -185,27 +184,28 @@ namespace SF
             new TypeMap( "Time32", false, typeof(UInt32), cppTypeName:"uint32_t" ),
             new TypeMap( "Time64", false, typeof(UInt64), cppTypeName:"uint64_t" ),
             new TypeMap( "TransactionID", false, typeof(SF.TransactionID), cppTypeName:"TransactionID" ),
-            new TypeMap( "AccountID", false, typeof(UInt64) ),
-            new TypeMap( "PlayerID", false, typeof(UInt64) ),
-            new TypeMap( "CharacterID", false, typeof(UInt32) ),
+            new TypeMap( "AccountID", false, typeof(SF.AccountID)),
+            new TypeMap( "PlayerID", false,typeof(SF.AccountID) ),
+            new TypeMap( "Guid", false,typeof(Guid) ),
+            new TypeMap( "CharacterID", false, typeof(CharacterID) ),
             new TypeMap( "FacebookUID", false, typeof(UInt64) ),
+            new TypeMap( "Platform", false, typeof(EPlatform), "EPlatform" ),
             new TypeMap( "PlayerPlatformID", false, typeof(PlayerPlatformID), InUseGenericVariableBuilderInterface:true ),
             new TypeMap( "AuthTicket", false, typeof(UInt64) ),
-            new TypeMap( "GameInsID", false, typeof(UInt32) ),
-            new TypeMap( "GameInsUID", false, typeof(UInt64), cppTypeName:"uint64_t" ),
-            new TypeMap( "EntityID", false, typeof(UInt32) ),
-            new TypeMap( "EntityUID", false, typeof(UInt64), cppTypeName:"uint64_t" ),
+            new TypeMap( "GameInstanceUID", false, typeof(SF.GameInstanceUID) ),
+            new TypeMap( "EntityID", false, typeof(UInt32)),
+            new TypeMap( "EntityUID", false, typeof(UInt32)),
             new TypeMap( "PartyUID", false, typeof(UInt64), cppTypeName:"uint64_t" ),
             new TypeMap( "ServerID", false, typeof(UInt32) ),
             new TypeMap( "ClusterID", false, typeof(UInt32) ),
             new TypeMap( "Result", false, typeof(Int32) ),
             new TypeMap( "NotificationType", false, typeof(Int16) ),
             new TypeMap( "RankingType", false, typeof(RankingType) ),
-            new TypeMap( "PlayerRole", false, typeof(PlayerRole), cppTypeName:"uint8_t" ),
-            new TypeMap( "GameStateID", false, typeof(GameStateID), cppTypeName:"uint8_t" ),
-            new TypeMap( "GameWinner", false, typeof(GameWinner), cppTypeName:"uint8_t" ),
-            new TypeMap( "PlayerKilledReason", false, typeof(PlayerKilledReason), cppTypeName:"uint8_t" ),
-            new TypeMap( "PlayerRevealedReason", false, typeof(PlayerRevealedReason), cppTypeName:"uint8_t" ),
+            new TypeMap( "PlayerRole", false, typeof(PlayerRole) ),
+            new TypeMap( "GameStateID", false, typeof(GameStateID) ),
+            new TypeMap( "GameWinner", false, typeof(GameWinner) ),
+            new TypeMap( "PlayerKilledReason", false, typeof(PlayerKilledReason) ),
+            new TypeMap( "PlayerRevealedReason", false, typeof(PlayerRevealedReason) ),
             new TypeMap( "GameID", false, typeof(UInt32), cppTypeName:"uint32_t" ),
             new TypeMap( "StringCrc32", false, typeof(UInt32), cppTypeName:"StringCrc32" ),
             new TypeMap( "StringCrc64", false, typeof(UInt64), cppTypeName:"StringCrc64" ),
@@ -235,8 +235,8 @@ namespace SF
             new TypeMap( "AchievementStat", false, typeof(AchievementStat), InUseGenericVariableBuilderInterface:true ),
             new TypeMap( "LogEntryID", false, typeof(UInt32), InUseGenericVariableBuilderInterface:true ),
             new TypeMap( "TimeSpan", false, typeof(SF.TimeSpan), "TimeSpan", InUseGenericVariableBuilderInterface:true ),
-            new TypeMap( "bool", false, typeof(byte), "uint8", InUseGenericVariableBuilderInterface:true ),
-            new TypeMap( "ObjectInformation", false, typeof(BR.ObjectInformation), InUseGenericVariableBuilderInterface:true ),
+            new TypeMap( "bool", false, typeof(bool), "bool", InUseGenericVariableBuilderInterface:true ),
+            new TypeMap( "ObjectInformation", false, typeof(SF.ObjectInformation), InUseGenericVariableBuilderInterface:true ),
             new TypeMap( "NamedVariable", false, typeof(SF.NamedVariable), InUseGenericVariableBuilderInterface:true ),
         };
 

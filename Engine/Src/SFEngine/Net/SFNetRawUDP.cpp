@@ -319,14 +319,14 @@ namespace Net {
 		while (uiBuffSize)
 		{
             pMsgHeader = reinterpret_cast<const MessageHeader*>(pBuff);
-			if (uiBuffSize < pMsgHeader->GetHeaderSize() || uiBuffSize < pMsgHeader->Length || pMsgHeader->Length == 0)
+			if (uiBuffSize < pMsgHeader->GetHeaderSize() || uiBuffSize < pMsgHeader->MessageSize || pMsgHeader->MessageSize == 0)
 			{
-				SFLog(Net, Error, "Unexpected packet buffer size:{0}, size in header:{1}", uiBuffSize, pMsgHeader->Length);
+				SFLog(Net, Error, "Unexpected packet buffer size:{0}, size in header:{1}", uiBuffSize, pMsgHeader->MessageSize);
 				netCheck(ResultCode::IO_BADPACKET_SIZE);
 			}
 
-			uiBuffSize -= pMsgHeader->Length;
-			pBuff += pMsgHeader->Length;
+			uiBuffSize -= pMsgHeader->MessageSize;
+			pBuff += pMsgHeader->MessageSize;
 
 			m_MessageHandler(remoteAddr, pMsgHeader);
 

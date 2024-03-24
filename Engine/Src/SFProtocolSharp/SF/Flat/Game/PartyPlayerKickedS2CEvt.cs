@@ -20,20 +20,11 @@ public struct PartyPlayerKickedS2CEvt : IFlatbufferObject
   public PartyPlayerKickedS2CEvt __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public ulong PartyUid { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-  public ulong KickedPlayerId { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-
-  public static Offset<SF.Flat.Game.PartyPlayerKickedS2CEvt> CreatePartyPlayerKickedS2CEvt(FlatBufferBuilder builder,
-      ulong party_uid = 0,
-      ulong kicked_player_id = 0) {
-    builder.StartTable(2);
-    PartyPlayerKickedS2CEvt.AddKickedPlayerId(builder, kicked_player_id);
-    PartyPlayerKickedS2CEvt.AddPartyUid(builder, party_uid);
-    return PartyPlayerKickedS2CEvt.EndPartyPlayerKickedS2CEvt(builder);
-  }
+  public SF.Flat.AccountID? KickedPlayerId { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
 
   public static void StartPartyPlayerKickedS2CEvt(FlatBufferBuilder builder) { builder.StartTable(2); }
   public static void AddPartyUid(FlatBufferBuilder builder, ulong partyUid) { builder.AddUlong(0, partyUid, 0); }
-  public static void AddKickedPlayerId(FlatBufferBuilder builder, ulong kickedPlayerId) { builder.AddUlong(1, kickedPlayerId, 0); }
+  public static void AddKickedPlayerId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> kickedPlayerIdOffset) { builder.AddStruct(1, kickedPlayerIdOffset.Value, 0); }
   public static Offset<SF.Flat.Game.PartyPlayerKickedS2CEvt> EndPartyPlayerKickedS2CEvt(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.PartyPlayerKickedS2CEvt>(o);
@@ -47,7 +38,7 @@ static public class PartyPlayerKickedS2CEvtVerify
   {
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyField(tablePos, 4 /*PartyUid*/, 8 /*ulong*/, 8, false)
-      && verifier.VerifyField(tablePos, 6 /*KickedPlayerId*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyField(tablePos, 6 /*KickedPlayerId*/, 16 /*SF.Flat.AccountID*/, 8, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

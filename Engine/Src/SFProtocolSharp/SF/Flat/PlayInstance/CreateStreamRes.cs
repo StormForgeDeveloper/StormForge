@@ -19,7 +19,7 @@ public struct CreateStreamRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public CreateStreamRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public uint Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
+  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
   public string StreamName { get { int o = __p.__offset(6); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
   public Span<byte> GetStreamNameBytes() { return __p.__vector_as_span<byte>(6, 1); }
@@ -29,7 +29,7 @@ public struct CreateStreamRes : IFlatbufferObject
   public byte[] GetStreamNameArray() { return __p.__vector_as_array<byte>(6); }
 
   public static Offset<SF.Flat.PlayInstance.CreateStreamRes> CreateCreateStreamRes(FlatBufferBuilder builder,
-      uint result = 0,
+      int result = 0,
       StringOffset stream_nameOffset = default(StringOffset)) {
     builder.StartTable(2);
     CreateStreamRes.AddStreamName(builder, stream_nameOffset);
@@ -38,7 +38,7 @@ public struct CreateStreamRes : IFlatbufferObject
   }
 
   public static void StartCreateStreamRes(FlatBufferBuilder builder) { builder.StartTable(2); }
-  public static void AddResult(FlatBufferBuilder builder, uint result) { builder.AddUint(0, result, 0); }
+  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
   public static void AddStreamName(FlatBufferBuilder builder, StringOffset streamNameOffset) { builder.AddOffset(1, streamNameOffset.Value, 0); }
   public static Offset<SF.Flat.PlayInstance.CreateStreamRes> EndCreateStreamRes(FlatBufferBuilder builder) {
     int o = builder.EndTable();
@@ -52,7 +52,7 @@ static public class CreateStreamResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
       && verifier.VerifyString(tablePos, 6 /*StreamName*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }

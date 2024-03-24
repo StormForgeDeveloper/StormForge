@@ -1,4 +1,4 @@
-﻿include "LocalTypes.fbs";
+﻿include "SFTypes.fbs";
 namespace SF.Flat.Login;
 
 table LoginCmd
@@ -10,9 +10,9 @@ table LoginCmd
 
 table LoginRes
 {
- 	result:uint32;
+ 	result:int;
 	nick_name:string;
-	account_id:uint64;
+	account_id:AccountID;
 	auth_ticket:uint64;
 	banned_reason:string;
 	game_server_address:string;
@@ -29,9 +29,9 @@ table LoginWithSteamCmd
 
 table LoginWithSteamRes
 {
- 	result:uint32;
+ 	result:int;
 	nick_name:string;
-	account_id:uint64;
+	account_id:AccountID;
 	auth_ticket:uint64;
 	banned_reason:string;
 	game_server_address:string;

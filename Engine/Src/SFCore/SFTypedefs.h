@@ -655,15 +655,21 @@ namespace SF {
 
     struct TimeSpan
     {
-        long milliseconds{};
+        int64_t Milliseconds{};
 
-        DurationMS ToDuration() const { return DurationMS(milliseconds); }
+        TimeSpan() {}
+        TimeSpan(int64_t milliseconds) : Milliseconds(milliseconds) {}
+        TimeSpan(const TimeSpan& src) : Milliseconds(src.Milliseconds) {}
+
+        DurationMS ToDuration() const { return DurationMS(Milliseconds); }
     };
 
 
 	extern const TimeStampMS TimeStampMS_Zero;
 	extern const DurationMS  DurationMS_Zero;
 
+    typedef uint32_t Time32;
+    typedef uint64_t Time64;
 
 	typedef std::thread::id ThreadID;
 	typedef std::thread::native_handle_type			ThreadHandle;

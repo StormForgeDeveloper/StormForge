@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2013 Kyungkun Ko
 // 
@@ -81,23 +81,17 @@ namespace SF {
 	{
 	}
 
-	EntityID::EntityID(const EntityUID& entityUID)
-		: ID(entityUID.Components.EntID.ID)
-	{
-	}
-
 	EntityID::EntityID(const EntityID& entityID)
 		: ID(entityID.ID)
 	{
 	}
 
-#if !defined(SWIG)
-	EntityID::EntityID(EntityFaculty facultyID, uint32_t entityLID)
+	EntityID::EntityID(ServerID serverId, EntityFaculty facultyID, uint32_t entityLID)
 	{
+        Components.ServerID = serverId;
 		Components.FacultyID = (uint)facultyID;
-		Components.EntityLID = entityLID & 0xFFFFFF; // to avoid wconversion warning
+		Components.EntityLID = entityLID & 0xFFFF; // to avoid wconversion warning
 	}
-#endif
 
 	EntityID::EntityID(uint32_t uiID)
 		:ID(uiID)
@@ -119,60 +113,29 @@ namespace SF {
 
 
 
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Entity Universal unique ID
-	//
-
-
-	EntityUID& EntityUID::operator = (const EntityUID& entityUID)
-	{
-		UID = entityUID.UID;
-
-		return *this;
-	}
-
-	bool EntityUID::operator == (const EntityUID& src) const
-	{
-		return UID == src.UID;
-	}
-
-	bool EntityUID::operator != (const EntityUID& src) const
-	{
-		return UID != src.UID;
-	}
-
-	EntityUID::operator Context() const
-	{
-		return (Context)UID;
-	}
-
-
-
 	//////////////////////////////////////////////////////////////////////////////////////
 	//
 	//	RouteContext
 	//
 
-	RouteContext& RouteContext::operator = (const RouteContext& src)
-	{
-		memcpy(ContextValue, src.ContextValue, sizeof(ContextValue));
-		return *this;
-	}
+	//RouteContext& RouteContext::operator = (const RouteContext& src)
+	//{
+	//	memcpy(ContextValue, src.ContextValue, sizeof(ContextValue));
+	//	return *this;
+	//}
 
-	bool RouteContext::operator == (const RouteContext& routeContext) const
-	{
-		return ContextValue[0] == routeContext.ContextValue[0] && ContextValue[1] == routeContext.ContextValue[1];
-	}
+	//bool RouteContext::operator == (const RouteContext& routeContext) const
+	//{
+	//	return ContextValue[0] == routeContext.ContextValue[0] && ContextValue[1] == routeContext.ContextValue[1];
+	//}
 
 
 
-	// Get swaped context( From <==> To )
-	RouteContext RouteContext::GetSwaped() const
-	{
-		return RouteContext(Components.To, Components.From);
-	}
+	//// Get swaped context( From <==> To )
+	//RouteContext RouteContext::GetSwaped() const
+	//{
+	//	return RouteContext(Components.To, Components.From);
+	//}
 
 
 

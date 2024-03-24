@@ -19,7 +19,7 @@ public struct PlayPacketC2SEvt : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public PlayPacketC2SEvt __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ulong PlayInstanceUid { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
+  public SF.Flat.GameInstanceUID? PlayInstanceUid { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.GameInstanceUID?)(new SF.Flat.GameInstanceUID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public uint SenderEndpointId { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
   public uint TargetEndpointMask { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
   public byte Payload(int j) { int o = __p.__offset(10); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
@@ -31,21 +31,8 @@ public struct PlayPacketC2SEvt : IFlatbufferObject
 #endif
   public byte[] GetPayloadArray() { return __p.__vector_as_array<byte>(10); }
 
-  public static Offset<SF.Flat.PlayInstance.PlayPacketC2SEvt> CreatePlayPacketC2SEvt(FlatBufferBuilder builder,
-      ulong play_instance_uid = 0,
-      uint sender_endpoint_id = 0,
-      uint target_endpoint_mask = 0,
-      VectorOffset payloadOffset = default(VectorOffset)) {
-    builder.StartTable(4);
-    PlayPacketC2SEvt.AddPlayInstanceUid(builder, play_instance_uid);
-    PlayPacketC2SEvt.AddPayload(builder, payloadOffset);
-    PlayPacketC2SEvt.AddTargetEndpointMask(builder, target_endpoint_mask);
-    PlayPacketC2SEvt.AddSenderEndpointId(builder, sender_endpoint_id);
-    return PlayPacketC2SEvt.EndPlayPacketC2SEvt(builder);
-  }
-
   public static void StartPlayPacketC2SEvt(FlatBufferBuilder builder) { builder.StartTable(4); }
-  public static void AddPlayInstanceUid(FlatBufferBuilder builder, ulong playInstanceUid) { builder.AddUlong(0, playInstanceUid, 0); }
+  public static void AddPlayInstanceUid(FlatBufferBuilder builder, Offset<SF.Flat.GameInstanceUID> playInstanceUidOffset) { builder.AddStruct(0, playInstanceUidOffset.Value, 0); }
   public static void AddSenderEndpointId(FlatBufferBuilder builder, uint senderEndpointId) { builder.AddUint(1, senderEndpointId, 0); }
   public static void AddTargetEndpointMask(FlatBufferBuilder builder, uint targetEndpointMask) { builder.AddUint(2, targetEndpointMask, 0); }
   public static void AddPayload(FlatBufferBuilder builder, VectorOffset payloadOffset) { builder.AddOffset(3, payloadOffset.Value, 0); }
@@ -66,7 +53,7 @@ static public class PlayPacketC2SEvtVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*PlayInstanceUid*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyField(tablePos, 4 /*PlayInstanceUid*/, 4 /*SF.Flat.GameInstanceUID*/, 4, false)
       && verifier.VerifyField(tablePos, 6 /*SenderEndpointId*/, 4 /*uint*/, 4, false)
       && verifier.VerifyField(tablePos, 8 /*TargetEndpointMask*/, 4 /*uint*/, 4, false)
       && verifier.VerifyVectorOfData(tablePos, 10 /*Payload*/, 1 /*byte*/, false)

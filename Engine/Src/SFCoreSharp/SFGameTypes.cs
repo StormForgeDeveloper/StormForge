@@ -18,7 +18,6 @@ using System.Runtime.InteropServices;
 
 namespace SF
 {
-    using GameInstanceID = System.UInt64;
     using LogEntryID = System.UInt64;
 
     // structure data type attribute, this is used for message builder
@@ -26,6 +25,200 @@ namespace SF
     {
     }
 
+    [Struct]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct GameInstanceUID
+    {
+        public UInt32 UID;
+
+        public GameInstanceUID(UInt32 uid)
+        {
+            UID = uid;
+        }
+    }
+
+    [Struct]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SFUInt128
+    {
+        public UInt64 Low;
+        public UInt64 High;
+
+        public SFUInt128(UInt64 low, UInt64 high)
+        {
+            Low = low; High = high;
+        }
+
+        public static SFUInt128 FromGuid(Guid guid)
+        {
+            var bytes = guid.ToByteArray();
+            return new SFUInt128()
+            {
+                Low = (ulong)bytes[0] | ((ulong)bytes[1] << 8) | ((ulong)bytes[2] << 16) | ((ulong)bytes[3] << 24)
+                        | ((ulong)bytes[4] << 32) | ((ulong)bytes[5] << 40) | ((ulong)bytes[6] << 48) | ((ulong)bytes[7] << 56),
+
+                High = ((ulong)bytes[0 + 8] << 8) | ((ulong)bytes[1 + 8] << 8) | ((ulong)bytes[2 + 8] << 16) | ((ulong)bytes[3 + 8] << 24)
+                        | ((ulong)bytes[4 + 8] << 32) | ((ulong)bytes[5 + 8] << 40) | ((ulong)bytes[6 + 8] << 48) | ((ulong)bytes[7 + 8] << 56)
+            };
+        }
+
+        public static Guid ToGuid(ulong Low, ulong High)
+        {
+            return new Guid((uint)(Low & 0xFFFFFFFF), (ushort)((Low >> 32) & 0xFFFF), (ushort)((Low >> 48) & 0xFFFF),
+                (byte)(High & 0xFF), (byte)((High >> (1 * 8)) & 0xFF), (byte)((High >> (2 * 8)) & 0xFF), (byte)((High >> (3 * 8)) & 0xFF),
+                (byte)((High >> (4 * 8)) & 0xFF), (byte)((High >> (5 * 8)) & 0xFF), (byte)((High >> (6 * 8)) & 0xFF), (byte)((High >> (7 * 8)) & 0xFF));
+        }
+    }
+
+    [Struct()]
+    public struct AccountID
+    {
+        public Guid Guid = new Guid();
+
+        public SFUInt128 ToUInt128()
+        {
+            var bytes = Guid.ToByteArray();
+            return new SFUInt128()
+            {
+                Low = (ulong)bytes[0] | ((ulong)bytes[1] << 8) | ((ulong)bytes[2] << 16) | ((ulong)bytes[3] << 24)
+                        | ((ulong)bytes[4] << 32) | ((ulong)bytes[5] << 40) | ((ulong)bytes[6] << 48) | ((ulong)bytes[7] << 56),
+
+                High = ((ulong)bytes[0 + 8] << 8) | ((ulong)bytes[1 + 8] << 8) | ((ulong)bytes[2 + 8] << 16) | ((ulong)bytes[3 + 8] << 24)
+                        | ((ulong)bytes[4 + 8] << 32) | ((ulong)bytes[5 + 8] << 40) | ((ulong)bytes[6 + 8] << 48) | ((ulong)bytes[7 + 8] << 56)
+            };
+        }
+
+
+        public AccountID(byte[] b)
+        {
+            Guid = new Guid(b);
+        }
+
+        public AccountID(Guid guid)
+        {
+            Guid = guid;
+        }
+
+        public AccountID(ulong guid)
+        {
+            Guid = new Guid((uint)(guid & 0xFFFFFFFF), (ushort)((guid >> 32) & 0xFFFF), (ushort)((guid >> 48) & 0xFFFF), 0, 0,0,0,0,0,0,0);
+        }
+
+        public AccountID(string b)
+        {
+            Guid.TryParse(b, out Guid);
+        }
+
+        public bool IsValid => Guid == Guid.Empty;
+
+        public static bool TryParse(string b, out AccountID accountId)
+        {
+            return Guid.TryParse(b, out accountId.Guid);
+        }
+
+        public byte[] ToByteArray() { return Guid.ToByteArray(); }
+
+        public static bool operator == (AccountID op1, AccountID op2)
+        {
+            return op1.Guid == op2.Guid;
+        }
+        public static bool operator !=(AccountID op1, AccountID op2)
+        {
+            return op1.Guid != op2.Guid;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null)
+                return false;
+
+            return Guid == ((AccountID)obj).Guid;
+        }
+
+        public override int GetHashCode()
+        {
+            return Guid.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return Guid.ToString();
+        }
+    }
+
+    [Struct()]
+    public struct CharacterID
+    {
+        public Guid Guid = new Guid();
+
+        public SFUInt128 ToUInt128()
+        {
+            var bytes = Guid.ToByteArray();
+            return new SFUInt128()
+            {
+                Low = (ulong)bytes[0] | ((ulong)bytes[1] << 8) | ((ulong)bytes[2] << 16) | ((ulong)bytes[3] << 24)
+                        | ((ulong)bytes[4] << 32) | ((ulong)bytes[5] << 40) | ((ulong)bytes[6] << 48) | ((ulong)bytes[7] << 56),
+
+                High = ((ulong)bytes[0 + 8] << 8) | ((ulong)bytes[1 + 8] << 8) | ((ulong)bytes[2 + 8] << 16) | ((ulong)bytes[3 + 8] << 24)
+                        | ((ulong)bytes[4 + 8] << 32) | ((ulong)bytes[5 + 8] << 40) | ((ulong)bytes[6 + 8] << 48) | ((ulong)bytes[7 + 8] << 56)
+            };
+        }
+
+
+        public CharacterID(byte[] b)
+        {
+            Guid = new Guid(b);
+        }
+
+        public CharacterID(Guid guid)
+        {
+            Guid = guid;
+        }
+
+        public CharacterID(ulong guid)
+        {
+            Guid = new Guid((uint)(guid & 0xFFFFFFFF), (ushort)((guid >> 32) & 0xFFFF), (ushort)((guid >> 48) & 0xFFFF), 0, 0, 0, 0, 0, 0, 0, 0);
+        }
+
+        public CharacterID(string b)
+        {
+            Guid.TryParse(b, out Guid);
+        }
+
+        public bool IsValid => Guid == Guid.Empty;
+
+        public static bool TryParse(string b, out CharacterID value)
+        {
+            return Guid.TryParse(b, out value.Guid);
+        }
+
+        public static bool operator ==(CharacterID op1, CharacterID op2)
+        {
+            return op1.Guid == op2.Guid;
+        }
+        public static bool operator !=(CharacterID op1, CharacterID op2)
+        {
+            return op1.Guid != op2.Guid;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null)
+                return false;
+
+            return Guid == ((CharacterID)obj).Guid;
+        }
+
+        public override int GetHashCode()
+        {
+            return Guid.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return Guid.ToString();
+        }
+    }
 
     [Struct()]
     [StructLayout(LayoutKind.Sequential)]
@@ -93,18 +286,23 @@ namespace SF
 
         public bool IsValid => TransactionId != 0;
 
+        public TransactionID(ulong transactionId)
+        {
+            TransactionId = transactionId;
+        }
+
         public new string ToString()
         {
             return $"(TransID:{TransactionId})";
         }
     }
 
-    // PH, don't use it directly
     [Struct()]
     [StructLayout(LayoutKind.Sequential)]
     public struct NamedVariable
     {
-        public UInt64 UID;
+        public string Name;
+        public object? Value;
     }
 
     // Player Role
@@ -129,7 +327,7 @@ namespace SF
     public struct MatchingPlayerInformation
     {
         UInt64 PlayerUID;
-        UInt64 PlayerID;
+        AccountID PlayerID;
         byte RequestedRole;
     }
 
@@ -203,7 +401,7 @@ namespace SF
 
 
     // Platform types
-    public enum Platform
+    public enum EPlatform
     {
         BR,         // Braves player Id
         Steam,      // Steam player Id
@@ -211,14 +409,14 @@ namespace SF
     };
 
     [Struct]
-    [StructLayout(LayoutKind.Explicit, Size = 9)]
+    [StructLayout(LayoutKind.Explicit, Size = 17)]
     public struct PlayerPlatformID
     {
-        [FieldOffset(0)] public UInt64 PlayerID;
-        [FieldOffset(8)] public byte PlatformData;
-        public Platform Platform
+        [FieldOffset(0)] public byte PlatformData;
+        [FieldOffset(1)] public AccountID PlayerID;
+        public EPlatform Platform
         {
-            get => (Platform)(PlatformData);
+            get => (EPlatform)(PlatformData);
             set => PlatformData = (byte)value;
         }
 
@@ -234,7 +432,7 @@ namespace SF
             if (!byte.TryParse(subStrings[0], out PlatformData))
                 return false;
 
-            if (!UInt64.TryParse(subStrings[1], out PlayerID))
+            if (!AccountID.TryParse(subStrings[1], out PlayerID))
                 return false;
 
             return true;
@@ -272,14 +470,6 @@ namespace SF
 
     [Struct]
     [StructLayout(LayoutKind.Sequential)]
-    public struct SFUInt128
-    {
-        public UInt64 Low;
-        public UInt64 High;
-    }
-
-    [Struct]
-    [StructLayout(LayoutKind.Sequential)]
     public struct MatchingQueueTicket
     {
         public UInt64 QueueUID;
@@ -310,7 +500,7 @@ namespace SF
         {
         }
 
-        public FriendInformation(ulong playerID, ulong fbUID, String nickName, ulong lastActiveTime, uint level, int playingGame, int weeklyWin, int weeklyLose, ulong lastStaminaSent)
+        public FriendInformation(AccountID playerID, ulong fbUID, String nickName, ulong lastActiveTime, uint level, int playingGame, int weeklyWin, int weeklyLose, ulong lastStaminaSent)
             : base(playerID, fbUID, nickName, lastActiveTime, level, playingGame, weeklyWin, weeklyLose)
         {
             LastStaminaSent = lastStaminaSent;
@@ -363,8 +553,8 @@ namespace SF
     [StructLayout(LayoutKind.Sequential)]
     public class PlayerInformation
     {
-        public ulong PlayerID;
-        public ulong FBUID;
+        public AccountID PlayerID;
+        public PlayerPlatformID PlayerPlatformId;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
         public byte[] NickNameBytes = new byte[64];
         public ulong LastActiveTime;
@@ -393,10 +583,9 @@ namespace SF
         {
         }
 
-        public PlayerInformation(ulong playerID, ulong fbUID, string nickName, ulong lastActiveTime, uint level, int playingGame)
+        public PlayerInformation(AccountID playerID, ulong fbUID, string nickName, ulong lastActiveTime, uint level, int playingGame)
         {
             PlayerID = playerID;
-            FBUID = fbUID;
             NickName = nickName;
             LastActiveTime = lastActiveTime;
             Level = level;
@@ -506,7 +695,6 @@ namespace SF
 
         public byte[] ToByteArray()
         {
-            UInt16 NumItems = (UInt16)Count;
             using (MemoryStream outputStream = new MemoryStream())
             using (BinaryWriter writer = new BinaryWriter(outputStream))
             {
@@ -619,7 +807,7 @@ namespace SF
     public class RelayPlayerInfo
     {
         public ulong EndpointID;
-        public ulong PlayerID;
+        public AccountID PlayerID;
 
         public RelayPlayerInfo()
         {
@@ -659,7 +847,7 @@ namespace SF
         {
         }
 
-        public RankingPlayerInformation(ulong playerID, ulong fbUID, string nickName, ulong lastActiveTime, uint level, int playingGame, int weeklyWin, int weeklyLose)
+        public RankingPlayerInformation(AccountID playerID, ulong fbUID, string nickName, ulong lastActiveTime, uint level, int playingGame, int weeklyWin, int weeklyLose)
             : base(playerID, fbUID, nickName, lastActiveTime, level, playingGame)
         {
             WeeklyWin = weeklyWin;
@@ -673,8 +861,8 @@ namespace SF
     {
         public UInt32 RankingID;
         public UInt32 Ranking;
-        public UInt64 PlayerID;
-        public UInt64 FBUID;
+        public AccountID PlayerID;
+        public PlayerPlatformID PlayerPlatformId;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
         public byte[] NickNameBytes;
         public UInt32 Level;
@@ -682,7 +870,7 @@ namespace SF
         public UInt32 ScoreHigh;
 
 
-        public string NickName
+        public string ProfileName
         {
             get
             {
@@ -714,7 +902,7 @@ namespace SF
         }
         public override string ToString()
         {
-            return string.Format("Rank:{0}, PlayerID:{1}, Nick:{2}, Score:{3}", Ranking, PlayerID, NickName, Score);
+            return string.Format("Rank:{0}, PlayerID:{1}, Nick:{2}, Score:{3}", Ranking, PlayerID, ProfileName, Score);
         }
 
     }

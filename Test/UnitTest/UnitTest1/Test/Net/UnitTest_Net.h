@@ -14,7 +14,10 @@
 #include "MemoryManager/SFMemoryManager.h"
 #include "Util/SFToString.h"
 #include "../SFTestBase.h"
-
+#include "Protocol/PlayInstanceRPCSendAdapter.h"
+#include "MessageBus/SFMemoryEndpoint.h"
+#include "Util/SFGuidHelper.h"
+#include "Variable/SFVariableTable.h"
 
 #ifdef DEBUG
 #define TestScale 1
@@ -26,18 +29,19 @@
 
 class NetTest : public MyTestBase
 {
-public:
-
-
 protected:
-
+    SF::SharedPointerT<SF::MemoryEndpoint> m_MemoryEndpoint;
+    SF::GuidGenerator<std::mt19937_64> m_GuidGen;
 
 public:
 
+    SF::MessageDataPtr NewMessage(SF::IHeap& memoryManager, uint32_t sequenceID);
+    SF::MessageDataPtr NewMessage(SF::IHeap& memoryManager);
 
 	// Remember that SetUp() is run immediately before a test starts.
 	virtual void SetUp()
 	{
+        m_MemoryEndpoint = new(SF::GetSystemHeap()) SF::MemoryEndpoint();
 		MyTestBase::SetUp();
 	}
 
@@ -45,7 +49,7 @@ public:
 	virtual void TearDown()
 	{
 		MyTestBase::TearDown();
-
+        m_MemoryEndpoint.reset();
 	}
 };
 

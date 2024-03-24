@@ -20,20 +20,11 @@ public struct PartyPlayerLeftS2CEvt : IFlatbufferObject
   public PartyPlayerLeftS2CEvt __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public ulong PartyUid { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-  public ulong LeftPlayerId { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-
-  public static Offset<SF.Flat.Game.PartyPlayerLeftS2CEvt> CreatePartyPlayerLeftS2CEvt(FlatBufferBuilder builder,
-      ulong party_uid = 0,
-      ulong left_player_id = 0) {
-    builder.StartTable(2);
-    PartyPlayerLeftS2CEvt.AddLeftPlayerId(builder, left_player_id);
-    PartyPlayerLeftS2CEvt.AddPartyUid(builder, party_uid);
-    return PartyPlayerLeftS2CEvt.EndPartyPlayerLeftS2CEvt(builder);
-  }
+  public SF.Flat.AccountID? LeftPlayerId { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
 
   public static void StartPartyPlayerLeftS2CEvt(FlatBufferBuilder builder) { builder.StartTable(2); }
   public static void AddPartyUid(FlatBufferBuilder builder, ulong partyUid) { builder.AddUlong(0, partyUid, 0); }
-  public static void AddLeftPlayerId(FlatBufferBuilder builder, ulong leftPlayerId) { builder.AddUlong(1, leftPlayerId, 0); }
+  public static void AddLeftPlayerId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> leftPlayerIdOffset) { builder.AddStruct(1, leftPlayerIdOffset.Value, 0); }
   public static Offset<SF.Flat.Game.PartyPlayerLeftS2CEvt> EndPartyPlayerLeftS2CEvt(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.PartyPlayerLeftS2CEvt>(o);
@@ -47,7 +38,7 @@ static public class PartyPlayerLeftS2CEvtVerify
   {
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyField(tablePos, 4 /*PartyUid*/, 8 /*ulong*/, 8, false)
-      && verifier.VerifyField(tablePos, 6 /*LeftPlayerId*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyField(tablePos, 6 /*LeftPlayerId*/, 16 /*SF.Flat.AccountID*/, 8, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

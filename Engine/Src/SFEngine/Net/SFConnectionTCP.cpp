@@ -528,22 +528,22 @@ namespace Net {
             pMsgHdr = reinterpret_cast<MessageHeader*>(m_bufRecvTem.data());
 
             // If packet length is smaller than header size, the packet is likely corrupted
-            if (pMsgHdr->Length < m_ReceivedDataSize)
+            if (pMsgHdr->MessageSize < m_ReceivedDataSize)
             {
                 netCheck(ResultCode::IO_BADPACKET_SIZE);
             }
 
             // if Temporary buffer is too small then reallocate
-            if (m_bufRecvTem.size() < pMsgHdr->Length)
+            if (m_bufRecvTem.size() < pMsgHdr->MessageSize)
             {
-                m_bufRecvTem.resize(AlignUp(pMsgHdr->Length, 1024));
+                m_bufRecvTem.resize(AlignUp(pMsgHdr->MessageSize, 1024));
 
                 // resize can move address
                 pMsgHdr = reinterpret_cast<MessageHeader*>(m_bufRecvTem.data());
             }
 
 			// Append remain payload
-			uint requiredDataSizeForTheMessage = pMsgHdr->Length - m_ReceivedDataSize;
+			uint requiredDataSizeForTheMessage = pMsgHdr->MessageSize - m_ReceivedDataSize;
 
             uint copySize = std::min(uiBuffSize, requiredDataSizeForTheMessage);
             memcpy(m_bufRecvTem.data() + m_ReceivedDataSize, pBuff, copySize);
@@ -552,7 +552,7 @@ namespace Net {
             uiBuffSize -= copySize;
 
             // Call recv callback if we have full message data
-            if (m_ReceivedDataSize == pMsgHdr->Length)
+            if (m_ReceivedDataSize == pMsgHdr->MessageSize)
             {
                 m_ReceivedDataSize = 0;
 
@@ -574,14 +574,12 @@ namespace Net {
 		{
 			SFLog(Net, Debug5, "TCP Ctrl Recv ip:{0}, msg:{1}, Len:{2}",
 				GetRemoteInfo().PeerAddress, 
-				pMsgHeader->MessageId, pMsgHeader->Length );
+				pMsgHeader->MessageId, pMsgHeader->MessageSize);
 
 			netCheck( ProcNetCtrl(reinterpret_cast<const MsgNetCtrlBuffer*>(pMsgHeader)) );
 		}
 		else
 		{
-            pMsgHeader->ValidateChecksumNDecrypt();
-
 			hr  = Connection::OnRecv(pMsgHeader);
 			netCheck( hr );
 		}
@@ -635,7 +633,7 @@ namespace Net {
             netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
         }
 
-        CircularBufferQueue::ItemWritePtr itemWritePtr = m_SendBufferQueue.AllocateWrite(sizeof(IOBUFFER_WRITE) + pMsgHeader->Length);
+        CircularBufferQueue::ItemWritePtr itemWritePtr = m_SendBufferQueue.AllocateWrite(sizeof(IOBUFFER_WRITE) + pMsgHeader->MessageSize);
         if (!itemWritePtr)
         {
             if (pMsgHeader->MessageId.IDs.Reliability)
@@ -650,16 +648,8 @@ namespace Net {
         assert(pSendBuffer == itemWritePtr.data());
 
         MessageHeader* pNewHeader = reinterpret_cast<MessageHeader*>(pSendBuffer + 1);
-        memcpy(pNewHeader, pMsgHeader, pMsgHeader->Length);
-        if (msgID.GetMessageType() == MessageType::NetCtrl)
-        {
-            pNewHeader->UpdateChecksum();
-        }
-        else
-        {
-            pNewHeader->UpdateChecksumNEncrypt();
-        }
-        pSendBuffer->SetupSendTCP(pMsgHeader->Length, reinterpret_cast<uint8_t*>(pNewHeader));
+        memcpy(pNewHeader, pMsgHeader, pMsgHeader->MessageSize);
+        pSendBuffer->SetupSendTCP(pMsgHeader->MessageSize, reinterpret_cast<uint8_t*>(pNewHeader));
 
         // Release before handover to buffer send
         itemWritePtr.Reset();
@@ -734,23 +724,12 @@ namespace Net {
             return hr;
         }
 
-        if (pMsgHeader->Length > (uint)Const::TCP_PACKET_SIZE_MAX)
+        if (pMsgHeader->MessageSize > (uint)Const::TCP_PACKET_SIZE_MAX)
         {
             netCheck(ResultCode::IO_BADPACKET_TOOBIG);
         }
 
         Protocol::PrintDebugMessage("Send", pMsgHeader);
-
-        // TODO: fix me
-        //if (!pMsgHeader->msgID.IDs.Reliability
-        //    && (m_lGuarantedSent - m_lGuarantedAck) > Const::GUARANTEED_PENDING_MAX)
-        //{
-        //    // Drop if there are too many reliable packets
-        //    netCheck(ResultCode::IO_SEND_FAIL);
-        //}
-
-        //m_lGuarantedSent.fetch_add(1, std::memory_order_relaxed);
-
 
         netCheck(SendRaw(pMsgHeader));
 

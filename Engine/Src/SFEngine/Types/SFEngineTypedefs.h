@@ -13,6 +13,7 @@
 #pragma once
 
 #include "SFTypedefs.h"
+#include "Util/SFGuid.h"
 #include "Util/SFStringCrc32.h"
 #include "Util/SFStringCrc64.h"
 #include "Math/SF3DMath.h"
@@ -36,12 +37,6 @@ namespace SF {
 	// Authentication ticket
 	using AuthTicket = uint64_t;
 
-	using AccountID = uint64_t;
-
-	using PlayerID = uint64_t;
-
-	using CharacterID = uint32_t;
-
     using LogEntryID = uint32_t;
 
 	using FacebookUID = uint64_t;
@@ -52,34 +47,6 @@ namespace SF {
 	using ServerID = uint32_t;
 
 
-
-    enum class EPlatform : uint8_t
-    {
-        BR,         // Braves player Id
-        Steam,      // Steam player Id
-        Facebook,   // Facebook
-    };
-
-#pragma pack(push, 1)
-    struct PlayerPlatformID
-    {
-        uint64_t PlayerID{};
-        EPlatform Platform{};
-
-        PlayerPlatformID() = default;
-        PlayerPlatformID(EPlatform platform, uint64_t playerId)
-            : Platform(platform)
-            , PlayerID(playerId)
-        {}
-        PlayerPlatformID(const char* strId);
-    };
-#pragma pack(pop)
-
-    SF_FORCEINLINE bool operator == (const PlayerPlatformID& op1, const PlayerPlatformID& op2)
-    {
-        return op1.Platform == op2.Platform
-            && op1.PlayerID == op2.PlayerID;
-    }
 
 
 #pragma pack(push, 1)
@@ -95,6 +62,8 @@ namespace SF {
             && op1.StatValue == op2.StatValue;
     }
 
+
+
 #pragma pack(pop)
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -103,9 +72,8 @@ namespace SF {
 	//
 
 
-	union EntityUID;
-
 	// Entity ID faculty, this means group of Entity
+    // We might not need this anymore, just leaving as ph for legacy code
 	enum class EntityFaculty : uint8_t
 	{
 		None,				// Faculty undefined
@@ -169,24 +137,24 @@ namespace SF {
 
 
 		struct {
-			uint32_t			EntityLID : 24;	// Local entity ID
-			uint32_t			FacultyID : 8;	// Local faculty ID
-			uint32_t : 0;		// Local entity ID
+			uint32_t			EntityLID : 16;	// Local entity ID
+			uint32_t			FacultyID : 4;	// Local faculty ID
+            uint32_t			ServerID : 12;	// Server ID
+			uint32_t : 0;
 		} Components;
 		uint32_t ID;
 
 
 		inline EntityID();
-		inline EntityID(const EntityUID& entityUID);
 		inline EntityID(const EntityID& entityID);
-#if !defined(SWIG)
-		inline EntityID(EntityFaculty facultyID, uint32_t entityLID);
-#endif
+		inline EntityID(ServerID serverId, EntityFaculty facultyID, uint32_t entityLID);
 		inline EntityID(uint32_t uiID);
 
-		uint32_t GetEntityLID() const { return Components.EntityLID; }
+		uint32_t GetServerID() const { return Components.ServerID; }
+        uint32_t GetEntityLID() const { return Components.EntityLID; }
 		uint32_t GetFacultyID() const { return Components.FacultyID; }
 
+        bool IsValid() const { return ID != 0; }
 		inline EntityID& operator = (const EntityID& entityID);
 
 		//inline bool operator == ( const EntityID& src ) const;
@@ -196,59 +164,12 @@ namespace SF {
 #endif
 	};
 
+    // We now use same type. will be merged gradually
+    using EntityUID = EntityID;
 
-
-	union EntityUID
-	{
-		struct EntityUIDComponents {
-			EntityID	EntID = 0;		// Local entity ID
-			ServerID	SvrID = 0;		// Server ID
-
-			EntityUIDComponents() {}
-			EntityUIDComponents(EntityID InEntID, ServerID InSvrId)
-				: EntID(InEntID)
-				, SvrID(InSvrId)
-			{}
-			EntityUIDComponents(const EntityUIDComponents& src)
-				: EntID(src.EntID)
-				, SvrID(src.SvrID)
-			{}
-
-		} Components;
-		uint64_t UID;
-
-		SF_FORCEINLINE EntityUID()
-			: Components()
-		{}
-
-		SF_FORCEINLINE EntityUID(const EntityUID& entityUID)
-			: Components(entityUID.Components)
-		{}
-
-		SF_FORCEINLINE EntityUID(ServerID serverID, uint32_t entityID)
-			: Components(entityID, serverID)
-		{}
-
-		SF_FORCEINLINE EntityUID(const Context& context)
-			: Components()
-		{
-			UID = context;
-		}
-
-		SF_FORCEINLINE EntityID GetEntityID() const { return Components.EntID; }
-		SF_FORCEINLINE ServerID GetServerID() const { return Components.SvrID; }
-
-		inline EntityUID& operator = (const EntityUID& entityUID);
-
-		inline bool operator == (const EntityUID& src) const;
-		inline bool operator != (const EntityUID& src) const;
-
-#if !defined(SWIG)
-		inline operator Context() const;
-#endif
-	};
 
 	using GameInsUID = EntityUID;
+    using GameInstanceUID = EntityUID;
 	using PartyUID = EntityUID;
 	using PlayerUID = EntityUID;
 
@@ -302,55 +223,54 @@ namespace SF {
 
 
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Server Route context
-	//
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////
+	////	Server Route context
+	////
 
-	union RouteContext
-	{
-		struct RouteContextComponents {
-			EntityUID	From;
-			EntityUID	To;
+	//union RouteContext
+	//{
+	//	struct RouteContextComponents {
+	//		EntityUID	From;
+	//		EntityUID	To;
 
-			RouteContextComponents() {}
-			RouteContextComponents(EntityUID InFrom, EntityUID InTo)
-				: From(InFrom)
-				, To(InTo)
-			{}
-			RouteContextComponents(const RouteContextComponents& src)
-				: From(src.From)
-				, To(src.To)
-			{}
+	//		RouteContextComponents() {}
+	//		RouteContextComponents(EntityUID InFrom, EntityUID InTo)
+	//			: From(InFrom)
+	//			, To(InTo)
+	//		{}
+	//		RouteContextComponents(const RouteContextComponents& src)
+	//			: From(src.From)
+	//			, To(src.To)
+	//		{}
 
-		} Components;
-		uint64_t ContextValue[2];
+	//	} Components;
+	//	uint64_t ContextValue[2];
 
-		SF_FORCEINLINE RouteContext()
-			: Components()
-		{}
+	//	SF_FORCEINLINE RouteContext()
+	//		: Components()
+	//	{}
 
-		SF_FORCEINLINE RouteContext(const RouteContext& src)
-			: Components(src.Components)
-		{}
-		SF_FORCEINLINE RouteContext(EntityUID InFromID, EntityUID InToID)
-			: Components(InFromID, InToID)
-		{}
+	//	SF_FORCEINLINE RouteContext(const RouteContext& src)
+	//		: Components(src.Components)
+	//	{}
+	//	SF_FORCEINLINE RouteContext(EntityUID InFromID, EntityUID InToID)
+	//		: Components(InFromID, InToID)
+	//	{}
 
 
-		EntityUID GetFrom() const { return Components.From; }
-		EntityUID GetTo() const { return Components.To; }
+	//	EntityUID GetFrom() const { return Components.From; }
+	//	EntityUID GetTo() const { return Components.To; }
 
-		inline RouteContext& operator = (const RouteContext& src);
+	//	inline RouteContext& operator = (const RouteContext& src);
 
-		inline bool operator == (const RouteContext& routeContext) const;
+	//	inline bool operator == (const RouteContext& routeContext) const;
 
-		// Get swaped context( From <==> To )
-		inline RouteContext GetSwaped() const;
+	//	// Get swaped context( From <==> To )
+	//	inline RouteContext GetSwaped() const;
 
-	};
+	//};
 
-	using AccountID = uint64_t;
 	using AuthTicket = uint64_t;
 	using PartyID = EntityID;
 	using GameInsID = EntityID;
@@ -375,6 +295,69 @@ namespace SF {
 	};
 
 
+
+    struct AccountID : public Guid
+    {
+        AccountID()
+        {
+        }
+
+        AccountID(const AccountID& other)
+            : Guid(other)
+        {
+        }
+
+        AccountID(const Guid& other)
+            : Guid(other)
+        {
+        }
+
+        AccountID(const uint8_t* bytes)
+            : Guid(bytes)
+        {
+        }
+
+        AccountID(uint64_t low, uint64_t high)
+            : Guid(low, high)
+        {
+        }
+
+    };
+
+    using PlayerID = AccountID;
+
+    typedef Guid CharacterID;
+
+
+    enum class EPlatform : uint8_t
+    {
+        BR,         // Braves player Id
+        Steam,      // Steam player Id
+        Facebook,   // Facebook
+    };
+
+#pragma pack(push, 1)
+    struct PlayerPlatformID
+    {
+        AccountID PlayerId{};
+        EPlatform Platform{};
+
+        PlayerPlatformID() = default;
+        PlayerPlatformID(EPlatform platform, AccountID playerId)
+            : Platform(platform)
+            , PlayerId(playerId)
+        {}
+        PlayerPlatformID(const char* strId);
+    };
+#pragma pack(pop)
+
+    SF_FORCEINLINE bool operator == (const PlayerPlatformID& op1, const PlayerPlatformID& op2)
+    {
+        return op1.Platform == op2.Platform
+            && op1.PlayerId == op2.PlayerId;
+    }
+
+
 	// Player information
 	struct PlayerInformation
 	{
@@ -382,7 +365,7 @@ namespace SF {
 			MAX_NAME = 63, // 64 -1 for PlayerPlatformID alignment
 		};
 
-		AccountID		PlayerID = 0;
+        AccountID		PlayerID = {};
         PlayerPlatformID PlayerPlatformId{};
 		char			NickName[MAX_NAME] = {0,};
 		uint64_t			LastActiveTime = 0;
@@ -590,6 +573,8 @@ namespace SF {
 		inline LocalUID(uint32_t time, uint32_t id);
 		inline LocalUID(uint64_t initValue);
 
+        inline bool IsValid() const { return UID != 0; }
+
 		inline LocalUID& operator = (const LocalUID& src);
 
 		inline bool operator == (const LocalUID& op) const;
@@ -616,6 +601,8 @@ namespace SF {
 
 		inline MatchingQueueTicket& operator = (const MatchingQueueTicket& src);
 
+        inline bool IsValid() const { return QueueUID.IsValid() && QueueItemID.IsValid(); }
+
 		inline bool operator == (const MatchingQueueTicket& op) const;
 		inline bool operator != (const MatchingQueueTicket& op) const;
 
@@ -634,11 +621,17 @@ namespace SF {
 		bool operator != (const RelayPlayerInfo& op1) const { return EndpointID != op1.EndpointID || RelayPlayerID != op1.RelayPlayerID; }
 	};
 
-
-
-
 #pragma pack(pop)
 
+};
+
+template <> class std::hash<SF::AccountID>
+{
+public:
+    size_t operator()(const SF::AccountID& guid) const
+    {
+        return guid.GetHash();
+    }
 };
 
 

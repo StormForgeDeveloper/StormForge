@@ -19,7 +19,7 @@
 #include "Util/SFString.h"
 #include "Stream/SFStream.h"
 #include "Util/SFStringSerialization.h"
-
+#include "Util/SFGuid.h"
 
 namespace SF {
 
@@ -69,7 +69,8 @@ namespace SF {
 		virtual void SetValue(const String& value) { assert(false); unused(value); }
 		virtual void SetValue(StringCrc32 value) { assert(false); unused(value); }
 		virtual void SetValue(StringCrc64 value) { assert(false); unused(value); }
-		virtual void SetValue(const Array<const uint8_t>& value) { assert(false); unused(value); }
+        virtual void SetValue(const Guid& value) { assert(false); unused(value); }
+        virtual void SetValue(const Array<const uint8_t>& value) { assert(false); unused(value); }
 
 
 		virtual void* GetDataPtr() const { return nullptr; }
@@ -89,7 +90,8 @@ namespace SF {
 		virtual const wchar_t* GetValueWCharString() const { return nullptr; }
 		virtual StringCrc32 GetValueStringCrc32() const { return StringCrc32(); }
 		virtual StringCrc64 GetValueStringCrc64() const { return StringCrc64(); }
-		virtual const Array<uint8_t>& GetValueBLOB() const { assert(false); static StaticArray<uint8_t,1> temp; return temp; }
+        virtual Guid GetValueGuid() const { return Guid(); }
+        virtual const Array<uint8_t>& GetValueBLOB() const { assert(false); static StaticArray<uint8_t, 1> temp; return temp; }
 
 		// Template implementation for type based GetValue access
 		template<class ValueType>
@@ -138,6 +140,7 @@ namespace SF {
 	template<> inline StringCrc32 Variable::GetValue<StringCrc32>() const { return GetValueStringCrc32(); }
 	template<> inline StringCrc64 Variable::GetValue<StringCrc64>() const { return GetValueStringCrc64(); }
 	//template<> inline Array<uint8_t> Variable::GetValue<Array<uint8_t>>() const { return GetValueBLOB(); }
+    template<> inline Guid Variable::GetValue<Guid>() const { return GetValueGuid(); }
 
 
 

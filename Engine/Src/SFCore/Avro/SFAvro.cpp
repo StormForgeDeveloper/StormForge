@@ -472,6 +472,21 @@ namespace SF
 		return value != 0;
 	}
 
+    Guid AvroValue::AsGuid() const
+    {
+        const void* buf{};
+        size_t size{};
+        int res = avro_value_get_fixed(&m_DataValue, &buf, &size);
+        if (res != 0)
+        {
+            SFLog(System, Error, "AvroValue parsing has type error:{0}, '{1}'", res, avro_strerror());
+            return Guid();
+        }
+
+
+        return Guid(reinterpret_cast<const uint8_t*>(buf));
+    }
+
 	ArrayView<const uint8_t> AvroValue::AsBytes() const
 	{
 		const void* buf{};
@@ -652,6 +667,27 @@ namespace SF
         if (avro_value_get_by_name(&m_DataValue, Name, &avValue, NULL) == 0)
         {
             int ret = avro_value_set_double(&avValue, Value);
+            if (ret != 0)
+            {
+                SFLog(System, Error, "Avro SetValue: error invalid type: {0}", Name);
+                return ResultCode::INVALID_TYPE;
+            }
+
+            return ResultCode::SUCCESS;
+        }
+        else
+        {
+            SFLog(System, Error, "Avro SetValue:  error value not found: {0}", Name);
+            return ResultCode::VARIABLE_NOT_FOUND;
+        }
+    }
+
+    Result AvroValue::SetValue(const char* Name, const Guid& Value)
+    {
+        avro_value_t avValue{};
+        if (avro_value_get_by_name(&m_DataValue, Name, &avValue, NULL) == 0)
+        {
+            int ret = avro_value_set_fixed(&avValue, (void*)Value.data, 16);
             if (ret != 0)
             {
                 SFLog(System, Error, "Avro SetValue: error invalid type: {0}", Name);

@@ -192,6 +192,7 @@ set(SUBUtil_FILES
 	Util/SFDebugger.cpp
 	Util/SFGuid.h
 	Util/SFGuid.cpp
+	Util/SFGuidHelper.h
   )
 
 source_group(Util FILES
@@ -354,10 +355,12 @@ set(SUBOnline_FILES
 	Online/HTTP/SFHTTPClientCurl.cpp
 	Online/HTTP/SFHTTPClientSystemCurl.h
 	Online/HTTP/SFHTTPClientSystemCurl.cpp
-	MessageBus/SFMessage2.h
-	MessageBus/SFMessage2.cpp
+	MessageBus/SFMessageHeader.h
+	MessageBus/SFMessageHeader.cpp
 	MessageBus/SFMessageDelegateMap.h
 	MessageBus/SFMessageDelegateMap.cpp
+	MessageBus/SFMemoryEndpoint.h
+	MessageBus/SFMemoryEndpoint.cpp
   )
 
 source_group(Online FILES

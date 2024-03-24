@@ -1,4 +1,4 @@
-﻿include "LocalTypes.fbs";
+﻿include "SFTypes.fbs";
 namespace SF.Flat.Telemetry;
 
 table PostEventCmd
@@ -8,7 +8,7 @@ table PostEventCmd
 	app_id:string;
 	machine_id:string;
 	event_id:uint32;
-	account_id:uint64;
+	account_id:AccountID;
 	is_play_event:bool;
 	session_id:[uint8];
 	attributes:[NamedVariable];
@@ -16,7 +16,7 @@ table PostEventCmd
 
 table PostEventRes
 {
- 	result:uint32;
+ 	result:int;
 } // table PostEventRes
 
 root_type PostEventRes;

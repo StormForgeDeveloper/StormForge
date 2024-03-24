@@ -11,48 +11,37 @@ using global::Google.FlatBuffers;
 
 public struct ActorMovement : IFlatbufferObject
 {
-  private Table __p;
+  private Struct __p;
   public ByteBuffer ByteBuffer { get { return __p.bb; } }
-  public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_24_3_7(); }
-  public static ActorMovement GetRootAsActorMovement(ByteBuffer _bb) { return GetRootAsActorMovement(_bb, new ActorMovement()); }
-  public static ActorMovement GetRootAsActorMovement(ByteBuffer _bb, ActorMovement obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
-  public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
+  public void __init(int _i, ByteBuffer _bb) { __p = new Struct(_i, _bb); }
   public ActorMovement __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public SF.Flat.Vector4? Position { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.Vector4?)(new SF.Flat.Vector4()).__assign(o + __p.bb_pos, __p.bb) : null; } }
-  public SF.Flat.Vector4? LinearVelocity { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.Vector4?)(new SF.Flat.Vector4()).__assign(o + __p.bb_pos, __p.bb) : null; } }
-  public uint ActorId { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
-  public float AngularYaw { get { int o = __p.__offset(10); return o != 0 ? __p.bb.GetFloat(o + __p.bb_pos) : (float)0.0f; } }
-  public uint MoveFrame { get { int o = __p.__offset(12); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
-  public uint MovementState { get { int o = __p.__offset(14); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
+  public SF.Flat.Vector4 Position { get { return (new SF.Flat.Vector4()).__assign(__p.bb_pos + 0, __p.bb); } }
+  public SF.Flat.Vector4 LinearVelocity { get { return (new SF.Flat.Vector4()).__assign(__p.bb_pos + 16, __p.bb); } }
+  public uint ActorId { get { return __p.bb.GetUint(__p.bb_pos + 32); } }
+  public float AngularYaw { get { return __p.bb.GetFloat(__p.bb_pos + 36); } }
+  public uint MoveFrame { get { return __p.bb.GetUint(__p.bb_pos + 40); } }
+  public uint MovementState { get { return __p.bb.GetUint(__p.bb_pos + 44); } }
 
-  public static void StartActorMovement(FlatBufferBuilder builder) { builder.StartTable(6); }
-  public static void AddPosition(FlatBufferBuilder builder, Offset<SF.Flat.Vector4> positionOffset) { builder.AddStruct(0, positionOffset.Value, 0); }
-  public static void AddLinearVelocity(FlatBufferBuilder builder, Offset<SF.Flat.Vector4> linearVelocityOffset) { builder.AddStruct(1, linearVelocityOffset.Value, 0); }
-  public static void AddActorId(FlatBufferBuilder builder, uint actorId) { builder.AddUint(2, actorId, 0); }
-  public static void AddAngularYaw(FlatBufferBuilder builder, float angularYaw) { builder.AddFloat(3, angularYaw, 0.0f); }
-  public static void AddMoveFrame(FlatBufferBuilder builder, uint moveFrame) { builder.AddUint(4, moveFrame, 0); }
-  public static void AddMovementState(FlatBufferBuilder builder, uint movementState) { builder.AddUint(5, movementState, 0); }
-  public static Offset<SF.Flat.ActorMovement> EndActorMovement(FlatBufferBuilder builder) {
-    int o = builder.EndTable();
-    return new Offset<SF.Flat.ActorMovement>(o);
+  public static Offset<SF.Flat.ActorMovement> CreateActorMovement(FlatBufferBuilder builder, float position_X, float position_Y, float position_Z, float position_W, float linear_velocity_X, float linear_velocity_Y, float linear_velocity_Z, float linear_velocity_W, uint ActorId, float AngularYaw, uint MoveFrame, uint MovementState) {
+    builder.Prep(4, 48);
+    builder.PutUint(MovementState);
+    builder.PutUint(MoveFrame);
+    builder.PutFloat(AngularYaw);
+    builder.PutUint(ActorId);
+    builder.Prep(4, 16);
+    builder.PutFloat(linear_velocity_W);
+    builder.PutFloat(linear_velocity_Z);
+    builder.PutFloat(linear_velocity_Y);
+    builder.PutFloat(linear_velocity_X);
+    builder.Prep(4, 16);
+    builder.PutFloat(position_W);
+    builder.PutFloat(position_Z);
+    builder.PutFloat(position_Y);
+    builder.PutFloat(position_X);
+    return new Offset<SF.Flat.ActorMovement>(builder.Offset);
   }
 }
 
-
-static public class ActorMovementVerify
-{
-  static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
-  {
-    return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Position*/, 16 /*SF.Flat.Vector4*/, 4, false)
-      && verifier.VerifyField(tablePos, 6 /*LinearVelocity*/, 16 /*SF.Flat.Vector4*/, 4, false)
-      && verifier.VerifyField(tablePos, 8 /*ActorId*/, 4 /*uint*/, 4, false)
-      && verifier.VerifyField(tablePos, 10 /*AngularYaw*/, 4 /*float*/, 4, false)
-      && verifier.VerifyField(tablePos, 12 /*MoveFrame*/, 4 /*uint*/, 4, false)
-      && verifier.VerifyField(tablePos, 14 /*MovementState*/, 4 /*uint*/, 4, false)
-      && verifier.VerifyTableEnd(tablePos);
-  }
-}
 
 }

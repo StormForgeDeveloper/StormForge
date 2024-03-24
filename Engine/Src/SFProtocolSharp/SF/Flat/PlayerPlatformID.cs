@@ -16,14 +16,16 @@ public struct PlayerPlatformID : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Struct(_i, _bb); }
   public PlayerPlatformID __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public ulong PlayerId { get { return __p.bb.GetUlong(__p.bb_pos + 0); } }
-  public SF.Flat.Platform PlatformData { get { return (SF.Flat.Platform)__p.bb.GetSbyte(__p.bb_pos + 8); } }
+  public SF.Flat.AccountID PlayerId { get { return (new SF.Flat.AccountID()).__assign(__p.bb_pos + 0, __p.bb); } }
+  public SF.Flat.Platform PlatformData { get { return (SF.Flat.Platform)__p.bb.GetSbyte(__p.bb_pos + 16); } }
 
-  public static Offset<SF.Flat.PlayerPlatformID> CreatePlayerPlatformID(FlatBufferBuilder builder, ulong PlayerId, SF.Flat.Platform PlatformData) {
-    builder.Prep(8, 16);
+  public static Offset<SF.Flat.PlayerPlatformID> CreatePlayerPlatformID(FlatBufferBuilder builder, ulong player_id_Low, ulong player_id_High, SF.Flat.Platform PlatformData) {
+    builder.Prep(8, 24);
     builder.Pad(7);
     builder.PutSbyte((sbyte)PlatformData);
-    builder.PutUlong(PlayerId);
+    builder.Prep(8, 16);
+    builder.PutUlong(player_id_High);
+    builder.PutUlong(player_id_Low);
     return new Offset<SF.Flat.PlayerPlatformID>(builder.Offset);
   }
 }
