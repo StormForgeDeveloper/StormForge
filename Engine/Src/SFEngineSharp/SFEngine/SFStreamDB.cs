@@ -130,9 +130,9 @@ namespace SF
 
         static internal OnlineClient? stm_StaticEventReceiver = null;
 
-        static public void OnMessageData(MessageID messageID, TransactionID transactionId, uint payloadSize, IntPtr payloadPtr)
+        static public void OnMessageData(MessageID messageID, TransactionID transactionId, Result result, uint payloadSize, IntPtr payloadPtr)
         {
-            SFMessage message = new SFMessage(messageID, transactionId,payloadSize, payloadPtr);
+            SFMessage message = new SFMessage(messageID, transactionId, result, payloadSize, payloadPtr);
             stm_StaticEventReceiver?.MessageRouter.HandleRecvMessage(message);
         }
 

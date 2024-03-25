@@ -42,7 +42,24 @@ namespace SF {
         // Data length including header
         uint16_t MessageSize = 0;
 
-        constexpr uint16_t GetHeaderSize() const { return static_cast<uint16_t>(sizeof(MessageHeader2)); }
+        uint16_t GetHeaderSize() const
+        {
+            if (MessageId.GetMessageType() == MessageType::Result)
+                return static_cast<uint16_t>(sizeof(MessageHeader2) + sizeof(Result));
+            else
+                return static_cast<uint16_t>(sizeof(MessageHeader2));
+        }
+
+        // Read and return result if it is transaction result 
+        Result GetTransactionResult() const
+        {
+            if (MessageId.GetMessageType() == MessageType::Result)
+            {
+                return *reinterpret_cast<const Result*>(reinterpret_cast<uintptr_t>(this) + sizeof(MessageHeader2));
+            }
+            else
+                return ResultCode::SUCCESS_FALSE;
+        }
 
         constexpr MessageID GetMessageID() const { return MessageId.GetMessageID(); }
 
@@ -87,7 +104,7 @@ namespace SF {
         MessageHeader2* Clone(IHeap& heap);
 
         // Update size and write to flat packet builder
-        void UpdateNWriteTo(::flatbuffers::FlatBufferBuilder& packetBuilder);
+        void UpdateNWriteTo(::flatbuffers::FlatBufferBuilder& packetBuilder, Result result);
 
     };
 

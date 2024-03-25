@@ -171,7 +171,7 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle,
 
 	auto messageHandler = [onMessageFunc](Net::Connection* pConn, const MessageHeader* pMsgData)
 	{
-            onMessageFunc(pMsgData->GetMessageID(), pMsgData->TransactionId, pMsgData->GetPayloadSize(), pMsgData->GetPayloadPtr());
+            onMessageFunc(pMsgData->GetMessageID(), pMsgData->TransactionId, pMsgData->GetTransactionResult(), pMsgData->GetPayloadSize(), pMsgData->GetPayloadPtr());
 	};
 
 

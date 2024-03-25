@@ -62,6 +62,11 @@ namespace ProtocolCompiler
             {
                 foreach(var parameter in parameters)
                 {
+                    if (parameter == ParamResult)
+                    {
+                        continue;
+                    }
+
                     MatchIndent(); OutStream.WriteLine($"{FlatbufferUtil.ToFlatVariableName(parameter.Name)}:{FlatbufferUtil.ToFlatType(parameter)};");
                 }
             }

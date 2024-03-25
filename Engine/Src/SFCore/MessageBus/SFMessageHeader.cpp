@@ -36,8 +36,13 @@ namespace SF
         return pNewHeader;
     }
 
-    void MessageHeader2::UpdateNWriteTo(::flatbuffers::FlatBufferBuilder& packetBuilder)
+    void MessageHeader2::UpdateNWriteTo(::flatbuffers::FlatBufferBuilder& packetBuilder, Result result)
     {
+        if (MessageId.GetMessageType() == MessageType::Result)
+        {
+            packetBuilder.PushBytes((const uint8_t*)&result, sizeof(Result));
+        }
+
         // Update size
         MessageSize = (uint16_t)(packetBuilder.GetSize() + sizeof(MessageHeader2));
 

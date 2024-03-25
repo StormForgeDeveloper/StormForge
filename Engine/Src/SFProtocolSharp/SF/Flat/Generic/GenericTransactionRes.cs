@@ -20,20 +20,18 @@ public struct GenericTransactionRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public GenericTransactionRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public SF.Flat.TransactionID? FinishedTransaction { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.TransactionID?)(new SF.Flat.TransactionID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
-  public string Signature { get { int o = __p.__offset(8); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+  public SF.Flat.TransactionID? FinishedTransaction { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.TransactionID?)(new SF.Flat.TransactionID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public string Signature { get { int o = __p.__offset(6); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
-  public Span<byte> GetSignatureBytes() { return __p.__vector_as_span<byte>(8, 1); }
+  public Span<byte> GetSignatureBytes() { return __p.__vector_as_span<byte>(6, 1); }
 #else
-  public ArraySegment<byte>? GetSignatureBytes() { return __p.__vector_as_arraysegment(8); }
+  public ArraySegment<byte>? GetSignatureBytes() { return __p.__vector_as_arraysegment(6); }
 #endif
-  public byte[] GetSignatureArray() { return __p.__vector_as_array<byte>(8); }
+  public byte[] GetSignatureArray() { return __p.__vector_as_array<byte>(6); }
 
-  public static void StartGenericTransactionRes(FlatBufferBuilder builder) { builder.StartTable(3); }
-  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
-  public static void AddFinishedTransaction(FlatBufferBuilder builder, Offset<SF.Flat.TransactionID> finishedTransactionOffset) { builder.AddStruct(1, finishedTransactionOffset.Value, 0); }
-  public static void AddSignature(FlatBufferBuilder builder, StringOffset signatureOffset) { builder.AddOffset(2, signatureOffset.Value, 0); }
+  public static void StartGenericTransactionRes(FlatBufferBuilder builder) { builder.StartTable(2); }
+  public static void AddFinishedTransaction(FlatBufferBuilder builder, Offset<SF.Flat.TransactionID> finishedTransactionOffset) { builder.AddStruct(0, finishedTransactionOffset.Value, 0); }
+  public static void AddSignature(FlatBufferBuilder builder, StringOffset signatureOffset) { builder.AddOffset(1, signatureOffset.Value, 0); }
   public static Offset<SF.Flat.Generic.GenericTransactionRes> EndGenericTransactionRes(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Generic.GenericTransactionRes>(o);
@@ -48,9 +46,8 @@ static public class GenericTransactionResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
-      && verifier.VerifyField(tablePos, 6 /*FinishedTransaction*/, 8 /*SF.Flat.TransactionID*/, 8, false)
-      && verifier.VerifyString(tablePos, 8 /*Signature*/, false)
+      && verifier.VerifyField(tablePos, 4 /*FinishedTransaction*/, 8 /*SF.Flat.TransactionID*/, 8, false)
+      && verifier.VerifyString(tablePos, 6 /*Signature*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

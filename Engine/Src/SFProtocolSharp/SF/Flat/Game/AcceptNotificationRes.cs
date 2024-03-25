@@ -19,21 +19,17 @@ public struct AcceptNotificationRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public AcceptNotificationRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public uint NotificationId { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
+  public uint NotificationId { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
 
   public static Offset<SF.Flat.Game.AcceptNotificationRes> CreateAcceptNotificationRes(FlatBufferBuilder builder,
-      int result = 0,
       uint notification_id = 0) {
-    builder.StartTable(2);
+    builder.StartTable(1);
     AcceptNotificationRes.AddNotificationId(builder, notification_id);
-    AcceptNotificationRes.AddResult(builder, result);
     return AcceptNotificationRes.EndAcceptNotificationRes(builder);
   }
 
-  public static void StartAcceptNotificationRes(FlatBufferBuilder builder) { builder.StartTable(2); }
-  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
-  public static void AddNotificationId(FlatBufferBuilder builder, uint notificationId) { builder.AddUint(1, notificationId, 0); }
+  public static void StartAcceptNotificationRes(FlatBufferBuilder builder) { builder.StartTable(1); }
+  public static void AddNotificationId(FlatBufferBuilder builder, uint notificationId) { builder.AddUint(0, notificationId, 0); }
   public static Offset<SF.Flat.Game.AcceptNotificationRes> EndAcceptNotificationRes(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.AcceptNotificationRes>(o);
@@ -46,8 +42,7 @@ static public class AcceptNotificationResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
-      && verifier.VerifyField(tablePos, 6 /*NotificationId*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*NotificationId*/, 4 /*uint*/, 4, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

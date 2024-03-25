@@ -10,8 +10,7 @@ table LoginCmd
 
 table LoginRes
 {
- 	result:int;
-	nick_name:string;
+ 	nick_name:string;
 	account_id:AccountID;
 	auth_ticket:uint64;
 	banned_reason:string;
@@ -29,8 +28,7 @@ table LoginWithSteamCmd
 
 table LoginWithSteamRes
 {
- 	result:int;
-	nick_name:string;
+ 	nick_name:string;
 	account_id:AccountID;
 	auth_ticket:uint64;
 	banned_reason:string;

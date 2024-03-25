@@ -43,9 +43,12 @@ namespace SF.Net
             return m_Connection?.NewTransactionID() ?? TransactionID.Empty;
         }
 
-        public Result SendMessage(MessageID messageId, Google.FlatBuffers.FlatBufferBuilder builder, int packetOffset, TransactionID transactionId = default(TransactionID), Action<SFMessage>? callback = null)
+        public Result SendMessage(MessageID messageId, Google.FlatBuffers.FlatBufferBuilder builder, int packetOffset,
+            TransactionID transactionId = default(TransactionID),
+            Result result = default(Result),
+            Action<SFMessage>? callback = null)
         {
-            Result hr = new Result();
+            Result hr = ResultCode.SUCCESS;
 
             if (m_Connection == null)
             {
@@ -57,7 +60,8 @@ namespace SF.Net
             var packetHeader = new SF.MessageHeader()
             {
                 MessageId = messageId,
-                TransactionId = transactionId
+                TransactionId = transactionId,
+                TransactionResult = result,
             };
             packetHeader.WriteHeader(builder);
 

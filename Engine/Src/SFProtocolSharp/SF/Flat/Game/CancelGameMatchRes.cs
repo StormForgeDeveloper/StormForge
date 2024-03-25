@@ -19,17 +19,8 @@ public struct CancelGameMatchRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public CancelGameMatchRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
 
-  public static Offset<SF.Flat.Game.CancelGameMatchRes> CreateCancelGameMatchRes(FlatBufferBuilder builder,
-      int result = 0) {
-    builder.StartTable(1);
-    CancelGameMatchRes.AddResult(builder, result);
-    return CancelGameMatchRes.EndCancelGameMatchRes(builder);
-  }
-
-  public static void StartCancelGameMatchRes(FlatBufferBuilder builder) { builder.StartTable(1); }
-  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
+  public static void StartCancelGameMatchRes(FlatBufferBuilder builder) { builder.StartTable(0); }
   public static Offset<SF.Flat.Game.CancelGameMatchRes> EndCancelGameMatchRes(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.CancelGameMatchRes>(o);
@@ -42,7 +33,6 @@ static public class CancelGameMatchResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

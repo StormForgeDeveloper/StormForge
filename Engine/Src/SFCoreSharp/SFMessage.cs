@@ -23,29 +23,25 @@ namespace SF
     {
         MessageID m_MessageId;
         TransactionID m_TransactionId;
+        // Result if the message type is result
+        Result m_Result;
 
         Google.FlatBuffers.ByteBuffer m_byteBuffer;
+        public Google.FlatBuffers.ByteBuffer Payload => m_byteBuffer;
 
-        public SFMessage(MessageID messageID, TransactionID transactionId, uint payloadSize, IntPtr payloadPtr)
+        public SFMessage(MessageID messageID, TransactionID transactionId, Result result, uint payloadSize, IntPtr payloadPtr)
         {
             m_MessageId = messageID;
             m_TransactionId = transactionId;
-
-            // TODO: for performance
-            //unsafe
-            //{
-            //    var span = new Span<byte>((void*)payloadPtr, (int)payloadSize);
-            //    m_byteBuffer = new Google.FlatBuffers.ByteBuffer(span, 0);
-            //}
+            m_Result = result;
 
             var buffer = new byte[payloadSize];
             Marshal.Copy(payloadPtr, buffer, 0, buffer.Length);
             var readBuffer = new SF.Flat.ReadByteArrayAllocator(buffer, 0, buffer.Length);
             m_byteBuffer = new Google.FlatBuffers.ByteBuffer(readBuffer, 0);
-
         }
 
-        public SFMessage(MessageID messageID, TransactionID transactionId, ArraySegment<byte> payloadData)
+        public SFMessage(MessageID messageID, TransactionID transactionId, Result result, ArraySegment<byte> payloadData)
         {
             m_MessageId = messageID;
             m_TransactionId = transactionId;
@@ -61,17 +57,14 @@ namespace SF
         {
             var readBuffer = new Google.FlatBuffers.ByteArrayAllocator(new byte[0]);
             m_byteBuffer = new Google.FlatBuffers.ByteBuffer(readBuffer, 0);
+            m_Result = ResultCode.SUCCESS;
         }
 
-        public MessageID GetMessageID()
-        {
-            return m_MessageId;
-        }
+        public MessageID MessageId => m_MessageId;
 
-        public TransactionID GetTransactionID()
-        {
-            return m_TransactionId;
-        }
+        public TransactionID TransactionId => m_TransactionId;
+
+        public Result TransactionResult => m_Result;
 
     }
 }

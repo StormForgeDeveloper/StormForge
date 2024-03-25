@@ -19,21 +19,17 @@ public struct AddWhiteboardSharingLogEntryRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public AddWhiteboardSharingLogEntryRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public uint LogEntryId { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
+  public uint LogEntryId { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
 
   public static Offset<SF.Flat.PlayInstance.AddWhiteboardSharingLogEntryRes> CreateAddWhiteboardSharingLogEntryRes(FlatBufferBuilder builder,
-      int result = 0,
       uint log_entry_id = 0) {
-    builder.StartTable(2);
+    builder.StartTable(1);
     AddWhiteboardSharingLogEntryRes.AddLogEntryId(builder, log_entry_id);
-    AddWhiteboardSharingLogEntryRes.AddResult(builder, result);
     return AddWhiteboardSharingLogEntryRes.EndAddWhiteboardSharingLogEntryRes(builder);
   }
 
-  public static void StartAddWhiteboardSharingLogEntryRes(FlatBufferBuilder builder) { builder.StartTable(2); }
-  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
-  public static void AddLogEntryId(FlatBufferBuilder builder, uint logEntryId) { builder.AddUint(1, logEntryId, 0); }
+  public static void StartAddWhiteboardSharingLogEntryRes(FlatBufferBuilder builder) { builder.StartTable(1); }
+  public static void AddLogEntryId(FlatBufferBuilder builder, uint logEntryId) { builder.AddUint(0, logEntryId, 0); }
   public static Offset<SF.Flat.PlayInstance.AddWhiteboardSharingLogEntryRes> EndAddWhiteboardSharingLogEntryRes(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.PlayInstance.AddWhiteboardSharingLogEntryRes>(o);
@@ -46,8 +42,7 @@ static public class AddWhiteboardSharingLogEntryResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
-      && verifier.VerifyField(tablePos, 6 /*LogEntryId*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*LogEntryId*/, 4 /*uint*/, 4, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

@@ -158,7 +158,7 @@ SFDLL_EXPORT bool SFConnection_NativeDequeueMessage(intptr_t nativeHandle, ON_ME
 
     const MessageHeader* pHeader = reinterpret_cast<const MessageHeader * >(itemPtr.data());
 
-	onMessageFunc(pHeader->GetMessageID(), pHeader->TransactionId, pHeader->GetPayloadSize(), pHeader->GetPayloadPtr());
+	onMessageFunc(pHeader->GetMessageID(), pHeader->TransactionId, pHeader->GetTransactionResult(), pHeader->GetPayloadSize(), pHeader->GetPayloadPtr());
 
 	return true;
 }

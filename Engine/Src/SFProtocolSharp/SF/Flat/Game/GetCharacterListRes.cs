@@ -19,28 +19,24 @@ public struct GetCharacterListRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public GetCharacterListRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public byte Characters(int j) { int o = __p.__offset(6); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
-  public int CharactersLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public byte Characters(int j) { int o = __p.__offset(4); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
+  public int CharactersLength { get { int o = __p.__offset(4); return o != 0 ? __p.__vector_len(o) : 0; } }
 #if ENABLE_SPAN_T
-  public Span<byte> GetCharactersBytes() { return __p.__vector_as_span<byte>(6, 1); }
+  public Span<byte> GetCharactersBytes() { return __p.__vector_as_span<byte>(4, 1); }
 #else
-  public ArraySegment<byte>? GetCharactersBytes() { return __p.__vector_as_arraysegment(6); }
+  public ArraySegment<byte>? GetCharactersBytes() { return __p.__vector_as_arraysegment(4); }
 #endif
-  public byte[] GetCharactersArray() { return __p.__vector_as_array<byte>(6); }
+  public byte[] GetCharactersArray() { return __p.__vector_as_array<byte>(4); }
 
   public static Offset<SF.Flat.Game.GetCharacterListRes> CreateGetCharacterListRes(FlatBufferBuilder builder,
-      int result = 0,
       VectorOffset charactersOffset = default(VectorOffset)) {
-    builder.StartTable(2);
+    builder.StartTable(1);
     GetCharacterListRes.AddCharacters(builder, charactersOffset);
-    GetCharacterListRes.AddResult(builder, result);
     return GetCharacterListRes.EndGetCharacterListRes(builder);
   }
 
-  public static void StartGetCharacterListRes(FlatBufferBuilder builder) { builder.StartTable(2); }
-  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
-  public static void AddCharacters(FlatBufferBuilder builder, VectorOffset charactersOffset) { builder.AddOffset(1, charactersOffset.Value, 0); }
+  public static void StartGetCharacterListRes(FlatBufferBuilder builder) { builder.StartTable(1); }
+  public static void AddCharacters(FlatBufferBuilder builder, VectorOffset charactersOffset) { builder.AddOffset(0, charactersOffset.Value, 0); }
   public static VectorOffset CreateCharactersVector(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte(data[i]); return builder.EndVector(); }
   public static VectorOffset CreateCharactersVectorBlock(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
   public static VectorOffset CreateCharactersVectorBlock(FlatBufferBuilder builder, ArraySegment<byte> data) { builder.StartVector(1, data.Count, 1); builder.Add(data); return builder.EndVector(); }
@@ -58,8 +54,7 @@ static public class GetCharacterListResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
-      && verifier.VerifyVectorOfData(tablePos, 6 /*Characters*/, 1 /*byte*/, false)
+      && verifier.VerifyVectorOfData(tablePos, 4 /*Characters*/, 1 /*byte*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

@@ -400,7 +400,8 @@ namespace SF
         MessageHeader2 packetHeader;
         packetHeader.TransactionId = TransactionID(eventId);
         packetHeader.MessageId = Message::Telemetry::MID_PostEventCmd;
-        packetHeader.UpdateNWriteTo(packetBuilder);
+        Result resultPH;
+        packetHeader.UpdateNWriteTo(packetBuilder, resultPH);
 
         ArrayView<uint8_t> packetBufferView(packetBuilder.GetSize(), (uint8_t*)packetBuilder.GetBufferPointer());
 

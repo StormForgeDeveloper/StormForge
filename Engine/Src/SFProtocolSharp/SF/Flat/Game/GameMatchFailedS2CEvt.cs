@@ -19,17 +19,10 @@ public struct GameMatchFailedS2CEvt : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public GameMatchFailedS2CEvt __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public int FailedReason { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-
-  public static Offset<SF.Flat.Game.GameMatchFailedS2CEvt> CreateGameMatchFailedS2CEvt(FlatBufferBuilder builder,
-      int failed_reason = 0) {
-    builder.StartTable(1);
-    GameMatchFailedS2CEvt.AddFailedReason(builder, failed_reason);
-    return GameMatchFailedS2CEvt.EndGameMatchFailedS2CEvt(builder);
-  }
+  public SF.Flat.Result? FailedReason { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.Result?)(new SF.Flat.Result()).__assign(o + __p.bb_pos, __p.bb) : null; } }
 
   public static void StartGameMatchFailedS2CEvt(FlatBufferBuilder builder) { builder.StartTable(1); }
-  public static void AddFailedReason(FlatBufferBuilder builder, int failedReason) { builder.AddInt(0, failedReason, 0); }
+  public static void AddFailedReason(FlatBufferBuilder builder, Offset<SF.Flat.Result> failedReasonOffset) { builder.AddStruct(0, failedReasonOffset.Value, 0); }
   public static Offset<SF.Flat.Game.GameMatchFailedS2CEvt> EndGameMatchFailedS2CEvt(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.GameMatchFailedS2CEvt>(o);
@@ -42,7 +35,7 @@ static public class GameMatchFailedS2CEvtVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*FailedReason*/, 4 /*int*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*FailedReason*/, 4 /*SF.Flat.Result*/, 4, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

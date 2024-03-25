@@ -10,8 +10,7 @@ table JoinPlayInstanceCmd
 
 table JoinPlayInstanceRes
 {
- 	result:int;
-	play_instance_uid:EntityUID;
+ 	play_instance_uid:EntityUID;
 	player_id:AccountID;
 	character_id:CharacterID;
 	character_private_data:[ubyte];
@@ -102,8 +101,7 @@ table SetCharacterPublicMessageCmd
 
 table SetCharacterPublicMessageRes
 {
- 	result:int;
-} // table SetCharacterPublicMessageRes
+ } // table SetCharacterPublicMessageRes
 
 table CharacterPrivateDataChangedS2CEvt
 {
@@ -130,8 +128,7 @@ table RequestWhiteboardSharingCmd
 
 table RequestWhiteboardSharingRes
 {
- 	result:int;
-} // table RequestWhiteboardSharingRes
+ } // table RequestWhiteboardSharingRes
 
 table AcceptWhiteboardSharingCmd
 {
@@ -143,8 +140,7 @@ table AcceptWhiteboardSharingCmd
 
 table AcceptWhiteboardSharingRes
 {
- 	result:int;
-} // table AcceptWhiteboardSharingRes
+ } // table AcceptWhiteboardSharingRes
 
 table CloseWhiteboardSharingCmd
 {
@@ -154,8 +150,7 @@ table CloseWhiteboardSharingCmd
 
 table CloseWhiteboardSharingRes
 {
- 	result:int;
-} // table CloseWhiteboardSharingRes
+ } // table CloseWhiteboardSharingRes
 
 table AddWhiteboardSharingLogEntryCmd
 {
@@ -166,8 +161,7 @@ table AddWhiteboardSharingLogEntryCmd
 
 table AddWhiteboardSharingLogEntryRes
 {
- 	result:int;
-	log_entry_id:uint32;
+ 	log_entry_id:uint32;
 } // table AddWhiteboardSharingLogEntryRes
 
 table UpdateWhiteboardSharingLogEntryCmd
@@ -179,8 +173,7 @@ table UpdateWhiteboardSharingLogEntryCmd
 
 table UpdateWhiteboardSharingLogEntryRes
 {
- 	result:int;
-} // table UpdateWhiteboardSharingLogEntryRes
+ } // table UpdateWhiteboardSharingLogEntryRes
 
 table RemoveWhiteboardSharingLogEntryCmd
 {
@@ -191,8 +184,7 @@ table RemoveWhiteboardSharingLogEntryCmd
 
 table RemoveWhiteboardSharingLogEntryRes
 {
- 	result:int;
-} // table RemoveWhiteboardSharingLogEntryRes
+ } // table RemoveWhiteboardSharingLogEntryRes
 
 table WhiteboardSharingRequestedS2CEvt
 {
@@ -254,8 +246,7 @@ table OccupyMapObjectCmd
 
 table OccupyMapObjectRes
 {
- 	result:int;
-	play_instance_uid:EntityUID;
+ 	play_instance_uid:EntityUID;
 	player_id:AccountID;
 	map_object_id:uint32;
 } // table OccupyMapObjectRes
@@ -269,8 +260,7 @@ table UnoccupyMapObjectCmd
 
 table UnoccupyMapObjectRes
 {
- 	result:int;
-	play_instance_uid:EntityUID;
+ 	play_instance_uid:EntityUID;
 	player_id:AccountID;
 	map_object_id:uint32;
 } // table UnoccupyMapObjectRes
@@ -285,8 +275,7 @@ table UseMapObjectCmd
 
 table UseMapObjectRes
 {
- 	result:int;
-	play_instance_uid:EntityUID;
+ 	play_instance_uid:EntityUID;
 	player_id:AccountID;
 	map_object_id:uint32;
 	result_attributes:[ubyte];
@@ -303,8 +292,7 @@ table ZoneChatCmd
 
 table ZoneChatRes
 {
- 	result:int;
-} // table ZoneChatRes
+ } // table ZoneChatRes
 
 table ZoneChatS2CEvt
 {
@@ -332,8 +320,7 @@ table CallFunctionCmd
 
 table CallFunctionRes
 {
- 	result:int;
-	results:[ubyte];
+ 	results:[ubyte];
 } // table CallFunctionRes
 
 table SendVoiceDataC2SEvt
@@ -359,8 +346,7 @@ table CreateStreamCmd
 
 table CreateStreamRes
 {
- 	result:int;
-	stream_name:string;
+ 	stream_name:string;
 } // table CreateStreamRes
 
 table FindStreamCmd
@@ -371,8 +357,7 @@ table FindStreamCmd
 
 table FindStreamRes
 {
- 	result:int;
-	stream_name:string;
+ 	stream_name:string;
 } // table FindStreamRes
 
 table DeleteStreamCmd
@@ -383,8 +368,7 @@ table DeleteStreamCmd
 
 table DeleteStreamRes
 {
- 	result:int;
-	stream_name:string;
+ 	stream_name:string;
 } // table DeleteStreamRes
 
 table GetStreamListCmd
@@ -394,8 +378,7 @@ table GetStreamListCmd
 
 table GetStreamListRes
 {
- 	result:int;
-	stream_names:[string];
+ 	stream_names:[string];
 } // table GetStreamListRes
 
 root_type GetStreamListRes;

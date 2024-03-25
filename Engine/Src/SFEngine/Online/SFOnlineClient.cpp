@@ -112,7 +112,7 @@ namespace SF
             m_Owner.m_GameServerAddress = response->game_server_address()->c_str();
             m_Owner.m_AccountId = Guid(response->account_id()->low(), response->account_id()->high());
             m_Owner.m_AuthTicket = response->auth_ticket();
-            Result loginResult = response->result();
+            Result loginResult = messageHeader->GetTransactionResult();
 
             if (!loginResult)
             {
@@ -486,7 +486,7 @@ namespace SF
 				return;
 			}
 
-            Result hr(responseData->result());
+            Result hr(pHeader->GetTransactionResult());
 			if (!hr)
 			{
 				SFLog(Net, Error, "Game::JoinGameServerRes: failure: {0}", hr);
@@ -693,7 +693,7 @@ namespace SF
 				return;
 			}
 
-            Result hr(responseData->result());
+            Result hr(pHeader->GetTransactionResult());
 			if (!hr)
 			{
 				SFLog(Net, Error, "JoinGameInstanceRes: failure: {0}", hr);
@@ -747,7 +747,7 @@ namespace SF
 				return;
 			}
 
-            Result hr(responseData->result());
+            Result hr(pHeader->GetTransactionResult());
 			if (!hr)
 			{
 				SFLog(Net, Error, "PlayInstance::JoinPlayInstanceRes: failure: {0}", hr);

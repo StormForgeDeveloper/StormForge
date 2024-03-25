@@ -259,7 +259,7 @@ namespace SF
 #endif
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void ON_MESSAGE_FUNCTION(MessageID messageID, TransactionID transactionId, uint payloadSize, IntPtr payloadPtr);
+        public delegate void ON_MESSAGE_FUNCTION(MessageID messageID, TransactionID transactionId, Result result, uint payloadSize, IntPtr payloadPtr);
 
         [DllImport(NativeDllName, EntryPoint = "SFConnection_NativeCreateConnection", CharSet = CharSet.Auto)]
         static extern IntPtr NativeCreateConnection();

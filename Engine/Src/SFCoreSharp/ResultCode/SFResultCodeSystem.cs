@@ -14,7 +14,8 @@ using System;
 namespace SF {
 	public partial struct ResultCode {
 
-		public static readonly Result SUCCESS =                              new Result(0);
+        public const int _SUCCESS = 0;
+        public static readonly Result SUCCESS =                              new Result(0);
         public static readonly Result SUCCESS_FALSE = new Result(1);
         public static readonly Result SUCCESS_YIELD = new Result(2);
         public static readonly Result INVALID_POINTER = new Result(unchecked((int)0xC0000002L));

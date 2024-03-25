@@ -19,17 +19,8 @@ public struct PartyInviteRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public PartyInviteRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
 
-  public static Offset<SF.Flat.Game.PartyInviteRes> CreatePartyInviteRes(FlatBufferBuilder builder,
-      int result = 0) {
-    builder.StartTable(1);
-    PartyInviteRes.AddResult(builder, result);
-    return PartyInviteRes.EndPartyInviteRes(builder);
-  }
-
-  public static void StartPartyInviteRes(FlatBufferBuilder builder) { builder.StartTable(1); }
-  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
+  public static void StartPartyInviteRes(FlatBufferBuilder builder) { builder.StartTable(0); }
   public static Offset<SF.Flat.Game.PartyInviteRes> EndPartyInviteRes(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.PartyInviteRes>(o);
@@ -42,7 +33,6 @@ static public class PartyInviteResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

@@ -22,7 +22,7 @@
 
 namespace SF
 {
-	typedef void(*ON_MESSAGE_FUNCTION)(uint32_t messageID, TransactionID transactionId, uint payloadSize, void* payloadPtr);
+	typedef void(*ON_MESSAGE_FUNCTION)(uint32_t messageID, TransactionID transactionId, Result result, uint payloadSize, void* payloadPtr);
     typedef void(*SET_EVENT_FUNCTION)(Net::ConnectionEvent::EventTypes eventType, int32_t result, Net::ConnectionState state);
 
 

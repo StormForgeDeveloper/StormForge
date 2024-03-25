@@ -17,6 +17,11 @@ struct Time64
 	time:uint64;
 }
 
+struct Result
+{
+	value:int32;
+}
+
 struct GameInstanceUID
 {
     uid:uint32;
@@ -60,8 +65,6 @@ struct CharacterID
 }
 
 table GenericError {
-	transaction_id:uint64;
-    result_code:int32;
 	reason:string(required);
 }
 

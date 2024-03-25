@@ -124,7 +124,7 @@ SFDLL_EXPORT int32_t StreamDBDirectory_NativePollMessage(intptr_t nativeHandle, 
 	if (!pDirectoryBase->PollMessage(pIMsg))
 		return (int)ResultCode::NO_DATA_EXIST;
 
-    onMessage(pIMsg->GetMessageHeader()->GetMessageID(), pIMsg->GetMessageHeader()->TransactionId, pIMsg->GetPayloadSize(), pIMsg->GetPayloadPtr());
+    onMessage(pIMsg->GetMessageHeader()->GetMessageID(), pIMsg->GetMessageHeader()->TransactionId, pIMsg->GetMessageHeader()->GetTransactionResult(), pIMsg->GetPayloadSize(), pIMsg->GetPayloadPtr());
 
 	return (int)ResultCode::SUCCESS;
 }

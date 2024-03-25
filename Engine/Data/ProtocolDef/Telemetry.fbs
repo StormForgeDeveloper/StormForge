@@ -16,8 +16,7 @@ table PostEventCmd
 
 table PostEventRes
 {
- 	result:int;
-} // table PostEventRes
+ } // table PostEventRes
 
 root_type PostEventRes;
 

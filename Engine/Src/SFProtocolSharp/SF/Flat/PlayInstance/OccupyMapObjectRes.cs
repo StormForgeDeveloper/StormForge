@@ -19,16 +19,14 @@ public struct OccupyMapObjectRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public OccupyMapObjectRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public SF.Flat.EntityUID? PlayInstanceUid { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.EntityUID?)(new SF.Flat.EntityUID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
-  public SF.Flat.AccountID? PlayerId { get { int o = __p.__offset(8); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
-  public uint MapObjectId { get { int o = __p.__offset(10); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
+  public SF.Flat.EntityUID? PlayInstanceUid { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.EntityUID?)(new SF.Flat.EntityUID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public SF.Flat.AccountID? PlayerId { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public uint MapObjectId { get { int o = __p.__offset(8); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
 
-  public static void StartOccupyMapObjectRes(FlatBufferBuilder builder) { builder.StartTable(4); }
-  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
-  public static void AddPlayInstanceUid(FlatBufferBuilder builder, Offset<SF.Flat.EntityUID> playInstanceUidOffset) { builder.AddStruct(1, playInstanceUidOffset.Value, 0); }
-  public static void AddPlayerId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> playerIdOffset) { builder.AddStruct(2, playerIdOffset.Value, 0); }
-  public static void AddMapObjectId(FlatBufferBuilder builder, uint mapObjectId) { builder.AddUint(3, mapObjectId, 0); }
+  public static void StartOccupyMapObjectRes(FlatBufferBuilder builder) { builder.StartTable(3); }
+  public static void AddPlayInstanceUid(FlatBufferBuilder builder, Offset<SF.Flat.EntityUID> playInstanceUidOffset) { builder.AddStruct(0, playInstanceUidOffset.Value, 0); }
+  public static void AddPlayerId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> playerIdOffset) { builder.AddStruct(1, playerIdOffset.Value, 0); }
+  public static void AddMapObjectId(FlatBufferBuilder builder, uint mapObjectId) { builder.AddUint(2, mapObjectId, 0); }
   public static Offset<SF.Flat.PlayInstance.OccupyMapObjectRes> EndOccupyMapObjectRes(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.PlayInstance.OccupyMapObjectRes>(o);
@@ -41,10 +39,9 @@ static public class OccupyMapObjectResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
-      && verifier.VerifyField(tablePos, 6 /*PlayInstanceUid*/, 4 /*SF.Flat.EntityUID*/, 4, false)
-      && verifier.VerifyField(tablePos, 8 /*PlayerId*/, 16 /*SF.Flat.AccountID*/, 8, false)
-      && verifier.VerifyField(tablePos, 10 /*MapObjectId*/, 4 /*uint*/, 4, false)
+      && verifier.VerifyField(tablePos, 4 /*PlayInstanceUid*/, 4 /*SF.Flat.EntityUID*/, 4, false)
+      && verifier.VerifyField(tablePos, 6 /*PlayerId*/, 16 /*SF.Flat.AccountID*/, 8, false)
+      && verifier.VerifyField(tablePos, 8 /*MapObjectId*/, 4 /*uint*/, 4, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

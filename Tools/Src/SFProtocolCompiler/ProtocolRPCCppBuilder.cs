@@ -234,6 +234,11 @@ namespace ProtocolCompiler
                 if (param.Name == "TransactionID")
                     continue;
 
+                if (param.Name == "Result")
+                {
+                    continue;
+                }
+
                 var flatTypeName = FlatbufferUtil.ToFlatType(param);
                 bool bIsScalar = FlatbufferUtil.IsScalar(flatTypeName);
                 if (param.IsArray)
@@ -263,6 +268,11 @@ namespace ProtocolCompiler
                 // TransactionId included in message header
                 if (param.Name == "TransactionID")
                     continue;
+
+                if (param.Name == "Result")
+                {
+                    continue;
+                }
 
                 string flatVariableName = FlatbufferUtil.ToFlatVariableName(param.Name);
 
@@ -313,13 +323,17 @@ namespace ProtocolCompiler
             BuildFlatbufferPacket(packetClassName, parameters);
             NewLine();
 
-            if (typeName == "Cmd" || typeName == "Res")
+            if (typeName == "Cmd")
             {
-                WriteLineWithIndent($"protocolCheck(Send(InTransactionID, Message::{Group.Name}::MID_{packetClassName}, fbb));\n");
+                WriteLineWithIndent($"protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::{Group.Name}::MID_{packetClassName}, fbb));\n");
+            }
+            else if (typeName == "Res")
+            {
+                WriteLineWithIndent($"protocolCheck(Send(InTransactionID, InResult, Message::{Group.Name}::MID_{packetClassName}, fbb));\n");
             }
             else
             {
-                WriteLineWithIndent($"protocolCheck(Send(TransactionID(), Message::{Group.Name}::MID_{packetClassName}, fbb));\n");
+                WriteLineWithIndent($"protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::{Group.Name}::MID_{packetClassName}, fbb));\n");
             }
 
             NewLine();

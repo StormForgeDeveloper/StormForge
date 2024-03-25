@@ -85,6 +85,11 @@ namespace SF {
         {
             using namespace flatbuffers;
 
+            inline FlatValueHolder<SF::Flat::Result> CreateResult(FlatBufferBuilder& fbb, const SF::Result& value)
+            {
+                return FlatValueHolder<SF::Flat::Result>(SF::Flat::Result((int)value));
+            }
+
             inline Offset<flatbuffers::String> CreateString(FlatBufferBuilder& fbb, const char* value)
             {
                 return fbb.CreateString(value);
@@ -256,10 +261,10 @@ namespace SF {
                     return SF::AccountID(value->low(), value->high());
             }
 
-            inline Result ParseAccountIDVector(const Vector<const SF::Flat::AccountID*>* value, Array<SF::AccountID>& outValue)
+            inline SF::Result ParseAccountIDVector(const Vector<const SF::Flat::AccountID*>* value, Array<SF::AccountID>& outValue)
             {
                 if (value == nullptr)
-                    return ResultCode::INVALID_POINTER;
+                    return SF::ResultCode::INVALID_POINTER;
 
                 outValue.reserve(value->size());
                 for (const SF::Flat::AccountID* srcValue : *value)
@@ -267,7 +272,7 @@ namespace SF {
                     outValue.push_back(ParseAccountID(srcValue));
                 }
 
-                return ResultCode::SUCCESS;
+                return SF::ResultCode::SUCCESS;
             }
 
             inline FlatValueHolder<SF::Flat::AccountID> CreatePlayerID(FlatBufferBuilder& fbb, const SF::AccountID& value)
@@ -415,23 +420,23 @@ namespace SF {
                 return fbb.CreateVector(out.data(), out.size());
             }
 
-            inline Result ParseVariableTable(const flatbuffers::Vector<uint8_t>* value, SF::VariableTable& outValue)
+            inline SF::Result ParseVariableTable(const flatbuffers::Vector<uint8_t>* value, SF::VariableTable& outValue)
             {
                 outValue.Clear();
 
                 if (value == nullptr)
-                    return ResultCode::INVALID_POINTER;
+                    return SF::ResultCode::INVALID_POINTER;
 
                 InputMemoryStream in(ArrayView<const uint8_t>(value->size(), value->data()));
                 return in >> outValue;
             }
 
-            inline Result ParseVariableTableVector(const flatbuffers::Vector<uint8_t>* value, Array<SF::VariableTable>& outValue)
+            inline SF::Result ParseVariableTableVector(const flatbuffers::Vector<uint8_t>* value, Array<SF::VariableTable>& outValue)
             {
                 outValue.Clear();
 
                 if (value == nullptr)
-                    return ResultCode::INVALID_POINTER;
+                    return SF::ResultCode::INVALID_POINTER;
 
                 InputMemoryStream in(ArrayView<const uint8_t>(value->size(), value->data()));
                 
@@ -502,11 +507,11 @@ namespace SF {
                 return fbb.CreateVector(elems.data(), elems.size());
             }
 
-            inline Result ParsePlayerInformation(const SF::Flat::PlayerInformation* value, SF::PlayerInformation& outPlayerInfo)
+            inline SF::Result ParsePlayerInformation(const SF::Flat::PlayerInformation* value, SF::PlayerInformation& outPlayerInfo)
             {
-                Result hr;
+                SF::Result hr;
                 if (value == nullptr || value->profile_name() == nullptr)
-                    return ResultCode::INVALID_POINTER;
+                    return SF::ResultCode::INVALID_POINTER;
 
                 outPlayerInfo.PlayerID = ParseAccountID(value->player_id());
                 outPlayerInfo.PlayerPlatformId = ParsePlayerPlatformID(value->player_platform_id());

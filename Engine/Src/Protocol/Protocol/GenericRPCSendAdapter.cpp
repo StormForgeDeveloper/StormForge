@@ -34,7 +34,7 @@ namespace SF
 		SF::Flat::Generic::GenericFailureCmdBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Generic::GenericFailureCmd> packetOffset = _builder.Finish();
 
-		protocolCheck(Send(InTransactionID, Message::Generic::MID_GenericFailureCmd, fbb));
+		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Generic::MID_GenericFailureCmd, fbb));
 
 
 		return hr;
@@ -50,7 +50,7 @@ namespace SF
 		SF::Flat::Generic::GenericTransactionCmdBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Generic::GenericTransactionCmd> packetOffset = _builder.Finish();
 
-		protocolCheck(Send(InTransactionID, Message::Generic::MID_GenericTransactionCmd, fbb));
+		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Generic::MID_GenericTransactionCmd, fbb));
 
 
 		return hr;
@@ -66,10 +66,9 @@ namespace SF
 
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Generic::GenericFailureResBuilder _builder(fbb);
-		_builder.add_result((int)InResult);
 		flatbuffers::Offset<SF::Flat::Generic::GenericFailureRes> packetOffset = _builder.Finish();
 
-		protocolCheck(Send(InTransactionID, Message::Generic::MID_GenericFailureRes, fbb));
+		protocolCheck(Send(InTransactionID, InResult, Message::Generic::MID_GenericFailureRes, fbb));
 
 
 		return hr;
@@ -85,12 +84,11 @@ namespace SF
 		auto FinishedTransactionOffset = SF::Flat::Helper::CreateTransactionID(fbb, InFinishedTransaction);
 		auto SignatureOffset = SF::Flat::Helper::CreateString(fbb, InSignature);
 		SF::Flat::Generic::GenericTransactionResBuilder _builder(fbb);
-		_builder.add_result((int)InResult);
 		_builder.add_finished_transaction(FinishedTransactionOffset);
 		_builder.add_signature(SignatureOffset);
 		flatbuffers::Offset<SF::Flat::Generic::GenericTransactionRes> packetOffset = _builder.Finish();
 
-		protocolCheck(Send(InTransactionID, Message::Generic::MID_GenericTransactionRes, fbb));
+		protocolCheck(Send(InTransactionID, InResult, Message::Generic::MID_GenericTransactionRes, fbb));
 
 
 		return hr;

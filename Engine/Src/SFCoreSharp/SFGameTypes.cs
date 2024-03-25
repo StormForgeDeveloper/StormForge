@@ -39,6 +39,18 @@ namespace SF
 
     [Struct]
     [StructLayout(LayoutKind.Sequential)]
+    public struct EntityUID
+    {
+        public UInt32 UID;
+
+        public EntityUID(UInt32 uid)
+        {
+            UID = uid;
+        }
+    }
+
+    [Struct]
+    [StructLayout(LayoutKind.Sequential)]
     public struct SFUInt128
     {
         public UInt64 Low;
@@ -73,7 +85,9 @@ namespace SF
     [Struct()]
     public struct AccountID
     {
-        public Guid Guid = new Guid();
+        public static readonly AccountID Empty = new AccountID(Guid.Empty);
+
+        public Guid Guid;
 
         public SFUInt128 ToUInt128()
         {
@@ -88,6 +102,15 @@ namespace SF
             };
         }
 
+        public ulong Low
+        {
+            get
+            {
+                var bytes = Guid.ToByteArray();
+                return (ulong)bytes[0] | ((ulong)bytes[1] << 8) | ((ulong)bytes[2] << 16) | ((ulong)bytes[3] << 24)
+                        | ((ulong)bytes[4] << 32) | ((ulong)bytes[5] << 40) | ((ulong)bytes[6] << 48) | ((ulong)bytes[7] << 56);
+            }
+        }
 
         public AccountID(byte[] b)
         {
@@ -99,9 +122,9 @@ namespace SF
             Guid = guid;
         }
 
-        public AccountID(ulong guid)
+        public AccountID(ulong low)
         {
-            Guid = new Guid((uint)(guid & 0xFFFFFFFF), (ushort)((guid >> 32) & 0xFFFF), (ushort)((guid >> 48) & 0xFFFF), 0, 0,0,0,0,0,0,0);
+            Guid = new Guid((uint)(low & 0xFFFFFFFF), (ushort)((low >> 32) & 0xFFFF), (ushort)((low >> 48) & 0xFFFF), 0, 0,0,0,0,0,0,0);
         }
 
         public AccountID(string b)
@@ -149,7 +172,9 @@ namespace SF
     [Struct()]
     public struct CharacterID
     {
-        public Guid Guid = new Guid();
+        public static readonly CharacterID Empty = new CharacterID(Guid.Empty);
+
+        public Guid Guid;
 
         public SFUInt128 ToUInt128()
         {
@@ -175,9 +200,9 @@ namespace SF
             Guid = guid;
         }
 
-        public CharacterID(ulong guid)
+        public CharacterID(ulong low)
         {
-            Guid = new Guid((uint)(guid & 0xFFFFFFFF), (ushort)((guid >> 32) & 0xFFFF), (ushort)((guid >> 48) & 0xFFFF), 0, 0, 0, 0, 0, 0, 0, 0);
+            Guid = new Guid((uint)(low & 0xFFFFFFFF), (ushort)((low >> 32) & 0xFFFF), (ushort)((low >> 48) & 0xFFFF), 0, 0, 0, 0, 0, 0, 0, 0);
         }
 
         public CharacterID(string b)
@@ -186,6 +211,8 @@ namespace SF
         }
 
         public bool IsValid => Guid == Guid.Empty;
+
+        public byte[] ToByteArray() { return Guid.ToByteArray(); }
 
         public static bool TryParse(string b, out CharacterID value)
         {

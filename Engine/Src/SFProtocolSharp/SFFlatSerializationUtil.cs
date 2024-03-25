@@ -12,16 +12,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection.Metadata;
-using System.Runtime.InteropServices;
-using System.Text;
 using Google.FlatBuffers;
 
 
 #nullable enable
-namespace SF.Flat
+namespace SF
 {
-    
+
     public static class SerializationUtil
     {
         public static VectorOffset CreateStringVector(this Google.FlatBuffers.FlatBufferBuilder builder, string[] data)
@@ -62,9 +59,25 @@ namespace SF.Flat
             return builder.CreateTime32(value);
         }
 
+        public static UInt32 Parse(this SF.Flat.Time32? value)
+        {
+            if (value == null)
+                return 0;
+
+            return value.Value.Time;
+        }
+
         public static Offset<SF.Flat.Time64> CreateTime64(this Google.FlatBuffers.FlatBufferBuilder builder, UInt64 value)
         {
             return builder.CreateTime64(value);
+        }
+
+        public static UInt64 Parse(this SF.Flat.Time64? value)
+        {
+            if (value == null)
+                return 0;
+
+            return value.Value.Time;
         }
 
         public static Offset<SF.Flat.TimeSpan> CreateTimeSpan(this Google.FlatBuffers.FlatBufferBuilder builder, SF.TimeSpan value)
@@ -72,37 +85,116 @@ namespace SF.Flat
             return CreateTimeSpan(builder, value);
         }
 
+        public static SF.TimeSpan Parse(this SF.Flat.TimeSpan? value)
+        {
+            if (value == null)
+                return default(SF.TimeSpan);
+
+            return new SF.TimeSpan(value.Value.Milliseconds);
+        }
+
+        public static Offset<SF.Flat.Result> CreateResult(this Google.FlatBuffers.FlatBufferBuilder builder, SF.Result value)
+        {
+            return SF.Flat.Result.CreateResult(builder, value.Code);
+        }
+
+        public static SF.Result Parse(this SF.Flat.Result? value)
+        {
+            if (value == null)
+                return default(SF.Result);
+
+            return new SF.Result(value.Value.Value);
+        }
+
 
         public static Offset<SF.Flat.GameInstanceUID> CreateGameInstanceUID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.GameInstanceUID data)
         {
-            return GameInstanceUID.CreateGameInstanceUID(builder, data.UID);
+            return SF.Flat.GameInstanceUID.CreateGameInstanceUID(builder, data.UID);
         }
+
+        public static SF.GameInstanceUID Parse(this SF.Flat.GameInstanceUID? data)
+        {
+            if (data == null)
+                return default(SF.GameInstanceUID);
+
+            return new SF.GameInstanceUID(data.Value.Uid);
+        }
+
 
         public static Offset<SF.Flat.GameInstanceUID> CreateGameInsUID(this Google.FlatBuffers.FlatBufferBuilder builder, UInt32 data)
         {
-            return GameInstanceUID.CreateGameInstanceUID(builder, data);
+            return SF.Flat.GameInstanceUID.CreateGameInstanceUID(builder, data);
         }
 
         public static Offset<SF.Flat.EntityUID> CreateEntityUID(this Google.FlatBuffers.FlatBufferBuilder builder, UInt32 data)
         {
-            return EntityUID.CreateEntityUID(builder, data);
+            return SF.Flat.EntityUID.CreateEntityUID(builder, data);
+        }
+
+        public static SF.EntityUID Parse(this SF.Flat.EntityUID? data)
+        {
+            if (data == null)
+                return default(SF.EntityUID);
+
+            return new SF.EntityUID(data.Value.EntityId);
         }
 
         public static Offset<SF.Flat.TransactionID> CreateTransactionID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.TransactionID data)
         {
-            return TransactionID.CreateTransactionID(builder, data.TransactionId);
+            return SF.Flat.TransactionID.CreateTransactionID(builder, data.TransactionId);
+        }
+
+        public static SF.TransactionID Parse(this SF.Flat.TransactionID? data)
+        {
+            if (data == null)
+                return default(SF.TransactionID);
+
+            return new SF.TransactionID(data.Value.TransactionId);
         }
 
         public static Offset<SF.Flat.AccountID> CreateAccountID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.AccountID accountId)
         {
             var u128 = accountId.ToUInt128();
-            return AccountID.CreateAccountID(builder, u128.Low, u128.High);
+            return SF.Flat.AccountID.CreateAccountID(builder, u128.Low, u128.High);
         }
 
+        public static SF.AccountID Parse(this SF.Flat.AccountID value)
+        {
+            return new SF.AccountID(SF.SFUInt128.ToGuid(value.Low, value.High));
+        }
+
+        public static SF.AccountID Parse(this SF.Flat.AccountID? value)
+        {
+            if (value.HasValue)
+            {
+                return Parse(value.Value);
+            }
+            else
+            {
+                return new SF.AccountID();
+            }
+        }
         public static Offset<SF.Flat.CharacterID> CreateCharacterID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.CharacterID characterId)
         {
             var u128 = characterId.ToUInt128();
-            return CharacterID.CreateCharacterID(builder, u128.Low, u128.High);
+            return SF.Flat.CharacterID.CreateCharacterID(builder, u128.Low, u128.High);
+        }
+
+        public static SF.CharacterID Parse(this SF.Flat.CharacterID value)
+        {
+            return new SF.CharacterID(SF.SFUInt128.ToGuid(value.Low, value.High));
+        }
+
+        public static SF.CharacterID Parse(this SF.Flat.CharacterID? value)
+        {
+            if (value.HasValue)
+            {
+                return Parse(value.Value);
+            }
+            else
+            {
+                return new SF.CharacterID();
+            }
         }
 
         public static VectorOffset CreateAccountIDVector(this Google.FlatBuffers.FlatBufferBuilder builder, SF.AccountID[] data)
@@ -119,17 +211,6 @@ namespace SF.Flat
             return builder.EndVector();
         }
 
-        public static SF.AccountID ToSystemAccountID(this SF.Flat.AccountID? value)
-        {
-            if (value.HasValue)
-            {
-                return new SF.AccountID(SF.SFUInt128.ToGuid(value.Value.Low, value.Value.High));
-            }
-            else
-            {
-                return new SF.AccountID();
-            }
-        }
         public static byte[] ToByteArray(this SF.Flat.AccountID? value)
         {
             if (value.HasValue)
@@ -142,9 +223,9 @@ namespace SF.Flat
             }
         }
 
-        public static SF.Flat.Platform ToFlatPlatform(SF.EPlatform platform)
+        public static SF.Flat.Platform CreatePlatform(this Google.FlatBuffers.FlatBufferBuilder builder, SF.EPlatform platform)
         {
-            switch(platform)
+            switch (platform)
             {
                 case SF.EPlatform.Steam: return SF.Flat.Platform.Steam;
                 case SF.EPlatform.BR: return SF.Flat.Platform.BR;
@@ -153,7 +234,7 @@ namespace SF.Flat
                     throw new NotImplementedException($"Unknown platform type:{platform}");
             }
         }
-        public static SF.EPlatform ToSystemPlatform(SF.Flat.Platform platform)
+        public static SF.EPlatform Parse(this SF.Flat.Platform platform)
         {
             switch (platform)
             {
@@ -169,7 +250,23 @@ namespace SF.Flat
         public static Offset<SF.Flat.PlayerPlatformID> CreatePlayerPlatformID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.PlayerPlatformID data)
         {
             var u128 = data.PlayerID.ToUInt128();
-            return PlayerPlatformID.CreatePlayerPlatformID(builder, u128.Low, u128.High, ToFlatPlatform(data.Platform));
+            return SF.Flat.PlayerPlatformID.CreatePlayerPlatformID(builder, u128.Low, u128.High, builder.CreatePlatform(data.Platform));
+        }
+
+        public static SF.PlayerPlatformID Parse(this SF.Flat.PlayerPlatformID? value)
+        {
+            if (value.HasValue)
+            {
+                return new SF.PlayerPlatformID()
+                {
+                    PlayerID = value.Value.PlayerId.Parse(),
+                    Platform = value.Value.PlatformData.Parse()
+                };
+            }
+            else
+            {
+                return new SF.PlayerPlatformID();
+            }
         }
 
         public static Offset<SF.Flat.AccountID> CreatePlayerID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.AccountID accountId)
@@ -177,18 +274,18 @@ namespace SF.Flat
             return CreateAccountID(builder, accountId);
         }
 
-        public static SF.AccountID ToSystemPlayerID(this SF.Flat.AccountID? flatAccountId)
-        {
-            return ToSystemAccountID(flatAccountId);
-        }
+        //public static SF.AccountID Parse(this SF.Flat.AccountID? flatAccountId)
+        //{
+        //    return Parse(flatAccountId);
+        //}
 
         public static Offset<SF.Flat.Guid> CreateGuid(this Google.FlatBuffers.FlatBufferBuilder builder, System.Guid guid)
         {
             var u128 = SFUInt128.FromGuid(guid);
-            return Guid.CreateGuid(builder, u128.Low, u128.High);
+            return SF.Flat.Guid.CreateGuid(builder, u128.Low, u128.High);
         }
 
-        public static System.Guid ToSystemGuid(this SF.Flat.Guid? flatGuid)
+        public static System.Guid Parse(this SF.Flat.Guid? flatGuid)
         {
             if (flatGuid.HasValue)
             {
@@ -213,7 +310,7 @@ namespace SF.Flat
 
         public static Offset<SF.Flat.RouteContext> CreateRouteContext(this Google.FlatBuffers.FlatBufferBuilder builder, SFRouteContext context)
         {
-            return RouteContext.CreateRouteContext(builder, (uint)context.From, (uint)(context.From >> 32), (uint)context.To, (uint)(context.To >> 32));
+            return SF.Flat.RouteContext.CreateRouteContext(builder, (uint)context.From, (uint)(context.From >> 32), (uint)context.To, (uint)(context.To >> 32));
         }
 
         public static VectorOffset Createuint8Vector(this Google.FlatBuffers.FlatBufferBuilder builder, byte[] data)
@@ -230,10 +327,10 @@ namespace SF.Flat
         {
             int valueOffset = 0;
             var nameOffset = builder.CreateString(data.Name);
-            NamedVariableValue ValueType = NamedVariableValue.NONE;
+            SF.Flat.NamedVariableValue ValueType = SF.Flat.NamedVariableValue.NONE;
             if (data.Value == null)
             {
-                ValueType = NamedVariableValue.NONE;
+                ValueType = SF.Flat.NamedVariableValue.NONE;
                 valueOffset = 0;
             }
             else
@@ -241,39 +338,39 @@ namespace SF.Flat
                 switch (data.Value.GetType().Name.ToLower())
                 {
                     case "string":
-                        ValueType = NamedVariableValue.NamedVariableInt;
+                        ValueType = SF.Flat.NamedVariableValue.NamedVariableInt;
                         valueOffset = SF.Flat.NamedVariableInt.CreateNamedVariableInt(builder, (int)data.Value).Value;
                         break;
                     case "int":
                     case "int32":
                     case "system.int32":
-                        ValueType = NamedVariableValue.NamedVariableInt;
+                        ValueType = SF.Flat.NamedVariableValue.NamedVariableInt;
                         valueOffset = SF.Flat.NamedVariableInt.CreateNamedVariableInt(builder, (int)data.Value).Value;
                         break;
                     case "uint":
                     case "uint32":
                     case "system.uint32":
-                        ValueType = NamedVariableValue.NamedVariableUInt;
+                        ValueType = SF.Flat.NamedVariableValue.NamedVariableUInt;
                         valueOffset = SF.Flat.NamedVariableUInt.CreateNamedVariableUInt(builder, (uint)data.Value).Value;
                         break;
                     case "int64":
                     case "system.int64":
                     case "long":
-                        ValueType = NamedVariableValue.NamedVariableInt64;
+                        ValueType = SF.Flat.NamedVariableValue.NamedVariableInt64;
                         valueOffset = SF.Flat.NamedVariableInt64.CreateNamedVariableInt64(builder, (long)data.Value).Value;
                         break;
                     case "uint64":
                     case "system.uint64":
                     case "ulong":
-                        ValueType = NamedVariableValue.NamedVariableUInt64;
+                        ValueType = SF.Flat.NamedVariableValue.NamedVariableUInt64;
                         valueOffset = SF.Flat.NamedVariableUInt64.CreateNamedVariableUInt64(builder, (ulong)data.Value).Value;
                         break;
                     case "float":
-                        ValueType = NamedVariableValue.NamedVariableFloat;
+                        ValueType = SF.Flat.NamedVariableValue.NamedVariableFloat;
                         valueOffset = SF.Flat.NamedVariableFloat.CreateNamedVariableFloat(builder, (float)data.Value).Value;
                         break;
                     case "double":
-                        ValueType = NamedVariableValue.NamedVariableDouble;
+                        ValueType = SF.Flat.NamedVariableValue.NamedVariableDouble;
                         valueOffset = SF.Flat.NamedVariableDouble.CreateNamedVariableDouble(builder, (double)data.Value).Value;
                         break;
                     default:
@@ -281,7 +378,7 @@ namespace SF.Flat
                         return default(Offset<SF.Flat.NamedVariable>);
                 }
             }
-            
+
             SF.Flat.NamedVariable.StartNamedVariable(builder);
             SF.Flat.NamedVariable.AddName(builder, nameOffset);
             SF.Flat.NamedVariable.AddValueType(builder, ValueType);
@@ -306,7 +403,7 @@ namespace SF.Flat
         }
         public static Offset<SF.Flat.MatchingQueueTicket> CreateMatchingQueueTicket(this Google.FlatBuffers.FlatBufferBuilder builder, SF.MatchingQueueTicket data)
         {
-            return MatchingQueueTicket.CreateMatchingQueueTicket(builder, data.QueueUID, data.QueueItemID);
+            return SF.Flat.MatchingQueueTicket.CreateMatchingQueueTicket(builder, data.QueueUID, data.QueueItemID);
         }
 
         public static VectorOffset CreateMatchingQueueTicketVector(this Google.FlatBuffers.FlatBufferBuilder builder, SF.MatchingQueueTicket[]? value)
@@ -330,7 +427,23 @@ namespace SF.Flat
 
         public static Offset<SF.Flat.AchievementStat> CreateAchievementStat(this Google.FlatBuffers.FlatBufferBuilder builder, SF.AchievementStat data)
         {
-            return AchievementStat.CreateAchievementStat(builder, data.AchievementStatId, data.StatValue);
+            return SF.Flat.AchievementStat.CreateAchievementStat(builder, data.AchievementStatId, data.StatValue);
+        }
+
+        public static SF.AchievementStat Parse(this SF.Flat.AchievementStat? value)
+        {
+            if (value.HasValue)
+            {
+                return new SF.AchievementStat()
+                {
+                    AchievementStatId = value.Value.AchievementStatId,
+                    StatValue = value.Value.StatValue
+                };
+            }
+            else
+            {
+                return default(SF.AchievementStat);
+            }
         }
 
         public static VectorOffset CreateAchievementStatVector(this Google.FlatBuffers.FlatBufferBuilder builder, SF.AchievementStat[] data)
@@ -362,6 +475,13 @@ namespace SF.Flat
             return builder.EndVector();
         }
 
+        public static SF.VariableTable ParseVariableTable(this byte[] value)
+        {
+            SF.VariableTable variableTable = new();
+            variableTable.FromByteArray(value);
+            return variableTable;
+        }
+
         public static VectorOffset CreateVariableTableVector(this Google.FlatBuffers.FlatBufferBuilder builder, SF.VariableTable[] data)
         {
             byte[]? binaryData = null;
@@ -385,6 +505,22 @@ namespace SF.Flat
 
             return builder.EndVector();
         }
+        public static SF.VariableTable[] ParseVariableTableVector(this byte[] value)
+        {
+            using (BinaryReader reader = new BinaryReader(new MemoryStream(value)))
+            {
+                UInt16 numItems = reader.ReadUInt16();
+
+                SF.VariableTable[] variableTables = new SF.VariableTable[numItems];
+                for (int iItem = 0; iItem < numItems; iItem++)
+                {
+                    variableTables[iItem] = new VariableTable();
+                    variableTables[iItem].FromBinary(reader);
+                }
+
+                return variableTables;
+            }
+        }
 
         public static Offset<SF.Flat.PlayerInformation> CreatePlayerInformation(this Google.FlatBuffers.FlatBufferBuilder builder, SF.PlayerInformation data)
         {
@@ -392,12 +528,30 @@ namespace SF.Flat
             var playerPlatformIdOffset = builder.CreatePlayerPlatformID(data.PlayerPlatformId);
             var playerNameOffset = builder.CreateString(data.NickName);
 
-            PlayerInformation.StartPlayerInformation(builder);
-            PlayerInformation.AddPlayerId(builder, playerIdOffset);
-            PlayerInformation.AddPlayerPlatformId(builder, playerPlatformIdOffset);
-            PlayerInformation.AddProfileName(builder, playerNameOffset);
-            PlayerInformation.AddLastActiveTime(builder, data.LastActiveTime);
-            return PlayerInformation.EndPlayerInformation(builder);
+            SF.Flat.PlayerInformation.StartPlayerInformation(builder);
+            SF.Flat.PlayerInformation.AddPlayerId(builder, playerIdOffset);
+            SF.Flat.PlayerInformation.AddPlayerPlatformId(builder, playerPlatformIdOffset);
+            SF.Flat.PlayerInformation.AddProfileName(builder, playerNameOffset);
+            SF.Flat.PlayerInformation.AddLastActiveTime(builder, data.LastActiveTime);
+            return SF.Flat.PlayerInformation.EndPlayerInformation(builder);
+        }
+
+        public static SF.PlayerInformation Parse(this SF.Flat.PlayerInformation? value)
+        {
+            if (value.HasValue)
+            {
+                return new SF.PlayerInformation()
+                {
+                    PlayerID = value.Value.PlayerId.Parse(),
+                    PlayerPlatformId = value.Value.PlayerPlatformId.Parse(),
+                    NickName = value.Value.ProfileName,
+                    LastActiveTime = value.Value.LastActiveTime,
+                };
+            }
+            else
+            {
+                return new SF.PlayerInformation();
+            }
         }
 
         public static VectorOffset CreatePlayerInformationVector(this Google.FlatBuffers.FlatBufferBuilder builder, SF.PlayerInformation[] data)
@@ -421,12 +575,12 @@ namespace SF.Flat
             var playerPlatformIdOffset = builder.CreatePlayerPlatformID(data.PlayerPlatformId);
             var playerNameOffset = builder.CreateString(data.ProfileName);
 
-            TotalRankingPlayerInformation.StartTotalRankingPlayerInformation(builder);
-            TotalRankingPlayerInformation.AddPlayerId(builder, playerIdOffset);
-            TotalRankingPlayerInformation.AddPlayerPlatformId(builder, playerPlatformIdOffset);
-            TotalRankingPlayerInformation.AddProfileName(builder, playerNameOffset);
+            SF.Flat.TotalRankingPlayerInformation.StartTotalRankingPlayerInformation(builder);
+            SF.Flat.TotalRankingPlayerInformation.AddPlayerId(builder, playerIdOffset);
+            SF.Flat.TotalRankingPlayerInformation.AddPlayerPlatformId(builder, playerPlatformIdOffset);
+            SF.Flat.TotalRankingPlayerInformation.AddProfileName(builder, playerNameOffset);
             // TODO: Other informations are planed to be changed
-            return TotalRankingPlayerInformation.EndTotalRankingPlayerInformation(builder);
+            return SF.Flat.TotalRankingPlayerInformation.EndTotalRankingPlayerInformation(builder);
         }
 
         public static VectorOffset CreateTotalRankingPlayerInformationVector(this Google.FlatBuffers.FlatBufferBuilder builder, SF.TotalRankingPlayerInformation[] data)
@@ -452,7 +606,26 @@ namespace SF.Flat
         public static Offset<SF.Flat.Vector4> CreateVector4(this Google.FlatBuffers.FlatBufferBuilder builder, SF.Vector4 data)
         {
             // TODO: optimize position data
-            return Vector4.CreateVector4(builder, data.x, data.y, data.z, data.w);
+            return SF.Flat.Vector4.CreateVector4(builder, data.x, data.y, data.z, data.w);
+        }
+
+        public static SF.Vector4 Parse(this SF.Flat.Vector4 value)
+        {
+            return new SF.Vector4()
+            {
+                x = value.X,
+                y = value.Y,
+                z = value.Z,
+                w = value.W
+            };
+        }
+
+        public static SF.Vector4 Parse(this SF.Flat.Vector4? value)
+        {
+            if (value == null)
+                return default(SF.Vector4);
+
+            return Parse(value.Value);
         }
 
         public static Offset<SF.Flat.ActorMovement> CreateActorMovement(this Google.FlatBuffers.FlatBufferBuilder builder, SF.ActorMovement data)
@@ -468,12 +641,29 @@ namespace SF.Flat
 
             //return ActorMovement.EndActorMovement(builder);
 
-            return ActorMovement.CreateActorMovement(builder,
+            return SF.Flat.ActorMovement.CreateActorMovement(builder,
                 data.Position.x, data.Position.y, data.Position.z, data.Position.w,
                 data.LinearVelocity.x, data.LinearVelocity.y, data.LinearVelocity.z, data.LinearVelocity.w,
                 data.ActorId, data.AngularYaw, data.MoveFrame, data.MovementState
                 );
         }
+
+        public static SF.ActorMovement Parse(this SF.Flat.ActorMovement? value)
+        {
+            if (value == null)
+                return default(SF.ActorMovement);
+
+            return new SF.ActorMovement()
+            {
+                Position = value.Value.Position.Parse(),
+                LinearVelocity = value.Value.LinearVelocity.Parse(),
+                ActorId = value.Value.ActorId,
+                AngularYaw = value.Value.AngularYaw,
+                MoveFrame = value.Value.MoveFrame,
+                MovementState = value.Value.MovementState,
+            };
+        }
+
         public static VectorOffset CreateActorMovementVector(this Google.FlatBuffers.FlatBufferBuilder builder, SF.ActorMovement[] data)
         {
             Offset<SF.Flat.ActorMovement>[] offsets = new Offset<SF.Flat.ActorMovement>[data.Length];

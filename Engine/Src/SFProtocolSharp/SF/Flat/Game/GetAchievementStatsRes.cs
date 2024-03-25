@@ -19,22 +19,18 @@ public struct GetAchievementStatsRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public GetAchievementStatsRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public SF.Flat.AchievementStat? AchievementStats(int j) { int o = __p.__offset(6); return o != 0 ? (SF.Flat.AchievementStat?)(new SF.Flat.AchievementStat()).__assign(__p.__vector(o) + j * 8, __p.bb) : null; }
-  public int AchievementStatsLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public SF.Flat.AchievementStat? AchievementStats(int j) { int o = __p.__offset(4); return o != 0 ? (SF.Flat.AchievementStat?)(new SF.Flat.AchievementStat()).__assign(__p.__vector(o) + j * 8, __p.bb) : null; }
+  public int AchievementStatsLength { get { int o = __p.__offset(4); return o != 0 ? __p.__vector_len(o) : 0; } }
 
   public static Offset<SF.Flat.Game.GetAchievementStatsRes> CreateGetAchievementStatsRes(FlatBufferBuilder builder,
-      int result = 0,
       VectorOffset achievement_statsOffset = default(VectorOffset)) {
-    builder.StartTable(2);
+    builder.StartTable(1);
     GetAchievementStatsRes.AddAchievementStats(builder, achievement_statsOffset);
-    GetAchievementStatsRes.AddResult(builder, result);
     return GetAchievementStatsRes.EndGetAchievementStatsRes(builder);
   }
 
-  public static void StartGetAchievementStatsRes(FlatBufferBuilder builder) { builder.StartTable(2); }
-  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
-  public static void AddAchievementStats(FlatBufferBuilder builder, VectorOffset achievementStatsOffset) { builder.AddOffset(1, achievementStatsOffset.Value, 0); }
+  public static void StartGetAchievementStatsRes(FlatBufferBuilder builder) { builder.StartTable(1); }
+  public static void AddAchievementStats(FlatBufferBuilder builder, VectorOffset achievementStatsOffset) { builder.AddOffset(0, achievementStatsOffset.Value, 0); }
   public static void StartAchievementStatsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(8, numElems, 4); }
   public static Offset<SF.Flat.Game.GetAchievementStatsRes> EndGetAchievementStatsRes(FlatBufferBuilder builder) {
     int o = builder.EndTable();
@@ -48,8 +44,7 @@ static public class GetAchievementStatsResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
-      && verifier.VerifyVectorOfData(tablePos, 6 /*AchievementStats*/, 8 /*SF.Flat.AchievementStat*/, false)
+      && verifier.VerifyVectorOfData(tablePos, 4 /*AchievementStats*/, 8 /*SF.Flat.AchievementStat*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

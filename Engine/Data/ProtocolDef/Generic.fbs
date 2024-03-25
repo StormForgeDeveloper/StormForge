@@ -7,8 +7,7 @@ table GenericFailureCmd
 
 table GenericFailureRes
 {
- 	result:int;
-} // table GenericFailureRes
+ } // table GenericFailureRes
 
 table GenericTransactionCmd
 {
@@ -16,8 +15,7 @@ table GenericTransactionCmd
 
 table GenericTransactionRes
 {
- 	result:int;
-	finished_transaction:TransactionID;
+ 	finished_transaction:TransactionID;
 	signature:string;
 } // table GenericTransactionRes
 

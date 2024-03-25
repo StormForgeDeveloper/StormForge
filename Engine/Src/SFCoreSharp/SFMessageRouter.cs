@@ -139,7 +139,7 @@ namespace SF
             SortedList<int, Action<SFMessage>>? handlerList = null;
             lock (m_MessageHandlerMap)
             {
-                m_MessageHandlerMap.TryGetValue(message.GetMessageID(), out handlerList);
+                m_MessageHandlerMap.TryGetValue(message.MessageId, out handlerList);
             }
 
             if (handlerList != null)

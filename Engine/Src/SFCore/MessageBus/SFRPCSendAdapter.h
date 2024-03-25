@@ -52,7 +52,7 @@ namespace SF
             }
         }
 
-        Result Send(TransactionID transactionId, MessageID messageId, flatbuffers::FlatBufferBuilder& fbb)
+        Result Send(TransactionID transactionId, Result result, MessageID messageId, flatbuffers::FlatBufferBuilder& fbb)
         {
             Result hr;
 
@@ -60,7 +60,7 @@ namespace SF
             messageHeader.MessageId = messageId;
             messageHeader.TransactionId = transactionId;
 
-            messageHeader.UpdateNWriteTo(fbb);
+            messageHeader.UpdateNWriteTo(fbb, result);
 
             const MessageHeader2* pMessageHeader = reinterpret_cast<const MessageHeader2*>(fbb.GetBufferPointer());
             return m_Endpoint->SendMsg(pMessageHeader);

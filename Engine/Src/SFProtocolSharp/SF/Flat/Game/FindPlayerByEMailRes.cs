@@ -19,21 +19,17 @@ public struct FindPlayerByEMailRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public FindPlayerByEMailRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public SF.Flat.PlayerInformation? Player { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.PlayerInformation?)(new SF.Flat.PlayerInformation()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
+  public SF.Flat.PlayerInformation? Player { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.PlayerInformation?)(new SF.Flat.PlayerInformation()).__assign(__p.__indirect(o + __p.bb_pos), __p.bb) : null; } }
 
   public static Offset<SF.Flat.Game.FindPlayerByEMailRes> CreateFindPlayerByEMailRes(FlatBufferBuilder builder,
-      int result = 0,
       Offset<SF.Flat.PlayerInformation> playerOffset = default(Offset<SF.Flat.PlayerInformation>)) {
-    builder.StartTable(2);
+    builder.StartTable(1);
     FindPlayerByEMailRes.AddPlayer(builder, playerOffset);
-    FindPlayerByEMailRes.AddResult(builder, result);
     return FindPlayerByEMailRes.EndFindPlayerByEMailRes(builder);
   }
 
-  public static void StartFindPlayerByEMailRes(FlatBufferBuilder builder) { builder.StartTable(2); }
-  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
-  public static void AddPlayer(FlatBufferBuilder builder, Offset<SF.Flat.PlayerInformation> playerOffset) { builder.AddOffset(1, playerOffset.Value, 0); }
+  public static void StartFindPlayerByEMailRes(FlatBufferBuilder builder) { builder.StartTable(1); }
+  public static void AddPlayer(FlatBufferBuilder builder, Offset<SF.Flat.PlayerInformation> playerOffset) { builder.AddOffset(0, playerOffset.Value, 0); }
   public static Offset<SF.Flat.Game.FindPlayerByEMailRes> EndFindPlayerByEMailRes(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.FindPlayerByEMailRes>(o);
@@ -46,8 +42,7 @@ static public class FindPlayerByEMailResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
-      && verifier.VerifyTable(tablePos, 6 /*Player*/, SF.Flat.PlayerInformationVerify.Verify, false)
+      && verifier.VerifyTable(tablePos, 4 /*Player*/, SF.Flat.PlayerInformationVerify.Verify, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

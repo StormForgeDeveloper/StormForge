@@ -129,9 +129,6 @@ namespace ProtocolCompiler
                 case "UGCID":
                     return "uint64";
 
-                case "Result":
-                    return "int";
-
                 case "LogEntryID":
                 case "StringCrc32":
                     return "uint32";
@@ -144,6 +141,7 @@ namespace ProtocolCompiler
                 case "GameInsUID":
                     return "GameInstanceUID";
 
+                case "Result":
                 case "GameInstanceUID":
                 case "EntityUID":
                 case "CharacterID":

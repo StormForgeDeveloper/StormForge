@@ -198,7 +198,7 @@ namespace SF
             new TypeMap( "PartyUID", false, typeof(UInt64), cppTypeName:"uint64_t" ),
             new TypeMap( "ServerID", false, typeof(UInt32) ),
             new TypeMap( "ClusterID", false, typeof(UInt32) ),
-            new TypeMap( "Result", false, typeof(Int32) ),
+            new TypeMap( "Result", false, typeof(Result) ),
             new TypeMap( "NotificationType", false, typeof(Int16) ),
             new TypeMap( "RankingType", false, typeof(RankingType) ),
             new TypeMap( "PlayerRole", false, typeof(PlayerRole) ),

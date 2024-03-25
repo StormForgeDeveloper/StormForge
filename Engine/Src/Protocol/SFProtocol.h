@@ -36,9 +36,10 @@ namespace SF
         constexpr uint Telemetry = 6;
         constexpr uint Relay = 7;
 
+        constexpr uint GameCustomStart = 15;
         // TODO: separate
-        constexpr uint FishingGame = 12;
-        constexpr uint FishingPlayInstance = 13;
+        //constexpr uint FishingGame = 12;
+        //constexpr uint FishingPlayInstance = 13;
 
         constexpr uint ClientMax = 50;
         constexpr uint Max = 1 << NET_PROTOCOL_BITS;

@@ -19,20 +19,18 @@ public struct JoinGameInstanceRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public JoinGameInstanceRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public int Result { get { int o = __p.__offset(4); return o != 0 ? __p.bb.GetInt(o + __p.bb_pos) : (int)0; } }
-  public SF.Flat.GameInstanceUID? InsUid { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.GameInstanceUID?)(new SF.Flat.GameInstanceUID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
-  public string ServerPublicAddress { get { int o = __p.__offset(8); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+  public SF.Flat.GameInstanceUID? InsUid { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.GameInstanceUID?)(new SF.Flat.GameInstanceUID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public string ServerPublicAddress { get { int o = __p.__offset(6); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
-  public Span<byte> GetServerPublicAddressBytes() { return __p.__vector_as_span<byte>(8, 1); }
+  public Span<byte> GetServerPublicAddressBytes() { return __p.__vector_as_span<byte>(6, 1); }
 #else
-  public ArraySegment<byte>? GetServerPublicAddressBytes() { return __p.__vector_as_arraysegment(8); }
+  public ArraySegment<byte>? GetServerPublicAddressBytes() { return __p.__vector_as_arraysegment(6); }
 #endif
-  public byte[] GetServerPublicAddressArray() { return __p.__vector_as_array<byte>(8); }
+  public byte[] GetServerPublicAddressArray() { return __p.__vector_as_array<byte>(6); }
 
-  public static void StartJoinGameInstanceRes(FlatBufferBuilder builder) { builder.StartTable(3); }
-  public static void AddResult(FlatBufferBuilder builder, int result) { builder.AddInt(0, result, 0); }
-  public static void AddInsUid(FlatBufferBuilder builder, Offset<SF.Flat.GameInstanceUID> insUidOffset) { builder.AddStruct(1, insUidOffset.Value, 0); }
-  public static void AddServerPublicAddress(FlatBufferBuilder builder, StringOffset serverPublicAddressOffset) { builder.AddOffset(2, serverPublicAddressOffset.Value, 0); }
+  public static void StartJoinGameInstanceRes(FlatBufferBuilder builder) { builder.StartTable(2); }
+  public static void AddInsUid(FlatBufferBuilder builder, Offset<SF.Flat.GameInstanceUID> insUidOffset) { builder.AddStruct(0, insUidOffset.Value, 0); }
+  public static void AddServerPublicAddress(FlatBufferBuilder builder, StringOffset serverPublicAddressOffset) { builder.AddOffset(1, serverPublicAddressOffset.Value, 0); }
   public static Offset<SF.Flat.Game.JoinGameInstanceRes> EndJoinGameInstanceRes(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.JoinGameInstanceRes>(o);
@@ -45,9 +43,8 @@ static public class JoinGameInstanceResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*Result*/, 4 /*int*/, 4, false)
-      && verifier.VerifyField(tablePos, 6 /*InsUid*/, 4 /*SF.Flat.GameInstanceUID*/, 4, false)
-      && verifier.VerifyString(tablePos, 8 /*ServerPublicAddress*/, false)
+      && verifier.VerifyField(tablePos, 4 /*InsUid*/, 4 /*SF.Flat.GameInstanceUID*/, 4, false)
+      && verifier.VerifyString(tablePos, 6 /*ServerPublicAddress*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }
