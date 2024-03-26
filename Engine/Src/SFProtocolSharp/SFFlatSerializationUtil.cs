@@ -139,6 +139,14 @@ namespace SF
             return new SF.EntityUID(data.Value.EntityId);
         }
 
+        public static SF.GameInstanceUID ParseGameInstanceUID(this SF.Flat.EntityUID? data)
+        {
+            if (data == null)
+                return default(SF.GameInstanceUID);
+
+            return new SF.GameInstanceUID(data.Value.EntityId);
+        }
+
         public static Offset<SF.Flat.TransactionID> CreateTransactionID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.TransactionID data)
         {
             return SF.Flat.TransactionID.CreateTransactionID(builder, data.TransactionId);
@@ -603,15 +611,15 @@ namespace SF
             return (SF.Flat.GameStateID)data;
         }
 
-        public static Offset<SF.Flat.Vector4> CreateVector4(this Google.FlatBuffers.FlatBufferBuilder builder, SF.Vector4 data)
+        public static Offset<SF.Flat.Vector4> CreateVector4(this Google.FlatBuffers.FlatBufferBuilder builder, SF.SFVector4 data)
         {
             // TODO: optimize position data
             return SF.Flat.Vector4.CreateVector4(builder, data.x, data.y, data.z, data.w);
         }
 
-        public static SF.Vector4 Parse(this SF.Flat.Vector4 value)
+        public static SF.SFVector4 Parse(this SF.Flat.Vector4 value)
         {
-            return new SF.Vector4()
+            return new SF.SFVector4()
             {
                 x = value.X,
                 y = value.Y,
@@ -620,10 +628,10 @@ namespace SF
             };
         }
 
-        public static SF.Vector4 Parse(this SF.Flat.Vector4? value)
+        public static SF.SFVector4 Parse(this SF.Flat.Vector4? value)
         {
             if (value == null)
-                return default(SF.Vector4);
+                return default(SF.SFVector4);
 
             return Parse(value.Value);
         }

@@ -22,8 +22,8 @@ namespace SF.Net
 	public static class MessageIDTelemetry
 	{
  		// Cmd: Post telemetry event
-		public static readonly MessageID PostEventCmd = MessageID.MakeMessageID(MessageType.Command, 1, SF.MessageProtocol.Telemetry, 0);
-		public static readonly MessageID PostEventRes = MessageID.MakeMessageID(MessageType.Result, 1, SF.MessageProtocol.Telemetry, 0);
+		public static readonly MessageID PostEventCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Telemetry, 0);
+		public static readonly MessageID PostEventRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Telemetry, 0);
 
 	}; // public static class MessageIDTelemetry
 

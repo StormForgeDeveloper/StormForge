@@ -22,8 +22,8 @@ namespace SF
  
 
 			// Cmd: Post telemetry event
-			constexpr MessageID MID_PostEventCmd(MessageType::Command,1,MessageProtocol::Telemetry,0);
-			constexpr MessageID MID_PostEventRes(MessageType::Result,1,MessageProtocol::Telemetry,0);
+			constexpr MessageID MID_PostEventCmd(EMessageType::Command,1,MessageProtocol::Telemetry,0);
+			constexpr MessageID MID_PostEventRes(EMessageType::Result,1,MessageProtocol::Telemetry,0);
 
 
 

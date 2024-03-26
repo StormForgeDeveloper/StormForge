@@ -21,10 +21,10 @@ namespace ProtocolCompiler
     {
         // Msg type string
         static string[] MsgTypeString = new string[] {
-                    "MessageType::NetCtrl",
-                    "MessageType::Command",
-                    "MessageType::Result",
-                    "MessageType::Event",
+                    "EMessageType::NetCtrl",
+                    "EMessageType::Command",
+                    "EMessageType::Result",
+                    "EMessageType::Event",
                 };
 
         // Message guaranteed level string

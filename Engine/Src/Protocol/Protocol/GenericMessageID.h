@@ -22,12 +22,12 @@ namespace SF
  
 
 			// Cmd: Generic failure message
-			constexpr MessageID MID_GenericFailureCmd(MessageType::Command,1,MessageProtocol::Generic,0);
-			constexpr MessageID MID_GenericFailureRes(MessageType::Result,1,MessageProtocol::Generic,0);
+			constexpr MessageID MID_GenericFailureCmd(EMessageType::Command,1,MessageProtocol::Generic,0);
+			constexpr MessageID MID_GenericFailureRes(EMessageType::Result,1,MessageProtocol::Generic,0);
 
 			// Cmd: Generic transaction result
-			constexpr MessageID MID_GenericTransactionCmd(MessageType::Command,1,MessageProtocol::Generic,1);
-			constexpr MessageID MID_GenericTransactionRes(MessageType::Result,1,MessageProtocol::Generic,1);
+			constexpr MessageID MID_GenericTransactionCmd(EMessageType::Command,1,MessageProtocol::Generic,1);
+			constexpr MessageID MID_GenericTransactionRes(EMessageType::Result,1,MessageProtocol::Generic,1);
 
 
 

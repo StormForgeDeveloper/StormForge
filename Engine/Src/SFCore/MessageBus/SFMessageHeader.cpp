@@ -38,7 +38,7 @@ namespace SF
 
     void MessageHeader2::UpdateNWriteTo(::flatbuffers::FlatBufferBuilder& packetBuilder, Result result)
     {
-        if (MessageId.GetMessageType() == MessageType::Result)
+        if (MessageId.GetMessageType() == EMessageType::Result)
         {
             packetBuilder.PushBytes((const uint8_t*)&result, sizeof(Result));
         }

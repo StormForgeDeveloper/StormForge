@@ -37,7 +37,7 @@ namespace SF
         public static readonly uint ClientMax = 50;
     }
 
-    public enum MessageType
+    public enum EMessageType
     {
         NetCtrl,
         Event,
@@ -76,7 +76,7 @@ namespace SF
 
         public uint ProtocolId => ((MessageIdRaw & NET_PROTOCOL_MASK) >> (int)NET_PROTOCOL_SHIFT);
         public uint CodeIndex => ((MessageIdRaw & NET_CODE_MASK) >> (int)NET_CODE_SHIFT);
-        public MessageType Type => (MessageType)((MessageIdRaw & NET_TYPE_MASK) >> (int)NET_TYPE_SHIFT);
+        public EMessageType Type => (EMessageType)((MessageIdRaw & NET_TYPE_MASK) >> (int)NET_TYPE_SHIFT);
         public UInt32 IDOnly => MessageIdRaw & (~NET_SEQUENCE_MASK);
         public UInt32 Sequence => MessageIdRaw & NET_SEQUENCE_MASK;
 
@@ -85,7 +85,7 @@ namespace SF
             MessageIdRaw = messageRawId;
         }
 
-        public static MessageID MakeMessageID(MessageType type, uint uiReliability, uint uiProtocol, uint uiCode)
+        public static MessageID MakeMessageID(EMessageType type, uint uiReliability, uint uiProtocol, uint uiCode)
         {
             uint uiBroadcast = 0;// deprecated
             return new MessageID()

@@ -44,7 +44,7 @@ namespace SF {
 
         uint16_t GetHeaderSize() const
         {
-            if (MessageId.GetMessageType() == MessageType::Result)
+            if (MessageId.GetMessageType() == EMessageType::Result)
                 return static_cast<uint16_t>(sizeof(MessageHeader2) + sizeof(Result));
             else
                 return static_cast<uint16_t>(sizeof(MessageHeader2));
@@ -53,7 +53,7 @@ namespace SF {
         // Read and return result if it is transaction result 
         Result GetTransactionResult() const
         {
-            if (MessageId.GetMessageType() == MessageType::Result)
+            if (MessageId.GetMessageType() == EMessageType::Result)
             {
                 return *reinterpret_cast<const Result*>(reinterpret_cast<uintptr_t>(this) + sizeof(MessageHeader2));
             }

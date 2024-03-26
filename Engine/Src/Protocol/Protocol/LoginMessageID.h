@@ -22,12 +22,12 @@ namespace SF
  
 
 			// Cmd: Login with ID/PW request
-			constexpr MessageID MID_LoginCmd(MessageType::Command,1,MessageProtocol::Login,0);
-			constexpr MessageID MID_LoginRes(MessageType::Result,1,MessageProtocol::Login,0);
+			constexpr MessageID MID_LoginCmd(EMessageType::Command,1,MessageProtocol::Login,0);
+			constexpr MessageID MID_LoginRes(EMessageType::Result,1,MessageProtocol::Login,0);
 
 			// Cmd: Login with steam login info
-			constexpr MessageID MID_LoginWithSteamCmd(MessageType::Command,1,MessageProtocol::Login,1);
-			constexpr MessageID MID_LoginWithSteamRes(MessageType::Result,1,MessageProtocol::Login,1);
+			constexpr MessageID MID_LoginWithSteamCmd(EMessageType::Command,1,MessageProtocol::Login,1);
+			constexpr MessageID MID_LoginWithSteamRes(EMessageType::Result,1,MessageProtocol::Login,1);
 
 
 

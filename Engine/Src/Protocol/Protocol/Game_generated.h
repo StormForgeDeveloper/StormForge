@@ -2654,8 +2654,8 @@ struct FindPlayerByPlatformUserNameCmd FLATBUFFERS_FINAL_CLASS : private ::flatb
     VT_PLATFORM_TYPE = 4,
     VT_PLATFORM_USER_NAME = 6
   };
-  uint8_t platform_type() const {
-    return GetField<uint8_t>(VT_PLATFORM_TYPE, 0);
+  SF::Flat::Platform platform_type() const {
+    return static_cast<SF::Flat::Platform>(GetField<int8_t>(VT_PLATFORM_TYPE, 0));
   }
   const ::flatbuffers::String *platform_user_name() const {
     return GetPointer<const ::flatbuffers::String *>(VT_PLATFORM_USER_NAME);
@@ -2668,7 +2668,7 @@ struct FindPlayerByPlatformUserNameCmd FLATBUFFERS_FINAL_CLASS : private ::flatb
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyField<uint8_t>(verifier, VT_PLATFORM_TYPE, 1) &&
+           VerifyField<int8_t>(verifier, VT_PLATFORM_TYPE, 1) &&
            VerifyOffset(verifier, VT_PLATFORM_USER_NAME) &&
            verifier.VerifyString(platform_user_name()) &&
            verifier.EndTable();
@@ -2679,8 +2679,8 @@ struct FindPlayerByPlatformUserNameCmdBuilder {
   typedef FindPlayerByPlatformUserNameCmd Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
-  void add_platform_type(uint8_t platform_type) {
-    fbb_.AddElement<uint8_t>(FindPlayerByPlatformUserNameCmd::VT_PLATFORM_TYPE, platform_type, 0);
+  void add_platform_type(SF::Flat::Platform platform_type) {
+    fbb_.AddElement<int8_t>(FindPlayerByPlatformUserNameCmd::VT_PLATFORM_TYPE, static_cast<int8_t>(platform_type), 0);
   }
   void add_platform_user_name(::flatbuffers::Offset<::flatbuffers::String> platform_user_name) {
     fbb_.AddOffset(FindPlayerByPlatformUserNameCmd::VT_PLATFORM_USER_NAME, platform_user_name);
@@ -2698,7 +2698,7 @@ struct FindPlayerByPlatformUserNameCmdBuilder {
 
 inline ::flatbuffers::Offset<FindPlayerByPlatformUserNameCmd> CreateFindPlayerByPlatformUserNameCmd(
     ::flatbuffers::FlatBufferBuilder &_fbb,
-    uint8_t platform_type = 0,
+    SF::Flat::Platform platform_type = SF::Flat::Platform::BR,
     ::flatbuffers::Offset<::flatbuffers::String> platform_user_name = 0) {
   FindPlayerByPlatformUserNameCmdBuilder builder_(_fbb);
   builder_.add_platform_user_name(platform_user_name);
@@ -2722,7 +2722,7 @@ struct FindPlayerByPlatformUserNameCmd::Traits {
 
 inline ::flatbuffers::Offset<FindPlayerByPlatformUserNameCmd> CreateFindPlayerByPlatformUserNameCmdDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
-    uint8_t platform_type = 0,
+    SF::Flat::Platform platform_type = SF::Flat::Platform::BR,
     const char *platform_user_name = nullptr) {
   auto platform_user_name__ = platform_user_name ? _fbb.CreateString(platform_user_name) : 0;
   return SF::Flat::Game::CreateFindPlayerByPlatformUserNameCmd(

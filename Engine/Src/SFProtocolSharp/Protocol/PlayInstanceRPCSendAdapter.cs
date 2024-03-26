@@ -30,14 +30,14 @@ namespace SF.Net
 		public  PlayInstanceRPCSendAdapter()
 		{
  		} // public  PlayInstanceRPCSendAdapter()
-		public  PlayInstanceRPCSendAdapter( SF.SFConnection connection ) : base(connection)
+		public  PlayInstanceRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 		{
- 		} // public  PlayInstanceRPCSendAdapter( SF.SFConnection connection ) : base(connection)
+ 		} // public  PlayInstanceRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 
 		// Cmd: Player Join request.
 		public Result  JoinPlayInstanceCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.String InPlayerIdentifier, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return JoinPlayInstanceCmd(InTransactionID, InPlayInstanceUID, InPlayerID, InPlayerIdentifier, callback);
 		} // public Result  JoinPlayInstanceCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.String InPlayerIdentifier, Action<SFMessage>? callback = null )
@@ -137,7 +137,7 @@ namespace SF.Net
 		// Cmd: Set character public message. Server will broadcast CharacterPublicDataChanged, NewActorInView should have updated value as well
 		public Result  SetCharacterPublicMessageCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.String InPublicMessage, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return SetCharacterPublicMessageCmd(InTransactionID, InPlayInstanceUID, InPlayerID, InPublicMessage, callback);
 		} // public Result  SetCharacterPublicMessageCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.String InPublicMessage, Action<SFMessage>? callback = null )
@@ -161,7 +161,7 @@ namespace SF.Net
 		// Cmd: Request WhiteboardSharing
 		public Result  RequestWhiteboardSharingCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.AccountID InTargetPlayerID, SF.VariableTable InWhiteboardInfo, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return RequestWhiteboardSharingCmd(InTransactionID, InPlayInstanceUID, InPlayerID, InTargetPlayerID, InWhiteboardInfo, callback);
 		} // public Result  RequestWhiteboardSharingCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.AccountID InTargetPlayerID, SF.VariableTable InWhiteboardInfo, Action<SFMessage>? callback = null )
@@ -187,7 +187,7 @@ namespace SF.Net
 		// Cmd: Accept WhiteboardSharing
 		public Result  AcceptWhiteboardSharingCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.AccountID InRequestedPlayerID, System.Byte InAnswer, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return AcceptWhiteboardSharingCmd(InTransactionID, InPlayInstanceUID, InPlayerID, InRequestedPlayerID, InAnswer, callback);
 		} // public Result  AcceptWhiteboardSharingCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.AccountID InRequestedPlayerID, System.Byte InAnswer, Action<SFMessage>? callback = null )
@@ -212,7 +212,7 @@ namespace SF.Net
 		// Cmd: Close WhiteboardSharing. Both clients will receive WhiteboardSharingHasClosed
 		public Result  CloseWhiteboardSharingCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return CloseWhiteboardSharingCmd(InTransactionID, InPlayInstanceUID, InPlayerID, callback);
 		} // public Result  CloseWhiteboardSharingCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, Action<SFMessage>? callback = null )
@@ -234,7 +234,7 @@ namespace SF.Net
 		// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
 		public Result  AddWhiteboardSharingLogEntryCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.VariableTable InLogEntry, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return AddWhiteboardSharingLogEntryCmd(InTransactionID, InPlayInstanceUID, InPlayerID, InLogEntry, callback);
 		} // public Result  AddWhiteboardSharingLogEntryCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.VariableTable InLogEntry, Action<SFMessage>? callback = null )
@@ -258,7 +258,7 @@ namespace SF.Net
 		// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
 		public Result  UpdateWhiteboardSharingLogEntryCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.VariableTable InLogEntry, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return UpdateWhiteboardSharingLogEntryCmd(InTransactionID, InPlayInstanceUID, InPlayerID, InLogEntry, callback);
 		} // public Result  UpdateWhiteboardSharingLogEntryCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.VariableTable InLogEntry, Action<SFMessage>? callback = null )
@@ -282,7 +282,7 @@ namespace SF.Net
 		// Cmd: Update whiteboard log entry
 		public Result  RemoveWhiteboardSharingLogEntryCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, UInt32 InLogEntryID, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return RemoveWhiteboardSharingLogEntryCmd(InTransactionID, InPlayInstanceUID, InPlayerID, InLogEntryID, callback);
 		} // public Result  RemoveWhiteboardSharingLogEntryCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, UInt32 InLogEntryID, Action<SFMessage>? callback = null )
@@ -305,7 +305,7 @@ namespace SF.Net
 		// Cmd: Occupy map object
 		public Result  OccupyMapObjectCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InMapObjectId, System.UInt32 InUsageId, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return OccupyMapObjectCmd(InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId, InUsageId, callback);
 		} // public Result  OccupyMapObjectCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InMapObjectId, System.UInt32 InUsageId, Action<SFMessage>? callback = null )
@@ -329,7 +329,7 @@ namespace SF.Net
 		// Cmd: Unoccupy map object
 		public Result  UnoccupyMapObjectCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InMapObjectId, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return UnoccupyMapObjectCmd(InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId, callback);
 		} // public Result  UnoccupyMapObjectCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InMapObjectId, Action<SFMessage>? callback = null )
@@ -352,7 +352,7 @@ namespace SF.Net
 		// Cmd: Use map object
 		public Result  UseMapObjectCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InUseParameters, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return UseMapObjectCmd(InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId, InUseParameters, callback);
 		} // public Result  UseMapObjectCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InUseParameters, Action<SFMessage>? callback = null )
@@ -377,7 +377,7 @@ namespace SF.Net
 		// Cmd: Send zone chatting
 		public Result  ZoneChatCmd( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return ZoneChatCmd(InTransactionID, InPlayInstanceUID, InPlayerID, InMessageType, InChatMetaData, InChatMessage, callback);
 		} // public Result  ZoneChatCmd( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage, Action<SFMessage>? callback = null )
@@ -404,7 +404,7 @@ namespace SF.Net
 		// Cmd: To call general functionality
 		public Result  CallFunctionCmd( System.UInt32 InFunctionName, SF.AccountID InPlayerID, SF.VariableTable InParameters, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return CallFunctionCmd(InTransactionID, InFunctionName, InPlayerID, InParameters, callback);
 		} // public Result  CallFunctionCmd( System.UInt32 InFunctionName, SF.AccountID InPlayerID, SF.VariableTable InParameters, Action<SFMessage>? callback = null )
@@ -447,7 +447,7 @@ namespace SF.Net
 		// Cmd: Create stream instance
 		public Result  CreateStreamCmd( System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return CreateStreamCmd(InTransactionID, InTicket, InStreamName, callback);
 		} // public Result  CreateStreamCmd( System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
@@ -468,7 +468,7 @@ namespace SF.Net
 		// Cmd: Open stream instance
 		public Result  FindStreamCmd( System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return FindStreamCmd(InTransactionID, InTicket, InStreamName, callback);
 		} // public Result  FindStreamCmd( System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
@@ -489,7 +489,7 @@ namespace SF.Net
 		// Cmd: Delete stream instance
 		public Result  DeleteStreamCmd( System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return DeleteStreamCmd(InTransactionID, InTicket, InStreamName, callback);
 		} // public Result  DeleteStreamCmd( System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
@@ -510,7 +510,7 @@ namespace SF.Net
 		// Cmd: Get stream list
 		public Result  GetStreamListCmd( System.UInt64 InTicket, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return GetStreamListCmd(InTransactionID, InTicket, callback);
 		} // public Result  GetStreamListCmd( System.UInt64 InTicket, Action<SFMessage>? callback = null )
@@ -535,9 +535,9 @@ namespace SF.Net
 		public  PlayInstanceSvrRPCSendAdapter()
 		{
  		} // public  PlayInstanceSvrRPCSendAdapter()
-		public  PlayInstanceSvrRPCSendAdapter( SF.SFConnection connection ) : base(connection)
+		public  PlayInstanceSvrRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 		{
- 		} // public  PlayInstanceSvrRPCSendAdapter( SF.SFConnection connection ) : base(connection)
+ 		} // public  PlayInstanceSvrRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 
 		// Cmd: Player Join request.
 		public Result  JoinPlayInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.CharacterID InCharacterID, SF.VariableTable InCharacterPrivateData, ActorMovement InMovement )
@@ -658,7 +658,7 @@ namespace SF.Net
 
 
 		// S2C: Player state change
-		public Result  PlayerStateChangedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InState, System.UInt32 InMoveFrame, SF.Vector4 InPosition, SF.VariableTable InStateValues )
+		public Result  PlayerStateChangedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InState, System.UInt32 InMoveFrame, SF.SFVector4 InPosition, SF.VariableTable InStateValues )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
@@ -677,7 +677,7 @@ namespace SF.Net
 			var packetOffset = SF.Flat.PlayInstance.PlayerStateChangedS2CEvt.EndPlayerStateChangedS2CEvt(builder);
 			result = SendMessage(MessageIDPlayInstance.PlayerStateChangedS2CEvt, builder, packetOffset.Value);
 			return result;
-		} // public Result  PlayerStateChangedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InState, System.UInt32 InMoveFrame, SF.Vector4 InPosition, SF.VariableTable InStateValues )
+		} // public Result  PlayerStateChangedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InState, System.UInt32 InMoveFrame, SF.SFVector4 InPosition, SF.VariableTable InStateValues )
 
 
 		// Cmd: Set character public message. Server will broadcast CharacterPublicDataChanged, NewActorInView should have updated value as well

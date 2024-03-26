@@ -176,7 +176,7 @@
 
         <Command Name="FindPlayerByPlatformUserName" Reliable="true" Crypto="No" Trace="Debug1" Desc="PlayerId Conversion">
             <Cmd>
-                <Params TypeName="uint8" Name="PlatformType" Desc="Platform type. See EPlatform"/>
+                <Params TypeName="Platform" Name="PlatformType" Desc="Platform type. See EPlatform"/>
                 <Params TypeName="String" Name="PlatformUserName" Desc="Platform User name"/>
             </Cmd>
             <Res>

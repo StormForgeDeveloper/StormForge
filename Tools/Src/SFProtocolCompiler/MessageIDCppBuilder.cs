@@ -79,11 +79,11 @@ namespace ProtocolCompiler
         {
             return string.Format("MID_{0}{1}", baseMsg.Name, msgTypeName);
         }
-        string MakeMessageID(MessageBase baseMsg, SF.MessageType messageType)
+        string MakeMessageID(MessageBase baseMsg, SF.EMessageType messageType)
         {
             string typeString = messageType.ToString();
             int reliable = baseMsg.Reliable ? 1 : 0;
-            return $"(MessageType::{typeString},{reliable},MessageProtocol::{Group.Name},{m_iCode})";
+            return $"(EMessageType::{typeString},{reliable},MessageProtocol::{Group.Name},{m_iCode})";
         }
 
 
@@ -98,8 +98,8 @@ namespace ProtocolCompiler
                     MatchIndent(); OutStream.WriteLine("// Cmd: " + baseMsg.Desc);
                     ProtocolsProtocolGroupCommand msg = baseMsg as ProtocolsProtocolGroupCommand;
 
-                    MatchIndent(); OutStream.WriteLine($"constexpr MessageID {AccessPropertyName(baseMsg, "Cmd")}{MakeMessageID(baseMsg, MessageType.Command)};");
-                    MatchIndent(); OutStream.WriteLine($"constexpr MessageID {AccessPropertyName(baseMsg, "Res")}{MakeMessageID(baseMsg, MessageType.Result)};");
+                    MatchIndent(); OutStream.WriteLine($"constexpr MessageID {AccessPropertyName(baseMsg, "Cmd")}{MakeMessageID(baseMsg, EMessageType.Command)};");
+                    MatchIndent(); OutStream.WriteLine($"constexpr MessageID {AccessPropertyName(baseMsg, "Res")}{MakeMessageID(baseMsg, EMessageType.Result)};");
 
                     m_iCode++;
 
@@ -111,7 +111,7 @@ namespace ProtocolCompiler
                     MatchIndent(); OutStream.WriteLine("// C2S: " + baseMsg.Desc);
                     ProtocolsProtocolGroupC2SEvent msg = baseMsg as ProtocolsProtocolGroupC2SEvent;
 
-                    MatchIndent(); OutStream.WriteLine($"constexpr MessageID {AccessPropertyName(baseMsg, "C2SEvt")}{MakeMessageID(baseMsg, MessageType.Event)};");
+                    MatchIndent(); OutStream.WriteLine($"constexpr MessageID {AccessPropertyName(baseMsg, "C2SEvt")}{MakeMessageID(baseMsg, EMessageType.Event)};");
 
                     m_iCode++;
                 }
@@ -121,7 +121,7 @@ namespace ProtocolCompiler
                     MatchIndent(); OutStream.WriteLine("// S2C: " + baseMsg.Desc);
                     var msg = baseMsg as ProtocolsProtocolGroupS2CEvent;
 
-                    MatchIndent(); OutStream.WriteLine($"constexpr MessageID {AccessPropertyName(baseMsg, "S2CEvt")}{MakeMessageID(baseMsg, MessageType.Event)};");
+                    MatchIndent(); OutStream.WriteLine($"constexpr MessageID {AccessPropertyName(baseMsg, "S2CEvt")}{MakeMessageID(baseMsg, EMessageType.Event)};");
 
                     m_iCode++;
                 }

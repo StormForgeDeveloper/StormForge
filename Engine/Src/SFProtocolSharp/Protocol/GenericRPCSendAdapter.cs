@@ -30,14 +30,14 @@ namespace SF.Net
 		public  GenericRPCSendAdapter()
 		{
  		} // public  GenericRPCSendAdapter()
-		public  GenericRPCSendAdapter( SF.SFConnection connection ) : base(connection)
+		public  GenericRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 		{
- 		} // public  GenericRPCSendAdapter( SF.SFConnection connection ) : base(connection)
+ 		} // public  GenericRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 
 		// Cmd: Generic failure message
 		public Result  GenericFailureCmd( Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return GenericFailureCmd(InTransactionID, callback);
 		} // public Result  GenericFailureCmd( Action<SFMessage>? callback = null )
@@ -55,7 +55,7 @@ namespace SF.Net
 		// Cmd: Generic transaction result
 		public Result  GenericTransactionCmd( Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return GenericTransactionCmd(InTransactionID, callback);
 		} // public Result  GenericTransactionCmd( Action<SFMessage>? callback = null )
@@ -79,9 +79,9 @@ namespace SF.Net
 		public  GenericSvrRPCSendAdapter()
 		{
  		} // public  GenericSvrRPCSendAdapter()
-		public  GenericSvrRPCSendAdapter( SF.SFConnection connection ) : base(connection)
+		public  GenericSvrRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 		{
- 		} // public  GenericSvrRPCSendAdapter( SF.SFConnection connection ) : base(connection)
+ 		} // public  GenericSvrRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 
 		// Cmd: Generic failure message
 		public Result  GenericFailureRes( SF.TransactionID InTransactionID, SF.Result InResult )

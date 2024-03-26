@@ -30,14 +30,14 @@ namespace SF.Net
 		public  LoginRPCSendAdapter()
 		{
  		} // public  LoginRPCSendAdapter()
-		public  LoginRPCSendAdapter( SF.SFConnection connection ) : base(connection)
+		public  LoginRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 		{
- 		} // public  LoginRPCSendAdapter( SF.SFConnection connection ) : base(connection)
+ 		} // public  LoginRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 
 		// Cmd: Login with ID/PW request
 		public Result  LoginCmd( System.String InUserId, System.String InPassword, System.String InGameID, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return LoginCmd(InTransactionID, InUserId, InPassword, InGameID, callback);
 		} // public Result  LoginCmd( System.String InUserId, System.String InPassword, System.String InGameID, Action<SFMessage>? callback = null )
@@ -61,7 +61,7 @@ namespace SF.Net
 		// Cmd: Login with steam login info
 		public Result  LoginWithSteamCmd( System.UInt64 InSteamAppID, System.UInt64 InSteamPlayerID, System.String InSteamPlayerName, System.String InSteamPlayerToken, System.String InGameID, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return LoginWithSteamCmd(InTransactionID, InSteamAppID, InSteamPlayerID, InSteamPlayerName, InSteamPlayerToken, InGameID, callback);
 		} // public Result  LoginWithSteamCmd( System.UInt64 InSteamAppID, System.UInt64 InSteamPlayerID, System.String InSteamPlayerName, System.String InSteamPlayerToken, System.String InGameID, Action<SFMessage>? callback = null )
@@ -93,9 +93,9 @@ namespace SF.Net
 		public  LoginSvrRPCSendAdapter()
 		{
  		} // public  LoginSvrRPCSendAdapter()
-		public  LoginSvrRPCSendAdapter( SF.SFConnection connection ) : base(connection)
+		public  LoginSvrRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 		{
- 		} // public  LoginSvrRPCSendAdapter( SF.SFConnection connection ) : base(connection)
+ 		} // public  LoginSvrRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 
 		// Cmd: Login with ID/PW request
 		public Result  LoginRes( SF.TransactionID InTransactionID, SF.Result InResult, System.String InNickName, SF.AccountID InAccountID, System.UInt64 InAuthTicket, System.String InBannedReason, System.String InGameServerAddress )

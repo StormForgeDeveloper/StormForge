@@ -69,7 +69,7 @@ namespace SF
 		// Cmd: PlayerId conversion
 		Result FindPlayerByCharacterNameCmd( const TransactionID &InTransactionID, const char* InCharacterName );
 		// Cmd: PlayerId Conversion
-		Result FindPlayerByPlatformUserNameCmd( const TransactionID &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName );
+		Result FindPlayerByPlatformUserNameCmd( const TransactionID &InTransactionID, const EPlatform &InPlatformType, const char* InPlatformUserName );
 		// Cmd: Query playerID list
 		Result FindPlayerByEMailCmd( const TransactionID &InTransactionID, const char* InPlayerEMail );
 		// Cmd: Query playerID list

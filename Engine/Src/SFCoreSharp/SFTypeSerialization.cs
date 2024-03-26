@@ -152,9 +152,9 @@ namespace SF
             }
         }
 
-        public static Vector4 ReadVector4(BinaryReader reader)
+        public static SFVector4 ReadVector4(BinaryReader reader)
         {
-            return new Vector4()
+            return new SFVector4()
             {
                 x = reader.ReadSingle(),
                 y = reader.ReadSingle(),
@@ -162,7 +162,7 @@ namespace SF
                 w = reader.ReadSingle()
             };
         }
-        public static void WriteVector4(BinaryWriter writer, ref Vector4 value)
+        public static void WriteVector4(BinaryWriter writer, ref SFVector4 value)
         {
             writer.Write(value.x);
             writer.Write(value.y);
@@ -338,20 +338,20 @@ namespace SF
                 (reader) => { return new TransactionID(){ TransactionId = reader.ReadUInt64() }; },
                 (ref IntPtr valuePtr) => { return new TransactionID(){ TransactionId = ReadUInt64(ref valuePtr) }; }),
 
-            new TypeInfo(typeof(Vector2), "Vector2",
-                (writer, value) => { var valueTemp = (Vector2)value; writer.Write(valueTemp.x); writer.Write(valueTemp.y); },
-                (reader) => { return new Vector2() { x = reader.ReadSingle(), y = reader.ReadSingle() }; },
-                (ref IntPtr valuePtr) => { return ReadStruct<Vector2>(ref valuePtr); }),
+            new TypeInfo(typeof(SFVector2), "Vector2",
+                (writer, value) => { var valueTemp = (SFVector2)value; writer.Write(valueTemp.x); writer.Write(valueTemp.y); },
+                (reader) => { return new SFVector2() { x = reader.ReadSingle(), y = reader.ReadSingle() }; },
+                (ref IntPtr valuePtr) => { return ReadStruct<SFVector2>(ref valuePtr); }),
 
-            new TypeInfo(typeof(Vector3), "Vector3",
-                (writer, value) => { var valueTemp = (Vector3)value; writer.Write(valueTemp.x); writer.Write(valueTemp.y); writer.Write(valueTemp.z); },
-                (reader) => { return new Vector3() { x = reader.ReadSingle(), y = reader.ReadSingle(), z = reader.ReadSingle() }; },
-                (ref IntPtr valuePtr) => { return ReadStruct<Vector3>(ref valuePtr); }),
+            new TypeInfo(typeof(SFVector3), "Vector3",
+                (writer, value) => { var valueTemp = (SFVector3)value; writer.Write(valueTemp.x); writer.Write(valueTemp.y); writer.Write(valueTemp.z); },
+                (reader) => { return new SFVector3() { x = reader.ReadSingle(), y = reader.ReadSingle(), z = reader.ReadSingle() }; },
+                (ref IntPtr valuePtr) => { return ReadStruct<SFVector3>(ref valuePtr); }),
 
-            new TypeInfo(typeof(Vector4), "Vector4",
-                (writer, value) => { var valueTemp = (Vector4)value; writer.Write(valueTemp.x); writer.Write(valueTemp.y); writer.Write(valueTemp.z); writer.Write(valueTemp.w); },
-                (reader) => { return new Vector4() { x = reader.ReadSingle(), y = reader.ReadSingle(), z = reader.ReadSingle(), w = reader.ReadSingle() }; },
-                (ref IntPtr valuePtr) => { return ReadStruct<Vector4>(ref valuePtr); }),
+            new TypeInfo(typeof(SFVector4), "Vector4",
+                (writer, value) => { var valueTemp = (SFVector4)value; writer.Write(valueTemp.x); writer.Write(valueTemp.y); writer.Write(valueTemp.z); writer.Write(valueTemp.w); },
+                (reader) => { return new SFVector4() { x = reader.ReadSingle(), y = reader.ReadSingle(), z = reader.ReadSingle(), w = reader.ReadSingle() }; },
+                (ref IntPtr valuePtr) => { return ReadStruct<SFVector4>(ref valuePtr); }),
 
             new TypeInfo(typeof(UInt64), "StringCrc32",
                 (writer, value) => { writer.Write(((StringCrc32)value).StringHash); },
@@ -406,6 +406,29 @@ namespace SF
                     var item = Marshal.PtrToStructure(valuePtr, typeof(ActorMovement));
                     if (item != null)
                         valuePtr += Marshal.SizeOf(item);
+                    return item;
+                }),
+
+        new TypeInfo(typeof(Guid), "Guid",
+                (writer, value) =>
+                {
+                    var item = (Guid)value;
+                    byte[] byteArray = item.ToByteArray();
+                    Debug.Assert(byteArray.Length == 16);
+                    writer.Write(byteArray);
+                },
+                (reader) =>
+                {
+                    var item = new Guid();
+                    item = new Guid(reader.ReadBytes(16));
+                    return item;
+                },
+                (ref IntPtr valuePtr) =>
+                {
+                    var bytes = new byte[16];
+                    var item = new Guid();
+                    Marshal.Copy(valuePtr, bytes, 0, bytes.Length); valuePtr += bytes.Length;
+                    item = new Guid(bytes);
                     return item;
                 }),
 

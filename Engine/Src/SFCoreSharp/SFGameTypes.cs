@@ -30,11 +30,42 @@ namespace SF
     [StructLayout(LayoutKind.Sequential)]
     public struct GameInstanceUID
     {
+        public static readonly GameInstanceUID Empty = new GameInstanceUID();
+
         public UInt32 UID;
 
         public GameInstanceUID(UInt32 uid)
         {
             UID = uid;
+        }
+
+        public bool IsValid => UID != 0;
+
+        public static bool operator ==(GameInstanceUID op1, GameInstanceUID op2)
+        {
+            return op1.UID == op2.UID;
+        }
+        public static bool operator !=(GameInstanceUID op1, GameInstanceUID op2)
+        {
+            return op1.UID != op2.UID;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null)
+                return false;
+
+            return UID == ((GameInstanceUID)obj).UID;
+        }
+
+        public override int GetHashCode()
+        {
+            return (int)UID;
+        }
+
+        public override string ToString()
+        {
+            return UID.ToString();
         }
     }
 
@@ -42,11 +73,42 @@ namespace SF
     [StructLayout(LayoutKind.Sequential)]
     public struct EntityUID
     {
+        public static readonly EntityUID Empty = new EntityUID();
+
         public UInt32 UID;
 
         public EntityUID(UInt32 uid)
         {
             UID = uid;
+        }
+
+        public bool IsValid => UID != 0;
+
+        public static bool operator ==(EntityUID op1, EntityUID op2)
+        {
+            return op1.UID == op2.UID;
+        }
+        public static bool operator !=(EntityUID op1, EntityUID op2)
+        {
+            return op1.UID != op2.UID;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj == null)
+                return false;
+
+            return UID == ((EntityUID)obj).UID;
+        }
+
+        public override int GetHashCode()
+        {
+            return (int)UID;
+        }
+
+        public override string ToString()
+        {
+            return UID.ToString();
         }
     }
 
@@ -125,7 +187,7 @@ namespace SF
 
         public AccountID(ulong low)
         {
-            Guid = new Guid((uint)(low & 0xFFFFFFFF), (ushort)((low >> 32) & 0xFFFF), (ushort)((low >> 48) & 0xFFFF), 0, 0,0,0,0,0,0,0);
+            Guid = new Guid((uint)(low & 0xFFFFFFFF), (ushort)((low >> 32) & 0xFFFF), (ushort)((low >> 48) & 0xFFFF), 0, 0, 0, 0, 0, 0, 0, 0);
         }
 
         public AccountID(string b)
@@ -142,7 +204,7 @@ namespace SF
 
         public byte[] ToByteArray() { return Guid.ToByteArray(); }
 
-        public static bool operator == (AccountID op1, AccountID op2)
+        public static bool operator ==(AccountID op1, AccountID op2)
         {
             return op1.Guid == op2.Guid;
         }
@@ -194,7 +256,7 @@ namespace SF
                     | ((ulong)bytes[4] << 32) | ((ulong)bytes[5] << 40) | ((ulong)bytes[6] << 48) | ((ulong)bytes[7] << 56);
         }
 
-        public static Guid FromLow64(this System.Guid guid, ulong low)
+        public static Guid FromUInt64(ulong low)
         {
             ulong High = 0;
             return new Guid((uint)(low & 0xFFFFFFFF), (ushort)((low >> 32) & 0xFFFF), (ushort)((low >> 48) & 0xFFFF),
@@ -283,7 +345,7 @@ namespace SF
 
     [Struct()]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector2
+    public struct SFVector2
     {
         public float x;
         public float y;
@@ -291,7 +353,7 @@ namespace SF
 
     [Struct()]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector3
+    public struct SFVector3
     {
         public float x;
         public float y;
@@ -300,7 +362,7 @@ namespace SF
 
     [Struct()]
     [StructLayout(LayoutKind.Sequential)]
-    public struct Vector4
+    public struct SFVector4
     {
         public float x;
         public float y;
@@ -396,11 +458,11 @@ namespace SF
     // Notification message
     public enum NotificationType
     {
-        None,				// Not used
-		MessageNotify,
-		FriendRequest,
-		GiftStamina,
-	};
+        None,               // Not used
+        MessageNotify,
+        FriendRequest,
+        GiftStamina,
+    };
 
 
     // Game flow state for Lupus in Tabula
@@ -453,11 +515,11 @@ namespace SF
     public enum ChatMessageType
     {
         Zone,
-		ZoneGlobal,
-		Whisper,
-		Channel,
-		System,
-		Max
+        ZoneGlobal,
+        Whisper,
+        Channel,
+        System,
+        Max
     };
 
 
@@ -541,8 +603,8 @@ namespace SF
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct ActorMovement
     {
-        public Vector4 Position;
-        public Vector4 LinearVelocity;
+        public SFVector4 Position;
+        public SFVector4 LinearVelocity;
 
         public UInt32 ActorId;
         // Look direction

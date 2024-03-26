@@ -385,11 +385,11 @@ PlayerId Conversion
 
 1. Command interface
 
-        Result FindPlayerByPlatformUserNameCmd(const TransactionID &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName)
+        Result FindPlayerByPlatformUserNameCmd(const TransactionID &InTransactionID, const EPlatform &InPlatformType, const char* InPlatformUserName)
 
 		- TransactionID: type:TransactionID, 
 
-		- PlatformType: type:uint8, Platform type. See EPlatform
+		- PlatformType: type:Platform, Platform type. See EPlatform
 
 		- PlatformUserName: type:String, Platform User name
 

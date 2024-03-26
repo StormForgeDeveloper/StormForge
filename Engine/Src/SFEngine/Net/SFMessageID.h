@@ -29,7 +29,7 @@ namespace SF {
 
     constexpr uint NET_ID_MASK = ~NET_SEQUENCE_MASK;
 
-    enum class MessageType : uint8_t
+    enum class EMessageType : uint8_t
     {
         NetCtrl,
         Event,
@@ -81,21 +81,21 @@ namespace SF {
         } IDSeq;
         uint32_t ID;
 
-        MessageType GetMessageType() const { return (MessageType)IDs.Type; }
+        EMessageType GetMessageType() const { return (EMessageType)IDs.Type; }
 
         constexpr MessageID() : ID(0) {}
         constexpr MessageID(uint32_t uiID) : ID(uiID) {}
-        constexpr MessageID(MessageType type, uint uiReliability, uint uiInterServer, uint uiProtocol, uint uiCode)
+        constexpr MessageID(EMessageType type, uint uiReliability, uint uiInterServer, uint uiProtocol, uint uiCode)
             : IDs({ 0, uiInterServer, uiReliability, (uint)type, uiCode, uiProtocol })
         {
         }
 
-        constexpr MessageID(MessageType type, uint uiReliability, uint uiProtocol, uint uiCode)
+        constexpr MessageID(EMessageType type, uint uiReliability, uint uiProtocol, uint uiCode)
             : IDs({ 0, 0, uiReliability, (uint)type, uiCode, uiProtocol })
         {
         }
 
-        uint32_t SetMessageID(MessageType type, uint uiReliability, uint uiInterServer, uint uiProtocol, uint uiCode)
+        uint32_t SetMessageID(EMessageType type, uint uiReliability, uint uiInterServer, uint uiProtocol, uint uiCode)
         {
             IDs.MsgCode = uiCode;
             IDs.Protocol = uiProtocol;
@@ -107,7 +107,7 @@ namespace SF {
             return ID;
         }
 
-        SF_FORCEINLINE void ValidateMessageID(MessageType uiType, uint uiReliability, uint uiMobility, uint uiProtocol, uint uiCode) const
+        SF_FORCEINLINE void ValidateMessageID(EMessageType uiType, uint uiReliability, uint uiMobility, uint uiProtocol, uint uiCode) const
         {
 #if DEBUG
             MessageID Temp;

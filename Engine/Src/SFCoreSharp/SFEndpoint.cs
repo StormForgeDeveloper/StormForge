@@ -11,18 +11,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Text;
-#if UNITY_IOS
-using AOT;
-#endif
 
 #nullable enable
 
 namespace SF
 {
-    interface IEndpoint
+    public interface IEndpoint
     {
+        public TransactionID NewTransactionID();
         public Result SendMessage(TransactionID transactionId, ArraySegment<byte> segment);
         public void HandleSentMessage(Result result, TransactionID transId, MessageID messageID, Action<SFMessage>? callback = null);
 
@@ -30,8 +27,15 @@ namespace SF
 
     public class MemoryEndpoint : IEndpoint
     {
-        public TransactionID LastTransactionId { get; private set; }
-        public ArraySegment<byte> LastMessage { get; private set; }
+        ulong m_TransactionIdGen = 1;
+        public TransactionID LastTransactionId { get; private set; } = TransactionID.Empty;
+        public ArraySegment<byte>? LastMessage { get; private set; }
+
+
+        public TransactionID NewTransactionID()
+        {
+            return new TransactionID(m_TransactionIdGen++);
+        }
 
         public Result SendMessage(TransactionID transactionId, ArraySegment<byte> segment)
         {

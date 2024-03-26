@@ -184,7 +184,7 @@ table FindPlayerByCharacterNameRes
 
 table FindPlayerByPlatformUserNameCmd
 {
- 	platform_type:uint8;
+ 	platform_type:Platform;
 	platform_user_name:string;
 } // table FindPlayerByPlatformUserNameCmd
 

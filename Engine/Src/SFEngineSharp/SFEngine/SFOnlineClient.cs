@@ -248,7 +248,8 @@ namespace SF
                 return null;
             }
 
-            if (CachedAdapter != null && CachedAdapter.Endpoint != null && CachedAdapter.Endpoint.NativeHandle == connectionHandle)
+            var connection = CachedAdapter?.Endpoint as SFConnection;
+            if (CachedAdapter != null && connection != null && connection.NativeHandle == connectionHandle)
                 return CachedAdapter;
 
             CachedAdapter = new TAdapter();

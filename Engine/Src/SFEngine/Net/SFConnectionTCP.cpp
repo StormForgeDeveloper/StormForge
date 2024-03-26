@@ -570,7 +570,7 @@ namespace Net {
 	{
 		Result hr = ResultCode::SUCCESS;
 
-		if( pMsgHeader->MessageId.GetMessageType() == MessageType::NetCtrl )
+		if( pMsgHeader->MessageId.GetMessageType() == EMessageType::NetCtrl )
 		{
 			SFLog(Net, Debug5, "TCP Ctrl Recv ip:{0}, msg:{1}, Len:{2}",
 				GetRemoteInfo().PeerAddress, 
@@ -700,7 +700,7 @@ namespace Net {
             {
                 if (hr)
                 {
-                    if (msgID.GetMessageType() == MessageType::NetCtrl)
+                    if (msgID.GetMessageType() == EMessageType::NetCtrl)
                     {
                         SFLog(Net, Debug6, "TCP Ctrl CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
                     }
@@ -717,7 +717,7 @@ namespace Net {
 
         msgID = pMsgHeader->MessageId;
 
-        if ((pMsgHeader->MessageId.GetMessageType() != MessageType::NetCtrl && GetConnectionState() == ConnectionState::DISCONNECTING)
+        if ((pMsgHeader->MessageId.GetMessageType() != EMessageType::NetCtrl && GetConnectionState() == ConnectionState::DISCONNECTING)
             || GetConnectionState() == ConnectionState::DISCONNECTED)
         {
             // Send fail by connection closed

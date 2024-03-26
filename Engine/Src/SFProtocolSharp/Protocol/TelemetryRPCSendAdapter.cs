@@ -30,14 +30,14 @@ namespace SF.Net
 		public  TelemetryRPCSendAdapter()
 		{
  		} // public  TelemetryRPCSendAdapter()
-		public  TelemetryRPCSendAdapter( SF.SFConnection connection ) : base(connection)
+		public  TelemetryRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 		{
- 		} // public  TelemetryRPCSendAdapter( SF.SFConnection connection ) : base(connection)
+ 		} // public  TelemetryRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 
 		// Cmd: Post telemetry event
 		public Result  PostEventCmd( System.String InEventName, System.UInt64 InTimeStamp, System.String InAppID, System.String InMachineID, System.UInt32 InEventID, SF.AccountID InAccountID, System.Boolean InIsPlayEvent, System.Byte[] InSessionID, SF.NamedVariable[] InAttributes, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return PostEventCmd(InTransactionID, InEventName, InTimeStamp, InAppID, InMachineID, InEventID, InAccountID, InIsPlayEvent, InSessionID, InAttributes, callback);
 		} // public Result  PostEventCmd( System.String InEventName, System.UInt64 InTimeStamp, System.String InAppID, System.String InMachineID, System.UInt32 InEventID, SF.AccountID InAccountID, System.Boolean InIsPlayEvent, System.Byte[] InSessionID, SF.NamedVariable[] InAttributes, Action<SFMessage>? callback = null )
@@ -76,9 +76,9 @@ namespace SF.Net
 		public  TelemetrySvrRPCSendAdapter()
 		{
  		} // public  TelemetrySvrRPCSendAdapter()
-		public  TelemetrySvrRPCSendAdapter( SF.SFConnection connection ) : base(connection)
+		public  TelemetrySvrRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 		{
- 		} // public  TelemetrySvrRPCSendAdapter( SF.SFConnection connection ) : base(connection)
+ 		} // public  TelemetrySvrRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 
 		// Cmd: Post telemetry event
 		public Result  PostEventRes( SF.TransactionID InTransactionID, SF.Result InResult )

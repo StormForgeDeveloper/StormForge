@@ -311,16 +311,17 @@ namespace SF
 		return hr;
 	}; // Result GameRPCSendAdapter::FindPlayerByCharacterNameCmd( const TransactionID &InTransactionID, const char* InCharacterName )
 	// Cmd: PlayerId Conversion
-	Result GameRPCSendAdapter::FindPlayerByPlatformUserNameCmd( const TransactionID &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName )
+	Result GameRPCSendAdapter::FindPlayerByPlatformUserNameCmd( const TransactionID &InTransactionID, const EPlatform &InPlatformType, const char* InPlatformUserName )
 	{
  		Result hr;
 
 		protocolCheckPtr(m_Endpoint);
 
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
+		auto PlatformTypeOffset = SF::Flat::Helper::CreatePlatform(fbb, InPlatformType);
 		auto PlatformUserNameOffset = SF::Flat::Helper::CreateString(fbb, InPlatformUserName);
 		SF::Flat::Game::FindPlayerByPlatformUserNameCmdBuilder _builder(fbb);
-		_builder.add_platform_type(InPlatformType);
+		_builder.add_platform_type(PlatformTypeOffset);
 		_builder.add_platform_user_name(PlatformUserNameOffset);
 		flatbuffers::Offset<SF::Flat::Game::FindPlayerByPlatformUserNameCmd> packetOffset = _builder.Finish();
 
@@ -328,7 +329,7 @@ namespace SF
 
 
 		return hr;
-	}; // Result GameRPCSendAdapter::FindPlayerByPlatformUserNameCmd( const TransactionID &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName )
+	}; // Result GameRPCSendAdapter::FindPlayerByPlatformUserNameCmd( const TransactionID &InTransactionID, const EPlatform &InPlatformType, const char* InPlatformUserName )
 	// Cmd: Query playerID list
 	Result GameRPCSendAdapter::FindPlayerByEMailCmd( const TransactionID &InTransactionID, const char* InPlayerEMail )
 	{

@@ -51,7 +51,7 @@ namespace Net {
 		auto socketType = GetSocketType();
 
 		const MsgNetCtrl* pNetCtrl = reinterpret_cast<const MsgNetCtrl*>(pHeader->GetPayloadPtr());
-		if (pNetCtrl->rtnMsgID.GetMessageType() == MessageType::NetCtrl)// connecting process
+		if (pNetCtrl->rtnMsgID.GetMessageType() == EMessageType::NetCtrl)// connecting process
 		{
 			GetConnection()->OnHeartbeatPacket();
 
@@ -119,7 +119,7 @@ namespace Net {
 		Result hr;
 
 		const MsgNetCtrl* pNetCtrl = (MsgNetCtrl*)(pHeader->GetPayloadPtr());
-		if (pNetCtrl->rtnMsgID.GetMessageType() == MessageType::NetCtrl)// connecting process
+		if (pNetCtrl->rtnMsgID.GetMessageType() == EMessageType::NetCtrl)// connecting process
 		{
 			GetConnection()->OnHeartbeatPacket();
 
@@ -174,7 +174,7 @@ namespace Net {
 		Result hr;
 
 		const MsgNetCtrl* pNetCtrl = (MsgNetCtrl*)(pHeader->GetPayloadPtr());
-		if (pNetCtrl->rtnMsgID.GetMessageType() == MessageType::NetCtrl)// connecting process
+		if (pNetCtrl->rtnMsgID.GetMessageType() == EMessageType::NetCtrl)// connecting process
 		{
 			switch (pNetCtrl->rtnMsgID.IDs.MsgCode)
 			{
@@ -201,7 +201,7 @@ namespace Net {
 		Result hr;
 
 		const MsgNetCtrl* pNetCtrl = (MsgNetCtrl*)(pHeader->GetPayloadPtr());
-		if (pNetCtrl->rtnMsgID.GetMessageType() == MessageType::NetCtrl)// connecting process
+		if (pNetCtrl->rtnMsgID.GetMessageType() == EMessageType::NetCtrl)// connecting process
 		{
 			switch (pNetCtrl->rtnMsgID.IDs.MsgCode)
 			{

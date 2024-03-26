@@ -19,7 +19,7 @@ public struct FindPlayerByPlatformUserNameCmd : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public FindPlayerByPlatformUserNameCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public byte PlatformType { get { int o = __p.__offset(4); return o != 0 ? __p.bb.Get(o + __p.bb_pos) : (byte)0; } }
+  public SF.Flat.Platform PlatformType { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.Platform)__p.bb.GetSbyte(o + __p.bb_pos) : SF.Flat.Platform.BR; } }
   public string PlatformUserName { get { int o = __p.__offset(6); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
   public Span<byte> GetPlatformUserNameBytes() { return __p.__vector_as_span<byte>(6, 1); }
@@ -29,7 +29,7 @@ public struct FindPlayerByPlatformUserNameCmd : IFlatbufferObject
   public byte[] GetPlatformUserNameArray() { return __p.__vector_as_array<byte>(6); }
 
   public static Offset<SF.Flat.Game.FindPlayerByPlatformUserNameCmd> CreateFindPlayerByPlatformUserNameCmd(FlatBufferBuilder builder,
-      byte platform_type = 0,
+      SF.Flat.Platform platform_type = SF.Flat.Platform.BR,
       StringOffset platform_user_nameOffset = default(StringOffset)) {
     builder.StartTable(2);
     FindPlayerByPlatformUserNameCmd.AddPlatformUserName(builder, platform_user_nameOffset);
@@ -38,7 +38,7 @@ public struct FindPlayerByPlatformUserNameCmd : IFlatbufferObject
   }
 
   public static void StartFindPlayerByPlatformUserNameCmd(FlatBufferBuilder builder) { builder.StartTable(2); }
-  public static void AddPlatformType(FlatBufferBuilder builder, byte platformType) { builder.AddByte(0, platformType, 0); }
+  public static void AddPlatformType(FlatBufferBuilder builder, SF.Flat.Platform platformType) { builder.AddSbyte(0, (sbyte)platformType, 0); }
   public static void AddPlatformUserName(FlatBufferBuilder builder, StringOffset platformUserNameOffset) { builder.AddOffset(1, platformUserNameOffset.Value, 0); }
   public static Offset<SF.Flat.Game.FindPlayerByPlatformUserNameCmd> EndFindPlayerByPlatformUserNameCmd(FlatBufferBuilder builder) {
     int o = builder.EndTable();
@@ -52,7 +52,7 @@ static public class FindPlayerByPlatformUserNameCmdVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*PlatformType*/, 1 /*byte*/, 1, false)
+      && verifier.VerifyField(tablePos, 4 /*PlatformType*/, 1 /*SF.Flat.Platform*/, 1, false)
       && verifier.VerifyString(tablePos, 6 /*PlatformUserName*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }

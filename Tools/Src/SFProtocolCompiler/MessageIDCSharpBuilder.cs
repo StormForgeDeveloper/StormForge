@@ -79,14 +79,14 @@ namespace ProtocolCompiler
             return string.Format("{0}{1}", baseMsg.Name, msgTypeName);
         }
 
-        string MakeMessageID(MessageBase baseMsg, SF.MessageType messageType)
+        string MakeMessageID(MessageBase baseMsg, SF.EMessageType messageType)
         {
             string typeString = messageType.ToString();
             int reliable = baseMsg.Reliable ? 1 : 0;
-            return $"MessageID.MakeMessageID(MessageType.{typeString}, {reliable}, {ProtocolNamespace}.{Group.Name}, {m_iCode})";
+            return $"MessageID.MakeMessageID(EMessageType.{typeString}, {reliable}, {ProtocolNamespace}.{Group.Name}, {m_iCode})";
         }
 
-        void PrintMessageCode(MessageBase msg, string postfix, MessageType messageType)
+        void PrintMessageCode(MessageBase msg, string postfix, EMessageType messageType)
         {
             MatchIndent(); OutStream.WriteLine($"public static const UInt32 _{AccessPropertyName(msg, postfix)} = {MakeMessageID(msg, messageType)};");
             MatchIndent(); OutStream.WriteLine($"public static readonly MessageID {AccessPropertyName(msg, postfix)} = {MakeMessageID(msg, messageType)};");
@@ -106,8 +106,8 @@ namespace ProtocolCompiler
                     MatchIndent(); OutStream.WriteLine("// Cmd: " + baseMsg.Desc);
                     ProtocolsProtocolGroupCommand msg = baseMsg as ProtocolsProtocolGroupCommand;
 
-                    MatchIndent(); OutStream.WriteLine($"public static readonly MessageID {AccessPropertyName(baseMsg, "Cmd")} = {MakeMessageID(baseMsg, MessageType.Command)};");
-                    MatchIndent(); OutStream.WriteLine($"public static readonly MessageID {AccessPropertyName(baseMsg, "Res")} = {MakeMessageID(baseMsg, MessageType.Result)};");
+                    MatchIndent(); OutStream.WriteLine($"public static readonly MessageID {AccessPropertyName(baseMsg, "Cmd")} = {MakeMessageID(baseMsg, EMessageType.Command)};");
+                    MatchIndent(); OutStream.WriteLine($"public static readonly MessageID {AccessPropertyName(baseMsg, "Res")} = {MakeMessageID(baseMsg, EMessageType.Result)};");
 
                     m_iCode++;
 
@@ -119,7 +119,7 @@ namespace ProtocolCompiler
                     MatchIndent(); OutStream.WriteLine("// C2S: " + baseMsg.Desc);
                     ProtocolsProtocolGroupC2SEvent msg = baseMsg as ProtocolsProtocolGroupC2SEvent;
 
-                    MatchIndent(); OutStream.WriteLine($"public static readonly MessageID {AccessPropertyName(baseMsg, "C2SEvt")} = {MakeMessageID(baseMsg, MessageType.Event)};");
+                    MatchIndent(); OutStream.WriteLine($"public static readonly MessageID {AccessPropertyName(baseMsg, "C2SEvt")} = {MakeMessageID(baseMsg, EMessageType.Event)};");
 
                     m_iCode++;
                 }
@@ -129,7 +129,7 @@ namespace ProtocolCompiler
                     MatchIndent(); OutStream.WriteLine("// S2C: " + baseMsg.Desc);
                     var msg = baseMsg as ProtocolsProtocolGroupS2CEvent;
 
-                    MatchIndent(); OutStream.WriteLine($"public static readonly MessageID {AccessPropertyName(baseMsg, "S2CEvt")} = {MakeMessageID(baseMsg, MessageType.Event)};");
+                    MatchIndent(); OutStream.WriteLine($"public static readonly MessageID {AccessPropertyName(baseMsg, "S2CEvt")} = {MakeMessageID(baseMsg, EMessageType.Event)};");
 
                     m_iCode++;
                 }

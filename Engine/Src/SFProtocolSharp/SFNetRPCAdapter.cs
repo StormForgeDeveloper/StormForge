@@ -11,9 +11,7 @@
 
 using System;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using SF;
-using Google.FlatBuffers;
 
 #nullable enable
 
@@ -24,23 +22,23 @@ namespace SF.Net
 	public class RPCAdapter
 	{
  
-		protected SF.SFConnection? m_Connection = null;
+		protected SF.IEndpoint? m_Endpoint = null;
 
-		public SF.SFConnection? Endpoint { get { return m_Connection; } set { m_Connection = value; } }
+		public SF.IEndpoint? Endpoint { get { return m_Endpoint; } set { m_Endpoint = value; } }
 
 
 		public RPCAdapter()
 		{
 		}
 
-        public RPCAdapter(SF.SFConnection connection)
+        public RPCAdapter(SF.IEndpoint endpoint)
         {
-            m_Connection = connection;
+            m_Endpoint = endpoint;
         }
 
         public TransactionID NewTransactionID()
         {
-            return m_Connection?.NewTransactionID() ?? TransactionID.Empty;
+            return m_Endpoint?.NewTransactionID() ?? TransactionID.Empty;
         }
 
         public Result SendMessage(MessageID messageId, Google.FlatBuffers.FlatBufferBuilder builder, int packetOffset,
@@ -50,7 +48,7 @@ namespace SF.Net
         {
             Result hr = ResultCode.SUCCESS;
 
-            if (m_Connection == null)
+            if (m_Endpoint == null)
             {
                 return ResultCode.NET_NOT_CONNECTED;
             }
@@ -68,8 +66,8 @@ namespace SF.Net
             var buf = builder.DataBuffer;
             var segment = buf.ToArraySegment(buf.Position, buf.Length - buf.Position);
 
-            hr = m_Connection.SendMessage(transactionId, segment);
-            m_Connection.HandleSentMessage(hr, transactionId, messageId, callback);
+            hr = m_Endpoint.SendMessage(transactionId, segment);
+            m_Endpoint.HandleSentMessage(hr, transactionId, messageId, callback);
 
             return hr;
         }
