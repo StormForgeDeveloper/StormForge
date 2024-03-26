@@ -26,7 +26,7 @@ namespace SF.Net
  
 		protected SF.SFConnection? m_Connection = null;
 
-		public SF.SFConnection? Connection { get { return m_Connection; } set { m_Connection = value; } }
+		public SF.SFConnection? Endpoint { get { return m_Connection; } set { m_Connection = value; } }
 
 
 		public RPCAdapter()

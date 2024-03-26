@@ -12,6 +12,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 #nullable enable
@@ -166,6 +167,39 @@ namespace SF
         public override string ToString()
         {
             return Guid.ToString();
+        }
+    }
+
+    public static class GuidHelper
+    {
+        public static AccountID ToAccountID(this System.Guid guid)
+        {
+            return new AccountID(guid);
+        }
+
+        public static CharacterID ToCharacterID(this System.Guid guid)
+        {
+            return new CharacterID(guid);
+        }
+
+        public static bool IsValid(this System.Guid guid)
+        {
+            return guid != Guid.Empty;
+        }
+
+        public static ulong Low64(this System.Guid guid)
+        {
+            var bytes = guid.ToByteArray();
+            return (ulong)bytes[0] | ((ulong)bytes[1] << 8) | ((ulong)bytes[2] << 16) | ((ulong)bytes[3] << 24)
+                    | ((ulong)bytes[4] << 32) | ((ulong)bytes[5] << 40) | ((ulong)bytes[6] << 48) | ((ulong)bytes[7] << 56);
+        }
+
+        public static Guid FromLow64(this System.Guid guid, ulong low)
+        {
+            ulong High = 0;
+            return new Guid((uint)(low & 0xFFFFFFFF), (ushort)((low >> 32) & 0xFFFF), (ushort)((low >> 48) & 0xFFFF),
+                (byte)(High & 0xFF), (byte)((High >> (1 * 8)) & 0xFF), (byte)((High >> (2 * 8)) & 0xFF), (byte)((High >> (3 * 8)) & 0xFF),
+                (byte)((High >> (4 * 8)) & 0xFF), (byte)((High >> (5 * 8)) & 0xFF), (byte)((High >> (6 * 8)) & 0xFF), (byte)((High >> (7 * 8)) & 0xFF));
         }
     }
 

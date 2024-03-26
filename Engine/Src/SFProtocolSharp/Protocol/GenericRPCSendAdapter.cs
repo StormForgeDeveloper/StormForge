@@ -43,7 +43,7 @@ namespace SF.Net
 		} // public Result  GenericFailureCmd( Action<SFMessage>? callback = null )
 		public Result  GenericFailureCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			SF.Flat.Generic.GenericFailureCmd.StartGenericFailureCmd(builder);
@@ -61,7 +61,7 @@ namespace SF.Net
 		} // public Result  GenericTransactionCmd( Action<SFMessage>? callback = null )
 		public Result  GenericTransactionCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			SF.Flat.Generic.GenericTransactionCmd.StartGenericTransactionCmd(builder);
@@ -86,7 +86,7 @@ namespace SF.Net
 		// Cmd: Generic failure message
 		public Result  GenericFailureRes( SF.TransactionID InTransactionID, SF.Result InResult )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			SF.Flat.Generic.GenericFailureRes.StartGenericFailureRes(builder);
@@ -99,7 +99,7 @@ namespace SF.Net
 		// Cmd: Generic transaction result
 		public Result  GenericTransactionRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.TransactionID InFinishedTransaction, System.String InSignature )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var FinishedTransactionOffset = builder.CreateTransactionID(InFinishedTransaction);

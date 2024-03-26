@@ -43,7 +43,7 @@ namespace SF.Net
 		} // public Result  PostEventCmd( System.String InEventName, System.UInt64 InTimeStamp, System.String InAppID, System.String InMachineID, System.UInt32 InEventID, SF.AccountID InAccountID, System.Boolean InIsPlayEvent, System.Byte[] InSessionID, SF.NamedVariable[] InAttributes, Action<SFMessage>? callback = null )
 		public Result  PostEventCmd( SF.TransactionID InTransactionID, System.String InEventName, System.UInt64 InTimeStamp, System.String InAppID, System.String InMachineID, System.UInt32 InEventID, SF.AccountID InAccountID, System.Boolean InIsPlayEvent, System.Byte[] InSessionID, SF.NamedVariable[] InAttributes, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var EventNameOffset = builder.CreateString(InEventName);
@@ -83,7 +83,7 @@ namespace SF.Net
 		// Cmd: Post telemetry event
 		public Result  PostEventRes( SF.TransactionID InTransactionID, SF.Result InResult )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			SF.Flat.Telemetry.PostEventRes.StartPostEventRes(builder);

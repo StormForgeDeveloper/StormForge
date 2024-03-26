@@ -34,7 +34,6 @@ namespace SF
     using GameInstanceID = UInt32;
     using GameInstanceUID = UInt32;
     using EntityID = UInt32;
-    using EntityUID = UInt32;
     using ServerID = UInt32;
     using ServerUID = UInt64;
     using System.Runtime.InteropServices;

@@ -152,7 +152,6 @@ namespace ProtocolCompiler
             m_ParamResult.IsArraySpecified = false;
             m_ParamResult.Name = "Result";
             m_ParamResult.TypeName = "Result";
-
         }
 
         // virtual interface for build

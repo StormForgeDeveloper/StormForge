@@ -21,9 +21,7 @@ using AOT;
 
 namespace SF
 {
-
-
-    public class SFConnection : SFObject
+    public class SFConnection : SFObject, IEndpoint
     {
 
         // Connection state

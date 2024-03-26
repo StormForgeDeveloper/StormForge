@@ -43,7 +43,7 @@ namespace SF.Net
 		} // public Result  LoginCmd( System.String InUserId, System.String InPassword, System.String InGameID, Action<SFMessage>? callback = null )
 		public Result  LoginCmd( SF.TransactionID InTransactionID, System.String InUserId, System.String InPassword, System.String InGameID, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var UserIdOffset = builder.CreateString(InUserId);
@@ -67,7 +67,7 @@ namespace SF.Net
 		} // public Result  LoginWithSteamCmd( System.UInt64 InSteamAppID, System.UInt64 InSteamPlayerID, System.String InSteamPlayerName, System.String InSteamPlayerToken, System.String InGameID, Action<SFMessage>? callback = null )
 		public Result  LoginWithSteamCmd( SF.TransactionID InTransactionID, System.UInt64 InSteamAppID, System.UInt64 InSteamPlayerID, System.String InSteamPlayerName, System.String InSteamPlayerToken, System.String InGameID, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var SteamPlayerNameOffset = builder.CreateString(InSteamPlayerName);
@@ -100,7 +100,7 @@ namespace SF.Net
 		// Cmd: Login with ID/PW request
 		public Result  LoginRes( SF.TransactionID InTransactionID, SF.Result InResult, System.String InNickName, SF.AccountID InAccountID, System.UInt64 InAuthTicket, System.String InBannedReason, System.String InGameServerAddress )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var NickNameOffset = builder.CreateString(InNickName);
@@ -122,7 +122,7 @@ namespace SF.Net
 		// Cmd: Login with steam login info
 		public Result  LoginWithSteamRes( SF.TransactionID InTransactionID, SF.Result InResult, System.String InNickName, SF.AccountID InAccountID, System.UInt64 InAuthTicket, System.String InBannedReason, System.String InGameServerAddress )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var NickNameOffset = builder.CreateString(InNickName);

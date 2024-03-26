@@ -43,7 +43,7 @@ namespace SF.Net
 		} // public Result  JoinPlayInstanceCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.String InPlayerIdentifier, Action<SFMessage>? callback = null )
 		public Result  JoinPlayInstanceCmd( SF.TransactionID InTransactionID, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.String InPlayerIdentifier, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -61,7 +61,7 @@ namespace SF.Net
 		// C2S: Play packet
 		public Result  PlayPacketC2SEvt( SF.GameInstanceUID InPlayInstanceUID, System.UInt32 InSenderEndpointID, System.UInt32 InTargetEndpointMask, System.Byte[] InPayload )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateGameInstanceUID(InPlayInstanceUID);
@@ -80,7 +80,7 @@ namespace SF.Net
 		// C2S: Player Movement
 		public Result  PlayerMovementC2SEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, ActorMovement InMovement )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateGameInstanceUID(InPlayInstanceUID);
@@ -99,7 +99,7 @@ namespace SF.Net
 		// C2S: Reliable player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
 		public Result  ClientSyncReliableC2SEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, SF.VariableTable InSyncData )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateGameInstanceUID(InPlayInstanceUID);
@@ -118,7 +118,7 @@ namespace SF.Net
 		// C2S: Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
 		public Result  ClientSyncC2SEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, SF.VariableTable InSyncData )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateGameInstanceUID(InPlayInstanceUID);
@@ -143,7 +143,7 @@ namespace SF.Net
 		} // public Result  SetCharacterPublicMessageCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.String InPublicMessage, Action<SFMessage>? callback = null )
 		public Result  SetCharacterPublicMessageCmd( SF.TransactionID InTransactionID, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.String InPublicMessage, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -167,7 +167,7 @@ namespace SF.Net
 		} // public Result  RequestWhiteboardSharingCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.AccountID InTargetPlayerID, SF.VariableTable InWhiteboardInfo, Action<SFMessage>? callback = null )
 		public Result  RequestWhiteboardSharingCmd( SF.TransactionID InTransactionID, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.AccountID InTargetPlayerID, SF.VariableTable InWhiteboardInfo, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -193,7 +193,7 @@ namespace SF.Net
 		} // public Result  AcceptWhiteboardSharingCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.AccountID InRequestedPlayerID, System.Byte InAnswer, Action<SFMessage>? callback = null )
 		public Result  AcceptWhiteboardSharingCmd( SF.TransactionID InTransactionID, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.AccountID InRequestedPlayerID, System.Byte InAnswer, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -218,7 +218,7 @@ namespace SF.Net
 		} // public Result  CloseWhiteboardSharingCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, Action<SFMessage>? callback = null )
 		public Result  CloseWhiteboardSharingCmd( SF.TransactionID InTransactionID, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -240,7 +240,7 @@ namespace SF.Net
 		} // public Result  AddWhiteboardSharingLogEntryCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.VariableTable InLogEntry, Action<SFMessage>? callback = null )
 		public Result  AddWhiteboardSharingLogEntryCmd( SF.TransactionID InTransactionID, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.VariableTable InLogEntry, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -264,7 +264,7 @@ namespace SF.Net
 		} // public Result  UpdateWhiteboardSharingLogEntryCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.VariableTable InLogEntry, Action<SFMessage>? callback = null )
 		public Result  UpdateWhiteboardSharingLogEntryCmd( SF.TransactionID InTransactionID, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.VariableTable InLogEntry, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -288,7 +288,7 @@ namespace SF.Net
 		} // public Result  RemoveWhiteboardSharingLogEntryCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, UInt32 InLogEntryID, Action<SFMessage>? callback = null )
 		public Result  RemoveWhiteboardSharingLogEntryCmd( SF.TransactionID InTransactionID, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, UInt32 InLogEntryID, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -311,7 +311,7 @@ namespace SF.Net
 		} // public Result  OccupyMapObjectCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InMapObjectId, System.UInt32 InUsageId, Action<SFMessage>? callback = null )
 		public Result  OccupyMapObjectCmd( SF.TransactionID InTransactionID, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InMapObjectId, System.UInt32 InUsageId, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -335,7 +335,7 @@ namespace SF.Net
 		} // public Result  UnoccupyMapObjectCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InMapObjectId, Action<SFMessage>? callback = null )
 		public Result  UnoccupyMapObjectCmd( SF.TransactionID InTransactionID, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InMapObjectId, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -358,7 +358,7 @@ namespace SF.Net
 		} // public Result  UseMapObjectCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InUseParameters, Action<SFMessage>? callback = null )
 		public Result  UseMapObjectCmd( SF.TransactionID InTransactionID, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InUseParameters, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -383,7 +383,7 @@ namespace SF.Net
 		} // public Result  ZoneChatCmd( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage, Action<SFMessage>? callback = null )
 		public Result  ZoneChatCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateGameInstanceUID(InPlayInstanceUID);
@@ -410,7 +410,7 @@ namespace SF.Net
 		} // public Result  CallFunctionCmd( System.UInt32 InFunctionName, SF.AccountID InPlayerID, SF.VariableTable InParameters, Action<SFMessage>? callback = null )
 		public Result  CallFunctionCmd( SF.TransactionID InTransactionID, System.UInt32 InFunctionName, SF.AccountID InPlayerID, SF.VariableTable InParameters, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayerIDOffset = builder.CreatePlayerID(InPlayerID);
@@ -427,7 +427,7 @@ namespace SF.Net
 		// C2S: Send coded voice data to server
 		public Result  SendVoiceDataC2SEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt16 InFrameIndex, System.Byte[] InVoiceData )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateGameInstanceUID(InPlayInstanceUID);
@@ -453,7 +453,7 @@ namespace SF.Net
 		} // public Result  CreateStreamCmd( System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 		public Result  CreateStreamCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var StreamNameOffset = builder.CreateString(InStreamName);
@@ -474,7 +474,7 @@ namespace SF.Net
 		} // public Result  FindStreamCmd( System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 		public Result  FindStreamCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var StreamNameOffset = builder.CreateString(InStreamName);
@@ -495,7 +495,7 @@ namespace SF.Net
 		} // public Result  DeleteStreamCmd( System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 		public Result  DeleteStreamCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var StreamNameOffset = builder.CreateString(InStreamName);
@@ -516,7 +516,7 @@ namespace SF.Net
 		} // public Result  GetStreamListCmd( System.UInt64 InTicket, Action<SFMessage>? callback = null )
 		public Result  GetStreamListCmd( SF.TransactionID InTransactionID, System.UInt64 InTicket, Action<SFMessage>? callback = null )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			SF.Flat.PlayInstance.GetStreamListCmd.StartGetStreamListCmd(builder);
@@ -542,7 +542,7 @@ namespace SF.Net
 		// Cmd: Player Join request.
 		public Result  JoinPlayInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.CharacterID InCharacterID, SF.VariableTable InCharacterPrivateData, ActorMovement InMovement )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -565,7 +565,7 @@ namespace SF.Net
 		// S2C: Player kicked event. this event will be broadcasted when a player kicked.
 		public Result  PlayerKickedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InKickedPlayerID )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateGameInstanceUID(InPlayInstanceUID);
@@ -582,7 +582,7 @@ namespace SF.Net
 		// S2C: New actor in get view
 		public Result  NewActorInViewS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, PlayerPlatformID InPlayerPlatformId, SF.VariableTable InPublicData, SF.VariableTable InEquipData, ActorMovement InMovement, System.UInt32 InState, SF.VariableTable InStateValues )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateGameInstanceUID(InPlayInstanceUID);
@@ -610,7 +610,7 @@ namespace SF.Net
 		// S2C: Remove actor from view
 		public Result  RemoveActorFromViewS2CEvt( SF.GameInstanceUID InPlayInstanceUID, System.UInt32 InActorID )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateGameInstanceUID(InPlayInstanceUID);
@@ -626,7 +626,7 @@ namespace SF.Net
 		// S2C: Player Movement
 		public Result  ActorMovementS2CEvt( SF.GameInstanceUID InPlayInstanceUID, ActorMovement InMovement )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateGameInstanceUID(InPlayInstanceUID);
@@ -643,7 +643,7 @@ namespace SF.Net
 		// S2C: Player Movement
 		public Result  ActorMovementsS2CEvt( SF.GameInstanceUID InPlayInstanceUID, ActorMovement[] InMovement )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateGameInstanceUID(InPlayInstanceUID);
@@ -660,7 +660,7 @@ namespace SF.Net
 		// S2C: Player state change
 		public Result  PlayerStateChangedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InState, System.UInt32 InMoveFrame, SF.Vector4 InPosition, SF.VariableTable InStateValues )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateGameInstanceUID(InPlayInstanceUID);
@@ -683,7 +683,7 @@ namespace SF.Net
 		// Cmd: Set character public message. Server will broadcast CharacterPublicDataChanged, NewActorInView should have updated value as well
 		public Result  SetCharacterPublicMessageRes( SF.TransactionID InTransactionID, SF.Result InResult )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			SF.Flat.PlayInstance.SetCharacterPublicMessageRes.StartSetCharacterPublicMessageRes(builder);
@@ -696,7 +696,7 @@ namespace SF.Net
 		// S2C: Character's private data has changed
 		public Result  CharacterPrivateDataChangedS2CEvt( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.CharacterID InCharacterID, SF.VariableTable InPrivateData )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -717,7 +717,7 @@ namespace SF.Net
 		// S2C: Player public data has been changed
 		public Result  CharacterPublicDataChangedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, SF.VariableTable InPublicData )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateGameInstanceUID(InPlayInstanceUID);
@@ -736,7 +736,7 @@ namespace SF.Net
 		// Cmd: Request WhiteboardSharing
 		public Result  RequestWhiteboardSharingRes( SF.TransactionID InTransactionID, SF.Result InResult )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			SF.Flat.PlayInstance.RequestWhiteboardSharingRes.StartRequestWhiteboardSharingRes(builder);
@@ -749,7 +749,7 @@ namespace SF.Net
 		// Cmd: Accept WhiteboardSharing
 		public Result  AcceptWhiteboardSharingRes( SF.TransactionID InTransactionID, SF.Result InResult )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			SF.Flat.PlayInstance.AcceptWhiteboardSharingRes.StartAcceptWhiteboardSharingRes(builder);
@@ -762,7 +762,7 @@ namespace SF.Net
 		// Cmd: Close WhiteboardSharing. Both clients will receive WhiteboardSharingHasClosed
 		public Result  CloseWhiteboardSharingRes( SF.TransactionID InTransactionID, SF.Result InResult )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			SF.Flat.PlayInstance.CloseWhiteboardSharingRes.StartCloseWhiteboardSharingRes(builder);
@@ -775,7 +775,7 @@ namespace SF.Net
 		// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
 		public Result  AddWhiteboardSharingLogEntryRes( SF.TransactionID InTransactionID, SF.Result InResult, UInt32 InLogEntryID )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			SF.Flat.PlayInstance.AddWhiteboardSharingLogEntryRes.StartAddWhiteboardSharingLogEntryRes(builder);
@@ -789,7 +789,7 @@ namespace SF.Net
 		// Cmd: Add new log entry to WhiteboardSharing. The other client will receive WhiteboardSharingNewLogEntryAdded
 		public Result  UpdateWhiteboardSharingLogEntryRes( SF.TransactionID InTransactionID, SF.Result InResult )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			SF.Flat.PlayInstance.UpdateWhiteboardSharingLogEntryRes.StartUpdateWhiteboardSharingLogEntryRes(builder);
@@ -802,7 +802,7 @@ namespace SF.Net
 		// Cmd: Update whiteboard log entry
 		public Result  RemoveWhiteboardSharingLogEntryRes( SF.TransactionID InTransactionID, SF.Result InResult )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			SF.Flat.PlayInstance.RemoveWhiteboardSharingLogEntryRes.StartRemoveWhiteboardSharingLogEntryRes(builder);
@@ -815,7 +815,7 @@ namespace SF.Net
 		// S2C: WhiteboardSharing has been requested
 		public Result  WhiteboardSharingRequestedS2CEvt( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.AccountID InRequestedPlayerID )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -834,7 +834,7 @@ namespace SF.Net
 		// S2C: WhiteboardSharing has been requested
 		public Result  WhiteboardSharingRejectedS2CEvt( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.AccountID InRejectedPlayerID )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -853,7 +853,7 @@ namespace SF.Net
 		// S2C: WhiteboardSharing has been started
 		public Result  WhiteboardSharingStartedS2CEvt( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.AccountID InOtherPlayerID, SF.VariableTable InWhiteboardInfo )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -874,7 +874,7 @@ namespace SF.Net
 		// S2C: WhiteboardSharing has been closed
 		public Result  WhiteboardSharingHasClosedS2CEvt( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.AccountID InClosedPlayerID )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -893,7 +893,7 @@ namespace SF.Net
 		// S2C: WhiteboardSharing new log entry has been added
 		public Result  WhiteboardSharingNewLogEntryAddedS2CEvt( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.VariableTable InLogEntry )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -912,7 +912,7 @@ namespace SF.Net
 		// S2C: WhiteboardSharing new log entry has been removed
 		public Result  WhiteboardSharingNewLogEntryRemovedS2CEvt( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, UInt32 InLogEntryID )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -930,7 +930,7 @@ namespace SF.Net
 		// S2C: WhiteboardSharing new log entry has been updated
 		public Result  WhiteboardSharingNewLogEntryUpdatedS2CEvt( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, SF.VariableTable InLogEntry )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -949,7 +949,7 @@ namespace SF.Net
 		// Cmd: Occupy map object
 		public Result  OccupyMapObjectRes( SF.TransactionID InTransactionID, SF.Result InResult, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InMapObjectId )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -967,7 +967,7 @@ namespace SF.Net
 		// Cmd: Unoccupy map object
 		public Result  UnoccupyMapObjectRes( SF.TransactionID InTransactionID, SF.Result InResult, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InMapObjectId )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -985,7 +985,7 @@ namespace SF.Net
 		// Cmd: Use map object
 		public Result  UseMapObjectRes( SF.TransactionID InTransactionID, SF.Result InResult, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InResultAttributes )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -1005,7 +1005,7 @@ namespace SF.Net
 		// Cmd: Send zone chatting
 		public Result  ZoneChatRes( SF.TransactionID InTransactionID, SF.Result InResult )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			SF.Flat.PlayInstance.ZoneChatRes.StartZoneChatRes(builder);
@@ -1018,7 +1018,7 @@ namespace SF.Net
 		// S2C: Player state change
 		public Result  ZoneChatS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InSenderID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateGameInstanceUID(InPlayInstanceUID);
@@ -1040,7 +1040,7 @@ namespace SF.Net
 		// S2C: Effect modifier initial sync
 		public Result  LevelUpS2CEvt( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.Int64 InCurrentExp, System.Int32 InCurrentLevel )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateEntityUID(InPlayInstanceUID);
@@ -1059,7 +1059,7 @@ namespace SF.Net
 		// Cmd: To call general functionality
 		public Result  CallFunctionRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.VariableTable InResults )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var ResultsOffset = builder.CreateVariableTable(InResults);
@@ -1074,7 +1074,7 @@ namespace SF.Net
 		// S2C: Voice data
 		public Result  VoiceDataS2CEvt( System.UInt32 InActorID, System.UInt16 InFrameIndex, System.Byte[] InVoiceData )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var VoiceDataOffset = builder.Createuint8Vector(InVoiceData);
@@ -1091,7 +1091,7 @@ namespace SF.Net
 		// Cmd: Create stream instance
 		public Result  CreateStreamRes( SF.TransactionID InTransactionID, SF.Result InResult, System.String InStreamName )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var StreamNameOffset = builder.CreateString(InStreamName);
@@ -1106,7 +1106,7 @@ namespace SF.Net
 		// Cmd: Open stream instance
 		public Result  FindStreamRes( SF.TransactionID InTransactionID, SF.Result InResult, System.String InStreamName )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var StreamNameOffset = builder.CreateString(InStreamName);
@@ -1121,7 +1121,7 @@ namespace SF.Net
 		// Cmd: Delete stream instance
 		public Result  DeleteStreamRes( SF.TransactionID InTransactionID, SF.Result InResult, System.String InStreamName )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var StreamNameOffset = builder.CreateString(InStreamName);
@@ -1136,7 +1136,7 @@ namespace SF.Net
 		// Cmd: Get stream list
 		public Result  GetStreamListRes( SF.TransactionID InTransactionID, SF.Result InResult, System.String[] InStreamNames )
 		{
- 			if (m_Connection == null) return ResultCode.IO_NOT_CONNECTED;
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var StreamNamesOffset = builder.CreateStringVector(InStreamNames);

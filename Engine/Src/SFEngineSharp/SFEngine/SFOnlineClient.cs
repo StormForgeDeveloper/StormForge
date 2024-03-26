@@ -248,11 +248,11 @@ namespace SF
                 return null;
             }
 
-            if (CachedAdapter != null && CachedAdapter.Connection != null && CachedAdapter.Connection.NativeHandle == connectionHandle)
+            if (CachedAdapter != null && CachedAdapter.Endpoint != null && CachedAdapter.Endpoint.NativeHandle == connectionHandle)
                 return CachedAdapter;
 
             CachedAdapter = new TAdapter();
-            CachedAdapter.Connection = new SFConnection(connectionHandle
+            CachedAdapter.Endpoint = new SFConnection(connectionHandle
                 , messageRouter: MessageRouter
                 , transactionIdGenerator: m_OnlineTransactionIDGenerator);
             return CachedAdapter;
