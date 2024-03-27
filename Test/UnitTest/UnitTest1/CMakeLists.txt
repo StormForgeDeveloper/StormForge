@@ -48,6 +48,7 @@ set(SF_UNIT_TEST_FILES
 	Test/Math/3D/UnitTest_Math3D_Matrix.cpp
 	Test/Math/3D/UnitTest_Math3D_Quaternion.cpp
 	Test/Math/3D/UnitTest_Math3D_Vector.cpp
+	Test/Math/UnitTest_Guid.cpp
 	Test/Memory/UnitTest_Memory.h
 	Test/Memory/UnitTest_Memory_CircularHeap.cpp
 	Test/Memory/UnitTest_Memory_Heap.cpp

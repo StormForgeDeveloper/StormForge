@@ -123,26 +123,6 @@ namespace SF
         {
             Low = low; High = high;
         }
-
-        public static SFUInt128 FromGuid(Guid guid)
-        {
-            var bytes = guid.ToByteArray();
-            return new SFUInt128()
-            {
-                Low = (ulong)bytes[0] | ((ulong)bytes[1] << 8) | ((ulong)bytes[2] << 16) | ((ulong)bytes[3] << 24)
-                        | ((ulong)bytes[4] << 32) | ((ulong)bytes[5] << 40) | ((ulong)bytes[6] << 48) | ((ulong)bytes[7] << 56),
-
-                High = ((ulong)bytes[0 + 8] << 8) | ((ulong)bytes[1 + 8] << 8) | ((ulong)bytes[2 + 8] << 16) | ((ulong)bytes[3 + 8] << 24)
-                        | ((ulong)bytes[4 + 8] << 32) | ((ulong)bytes[5 + 8] << 40) | ((ulong)bytes[6 + 8] << 48) | ((ulong)bytes[7 + 8] << 56)
-            };
-        }
-
-        public static Guid ToGuid(ulong Low, ulong High)
-        {
-            return new Guid((uint)(Low & 0xFFFFFFFF), (ushort)((Low >> 32) & 0xFFFF), (ushort)((Low >> 48) & 0xFFFF),
-                (byte)(High & 0xFF), (byte)((High >> (1 * 8)) & 0xFF), (byte)((High >> (2 * 8)) & 0xFF), (byte)((High >> (3 * 8)) & 0xFF),
-                (byte)((High >> (4 * 8)) & 0xFF), (byte)((High >> (5 * 8)) & 0xFF), (byte)((High >> (6 * 8)) & 0xFF), (byte)((High >> (7 * 8)) & 0xFF));
-        }
     }
 
     [Struct()]
@@ -154,25 +134,12 @@ namespace SF
 
         public SFUInt128 ToUInt128()
         {
-            var bytes = Guid.ToByteArray();
-            return new SFUInt128()
-            {
-                Low = (ulong)bytes[0] | ((ulong)bytes[1] << 8) | ((ulong)bytes[2] << 16) | ((ulong)bytes[3] << 24)
-                        | ((ulong)bytes[4] << 32) | ((ulong)bytes[5] << 40) | ((ulong)bytes[6] << 48) | ((ulong)bytes[7] << 56),
-
-                High = ((ulong)bytes[0 + 8] << 8) | ((ulong)bytes[1 + 8] << 8) | ((ulong)bytes[2 + 8] << 16) | ((ulong)bytes[3 + 8] << 24)
-                        | ((ulong)bytes[4 + 8] << 32) | ((ulong)bytes[5 + 8] << 40) | ((ulong)bytes[6 + 8] << 48) | ((ulong)bytes[7 + 8] << 56)
-            };
+            return Guid.ToUInt128();
         }
 
-        public ulong Low
+        public ulong ToUInt64()
         {
-            get
-            {
-                var bytes = Guid.ToByteArray();
-                return (ulong)bytes[0] | ((ulong)bytes[1] << 8) | ((ulong)bytes[2] << 16) | ((ulong)bytes[3] << 24)
-                        | ((ulong)bytes[4] << 32) | ((ulong)bytes[5] << 40) | ((ulong)bytes[6] << 48) | ((ulong)bytes[7] << 56);
-            }
+            return Guid.ToUInt64();
         }
 
         public AccountID(byte[] b)
@@ -185,21 +152,26 @@ namespace SF
             Guid = guid;
         }
 
-        public AccountID(ulong low)
+        public AccountID(ulong value)
         {
-            Guid = new Guid((uint)(low & 0xFFFFFFFF), (ushort)((low >> 32) & 0xFFFF), (ushort)((low >> 48) & 0xFFFF), 0, 0, 0, 0, 0, 0, 0, 0);
+            Guid = GuidHelper.FromUInt64(value);
         }
 
         public AccountID(string b)
         {
-            Guid.TryParse(b, out Guid);
+            Guid = GuidHelper.Parse(b);
         }
 
-        public bool IsValid => Guid == Guid.Empty;
+        public static AccountID Parse(string b)
+        {
+            return new AccountID(b);
+        }
+
+        public bool IsValid => Guid != Guid.Empty;
 
         public static bool TryParse(string b, out AccountID accountId)
         {
-            return Guid.TryParse(b, out accountId.Guid);
+            return GuidHelper.TryParse(b, out accountId.Guid);
         }
 
         public byte[] ToByteArray() { return Guid.ToByteArray(); }
@@ -249,20 +221,78 @@ namespace SF
             return guid != Guid.Empty;
         }
 
-        public static ulong Low64(this System.Guid guid)
+        public static SFUInt128 ToUInt128(this System.Guid guid)
         {
             var bytes = guid.ToByteArray();
-            return (ulong)bytes[0] | ((ulong)bytes[1] << 8) | ((ulong)bytes[2] << 16) | ((ulong)bytes[3] << 24)
-                    | ((ulong)bytes[4] << 32) | ((ulong)bytes[5] << 40) | ((ulong)bytes[6] << 48) | ((ulong)bytes[7] << 56);
+            return new SFUInt128()
+            {
+                Low = ((ulong)bytes[0 + 0] << (0 * 8)) | ((ulong)bytes[1 + 0] << (1 * 8)) | ((ulong)bytes[2 + 0] << (2 * 8)) | ((ulong)bytes[3 + 0] << (3 * 8))
+                        | ((ulong)bytes[4 + 0] << (4 * 8)) | ((ulong)bytes[5 + 0] << (5 * 8)) | ((ulong)bytes[6 + 0] << (6 * 8)) | ((ulong)bytes[7 + 0] << (7 * 8)),
+
+                High = ((ulong)bytes[0 + 8] << (0 * 8)) | ((ulong)bytes[1 + 8] << (1 * 8)) | ((ulong)bytes[2 + 8] << (2 * 8)) | ((ulong)bytes[3 + 8] << (3 * 8))
+                        | ((ulong)bytes[4 + 8] << (4 * 8)) | ((ulong)bytes[5 + 8] << (5 * 8)) | ((ulong)bytes[6 + 8] << (6 * 8)) | ((ulong)bytes[7 + 8] << (7 * 8))
+            };
         }
 
-        public static Guid FromUInt64(ulong low)
+        public static ulong ToUInt64(this System.Guid guid)
         {
-            ulong High = 0;
-            return new Guid((uint)(low & 0xFFFFFFFF), (ushort)((low >> 32) & 0xFFFF), (ushort)((low >> 48) & 0xFFFF),
-                (byte)(High & 0xFF), (byte)((High >> (1 * 8)) & 0xFF), (byte)((High >> (2 * 8)) & 0xFF), (byte)((High >> (3 * 8)) & 0xFF),
-                (byte)((High >> (4 * 8)) & 0xFF), (byte)((High >> (5 * 8)) & 0xFF), (byte)((High >> (6 * 8)) & 0xFF), (byte)((High >> (7 * 8)) & 0xFF));
+            var bytes = guid.ToByteArray();
+            return ((ulong)bytes[0 + 8] << (0 * 8)) | ((ulong)bytes[1 + 8] << (1 * 8)) | ((ulong)bytes[2 + 8] << (2 * 8)) | ((ulong)bytes[3 + 8] << (3 * 8))
+                    | ((ulong)bytes[4 + 8] << (4 * 8)) | ((ulong)bytes[5 + 8] << (5 * 8)) | ((ulong)bytes[6 + 8] << (6 * 8)) | ((ulong)bytes[7 + 8] << (7 * 8));
         }
+
+        public static Guid Parse(string b)
+        {
+            Guid guid;
+            if (!Guid.TryParse(b, out guid))
+            {
+                UInt64 longValue;
+                // We uses low 64 bit mode, and those are not valid guid format.
+                if (ulong.TryParse(b, out longValue))
+                {
+                    return FromUInt64(longValue);
+                }
+            }
+
+            return guid;
+        }
+
+        public static bool TryParse(string b, out Guid guid)
+        {
+            if (!Guid.TryParse(b, out guid))
+            {
+                UInt64 longValue;
+                // We uses low 64 bit mode, and those are not valid guid format.
+                if (ulong.TryParse(b, out longValue))
+                {
+                    guid = FromUInt64(longValue);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static Guid FromUInt64(UInt64 value)
+        {
+            ulong high = value;
+            return new Guid(0, 0, 0,  // low 64 bits
+                (byte)((high >> (0 * 8)) & 0xFF), (byte)((high >> (1 * 8)) & 0xFF), (byte)((high >> (2 * 8)) & 0xFF), (byte)((high >> (3 * 8)) & 0xFF),
+                (byte)((high >> (4 * 8)) & 0xFF), (byte)((high >> (5 * 8)) & 0xFF), (byte)((high >> (6 * 8)) & 0xFF), (byte)((high >> (7 * 8)) & 0xFF)
+                );
+        }
+
+        public static Guid FromLowHigh(UInt64 low, UInt64 high)
+        {
+            return new Guid((uint)(low & 0xFFFFFFFF), (ushort)((low >> 32) & 0xFFFF), (ushort)((low >> 48) & 0xFFFF),
+                (byte)((high >> (0 * 8)) & 0xFF), (byte)((high >> (1 * 8)) & 0xFF), (byte)((high >> (2 * 8)) & 0xFF), (byte)((high >> (3 * 8)) & 0xFF),
+                (byte)((high >> (4 * 8)) & 0xFF), (byte)((high >> (5 * 8)) & 0xFF), (byte)((high >> (6 * 8)) & 0xFF), (byte)((high >> (7 * 8)) & 0xFF)
+                );
+        }
+
     }
 
     [Struct()]
@@ -274,15 +304,7 @@ namespace SF
 
         public SFUInt128 ToUInt128()
         {
-            var bytes = Guid.ToByteArray();
-            return new SFUInt128()
-            {
-                Low = (ulong)bytes[0] | ((ulong)bytes[1] << 8) | ((ulong)bytes[2] << 16) | ((ulong)bytes[3] << 24)
-                        | ((ulong)bytes[4] << 32) | ((ulong)bytes[5] << 40) | ((ulong)bytes[6] << 48) | ((ulong)bytes[7] << 56),
-
-                High = ((ulong)bytes[0 + 8] << 8) | ((ulong)bytes[1 + 8] << 8) | ((ulong)bytes[2 + 8] << 16) | ((ulong)bytes[3 + 8] << 24)
-                        | ((ulong)bytes[4 + 8] << 32) | ((ulong)bytes[5 + 8] << 40) | ((ulong)bytes[6 + 8] << 48) | ((ulong)bytes[7 + 8] << 56)
-            };
+            return Guid.ToUInt128();
         }
 
 
@@ -296,9 +318,9 @@ namespace SF
             Guid = guid;
         }
 
-        public CharacterID(ulong low)
+        public CharacterID(ulong value)
         {
-            Guid = new Guid((uint)(low & 0xFFFFFFFF), (ushort)((low >> 32) & 0xFFFF), (ushort)((low >> 48) & 0xFFFF), 0, 0, 0, 0, 0, 0, 0, 0);
+            Guid = GuidHelper.FromUInt64(value);
         }
 
         public CharacterID(string b)
@@ -306,13 +328,18 @@ namespace SF
             Guid.TryParse(b, out Guid);
         }
 
-        public bool IsValid => Guid == Guid.Empty;
+        public static CharacterID Parse(string b)
+        {
+            return new CharacterID(GuidHelper.Parse(b));
+        }
+
+        public bool IsValid => Guid != Guid.Empty;
 
         public byte[] ToByteArray() { return Guid.ToByteArray(); }
 
         public static bool TryParse(string b, out CharacterID value)
         {
-            return Guid.TryParse(b, out value.Guid);
+            return GuidHelper.TryParse(b, out value.Guid);
         }
 
         public static bool operator ==(CharacterID op1, CharacterID op2)

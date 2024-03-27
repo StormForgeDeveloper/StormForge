@@ -168,7 +168,7 @@ namespace SF
 
         public static SF.AccountID Parse(this SF.Flat.AccountID value)
         {
-            return new SF.AccountID(SF.SFUInt128.ToGuid(value.Low, value.High));
+            return new SF.AccountID(GuidHelper.FromLowHigh(value.Low, value.High));
         }
 
         public static SF.AccountID Parse(this SF.Flat.AccountID? value)
@@ -190,7 +190,7 @@ namespace SF
 
         public static SF.CharacterID Parse(this SF.Flat.CharacterID value)
         {
-            return new SF.CharacterID(SF.SFUInt128.ToGuid(value.Low, value.High));
+            return new SF.CharacterID(GuidHelper.FromLowHigh(value.Low, value.High));
         }
 
         public static SF.CharacterID Parse(this SF.Flat.CharacterID? value)
@@ -223,7 +223,7 @@ namespace SF
         {
             if (value.HasValue)
             {
-                return SF.SFUInt128.ToGuid(value.Value.Low, value.Value.High).ToByteArray();
+                return GuidHelper.FromLowHigh(value.Value.Low, value.Value.High).ToByteArray();
             }
             else
             {
@@ -289,7 +289,7 @@ namespace SF
 
         public static Offset<SF.Flat.Guid> CreateGuid(this Google.FlatBuffers.FlatBufferBuilder builder, System.Guid guid)
         {
-            var u128 = SFUInt128.FromGuid(guid);
+            var u128 = guid.ToUInt128();
             return SF.Flat.Guid.CreateGuid(builder, u128.Low, u128.High);
         }
 
@@ -297,7 +297,7 @@ namespace SF
         {
             if (flatGuid.HasValue)
             {
-                return SF.SFUInt128.ToGuid(flatGuid.Value.Low, flatGuid.Value.High);
+                return GuidHelper.FromLowHigh(flatGuid.Value.Low, flatGuid.Value.High);
             }
             else
             {
@@ -308,7 +308,7 @@ namespace SF
         {
             if (value.HasValue)
             {
-                return SF.SFUInt128.ToGuid(value.Value.Low, value.Value.High).ToByteArray();
+                return GuidHelper.FromLowHigh(value.Value.Low, value.Value.High).ToByteArray();
             }
             else
             {

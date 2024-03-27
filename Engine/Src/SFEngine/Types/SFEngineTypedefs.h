@@ -348,6 +348,8 @@ namespace SF {
             , PlayerId(playerId)
         {}
         PlayerPlatformID(const char* strId);
+
+        bool TryParse(const char* str);
     };
 #pragma pack(pop)
 

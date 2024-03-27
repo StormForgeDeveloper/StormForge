@@ -5,7 +5,6 @@
 // Author : KyungKun Ko
 //
 // Description : Guid - RFC4122
-//              Based on https://github.com/crashoz/uuid_v4
 //	
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -54,14 +53,32 @@ namespace SF {
             return (dwordData[0] | dwordData[1] | dwordData[2] | dwordData[3]) != 0;
         }
 
-        uint64_t Low() const { return *((uint64_t*)data); }
-        uint64_t High() const { return *((uint64_t*)data + 8); }
-
-        /* Static factory to parse an Guid from its string representation */
-        static Guid Parse(const char* str)
+        void Reset()
         {
-            return Guid(stom128i(str));
+            memset(data, 0, sizeof(data));
         }
+
+        //uint64_t Low() const { return *((uint64_t*)data); }
+        //uint64_t High() const { return *((uint64_t*)data + 8); }
+        uint64_t ToUInt64() const { return *((uint64_t*)data + 8); }
+
+        // Parse string with some format detection logic.
+        // The implementation has some faulty cases. use particular implementation if you knows the input string format
+        static bool TryParseGeneric(const char* str, Guid& outGuid);
+        // Parse RFC string ex)"12345678-90ab-cdef-1234-1234567890ab"
+        static bool TryParseRFC(const char* str, Guid& outGuid);
+        // Parse short form string ex)"1234567890abcdef12341234567890ab"
+        static bool TryParse32(const char* str, Guid& outGuid);
+        // Parse 64bit unsigned integer string and fills from high portion
+        //  ex) "1311768467294899695" => 0x1234567890abcdef => "00000000-0000-0000-1234-567890abcdef"
+        static bool TryParseUInt64(const char* str, Guid& outGuid);
+        static bool TryParseHexUInt64(const char* str, Guid& outGuid);
+
+        static Guid ParseGeneric(const char* str);
+
+        // Make a Guid from uint64_t
+        static Guid FromUInt64(uint64_t value);
+
 
         Guid& operator=(const Guid& other)
         {
@@ -106,11 +123,7 @@ namespace SF {
         }
 
 
-        void ToString(char* strBuff) const
-        {
-            __m128i x = _mm_loadu_si128((__m128i*)data);
-            m128itos(x, strBuff);
-        }
+        void ToString(char* strBuff) const;
 
         size_t ToString(char* strBuff, size_t bufferSize) const
         {
@@ -126,9 +139,6 @@ namespace SF {
         {
             return *((uint64_t*)data) ^ *((uint64_t*)data + 8);
         }
-
-        static void m128itos(__m128i x, char* mem);
-        static __m128i stom128i(const char* mem);
 
         uint8_t data[16]{};
     };

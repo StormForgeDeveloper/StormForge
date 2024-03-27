@@ -53,22 +53,37 @@ namespace SF {
         if (StrUtil::IsNullOrEmpty(strId))
             return;
 
+        if (!TryParse(strId))
+        {
+            SFLog(System, Error, "Failed to convert PlayerPlatformID:{0}", strId);
+        }
+    }
+
+    bool PlayerPlatformID::TryParse(const char* str)
+    {
+        char buffer[128]{};
         char* endptr{};
-        auto separatorIndex = StrUtil::Indexof(strId, ':');
+        auto separatorIndex = StrUtil::Indexof(str, ':');
         if (separatorIndex < 0)
         {
             Platform = EPlatform::BR;
-            this->PlayerId = AccountID(Guid::Parse(strId));
         }
         else
         {
-            char buffer[128]{};
-            StrUtil::StringCopy(buffer, strId);
+            StrUtil::StringCopy(buffer, str);
             buffer[separatorIndex] = '\0';
             Platform = (EPlatform)strtol(buffer, &endptr, 10);
-
-            this->PlayerId = AccountID(Guid::Parse(buffer));
+            str = buffer + separatorIndex + 1;
         }
+
+        // Try FTC first and then go for integer form for legacy format
+        if (!Guid::TryParseRFC(str, this->PlayerId))
+        {
+            if (!Guid::TryParseUInt64(str, this->PlayerId))
+                return false;
+        }
+
+        return true;
     }
 
 	/////////////////////////////////////////////////////////////////////

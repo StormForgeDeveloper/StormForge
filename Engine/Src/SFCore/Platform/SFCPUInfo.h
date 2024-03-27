@@ -68,6 +68,9 @@ namespace SF
 
         SF_FORCEINLINE static const CPUFeatures& GetFeatures() { return Instance.m_Features; }
 
+        // For testing 
+        SF_FORCEINLINE static CPUFeatures& GetFeaturesMutable() { return Instance.m_Features; }
+
     private:
 
         // singleton instance
