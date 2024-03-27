@@ -23,6 +23,10 @@ namespace SF
     
     public struct MessageHeader
     {
+        // Uint32(MessageId), ulong(TransactionId), UInt16(PayloadSize).
+        // UInt32(Result) is only when the message type is Result
+        const int HeaderBaseSize = sizeof(UInt16) + sizeof(ulong) + sizeof(UInt32);
+
         public MessageID MessageId; // ID & sequence
         public TransactionID TransactionId; // Payload size
         public Result TransactionResult;
@@ -36,11 +40,12 @@ namespace SF
 
             if (MessageId.Type == EMessageType.Result)
             {
-                byteBuffer.PutInt(byteBuffer.Position, TransactionResult.Code); byteBuffer.Position -= sizeof(Int32);
+                byteBuffer.Position -= sizeof(Int32);
+                byteBuffer.PutInt(byteBuffer.Position, TransactionResult.Code);
             }
 
             // Update size
-            PayloadSize = (ushort)(byteBuffer.Length - byteBuffer.Position + sizeof(UInt16) + sizeof(ulong) + sizeof(UInt32));
+            PayloadSize = (ushort)(byteBuffer.Length - byteBuffer.Position + HeaderBaseSize);
 
             // Remember that flatbuffer store from end
             byteBuffer.Position -= sizeof(UInt16);
@@ -58,7 +63,7 @@ namespace SF
             MessageId.MessageIdRaw = buffer.GetUint(0);
             TransactionId.TransactionId = buffer.GetUlong(4);
             PayloadSize = buffer.GetUshort(12);
-            buffer.Position += Marshal.SizeOf<MessageHeader>();
+            buffer.Position += HeaderBaseSize;
 
             if (MessageId.Type == EMessageType.Result)
             {
