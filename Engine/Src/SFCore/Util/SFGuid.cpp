@@ -15,6 +15,7 @@
 #include "Util/SFGuid.h"
 #include "Util/SFGuidHelper.h"
 #include "Platform/SFCPUInfo.h"
+#include "Util/SFLog.h"
 
 namespace SF
 {
@@ -139,6 +140,20 @@ namespace SF
         }
     }
 
+    const Guid Guid::Empty(0,0);
+
+    Guid Guid::FromBytes(const uint8_t* bytes)
+    {
+        if (bytes == nullptr)
+        {
+            return Guid(0,0);
+        }
+        else
+        {
+            __m128i x = _mm_loadu_si128((__m128i*)bytes);
+            return Guid(x);
+        }
+    }
 
     void Guid::ToString(char* strBuff) const
     {

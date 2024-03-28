@@ -108,9 +108,11 @@ namespace SF
 
             const Flat::Login::LoginRes* response = ::flatbuffers::GetRoot<Flat::Login::LoginRes>(messageHeader->GetPayloadPtr());
             defCheckPtr(response);
+            defCheckPtr(response->game_server_address());
+            defCheckPtr(response->account_id());
 
             m_Owner.m_GameServerAddress = response->game_server_address()->c_str();
-            m_Owner.m_AccountId = Guid(response->account_id()->low(), response->account_id()->high());
+            m_Owner.m_AccountId = Flat::Helper::ParseAccountID(response->account_id());
             m_Owner.m_AuthTicket = response->auth_ticket();
             Result loginResult = messageHeader->GetTransactionResult();
 
@@ -119,7 +121,7 @@ namespace SF
                 defCheck(loginResult);
             }
 
-            if (m_Owner.m_AccountId == 0 || m_Owner.m_AuthTicket == 0)
+            if (!m_Owner.m_AccountId.IsValid() || m_Owner.m_AuthTicket == 0)
             {
                 defCheck(ResultCode::UNEXPECTED);
             }

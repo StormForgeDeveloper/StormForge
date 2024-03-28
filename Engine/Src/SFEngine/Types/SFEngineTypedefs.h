@@ -312,11 +312,6 @@ namespace SF {
         {
         }
 
-        AccountID(const uint8_t* bytes)
-            : Guid(bytes)
-        {
-        }
-
         AccountID(uint64_t low, uint64_t high)
             : Guid(low, high)
         {

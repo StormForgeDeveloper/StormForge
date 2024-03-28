@@ -484,7 +484,7 @@ namespace SF
         }
 
 
-        return Guid(reinterpret_cast<const uint8_t*>(buf));
+        return Guid::FromBytes(reinterpret_cast<const uint8_t*>(buf));
     }
 
 	ArrayView<const uint8_t> AvroValue::AsBytes() const

@@ -22,6 +22,9 @@ namespace SF {
     class SF_DECLARE_ALIGN_DOUBLE Guid
     {
     public:
+
+        static const Guid Empty;
+
         Guid()
         {}
 
@@ -41,12 +44,6 @@ namespace SF {
         {
             __m128i z = _mm_set_epi64x(x, y);
             _mm_store_si128((__m128i*)data, z);
-        }
-
-        Guid(const uint8_t* bytes)
-        {
-            __m128i x = _mm_loadu_si128((__m128i*)bytes);
-            _mm_store_si128((__m128i*)data, x);
         }
 
         bool IsValid() const
@@ -80,6 +77,9 @@ namespace SF {
         static bool TryParseHexUInt64(const char* str, Guid& outGuid);
 
         static Guid ParseGeneric(const char* str);
+
+        // From bytes array
+        static Guid FromBytes(const uint8_t* bytes);
 
         // Make a Guid from uint64_t
         static Guid FromUInt64(uint64_t value);
