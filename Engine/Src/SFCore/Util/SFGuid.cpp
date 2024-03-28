@@ -31,6 +31,18 @@ namespace SF
     {
         // This implementation is based on https ://github.com/crashoz/uuid_v4
 
+        constexpr int UUID_NumDigits[] = {8, 4, 4, 4, 2, 2, 2, 2, 2, 2 };
+        constexpr int UUID_NumBytes[] = {4, 2, 2, 2, 1, 1, 1, 1, 1, 1 };
+
+        void SwapBytes(Array<uint8_t>& buffer, int basePos, int numBytes)
+        {
+            for (int left = basePos, right = basePos + numBytes - 1; left < right; right--, left++)
+            {
+                std::swap(buffer[left], buffer[right]);
+            }
+        }
+
+
         /*
           Converts a 128-bits unsigned int to an Guid string representation.
           Uses SIMD via Intel's AVX2 instruction set.
@@ -137,18 +149,26 @@ namespace SF
         }
         else
         {
-            constexpr int NumBytes[] = { 4, 2, 2, 2, 6 };
+            uint8_t dataBuff[16];
+            memcpy(dataBuff, data, sizeof(dataBuff));
+            ArrayView<uint8_t> dataArray(16, dataBuff);
 
             ArrayView<uint8_t> outBuff(36, reinterpret_cast<uint8_t*>(strBuff));
             Result hr;
-            const uint8_t* curPos = reinterpret_cast<const uint8_t*>(data);
-            for (int NumByte : NumBytes)
+            int basePos = 0;
+            const uint8_t* curPos = dataBuff;
+            for (int numBytes : GuidImpl::UUID_NumBytes)
             {
-                hr = Util::HEXEncode(NumByte, curPos, outBuff);
+                // Swap bytes, UUID uses big endian
+                GuidImpl::SwapBytes(dataArray, basePos, numBytes);
+
+                // Hex encode
+                hr = Util::HEXEncode(numBytes, curPos, outBuff);
                 if (hr.IsFailure())
                     return;
 
-                curPos += NumByte;
+                curPos += numBytes;
+                basePos += numBytes;
 
                 // Append '-'
                 outBuff.push_back('-');
@@ -158,24 +178,31 @@ namespace SF
 
     bool Guid::TryParseRFC(const char* str, Guid& outGuid)
     {
-        constexpr int NumDigits[] = {8, 4, 4, 4, 12};
         ArrayView<uint8_t> outBuff(16, 0, outGuid.data);
         Result hr;
 
         const uint8_t* curPos = reinterpret_cast<const uint8_t*>(str);
-        for (int NumDigit : NumDigits)
+        int basePos = 0;
+        for (int NumDigit : GuidImpl::UUID_NumDigits)
         {
             hr = Util::HEXDecode(NumDigit, curPos, outBuff);
             if (hr.IsFailure())
                 return false;
 
+            // Swap bytes, UUID uses big endian
+            // for now we only support little endian
+            int numBytes = NumDigit / 2;
+            GuidImpl::SwapBytes(outBuff, basePos, numBytes);
+
             curPos += NumDigit;
+            basePos += numBytes;
 
             // Skip '-'
             if ((*curPos) != '-')
                 return false;
 
             curPos++;
+            basePos++;
         }
 
         return hr.IsSuccess();
@@ -185,7 +212,20 @@ namespace SF
     {
         ArrayView<uint8_t> outBuff(16, 0, outGuid.data);
         Result hr = Util::HEXDecode(32, reinterpret_cast<const uint8_t*>(str), outBuff);
-        return hr.IsSuccess();
+        if (hr.IsFailure())
+            return false;
+
+        // Swap bytes, UUID uses big endian
+        // for now we only support little endian
+        int basePos = 0;
+        for (int numBytes : GuidImpl::UUID_NumBytes)
+        {
+            GuidImpl::SwapBytes(outBuff, basePos, numBytes);
+
+            basePos += numBytes;
+        }
+
+        return true;
     }
 
     bool Guid::TryParseUInt64(const char* str, Guid& outGuid)
@@ -274,8 +314,10 @@ namespace SF
     Guid Guid::FromUInt64(uint64_t value)
     {
         Guid guid;
-        memset(guid.data, 0, 8);
-        memcpy(guid.data + 8, &value, 8);
+
+        memcpy(guid.data, &value, 8);
+        memset(guid.data + 8, 0, 8);
+
         return guid;
     }
 

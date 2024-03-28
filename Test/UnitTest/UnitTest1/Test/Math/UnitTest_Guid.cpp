@@ -87,5 +87,16 @@ TEST_F(MathTest, Guid)
         EXPECT_FALSE(Guid::TryParseGeneric(testGuid, op1));
     }
 
+
+    {
+        
+        uint64_t test64 = 76561198044532044;
+        Guid testGuid = Guid::FromUInt64(test64);
+
+        std::string testString = testGuid.ToString();
+        EXPECT_TRUE(testString == "4ccd0505-0100-1001-0000-000000000000");
+
+        EXPECT_EQ(testGuid.ToUInt64(), test64);
+    }
 }
 

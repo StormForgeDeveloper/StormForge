@@ -15,7 +15,9 @@
 
 namespace SF {
 
-
+    // UUID binary form is defined with big endian system, and this also affects string representation.
+    // 4 bytes + 2 bytes + 2 bytes + 2 bytes + 8 X 1 bytes
+    // https://www.rfc-editor.org/rfc/rfc4122
     // Guid RFC-4122
     class SF_DECLARE_ALIGN_DOUBLE Guid
     {
@@ -60,7 +62,10 @@ namespace SF {
 
         //uint64_t Low() const { return *((uint64_t*)data); }
         //uint64_t High() const { return *((uint64_t*)data + 8); }
-        uint64_t ToUInt64() const { return *((uint64_t*)data + 8); }
+        uint64_t ToUInt64() const
+        {
+            return *((uint64_t*)data);
+        }
 
         // Parse string with some format detection logic.
         // The implementation has some faulty cases. use particular implementation if you knows the input string format
