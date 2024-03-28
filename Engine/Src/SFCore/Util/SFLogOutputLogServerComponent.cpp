@@ -54,8 +54,9 @@ namespace SF {
 		m_Buffer.reserve(BufferSize);
 		m_CompressionBuffer.resize(CompressionBufferSize);
 
-		m_StreamProducer = new(heap) StreamDBProducer();
+        SFLog(System, Info, "Log server:{0}, channel:{1}", logServer, Util::GetServiceName());
 
+		m_StreamProducer = new(heap) StreamDBProducer();
 		m_StreamProducer->Initialize(logServer, Util::GetServiceName());
 	}
 
