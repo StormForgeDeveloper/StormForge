@@ -545,9 +545,8 @@ namespace SF {
 			// 
 			Protocol::PrintDebugMessage("Recv", pMsgHeader);
 
-			//Assert( MemoryPool::CheckMemoryHeader( *pMsg ) );
-            assert(pMsgHeader->GetPayloadSize() == 0 // 0 crc for zero size packet
-                || pMsgHeader->MessageSize > 1024); // Multiple sub framed message can't have crc value. each sub frame does
+            // rough size check
+            assert(pMsgHeader->GetPayloadSize() != 0 && pMsgHeader->MessageSize < 1500);
 
             uint uiPolicy = msgID.IDs.Protocol;
             if (uiPolicy == 0 // Net control
