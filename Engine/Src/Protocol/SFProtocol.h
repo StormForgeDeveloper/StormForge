@@ -46,20 +46,15 @@ namespace SF
     }
 
 
-	class IVariableMapBuilder;
-	typedef Result(*MessageHandlingFunction)(const char* prefix, const MessageHeader* pHeader);
-	typedef Result(*HandleParseMessageTo)(const MessageHeader*, IVariableMapBuilder &);
-	typedef Result(*HandleParseMessageToMessageBase)(IHeap& memoryManager, const MessageHeader*, MessageBase * &);
-	
-	
 
 	namespace Protocol
 	{
+        typedef Result(*MessageHandlingFunction)(const char* prefix, const MessageHeader* pHeader);
+
+        extern std::unordered_map<MessageID, MessageHandlingFunction> MessageDebugTraceMap;
+
 		//TODO: to library object
 		void PrintDebugMessage(const char* preFix, const MessageHeader* pHeader);
-
-		Result ParseMessage(const MessageHeader* pHeader, IVariableMapBuilder& variableMap);
-		Result ParseMessage(IHeap& memoryManager, const MessageHeader* pHeader, MessageBase * &pMsgBase);
 	}
 
 	

@@ -134,3 +134,12 @@ namespace SF {
 #endif
 
 } // SF
+
+template <> class std::hash<SF::MessageID>
+{
+public:
+    size_t operator()(const SF::MessageID& messageId) const
+    {
+        return messageId.ID;
+    }
+};

@@ -316,10 +316,6 @@ namespace SF
             }
         }
 
-        public static Offset<SF.Flat.RouteContext> CreateRouteContext(this Google.FlatBuffers.FlatBufferBuilder builder, SFRouteContext context)
-        {
-            return SF.Flat.RouteContext.CreateRouteContext(builder, (uint)context.From, (uint)(context.From >> 32), (uint)context.To, (uint)(context.To >> 32));
-        }
 
         public static VectorOffset Createuint8Vector(this Google.FlatBuffers.FlatBufferBuilder builder, byte[] data)
         {

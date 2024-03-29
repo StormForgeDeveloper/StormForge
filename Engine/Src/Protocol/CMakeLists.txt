@@ -7,16 +7,22 @@ set(SFPROTOCOL_LIB_FILES
 
 	Protocol/Game_generated.h
 	Protocol/GameMessageID.h
+	Protocol/GameMessageLog.h
+	Protocol/GameMessageLog.cpp
 	Protocol/GameRPCSendAdapter.h
 	Protocol/GameRPCSendAdapter.cpp
 
 	Protocol/PlayInstance_generated.h
 	Protocol/PlayInstanceMessageID.h
+	Protocol/PlayInstanceMessageLog.h
+	Protocol/PlayInstanceMessageLog.cpp
 	Protocol/PlayInstanceRPCSendAdapter.h
 	Protocol/PlayInstanceRPCSendAdapter.cpp
 	
 	Protocol/Generic_generated.h
 	Protocol/GenericMessageID.h
+	Protocol/GenericMessageLog.h
+	Protocol/GenericMessageLog.cpp
 	Protocol/GenericRPCSendAdapter.h
 	Protocol/GenericRPCSendAdapter.cpp
 	
