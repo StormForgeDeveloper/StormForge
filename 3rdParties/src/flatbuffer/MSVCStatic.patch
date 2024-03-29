@@ -1,0 +1,13 @@
+diff --git "a/CMakeLists.txt" "b/CMakeLists.txt"
+index c036885..1e645af 100644
+--- "a/CMakeLists.txt"
++++ "b/CMakeLists.txt"
+@@ -353,6 +353,8 @@ if(MSVC_LIKE)
+         /D_CRT_SECURE_NO_WARNINGS
+       >
+   )
++  # SF - Enable static lib
++  set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+ else()
+   target_compile_options(ProjectConfig
+     INTERFACE

@@ -304,24 +304,33 @@ namespace Util {
 		return 1<<power;
 	}
 
-
-    Result LoadJsonFile(const char* jsonPath, Json::Value& outValue)
+    Result LoadWholeFile(const char* path, Array<uint8_t>& outData)
     {
         Result hr;
         File file;
-        file.Open(jsonPath, File::OpenMode::Read);
+        file.Open(path, File::OpenMode::Read);
         if (!file.IsOpened())
             return hr = ResultCode::FAIL;
 
         auto fileSize = file.GetFileSize();
-        SF::StaticArray<uint8_t, 1024> buffer(GetSystemHeap());
-        buffer.resize(fileSize + 1);
+        outData.reserve(fileSize + 1); // prevent reallocation in case we need text terminator
+        outData.resize(fileSize);
         size_t readed = 0;
-        hr = file.Read(buffer.data(), fileSize, readed);
+        hr = file.Read(outData.data(), fileSize, readed);
         if (!hr.IsSuccess())
             return hr;
 
-        buffer[fileSize] = '\0';
+        return hr;
+    }
+
+    Result LoadJsonFile(const char* jsonPath, Json::Value& outValue)
+    {
+        Result hr;
+
+        DynamicArray<uint8_t> buffer;
+        hr = LoadWholeFile(jsonPath, buffer);
+
+        buffer.push_back('\0');
 
         int readOffset = 0;
         constexpr uint8_t UTF8BOM[] = { 0xEF, 0xBB, 0xBF };

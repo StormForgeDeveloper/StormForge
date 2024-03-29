@@ -26,10 +26,17 @@
 #include "Net/SFNetToString.h"
 
 #include "SFProtocol.h"
+#include "Util/SFPath.h"
 
 #include "Protocol/GameMessageLog.h"
 #include "Protocol/PlayInstanceMessageLog.h"
 #include "Protocol/GenericMessageLog.h"
+
+#ifdef ERROR
+#undef ERROR
+#endif
+#include "flatbuffers/flatbuffers.h"
+#include "flatbuffers/idl.h"
 
 
 namespace SF {
@@ -40,7 +47,7 @@ namespace SF {
 namespace Protocol {
 
 	std::unordered_map<MessageID, MessageHandlingFunction> MessageDebugTraceMap;
-
+    flatbuffers::Parser MessageDebugParser;
 
 	class SFProtocolInitializer : public LibraryComponentInitializer
 	{
@@ -56,6 +63,9 @@ namespace Protocol {
 			if (InitMode != ComponentInitializeMode::AfterRegisterComponent)
 				return false;
 
+            MessageDebugParser.opts.natural_utf8 = true;
+            MessageDebugParser.opts.strict_json = false;
+
             GameMessageLog::Initialize();
             PlayInstanceMessageLog::Initialize();
             GenericMessageLog::Initialize();
@@ -68,7 +78,40 @@ namespace Protocol {
 
 	SFProtocolInitializer SFProtocolInitializer::stm_Instance;
 
+    Result LoadFlatSchema(flatbuffers::Parser& parser, const char* filePath)
+    {
+        Result hr;
+        if (filePath == nullptr)
+            return hr;
 
+        const char* DevSchemaPath = "Dev/ProtocolSchema";
+
+        std::vector<const char*> includes;
+        includes.push_back(DevSchemaPath); // default protocol schema path
+        includes.push_back(nullptr);
+
+        String relativePath = Util::Path::Combine(DevSchemaPath, filePath);
+
+        DynamicArray<uint8_t> buffer;
+        hr = Util::LoadWholeFile(relativePath, buffer);
+        if (!hr.IsSuccess())
+            return hr;
+
+        buffer.push_back(0);
+
+        bool bSuccess = parser.Parse(reinterpret_cast<const char*>(buffer.data()), includes.data(), relativePath);
+        if (!bSuccess)
+        {
+            SFLog(Protocol, Error, "Failed to parse schema file:{0}", filePath);
+        }
+
+        return hr;
+    }
+
+    Result LoadFlatSchema(const char* schemaFilePath)
+    {
+        return LoadFlatSchema(MessageDebugParser, schemaFilePath);
+    }
 
 	void PrintDebugMessage(const char* preFix, const MessageHeader* pHeader)
 	{

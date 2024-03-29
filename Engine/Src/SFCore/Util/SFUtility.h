@@ -103,6 +103,9 @@ namespace Util {
 	template<class ValueType>
 	Result SafeDelete( ValueType* &pObj );
 
+    // Load whole file into memory
+    Result LoadWholeFile(const char* path, Array<uint8_t>& outData);
+
 
 	// Peek key from console
 	//Result PeekKey( int &inputKey, NativeHandle hConsole = INVALID_NATIVE_HANDLE_VALUE);

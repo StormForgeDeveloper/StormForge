@@ -98,10 +98,13 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#include \"SFTypedefs.h\"");
             OutStream.WriteLine("#include \"Net/SFNetDef.h\"");
             OutStream.WriteLine("#include \"Net/SFMessage.h\"");
-            OutStream.WriteLine("#include \"Net/SFMessageEndpoint.h\"");
-            OutStream.WriteLine("#include \"Actor/Movement/SFActorMovement.h\"");
             OutStream.WriteLine($"#include \"Protocol/{OutputHeaderName()}\"");
-            OutStream.WriteLine($"#include \"{Group.Name}_generated.h\"");
+            OutStream.WriteLine($"#include \"Protocol/{Group.Name}_generated.h\"");
+            OutStream.WriteLine("#ifdef ERROR");
+            OutStream.WriteLine("#undef ERROR");
+            OutStream.WriteLine("#endif");
+            OutStream.WriteLine("#include \"flatbuffers/flatbuffers.h\"");
+            OutStream.WriteLine("#include \"flatbuffers/idl.h\"");
 
             NewLine(3);
 
@@ -112,7 +115,12 @@ namespace ProtocolCompiler
         void BuildClassH()
         {
             OpenSection("class", LogClassName);
+
+            WriteLineWithIndent("private:");
+            //WriteLineWithIndent($"static flatbuffers::Parser stm_Parser;");
+            NewLine();
             WriteLineWithIndent("public:");
+
 
             WriteLineWithIndent("static Result Initialize();");
             NewLine();
@@ -158,17 +166,23 @@ namespace ProtocolCompiler
             WriteLineWithIndent("protocolCheckPtr(messageHeader);");
             NewLine();
 
+            string messageStructName = $"SF.Flat.{Group.Name}.{baseMsg.Name}{typeName}";
+            WriteLineWithIndent("std::string packetString;");
+            WriteLineWithIndent($"if (Protocol::MessageDebugParser.LookupStruct(\"{messageStructName}\")) {{");
+            WriteLineWithIndent("    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);");
+            WriteLineWithIndent("}");
+
             if (typeName == "Cmd")
             {
-                WriteLineWithIndent($"SFLog(Net, Debug, \"{{0}} {Group.Name}:{baseMsg.Name}{typeName}: tid:{{1}}, size:{{2}}\", prefix, messageHeader->TransactionId, messageHeader->MessageSize);");
+                WriteLineWithIndent($"SFLog(Net, Debug, \"{{0}} {Group.Name}:{baseMsg.Name}{typeName}: tid:{{1}}, sz:{{2}}: {{3}}\", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : \"\");");
             }
             else if (typeName == "Res")
             {
-                WriteLineWithIndent($"SFLog(Net, Debug, \"{{0}} {Group.Name}:{baseMsg.Name}{typeName}: tid:{{1}}, Result:{{2}} size:{{3}}\", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize);");
+                WriteLineWithIndent($"SFLog(Net, Debug, \"{{0}} {Group.Name}:{baseMsg.Name}{typeName}: tid:{{1}}, res:{{2}} sz:{{3}}: {{4}}\", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : \"\");");
             }
             else
             {
-                WriteLineWithIndent($"SFLog(Net, Debug, \"{{0}} {Group.Name}:{baseMsg.Name}{typeName}: size:{{1}}\", prefix, messageHeader->MessageSize);");
+                WriteLineWithIndent($"SFLog(Net, Debug, \"{{0}} {Group.Name}:{baseMsg.Name}{typeName}: sz:{{1}}: {{2}}\", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : \"\");");
             }
 
             NewLine();
@@ -219,12 +233,20 @@ namespace ProtocolCompiler
                 }
             }
 
+            NewLine(2);
+
+            WriteLineWithIndent($"Protocol::LoadFlatSchema(\"{Group.Name}.fbs\");");
+
+            NewLine();
+
             WriteLineWithIndent("return hr;");
             CloseSection();
         }
 
         void BuildMessageLogCPP()
         {
+            //WriteLineWithIndent($"flatbuffers::Parser {LogClassName}::stm_Parser;");
+
             BuildMessageLogInitializeImpl();
 
             foreach (MessageBase baseMsg in Group.Items)

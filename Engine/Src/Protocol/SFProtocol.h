@@ -20,6 +20,11 @@
 #include "Net/SFMessageData.h"
 
 
+namespace flatbuffers
+{
+    class Parser;
+}
+
 namespace SF
 {
 	
@@ -52,6 +57,9 @@ namespace SF
         typedef Result(*MessageHandlingFunction)(const char* prefix, const MessageHeader* pHeader);
 
         extern std::unordered_map<MessageID, MessageHandlingFunction> MessageDebugTraceMap;
+        extern flatbuffers::Parser MessageDebugParser;
+
+        Result LoadFlatSchema(const char* schemaFilePath);
 
 		//TODO: to library object
 		void PrintDebugMessage(const char* preFix, const MessageHeader* pHeader);

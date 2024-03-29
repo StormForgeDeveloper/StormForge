@@ -25,7 +25,9 @@ namespace SF
 
 	class PlayInstanceMessageLog
 	{
- 		public:
+ 		private:
+
+		public:
 		static Result Initialize();
 
 		static Result JoinPlayInstanceCmd(const char* prefix, const MessageHeader* messageHeader);

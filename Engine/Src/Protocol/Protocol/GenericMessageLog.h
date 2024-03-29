@@ -25,7 +25,9 @@ namespace SF
 
 	class GenericMessageLog
 	{
- 		public:
+ 		private:
+
+		public:
 		static Result Initialize();
 
 		static Result GenericFailureCmd(const char* prefix, const MessageHeader* messageHeader);

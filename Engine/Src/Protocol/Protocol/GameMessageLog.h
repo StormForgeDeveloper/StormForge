@@ -25,7 +25,9 @@ namespace SF
 
 	class GameMessageLog
 	{
- 		public:
+ 		private:
+
+		public:
 		static Result Initialize();
 
 		static Result HeartbeatC2SEvt(const char* prefix, const MessageHeader* messageHeader);
