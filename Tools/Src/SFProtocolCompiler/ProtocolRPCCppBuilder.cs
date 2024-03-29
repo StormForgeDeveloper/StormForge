@@ -302,6 +302,7 @@ namespace ProtocolCompiler
             }
 
             WriteLineWithIndent($"flatbuffers::Offset<SF::Flat::{Group.Name}::{packetClassName}> packetOffset = _builder.Finish();");
+            WriteLineWithIndent($"fbb.Finish(packetOffset);");
         }
 
         // Build parser class implementation
@@ -321,6 +322,7 @@ namespace ProtocolCompiler
             string packetClassName = $"{Name}{typeName}";
 
             BuildFlatbufferPacket(packetClassName, parameters);
+
             NewLine();
 
             if (typeName == "Cmd")

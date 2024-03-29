@@ -182,6 +182,7 @@ namespace SF {
 
 #elif SF_PLATFORM == SF_PLATFORM_LINUX
 
+#if 0 // This isn't that important since we are much more leaning toward to docker based per process approach
 		sched_param sch_params{};
 		sch_params.sched_priority = ThreadSchedulingTable[(int)priority].Priority;
 		if (pthread_setschedparam(native_handle(), ThreadSchedulingTable[(int)priority].Policy, &sch_params))
@@ -189,6 +190,7 @@ namespace SF {
 			std::cerr << "Failed to set Thread scheduling, errno:" << errno << std::endl;
 			//assert(false);
 		}
+#endif
 
 #elif SF_PLATFORM == SF_PLATFORM_ANDROID
 		// No thread priority for android

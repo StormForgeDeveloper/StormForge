@@ -33,6 +33,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::HeartbeatC2SEvtBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::HeartbeatC2SEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_HeartbeatC2SEvt, fbb));
 
@@ -53,6 +54,7 @@ namespace SF
 		_builder.add_ticket(InTicket);
 		_builder.add_login_entity_uid(InLoginEntityUID);
 		flatbuffers::Offset<SF::Flat::Game::JoinGameServerCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_JoinGameServerCmd, fbb));
 
@@ -73,6 +75,7 @@ namespace SF
 		_builder.add_achievement_stat_idfrom(InAchievementStatIDFrom);
 		_builder.add_achievement_stat_idto(InAchievementStatIDTo);
 		flatbuffers::Offset<SF::Flat::Game::GetAchievementStatsCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_GetAchievementStatsCmd, fbb));
 
@@ -91,6 +94,7 @@ namespace SF
 		SF::Flat::Game::Dummy1CmdBuilder _builder(fbb);
 		_builder.add_complition_state(ComplitionStateOffset);
 		flatbuffers::Offset<SF::Flat::Game::Dummy1Cmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_Dummy1Cmd, fbb));
 
@@ -109,6 +113,7 @@ namespace SF
 		SF::Flat::Game::RegisterGCMCmdBuilder _builder(fbb);
 		_builder.add_gcmregistered_id(GCMRegisteredIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::RegisterGCMCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_RegisterGCMCmd, fbb));
 
@@ -127,6 +132,7 @@ namespace SF
 		SF::Flat::Game::UnregisterGCMCmdBuilder _builder(fbb);
 		_builder.add_gcmregistered_id(GCMRegisteredIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::UnregisterGCMCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_UnregisterGCMCmd, fbb));
 
@@ -145,6 +151,7 @@ namespace SF
 		SF::Flat::Game::InviteFriendCmdBuilder _builder(fbb);
 		_builder.add_friend_id(FriendIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::InviteFriendCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_InviteFriendCmd, fbb));
 
@@ -165,6 +172,7 @@ namespace SF
 		_builder.add_inviter_id(InviterIDOffset);
 		_builder.add_inviter_platform_id(InviterPlatformIdOffset);
 		flatbuffers::Offset<SF::Flat::Game::AcceptFriendRequestCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_AcceptFriendRequestCmd, fbb));
 
@@ -183,6 +191,7 @@ namespace SF
 		SF::Flat::Game::RemoveFriendCmdBuilder _builder(fbb);
 		_builder.add_friend_id(FriendIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::RemoveFriendCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_RemoveFriendCmd, fbb));
 
@@ -201,6 +210,7 @@ namespace SF
 		_builder.add_start_index(InStartIndex);
 		_builder.add_count(InCount);
 		flatbuffers::Offset<SF::Flat::Game::GetFriendListCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_GetFriendListCmd, fbb));
 
@@ -217,6 +227,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::GetNotificationListCmdBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::GetNotificationListCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_GetNotificationListCmd, fbb));
 
@@ -234,6 +245,7 @@ namespace SF
 		SF::Flat::Game::DeleteNotificationCmdBuilder _builder(fbb);
 		_builder.add_notification_id(InNotificationID);
 		flatbuffers::Offset<SF::Flat::Game::DeleteNotificationCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_DeleteNotificationCmd, fbb));
 
@@ -251,6 +263,7 @@ namespace SF
 		SF::Flat::Game::SetNotificationReadCmdBuilder _builder(fbb);
 		_builder.add_notification_id(InNotificationID);
 		flatbuffers::Offset<SF::Flat::Game::SetNotificationReadCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_SetNotificationReadCmd, fbb));
 
@@ -268,6 +281,7 @@ namespace SF
 		SF::Flat::Game::AcceptNotificationCmdBuilder _builder(fbb);
 		_builder.add_notification_id(InNotificationID);
 		flatbuffers::Offset<SF::Flat::Game::AcceptNotificationCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_AcceptNotificationCmd, fbb));
 
@@ -286,6 +300,7 @@ namespace SF
 		SF::Flat::Game::FindPlayerByPlatformIdCmdBuilder _builder(fbb);
 		_builder.add_platform_player_id(PlatformPlayerIdOffset);
 		flatbuffers::Offset<SF::Flat::Game::FindPlayerByPlatformIdCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_FindPlayerByPlatformIdCmd, fbb));
 
@@ -304,6 +319,7 @@ namespace SF
 		SF::Flat::Game::FindPlayerByCharacterNameCmdBuilder _builder(fbb);
 		_builder.add_character_name(CharacterNameOffset);
 		flatbuffers::Offset<SF::Flat::Game::FindPlayerByCharacterNameCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_FindPlayerByCharacterNameCmd, fbb));
 
@@ -324,6 +340,7 @@ namespace SF
 		_builder.add_platform_type(PlatformTypeOffset);
 		_builder.add_platform_user_name(PlatformUserNameOffset);
 		flatbuffers::Offset<SF::Flat::Game::FindPlayerByPlatformUserNameCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_FindPlayerByPlatformUserNameCmd, fbb));
 
@@ -342,6 +359,7 @@ namespace SF
 		SF::Flat::Game::FindPlayerByEMailCmdBuilder _builder(fbb);
 		_builder.add_player_email(PlayerEMailOffset);
 		flatbuffers::Offset<SF::Flat::Game::FindPlayerByEMailCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_FindPlayerByEMailCmd, fbb));
 
@@ -360,6 +378,7 @@ namespace SF
 		SF::Flat::Game::FindPlayerByPlayerIDCmdBuilder _builder(fbb);
 		_builder.add_player_id(PlayerIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::FindPlayerByPlayerIDCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_FindPlayerByPlayerIDCmd, fbb));
 
@@ -378,6 +397,7 @@ namespace SF
 		SF::Flat::Game::RequestPlayerStatusUpdateCmdBuilder _builder(fbb);
 		_builder.add_target_player_id(TargetPlayerIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::RequestPlayerStatusUpdateCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_RequestPlayerStatusUpdateCmd, fbb));
 
@@ -397,6 +417,7 @@ namespace SF
 		_builder.add_base_ranking(InBaseRanking);
 		_builder.add_count(InCount);
 		flatbuffers::Offset<SF::Flat::Game::GetRankingListCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_GetRankingListCmd, fbb));
 
@@ -413,6 +434,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::GetUserGamePlayerInfoCmdBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::GetUserGamePlayerInfoCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_GetUserGamePlayerInfoCmd, fbb));
 
@@ -431,6 +453,7 @@ namespace SF
 		SF::Flat::Game::GetGamePlayerInfoCmdBuilder _builder(fbb);
 		_builder.add_player_id(PlayerIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::GetGamePlayerInfoCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_GetGamePlayerInfoCmd, fbb));
 
@@ -450,6 +473,7 @@ namespace SF
 		_builder.add_nick_name(NickNameOffset);
 		_builder.add_is_cost_free(InIsCostFree);
 		flatbuffers::Offset<SF::Flat::Game::SetNickNameCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_SetNickNameCmd, fbb));
 
@@ -466,6 +490,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::CreatePartyCmdBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::CreatePartyCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_CreatePartyCmd, fbb));
 
@@ -485,6 +510,7 @@ namespace SF
 		_builder.add_party_uid(InPartyUID);
 		_builder.add_inviter_id(InviterIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::JoinPartyCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_JoinPartyCmd, fbb));
 
@@ -504,6 +530,7 @@ namespace SF
 		_builder.add_party_uid(InPartyUID);
 		_builder.add_player_id(PlayerIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::LeavePartyCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_LeavePartyCmd, fbb));
 
@@ -525,6 +552,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_player_to_kick(PlayerToKickOffset);
 		flatbuffers::Offset<SF::Flat::Game::PartyKickPlayerCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_PartyKickPlayerCmd, fbb));
 
@@ -543,6 +571,7 @@ namespace SF
 		SF::Flat::Game::PartyInviteCmdBuilder _builder(fbb);
 		_builder.add_invite_target_id(InviteTargetIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::PartyInviteCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_PartyInviteCmd, fbb));
 
@@ -560,6 +589,7 @@ namespace SF
 		SF::Flat::Game::PartyQuickChatMessageCmdBuilder _builder(fbb);
 		_builder.add_quick_chat_id(InQuickChatID);
 		flatbuffers::Offset<SF::Flat::Game::PartyQuickChatMessageCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_PartyQuickChatMessageCmd, fbb));
 
@@ -578,6 +608,7 @@ namespace SF
 		SF::Flat::Game::PartyChatMessageCmdBuilder _builder(fbb);
 		_builder.add_chat_message(ChatMessageOffset);
 		flatbuffers::Offset<SF::Flat::Game::PartyChatMessageCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_PartyChatMessageCmd, fbb));
 
@@ -596,6 +627,7 @@ namespace SF
 		SF::Flat::Game::JoinGameInstanceCmdBuilder _builder(fbb);
 		_builder.add_ins_uid(InsUIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::JoinGameInstanceCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_JoinGameInstanceCmd, fbb));
 
@@ -614,6 +646,7 @@ namespace SF
 		SF::Flat::Game::LeaveGameInstanceCmdBuilder _builder(fbb);
 		_builder.add_ins_uid(InsUIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::LeaveGameInstanceCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_LeaveGameInstanceCmd, fbb));
 
@@ -633,6 +666,7 @@ namespace SF
 		_builder.add_search_keyword(SearchKeywordOffset);
 		_builder.add_zone_table_id(InZoneTableID);
 		flatbuffers::Offset<SF::Flat::Game::SearchGameInstanceCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_SearchGameInstanceCmd, fbb));
 
@@ -653,6 +687,7 @@ namespace SF
 		_builder.add_game_instance_uid(GameInstanceUIDOffset);
 		_builder.add_player_id(PlayerIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::GetCharacterDataInGameInstanceCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_GetCharacterDataInGameInstanceCmd, fbb));
 
@@ -671,6 +706,7 @@ namespace SF
 		_builder.add_num_player(InNumPlayer);
 		_builder.add_request_role(InRequestRole);
 		flatbuffers::Offset<SF::Flat::Game::RequestGameMatchCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_RequestGameMatchCmd, fbb));
 
@@ -687,6 +723,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::CancelGameMatchCmdBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::CancelGameMatchCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_CancelGameMatchCmd, fbb));
 
@@ -705,6 +742,7 @@ namespace SF
 		SF::Flat::Game::GetUGCTemplatesCmdBuilder _builder(fbb);
 		_builder.add_tags(TagsOffset);
 		flatbuffers::Offset<SF::Flat::Game::GetUGCTemplatesCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_GetUGCTemplatesCmd, fbb));
 
@@ -725,6 +763,7 @@ namespace SF
 		_builder.add_ugcmeta_data(UGCMetaDataOffset);
 		_builder.add_ugccontents(UGCContentsOffset);
 		flatbuffers::Offset<SF::Flat::Game::SaveUGCCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_SaveUGCCmd, fbb));
 
@@ -743,6 +782,7 @@ namespace SF
 		SF::Flat::Game::SearchUGCCmdBuilder _builder(fbb);
 		_builder.add_tags(TagsOffset);
 		flatbuffers::Offset<SF::Flat::Game::SearchUGCCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_SearchUGCCmd, fbb));
 
@@ -760,6 +800,7 @@ namespace SF
 		SF::Flat::Game::GetUGCContentInfoCmdBuilder _builder(fbb);
 		_builder.add_ugcid(InUGCID);
 		flatbuffers::Offset<SF::Flat::Game::GetUGCContentInfoCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_GetUGCContentInfoCmd, fbb));
 
@@ -778,6 +819,7 @@ namespace SF
 		_builder.add_ugcid(InUGCID);
 		_builder.add_is_include_meta_data(InIsIncludeMetaData);
 		flatbuffers::Offset<SF::Flat::Game::DownloadUGCContentCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_DownloadUGCContentCmd, fbb));
 
@@ -795,6 +837,7 @@ namespace SF
 		SF::Flat::Game::RequestUGCZoneInstanceCmdBuilder _builder(fbb);
 		_builder.add_ugcid(InUGCID);
 		flatbuffers::Offset<SF::Flat::Game::RequestUGCZoneInstanceCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_RequestUGCZoneInstanceCmd, fbb));
 
@@ -812,6 +855,7 @@ namespace SF
 		SF::Flat::Game::BuyShopItemPrepareCmdBuilder _builder(fbb);
 		_builder.add_shop_item_id(InShopItemID);
 		flatbuffers::Offset<SF::Flat::Game::BuyShopItemPrepareCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_BuyShopItemPrepareCmd, fbb));
 
@@ -837,6 +881,7 @@ namespace SF
 		_builder.add_purchase_transaction_id(PurchaseTransactionIDOffset);
 		_builder.add_purchase_token(PurchaseTokenOffset);
 		flatbuffers::Offset<SF::Flat::Game::BuyShopItemCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_BuyShopItemCmd, fbb));
 
@@ -857,6 +902,7 @@ namespace SF
 		_builder.add_channel_name(ChannelNameOffset);
 		_builder.add_passcode(PasscodeOffset);
 		flatbuffers::Offset<SF::Flat::Game::CreateOrJoinChatChannelCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_CreateOrJoinChatChannelCmd, fbb));
 
@@ -879,6 +925,7 @@ namespace SF
 		_builder.add_inviter_id(InviterIDOffset);
 		_builder.add_passcode(PasscodeOffset);
 		flatbuffers::Offset<SF::Flat::Game::JoinChatChannelCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_JoinChatChannelCmd, fbb));
 
@@ -899,6 +946,7 @@ namespace SF
 		_builder.add_chat_uid(ChatUIDOffset);
 		_builder.add_player_id(PlayerIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::LeaveChatChannelCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_LeaveChatChannelCmd, fbb));
 
@@ -921,6 +969,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_player_to_kick(PlayerToKickOffset);
 		flatbuffers::Offset<SF::Flat::Game::ChatChannelKickPlayerCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_ChatChannelKickPlayerCmd, fbb));
 
@@ -943,6 +992,7 @@ namespace SF
 		_builder.add_chat_meta_data(ChatMetaDataOffset);
 		_builder.add_chat_message(ChatMessageOffset);
 		flatbuffers::Offset<SF::Flat::Game::ChatChannelChatMessageCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_ChatChannelChatMessageCmd, fbb));
 
@@ -967,6 +1017,7 @@ namespace SF
 		_builder.add_chat_meta_data(ChatMetaDataOffset);
 		_builder.add_chat_message(ChatMessageOffset);
 		flatbuffers::Offset<SF::Flat::Game::WhisperMessageCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_WhisperMessageCmd, fbb));
 
@@ -989,6 +1040,7 @@ namespace SF
 		_builder.add_public_data(PublicDataOffset);
 		_builder.add_private_data(PrivateDataOffset);
 		flatbuffers::Offset<SF::Flat::Game::CreateCharacterCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_CreateCharacterCmd, fbb));
 
@@ -1007,6 +1059,7 @@ namespace SF
 		SF::Flat::Game::DeleteCharacterCmdBuilder _builder(fbb);
 		_builder.add_character_id(CharacterIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::DeleteCharacterCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_DeleteCharacterCmd, fbb));
 
@@ -1023,6 +1076,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::GetCharacterListCmdBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::GetCharacterListCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_GetCharacterListCmd, fbb));
 
@@ -1041,6 +1095,7 @@ namespace SF
 		SF::Flat::Game::GetCharacterDataCmdBuilder _builder(fbb);
 		_builder.add_character_id(CharacterIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::GetCharacterDataCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_GetCharacterDataCmd, fbb));
 
@@ -1059,6 +1114,7 @@ namespace SF
 		SF::Flat::Game::SelectCharacterCmdBuilder _builder(fbb);
 		_builder.add_character_id(CharacterIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::SelectCharacterCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_SelectCharacterCmd, fbb));
 
@@ -1075,6 +1131,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::RequestServerNoticeUpdateCmdBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::RequestServerNoticeUpdateCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_RequestServerNoticeUpdateCmd, fbb));
 
@@ -1094,6 +1151,7 @@ namespace SF
 		_builder.add_function_name(InFunctionName);
 		_builder.add_parameters(ParametersOffset);
 		flatbuffers::Offset<SF::Flat::Game::CallFunctionCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_CallFunctionCmd, fbb));
 
@@ -1121,6 +1179,7 @@ namespace SF
 		_builder.add_party_leader_id(PartyLeaderIDOffset);
 		_builder.add_matching_ticket(MatchingTicketOffset);
 		flatbuffers::Offset<SF::Flat::Game::JoinGameServerRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_JoinGameServerRes, fbb));
 
@@ -1139,6 +1198,7 @@ namespace SF
 		SF::Flat::Game::GetAchievementStatsResBuilder _builder(fbb);
 		_builder.add_achievement_stats(AchievementStatsOffset);
 		flatbuffers::Offset<SF::Flat::Game::GetAchievementStatsRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_GetAchievementStatsRes, fbb));
 
@@ -1155,6 +1215,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::Dummy1ResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::Dummy1Res> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_Dummy1Res, fbb));
 
@@ -1171,6 +1232,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::RegisterGCMResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::RegisterGCMRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_RegisterGCMRes, fbb));
 
@@ -1187,6 +1249,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::UnregisterGCMResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::UnregisterGCMRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_UnregisterGCMRes, fbb));
 
@@ -1203,6 +1266,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::InviteFriendResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::InviteFriendRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_InviteFriendRes, fbb));
 
@@ -1221,6 +1285,7 @@ namespace SF
 		SF::Flat::Game::AcceptFriendRequestResBuilder _builder(fbb);
 		_builder.add_new_friend(NewFriendOffset);
 		flatbuffers::Offset<SF::Flat::Game::AcceptFriendRequestRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_AcceptFriendRequestRes, fbb));
 
@@ -1239,6 +1304,7 @@ namespace SF
 		SF::Flat::Game::FriendRequestAcceptedS2CEvtBuilder _builder(fbb);
 		_builder.add_accepter(AccepterOffset);
 		flatbuffers::Offset<SF::Flat::Game::FriendRequestAcceptedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_FriendRequestAcceptedS2CEvt, fbb));
 
@@ -1257,6 +1323,7 @@ namespace SF
 		SF::Flat::Game::RemoveFriendResBuilder _builder(fbb);
 		_builder.add_friend_id(FriendIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::RemoveFriendRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_RemoveFriendRes, fbb));
 
@@ -1275,6 +1342,7 @@ namespace SF
 		SF::Flat::Game::FriendRemovedS2CEvtBuilder _builder(fbb);
 		_builder.add_friend_id(FriendIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::FriendRemovedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_FriendRemovedS2CEvt, fbb));
 
@@ -1296,6 +1364,7 @@ namespace SF
 		_builder.add_start_index(InStartIndex);
 		_builder.add_friend_list(FriendListOffset);
 		flatbuffers::Offset<SF::Flat::Game::GetFriendListRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_GetFriendListRes, fbb));
 
@@ -1312,6 +1381,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::GetNotificationListResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::GetNotificationListRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_GetNotificationListRes, fbb));
 
@@ -1329,6 +1399,7 @@ namespace SF
 		SF::Flat::Game::DeleteNotificationResBuilder _builder(fbb);
 		_builder.add_notification_id(InNotificationID);
 		flatbuffers::Offset<SF::Flat::Game::DeleteNotificationRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_DeleteNotificationRes, fbb));
 
@@ -1346,6 +1417,7 @@ namespace SF
 		SF::Flat::Game::SetNotificationReadResBuilder _builder(fbb);
 		_builder.add_notification_id(InNotificationID);
 		flatbuffers::Offset<SF::Flat::Game::SetNotificationReadRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_SetNotificationReadRes, fbb));
 
@@ -1363,6 +1435,7 @@ namespace SF
 		SF::Flat::Game::AcceptNotificationResBuilder _builder(fbb);
 		_builder.add_notification_id(InNotificationID);
 		flatbuffers::Offset<SF::Flat::Game::AcceptNotificationRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_AcceptNotificationRes, fbb));
 
@@ -1385,6 +1458,7 @@ namespace SF
 		_builder.add_is_read(InIsRead);
 		_builder.add_time_stamp(InTimeStamp);
 		flatbuffers::Offset<SF::Flat::Game::NotifyS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_NotifyS2CEvt, fbb));
 
@@ -1405,6 +1479,7 @@ namespace SF
 		_builder.add_player_id(PlayerIdOffset);
 		_builder.add_player_platform_id(PlayerPlatformIdOffset);
 		flatbuffers::Offset<SF::Flat::Game::FindPlayerByPlatformIdRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_FindPlayerByPlatformIdRes, fbb));
 
@@ -1423,6 +1498,7 @@ namespace SF
 		SF::Flat::Game::FindPlayerByCharacterNameResBuilder _builder(fbb);
 		_builder.add_player_id(PlayerIdOffset);
 		flatbuffers::Offset<SF::Flat::Game::FindPlayerByCharacterNameRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_FindPlayerByCharacterNameRes, fbb));
 
@@ -1443,6 +1519,7 @@ namespace SF
 		_builder.add_player_id(PlayerIdOffset);
 		_builder.add_player_platform_id(PlayerPlatformIdOffset);
 		flatbuffers::Offset<SF::Flat::Game::FindPlayerByPlatformUserNameRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_FindPlayerByPlatformUserNameRes, fbb));
 
@@ -1461,6 +1538,7 @@ namespace SF
 		SF::Flat::Game::FindPlayerByEMailResBuilder _builder(fbb);
 		_builder.add_player(PlayerOffset);
 		flatbuffers::Offset<SF::Flat::Game::FindPlayerByEMailRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_FindPlayerByEMailRes, fbb));
 
@@ -1479,6 +1557,7 @@ namespace SF
 		SF::Flat::Game::FindPlayerByPlayerIDResBuilder _builder(fbb);
 		_builder.add_player(PlayerOffset);
 		flatbuffers::Offset<SF::Flat::Game::FindPlayerByPlayerIDRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_FindPlayerByPlayerIDRes, fbb));
 
@@ -1495,6 +1574,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::RequestPlayerStatusUpdateResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::RequestPlayerStatusUpdateRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_RequestPlayerStatusUpdateRes, fbb));
 
@@ -1515,6 +1595,7 @@ namespace SF
 		_builder.add_latest_active_time(InLatestActiveTime);
 		_builder.add_is_in_game(InIsInGame);
 		flatbuffers::Offset<SF::Flat::Game::NotifyPlayerStatusUpdatedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_NotifyPlayerStatusUpdatedS2CEvt, fbb));
 
@@ -1533,6 +1614,7 @@ namespace SF
 		SF::Flat::Game::GetRankingListResBuilder _builder(fbb);
 		_builder.add_ranking(RankingOffset);
 		flatbuffers::Offset<SF::Flat::Game::GetRankingListRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_GetRankingListRes, fbb));
 
@@ -1551,6 +1633,7 @@ namespace SF
 		SF::Flat::Game::GetUserGamePlayerInfoResBuilder _builder(fbb);
 		_builder.add_attributes(AttributesOffset);
 		flatbuffers::Offset<SF::Flat::Game::GetUserGamePlayerInfoRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_GetUserGamePlayerInfoRes, fbb));
 
@@ -1571,6 +1654,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_attributes(AttributesOffset);
 		flatbuffers::Offset<SF::Flat::Game::GetGamePlayerInfoRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_GetGamePlayerInfoRes, fbb));
 
@@ -1589,6 +1673,7 @@ namespace SF
 		_builder.add_current_total_exp(InCurrentTotalExp);
 		_builder.add_current_level(InCurrentLevel);
 		flatbuffers::Offset<SF::Flat::Game::LevelUpS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_LevelUpS2CEvt, fbb));
 
@@ -1607,6 +1692,7 @@ namespace SF
 		_builder.add_total_gem(InTotalGem);
 		_builder.add_total_game_money(InTotalGameMoney);
 		flatbuffers::Offset<SF::Flat::Game::SetNickNameRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_SetNickNameRes, fbb));
 
@@ -1624,6 +1710,7 @@ namespace SF
 		SF::Flat::Game::CreatePartyResBuilder _builder(fbb);
 		_builder.add_party_uid(InPartyUID);
 		flatbuffers::Offset<SF::Flat::Game::CreatePartyRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_CreatePartyRes, fbb));
 
@@ -1645,6 +1732,7 @@ namespace SF
 		_builder.add_party_leader_id(PartyLeaderIDOffset);
 		_builder.add_chat_history_data(ChatHistoryDataOffset);
 		flatbuffers::Offset<SF::Flat::Game::JoinPartyRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_JoinPartyRes, fbb));
 
@@ -1664,6 +1752,7 @@ namespace SF
 		_builder.add_party_uid(InPartyUID);
 		_builder.add_joined_player(JoinedPlayerOffset);
 		flatbuffers::Offset<SF::Flat::Game::PartyPlayerJoinedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_PartyPlayerJoinedS2CEvt, fbb));
 
@@ -1683,6 +1772,7 @@ namespace SF
 		_builder.add_party_uid(InPartyUID);
 		_builder.add_new_leader_id(NewLeaderIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::PartyLeaderChangedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_PartyLeaderChangedS2CEvt, fbb));
 
@@ -1699,6 +1789,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::LeavePartyResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::LeavePartyRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_LeavePartyRes, fbb));
 
@@ -1718,6 +1809,7 @@ namespace SF
 		_builder.add_party_uid(InPartyUID);
 		_builder.add_left_player_id(LeftPlayerIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::PartyPlayerLeftS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_PartyPlayerLeftS2CEvt, fbb));
 
@@ -1734,6 +1826,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::PartyKickPlayerResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::PartyKickPlayerRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_PartyKickPlayerRes, fbb));
 
@@ -1753,6 +1846,7 @@ namespace SF
 		_builder.add_party_uid(InPartyUID);
 		_builder.add_kicked_player_id(KickedPlayerIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::PartyPlayerKickedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_PartyPlayerKickedS2CEvt, fbb));
 
@@ -1769,6 +1863,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::PartyInviteResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::PartyInviteRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_PartyInviteRes, fbb));
 
@@ -1790,6 +1885,7 @@ namespace SF
 		_builder.add_inviter_name(InviterNameOffset);
 		_builder.add_party_to_join_uid(InPartyToJoinUID);
 		flatbuffers::Offset<SF::Flat::Game::PartyInviteRequestedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_PartyInviteRequestedS2CEvt, fbb));
 
@@ -1806,6 +1902,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::PartyQuickChatMessageResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::PartyQuickChatMessageRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_PartyQuickChatMessageRes, fbb));
 
@@ -1825,6 +1922,7 @@ namespace SF
 		_builder.add_sender_id(SenderIDOffset);
 		_builder.add_quick_chat_id(InQuickChatID);
 		flatbuffers::Offset<SF::Flat::Game::PartyQuickChatMessageS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_PartyQuickChatMessageS2CEvt, fbb));
 
@@ -1841,6 +1939,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::PartyChatMessageResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::PartyChatMessageRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_PartyChatMessageRes, fbb));
 
@@ -1863,6 +1962,7 @@ namespace SF
 		_builder.add_sender_name(SenderNameOffset);
 		_builder.add_chat_message(ChatMessageOffset);
 		flatbuffers::Offset<SF::Flat::Game::PartyChatMessageS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_PartyChatMessageS2CEvt, fbb));
 
@@ -1883,6 +1983,7 @@ namespace SF
 		_builder.add_ins_uid(InsUIDOffset);
 		_builder.add_server_public_address(ServerPublicAddressOffset);
 		flatbuffers::Offset<SF::Flat::Game::JoinGameInstanceRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_JoinGameInstanceRes, fbb));
 
@@ -1899,6 +2000,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::LeaveGameInstanceResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::LeaveGameInstanceRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_LeaveGameInstanceRes, fbb));
 
@@ -1917,6 +2019,7 @@ namespace SF
 		SF::Flat::Game::SearchGameInstanceResBuilder _builder(fbb);
 		_builder.add_game_instances(GameInstancesOffset);
 		flatbuffers::Offset<SF::Flat::Game::SearchGameInstanceRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_SearchGameInstanceRes, fbb));
 
@@ -1937,6 +2040,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_game_instances(GameInstancesOffset);
 		flatbuffers::Offset<SF::Flat::Game::GetCharacterDataInGameInstanceRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_GetCharacterDataInGameInstanceRes, fbb));
 
@@ -1955,6 +2059,7 @@ namespace SF
 		_builder.add_total_gem(InTotalGem);
 		_builder.add_total_game_money(InTotalGameMoney);
 		flatbuffers::Offset<SF::Flat::Game::RequestGameMatchRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_RequestGameMatchRes, fbb));
 
@@ -1989,6 +2094,7 @@ namespace SF
 		_builder.add_total_gem(InTotalGem);
 		_builder.add_total_game_money(InTotalGameMoney);
 		flatbuffers::Offset<SF::Flat::Game::GameMatchedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_GameMatchedS2CEvt, fbb));
 
@@ -2007,6 +2113,7 @@ namespace SF
 		SF::Flat::Game::GameMatchFailedS2CEvtBuilder _builder(fbb);
 		_builder.add_failed_reason(FailedReasonOffset);
 		flatbuffers::Offset<SF::Flat::Game::GameMatchFailedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_GameMatchFailedS2CEvt, fbb));
 
@@ -2023,6 +2130,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::GameMatchingStartedS2CEvtBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::GameMatchingStartedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_GameMatchingStartedS2CEvt, fbb));
 
@@ -2039,6 +2147,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::CancelGameMatchResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::CancelGameMatchRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_CancelGameMatchRes, fbb));
 
@@ -2055,6 +2164,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::GameMatchingCanceledS2CEvtBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::GameMatchingCanceledS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_GameMatchingCanceledS2CEvt, fbb));
 
@@ -2072,6 +2182,7 @@ namespace SF
 		SF::Flat::Game::GetUGCTemplatesResBuilder _builder(fbb);
 		_builder.add_ugcids(InUGCIDs);
 		flatbuffers::Offset<SF::Flat::Game::GetUGCTemplatesRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_GetUGCTemplatesRes, fbb));
 
@@ -2089,6 +2200,7 @@ namespace SF
 		SF::Flat::Game::SaveUGCResBuilder _builder(fbb);
 		_builder.add_ugcid(InUGCID);
 		flatbuffers::Offset<SF::Flat::Game::SaveUGCRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_SaveUGCRes, fbb));
 
@@ -2105,6 +2217,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::SearchUGCResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::SearchUGCRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_SearchUGCRes, fbb));
 
@@ -2123,6 +2236,7 @@ namespace SF
 		SF::Flat::Game::GetUGCContentInfoResBuilder _builder(fbb);
 		_builder.add_ugcmeta_data(UGCMetaDataOffset);
 		flatbuffers::Offset<SF::Flat::Game::GetUGCContentInfoRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_GetUGCContentInfoRes, fbb));
 
@@ -2141,6 +2255,7 @@ namespace SF
 		SF::Flat::Game::DownloadUGCContentResBuilder _builder(fbb);
 		_builder.add_ugcmeta_data(UGCMetaDataOffset);
 		flatbuffers::Offset<SF::Flat::Game::DownloadUGCContentRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_DownloadUGCContentRes, fbb));
 
@@ -2159,6 +2274,7 @@ namespace SF
 		SF::Flat::Game::RequestUGCZoneInstanceResBuilder _builder(fbb);
 		_builder.add_game_instance(GameInstanceOffset);
 		flatbuffers::Offset<SF::Flat::Game::RequestUGCZoneInstanceRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_RequestUGCZoneInstanceRes, fbb));
 
@@ -2178,6 +2294,7 @@ namespace SF
 		_builder.add_shop_item_id(InShopItemID);
 		_builder.add_purchase_id(PurchaseIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::BuyShopItemPrepareRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_BuyShopItemPrepareRes, fbb));
 
@@ -2195,6 +2312,7 @@ namespace SF
 		SF::Flat::Game::BuyShopItemResBuilder _builder(fbb);
 		_builder.add_shop_item_id(InShopItemID);
 		flatbuffers::Offset<SF::Flat::Game::BuyShopItemRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_BuyShopItemRes, fbb));
 
@@ -2215,6 +2333,7 @@ namespace SF
 		_builder.add_chat_uid(ChatUIDOffset);
 		_builder.add_channel_leader_id(ChannelLeaderIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::CreateOrJoinChatChannelRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_CreateOrJoinChatChannelRes, fbb));
 
@@ -2235,6 +2354,7 @@ namespace SF
 		_builder.add_chat_uid(ChatUIDOffset);
 		_builder.add_channel_leader_id(ChannelLeaderIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::JoinChatChannelRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_JoinChatChannelRes, fbb));
 
@@ -2255,6 +2375,7 @@ namespace SF
 		_builder.add_chat_uid(ChatUIDOffset);
 		_builder.add_joined_player(JoinedPlayerOffset);
 		flatbuffers::Offset<SF::Flat::Game::ChatChannelPlayerJoinedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_ChatChannelPlayerJoinedS2CEvt, fbb));
 
@@ -2275,6 +2396,7 @@ namespace SF
 		_builder.add_chat_uid(ChatUIDOffset);
 		_builder.add_new_leader_id(NewLeaderIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::ChatChannelLeaderChangedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_ChatChannelLeaderChangedS2CEvt, fbb));
 
@@ -2291,6 +2413,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::LeaveChatChannelResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::LeaveChatChannelRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_LeaveChatChannelRes, fbb));
 
@@ -2311,6 +2434,7 @@ namespace SF
 		_builder.add_chat_uid(ChatUIDOffset);
 		_builder.add_left_player_id(LeftPlayerIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::ChatChannelPlayerLeftS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_ChatChannelPlayerLeftS2CEvt, fbb));
 
@@ -2327,6 +2451,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::ChatChannelKickPlayerResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::ChatChannelKickPlayerRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_ChatChannelKickPlayerRes, fbb));
 
@@ -2347,6 +2472,7 @@ namespace SF
 		_builder.add_chat_uid(ChatUIDOffset);
 		_builder.add_kicked_player_id(KickedPlayerIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::ChatChannelPlayerKickedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_ChatChannelPlayerKickedS2CEvt, fbb));
 
@@ -2363,6 +2489,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::ChatChannelChatMessageResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::ChatChannelChatMessageRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_ChatChannelChatMessageRes, fbb));
 
@@ -2385,6 +2512,7 @@ namespace SF
 		_builder.add_chat_meta_data(ChatMetaDataOffset);
 		_builder.add_chat_message(ChatMessageOffset);
 		flatbuffers::Offset<SF::Flat::Game::ChatChannelChatMessageS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_ChatChannelChatMessageS2CEvt, fbb));
 
@@ -2401,6 +2529,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::WhisperMessageResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::WhisperMessageRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_WhisperMessageRes, fbb));
 
@@ -2423,6 +2552,7 @@ namespace SF
 		_builder.add_chat_meta_data(ChatMetaDataOffset);
 		_builder.add_chat_message(ChatMessageOffset);
 		flatbuffers::Offset<SF::Flat::Game::WhisperMessageS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_WhisperMessageS2CEvt, fbb));
 
@@ -2441,6 +2571,7 @@ namespace SF
 		SF::Flat::Game::CreateCharacterResBuilder _builder(fbb);
 		_builder.add_character_id(CharacterIDOffset);
 		flatbuffers::Offset<SF::Flat::Game::CreateCharacterRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_CreateCharacterRes, fbb));
 
@@ -2457,6 +2588,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::DeleteCharacterResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::DeleteCharacterRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_DeleteCharacterRes, fbb));
 
@@ -2475,6 +2607,7 @@ namespace SF
 		SF::Flat::Game::GetCharacterListResBuilder _builder(fbb);
 		_builder.add_characters(CharactersOffset);
 		flatbuffers::Offset<SF::Flat::Game::GetCharacterListRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_GetCharacterListRes, fbb));
 
@@ -2495,6 +2628,7 @@ namespace SF
 		_builder.add_private_data(PrivateDataOffset);
 		_builder.add_equip_data(EquipDataOffset);
 		flatbuffers::Offset<SF::Flat::Game::GetCharacterDataRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_GetCharacterDataRes, fbb));
 
@@ -2515,6 +2649,7 @@ namespace SF
 		_builder.add_character_id(CharacterIDOffset);
 		_builder.add_attributes(AttributesOffset);
 		flatbuffers::Offset<SF::Flat::Game::SelectCharacterRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_SelectCharacterRes, fbb));
 
@@ -2531,6 +2666,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Game::RequestServerNoticeUpdateResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Game::RequestServerNoticeUpdateRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_RequestServerNoticeUpdateRes, fbb));
 
@@ -2550,6 +2686,7 @@ namespace SF
 		_builder.add_notice_category(InNoticeCategory);
 		_builder.add_server_notice_message(ServerNoticeMessageOffset);
 		flatbuffers::Offset<SF::Flat::Game::ServerNoticeS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Game::MID_ServerNoticeS2CEvt, fbb));
 
@@ -2568,6 +2705,7 @@ namespace SF
 		SF::Flat::Game::CallFunctionResBuilder _builder(fbb);
 		_builder.add_results(ResultsOffset);
 		flatbuffers::Offset<SF::Flat::Game::CallFunctionRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_CallFunctionRes, fbb));
 

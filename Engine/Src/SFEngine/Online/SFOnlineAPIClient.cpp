@@ -112,7 +112,6 @@ namespace SF
 
         SFLog(Websocket, Debug4, "OnlineAPIClient OnRecv: size:{0}", data.size());
 
-
         std::string errs;
         Json::CharReaderBuilder jsonBuilder;
         Json::Value rootObject;
@@ -121,7 +120,7 @@ namespace SF
         bool bRes = jsonReader->parse(readStart, readStart + data.size(), &rootObject, &errs);
         if (!bRes)
         {
-            SFLog(Net, Error, "ServerConfigJson::LoadConfig value parsing error:{0}", errs);
+            SFLog(Net, Error, "OnlineAPIClient::OnRecv, value parsing error:{0}", errs);
             return;
         }
 

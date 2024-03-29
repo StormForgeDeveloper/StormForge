@@ -30,20 +30,20 @@ namespace SF {
 
         Guid(const Guid& other)
         {
-            __m128i x = _mm_loadu_si128 ((__m128i*)other.data);
-            _mm_store_si128((__m128i*)data, x);
+            memcpy(data, other.data, sizeof(data));
         }
 
         /* Builds a 128-bits Guid */
         Guid(__m128i uuid)
         {
-            _mm_store_si128((__m128i*)data, uuid);
+            // No boundary limit unlike _mm_store_si128
+            _mm_storeu_si128((__m128i*)data, uuid);
         }
 
         Guid(uint64_t x, uint64_t y)
         {
-            __m128i z = _mm_set_epi64x(x, y);
-            _mm_store_si128((__m128i*)data, z);
+            memcpy(data, &x, sizeof(x));
+            memcpy(data + 8, &y, sizeof(x));
         }
 
         bool IsValid() const
@@ -84,15 +84,16 @@ namespace SF {
         // Make a Guid from uint64_t
         static Guid FromUInt64(uint64_t value);
 
-
         Guid& operator=(const Guid& other)
         {
             if (&other == this)
             {
                 return *this;
             }
+
             __m128i x = _mm_loadu_si128 ((__m128i*)other.data);
-            _mm_store_si128((__m128i*)data, x);
+            _mm_storeu_si128((__m128i*)data, x);
+
             return *this;
         }
 

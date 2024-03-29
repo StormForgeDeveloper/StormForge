@@ -39,6 +39,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_player_identifier(PlayerIdentifierOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::JoinPlayInstanceCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_JoinPlayInstanceCmd, fbb));
 
@@ -61,6 +62,7 @@ namespace SF
 		_builder.add_target_endpoint_mask(InTargetEndpointMask);
 		_builder.add_payload(PayloadOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::PlayPacketC2SEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_PlayPacketC2SEvt, fbb));
 
@@ -83,6 +85,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_movement(MovementOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::PlayerMovementC2SEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_PlayerMovementC2SEvt, fbb));
 
@@ -105,6 +108,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_sync_data(SyncDataOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::ClientSyncReliableC2SEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_ClientSyncReliableC2SEvt, fbb));
 
@@ -127,6 +131,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_sync_data(SyncDataOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::ClientSyncC2SEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_ClientSyncC2SEvt, fbb));
 
@@ -149,6 +154,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_public_message(PublicMessageOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::SetCharacterPublicMessageCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_SetCharacterPublicMessageCmd, fbb));
 
@@ -173,6 +179,7 @@ namespace SF
 		_builder.add_target_player_id(TargetPlayerIDOffset);
 		_builder.add_whiteboard_info(WhiteboardInfoOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::RequestWhiteboardSharingCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_RequestWhiteboardSharingCmd, fbb));
 
@@ -196,6 +203,7 @@ namespace SF
 		_builder.add_requested_player_id(RequestedPlayerIDOffset);
 		_builder.add_answer(InAnswer);
 		flatbuffers::Offset<SF::Flat::PlayInstance::AcceptWhiteboardSharingCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_AcceptWhiteboardSharingCmd, fbb));
 
@@ -216,6 +224,7 @@ namespace SF
 		_builder.add_play_instance_uid(PlayInstanceUIDOffset);
 		_builder.add_player_id(PlayerIDOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::CloseWhiteboardSharingCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_CloseWhiteboardSharingCmd, fbb));
 
@@ -238,6 +247,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_log_entry(LogEntryOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::AddWhiteboardSharingLogEntryCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_AddWhiteboardSharingLogEntryCmd, fbb));
 
@@ -260,6 +270,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_log_entry(LogEntryOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::UpdateWhiteboardSharingLogEntryCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_UpdateWhiteboardSharingLogEntryCmd, fbb));
 
@@ -281,6 +292,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_log_entry_id(InLogEntryID);
 		flatbuffers::Offset<SF::Flat::PlayInstance::RemoveWhiteboardSharingLogEntryCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_RemoveWhiteboardSharingLogEntryCmd, fbb));
 
@@ -303,6 +315,7 @@ namespace SF
 		_builder.add_map_object_id(InMapObjectId);
 		_builder.add_usage_id(InUsageId);
 		flatbuffers::Offset<SF::Flat::PlayInstance::OccupyMapObjectCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_OccupyMapObjectCmd, fbb));
 
@@ -324,6 +337,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_map_object_id(InMapObjectId);
 		flatbuffers::Offset<SF::Flat::PlayInstance::UnoccupyMapObjectCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_UnoccupyMapObjectCmd, fbb));
 
@@ -347,6 +361,7 @@ namespace SF
 		_builder.add_map_object_id(InMapObjectId);
 		_builder.add_use_parameters(UseParametersOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::UseMapObjectCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_UseMapObjectCmd, fbb));
 
@@ -372,6 +387,7 @@ namespace SF
 		_builder.add_chat_meta_data(ChatMetaDataOffset);
 		_builder.add_chat_message(ChatMessageOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::ZoneChatCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_ZoneChatCmd, fbb));
 
@@ -393,6 +409,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_parameters(ParametersOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::CallFunctionCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_CallFunctionCmd, fbb));
 
@@ -416,6 +433,7 @@ namespace SF
 		_builder.add_frame_index(InFrameIndex);
 		_builder.add_voice_data(VoiceDataOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::SendVoiceDataC2SEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_SendVoiceDataC2SEvt, fbb));
 
@@ -435,6 +453,7 @@ namespace SF
 		_builder.add_ticket(InTicket);
 		_builder.add_stream_name(StreamNameOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::CreateStreamCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_CreateStreamCmd, fbb));
 
@@ -454,6 +473,7 @@ namespace SF
 		_builder.add_ticket(InTicket);
 		_builder.add_stream_name(StreamNameOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::FindStreamCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_FindStreamCmd, fbb));
 
@@ -473,6 +493,7 @@ namespace SF
 		_builder.add_ticket(InTicket);
 		_builder.add_stream_name(StreamNameOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::DeleteStreamCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_DeleteStreamCmd, fbb));
 
@@ -490,6 +511,7 @@ namespace SF
 		SF::Flat::PlayInstance::GetStreamListCmdBuilder _builder(fbb);
 		_builder.add_ticket(InTicket);
 		flatbuffers::Offset<SF::Flat::PlayInstance::GetStreamListCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_GetStreamListCmd, fbb));
 
@@ -518,6 +540,7 @@ namespace SF
 		_builder.add_character_private_data(CharacterPrivateDataOffset);
 		_builder.add_movement(MovementOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::JoinPlayInstanceRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_JoinPlayInstanceRes, fbb));
 
@@ -538,6 +561,7 @@ namespace SF
 		_builder.add_play_instance_uid(PlayInstanceUIDOffset);
 		_builder.add_kicked_player_id(KickedPlayerIDOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::PlayerKickedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_PlayerKickedS2CEvt, fbb));
 
@@ -569,6 +593,7 @@ namespace SF
 		_builder.add_state(InState);
 		_builder.add_state_values(StateValuesOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::NewActorInViewS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_NewActorInViewS2CEvt, fbb));
 
@@ -588,6 +613,7 @@ namespace SF
 		_builder.add_play_instance_uid(PlayInstanceUIDOffset);
 		_builder.add_actor_id(InActorID);
 		flatbuffers::Offset<SF::Flat::PlayInstance::RemoveActorFromViewS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_RemoveActorFromViewS2CEvt, fbb));
 
@@ -608,6 +634,7 @@ namespace SF
 		_builder.add_play_instance_uid(PlayInstanceUIDOffset);
 		_builder.add_movement(MovementOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::ActorMovementS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_ActorMovementS2CEvt, fbb));
 
@@ -628,6 +655,7 @@ namespace SF
 		_builder.add_play_instance_uid(PlayInstanceUIDOffset);
 		_builder.add_movement(MovementOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::ActorMovementsS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_ActorMovementsS2CEvt, fbb));
 
@@ -654,6 +682,7 @@ namespace SF
 		_builder.add_position(PositionOffset);
 		_builder.add_state_values(StateValuesOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::PlayerStateChangedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_PlayerStateChangedS2CEvt, fbb));
 
@@ -670,6 +699,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::PlayInstance::SetCharacterPublicMessageResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::PlayInstance::SetCharacterPublicMessageRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_SetCharacterPublicMessageRes, fbb));
 
@@ -694,6 +724,7 @@ namespace SF
 		_builder.add_character_id(CharacterIDOffset);
 		_builder.add_private_data(PrivateDataOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::CharacterPrivateDataChangedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_CharacterPrivateDataChangedS2CEvt, fbb));
 
@@ -716,6 +747,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_public_data(PublicDataOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::CharacterPublicDataChangedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_CharacterPublicDataChangedS2CEvt, fbb));
 
@@ -732,6 +764,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::PlayInstance::RequestWhiteboardSharingResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::PlayInstance::RequestWhiteboardSharingRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_RequestWhiteboardSharingRes, fbb));
 
@@ -748,6 +781,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::PlayInstance::AcceptWhiteboardSharingResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::PlayInstance::AcceptWhiteboardSharingRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_AcceptWhiteboardSharingRes, fbb));
 
@@ -764,6 +798,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::PlayInstance::CloseWhiteboardSharingResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::PlayInstance::CloseWhiteboardSharingRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_CloseWhiteboardSharingRes, fbb));
 
@@ -781,6 +816,7 @@ namespace SF
 		SF::Flat::PlayInstance::AddWhiteboardSharingLogEntryResBuilder _builder(fbb);
 		_builder.add_log_entry_id(InLogEntryID);
 		flatbuffers::Offset<SF::Flat::PlayInstance::AddWhiteboardSharingLogEntryRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_AddWhiteboardSharingLogEntryRes, fbb));
 
@@ -797,6 +833,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::PlayInstance::UpdateWhiteboardSharingLogEntryResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::PlayInstance::UpdateWhiteboardSharingLogEntryRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_UpdateWhiteboardSharingLogEntryRes, fbb));
 
@@ -813,6 +850,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::PlayInstance::RemoveWhiteboardSharingLogEntryResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::PlayInstance::RemoveWhiteboardSharingLogEntryRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_RemoveWhiteboardSharingLogEntryRes, fbb));
 
@@ -835,6 +873,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_requested_player_id(RequestedPlayerIDOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::WhiteboardSharingRequestedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_WhiteboardSharingRequestedS2CEvt, fbb));
 
@@ -857,6 +896,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_rejected_player_id(RejectedPlayerIDOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::WhiteboardSharingRejectedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_WhiteboardSharingRejectedS2CEvt, fbb));
 
@@ -881,6 +921,7 @@ namespace SF
 		_builder.add_other_player_id(OtherPlayerIDOffset);
 		_builder.add_whiteboard_info(WhiteboardInfoOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::WhiteboardSharingStartedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_WhiteboardSharingStartedS2CEvt, fbb));
 
@@ -903,6 +944,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_closed_player_id(ClosedPlayerIDOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::WhiteboardSharingHasClosedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_WhiteboardSharingHasClosedS2CEvt, fbb));
 
@@ -925,6 +967,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_log_entry(LogEntryOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::WhiteboardSharingNewLogEntryAddedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_WhiteboardSharingNewLogEntryAddedS2CEvt, fbb));
 
@@ -946,6 +989,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_log_entry_id(InLogEntryID);
 		flatbuffers::Offset<SF::Flat::PlayInstance::WhiteboardSharingNewLogEntryRemovedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_WhiteboardSharingNewLogEntryRemovedS2CEvt, fbb));
 
@@ -968,6 +1012,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_log_entry(LogEntryOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::WhiteboardSharingNewLogEntryUpdatedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_WhiteboardSharingNewLogEntryUpdatedS2CEvt, fbb));
 
@@ -989,6 +1034,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_map_object_id(InMapObjectId);
 		flatbuffers::Offset<SF::Flat::PlayInstance::OccupyMapObjectRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_OccupyMapObjectRes, fbb));
 
@@ -1010,6 +1056,7 @@ namespace SF
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_map_object_id(InMapObjectId);
 		flatbuffers::Offset<SF::Flat::PlayInstance::UnoccupyMapObjectRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_UnoccupyMapObjectRes, fbb));
 
@@ -1033,6 +1080,7 @@ namespace SF
 		_builder.add_map_object_id(InMapObjectId);
 		_builder.add_result_attributes(ResultAttributesOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::UseMapObjectRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_UseMapObjectRes, fbb));
 
@@ -1049,6 +1097,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::PlayInstance::ZoneChatResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::PlayInstance::ZoneChatRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_ZoneChatRes, fbb));
 
@@ -1074,6 +1123,7 @@ namespace SF
 		_builder.add_chat_meta_data(ChatMetaDataOffset);
 		_builder.add_chat_message(ChatMessageOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::ZoneChatS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_ZoneChatS2CEvt, fbb));
 
@@ -1096,6 +1146,7 @@ namespace SF
 		_builder.add_current_exp(InCurrentExp);
 		_builder.add_current_level(InCurrentLevel);
 		flatbuffers::Offset<SF::Flat::PlayInstance::LevelUpS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_LevelUpS2CEvt, fbb));
 
@@ -1114,6 +1165,7 @@ namespace SF
 		SF::Flat::PlayInstance::CallFunctionResBuilder _builder(fbb);
 		_builder.add_results(ResultsOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::CallFunctionRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_CallFunctionRes, fbb));
 
@@ -1134,6 +1186,7 @@ namespace SF
 		_builder.add_frame_index(InFrameIndex);
 		_builder.add_voice_data(VoiceDataOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::VoiceDataS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_VoiceDataS2CEvt, fbb));
 
@@ -1152,6 +1205,7 @@ namespace SF
 		SF::Flat::PlayInstance::CreateStreamResBuilder _builder(fbb);
 		_builder.add_stream_name(StreamNameOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::CreateStreamRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_CreateStreamRes, fbb));
 
@@ -1170,6 +1224,7 @@ namespace SF
 		SF::Flat::PlayInstance::FindStreamResBuilder _builder(fbb);
 		_builder.add_stream_name(StreamNameOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::FindStreamRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_FindStreamRes, fbb));
 
@@ -1188,6 +1243,7 @@ namespace SF
 		SF::Flat::PlayInstance::DeleteStreamResBuilder _builder(fbb);
 		_builder.add_stream_name(StreamNameOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::DeleteStreamRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_DeleteStreamRes, fbb));
 
@@ -1206,6 +1262,7 @@ namespace SF
 		SF::Flat::PlayInstance::GetStreamListResBuilder _builder(fbb);
 		_builder.add_stream_names(StreamNamesOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::GetStreamListRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_GetStreamListRes, fbb));
 

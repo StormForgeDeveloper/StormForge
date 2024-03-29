@@ -33,6 +33,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Generic::GenericFailureCmdBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Generic::GenericFailureCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Generic::MID_GenericFailureCmd, fbb));
 
@@ -49,6 +50,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Generic::GenericTransactionCmdBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Generic::GenericTransactionCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Generic::MID_GenericTransactionCmd, fbb));
 
@@ -67,6 +69,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		SF::Flat::Generic::GenericFailureResBuilder _builder(fbb);
 		flatbuffers::Offset<SF::Flat::Generic::GenericFailureRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Generic::MID_GenericFailureRes, fbb));
 
@@ -87,6 +90,7 @@ namespace SF
 		_builder.add_finished_transaction(FinishedTransactionOffset);
 		_builder.add_signature(SignatureOffset);
 		flatbuffers::Offset<SF::Flat::Generic::GenericTransactionRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
 
 		protocolCheck(Send(InTransactionID, InResult, Message::Generic::MID_GenericTransactionRes, fbb));
 
