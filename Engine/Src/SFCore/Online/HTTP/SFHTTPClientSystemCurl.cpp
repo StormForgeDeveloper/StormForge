@@ -94,7 +94,8 @@ namespace SF
                 typeName = TypeNames[int(type)];
             }
 
-            SFLog(HTTP, Custom1, "CURL: {0}:{1}", typeName, data);
+            std::string strData(data, data + size);
+            SFLog(HTTP, Custom1, "CURL: {0}:{1}", typeName, strData);
 
             return 0;
         }
