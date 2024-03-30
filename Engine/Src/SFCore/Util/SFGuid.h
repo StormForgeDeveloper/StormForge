@@ -19,14 +19,17 @@ namespace SF {
     // 4 bytes + 2 bytes + 2 bytes + 2 bytes + 8 X 1 bytes
     // https://www.rfc-editor.org/rfc/rfc4122
     // Guid RFC-4122
-    class Guid
+    class SF_DECLARE_ALIGN_DOUBLE Guid
     {
     public:
 
         static const Guid Empty;
 
         Guid()
-        {}
+        {
+            __m128i x = _mm_setzero_si128 ();
+            _mm_storeu_si128((__m128i*)data, x);
+        }
 
         Guid(const Guid& other)
         {
@@ -147,7 +150,7 @@ namespace SF {
             return *((uint64_t*)data) ^ *((uint64_t*)data + 8);
         }
 
-        uint8_t data[16]{};
+        uint8_t data[16];
     };
 
 
