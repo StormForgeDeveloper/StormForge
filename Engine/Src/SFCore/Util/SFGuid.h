@@ -19,7 +19,7 @@ namespace SF {
     // 4 bytes + 2 bytes + 2 bytes + 2 bytes + 8 X 1 bytes
     // https://www.rfc-editor.org/rfc/rfc4122
     // Guid RFC-4122
-    class SF_DECLARE_ALIGN_DOUBLE Guid
+    class Guid
     {
     public:
 
