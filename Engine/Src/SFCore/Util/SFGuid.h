@@ -30,7 +30,8 @@ namespace SF {
 
         Guid(const Guid& other)
         {
-            memcpy(data, other.data, sizeof(data));
+            __m128i x = _mm_loadu_si128((__m128i*)other.data);
+            _mm_storeu_si128((__m128i*)data, x);
         }
 
         /* Builds a 128-bits Guid */
