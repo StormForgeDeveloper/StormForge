@@ -128,7 +128,7 @@ namespace SF
 
         public new string ToString()
         {
-            return $"(MID:{Type},{ProtocolId},{CodeIndex})";
+            return $"({Type},{ProtocolId},{CodeIndex})";
         }
 
     }

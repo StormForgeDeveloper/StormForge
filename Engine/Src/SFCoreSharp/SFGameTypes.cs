@@ -447,7 +447,7 @@ namespace SF
 
         public new string ToString()
         {
-            return $"(TransID:{TransactionId})";
+            return $"{TransactionId}";
         }
     }
 
