@@ -168,11 +168,11 @@ namespace SF
             // i.e. 0x1002300450067008 -> 0x12345678
             __m256i base = _mm256_sub_epi8(str_packed, base_sub);
 
-            // make blend make for alphabet lower case
+            // make blend mask for alphabet lower case
             __m256i base_alpha_masked = _mm256_and_si256(base, alpha_mask);
             __m256i alpha = _mm256_slli_epi64(base_alpha_masked, 2);
 
-            // make blend make for alphabet any
+            // make blend mask for alphabet any
             __m256i base_alpha_any_masked = _mm256_and_si256(base, alpha_any_mask);
             __m256i alpha_any = _mm256_slli_epi64(base_alpha_any_masked, 3);
 
