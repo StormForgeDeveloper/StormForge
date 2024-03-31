@@ -26,6 +26,8 @@ namespace SF
 	class GameMessageLog
 	{
  		private:
+		static bool stm_IsInitialized;
+		static flatbuffers::Parser stm_Parser;
 
 		public:
 		static Result Initialize();

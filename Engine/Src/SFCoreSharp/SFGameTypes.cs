@@ -201,7 +201,7 @@ namespace SF
 
         public override string ToString()
         {
-            return Guid.ToString();
+            return Guid.ToString("D");
         }
     }
 
@@ -370,7 +370,7 @@ namespace SF
 
         public override string ToString()
         {
-            return Guid.ToString();
+            return Guid.ToString("D");
         }
     }
 

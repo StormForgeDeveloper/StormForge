@@ -57,9 +57,8 @@ namespace SF
         typedef Result(*MessageHandlingFunction)(const char* prefix, const MessageHeader* pHeader);
 
         extern std::unordered_map<MessageID, MessageHandlingFunction> MessageDebugTraceMap;
-        extern flatbuffers::Parser MessageDebugParser;
 
-        Result LoadFlatSchema(const char* schemaFilePath);
+        Result LoadFlatSchema(flatbuffers::Parser& parser, const char* schemaFilePath);
 
 		//TODO: to library object
 		void PrintDebugMessage(const char* preFix, const MessageHeader* pHeader);

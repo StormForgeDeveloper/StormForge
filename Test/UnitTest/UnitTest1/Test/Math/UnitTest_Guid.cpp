@@ -33,7 +33,8 @@ TEST_F(MathTest, Guid)
         "00000000123400000000000000000000",
         "00000000000056780000000000000000",
         "0000000000000000abcd000000000000",
-        "69F7DF71-9151-4ACB-8670-E523F9C1A149",
+        "01234567-89ab-cdef-ABCD-EF23F9C1A149",
+        "69f7df71-9151-4acb-8670-e523f9c1a149",
         "45E22DBC-C7C3-447C-86C1-F103E803FF35",
         "B865CF14-9865-4C9A-AA97-AA79490B792F",
         "9ED9C1DD-4D31-489B-83D4-A79C410B4177",
@@ -42,6 +43,7 @@ TEST_F(MathTest, Guid)
         "7BB19B97"
         "1",
     };
+
     const char* TestInvalids[] = {
         "0000000000000-0000-0000-1234556789e7",
         "12345678-000000000-0000-000000000000",
@@ -52,26 +54,43 @@ TEST_F(MathTest, Guid)
         "00000000r0000r5678r0000r000000000000",
     };
 
+
     Guid op1, op2, op3;
+
+    EXPECT_TRUE(Guid::TryParseRFC("00000000-0000-0000-0000-000000000000", op1));
+    op2 = Guid::ParseGeneric("00000000-0000-0000-0000-000000000000");
+    EXPECT_TRUE(op1 == op2);
+    if (CPUInfo::GetFeatures().AVX2)
+    {
+        CPUInfo::GetFeaturesMutable().AVX2 = 0;
+
+        EXPECT_TRUE(Guid::TryParseRFC("00000000-0000-0000-0000-000000000000", op1));
+        op2 = Guid::ParseGeneric("00000000-0000-0000-0000-000000000000");
+        EXPECT_TRUE(op1 == op2);
+
+        CPUInfo::GetFeaturesMutable().AVX2 = 1;
+    }
+
 
     for (const char* testGuid : TestValids)
     {
-        EXPECT_TRUE(Guid::TryParseGeneric(testGuid, op1));
-        op2 = Guid::ParseGeneric(testGuid);
-
-        if (CPUInfo::GetFeatures().AVX)
-        {
-            CPUInfo::GetFeaturesMutable().AVX = 0;
-            EXPECT_TRUE(Guid::TryParseGeneric(testGuid, op3));
-            CPUInfo::GetFeaturesMutable().AVX = 1;
-        }
-
         char op1Str[64]{};
         char op2Str[64]{};
         char op3Str[64]{};
 
+        EXPECT_TRUE(Guid::TryParseGeneric(testGuid, op1));
         op1.ToString(op1Str);
+
+        op2 = Guid::ParseGeneric(testGuid);
         op2.ToString(op2Str);
+
+        op3 = op2;
+        if (CPUInfo::GetFeatures().AVX2)
+        {
+            CPUInfo::GetFeaturesMutable().AVX2 = 0;
+            EXPECT_TRUE(Guid::TryParseGeneric(testGuid, op3));
+            CPUInfo::GetFeaturesMutable().AVX2 = 1;
+        }
         op3.ToString(op3Str);
 
         EXPECT_TRUE(op1.IsValid());
@@ -80,6 +99,9 @@ TEST_F(MathTest, Guid)
 
         EXPECT_TRUE(op1 == op2);
         EXPECT_TRUE(op2 == op3);
+
+        EXPECT_TRUE(StrUtil::StringCompair(op1Str, op2Str));
+        EXPECT_TRUE(StrUtil::StringCompair(op2Str, op3Str));
     }
 
     for (const char* testGuid : TestInvalids)

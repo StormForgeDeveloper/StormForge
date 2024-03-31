@@ -25,10 +25,13 @@
 
 namespace SF
 {
- 	Result GameMessageLog::Initialize()
+ 	bool GameMessageLog::stm_IsInitialized = false;
+	flatbuffers::Parser GameMessageLog::stm_Parser;
+	Result GameMessageLog::Initialize()
 	{
  		Result hr;
 
+		if (stm_IsInitialized) return hr;
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_HeartbeatC2SEvt,&HeartbeatC2SEvt));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_JoinGameServerCmd,&JoinGameServerCmd));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_JoinGameServerRes,&JoinGameServerRes));
@@ -169,7 +172,9 @@ namespace SF
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_CallFunctionRes,&CallFunctionRes));
 
 
-		Protocol::LoadFlatSchema("Game.fbs");
+		Protocol::LoadFlatSchema(stm_Parser, "Game.fbs");
+		stm_Parser.opts.indent_step = -1; // no new line
+		stm_IsInitialized = true;
 
 		return hr;
 	}; // Result GameMessageLog::Initialize()
@@ -180,8 +185,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.HeartbeatC2SEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.HeartbeatC2SEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:HeartbeatC2SEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -194,8 +200,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.JoinGameServerCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.JoinGameServerCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:JoinGameServerCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -208,8 +215,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.JoinGameServerRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.JoinGameServerRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:JoinGameServerRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -222,8 +230,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetAchievementStatsCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetAchievementStatsCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetAchievementStatsCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -236,8 +245,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetAchievementStatsRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetAchievementStatsRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetAchievementStatsRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -250,8 +260,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.Dummy1Cmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.Dummy1Cmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:Dummy1Cmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -264,8 +275,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.Dummy1Res")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.Dummy1Res";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:Dummy1Res: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -278,8 +290,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.RegisterGCMCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.RegisterGCMCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:RegisterGCMCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -292,8 +305,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.RegisterGCMRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.RegisterGCMRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:RegisterGCMRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -306,8 +320,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.UnregisterGCMCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.UnregisterGCMCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:UnregisterGCMCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -320,8 +335,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.UnregisterGCMRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.UnregisterGCMRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:UnregisterGCMRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -334,8 +350,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.InviteFriendCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.InviteFriendCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:InviteFriendCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -348,8 +365,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.InviteFriendRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.InviteFriendRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:InviteFriendRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -362,8 +380,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.AcceptFriendRequestCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.AcceptFriendRequestCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:AcceptFriendRequestCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -376,8 +395,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.AcceptFriendRequestRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.AcceptFriendRequestRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:AcceptFriendRequestRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -390,8 +410,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.FriendRequestAcceptedS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.FriendRequestAcceptedS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:FriendRequestAcceptedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -404,8 +425,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.RemoveFriendCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.RemoveFriendCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:RemoveFriendCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -418,8 +440,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.RemoveFriendRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.RemoveFriendRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:RemoveFriendRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -432,8 +455,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.FriendRemovedS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.FriendRemovedS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:FriendRemovedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -446,8 +470,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetFriendListCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetFriendListCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetFriendListCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -460,8 +485,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetFriendListRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetFriendListRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetFriendListRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -474,8 +500,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetNotificationListCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetNotificationListCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetNotificationListCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -488,8 +515,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetNotificationListRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetNotificationListRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetNotificationListRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -502,8 +530,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.DeleteNotificationCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.DeleteNotificationCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:DeleteNotificationCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -516,8 +545,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.DeleteNotificationRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.DeleteNotificationRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:DeleteNotificationRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -530,8 +560,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.SetNotificationReadCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.SetNotificationReadCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:SetNotificationReadCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -544,8 +575,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.SetNotificationReadRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.SetNotificationReadRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:SetNotificationReadRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -558,8 +590,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.AcceptNotificationCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.AcceptNotificationCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:AcceptNotificationCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -572,8 +605,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.AcceptNotificationRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.AcceptNotificationRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:AcceptNotificationRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -586,8 +620,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.NotifyS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.NotifyS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:NotifyS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -600,8 +635,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.FindPlayerByPlatformIdCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.FindPlayerByPlatformIdCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:FindPlayerByPlatformIdCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -614,8 +650,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.FindPlayerByPlatformIdRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.FindPlayerByPlatformIdRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:FindPlayerByPlatformIdRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -628,8 +665,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.FindPlayerByCharacterNameCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.FindPlayerByCharacterNameCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:FindPlayerByCharacterNameCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -642,8 +680,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.FindPlayerByCharacterNameRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.FindPlayerByCharacterNameRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:FindPlayerByCharacterNameRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -656,8 +695,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.FindPlayerByPlatformUserNameCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.FindPlayerByPlatformUserNameCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:FindPlayerByPlatformUserNameCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -670,8 +710,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.FindPlayerByPlatformUserNameRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.FindPlayerByPlatformUserNameRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:FindPlayerByPlatformUserNameRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -684,8 +725,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.FindPlayerByEMailCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.FindPlayerByEMailCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:FindPlayerByEMailCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -698,8 +740,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.FindPlayerByEMailRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.FindPlayerByEMailRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:FindPlayerByEMailRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -712,8 +755,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.FindPlayerByPlayerIDCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.FindPlayerByPlayerIDCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:FindPlayerByPlayerIDCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -726,8 +770,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.FindPlayerByPlayerIDRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.FindPlayerByPlayerIDRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:FindPlayerByPlayerIDRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -740,8 +785,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.RequestPlayerStatusUpdateCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.RequestPlayerStatusUpdateCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:RequestPlayerStatusUpdateCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -754,8 +800,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.RequestPlayerStatusUpdateRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.RequestPlayerStatusUpdateRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:RequestPlayerStatusUpdateRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -768,8 +815,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.NotifyPlayerStatusUpdatedS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.NotifyPlayerStatusUpdatedS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:NotifyPlayerStatusUpdatedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -782,8 +830,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetRankingListCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetRankingListCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetRankingListCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -796,8 +845,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetRankingListRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetRankingListRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetRankingListRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -810,8 +860,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetUserGamePlayerInfoCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetUserGamePlayerInfoCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetUserGamePlayerInfoCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -824,8 +875,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetUserGamePlayerInfoRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetUserGamePlayerInfoRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetUserGamePlayerInfoRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -838,8 +890,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetGamePlayerInfoCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetGamePlayerInfoCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetGamePlayerInfoCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -852,8 +905,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetGamePlayerInfoRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetGamePlayerInfoRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetGamePlayerInfoRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -866,8 +920,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.LevelUpS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.LevelUpS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:LevelUpS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -880,8 +935,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.SetNickNameCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.SetNickNameCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:SetNickNameCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -894,8 +950,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.SetNickNameRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.SetNickNameRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:SetNickNameRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -908,8 +965,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.CreatePartyCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.CreatePartyCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:CreatePartyCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -922,8 +980,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.CreatePartyRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.CreatePartyRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:CreatePartyRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -936,8 +995,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.JoinPartyCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.JoinPartyCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:JoinPartyCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -950,8 +1010,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.JoinPartyRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.JoinPartyRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:JoinPartyRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -964,8 +1025,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.PartyPlayerJoinedS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.PartyPlayerJoinedS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:PartyPlayerJoinedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -978,8 +1040,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.PartyLeaderChangedS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.PartyLeaderChangedS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:PartyLeaderChangedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -992,8 +1055,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.LeavePartyCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.LeavePartyCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:LeavePartyCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1006,8 +1070,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.LeavePartyRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.LeavePartyRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:LeavePartyRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1020,8 +1085,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.PartyPlayerLeftS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.PartyPlayerLeftS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:PartyPlayerLeftS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1034,8 +1100,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.PartyKickPlayerCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.PartyKickPlayerCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:PartyKickPlayerCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1048,8 +1115,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.PartyKickPlayerRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.PartyKickPlayerRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:PartyKickPlayerRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1062,8 +1130,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.PartyPlayerKickedS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.PartyPlayerKickedS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:PartyPlayerKickedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1076,8 +1145,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.PartyInviteCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.PartyInviteCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:PartyInviteCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1090,8 +1160,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.PartyInviteRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.PartyInviteRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:PartyInviteRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1104,8 +1175,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.PartyInviteRequestedS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.PartyInviteRequestedS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:PartyInviteRequestedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1118,8 +1190,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.PartyQuickChatMessageCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.PartyQuickChatMessageCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:PartyQuickChatMessageCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1132,8 +1205,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.PartyQuickChatMessageRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.PartyQuickChatMessageRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:PartyQuickChatMessageRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1146,8 +1220,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.PartyQuickChatMessageS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.PartyQuickChatMessageS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:PartyQuickChatMessageS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1160,8 +1235,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.PartyChatMessageCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.PartyChatMessageCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:PartyChatMessageCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1174,8 +1250,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.PartyChatMessageRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.PartyChatMessageRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:PartyChatMessageRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1188,8 +1265,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.PartyChatMessageS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.PartyChatMessageS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:PartyChatMessageS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1202,8 +1280,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.JoinGameInstanceCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.JoinGameInstanceCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:JoinGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1216,8 +1295,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.JoinGameInstanceRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.JoinGameInstanceRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:JoinGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1230,8 +1310,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.LeaveGameInstanceCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.LeaveGameInstanceCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:LeaveGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1244,8 +1325,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.LeaveGameInstanceRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.LeaveGameInstanceRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:LeaveGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1258,8 +1340,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.SearchGameInstanceCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.SearchGameInstanceCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:SearchGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1272,8 +1355,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.SearchGameInstanceRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.SearchGameInstanceRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:SearchGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1286,8 +1370,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetCharacterDataInGameInstanceCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetCharacterDataInGameInstanceCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetCharacterDataInGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1300,8 +1385,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetCharacterDataInGameInstanceRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetCharacterDataInGameInstanceRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetCharacterDataInGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1314,8 +1400,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.RequestGameMatchCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.RequestGameMatchCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:RequestGameMatchCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1328,8 +1415,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.RequestGameMatchRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.RequestGameMatchRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:RequestGameMatchRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1342,8 +1430,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GameMatchedS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GameMatchedS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GameMatchedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1356,8 +1445,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GameMatchFailedS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GameMatchFailedS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GameMatchFailedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1370,8 +1460,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GameMatchingStartedS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GameMatchingStartedS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GameMatchingStartedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1384,8 +1475,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.CancelGameMatchCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.CancelGameMatchCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:CancelGameMatchCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1398,8 +1490,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.CancelGameMatchRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.CancelGameMatchRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:CancelGameMatchRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1412,8 +1505,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GameMatchingCanceledS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GameMatchingCanceledS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GameMatchingCanceledS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1426,8 +1520,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetUGCTemplatesCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetUGCTemplatesCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetUGCTemplatesCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1440,8 +1535,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetUGCTemplatesRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetUGCTemplatesRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetUGCTemplatesRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1454,8 +1550,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.SaveUGCCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.SaveUGCCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:SaveUGCCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1468,8 +1565,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.SaveUGCRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.SaveUGCRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:SaveUGCRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1482,8 +1580,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.SearchUGCCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.SearchUGCCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:SearchUGCCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1496,8 +1595,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.SearchUGCRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.SearchUGCRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:SearchUGCRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1510,8 +1610,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetUGCContentInfoCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetUGCContentInfoCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetUGCContentInfoCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1524,8 +1625,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetUGCContentInfoRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetUGCContentInfoRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetUGCContentInfoRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1538,8 +1640,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.DownloadUGCContentCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.DownloadUGCContentCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:DownloadUGCContentCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1552,8 +1655,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.DownloadUGCContentRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.DownloadUGCContentRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:DownloadUGCContentRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1566,8 +1670,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.RequestUGCZoneInstanceCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.RequestUGCZoneInstanceCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:RequestUGCZoneInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1580,8 +1685,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.RequestUGCZoneInstanceRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.RequestUGCZoneInstanceRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:RequestUGCZoneInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1594,8 +1700,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.BuyShopItemPrepareCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.BuyShopItemPrepareCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:BuyShopItemPrepareCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1608,8 +1715,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.BuyShopItemPrepareRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.BuyShopItemPrepareRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:BuyShopItemPrepareRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1622,8 +1730,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.BuyShopItemCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.BuyShopItemCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:BuyShopItemCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1636,8 +1745,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.BuyShopItemRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.BuyShopItemRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:BuyShopItemRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1650,8 +1760,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.CreateOrJoinChatChannelCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.CreateOrJoinChatChannelCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:CreateOrJoinChatChannelCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1664,8 +1775,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.CreateOrJoinChatChannelRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.CreateOrJoinChatChannelRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:CreateOrJoinChatChannelRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1678,8 +1790,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.JoinChatChannelCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.JoinChatChannelCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:JoinChatChannelCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1692,8 +1805,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.JoinChatChannelRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.JoinChatChannelRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:JoinChatChannelRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1706,8 +1820,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.ChatChannelPlayerJoinedS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.ChatChannelPlayerJoinedS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:ChatChannelPlayerJoinedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1720,8 +1835,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.ChatChannelLeaderChangedS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.ChatChannelLeaderChangedS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:ChatChannelLeaderChangedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1734,8 +1850,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.LeaveChatChannelCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.LeaveChatChannelCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:LeaveChatChannelCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1748,8 +1865,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.LeaveChatChannelRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.LeaveChatChannelRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:LeaveChatChannelRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1762,8 +1880,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.ChatChannelPlayerLeftS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.ChatChannelPlayerLeftS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:ChatChannelPlayerLeftS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1776,8 +1895,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.ChatChannelKickPlayerCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.ChatChannelKickPlayerCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:ChatChannelKickPlayerCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1790,8 +1910,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.ChatChannelKickPlayerRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.ChatChannelKickPlayerRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:ChatChannelKickPlayerRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1804,8 +1925,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.ChatChannelPlayerKickedS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.ChatChannelPlayerKickedS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:ChatChannelPlayerKickedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1818,8 +1940,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.ChatChannelChatMessageCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.ChatChannelChatMessageCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:ChatChannelChatMessageCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1832,8 +1955,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.ChatChannelChatMessageRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.ChatChannelChatMessageRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:ChatChannelChatMessageRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1846,8 +1970,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.ChatChannelChatMessageS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.ChatChannelChatMessageS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:ChatChannelChatMessageS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1860,8 +1985,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.WhisperMessageCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.WhisperMessageCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:WhisperMessageCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1874,8 +2000,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.WhisperMessageRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.WhisperMessageRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:WhisperMessageRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1888,8 +2015,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.WhisperMessageS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.WhisperMessageS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:WhisperMessageS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1902,8 +2030,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.CreateCharacterCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.CreateCharacterCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:CreateCharacterCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1916,8 +2045,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.CreateCharacterRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.CreateCharacterRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:CreateCharacterRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1930,8 +2060,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.DeleteCharacterCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.DeleteCharacterCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:DeleteCharacterCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1944,8 +2075,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.DeleteCharacterRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.DeleteCharacterRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:DeleteCharacterRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1958,8 +2090,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetCharacterListCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetCharacterListCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetCharacterListCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1972,8 +2105,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetCharacterListRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetCharacterListRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetCharacterListRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -1986,8 +2120,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetCharacterDataCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetCharacterDataCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetCharacterDataCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -2000,8 +2135,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.GetCharacterDataRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.GetCharacterDataRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:GetCharacterDataRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -2014,8 +2150,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.SelectCharacterCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.SelectCharacterCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:SelectCharacterCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -2028,8 +2165,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.SelectCharacterRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.SelectCharacterRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:SelectCharacterRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -2042,8 +2180,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.RequestServerNoticeUpdateCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.RequestServerNoticeUpdateCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:RequestServerNoticeUpdateCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -2056,8 +2195,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.RequestServerNoticeUpdateRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.RequestServerNoticeUpdateRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:RequestServerNoticeUpdateRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -2070,8 +2210,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.ServerNoticeS2CEvt")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.ServerNoticeS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:ServerNoticeS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -2084,8 +2225,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.CallFunctionCmd")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.CallFunctionCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:CallFunctionCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
@@ -2098,8 +2240,9 @@ namespace SF
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		if (Protocol::MessageDebugParser.LookupStruct("SF.Flat.Game.CallFunctionRes")) {
-		    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);
+		static const std::string tableName = "SF.Flat.Game.CallFunctionRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
 		SFLog(Net, Debug, "{0} Game:CallFunctionRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 

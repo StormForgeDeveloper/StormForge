@@ -47,7 +47,6 @@ namespace SF {
 namespace Protocol {
 
 	std::unordered_map<MessageID, MessageHandlingFunction> MessageDebugTraceMap;
-    flatbuffers::Parser MessageDebugParser;
 
 	class SFProtocolInitializer : public LibraryComponentInitializer
 	{
@@ -63,8 +62,9 @@ namespace Protocol {
 			if (InitMode != ComponentInitializeMode::AfterRegisterComponent)
 				return false;
 
-            MessageDebugParser.opts.natural_utf8 = true;
-            MessageDebugParser.opts.strict_json = false;
+            //MessageDebugParser.opts.json_nested_flatbuffers = true;
+            //MessageDebugParser.opts.natural_utf8 = true;
+            //MessageDebugParser.opts.strict_json = false;
 
             GameMessageLog::Initialize();
             PlayInstanceMessageLog::Initialize();
@@ -88,6 +88,7 @@ namespace Protocol {
 
         std::vector<const char*> includes;
         includes.push_back(DevSchemaPath); // default protocol schema path
+        includes.push_back("Dev/ServerProtocolSchema"); // default protocol schema path
         includes.push_back(nullptr);
 
         String relativePath = Util::Path::Combine(DevSchemaPath, filePath);
@@ -99,19 +100,17 @@ namespace Protocol {
 
         buffer.push_back(0);
 
-        bool bSuccess = parser.Parse(reinterpret_cast<const char*>(buffer.data()), includes.data(), relativePath);
+        bool bSuccess = parser.Parse(reinterpret_cast<const char*>(buffer.data()), includes.data(), filePath);
         if (!bSuccess)
         {
-            SFLog(Protocol, Error, "Failed to parse schema file:{0}", filePath);
+            std::string errorMsg;
+            parser.Error(errorMsg).Check();
+            SFLog(Protocol, Error, "Failed to parse schema file:{0}, error:{1}", filePath, errorMsg);
         }
 
         return hr;
     }
 
-    Result LoadFlatSchema(const char* schemaFilePath)
-    {
-        return LoadFlatSchema(MessageDebugParser, schemaFilePath);
-    }
 
 	void PrintDebugMessage(const char* preFix, const MessageHeader* pHeader)
 	{

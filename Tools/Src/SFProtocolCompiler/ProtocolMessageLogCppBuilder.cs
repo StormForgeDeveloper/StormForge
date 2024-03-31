@@ -117,7 +117,8 @@ namespace ProtocolCompiler
             OpenSection("class", LogClassName);
 
             WriteLineWithIndent("private:");
-            //WriteLineWithIndent($"static flatbuffers::Parser stm_Parser;");
+            WriteLineWithIndent($"static bool stm_IsInitialized;");
+            WriteLineWithIndent($"static flatbuffers::Parser stm_Parser;");
             NewLine();
             WriteLineWithIndent("public:");
 
@@ -168,8 +169,10 @@ namespace ProtocolCompiler
 
             string messageStructName = $"SF.Flat.{Group.Name}.{baseMsg.Name}{typeName}";
             WriteLineWithIndent("std::string packetString;");
-            WriteLineWithIndent($"if (Protocol::MessageDebugParser.LookupStruct(\"{messageStructName}\")) {{");
-            WriteLineWithIndent("    flatbuffers::GenText(Protocol::MessageDebugParser, messageHeader->GetPayloadPtr(), &packetString);");
+            WriteLineWithIndent($"static const std::string tableName = \"{messageStructName}\";");
+            WriteLineWithIndent($"if (stm_Parser.LookupStruct(tableName)) {{");
+            //WriteLineWithIndent("    flatbuffers::GenText(stm_Parser, messageHeader->GetPayloadPtr(), &packetString);");
+            WriteLineWithIndent("    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);");
             WriteLineWithIndent("}");
 
             if (typeName == "Cmd")
@@ -207,6 +210,7 @@ namespace ProtocolCompiler
             OpenSection("Result", $"{LogClassName}::Initialize()");
             DefaultHRESULT(); NewLine();
 
+            WriteLineWithIndent($"if (stm_IsInitialized) return hr;");
 
             foreach (MessageBase baseMsg in Group.Items)
             {
@@ -235,8 +239,10 @@ namespace ProtocolCompiler
 
             NewLine(2);
 
-            WriteLineWithIndent($"Protocol::LoadFlatSchema(\"{Group.Name}.fbs\");");
+            WriteLineWithIndent($"Protocol::LoadFlatSchema(stm_Parser, \"{Group.Name}.fbs\");");
+            WriteLineWithIndent($"stm_Parser.opts.indent_step = -1; // no new line");
 
+            WriteLineWithIndent($"stm_IsInitialized = true;");
             NewLine();
 
             WriteLineWithIndent("return hr;");
@@ -245,7 +251,8 @@ namespace ProtocolCompiler
 
         void BuildMessageLogCPP()
         {
-            //WriteLineWithIndent($"flatbuffers::Parser {LogClassName}::stm_Parser;");
+            WriteLineWithIndent($"bool {LogClassName}::stm_IsInitialized = false;");
+            WriteLineWithIndent($"flatbuffers::Parser {LogClassName}::stm_Parser;");
 
             BuildMessageLogInitializeImpl();
 
