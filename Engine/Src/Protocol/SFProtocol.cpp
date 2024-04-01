@@ -100,6 +100,7 @@ namespace Protocol {
 
         buffer.push_back(0);
 
+        // flatbuffer searches included schema from include paths. so don't need to manually load them
         bool bSuccess = parser.Parse(reinterpret_cast<const char*>(buffer.data()), includes.data(), filePath);
         if (!bSuccess)
         {

@@ -31,11 +31,11 @@ namespace SF
         {
             None,
 
-			// Disconnected
-			Disconnected,
+            // Disconnected
+            Disconnected,
 
-			// Login operations
-			ConnectingToLogin, // Not used
+            // Login operations
+            ConnectingToLogin, // Not used
             LogingIn,
             LoggedIn,
 
@@ -178,9 +178,9 @@ namespace SF
         {
             return NativeGetActorId(NativeHandle);
         }
-        static public void OnMessageData(MessageID messageID, TransactionID transactionId, Result result, uint payloadSize, IntPtr payloadPtr)
+        static public void OnMessageData(UInt32 messageID, UInt64 transactionId, Result result, uint payloadSize, IntPtr payloadPtr)
         {
-            SFMessage message = new SFMessage(messageID, transactionId, result, payloadSize, payloadPtr);
+            SFMessage message = new SFMessage(new MessageID(messageID), new TransactionID(transactionId), result, payloadSize, payloadPtr);
             stm_StaticEventReceiver?.MessageRouter.HandleRecvMessage(message);
         }
 
@@ -311,13 +311,13 @@ namespace SF
 #if UNITY_STANDALONE
         [AOT.MonoPInvokeCallback(typeof(ONLINE_TASK_FINISHED_CALLBACK))]
 #endif
-        static internal void OnTaskFinished_Internal(TransactionID transactionId, Result result)
+        static internal void OnTaskFinished_Internal(UInt64 inTransactionId, Result result)
         {
             if (stm_StaticEventReceiver != null)
             {
                 // FIXME: We need message ID for it
                 var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
-
+                var transactionId = new TransactionID(inTransactionId);
                 var transactionIdOffset = builder.CreateTransactionID(transactionId);
 
                 SF.Flat.Generic.GenericTransactionRes.StartGenericTransactionRes(builder);
@@ -356,13 +356,13 @@ namespace SF
         public delegate void SET_EVENT_FUNCTION(SFConnection.EventTypes eventType, Result result, SFConnection.ConnectionState state);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void ON_MESSAGE_FUNCTION(MessageID messageID, TransactionID transactionId, Result result, uint payloadSize, IntPtr payloadPtr);
+        public delegate void ON_MESSAGE_FUNCTION(UInt32 messageID, UInt64 transactionId, Result result, uint payloadSize, IntPtr payloadPtr);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void ONLINE_STATECHAGED_CALLBACK(OnlineState prevState, OnlineState newState);
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        public delegate void ONLINE_TASK_FINISHED_CALLBACK(TransactionID transactionId, Result result);
+        public delegate void ONLINE_TASK_FINISHED_CALLBACK(UInt64 transactionId, Result result);
 
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeCreateOnlineClient", CharSet = CharSet.Auto)]
