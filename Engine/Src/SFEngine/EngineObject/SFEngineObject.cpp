@@ -90,10 +90,13 @@ namespace SF {
 		// The object need to be unregistered from the task manager
 		Assert(m_TickFlags == 0);
 
-		// Engine object is a shared object with shared object manager
-		if(m_Registered)
+        // Prevent recursive remove object
+        bool registered = m_Registered;
+        m_Registered = false;
+
+        // Engine object is a shared object with shared object manager
+        if (registered)
 			Service::EngineObjectManager->RemoveObject(this);
-		m_Registered = false;
 
 		AssertRel(m_ManagerListNodes.pNext == nullptr && m_ManagerListNodes.pPrev == nullptr);
 		for (auto& itNode : m_ListNodes)
