@@ -92,7 +92,10 @@ namespace SF {
 
             inline Offset<flatbuffers::String> CreateString(FlatBufferBuilder& fbb, const char* value)
             {
-                return fbb.CreateString(value);
+                if (value == nullptr)
+                    return fbb.CreateString("");
+                else
+                    return fbb.CreateString(value);
             }
 
             inline Offset<Vector<Offset<::flatbuffers::String>>> CreateStringVector(FlatBufferBuilder& fbb, const Array<const char*>& value)
