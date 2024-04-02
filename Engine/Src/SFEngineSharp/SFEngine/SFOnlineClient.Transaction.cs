@@ -49,6 +49,8 @@ namespace SF
 
             public override void HandleSentMessage(Result result, TransactionID transId, MessageID messageID, Action<SFMessage>? callback)
             {
+                //UnityEngine.Debug.Log($"SendSharp messageId:{messageID.ToString()}, transactionId:{transId.ToString()}");
+
                 if (result.IsFailure || transId.TransactionId == 0 || callback == null)
                 {
                     return;
@@ -65,8 +67,10 @@ namespace SF
                 if (message.TransactionResult.IsFailure)
                 {
                     MessageID messageId = message.MessageId;
-                    SF.Log.Error($"Server request has failed, transactionId:{transactionId}, messageId:{messageId}");
+                    SF.Log.Error($"Server request has failed, transactionId:{transactionId.ToString()}, messageId:{messageId.ToString()}");
                 }
+
+                //UnityEngine.Debug.Log($"RecvSharp messageId:{message.MessageId.ToString()}, transactionId:{transactionId.ToString()}, result:{message.TransactionResult}");
 
                 Action<SFMessage>? outCallback = null;
                 m_PendingRequests.Remove(transactionId.TransactionId, out outCallback);

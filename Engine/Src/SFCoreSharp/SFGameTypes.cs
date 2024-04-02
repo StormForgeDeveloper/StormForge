@@ -283,16 +283,16 @@ namespace SF
 
         public static Guid FromUInt64(UInt64 value)
         {
-            ulong lowR = BinaryPrimitives.ReverseEndianness(value);
-            return new Guid((uint)((lowR >> 32) & 0xFFFFFFFF), (ushort)((lowR >> 16) & 0xFFFF), (ushort)((lowR >> 0) & 0xFFFF),
+            value = BinaryPrimitives.ReverseEndianness(value);
+            return new Guid((uint)((value >> 32) & 0xFFFFFFFF), (ushort)((value >> 16) & 0xFFFF), (ushort)((value >> 0) & 0xFFFF),
                 0, 0, 0, 0,  0, 0, 0, 0 // high 64 bit
                 );
         }
 
         public static Guid FromLowHigh(UInt64 low, UInt64 high)
         {
-            ulong lowR = BinaryPrimitives.ReverseEndianness(low);
-            return new Guid((uint)((lowR >> 32) & 0xFFFFFFFF), (ushort)((lowR >> 16) & 0xFFFF), (ushort)((lowR >> 0) & 0xFFFF),
+            low = BinaryPrimitives.ReverseEndianness(low);
+            return new Guid((uint)((low >> 32) & 0xFFFFFFFF), (ushort)((low >> 16) & 0xFFFF), (ushort)((low >> 0) & 0xFFFF),
                 (byte)((high >> (1 * 8)) & 0xFF), (byte)((high >> (0 * 8)) & 0xFF), (byte)((high >> (2 * 8)) & 0xFF), (byte)((high >> (3 * 8)) & 0xFF),
                 (byte)((high >> (4 * 8)) & 0xFF), (byte)((high >> (5 * 8)) & 0xFF), (byte)((high >> (6 * 8)) & 0xFF), (byte)((high >> (7 * 8)) & 0xFF)
                 );

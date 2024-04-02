@@ -60,7 +60,7 @@ namespace SF
                 // Swap bytes, UUID uses big endian
                 // for now we only support little endian
                 int numBytes = NumDigit / 2;
-                //GuidImpl::SwapBytes(outBuff, basePos, numBytes);
+                GuidImpl::SwapBytes(outBuff, basePos, numBytes);
 
                 curPos += NumDigit;
                 basePos += numBytes;
@@ -118,35 +118,6 @@ namespace SF
             *(uint32_t*)(mem + 32) = _mm256_extract_epi32(res, 7);
         }
 
-        // 32 characters are packed into str_packed. can't handle non RFC CAP case
-        __m128i StrTom128i_Org(__m256i str_packed)
-        {
-            // Build a mask to apply a different offset to alphas and digits
-            const __m256i sub = _mm256_set1_epi8(0x2F); // '0' - 1 = 0x2F
-            const __m256i mask = _mm256_set1_epi8(0x20); // 
-            const __m256i alpha_offset = _mm256_set1_epi8(0x28);
-            const __m256i digits_offset = _mm256_set1_epi8(0x01);
-            const __m256i unweave = _mm256_set_epi32(0x0f0d0b09, 0x0e0c0a08, 0x07050301, 0x06040200, 0x0f0d0b09, 0x0e0c0a08, 0x07050301, 0x06040200);
-            const __m256i shift = _mm256_set_epi32(0x00000000, 0x00000004, 0x00000000, 0x00000004, 0x00000000, 0x00000004, 0x00000000, 0x00000004);
-
-            // Translate ascii bytes to their value
-            // i.e. 0x3132333435363738 -> 0x0102030405060708
-            // Shift hi-digits
-            // i.e. 0x0102030405060708 -> 0x1002300450067008
-            // Horizontal add
-            // i.e. 0x1002300450067008 -> 0x12345678
-            __m256i a = _mm256_sub_epi8(str_packed, sub);
-            __m256i alpha = _mm256_slli_epi64(_mm256_and_si256(a, mask), 2);
-            __m256i sub_mask = _mm256_blendv_epi8(digits_offset, alpha_offset, alpha);
-            a = _mm256_sub_epi8(a, sub_mask);
-            a = _mm256_shuffle_epi8(a, unweave);
-            a = _mm256_sllv_epi32(a, shift);
-            a = _mm256_hadd_epi32(a, _mm256_setzero_si256());
-            a = _mm256_permute4x64_epi64(a, 0b00001000);
-
-            return _mm256_castsi256_si128(a);
-        }
-
         // 32 characters are packed into str_packed.
         __m128i StrTom128i(__m256i str_packed)
         {
@@ -185,7 +156,18 @@ namespace SF
             a = _mm256_hadd_epi32(a, _mm256_setzero_si256());
             a = _mm256_permute4x64_epi64(a, 0b00001000);
 
-            return _mm256_castsi256_si128(a);
+            __m128i converted = _mm256_castsi256_si128(a);
+
+            // Swizzle bytes for RFC standard form
+            const __m128i swizzle = _mm_set_epi8(
+                15, 14, 13, 12, 11, 10,
+                8, 9,
+                6, 7,
+                4, 5,
+                0, 1, 2, 3);
+            __m128i swizzled = _mm_shuffle_epi8(converted, swizzle);
+
+            return swizzled;
         }
 
         /*
@@ -292,10 +274,19 @@ namespace SF
 
     bool Guid::TryParse32(const char* str, Guid& outGuid)
     {
-        ArrayView<uint8_t> outBuff(16, 0, outGuid.data);
-        Result hr = Util::HEXDecode(32, reinterpret_cast<const uint8_t*>(str), outBuff);
+        ArrayView<uint8_t> dataArray(16, 0, outGuid.data);
+        Result hr = Util::HEXDecode(32, reinterpret_cast<const uint8_t*>(str), dataArray);
         if (hr.IsFailure())
             return false;
+
+        // Swap bytes for RFC
+        int basePos = 0;
+        for (int numBytes : GuidImpl::UUID_NumBytes)
+        {
+            GuidImpl::SwapBytes(dataArray, basePos, numBytes);
+
+            basePos += numBytes;
+        }
 
         return true;
     }
@@ -373,8 +364,18 @@ namespace SF
     {
         Guid guid;
 
-        memcpy(guid.data, &value, 8);
         memset(guid.data + 8, 0, 8);
+
+        guid.data[3] = (uint8_t)(value >> (0 * 8));
+        guid.data[2] = (uint8_t)(value >> (1 * 8));
+        guid.data[1] = (uint8_t)(value >> (2 * 8));
+        guid.data[0] = (uint8_t)(value >> (3 * 8));
+
+        guid.data[5] = (uint8_t)(value >> (4 * 8));
+        guid.data[4] = (uint8_t)(value >> (5 * 8));
+
+        guid.data[7] = (uint8_t)(value >> (6 * 8));
+        guid.data[6] = (uint8_t)(value >> (7 * 8));
 
         return guid;
     }

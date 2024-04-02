@@ -65,7 +65,17 @@ namespace SF {
         //uint64_t High() const { return *((uint64_t*)data + 8); }
         uint64_t ToUInt64() const
         {
-            return *((uint64_t*)data);
+            return (((uint64_t)data[3]) << (0 * 8))
+                | (((uint64_t)data[2]) << (1 * 8))
+                | (((uint64_t)data[1]) << (2 * 8))
+                | (((uint64_t)data[0]) << (3 * 8))
+
+                | (((uint64_t)data[5]) << (4 * 8))
+                | (((uint64_t)data[4]) << (5 * 8))
+
+                | (((uint64_t)data[7]) << (6 * 8))
+                | (((uint64_t)data[6]) << (7 * 8))
+                ;
         }
 
         // Parse string with some format detection logic.

@@ -57,19 +57,51 @@ TEST_F(MathTest, Guid)
 
     Guid op1, op2, op3;
 
-    EXPECT_TRUE(Guid::TryParseRFC("00000000-0000-0000-0000-000000000000", op1));
-    op2 = Guid::ParseGeneric("00000000-0000-0000-0000-000000000000");
-    EXPECT_TRUE(op1 == op2);
+    //EXPECT_TRUE(Guid::TryParseRFC("00000000-0000-0000-0000-000000000000", op1));
+    //op2 = Guid::ParseGeneric("00000000-0000-0000-0000-000000000000");
+    //EXPECT_TRUE(op1 == op2);
+    //if (CPUInfo::GetFeatures().AVX2)
+    //{
+    //    CPUInfo::GetFeaturesMutable().AVX2 = 0;
+
+    //    EXPECT_TRUE(Guid::TryParseRFC("00000000-0000-0000-0000-000000000000", op1));
+    //    op2 = Guid::ParseGeneric("00000000-0000-0000-0000-000000000000");
+    //    EXPECT_TRUE(op1 == op2);
+
+    //    CPUInfo::GetFeaturesMutable().AVX2 = 1;
+    //}
+
+    // test RFC byte order
+    const char* TestOrder = "01234567-89ab-cdef-ABCD-EF23F9C1A149";
+    uint8_t expectedBytes[16] = { 0x67, 0x45, 0x23, 0x01,
+        0xab, 0x89,
+        0xef, 0xcd,
+        0xcd, 0xab,
+        0xEF, 0x23, 0xF9, 0xC1, 0xA1, 0x49
+    };
+
+    EXPECT_TRUE(Guid::TryParseRFC(TestOrder, op1));
+
+    for (int iByte = 0; iByte < countof(expectedBytes); iByte++)
+    {
+        EXPECT_TRUE(op1.data[iByte] == expectedBytes[iByte]);
+    }
+
     if (CPUInfo::GetFeatures().AVX2)
     {
         CPUInfo::GetFeaturesMutable().AVX2 = 0;
 
-        EXPECT_TRUE(Guid::TryParseRFC("00000000-0000-0000-0000-000000000000", op1));
-        op2 = Guid::ParseGeneric("00000000-0000-0000-0000-000000000000");
-        EXPECT_TRUE(op1 == op2);
+        EXPECT_TRUE(Guid::TryParseRFC(TestOrder, op2));
+
+        for (int iByte = 0; iByte < countof(expectedBytes); iByte++)
+        {
+            EXPECT_TRUE(op2.data[iByte] == expectedBytes[iByte]);
+        }
 
         CPUInfo::GetFeaturesMutable().AVX2 = 1;
     }
+
+
 
 
     for (const char* testGuid : TestValids)
@@ -116,7 +148,7 @@ TEST_F(MathTest, Guid)
         Guid testGuid = Guid::FromUInt64(test64);
 
         std::string testString = testGuid.ToString();
-        EXPECT_TRUE(testString == "4ccd0505-0100-1001-0000-000000000000");
+        EXPECT_TRUE(testString == "0505cd4c-0001-0110-0000-000000000000");
 
         EXPECT_EQ(testGuid.ToUInt64(), test64);
     }
