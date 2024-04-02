@@ -110,10 +110,10 @@ TEST_F(MathTest, Guid)
         char op3Str[64]{};
 
         EXPECT_TRUE(Guid::TryParseGeneric(testGuid, op1));
-        op1.ToString(op1Str);
+        EXPECT_EQ(op1.ToString(op1Str, sizeof(op1Str)), 36);
 
         op2 = Guid::ParseGeneric(testGuid);
-        op2.ToString(op2Str);
+        EXPECT_EQ(op2.ToString(op2Str, sizeof(op2Str)), 36);
 
         op3 = op2;
         if (CPUInfo::GetFeatures().AVX2)
@@ -122,7 +122,7 @@ TEST_F(MathTest, Guid)
             EXPECT_TRUE(Guid::TryParseGeneric(testGuid, op3));
             CPUInfo::GetFeaturesMutable().AVX2 = 1;
         }
-        op3.ToString(op3Str);
+        EXPECT_EQ(op3.ToString(op3Str, sizeof(op3Str)), 36);
 
         EXPECT_TRUE(op1.IsValid());
         EXPECT_TRUE(op2.IsValid());

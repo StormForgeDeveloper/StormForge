@@ -16,6 +16,7 @@
 #include "Variable/SFVariable.h"
 #include "Variable/SFVariableBoxing.h"
 #include "Variable/SFVariableToString.h"
+#include "Util/SFGuidHelper.h"
 
 
 
@@ -52,7 +53,7 @@ namespace SF {
 
 	Result _ToString(ToStringContext& context, const VariableTable& value)
 	{
-		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "Tbl:("))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "VT:("))
 			return ResultCode::FAIL;
 
 		if (!(_IToA(context, (uint32_t)value.size())))

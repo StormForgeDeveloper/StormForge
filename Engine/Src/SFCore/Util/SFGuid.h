@@ -149,12 +149,12 @@ namespace SF {
 
         size_t ToString(char* strBuff, size_t bufferSize) const
         {
-            if (bufferSize <= 32)
+            if (bufferSize < 36)
                 return 0;
 
             ToString(strBuff);
 
-            return 32;
+            return 36;
         }
 
         size_t GetHash() const
