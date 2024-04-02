@@ -288,12 +288,12 @@ namespace SF {
                 return CreateAccountIDVector(fbb, value);
             }
 
-            inline FlatValueHolder<SF::Flat::Guid> CreateGuid(FlatBufferBuilder& fbb, const SF::Guid& guid)
+            inline FlatValueHolder<SF::Flat::Guid> CreateGuid(FlatBufferBuilder& fbb, const SF::Guid& value)
             {
-                const uint64_t* low = reinterpret_cast<const uint64_t*>(&guid.data[0]);
-                const uint64_t* high = reinterpret_cast<const uint64_t*>(&guid.data[8]);
+                const uint64_t low = value.ToLow64();
+                const uint64_t high = value.ToHigh64();
 
-                return FlatValueHolder<SF::Flat::Guid>(SF::Flat::Guid(*low, *high));
+                return FlatValueHolder<SF::Flat::Guid>(SF::Flat::Guid(low, high));
             }
 
             inline SF::Guid ParseGuid(const SF::Flat::Guid* value)
@@ -304,12 +304,12 @@ namespace SF {
                     return SF::Guid(value->low(), value->high());
             }
 
-            inline FlatValueHolder<SF::Flat::CharacterID> CreateCharacterID(FlatBufferBuilder& fbb, const SF::CharacterID& characterId)
+            inline FlatValueHolder<SF::Flat::CharacterID> CreateCharacterID(FlatBufferBuilder& fbb, const SF::CharacterID& value)
             {
-                const uint64_t* low = reinterpret_cast<const uint64_t*>(&characterId.data[0]);
-                const uint64_t* high = reinterpret_cast<const uint64_t*>(&characterId.data[8]);
+                const uint64_t low = value.ToLow64();
+                const uint64_t high = value.ToHigh64();
 
-                return FlatValueHolder<SF::Flat::CharacterID>(SF::Flat::CharacterID(*low, *high));
+                return FlatValueHolder<SF::Flat::CharacterID>(SF::Flat::CharacterID(low, high));
             }
 
             inline SF::CharacterID ParseCharacterID(const SF::Flat::CharacterID* value)
