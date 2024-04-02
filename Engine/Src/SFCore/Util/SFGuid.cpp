@@ -80,6 +80,20 @@ namespace SF
             return hr.IsSuccess();
         }
 
+        __m128i SwapRFCEndian(__m128i guid)
+        {
+            // swap endian bytes for RFC
+            const __m128i swizzle = _mm_set_epi8(
+                15, 14, 13, 12, 11, 10,
+                8, 9,
+                6, 7,
+                4, 5,
+                0, 1, 2, 3);
+            __m128i swizzled = _mm_shuffle_epi8(guid, swizzle);
+
+            return swizzled;
+        }
+
         /*
           Converts a 128-bits unsigned int to an Guid string representation.
           Uses SIMD via Intel's AVX2 instruction set.
@@ -94,6 +108,9 @@ namespace SF
             const __m256i add = _mm256_set1_epi8(0x06);
             const __m256i alpha_mask = _mm256_set1_epi8(0x10);
             const __m256i alpha_offset = _mm256_set1_epi8(0x57);
+
+            // swap endian bytes for RFC
+            guid = SwapRFCEndian(guid);
 
             __m256i guid_expanded = _mm256_castsi128_si256(guid);
             __m256i as = _mm256_srli_epi64(guid_expanded, 4);
@@ -158,14 +175,8 @@ namespace SF
 
             __m128i converted = _mm256_castsi256_si128(a);
 
-            // Swizzle bytes for RFC standard form
-            const __m128i swizzle = _mm_set_epi8(
-                15, 14, 13, 12, 11, 10,
-                8, 9,
-                6, 7,
-                4, 5,
-                0, 1, 2, 3);
-            __m128i swizzled = _mm_shuffle_epi8(converted, swizzle);
+            // swap endian bytes for RFC
+            __m128i swizzled = SwapRFCEndian(converted);
 
             return swizzled;
         }
@@ -224,17 +235,18 @@ namespace SF
             memcpy(dataBuff, data, sizeof(dataBuff));
             ArrayView<uint8_t> dataArray(16, dataBuff);
 
-            ArrayView<uint8_t> outBuff(36, reinterpret_cast<uint8_t*>(strBuff));
+            ArrayView<uint8_t> outBuff(36, 0, reinterpret_cast<uint8_t*>(strBuff));
             Result hr;
+            constexpr bool lowercase = true;
             int basePos = 0;
-            const uint8_t* curPos = dataBuff;
+            const uint8_t* curPos = dataArray.data();
             for (int numBytes : GuidImpl::UUID_NumBytes)
             {
                 // Swap bytes, UUID uses big endian
                 GuidImpl::SwapBytes(dataArray, basePos, numBytes);
 
                 // Hex encode
-                hr = Util::HEXEncode(numBytes, curPos, outBuff);
+                hr = Util::HEXEncode(numBytes, curPos, outBuff, 0, lowercase);
                 if (hr.IsFailure())
                     return;
 

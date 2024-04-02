@@ -22,19 +22,21 @@ namespace Util {
 	
 
 	static const char* g_Hex_Encode_Table = "0123456789ABCDEF";
+    static const char* g_Hex_Encode_Lwr_Table = "0123456789abcdef";
 
-	Result HEXEncode(size_t srcSize, const uint8_t* bytes_to_encode, Array<uint8_t>& destBuffer, uint8_t dummyChar)
+	Result HEXEncode(size_t srcSize, const uint8_t* bytes_to_encode, Array<uint8_t>& destBuffer, uint8_t dummyChar, bool lowercase)
 	{
 		Result hr;
 
 		destBuffer.reserve(srcSize * 2);
+        const char* encodeTable = lowercase ? g_Hex_Encode_Lwr_Table : g_Hex_Encode_Table;
 
 		auto srcEnd = bytes_to_encode + srcSize;
 		for (; srcEnd != bytes_to_encode;)
 		{
 			auto byteValue = *bytes_to_encode++;
-			SFCheckResult(System, destBuffer.push_back(g_Hex_Encode_Table[((byteValue>>4) & 0xF)]));
-			SFCheckResult(System, destBuffer.push_back(g_Hex_Encode_Table[(byteValue & 0xF)]));
+			SFCheckResult(System, destBuffer.push_back(encodeTable[((byteValue>>4) & 0xF)]));
+			SFCheckResult(System, destBuffer.push_back(encodeTable[(byteValue & 0xF)]));
 
 			if (dummyChar)
 			{

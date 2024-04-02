@@ -47,7 +47,7 @@ namespace Util {
 	uint32_t Crc32NDecrypt( size_t uiBuffSize, uint8_t* pBuff );
 
 
-	Result HEXEncode(size_t srcSize, const uint8_t* bytes_to_encode, Array<uint8_t>& destBuffer, uint8_t dummyChar = '\0');
+	Result HEXEncode(size_t srcSize, const uint8_t* bytes_to_encode, Array<uint8_t>& destBuffer, uint8_t dummyChar = '\0', bool lowercase = false);
 	Result HEXDecode(size_t srcSize, const uint8_t* bytes_to_decode, Array<uint8_t>& destBuffer, uint8_t dummyChar = '=');
 
 	// Base 64 encode/decode
