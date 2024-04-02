@@ -165,5 +165,30 @@ TEST_F(MathTest, Guid)
         }
 
     }
+
+
+    {
+        uint64_t test64 = 3;
+        Guid testGuid = Guid::FromUInt64(test64);
+
+        std::string testString = testGuid.ToString();
+        EXPECT_TRUE(testString == "03000000-0000-0000-0000-000000000000");
+
+        EXPECT_EQ(testGuid.ToUInt64(), test64);
+
+        if (CPUInfo::GetFeatures().AVX2)
+        {
+            CPUInfo::GetFeaturesMutable().AVX2 = 0;
+
+            testGuid = Guid::FromUInt64(test64);
+            testString = testGuid.ToString();
+            EXPECT_TRUE(testString == "03000000-0000-0000-0000-000000000000");
+
+            EXPECT_EQ(testGuid.ToUInt64(), test64);
+
+            CPUInfo::GetFeaturesMutable().AVX2 = 1;
+        }
+
+    }
 }
 

@@ -44,11 +44,7 @@ namespace SF {
             _mm_storeu_si128((__m128i*)data, uuid);
         }
 
-        Guid(uint64_t x, uint64_t y)
-        {
-            memcpy(data, &x, sizeof(x));
-            memcpy(data + 8, &y, sizeof(x));
-        }
+        Guid(uint64_t low, uint64_t high);
 
         bool IsValid() const
         {

@@ -209,6 +209,28 @@ namespace SF
 
     const Guid Guid::Empty(0,0);
 
+
+    Guid::Guid(uint64_t low, uint64_t high)
+    {
+        data[3] = (uint8_t)(low >> (0 * 8));
+        data[2] = (uint8_t)(low >> (1 * 8));
+        data[1] = (uint8_t)(low >> (2 * 8));
+        data[0] = (uint8_t)(low >> (3 * 8));
+
+        data[5] = (uint8_t)(low >> (4 * 8));
+        data[4] = (uint8_t)(low >> (5 * 8));
+
+        data[7] = (uint8_t)(low >> (6 * 8));
+        data[6] = (uint8_t)(low >> (7 * 8));
+
+        memcpy(data + 8, &high, sizeof(high));
+    }
+
+    Guid Guid::FromUInt64(uint64_t value)
+    {
+        return Guid(value, 0);
+    }
+
     Guid Guid::FromBytes(const uint8_t* bytes)
     {
         if (bytes == nullptr)
@@ -254,7 +276,10 @@ namespace SF
                 basePos += numBytes;
 
                 // Append '-'
-                outBuff.push_back('-');
+                if (numBytes > 1)
+                {
+                    outBuff.push_back('-');
+                }
             }
         }
     }
@@ -369,26 +394,6 @@ namespace SF
         {
             memset(guid.data, 0, sizeof(data));
         }
-        return guid;
-    }
-
-    Guid Guid::FromUInt64(uint64_t value)
-    {
-        Guid guid;
-
-        memset(guid.data + 8, 0, 8);
-
-        guid.data[3] = (uint8_t)(value >> (0 * 8));
-        guid.data[2] = (uint8_t)(value >> (1 * 8));
-        guid.data[1] = (uint8_t)(value >> (2 * 8));
-        guid.data[0] = (uint8_t)(value >> (3 * 8));
-
-        guid.data[5] = (uint8_t)(value >> (4 * 8));
-        guid.data[4] = (uint8_t)(value >> (5 * 8));
-
-        guid.data[7] = (uint8_t)(value >> (6 * 8));
-        guid.data[6] = (uint8_t)(value >> (7 * 8));
-
         return guid;
     }
 
