@@ -33,7 +33,7 @@ namespace SF
         // This implementation is based on https ://github.com/crashoz/uuid_v4
 
         constexpr int UUID_NumDigits[] = {8, 4, 4, 4, 2, 2, 2, 2, 2, 2 };
-        constexpr int UUID_NumBytes[] = {4, 2, 2, 2, 1, 1, 1, 1, 1, 1 };
+        constexpr int UUID_NumBytes[] = {4, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1 };
 
         void SwapBytes(Array<uint8_t>& buffer, int basePos, int numBytes)
         {
@@ -50,31 +50,33 @@ namespace SF
             Result hr;
 
             const uint8_t* curPos = reinterpret_cast<const uint8_t*>(str);
-            int basePos = 0;
-            for (int NumDigit : GuidImpl::UUID_NumDigits)
+            for (int numDigit : GuidImpl::UUID_NumDigits)
             {
-                hr = Util::HEXDecode(NumDigit, curPos, outBuff);
+                hr = Util::HEXDecode(numDigit, curPos, outBuff);
                 if (hr.IsFailure())
                     return false;
 
-                // Swap bytes, UUID uses big endian
-                // for now we only support little endian
-                int numBytes = NumDigit / 2;
-                GuidImpl::SwapBytes(outBuff, basePos, numBytes);
-
-                curPos += NumDigit;
-                basePos += numBytes;
+                curPos += numDigit;
 
                 // Skip '-'
                 if ((*curPos) == '-')
                 {
                     curPos++;
                 }
-                else if (numBytes != 1)
+                else if (numDigit != 2) // before the last digit group
                 {
                     return false;
                 }
 
+            }
+
+            // swap bytes for RFC
+            int basePos = 0;
+            for (int numBytes : GuidImpl::UUID_NumBytes)
+            {
+                // Swap bytes, UUID uses big endian
+                GuidImpl::SwapBytes(outBuff, basePos, numBytes);
+                basePos += numBytes;
             }
 
             return hr.IsSuccess();
@@ -85,7 +87,7 @@ namespace SF
             // swap endian bytes for RFC
             const __m128i swizzle = _mm_set_epi8(
                 15, 14, 13, 12, 11, 10,
-                8, 9,
+                9, 8,
                 6, 7,
                 4, 5,
                 0, 1, 2, 3);
@@ -257,23 +259,30 @@ namespace SF
             memcpy(dataBuff, data, sizeof(dataBuff));
             ArrayView<uint8_t> dataArray(16, dataBuff);
 
-            ArrayView<uint8_t> outBuff(36, 0, reinterpret_cast<uint8_t*>(strBuff));
-            Result hr;
-            constexpr bool lowercase = true;
+            // swap bytes for RFC
             int basePos = 0;
-            const uint8_t* curPos = dataArray.data();
             for (int numBytes : GuidImpl::UUID_NumBytes)
             {
                 // Swap bytes, UUID uses big endian
                 GuidImpl::SwapBytes(dataArray, basePos, numBytes);
+                basePos += numBytes;
+            }
 
-                // Hex encode
+
+            ArrayView<uint8_t> outBuff(36, 0, reinterpret_cast<uint8_t*>(strBuff));
+            Result hr;
+            constexpr bool lowercase = true;
+
+            const uint8_t* curPos = dataArray.data();
+            for (int numDigit : GuidImpl::UUID_NumDigits)
+            {
+                int numBytes = numDigit / 2;
+                // Hex numDigit
                 hr = Util::HEXEncode(numBytes, curPos, outBuff, 0, lowercase);
                 if (hr.IsFailure())
                     return;
 
                 curPos += numBytes;
-                basePos += numBytes;
 
                 // Append '-'
                 if (numBytes > 1)
