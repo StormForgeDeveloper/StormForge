@@ -238,10 +238,10 @@ namespace SF {
 
             inline FlatValueHolder<SF::Flat::AccountID> CreateAccountID(FlatBufferBuilder& fbb, const SF::AccountID& value)
             {
-                const uint64_t* low = reinterpret_cast<const uint64_t*>(&value.data[0]);
-                const uint64_t* high = reinterpret_cast<const uint64_t*>(&value.data[8]);
+                const uint64_t low = value.ToLow64();
+                const uint64_t high = value.ToHigh64();
 
-                return FlatValueHolder<SF::Flat::AccountID>(SF::Flat::AccountID(*low, *high));
+                return FlatValueHolder<SF::Flat::AccountID>(SF::Flat::AccountID(low, high));
             }
 
             inline Offset<Vector<const SF::Flat::AccountID*>> CreateAccountIDVector(FlatBufferBuilder& fbb, const Array<SF::AccountID>& value)
