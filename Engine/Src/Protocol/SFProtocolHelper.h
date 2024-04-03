@@ -300,8 +300,10 @@ namespace SF {
             {
                 if (value == nullptr)
                     return {};
-                else
-                    return SF::Guid(value->low(), value->high());
+
+                uint64_t low = value->low();
+                uint64_t high = value->high();
+                return SF::Guid(low, high);
             }
 
             inline FlatValueHolder<SF::Flat::CharacterID> CreateCharacterID(FlatBufferBuilder& fbb, const SF::CharacterID& value)
@@ -316,8 +318,10 @@ namespace SF {
             {
                 if (value == nullptr)
                     return {};
-                else
-                    return SF::CharacterID(value->low(), value->high());
+
+                uint64_t low = value->low();
+                uint64_t high = value->high();
+                return SF::CharacterID(low, high);
             }
 
             inline SF::Flat::Platform CreatePlatform(FlatBufferBuilder& fbb, SF::EPlatform value)
