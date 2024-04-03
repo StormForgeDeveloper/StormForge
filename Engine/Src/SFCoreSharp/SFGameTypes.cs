@@ -267,7 +267,7 @@ namespace SF
                 Low = ((ulong)bytes[3 + 0] << (0 * 8)) | ((ulong)bytes[2 + 0] << (1 * 8)) | ((ulong)bytes[1 + 0] << (2 * 8)) | ((ulong)bytes[0 + 0] << (3 * 8))
                         | ((ulong)bytes[5 + 0] << (4 * 8)) | ((ulong)bytes[4 + 0] << (5 * 8)) | ((ulong)bytes[7 + 0] << (6 * 8)) | ((ulong)bytes[6 + 0] << (7 * 8)),
 
-                High = ((ulong)bytes[0 + 8] << (1 * 8)) | ((ulong)bytes[0 + 8] << (1 * 8)) | ((ulong)bytes[2 + 8] << (2 * 8)) | ((ulong)bytes[3 + 8] << (3 * 8))
+                High = ((ulong)bytes[0 + 8] << (0 * 8)) | ((ulong)bytes[1 + 8] << (1 * 8)) | ((ulong)bytes[2 + 8] << (2 * 8)) | ((ulong)bytes[3 + 8] << (3 * 8))
                         | ((ulong)bytes[4 + 8] << (4 * 8)) | ((ulong)bytes[5 + 8] << (5 * 8)) | ((ulong)bytes[6 + 8] << (6 * 8)) | ((ulong)bytes[7 + 8] << (7 * 8))
             };
         }
@@ -293,7 +293,7 @@ namespace SF
         {
             low = BinaryPrimitives.ReverseEndianness(low);
             return new Guid((uint)((low >> 32) & 0xFFFFFFFF), (ushort)((low >> 16) & 0xFFFF), (ushort)((low >> 0) & 0xFFFF),
-                (byte)((high >> (1 * 8)) & 0xFF), (byte)((high >> (0 * 8)) & 0xFF), (byte)((high >> (2 * 8)) & 0xFF), (byte)((high >> (3 * 8)) & 0xFF),
+                (byte)((high >> (0 * 8)) & 0xFF), (byte)((high >> (1 * 8)) & 0xFF), (byte)((high >> (2 * 8)) & 0xFF), (byte)((high >> (3 * 8)) & 0xFF),
                 (byte)((high >> (4 * 8)) & 0xFF), (byte)((high >> (5 * 8)) & 0xFF), (byte)((high >> (6 * 8)) & 0xFF), (byte)((high >> (7 * 8)) & 0xFF)
                 );
         }

@@ -23,6 +23,7 @@ using namespace ::SF;
 TEST_F(MathTest, Guid)
 {
     const char* TestValids[] = {
+        "511078dd-f145-11ee-80d8-0242ac12000a",
         "00000000-0000-0000-0000-1234556789e7",
         "12345678-0000-0000-0000-000000000000",
         "00000000-1234-0000-0000-000000000000",
@@ -108,6 +109,7 @@ TEST_F(MathTest, Guid)
         char op1Str[64]{};
         char op2Str[64]{};
         char op3Str[64]{};
+        char op4Str[64]{};
 
         EXPECT_TRUE(Guid::TryParseGeneric(testGuid, op1));
         EXPECT_EQ(op1.ToString(op1Str, sizeof(op1Str)), 36);
@@ -124,12 +126,18 @@ TEST_F(MathTest, Guid)
         }
         EXPECT_EQ(op3.ToString(op3Str, sizeof(op3Str)), 36);
 
+        Guid op4(op1.ToLow64(), op1.ToHigh64());
+        EXPECT_EQ(op4.ToString(op4Str, sizeof(op4Str)), 36);
+
+
         EXPECT_TRUE(op1.IsValid());
         EXPECT_TRUE(op2.IsValid());
         EXPECT_TRUE(op3.IsValid());
+        EXPECT_TRUE(op4.IsValid());
 
         EXPECT_TRUE(op1 == op2);
         EXPECT_TRUE(op2 == op3);
+        EXPECT_TRUE(op3 == op4);
 
         EXPECT_TRUE(StrUtil::StringCompair(op1Str, op2Str));
         EXPECT_TRUE(StrUtil::StringCompair(op2Str, op3Str));
