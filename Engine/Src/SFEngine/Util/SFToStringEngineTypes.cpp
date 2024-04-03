@@ -37,7 +37,9 @@ namespace SF {
 
 	Result _ToString(ToStringContext& context, const PlayerInformation& value)
 	{
-        context.OutStream.BuffLen -= (int)value.PlayerID.ToString(context.OutStream.pBuffer, context.OutStream.BuffLen);
+        size_t szWritten = value.PlayerID.ToString(context.OutStream.pBuffer, context.OutStream.BuffLen);
+        context.OutStream.pBuffer += (int)szWritten;
+        context.OutStream.BuffLen -= (int)szWritten;
 
 		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
@@ -93,7 +95,9 @@ namespace SF {
 		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
 
-        context.OutStream.BuffLen -= (int)value.PlayerID.ToString(context.OutStream.pBuffer, context.OutStream.BuffLen);
+        size_t szWritten = value.PlayerID.ToString(context.OutStream.pBuffer, context.OutStream.BuffLen);
+        context.OutStream.pBuffer += (int)szWritten;
+        context.OutStream.BuffLen -= (int)szWritten;
 
 		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
