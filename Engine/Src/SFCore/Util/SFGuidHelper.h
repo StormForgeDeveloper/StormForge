@@ -97,7 +97,7 @@ namespace SF {
         virtual StringCrc32 GetValueStringCrc32() const override { return (uint32_t)m_Value.ToUInt64(); }
         virtual StringCrc64 GetValueStringCrc64() const override { return (uint64_t)m_Value.ToUInt64(); }
         virtual String GetValueString() const override { return m_Value.ToString().c_str(); }
-        virtual Guid GetValueGuid() const { return m_Value; }
+        virtual Guid GetValueGuid() const override { return m_Value; }
 
         virtual Result ToString(ToStringContext& context) const override;
 
