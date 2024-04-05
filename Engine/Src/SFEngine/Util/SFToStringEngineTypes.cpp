@@ -190,17 +190,6 @@ namespace SF {
     }*/
 
 
-    IMPLEMENT_BOXING_TEMPLETE_BYVALUE(AccountID);
-
-    Result _ToString(ToStringContext& context, const AccountID& Data)
-    {
-        char stringBuffer[128]{};
-        Data.ToString(stringBuffer);
-
-        return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, stringBuffer);
-    }
-
-
 }
 
 

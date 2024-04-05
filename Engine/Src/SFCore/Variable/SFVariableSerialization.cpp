@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2018 Kyungkun Ko
 // 
@@ -183,9 +183,14 @@ namespace SF
 				return ResultCode::END_OF_STREAM;
 
 			auto* pVariable = itItem.GetValue();
-			StringCrc32 TypeName = pVariable == nullptr ? nullptr : pVariable->GetTypeName();
-			if (!(output << TypeName))
+			StringCrc32 typeName = pVariable == nullptr ? nullptr : pVariable->GetTypeName();
+			if (!(output << typeName))
 				return ResultCode::END_OF_STREAM;
+
+            if ((uint)typeName == 0xADE10000)
+            {
+                assert(false);
+            }
 
 			if (pVariable == nullptr)
 				continue;

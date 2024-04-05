@@ -24,12 +24,55 @@ namespace SF
 {
     //IMPLEMENT_BOXING_TEMPLETE_BYVALUE(AccountID);
 
-    //Result _ToString(ToStringContext& context, const AccountID& value)
-    //{
-    //    context.OutStream.BuffLen -= (int)value.ToString(context.OutStream.pBuffer, context.OutStream.BuffLen);
+    Result _ToString(ToStringContext& context, const AccountID& value)
+    {
+        context.OutStream.BuffLen -= (int)value.ToString(context.OutStream.pBuffer, context.OutStream.BuffLen);
 
-    //    return ResultCode::SUCCESS;
-    //}
+        return ResultCode::SUCCESS;
+    }
+
+    //IMPLEMENT_BOXING_TEMPLETE_BYVALUE(EntityUID);
+
+    Result _ToString(ToStringContext& context, const EntityUID& Data)
+    {
+        auto oldRadix = context.Radix;
+        context.Radix = 16;
+        ScopeContext hr([oldRadix, &context](Result hr)
+            {
+                context.Radix = oldRadix;
+            });
+
+        if (!(_ToString(context, Data.ID)))
+            return ResultCode::FAIL;
+
+        context.Radix = oldRadix;
+
+        return hr;
+    }
+
+    //IMPLEMENT_BOXING_TEMPLETE_BYVALUE(TransactionID);
+
+    Result _ToString(ToStringContext& context, const TransactionID& Data)
+    {
+        auto oldRadix = context.Radix;
+        context.Radix = 16;
+        ScopeContext hr([oldRadix, &context](Result hr)
+            {
+                context.Radix = oldRadix;
+            });
+
+
+        if (!(_ToString(context, Data.GetEntityID())))
+            return ResultCode::FAIL;
+
+        if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
+            return ResultCode::FAIL;
+
+        if (!(_IToA(context, (uint32_t)Data.GetTransactionIndex())))
+            return ResultCode::FAIL;
+
+        return hr;
+    }
 
 
     Result _ToString(ToStringContext& context, const ClusterID& value)

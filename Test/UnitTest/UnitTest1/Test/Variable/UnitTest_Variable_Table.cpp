@@ -13,7 +13,11 @@
 #include "UnitTest_Variable.h"
 #include "Stream/SFMemoryStream.h"
 #include "Variable/SFVariableSerialization.h"
-
+#include "Util/SFGuid.h"
+#include "Util/SFGuidHelper.h"
+#include "Types/SFEngineTypedefs.h"
+#include "Types/SFEngineTypeSerialization.h"
+#include "Types/SFEngineTypeVariable.h"
 
 using ::testing::EmptyTestEventListener;
 using ::testing::InitGoogleTest;
@@ -78,10 +82,27 @@ TEST_F(VariableTest, Serialization)
 {
 	VariableTable table1(GetHeap());
 	DynamicArray<uint8_t> table1Bin(GetHeap());
+    Guid testGuid = GuidHelper::New();
+    EntityID entityUid(12345);
+    AccountID testAccountId(GuidHelper::New());
+
 	table1.SetValue("sex", 1);
 	table1.SetValue("hat", 10);
 	table1.SetValue("shoes", 10);
 	table1.SetValue("Name", "testName1234");
+
+    table1.SetValue("UID", testGuid);
+    Guid testGuidRes = table1.GetValue<Guid>("UID");
+    EXPECT_EQ(testGuidRes, testGuid);
+
+    table1.SetValue("EntityUID", entityUid);
+    EntityID entityUidRes = table1.GetValue<uint32_t>("EntityUID");
+    EXPECT_EQ(entityUidRes, entityUid);
+
+    table1.SetValue("AccountID", testAccountId);
+    AccountID testAccountIdRes = table1.GetValue<AccountID>("AccountID");
+    EXPECT_EQ(testAccountIdRes, testAccountId);
+
 
 	uint8_t testData[] = {12,114,54,66,234, 235};
 	SFUniquePtr<Variable> blobVar(new(GetEngineHeap()) VariableBLOB(ArrayView<uint8_t>(sizeof(testData), testData)));
@@ -90,7 +111,7 @@ TEST_F(VariableTest, Serialization)
 	table1Bin.reserve(2048);
 	{
 		OutputMemoryStream outputStream(table1Bin, true);
-		outputStream << table1;
+		EXPECT_TRUE(outputStream << table1);
 	}
 
 	auto expectedSize = SerializedSizeOf(table1);
@@ -101,13 +122,17 @@ TEST_F(VariableTest, Serialization)
 	VariableTable tableDeserialized;
 	{
 		InputMemoryStream inStream(table1Bin);
-		inStream >> tableDeserialized;
+        EXPECT_TRUE(inStream >> tableDeserialized);
 	}
 
 	EXPECT_EQ(table1.GetValue<int32_t>("sex"), tableDeserialized.GetValue<int32_t>("sex"));
 	EXPECT_EQ(table1.GetValue<int32_t>("hat"), tableDeserialized.GetValue<int32_t>("hat"));
 	EXPECT_EQ(table1.GetValue<int32_t>("shoes"), tableDeserialized.GetValue<int32_t>("shoes"));
 	EXPECT_EQ(table1.GetValue<String>("Name"), tableDeserialized.GetValue<String>("Name"));
-	EXPECT_EQ(table1.GetValueBLOB("BinData"), tableDeserialized.GetValueBLOB("BinData"));
+    EXPECT_EQ(testGuidRes, tableDeserialized.GetValue<Guid>("UID"));
+    EXPECT_EQ(entityUidRes, tableDeserialized.GetValue<uint32_t>("EntityUID"));
+    EXPECT_EQ(testAccountIdRes, tableDeserialized.GetValue<AccountID>("AccountID"));
+
+    EXPECT_EQ(table1.GetValueBLOB("BinData"), tableDeserialized.GetValueBLOB("BinData"));
 }
 

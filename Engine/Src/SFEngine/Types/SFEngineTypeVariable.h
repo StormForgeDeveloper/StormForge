@@ -38,6 +38,16 @@ namespace SF {
     Result _ToString(ToStringContext& context, const AchievementStat& value);
     DECLARE_BOXING_TEMPLETE_BYVALUE(AchievementStat);
 
+
+    Result _ToString(ToStringContext& context, const EntityUID& Data);
+    DEFINE_BOXING_TEMPLETE(EntityUID, VariableUInt);
+
+    Result _ToString(ToStringContext& context, const TransactionID& Data);
+    DEFINE_BOXING_TEMPLETE(TransactionID, VariableUInt64);
+
+    Result _ToString(ToStringContext& context, const AccountID& Data);
+    DEFINE_BOXING_TEMPLETE(AccountID, VariableGuid);
+
 } // namespace SF
 
 

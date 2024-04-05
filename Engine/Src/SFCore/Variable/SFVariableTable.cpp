@@ -83,6 +83,11 @@ namespace SF {
 			IHeap::Delete(pVariable);
 		}
 
+        if ((uint)variable.GetTypeName() == 0xADE10000)
+        {
+            assert(false);
+        }
+
 		auto newVariable = variable.Clone(GetHeap());
 
 		return m_VariableTable.Set(name, newVariable);
@@ -96,6 +101,11 @@ namespace SF {
 		{
 			IHeap::Delete(pVariable);
 		}
+
+        if ((uint)variable->GetTypeName() == 0xADE10000)
+        {
+            assert(false);
+        }
 
 		auto Ret = m_VariableTable.Set(name, variable.get());
 		if (Ret)
@@ -116,6 +126,11 @@ namespace SF {
 
 		if (variable == nullptr)
 			return ResultCode::INVALID_ARG;
+
+        if ((uint)variable->GetTypeName() == 0xADE10000)
+        {
+            assert(false);
+        }
 
 		auto Ret = m_VariableTable.Set(name, variable);
 		if (Ret)

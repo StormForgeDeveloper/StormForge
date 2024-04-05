@@ -19,7 +19,7 @@
 
 namespace SF
 {
-    IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Guid);
+    //IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Guid);
 
     Result _ToString(ToStringContext& context, const Guid& value)
     {
@@ -27,6 +27,91 @@ namespace SF
 
         return ResultCode::SUCCESS;
     }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    // GuidHelper
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+
+    GuidGenerator<std::mt19937_64> GuidHelper::stm_Generator;
+
+    Guid GuidHelper::New()
+    {
+        return stm_Generator.NewGuid();
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    // GuidVariable
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+
+    Result VariableGuid::ToString(ToStringContext& context) const
+    {
+        size_t used = m_Value.ToString(context.OutStream.pBuffer, context.OutStream.BuffLen);
+        if (used < 0)
+            return ResultCode::OUT_OF_MEMORY;
+
+        context.OutStream.pBuffer += used;
+        context.OutStream.BuffLen -= (int)used;
+        return ResultCode::SUCCESS;
+    }
+
+    Variable* VariableGuid::Clone(Array<uint8_t>& buffer) const
+    {
+        buffer.resize(sizeof(VariableGuid));
+        return new((void*)buffer.data()) VariableGuid(m_Value);
+    }
+
+    Variable* VariableGuid::Clone(IHeap& heap) const
+    {
+        return new(heap) VariableGuid(m_Value);
+    }
+
+    size_t VariableGuid::GetSerializedSize() const
+    {
+        return sizeof(Guid);
+    }
+
+    Result VariableGuid::Serialize(IOutputStream& output) const
+    {
+        return output.Write(m_Value.data, sizeof(m_Value.data));
+    }
+
+    Result VariableGuid::Deserialize(IInputStream& input)
+    {
+        return input.Read(m_Value.data, sizeof(m_Value.data));
+    }
+
+
+
+    //VariableBox BoxingByValue(IHeap& heap, Guid src)
+    //{
+    //    return VariableBox(VariableGuid(src));
+    //}
+
+    //VariableBox BoxingByReference(IHeap& heap, Guid src)
+    //{
+    //    return VariableBox(VariableGuid(src));
+    //}
+
+    //VariableBox Boxing(IHeap& heap, Guid src)
+    //{
+    //    return VariableBox(VariableGuid(src));
+    //}
+
+    //VariableBox Boxing(IHeap& heap, Array<Guid>& src)
+    //{
+    //    return VariableBox(VariableGuid(src));
+    //}
+
+    //VariableBox Boxing(IHeap& heap, const Array<Guid>& src)
+    //{
+
+    //}
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    // Guid implementation
+    /////////////////////////////////////////////////////////////////////////////////////////////////
 
     namespace GuidImpl
     {

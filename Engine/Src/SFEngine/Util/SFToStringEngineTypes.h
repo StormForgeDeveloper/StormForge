@@ -30,7 +30,6 @@ namespace SF
 	Result _ToString(ToStringContext& context, const RelayPlayerInfo& value);
 	//Result _ToString(ToStringContext& context, const RouteContext& Data);
     //Result _ToString(ToStringContext& context, const Guid& Data);
-    Result _ToString(ToStringContext& context, const AccountID& Data);
 
 
 	DECLARE_BOXING_TEMPLETE_BYREFERENCE(PlayerInformation);
@@ -42,7 +41,6 @@ namespace SF
 	DECLARE_BOXING_TEMPLETE_BYREFERENCE(RelayPlayerInfo);
 	//DECLARE_BOXING_TEMPLETE_BYVALUE(RouteContext);
     //DECLARE_BOXING_TEMPLETE_BYVALUE(Guid);
-    DECLARE_BOXING_TEMPLETE_BYVALUE(AccountID);
 
 } // namespace SF
 

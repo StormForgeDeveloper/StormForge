@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2020 Kyungkun Ko
 // 
@@ -15,6 +15,7 @@
 #include "Variable/SFVariableFactoryService.h"
 #include "Math/SF3DMath.h"
 #include "Math/SF3DMathSerialization.h"
+#include "Util/SFGuidHelper.h"
 
 
 namespace SF
@@ -54,7 +55,8 @@ namespace SF
 			_CREATE_VARIABLE_TYPE_(VariableStringCrc32);
 			_CREATE_VARIABLE_TYPE_(VariableStringCrc64);
 			_CREATE_VARIABLE_TYPE_(VariableBLOB);
-		case "int32"_crc: return new(heap) VariableInt();
+            _CREATE_VARIABLE_TYPE_(VariableGuid);
+        case "int32"_crc: return new(heap) VariableInt();
 		case "uint32"_crc: return new(heap) VariableUInt();
 		case "Vector3"_crc: return new(heap) VariableByBinaryValue<Vector3>();
 		case "Vector4"_crc: return new(heap) VariableByBinaryValue<Vector4>();
