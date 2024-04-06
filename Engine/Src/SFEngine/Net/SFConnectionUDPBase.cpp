@@ -562,15 +562,18 @@ namespace Net {
         // nerf size limit for now
         if (!msgID.IDs.Reliability && pMsgHeader->MessageSize > (uint)Const::PACKET_SIZE_MAX)
         {
-            SFLog(Net, Debug3, "Too big packet: msg:{0}, seq:{1}, len:{2}",
+            SFLog(Net, Debug, "Too big packet: msg:{0}, seq:{1}, len:{2}",
                 msgID,
                 msgID.GetSequence(),
                 uiMsgLen);
 
+            Protocol::PrintDebugMessage("SendBig", pMsgHeader);
             //netCheck(ResultCode::IO_BADPACKET_TOOBIG);
         }
-
-        Protocol::PrintDebugMessage("Send", pMsgHeader);
+        else
+        {
+            Protocol::PrintDebugMessage("Send", pMsgHeader);
+        }
 
         if (!msgID.IDs.Reliability
             && m_SendGuaQueue.size() > Const::GUARANTEED_PENDING_MAX)
