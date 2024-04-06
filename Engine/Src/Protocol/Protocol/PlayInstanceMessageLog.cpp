@@ -108,7 +108,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:JoinPlayInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:JoinPlayInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::JoinPlayInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -123,7 +123,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:JoinPlayInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:JoinPlayInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::JoinPlayInstanceRes(const char* prefix, const MessageHeader* messageHeader)
@@ -138,7 +138,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:PlayerKickedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:PlayerKickedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::PlayerKickedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -153,7 +153,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:PlayPacketC2SEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:PlayPacketC2SEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::PlayPacketC2SEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -168,7 +168,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:NewActorInViewS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:NewActorInViewS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::NewActorInViewS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -183,7 +183,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:RemoveActorFromViewS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:RemoveActorFromViewS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::RemoveActorFromViewS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -198,7 +198,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:PlayerMovementC2SEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug3, "{0} PlayInstance:PlayerMovementC2SEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::PlayerMovementC2SEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -213,7 +213,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:ActorMovementS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug4, "{0} PlayInstance:ActorMovementS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::ActorMovementS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -228,7 +228,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:ActorMovementsS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug4, "{0} PlayInstance:ActorMovementsS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::ActorMovementsS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -243,7 +243,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:PlayerStateChangedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:PlayerStateChangedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::PlayerStateChangedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -258,7 +258,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:ClientSyncReliableC2SEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:ClientSyncReliableC2SEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::ClientSyncReliableC2SEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -273,7 +273,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:ClientSyncC2SEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:ClientSyncC2SEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::ClientSyncC2SEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -288,7 +288,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:SetCharacterPublicMessageCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:SetCharacterPublicMessageCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::SetCharacterPublicMessageCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -303,7 +303,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:SetCharacterPublicMessageRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:SetCharacterPublicMessageRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::SetCharacterPublicMessageRes(const char* prefix, const MessageHeader* messageHeader)
@@ -318,7 +318,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:CharacterPrivateDataChangedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:CharacterPrivateDataChangedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::CharacterPrivateDataChangedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -333,7 +333,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:CharacterPublicDataChangedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:CharacterPublicDataChangedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::CharacterPublicDataChangedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -348,7 +348,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:RequestWhiteboardSharingCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:RequestWhiteboardSharingCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::RequestWhiteboardSharingCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -363,7 +363,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:RequestWhiteboardSharingRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:RequestWhiteboardSharingRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::RequestWhiteboardSharingRes(const char* prefix, const MessageHeader* messageHeader)
@@ -378,7 +378,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:AcceptWhiteboardSharingCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:AcceptWhiteboardSharingCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::AcceptWhiteboardSharingCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -393,7 +393,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:AcceptWhiteboardSharingRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:AcceptWhiteboardSharingRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::AcceptWhiteboardSharingRes(const char* prefix, const MessageHeader* messageHeader)
@@ -408,7 +408,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:CloseWhiteboardSharingCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:CloseWhiteboardSharingCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::CloseWhiteboardSharingCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -423,7 +423,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:CloseWhiteboardSharingRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:CloseWhiteboardSharingRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::CloseWhiteboardSharingRes(const char* prefix, const MessageHeader* messageHeader)
@@ -438,7 +438,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:AddWhiteboardSharingLogEntryCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:AddWhiteboardSharingLogEntryCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::AddWhiteboardSharingLogEntryCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -453,7 +453,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:AddWhiteboardSharingLogEntryRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:AddWhiteboardSharingLogEntryRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::AddWhiteboardSharingLogEntryRes(const char* prefix, const MessageHeader* messageHeader)
@@ -468,7 +468,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:UpdateWhiteboardSharingLogEntryCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:UpdateWhiteboardSharingLogEntryCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::UpdateWhiteboardSharingLogEntryCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -483,7 +483,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:UpdateWhiteboardSharingLogEntryRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:UpdateWhiteboardSharingLogEntryRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::UpdateWhiteboardSharingLogEntryRes(const char* prefix, const MessageHeader* messageHeader)
@@ -498,7 +498,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:RemoveWhiteboardSharingLogEntryCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:RemoveWhiteboardSharingLogEntryCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::RemoveWhiteboardSharingLogEntryCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -513,7 +513,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:RemoveWhiteboardSharingLogEntryRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:RemoveWhiteboardSharingLogEntryRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::RemoveWhiteboardSharingLogEntryRes(const char* prefix, const MessageHeader* messageHeader)
@@ -528,7 +528,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:WhiteboardSharingRequestedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:WhiteboardSharingRequestedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::WhiteboardSharingRequestedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -543,7 +543,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:WhiteboardSharingRejectedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:WhiteboardSharingRejectedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::WhiteboardSharingRejectedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -558,7 +558,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:WhiteboardSharingStartedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:WhiteboardSharingStartedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::WhiteboardSharingStartedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -573,7 +573,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:WhiteboardSharingHasClosedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:WhiteboardSharingHasClosedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::WhiteboardSharingHasClosedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -588,7 +588,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:WhiteboardSharingNewLogEntryAddedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:WhiteboardSharingNewLogEntryAddedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::WhiteboardSharingNewLogEntryAddedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -603,7 +603,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:WhiteboardSharingNewLogEntryRemovedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:WhiteboardSharingNewLogEntryRemovedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::WhiteboardSharingNewLogEntryRemovedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -618,7 +618,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:WhiteboardSharingNewLogEntryUpdatedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:WhiteboardSharingNewLogEntryUpdatedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::WhiteboardSharingNewLogEntryUpdatedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -633,7 +633,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:OccupyMapObjectCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:OccupyMapObjectCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::OccupyMapObjectCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -648,7 +648,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:OccupyMapObjectRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:OccupyMapObjectRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::OccupyMapObjectRes(const char* prefix, const MessageHeader* messageHeader)
@@ -663,7 +663,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:UnoccupyMapObjectCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:UnoccupyMapObjectCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::UnoccupyMapObjectCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -678,7 +678,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:UnoccupyMapObjectRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:UnoccupyMapObjectRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::UnoccupyMapObjectRes(const char* prefix, const MessageHeader* messageHeader)
@@ -693,7 +693,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:UseMapObjectCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:UseMapObjectCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::UseMapObjectCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -708,7 +708,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:UseMapObjectRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:UseMapObjectRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::UseMapObjectRes(const char* prefix, const MessageHeader* messageHeader)
@@ -723,7 +723,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:ZoneChatCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:ZoneChatCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::ZoneChatCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -738,7 +738,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:ZoneChatRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:ZoneChatRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::ZoneChatRes(const char* prefix, const MessageHeader* messageHeader)
@@ -753,7 +753,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:ZoneChatS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:ZoneChatS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::ZoneChatS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -768,7 +768,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:LevelUpS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:LevelUpS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::LevelUpS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -783,7 +783,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:CallFunctionCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:CallFunctionCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::CallFunctionCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -798,7 +798,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:CallFunctionRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:CallFunctionRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::CallFunctionRes(const char* prefix, const MessageHeader* messageHeader)
@@ -813,7 +813,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:SendVoiceDataC2SEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug6, "{0} PlayInstance:SendVoiceDataC2SEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::SendVoiceDataC2SEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -828,7 +828,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:VoiceDataS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug6, "{0} PlayInstance:VoiceDataS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::VoiceDataS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -843,7 +843,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:CreateStreamCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:CreateStreamCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::CreateStreamCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -858,7 +858,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:CreateStreamRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:CreateStreamRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::CreateStreamRes(const char* prefix, const MessageHeader* messageHeader)
@@ -873,7 +873,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:FindStreamCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:FindStreamCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::FindStreamCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -888,7 +888,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:FindStreamRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:FindStreamRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::FindStreamRes(const char* prefix, const MessageHeader* messageHeader)
@@ -903,7 +903,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:DeleteStreamCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:DeleteStreamCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::DeleteStreamCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -918,7 +918,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:DeleteStreamRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:DeleteStreamRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::DeleteStreamRes(const char* prefix, const MessageHeader* messageHeader)
@@ -933,7 +933,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:GetStreamListCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:GetStreamListCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::GetStreamListCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -948,7 +948,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} PlayInstance:GetStreamListRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} PlayInstance:GetStreamListRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::GetStreamListRes(const char* prefix, const MessageHeader* messageHeader)

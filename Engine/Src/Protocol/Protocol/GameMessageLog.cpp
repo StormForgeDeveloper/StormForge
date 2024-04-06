@@ -189,7 +189,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:HeartbeatC2SEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug7, "{0} Game:HeartbeatC2SEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::HeartbeatC2SEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -204,7 +204,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:JoinGameServerCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:JoinGameServerCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::JoinGameServerCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -219,7 +219,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:JoinGameServerRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:JoinGameServerRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::JoinGameServerRes(const char* prefix, const MessageHeader* messageHeader)
@@ -234,7 +234,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetAchievementStatsCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetAchievementStatsCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetAchievementStatsCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -249,7 +249,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetAchievementStatsRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetAchievementStatsRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetAchievementStatsRes(const char* prefix, const MessageHeader* messageHeader)
@@ -264,7 +264,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:Dummy1Cmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:Dummy1Cmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::Dummy1Cmd(const char* prefix, const MessageHeader* messageHeader)
@@ -279,7 +279,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:Dummy1Res: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:Dummy1Res: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::Dummy1Res(const char* prefix, const MessageHeader* messageHeader)
@@ -294,7 +294,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:RegisterGCMCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:RegisterGCMCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::RegisterGCMCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -309,7 +309,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:RegisterGCMRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:RegisterGCMRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::RegisterGCMRes(const char* prefix, const MessageHeader* messageHeader)
@@ -324,7 +324,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:UnregisterGCMCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:UnregisterGCMCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::UnregisterGCMCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -339,7 +339,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:UnregisterGCMRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:UnregisterGCMRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::UnregisterGCMRes(const char* prefix, const MessageHeader* messageHeader)
@@ -354,7 +354,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:InviteFriendCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:InviteFriendCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::InviteFriendCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -369,7 +369,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:InviteFriendRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:InviteFriendRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::InviteFriendRes(const char* prefix, const MessageHeader* messageHeader)
@@ -384,7 +384,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:AcceptFriendRequestCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:AcceptFriendRequestCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::AcceptFriendRequestCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -399,7 +399,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:AcceptFriendRequestRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:AcceptFriendRequestRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::AcceptFriendRequestRes(const char* prefix, const MessageHeader* messageHeader)
@@ -414,7 +414,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:FriendRequestAcceptedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:FriendRequestAcceptedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::FriendRequestAcceptedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -429,7 +429,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:RemoveFriendCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:RemoveFriendCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::RemoveFriendCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -444,7 +444,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:RemoveFriendRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:RemoveFriendRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::RemoveFriendRes(const char* prefix, const MessageHeader* messageHeader)
@@ -459,7 +459,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:FriendRemovedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:FriendRemovedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::FriendRemovedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -474,7 +474,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetFriendListCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetFriendListCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetFriendListCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -489,7 +489,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetFriendListRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetFriendListRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetFriendListRes(const char* prefix, const MessageHeader* messageHeader)
@@ -504,7 +504,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetNotificationListCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetNotificationListCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetNotificationListCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -519,7 +519,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetNotificationListRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetNotificationListRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetNotificationListRes(const char* prefix, const MessageHeader* messageHeader)
@@ -534,7 +534,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:DeleteNotificationCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:DeleteNotificationCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::DeleteNotificationCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -549,7 +549,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:DeleteNotificationRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:DeleteNotificationRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::DeleteNotificationRes(const char* prefix, const MessageHeader* messageHeader)
@@ -564,7 +564,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:SetNotificationReadCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:SetNotificationReadCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::SetNotificationReadCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -579,7 +579,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:SetNotificationReadRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:SetNotificationReadRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::SetNotificationReadRes(const char* prefix, const MessageHeader* messageHeader)
@@ -594,7 +594,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:AcceptNotificationCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:AcceptNotificationCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::AcceptNotificationCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -609,7 +609,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:AcceptNotificationRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:AcceptNotificationRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::AcceptNotificationRes(const char* prefix, const MessageHeader* messageHeader)
@@ -624,7 +624,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:NotifyS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:NotifyS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::NotifyS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -639,7 +639,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:FindPlayerByPlatformIdCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:FindPlayerByPlatformIdCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::FindPlayerByPlatformIdCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -654,7 +654,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:FindPlayerByPlatformIdRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:FindPlayerByPlatformIdRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::FindPlayerByPlatformIdRes(const char* prefix, const MessageHeader* messageHeader)
@@ -669,7 +669,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:FindPlayerByCharacterNameCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:FindPlayerByCharacterNameCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::FindPlayerByCharacterNameCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -684,7 +684,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:FindPlayerByCharacterNameRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:FindPlayerByCharacterNameRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::FindPlayerByCharacterNameRes(const char* prefix, const MessageHeader* messageHeader)
@@ -699,7 +699,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:FindPlayerByPlatformUserNameCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:FindPlayerByPlatformUserNameCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::FindPlayerByPlatformUserNameCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -714,7 +714,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:FindPlayerByPlatformUserNameRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:FindPlayerByPlatformUserNameRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::FindPlayerByPlatformUserNameRes(const char* prefix, const MessageHeader* messageHeader)
@@ -729,7 +729,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:FindPlayerByEMailCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:FindPlayerByEMailCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::FindPlayerByEMailCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -744,7 +744,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:FindPlayerByEMailRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:FindPlayerByEMailRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::FindPlayerByEMailRes(const char* prefix, const MessageHeader* messageHeader)
@@ -759,7 +759,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:FindPlayerByPlayerIDCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:FindPlayerByPlayerIDCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::FindPlayerByPlayerIDCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -774,7 +774,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:FindPlayerByPlayerIDRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:FindPlayerByPlayerIDRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::FindPlayerByPlayerIDRes(const char* prefix, const MessageHeader* messageHeader)
@@ -789,7 +789,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:RequestPlayerStatusUpdateCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:RequestPlayerStatusUpdateCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::RequestPlayerStatusUpdateCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -804,7 +804,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:RequestPlayerStatusUpdateRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:RequestPlayerStatusUpdateRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::RequestPlayerStatusUpdateRes(const char* prefix, const MessageHeader* messageHeader)
@@ -819,7 +819,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:NotifyPlayerStatusUpdatedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:NotifyPlayerStatusUpdatedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::NotifyPlayerStatusUpdatedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -834,7 +834,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetRankingListCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetRankingListCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetRankingListCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -849,7 +849,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetRankingListRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetRankingListRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetRankingListRes(const char* prefix, const MessageHeader* messageHeader)
@@ -864,7 +864,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetUserGamePlayerInfoCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetUserGamePlayerInfoCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetUserGamePlayerInfoCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -879,7 +879,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetUserGamePlayerInfoRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetUserGamePlayerInfoRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetUserGamePlayerInfoRes(const char* prefix, const MessageHeader* messageHeader)
@@ -894,7 +894,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetGamePlayerInfoCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetGamePlayerInfoCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetGamePlayerInfoCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -909,7 +909,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetGamePlayerInfoRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetGamePlayerInfoRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetGamePlayerInfoRes(const char* prefix, const MessageHeader* messageHeader)
@@ -924,7 +924,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:LevelUpS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:LevelUpS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::LevelUpS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -939,7 +939,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:SetNickNameCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:SetNickNameCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::SetNickNameCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -954,7 +954,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:SetNickNameRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:SetNickNameRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::SetNickNameRes(const char* prefix, const MessageHeader* messageHeader)
@@ -969,7 +969,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:CreatePartyCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:CreatePartyCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::CreatePartyCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -984,7 +984,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:CreatePartyRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:CreatePartyRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::CreatePartyRes(const char* prefix, const MessageHeader* messageHeader)
@@ -999,7 +999,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:JoinPartyCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:JoinPartyCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::JoinPartyCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1014,7 +1014,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:JoinPartyRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:JoinPartyRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::JoinPartyRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1029,7 +1029,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:PartyPlayerJoinedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:PartyPlayerJoinedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::PartyPlayerJoinedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -1044,7 +1044,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:PartyLeaderChangedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:PartyLeaderChangedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::PartyLeaderChangedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -1059,7 +1059,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:LeavePartyCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:LeavePartyCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::LeavePartyCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1074,7 +1074,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:LeavePartyRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:LeavePartyRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::LeavePartyRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1089,7 +1089,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:PartyPlayerLeftS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:PartyPlayerLeftS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::PartyPlayerLeftS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -1104,7 +1104,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:PartyKickPlayerCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:PartyKickPlayerCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::PartyKickPlayerCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1119,7 +1119,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:PartyKickPlayerRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:PartyKickPlayerRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::PartyKickPlayerRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1134,7 +1134,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:PartyPlayerKickedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:PartyPlayerKickedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::PartyPlayerKickedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -1149,7 +1149,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:PartyInviteCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:PartyInviteCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::PartyInviteCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1164,7 +1164,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:PartyInviteRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:PartyInviteRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::PartyInviteRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1179,7 +1179,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:PartyInviteRequestedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:PartyInviteRequestedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::PartyInviteRequestedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -1194,7 +1194,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:PartyQuickChatMessageCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:PartyQuickChatMessageCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::PartyQuickChatMessageCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1209,7 +1209,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:PartyQuickChatMessageRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:PartyQuickChatMessageRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::PartyQuickChatMessageRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1224,7 +1224,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:PartyQuickChatMessageS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:PartyQuickChatMessageS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::PartyQuickChatMessageS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -1239,7 +1239,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:PartyChatMessageCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:PartyChatMessageCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::PartyChatMessageCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1254,7 +1254,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:PartyChatMessageRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:PartyChatMessageRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::PartyChatMessageRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1269,7 +1269,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:PartyChatMessageS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:PartyChatMessageS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::PartyChatMessageS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -1284,7 +1284,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:JoinGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:JoinGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::JoinGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1299,7 +1299,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:JoinGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:JoinGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::JoinGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1314,7 +1314,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:LeaveGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:LeaveGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::LeaveGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1329,7 +1329,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:LeaveGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:LeaveGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::LeaveGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1344,7 +1344,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:SearchGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:SearchGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::SearchGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1359,7 +1359,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:SearchGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:SearchGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::SearchGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1374,7 +1374,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetCharacterDataInGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetCharacterDataInGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetCharacterDataInGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1389,7 +1389,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetCharacterDataInGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetCharacterDataInGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetCharacterDataInGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1404,7 +1404,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:RequestGameMatchCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:RequestGameMatchCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::RequestGameMatchCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1419,7 +1419,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:RequestGameMatchRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:RequestGameMatchRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::RequestGameMatchRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1434,7 +1434,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GameMatchedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GameMatchedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GameMatchedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -1449,7 +1449,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GameMatchFailedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GameMatchFailedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GameMatchFailedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -1464,7 +1464,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GameMatchingStartedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GameMatchingStartedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GameMatchingStartedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -1479,7 +1479,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:CancelGameMatchCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:CancelGameMatchCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::CancelGameMatchCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1494,7 +1494,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:CancelGameMatchRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:CancelGameMatchRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::CancelGameMatchRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1509,7 +1509,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GameMatchingCanceledS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GameMatchingCanceledS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GameMatchingCanceledS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -1524,7 +1524,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetUGCTemplatesCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetUGCTemplatesCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetUGCTemplatesCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1539,7 +1539,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetUGCTemplatesRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetUGCTemplatesRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetUGCTemplatesRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1554,7 +1554,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:SaveUGCCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:SaveUGCCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::SaveUGCCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1569,7 +1569,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:SaveUGCRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:SaveUGCRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::SaveUGCRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1584,7 +1584,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:SearchUGCCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:SearchUGCCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::SearchUGCCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1599,7 +1599,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:SearchUGCRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:SearchUGCRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::SearchUGCRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1614,7 +1614,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetUGCContentInfoCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetUGCContentInfoCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetUGCContentInfoCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1629,7 +1629,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetUGCContentInfoRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetUGCContentInfoRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetUGCContentInfoRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1644,7 +1644,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:DownloadUGCContentCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:DownloadUGCContentCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::DownloadUGCContentCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1659,7 +1659,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:DownloadUGCContentRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:DownloadUGCContentRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::DownloadUGCContentRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1674,7 +1674,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:RequestUGCZoneInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:RequestUGCZoneInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::RequestUGCZoneInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1689,7 +1689,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:RequestUGCZoneInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:RequestUGCZoneInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::RequestUGCZoneInstanceRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1704,7 +1704,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:BuyShopItemPrepareCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:BuyShopItemPrepareCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::BuyShopItemPrepareCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1719,7 +1719,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:BuyShopItemPrepareRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:BuyShopItemPrepareRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::BuyShopItemPrepareRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1734,7 +1734,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:BuyShopItemCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:BuyShopItemCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::BuyShopItemCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1749,7 +1749,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:BuyShopItemRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:BuyShopItemRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::BuyShopItemRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1764,7 +1764,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:CreateOrJoinChatChannelCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:CreateOrJoinChatChannelCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::CreateOrJoinChatChannelCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1779,7 +1779,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:CreateOrJoinChatChannelRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:CreateOrJoinChatChannelRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::CreateOrJoinChatChannelRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1794,7 +1794,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:JoinChatChannelCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:JoinChatChannelCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::JoinChatChannelCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1809,7 +1809,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:JoinChatChannelRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:JoinChatChannelRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::JoinChatChannelRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1824,7 +1824,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:ChatChannelPlayerJoinedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:ChatChannelPlayerJoinedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::ChatChannelPlayerJoinedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -1839,7 +1839,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:ChatChannelLeaderChangedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:ChatChannelLeaderChangedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::ChatChannelLeaderChangedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -1854,7 +1854,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:LeaveChatChannelCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:LeaveChatChannelCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::LeaveChatChannelCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1869,7 +1869,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:LeaveChatChannelRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:LeaveChatChannelRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::LeaveChatChannelRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1884,7 +1884,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:ChatChannelPlayerLeftS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:ChatChannelPlayerLeftS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::ChatChannelPlayerLeftS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -1899,7 +1899,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:ChatChannelKickPlayerCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:ChatChannelKickPlayerCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::ChatChannelKickPlayerCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1914,7 +1914,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:ChatChannelKickPlayerRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:ChatChannelKickPlayerRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::ChatChannelKickPlayerRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1929,7 +1929,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:ChatChannelPlayerKickedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:ChatChannelPlayerKickedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::ChatChannelPlayerKickedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -1944,7 +1944,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:ChatChannelChatMessageCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:ChatChannelChatMessageCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::ChatChannelChatMessageCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -1959,7 +1959,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:ChatChannelChatMessageRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:ChatChannelChatMessageRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::ChatChannelChatMessageRes(const char* prefix, const MessageHeader* messageHeader)
@@ -1974,7 +1974,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:ChatChannelChatMessageS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:ChatChannelChatMessageS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::ChatChannelChatMessageS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -1989,7 +1989,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:WhisperMessageCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:WhisperMessageCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::WhisperMessageCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -2004,7 +2004,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:WhisperMessageRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:WhisperMessageRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::WhisperMessageRes(const char* prefix, const MessageHeader* messageHeader)
@@ -2019,7 +2019,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:WhisperMessageS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:WhisperMessageS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::WhisperMessageS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -2034,7 +2034,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:CreateCharacterCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:CreateCharacterCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::CreateCharacterCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -2049,7 +2049,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:CreateCharacterRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:CreateCharacterRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::CreateCharacterRes(const char* prefix, const MessageHeader* messageHeader)
@@ -2064,7 +2064,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:DeleteCharacterCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:DeleteCharacterCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::DeleteCharacterCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -2079,7 +2079,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:DeleteCharacterRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:DeleteCharacterRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::DeleteCharacterRes(const char* prefix, const MessageHeader* messageHeader)
@@ -2094,7 +2094,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetCharacterListCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetCharacterListCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetCharacterListCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -2109,7 +2109,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetCharacterListRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetCharacterListRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetCharacterListRes(const char* prefix, const MessageHeader* messageHeader)
@@ -2124,7 +2124,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetCharacterDataCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetCharacterDataCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetCharacterDataCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -2139,7 +2139,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:GetCharacterDataRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:GetCharacterDataRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::GetCharacterDataRes(const char* prefix, const MessageHeader* messageHeader)
@@ -2154,7 +2154,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:SelectCharacterCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:SelectCharacterCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::SelectCharacterCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -2169,7 +2169,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:SelectCharacterRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:SelectCharacterRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::SelectCharacterRes(const char* prefix, const MessageHeader* messageHeader)
@@ -2184,7 +2184,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:RequestServerNoticeUpdateCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:RequestServerNoticeUpdateCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::RequestServerNoticeUpdateCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -2199,7 +2199,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:RequestServerNoticeUpdateRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:RequestServerNoticeUpdateRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::RequestServerNoticeUpdateRes(const char* prefix, const MessageHeader* messageHeader)
@@ -2214,7 +2214,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:ServerNoticeS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:ServerNoticeS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::ServerNoticeS2CEvt(const char* prefix, const MessageHeader* messageHeader)
@@ -2229,7 +2229,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:CallFunctionCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:CallFunctionCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::CallFunctionCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -2244,7 +2244,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Game:CallFunctionRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:CallFunctionRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GameMessageLog::CallFunctionRes(const char* prefix, const MessageHeader* messageHeader)

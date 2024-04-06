@@ -55,7 +55,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Generic:GenericFailureCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Generic:GenericFailureCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GenericMessageLog::GenericFailureCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -70,7 +70,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Generic:GenericFailureRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Generic:GenericFailureRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GenericMessageLog::GenericFailureRes(const char* prefix, const MessageHeader* messageHeader)
@@ -85,7 +85,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Generic:GenericTransactionCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Generic:GenericTransactionCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GenericMessageLog::GenericTransactionCmd(const char* prefix, const MessageHeader* messageHeader)
@@ -100,7 +100,7 @@ namespace SF
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug, "{0} Generic:GenericTransactionRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Generic:GenericTransactionRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
 	}; // Result GenericMessageLog::GenericTransactionRes(const char* prefix, const MessageHeader* messageHeader)

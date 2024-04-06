@@ -177,15 +177,15 @@ namespace ProtocolCompiler
 
             if (typeName == "Cmd")
             {
-                WriteLineWithIndent($"SFLog(Net, Debug, \"{{0}} {Group.Name}:{baseMsg.Name}{typeName}: tid:{{1}}, sz:{{2}}: {{3}}\", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : \"\");");
+                WriteLineWithIndent($"SFLog(Net, {baseMsg.Trace}, \"{{0}} {Group.Name}:{baseMsg.Name}{typeName}: tid:{{1}}, sz:{{2}}: {{3}}\", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : \"\");");
             }
             else if (typeName == "Res")
             {
-                WriteLineWithIndent($"SFLog(Net, Debug, \"{{0}} {Group.Name}:{baseMsg.Name}{typeName}: tid:{{1}}, res:{{2}} sz:{{3}}: {{4}}\", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : \"\");");
+                WriteLineWithIndent($"SFLog(Net, {baseMsg.Trace}, \"{{0}} {Group.Name}:{baseMsg.Name}{typeName}: tid:{{1}}, res:{{2}} sz:{{3}}: {{4}}\", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : \"\");");
             }
             else
             {
-                WriteLineWithIndent($"SFLog(Net, Debug, \"{{0}} {Group.Name}:{baseMsg.Name}{typeName}: sz:{{1}}: {{2}}\", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : \"\");");
+                WriteLineWithIndent($"SFLog(Net, {baseMsg.Trace}, \"{{0}} {Group.Name}:{baseMsg.Name}{typeName}: sz:{{1}}: {{2}}\", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : \"\");");
             }
 
             NewLine();
