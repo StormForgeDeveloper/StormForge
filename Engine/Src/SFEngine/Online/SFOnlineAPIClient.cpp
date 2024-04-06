@@ -120,7 +120,7 @@ namespace SF
         bool bRes = jsonReader->parse(readStart, readStart + data.size(), &rootObject, &errs);
         if (!bRes)
         {
-            SFLog(Net, Error, "OnlineAPIClient::OnRecv, value parsing error:{0}", errs);
+            SFLog(Net, Error, "OnlineAPIClient::OnRecv, value parsing error:{0}, size:{0}, data:'{1}'", errs, data.size(), readStart);
             return;
         }
 
