@@ -178,6 +178,10 @@ namespace SF
         {
             return NativeGetActorId(NativeHandle);
         }
+
+#if UNITY_STANDALONE
+		[AOT.MonoPInvokeCallback(typeof(ON_MESSAGE_FUNCTION))]
+#endif
         static public void OnMessageData(UInt32 messageID, UInt64 transactionId, Result result, uint payloadSize, IntPtr payloadPtr)
         {
             SFMessage message = new SFMessage(new MessageID(messageID), new TransactionID(transactionId), result, payloadSize, payloadPtr);
