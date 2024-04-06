@@ -31,7 +31,7 @@ namespace SF
 	{
  		public:
 		// Constructor
-		GameRPCSendAdapter (MessageEndpoint* pEndpoint, flatbuffers::FlatBufferBuilder* pBuilder = nullptr) : RPCSendAdapter(pEndpoint, pBuilder)
+		GameRPCSendAdapter (MessageEndpoint* pEndpoint) : RPCSendAdapter(pEndpoint)
 		{}
 		GameRPCSendAdapter (const SharedPointerT<MessageEndpoint>& pEndpoint) : RPCSendAdapter(pEndpoint.get())
 		{}
@@ -160,7 +160,7 @@ namespace SF
 	{
  		public:
 		// Constructor
-		GameSvrRPCSendAdapter (MessageEndpoint* pEndpoint, flatbuffers::FlatBufferBuilder* pBuilder = nullptr) : RPCSendAdapter(pEndpoint, pBuilder)
+		GameSvrRPCSendAdapter (MessageEndpoint* pEndpoint) : RPCSendAdapter(pEndpoint)
 		{}
 		GameSvrRPCSendAdapter (const SharedPointerT<MessageEndpoint>& pEndpoint) : RPCSendAdapter(pEndpoint.get())
 		{}

@@ -151,7 +151,7 @@ namespace ProtocolCompiler
             OpenSection("class", $"{SvrRPCSendAdapterClassName} : public RPCSendAdapter");
             WriteLineWithIndent("public:");
             WriteLineWithIndent("// Constructor");
-            WriteLineWithIndent($"{SvrRPCSendAdapterClassName} (MessageEndpoint* pEndpoint, flatbuffers::FlatBufferBuilder* pBuilder = nullptr) : RPCSendAdapter(pEndpoint, pBuilder)");
+            WriteLineWithIndent($"{SvrRPCSendAdapterClassName} (MessageEndpoint* pEndpoint) : RPCSendAdapter(pEndpoint)");
             WriteLineWithIndent("{}");
             WriteLineWithIndent($"{SvrRPCSendAdapterClassName} (const SharedPointerT<MessageEndpoint>& pEndpoint) : RPCSendAdapter(pEndpoint.get())");
             WriteLineWithIndent("{}");
@@ -192,7 +192,7 @@ namespace ProtocolCompiler
             OpenSection("class", $"{RPCSendAdapterClassName} : public RPCSendAdapter");
             WriteLineWithIndent("public:");
             WriteLineWithIndent("// Constructor");
-            WriteLineWithIndent($"{RPCSendAdapterClassName} (MessageEndpoint* pEndpoint, flatbuffers::FlatBufferBuilder* pBuilder = nullptr) : RPCSendAdapter(pEndpoint, pBuilder)");
+            WriteLineWithIndent($"{RPCSendAdapterClassName} (MessageEndpoint* pEndpoint) : RPCSendAdapter(pEndpoint)");
             WriteLineWithIndent("{}");
             WriteLineWithIndent($"{RPCSendAdapterClassName} (const SharedPointerT<MessageEndpoint>& pEndpoint) : RPCSendAdapter(pEndpoint.get())");
             WriteLineWithIndent("{}");

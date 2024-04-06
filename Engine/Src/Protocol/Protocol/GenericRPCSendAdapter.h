@@ -31,7 +31,7 @@ namespace SF
 	{
  		public:
 		// Constructor
-		GenericRPCSendAdapter (MessageEndpoint* pEndpoint, flatbuffers::FlatBufferBuilder* pBuilder = nullptr) : RPCSendAdapter(pEndpoint, pBuilder)
+		GenericRPCSendAdapter (MessageEndpoint* pEndpoint) : RPCSendAdapter(pEndpoint)
 		{}
 		GenericRPCSendAdapter (const SharedPointerT<MessageEndpoint>& pEndpoint) : RPCSendAdapter(pEndpoint.get())
 		{}
@@ -48,7 +48,7 @@ namespace SF
 	{
  		public:
 		// Constructor
-		GenericSvrRPCSendAdapter (MessageEndpoint* pEndpoint, flatbuffers::FlatBufferBuilder* pBuilder = nullptr) : RPCSendAdapter(pEndpoint, pBuilder)
+		GenericSvrRPCSendAdapter (MessageEndpoint* pEndpoint) : RPCSendAdapter(pEndpoint)
 		{}
 		GenericSvrRPCSendAdapter (const SharedPointerT<MessageEndpoint>& pEndpoint) : RPCSendAdapter(pEndpoint.get())
 		{}

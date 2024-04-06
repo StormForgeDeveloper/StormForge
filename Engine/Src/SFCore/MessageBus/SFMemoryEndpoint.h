@@ -79,7 +79,7 @@ namespace SF
 
         void Clear();
 
-        flatbuffers::FlatBufferBuilder* GetFlatBuilder() { return &m_Builder; }
+        virtual flatbuffers::FlatBufferBuilder* GetBuilder() override { return &m_Builder; }
 
         const MessageHeader* GetLastMessage() const
         {

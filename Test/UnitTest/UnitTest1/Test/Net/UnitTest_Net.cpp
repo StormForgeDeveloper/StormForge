@@ -45,7 +45,7 @@ using namespace SF;
 
 MessageDataPtr NetTest::NewMessage(IHeap& memoryManager, uint32_t sequenceID)
 {
-    SF::PlayInstanceSvrRPCSendAdapter(m_MemoryEndpoint.get(), m_MemoryEndpoint->GetFlatBuilder()).ZoneChatS2CEvt(0, m_GuidGen.NewGuid(), 2, SF::VariableTable(), "11");
+    SF::PlayInstanceSvrRPCSendAdapter(m_MemoryEndpoint.get()).ZoneChatS2CEvt(0, m_GuidGen.NewGuid(), 2, SF::VariableTable(), "11");
     MessageHeader* pResult = (MessageHeader*)m_MemoryEndpoint->GetLastMessage();
     pResult->SetSequence(sequenceID);
 
@@ -54,7 +54,7 @@ MessageDataPtr NetTest::NewMessage(IHeap& memoryManager, uint32_t sequenceID)
 
 MessageDataPtr NetTest::NewMessage(IHeap& memoryManager)
 {
-    SF::PlayInstanceSvrRPCSendAdapter(m_MemoryEndpoint.get(), m_MemoryEndpoint->GetFlatBuilder()).ZoneChatS2CEvt(0, m_GuidGen.NewGuid(), 2, SF::VariableTable(), "11");
+    SF::PlayInstanceSvrRPCSendAdapter(m_MemoryEndpoint.get()).ZoneChatS2CEvt(0, m_GuidGen.NewGuid(), 2, SF::VariableTable(), "11");
     MessageHeader* pResult = (MessageHeader*)m_MemoryEndpoint->GetLastMessage();
 
     return MessageData::NewMessage(GetSystemHeap(), pResult);
@@ -87,6 +87,8 @@ public:
     {
         return MessageQueue.Dequeue(pMessage);
     }
+
+    virtual flatbuffers::FlatBufferBuilder* GetBuilder() override { return nullptr; }
 
     virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) override
     {

@@ -33,10 +33,10 @@ namespace SF
 
     public:
         // Constructor
-        RPCSendAdapter(MessageEndpoint* pEndpoint, flatbuffers::FlatBufferBuilder* pBuilder = nullptr)
+        RPCSendAdapter(MessageEndpoint* pEndpoint)
             : m_Endpoint(pEndpoint)
-            , m_Builder(pBuilder ? 0 : 4096)
-            , m_pExternalBuilder(pBuilder)
+            , m_Builder(pEndpoint->GetBuilder() ? 0 : 4096)
+            , m_pExternalBuilder(pEndpoint->GetBuilder())
         {
         }
 

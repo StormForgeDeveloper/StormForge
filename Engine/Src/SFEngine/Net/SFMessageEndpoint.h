@@ -41,6 +41,7 @@ namespace SF {
 		// Close entity and clear transaction
 		virtual Result Terminate();
 
+        virtual flatbuffers::FlatBufferBuilder* GetBuilder() override { return nullptr; }
 		virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) override;
         virtual Result SendMsg(const MessageHeader* messageData) override;
 	};

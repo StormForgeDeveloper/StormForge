@@ -192,6 +192,8 @@ namespace Net {
 	class MessageEndpoint : public SharedObject
 	{
 	public:
+        virtual flatbuffers::FlatBufferBuilder* GetBuilder() = 0;
+
         virtual SharedPointerT<Net::Connection> GetConnection() const { return {}; }
 		virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) = 0;
         virtual Result SendMsg(const MessageHeader* messageData) = 0;
