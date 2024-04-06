@@ -54,9 +54,26 @@ namespace SF
             return builder.EndVector();
         }
 
-        public static Offset<SF.Flat.Time32> CreateTime32(this Google.FlatBuffers.FlatBufferBuilder builder, UInt32 value)
+        public struct FlatValueTime32
         {
-            return builder.CreateTime32(value);
+            public Google.FlatBuffers.FlatBufferBuilder Builder;
+            public UInt32 Value;
+
+            public FlatValueTime32(Google.FlatBuffers.FlatBufferBuilder builder, UInt32 value)
+            {
+                Builder = builder;
+                Value = value;
+            }
+
+            public static implicit operator Offset<SF.Flat.Time32>(FlatValueTime32 value)
+            {
+                return SF.Flat.Time32.CreateTime32(value.Builder, value.Value);
+            }
+        }
+
+        public static FlatValueTime32 CreateTime32(this Google.FlatBuffers.FlatBufferBuilder builder, UInt32 value)
+        {
+            return new FlatValueTime32(builder, value);
         }
 
         public static UInt32 Parse(this SF.Flat.Time32? value)
@@ -67,9 +84,26 @@ namespace SF
             return value.Value.Time;
         }
 
-        public static Offset<SF.Flat.Time64> CreateTime64(this Google.FlatBuffers.FlatBufferBuilder builder, UInt64 value)
+        public struct FlatValueTime64
         {
-            return builder.CreateTime64(value);
+            public Google.FlatBuffers.FlatBufferBuilder Builder;
+            public UInt64 Value;
+
+            public FlatValueTime64(Google.FlatBuffers.FlatBufferBuilder builder, UInt64 value)
+            {
+                Builder = builder;
+                Value = value;
+            }
+
+            public static implicit operator Offset<SF.Flat.Time64>(FlatValueTime64 value)
+            {
+                return SF.Flat.Time64.CreateTime64(value.Builder, value.Value);
+            }
+        }
+
+        public static FlatValueTime64 CreateTime64(this Google.FlatBuffers.FlatBufferBuilder builder, UInt64 value)
+        {
+            return new FlatValueTime64(builder, value);
         }
 
         public static UInt64 Parse(this SF.Flat.Time64? value)
@@ -80,9 +114,27 @@ namespace SF
             return value.Value.Time;
         }
 
-        public static Offset<SF.Flat.TimeSpan> CreateTimeSpan(this Google.FlatBuffers.FlatBufferBuilder builder, SF.TimeSpan value)
+
+        public struct FlatValueTimeSpan
         {
-            return CreateTimeSpan(builder, value);
+            public Google.FlatBuffers.FlatBufferBuilder Builder;
+            public SF.TimeSpan Value;
+
+            public FlatValueTimeSpan(Google.FlatBuffers.FlatBufferBuilder builder, SF.TimeSpan value)
+            {
+                Builder = builder;
+                Value = value;
+            }
+
+            public static implicit operator Offset<SF.Flat.TimeSpan>(FlatValueTimeSpan value)
+            {
+                return SF.Flat.TimeSpan.CreateTimeSpan(value.Builder, value.Value.MilliSeconds);
+            }
+        }
+
+        public static FlatValueTimeSpan CreateTimeSpan(this Google.FlatBuffers.FlatBufferBuilder builder, SF.TimeSpan value)
+        {
+            return new FlatValueTimeSpan(builder, value);
         }
 
         public static SF.TimeSpan Parse(this SF.Flat.TimeSpan? value)
@@ -93,9 +145,27 @@ namespace SF
             return new SF.TimeSpan(value.Value.Milliseconds);
         }
 
-        public static Offset<SF.Flat.Result> CreateResult(this Google.FlatBuffers.FlatBufferBuilder builder, SF.Result value)
+
+        public struct FlatValueResult
         {
-            return SF.Flat.Result.CreateResult(builder, value.Code);
+            public Google.FlatBuffers.FlatBufferBuilder Builder;
+            public int Value;
+
+            public FlatValueResult(Google.FlatBuffers.FlatBufferBuilder builder, int value)
+            {
+                Builder = builder;
+                Value = value;
+            }
+
+            public static implicit operator Offset<SF.Flat.Result>(FlatValueResult value)
+            {
+                return SF.Flat.Result.CreateResult(value.Builder, value.Value);
+            }
+        }
+
+        public static FlatValueResult CreateResult(this Google.FlatBuffers.FlatBufferBuilder builder, SF.Result value)
+        {
+            return new FlatValueResult(builder, value.Code);
         }
 
         public static SF.Result Parse(this SF.Flat.Result? value)
@@ -106,10 +176,27 @@ namespace SF
             return new SF.Result(value.Value.Value);
         }
 
-
-        public static Offset<SF.Flat.GameInstanceUID> CreateGameInstanceUID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.GameInstanceUID data)
+        public struct FlatValueGameInstanceUID
         {
-            return SF.Flat.GameInstanceUID.CreateGameInstanceUID(builder, data.UID);
+            public Google.FlatBuffers.FlatBufferBuilder Builder;
+            public UInt32 Value;
+
+            public FlatValueGameInstanceUID(Google.FlatBuffers.FlatBufferBuilder builder, UInt32 value)
+            {
+                Builder = builder;
+                Value = value;
+            }
+
+            public static implicit operator Offset<SF.Flat.GameInstanceUID>(FlatValueGameInstanceUID value)
+            {
+                return SF.Flat.GameInstanceUID.CreateGameInstanceUID(value.Builder, value.Value);
+            }
+        }
+
+
+        public static FlatValueGameInstanceUID CreateGameInstanceUID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.GameInstanceUID data)
+        {
+            return new FlatValueGameInstanceUID(builder, data.UID);
         }
 
         public static SF.GameInstanceUID Parse(this SF.Flat.GameInstanceUID? data)
@@ -120,15 +207,32 @@ namespace SF
             return new SF.GameInstanceUID(data.Value.Uid);
         }
 
-
-        public static Offset<SF.Flat.GameInstanceUID> CreateGameInsUID(this Google.FlatBuffers.FlatBufferBuilder builder, UInt32 data)
+        public static FlatValueGameInstanceUID CreateGameInsUID(this Google.FlatBuffers.FlatBufferBuilder builder, UInt32 data)
         {
-            return SF.Flat.GameInstanceUID.CreateGameInstanceUID(builder, data);
+            return new FlatValueGameInstanceUID(builder, data);
         }
 
-        public static Offset<SF.Flat.EntityUID> CreateEntityUID(this Google.FlatBuffers.FlatBufferBuilder builder, UInt32 data)
+
+        public struct FlatValueEntityUID
         {
-            return SF.Flat.EntityUID.CreateEntityUID(builder, data);
+            public Google.FlatBuffers.FlatBufferBuilder Builder;
+            public UInt32 Value;
+
+            public FlatValueEntityUID(Google.FlatBuffers.FlatBufferBuilder builder, UInt32 value)
+            {
+                Builder = builder;
+                Value = value;
+            }
+
+            public static implicit operator Offset<SF.Flat.EntityUID>(FlatValueEntityUID value)
+            {
+                return SF.Flat.EntityUID.CreateEntityUID(value.Builder, value.Value);
+            }
+        }
+
+        public static FlatValueEntityUID CreateEntityUID(this Google.FlatBuffers.FlatBufferBuilder builder, UInt32 data)
+        {
+            return new FlatValueEntityUID(builder, data);
         }
 
         public static SF.EntityUID Parse(this SF.Flat.EntityUID? data)
@@ -147,9 +251,27 @@ namespace SF
             return new SF.GameInstanceUID(data.Value.EntityId);
         }
 
-        public static Offset<SF.Flat.TransactionID> CreateTransactionID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.TransactionID data)
+
+        public struct FlatValueTransactionID
         {
-            return SF.Flat.TransactionID.CreateTransactionID(builder, data.TransactionId);
+            public Google.FlatBuffers.FlatBufferBuilder Builder;
+            public SF.TransactionID Value;
+
+            public FlatValueTransactionID(Google.FlatBuffers.FlatBufferBuilder builder, SF.TransactionID value)
+            {
+                Builder = builder;
+                Value = value;
+            }
+
+            public static implicit operator Offset<SF.Flat.TransactionID>(FlatValueTransactionID value)
+            {
+                return SF.Flat.TransactionID.CreateTransactionID(value.Builder, value.Value.TransactionId);
+            }
+        }
+
+        public static FlatValueTransactionID CreateTransactionID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.TransactionID data)
+        {
+            return new FlatValueTransactionID(builder, data);
         }
 
         public static SF.TransactionID Parse(this SF.Flat.TransactionID? data)
@@ -160,10 +282,28 @@ namespace SF
             return new SF.TransactionID(data.Value.TransactionId);
         }
 
-        public static Offset<SF.Flat.AccountID> CreateAccountID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.AccountID accountId)
+
+        public struct FlatValueAccountID
         {
-            var u128 = accountId.ToUInt128();
-            return SF.Flat.AccountID.CreateAccountID(builder, u128.Low, u128.High);
+            public Google.FlatBuffers.FlatBufferBuilder Builder;
+            public SF.AccountID Value;
+
+            public FlatValueAccountID(Google.FlatBuffers.FlatBufferBuilder builder, SF.AccountID value)
+            {
+                Builder = builder;
+                Value = value;
+            }
+
+            public static implicit operator Offset<SF.Flat.AccountID>(FlatValueAccountID value)
+            {
+                var u128 = value.Value.ToUInt128();
+                return SF.Flat.AccountID.CreateAccountID(value.Builder, u128.Low, u128.High);
+            }
+        }
+
+        public static FlatValueAccountID CreateAccountID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.AccountID accountId)
+        {
+            return new FlatValueAccountID(builder, accountId);
         }
 
         public static SF.AccountID Parse(this SF.Flat.AccountID value)
@@ -182,10 +322,29 @@ namespace SF
                 return new SF.AccountID();
             }
         }
-        public static Offset<SF.Flat.CharacterID> CreateCharacterID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.CharacterID characterId)
+
+
+        public struct FlatValueCharacterID
         {
-            var u128 = characterId.ToUInt128();
-            return SF.Flat.CharacterID.CreateCharacterID(builder, u128.Low, u128.High);
+            public Google.FlatBuffers.FlatBufferBuilder Builder;
+            public SF.CharacterID Value;
+
+            public FlatValueCharacterID(Google.FlatBuffers.FlatBufferBuilder builder, SF.CharacterID value)
+            {
+                Builder = builder;
+                Value = value;
+            }
+
+            public static implicit operator Offset<SF.Flat.CharacterID>(FlatValueCharacterID value)
+            {
+                var u128 = value.Value.ToUInt128();
+                return SF.Flat.CharacterID.CreateCharacterID(value.Builder, u128.Low, u128.High);
+            }
+        }
+
+        public static FlatValueCharacterID CreateCharacterID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.CharacterID characterId)
+        {
+            return new FlatValueCharacterID(builder, characterId);
         }
 
         public static SF.CharacterID Parse(this SF.Flat.CharacterID value)
@@ -210,7 +369,8 @@ namespace SF
             int[] offsets = new int[data.Length];
             for (int i = 0; i < data.Length; i++)
             {
-                offsets[i] = builder.CreateAccountID(data[i]).Value;
+                Offset<SF.Flat.AccountID> offset = CreateAccountID(builder, data[i]);
+                offsets[i] = offset.Value;
             }
             builder.StartVector(4, data.Length, 4);
 
@@ -255,10 +415,27 @@ namespace SF
         }
 
 
-        public static Offset<SF.Flat.PlayerPlatformID> CreatePlayerPlatformID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.PlayerPlatformID data)
+        public struct FlatValuePlayerPlatformID
         {
-            var u128 = data.PlayerID.ToUInt128();
-            return SF.Flat.PlayerPlatformID.CreatePlayerPlatformID(builder, u128.Low, u128.High, builder.CreatePlatform(data.Platform));
+            public Google.FlatBuffers.FlatBufferBuilder Builder;
+            public SF.PlayerPlatformID Value;
+
+            public FlatValuePlayerPlatformID(Google.FlatBuffers.FlatBufferBuilder builder, SF.PlayerPlatformID value)
+            {
+                Builder = builder;
+                Value = value;
+            }
+
+            public static implicit operator Offset<SF.Flat.PlayerPlatformID>(FlatValuePlayerPlatformID value)
+            {
+                var u128 = value.Value.PlayerID.ToUInt128();
+                return SF.Flat.PlayerPlatformID.CreatePlayerPlatformID(value.Builder, u128.Low, u128.High, value.Builder.CreatePlatform(value.Value.Platform));
+            }
+        }
+
+        public static FlatValuePlayerPlatformID CreatePlayerPlatformID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.PlayerPlatformID data)
+        {
+            return new FlatValuePlayerPlatformID(builder, data);
         }
 
         public static SF.PlayerPlatformID Parse(this SF.Flat.PlayerPlatformID? value)
@@ -277,9 +454,9 @@ namespace SF
             }
         }
 
-        public static Offset<SF.Flat.AccountID> CreatePlayerID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.AccountID accountId)
+        public static FlatValueAccountID CreatePlayerID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.AccountID accountId)
         {
-            return CreateAccountID(builder, accountId);
+            return new FlatValueAccountID(builder, accountId);
         }
 
         //public static SF.AccountID Parse(this SF.Flat.AccountID? flatAccountId)
@@ -287,10 +464,27 @@ namespace SF
         //    return Parse(flatAccountId);
         //}
 
-        public static Offset<SF.Flat.Guid> CreateGuid(this Google.FlatBuffers.FlatBufferBuilder builder, System.Guid guid)
+        public struct FlatValueGuid
         {
-            var u128 = guid.ToUInt128();
-            return SF.Flat.Guid.CreateGuid(builder, u128.Low, u128.High);
+            public Google.FlatBuffers.FlatBufferBuilder Builder;
+            public System.Guid Value;
+
+            public FlatValueGuid(Google.FlatBuffers.FlatBufferBuilder builder, System.Guid value)
+            {
+                Builder = builder;
+                Value = value;
+            }
+
+            public static implicit operator Offset<SF.Flat.Guid>(FlatValueGuid value)
+            {
+                var u128 = value.Value.ToUInt128();
+                return SF.Flat.Guid.CreateGuid(value.Builder, u128.Low, u128.High);
+            }
+        }
+
+        public static FlatValueGuid CreateGuid(this Google.FlatBuffers.FlatBufferBuilder builder, System.Guid guid)
+        {
+            return new FlatValueGuid(builder, guid);
         }
 
         public static System.Guid Parse(this SF.Flat.Guid? flatGuid)
@@ -607,10 +801,27 @@ namespace SF
             return (SF.Flat.GameStateID)data;
         }
 
-        public static Offset<SF.Flat.Vector4> CreateVector4(this Google.FlatBuffers.FlatBufferBuilder builder, SF.SFVector4 data)
+
+        public struct FlatValueVector4
         {
-            // TODO: optimize position data
-            return SF.Flat.Vector4.CreateVector4(builder, data.x, data.y, data.z, data.w);
+            public Google.FlatBuffers.FlatBufferBuilder Builder;
+            public SF.SFVector4 Value;
+
+            public FlatValueVector4(Google.FlatBuffers.FlatBufferBuilder builder, SF.SFVector4 value)
+            {
+                Builder = builder;
+                Value = value;
+            }
+
+            public static implicit operator Offset<SF.Flat.Vector4>(FlatValueVector4 value)
+            {
+                return SF.Flat.Vector4.CreateVector4(value.Builder, value.Value.x, value.Value.y, value.Value.z, value.Value.w);
+            }
+        }
+
+        public static FlatValueVector4 CreateVector4(this Google.FlatBuffers.FlatBufferBuilder builder, SF.SFVector4 data)
+        {
+            return new FlatValueVector4(builder, data);
         }
 
         public static SF.SFVector4 Parse(this SF.Flat.Vector4 value)
