@@ -44,10 +44,12 @@ namespace SF
         {
             if (m_pExternalBuilder == nullptr)
             {
+                m_Builder.Clear();
                 return m_Builder;
             }
             else
             {
+                m_pExternalBuilder->Clear();
                 return *m_pExternalBuilder;
             }
         }
