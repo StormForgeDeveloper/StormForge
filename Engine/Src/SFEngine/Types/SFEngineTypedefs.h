@@ -90,6 +90,14 @@ namespace SF {
 		Max,
 	};
 
+    enum class EAccountRole : uint8_t
+    {
+        Player,
+        Tester,
+        Dev
+    };
+
+
 	enum class DBClusterType
 	{
 		Normal,
@@ -221,55 +229,6 @@ namespace SF {
 	};
 
 
-
-
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////
-	////
-	////	Server Route context
-	////
-
-	//union RouteContext
-	//{
-	//	struct RouteContextComponents {
-	//		EntityUID	From;
-	//		EntityUID	To;
-
-	//		RouteContextComponents() {}
-	//		RouteContextComponents(EntityUID InFrom, EntityUID InTo)
-	//			: From(InFrom)
-	//			, To(InTo)
-	//		{}
-	//		RouteContextComponents(const RouteContextComponents& src)
-	//			: From(src.From)
-	//			, To(src.To)
-	//		{}
-
-	//	} Components;
-	//	uint64_t ContextValue[2];
-
-	//	SF_FORCEINLINE RouteContext()
-	//		: Components()
-	//	{}
-
-	//	SF_FORCEINLINE RouteContext(const RouteContext& src)
-	//		: Components(src.Components)
-	//	{}
-	//	SF_FORCEINLINE RouteContext(EntityUID InFromID, EntityUID InToID)
-	//		: Components(InFromID, InToID)
-	//	{}
-
-
-	//	EntityUID GetFrom() const { return Components.From; }
-	//	EntityUID GetTo() const { return Components.To; }
-
-	//	inline RouteContext& operator = (const RouteContext& src);
-
-	//	inline bool operator == (const RouteContext& routeContext) const;
-
-	//	// Get swaped context( From <==> To )
-	//	inline RouteContext GetSwaped() const;
-
-	//};
 
 	using AuthTicket = uint64_t;
 	using PartyID = EntityID;

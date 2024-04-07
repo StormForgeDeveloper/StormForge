@@ -301,6 +301,11 @@ namespace SF
             }
         }
 
+        public static SF.Flat.EAccountRole CreateEAccountRole(this Google.FlatBuffers.FlatBufferBuilder builder, SF.EAccountRole value)
+        {
+            return (SF.Flat.EAccountRole)value;
+        }
+
         public static FlatValueAccountID CreateAccountID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.AccountID accountId)
         {
             return new FlatValueAccountID(builder, accountId);

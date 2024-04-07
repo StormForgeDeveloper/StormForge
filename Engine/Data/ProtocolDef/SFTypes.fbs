@@ -40,6 +40,13 @@ struct Vector4
 	w:float;
 }
 
+enum EAccountRole : byte
+{
+    Player,
+    Tester,
+    Dev,
+}
+
 struct UInt128
 {
 	low:uint64;

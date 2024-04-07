@@ -167,11 +167,43 @@ namespace SF
         {
             IntPtr valuePtr = NativeGetCharacterId(NativeHandle);
             if (valuePtr == IntPtr.Zero)
-                return new CharacterID();
+                return CharacterID.Empty;
 
             var bytes = new byte[16];
             Marshal.Copy(valuePtr, bytes, 0, bytes.Length);
             return new CharacterID(bytes);
+        }
+
+        public EAccountRole GetAccountRole()
+        {
+            return (EAccountRole)NativeGetAccountRole(NativeHandle);
+        }
+
+        public System.Guid GetTitleUID()
+        {
+            IntPtr valuePtr = NativeGetTitleUID(NativeHandle);
+            if (valuePtr == IntPtr.Zero)
+                return System.Guid.Empty;
+
+            var bytes = new byte[16];
+            Marshal.Copy(valuePtr, bytes, 0, bytes.Length);
+            return new System.Guid(bytes);
+        }
+
+        public void SetTitleUID(System.Guid uid)
+        {
+            NativeSetTitleUID(NativeHandle, uid.ToByteArray());
+        }
+
+        public string GetTitleEnv()
+        {
+            string value = NativeGetTitleEnv(NativeHandle);
+            return value;
+        }
+
+        public void SetTitleEnv(string value)
+        {
+            NativeSetTitleEnv(NativeHandle, value);
         }
 
         public UInt32 GetActorId()
@@ -392,6 +424,22 @@ namespace SF
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetCharacterId", CharSet = CharSet.Auto)]
         static extern IntPtr NativeGetCharacterId(IntPtr nativeHandle);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetAccountRole", CharSet = CharSet.Auto)]
+        static extern UInt32 NativeGetAccountRole(IntPtr nativeHandle);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetTitleUID", CharSet = CharSet.Auto)]
+        static extern IntPtr NativeGetTitleUID(IntPtr nativeHandle);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeSetTitleUID", CharSet = CharSet.Auto)]
+        static extern void NativeSetTitleUID(IntPtr nativeHandle, [MarshalAs(UnmanagedType.LPArray)] byte[] bytes);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetTitleEnv", CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.LPStr)]
+        static extern string NativeGetTitleEnv(IntPtr nativeHandle);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeSetTitleEnv", CharSet = CharSet.Auto)]
+        static extern void NativeSetTitleEnv(IntPtr nativeHandle, [MarshalAs(UnmanagedType.LPStr)] string env);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetActorId", CharSet = CharSet.Auto)]
         static extern UInt32 NativeGetActorId(IntPtr nativeHandle);

@@ -35,20 +35,22 @@ public struct LoginRes : IFlatbufferObject
   public ArraySegment<byte>? GetBannedReasonBytes() { return __p.__vector_as_arraysegment(10); }
 #endif
   public byte[] GetBannedReasonArray() { return __p.__vector_as_array<byte>(10); }
-  public string GameServerAddress { get { int o = __p.__offset(12); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+  public SF.Flat.EAccountRole Role { get { int o = __p.__offset(12); return o != 0 ? (SF.Flat.EAccountRole)__p.bb.GetSbyte(o + __p.bb_pos) : SF.Flat.EAccountRole.Player; } }
+  public string GameServerAddress { get { int o = __p.__offset(14); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
-  public Span<byte> GetGameServerAddressBytes() { return __p.__vector_as_span<byte>(12, 1); }
+  public Span<byte> GetGameServerAddressBytes() { return __p.__vector_as_span<byte>(14, 1); }
 #else
-  public ArraySegment<byte>? GetGameServerAddressBytes() { return __p.__vector_as_arraysegment(12); }
+  public ArraySegment<byte>? GetGameServerAddressBytes() { return __p.__vector_as_arraysegment(14); }
 #endif
-  public byte[] GetGameServerAddressArray() { return __p.__vector_as_array<byte>(12); }
+  public byte[] GetGameServerAddressArray() { return __p.__vector_as_array<byte>(14); }
 
-  public static void StartLoginRes(FlatBufferBuilder builder) { builder.StartTable(5); }
+  public static void StartLoginRes(FlatBufferBuilder builder) { builder.StartTable(6); }
   public static void AddNickName(FlatBufferBuilder builder, StringOffset nickNameOffset) { builder.AddOffset(0, nickNameOffset.Value, 0); }
   public static void AddAccountId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> accountIdOffset) { builder.AddStruct(1, accountIdOffset.Value, 0); }
   public static void AddAuthTicket(FlatBufferBuilder builder, ulong authTicket) { builder.AddUlong(2, authTicket, 0); }
   public static void AddBannedReason(FlatBufferBuilder builder, StringOffset bannedReasonOffset) { builder.AddOffset(3, bannedReasonOffset.Value, 0); }
-  public static void AddGameServerAddress(FlatBufferBuilder builder, StringOffset gameServerAddressOffset) { builder.AddOffset(4, gameServerAddressOffset.Value, 0); }
+  public static void AddRole(FlatBufferBuilder builder, SF.Flat.EAccountRole role) { builder.AddSbyte(4, (sbyte)role, 0); }
+  public static void AddGameServerAddress(FlatBufferBuilder builder, StringOffset gameServerAddressOffset) { builder.AddOffset(5, gameServerAddressOffset.Value, 0); }
   public static Offset<SF.Flat.Login.LoginRes> EndLoginRes(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Login.LoginRes>(o);
@@ -65,7 +67,8 @@ static public class LoginResVerify
       && verifier.VerifyField(tablePos, 6 /*AccountId*/, 16 /*SF.Flat.AccountID*/, 8, false)
       && verifier.VerifyField(tablePos, 8 /*AuthTicket*/, 8 /*ulong*/, 8, false)
       && verifier.VerifyString(tablePos, 10 /*BannedReason*/, false)
-      && verifier.VerifyString(tablePos, 12 /*GameServerAddress*/, false)
+      && verifier.VerifyField(tablePos, 12 /*Role*/, 1 /*SF.Flat.EAccountRole*/, 1, false)
+      && verifier.VerifyString(tablePos, 14 /*GameServerAddress*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

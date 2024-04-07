@@ -223,18 +223,11 @@ namespace SF {
                     return SF::EntityUID(value->entity_id());
             }
 
-            //inline FlatValueHolder<SF::Flat::RouteContext> CreateRouteContext(FlatBufferBuilder& fbb, const SF::RouteContext& value)
-            //{
-            //    return FlatValueHolder<SF::Flat::RouteContext>(SF::Flat::RouteContext(*CreateEntityUID(fbb, value.GetFrom()), *CreateEntityUID(fbb, value.GetTo())));
-            //}
 
-            //inline SF::RouteContext ParseRouteContext(const SF::Flat::RouteContext* value)
-            //{
-            //    if (value == nullptr)
-            //        return {};
-            //    else
-            //        return SF::RouteContext(ParseEntityUID(&value->from()), ParseEntityUID(&value->to()));
-            //}
+            inline SF::Flat::EAccountRole CreateAccountRole(FlatBufferBuilder& fbb, SF::EAccountRole value)
+            {
+                return (SF::Flat::EAccountRole)value;
+            }
 
             inline FlatValueHolder<SF::Flat::AccountID> CreateAccountID(FlatBufferBuilder& fbb, const SF::AccountID& value)
             {
@@ -254,6 +247,11 @@ namespace SF {
                 }
                 auto offset = fbb.CreateVectorOfStructs(elems);
                 return offset;
+            }
+
+            inline SF::EAccountRole ParseAccountRole(const SF::Flat::EAccountRole value)
+            {
+                return (SF::EAccountRole)(value);
             }
 
             inline SF::AccountID ParseAccountID(const SF::Flat::AccountID* value)

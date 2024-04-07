@@ -40,6 +40,7 @@ C++: Cast message to LoginRes to access values
 		- AccountID: type:AccountID, AccountID
 		- AuthTicket: type:AuthTicket, Login ticket
 		- BannedReason: type:String, Banned reason if the account is banned
+		- Role: type:EAccountRole, account role
 		- GameServerAddress: type:String, Game server network address to connect
 
 
@@ -73,6 +74,7 @@ C++: Cast message to LoginWithSteamRes to access values
 		- AccountID: type:AccountID, AccountID
 		- AuthTicket: type:AuthTicket, Login ticket
 		- BannedReason: type:String, Banned reason if the account is banned
+		- Role: type:EAccountRole, account role
 		- GameServerAddress: type:String, Game server network address to connect
 
 

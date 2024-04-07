@@ -15,6 +15,7 @@
 				<Params TypeName="AccountID" Name="AccountID" Desc="AccountID"/>
 				<Params TypeName="AuthTicket" Name="AuthTicket" Desc="Login ticket"/>
 				<Params TypeName="String" Name="BannedReason" Desc="Banned reason if the account is banned"/>
+                <Params TypeName="EAccountRole" Name="Role" Desc="account role"/>
 				<Params TypeName="String" Name="GameServerAddress" Desc="Game server network address to connect"/>
 			</Res>
 		</Command>
@@ -35,6 +36,7 @@
 				<Params TypeName="AccountID" Name="AccountID" Desc="AccountID"/>
 				<Params TypeName="AuthTicket" Name="AuthTicket" Desc="Login ticket"/>
 				<Params TypeName="String" Name="BannedReason" Desc="Banned reason if the account is banned"/>
+                <Params TypeName="EAccountRole" Name="Role" Desc="account role"/>
 				<Params TypeName="String" Name="GameServerAddress" Desc="Game server network address to connect"/>
 			</Res>
 		</Command>

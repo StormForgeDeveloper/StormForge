@@ -87,6 +87,39 @@ struct NamedVariableGuidBuilder;
 struct NamedVariable;
 struct NamedVariableBuilder;
 
+enum class EAccountRole : int8_t {
+  Player = 0,
+  Tester = 1,
+  Dev = 2,
+  MIN = Player,
+  MAX = Dev
+};
+
+inline const EAccountRole (&EnumValuesEAccountRole())[3] {
+  static const EAccountRole values[] = {
+    EAccountRole::Player,
+    EAccountRole::Tester,
+    EAccountRole::Dev
+  };
+  return values;
+}
+
+inline const char * const *EnumNamesEAccountRole() {
+  static const char * const names[4] = {
+    "Player",
+    "Tester",
+    "Dev",
+    nullptr
+  };
+  return names;
+}
+
+inline const char *EnumNameEAccountRole(EAccountRole e) {
+  if (::flatbuffers::IsOutRange(e, EAccountRole::Player, EAccountRole::Dev)) return "";
+  const size_t index = static_cast<size_t>(e);
+  return EnumNamesEAccountRole()[index];
+}
+
 enum class Platform : int8_t {
   BR = 0,
   Steam = 1,

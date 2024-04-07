@@ -141,7 +141,8 @@ struct LoginRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
     VT_ACCOUNT_ID = 6,
     VT_AUTH_TICKET = 8,
     VT_BANNED_REASON = 10,
-    VT_GAME_SERVER_ADDRESS = 12
+    VT_ROLE = 12,
+    VT_GAME_SERVER_ADDRESS = 14
   };
   const ::flatbuffers::String *nick_name() const {
     return GetPointer<const ::flatbuffers::String *>(VT_NICK_NAME);
@@ -155,6 +156,9 @@ struct LoginRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const ::flatbuffers::String *banned_reason() const {
     return GetPointer<const ::flatbuffers::String *>(VT_BANNED_REASON);
   }
+  SF::Flat::EAccountRole role() const {
+    return static_cast<SF::Flat::EAccountRole>(GetField<int8_t>(VT_ROLE, 0));
+  }
   const ::flatbuffers::String *game_server_address() const {
     return GetPointer<const ::flatbuffers::String *>(VT_GAME_SERVER_ADDRESS);
   }
@@ -164,7 +168,8 @@ struct LoginRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
     else if constexpr (Index == 1) return account_id();
     else if constexpr (Index == 2) return auth_ticket();
     else if constexpr (Index == 3) return banned_reason();
-    else if constexpr (Index == 4) return game_server_address();
+    else if constexpr (Index == 4) return role();
+    else if constexpr (Index == 5) return game_server_address();
     else static_assert(Index != Index, "Invalid Field Index");
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
@@ -175,6 +180,7 @@ struct LoginRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            VerifyField<uint64_t>(verifier, VT_AUTH_TICKET, 8) &&
            VerifyOffset(verifier, VT_BANNED_REASON) &&
            verifier.VerifyString(banned_reason()) &&
+           VerifyField<int8_t>(verifier, VT_ROLE, 1) &&
            VerifyOffset(verifier, VT_GAME_SERVER_ADDRESS) &&
            verifier.VerifyString(game_server_address()) &&
            verifier.EndTable();
@@ -197,6 +203,9 @@ struct LoginResBuilder {
   void add_banned_reason(::flatbuffers::Offset<::flatbuffers::String> banned_reason) {
     fbb_.AddOffset(LoginRes::VT_BANNED_REASON, banned_reason);
   }
+  void add_role(SF::Flat::EAccountRole role) {
+    fbb_.AddElement<int8_t>(LoginRes::VT_ROLE, static_cast<int8_t>(role), 0);
+  }
   void add_game_server_address(::flatbuffers::Offset<::flatbuffers::String> game_server_address) {
     fbb_.AddOffset(LoginRes::VT_GAME_SERVER_ADDRESS, game_server_address);
   }
@@ -217,6 +226,7 @@ inline ::flatbuffers::Offset<LoginRes> CreateLoginRes(
     const SF::Flat::AccountID *account_id = nullptr,
     uint64_t auth_ticket = 0,
     ::flatbuffers::Offset<::flatbuffers::String> banned_reason = 0,
+    SF::Flat::EAccountRole role = SF::Flat::EAccountRole::Player,
     ::flatbuffers::Offset<::flatbuffers::String> game_server_address = 0) {
   LoginResBuilder builder_(_fbb);
   builder_.add_auth_ticket(auth_ticket);
@@ -224,6 +234,7 @@ inline ::flatbuffers::Offset<LoginRes> CreateLoginRes(
   builder_.add_banned_reason(banned_reason);
   builder_.add_account_id(account_id);
   builder_.add_nick_name(nick_name);
+  builder_.add_role(role);
   return builder_.Finish();
 }
 
@@ -232,12 +243,13 @@ struct LoginRes::Traits {
   static auto constexpr Create = CreateLoginRes;
   static constexpr auto name = "LoginRes";
   static constexpr auto fully_qualified_name = "SF.Flat.Login.LoginRes";
-  static constexpr size_t fields_number = 5;
+  static constexpr size_t fields_number = 6;
   static constexpr std::array<const char *, fields_number> field_names = {
     "nick_name",
     "account_id",
     "auth_ticket",
     "banned_reason",
+    "role",
     "game_server_address"
   };
   template<size_t Index>
@@ -250,6 +262,7 @@ inline ::flatbuffers::Offset<LoginRes> CreateLoginResDirect(
     const SF::Flat::AccountID *account_id = nullptr,
     uint64_t auth_ticket = 0,
     const char *banned_reason = nullptr,
+    SF::Flat::EAccountRole role = SF::Flat::EAccountRole::Player,
     const char *game_server_address = nullptr) {
   auto nick_name__ = nick_name ? _fbb.CreateString(nick_name) : 0;
   auto banned_reason__ = banned_reason ? _fbb.CreateString(banned_reason) : 0;
@@ -260,6 +273,7 @@ inline ::flatbuffers::Offset<LoginRes> CreateLoginResDirect(
       account_id,
       auth_ticket,
       banned_reason__,
+      role,
       game_server_address__);
 }
 
@@ -401,7 +415,8 @@ struct LoginWithSteamRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table 
     VT_ACCOUNT_ID = 6,
     VT_AUTH_TICKET = 8,
     VT_BANNED_REASON = 10,
-    VT_GAME_SERVER_ADDRESS = 12
+    VT_ROLE = 12,
+    VT_GAME_SERVER_ADDRESS = 14
   };
   const ::flatbuffers::String *nick_name() const {
     return GetPointer<const ::flatbuffers::String *>(VT_NICK_NAME);
@@ -415,6 +430,9 @@ struct LoginWithSteamRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table 
   const ::flatbuffers::String *banned_reason() const {
     return GetPointer<const ::flatbuffers::String *>(VT_BANNED_REASON);
   }
+  SF::Flat::EAccountRole role() const {
+    return static_cast<SF::Flat::EAccountRole>(GetField<int8_t>(VT_ROLE, 0));
+  }
   const ::flatbuffers::String *game_server_address() const {
     return GetPointer<const ::flatbuffers::String *>(VT_GAME_SERVER_ADDRESS);
   }
@@ -424,7 +442,8 @@ struct LoginWithSteamRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table 
     else if constexpr (Index == 1) return account_id();
     else if constexpr (Index == 2) return auth_ticket();
     else if constexpr (Index == 3) return banned_reason();
-    else if constexpr (Index == 4) return game_server_address();
+    else if constexpr (Index == 4) return role();
+    else if constexpr (Index == 5) return game_server_address();
     else static_assert(Index != Index, "Invalid Field Index");
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
@@ -435,6 +454,7 @@ struct LoginWithSteamRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table 
            VerifyField<uint64_t>(verifier, VT_AUTH_TICKET, 8) &&
            VerifyOffset(verifier, VT_BANNED_REASON) &&
            verifier.VerifyString(banned_reason()) &&
+           VerifyField<int8_t>(verifier, VT_ROLE, 1) &&
            VerifyOffset(verifier, VT_GAME_SERVER_ADDRESS) &&
            verifier.VerifyString(game_server_address()) &&
            verifier.EndTable();
@@ -457,6 +477,9 @@ struct LoginWithSteamResBuilder {
   void add_banned_reason(::flatbuffers::Offset<::flatbuffers::String> banned_reason) {
     fbb_.AddOffset(LoginWithSteamRes::VT_BANNED_REASON, banned_reason);
   }
+  void add_role(SF::Flat::EAccountRole role) {
+    fbb_.AddElement<int8_t>(LoginWithSteamRes::VT_ROLE, static_cast<int8_t>(role), 0);
+  }
   void add_game_server_address(::flatbuffers::Offset<::flatbuffers::String> game_server_address) {
     fbb_.AddOffset(LoginWithSteamRes::VT_GAME_SERVER_ADDRESS, game_server_address);
   }
@@ -477,6 +500,7 @@ inline ::flatbuffers::Offset<LoginWithSteamRes> CreateLoginWithSteamRes(
     const SF::Flat::AccountID *account_id = nullptr,
     uint64_t auth_ticket = 0,
     ::flatbuffers::Offset<::flatbuffers::String> banned_reason = 0,
+    SF::Flat::EAccountRole role = SF::Flat::EAccountRole::Player,
     ::flatbuffers::Offset<::flatbuffers::String> game_server_address = 0) {
   LoginWithSteamResBuilder builder_(_fbb);
   builder_.add_auth_ticket(auth_ticket);
@@ -484,6 +508,7 @@ inline ::flatbuffers::Offset<LoginWithSteamRes> CreateLoginWithSteamRes(
   builder_.add_banned_reason(banned_reason);
   builder_.add_account_id(account_id);
   builder_.add_nick_name(nick_name);
+  builder_.add_role(role);
   return builder_.Finish();
 }
 
@@ -492,12 +517,13 @@ struct LoginWithSteamRes::Traits {
   static auto constexpr Create = CreateLoginWithSteamRes;
   static constexpr auto name = "LoginWithSteamRes";
   static constexpr auto fully_qualified_name = "SF.Flat.Login.LoginWithSteamRes";
-  static constexpr size_t fields_number = 5;
+  static constexpr size_t fields_number = 6;
   static constexpr std::array<const char *, fields_number> field_names = {
     "nick_name",
     "account_id",
     "auth_ticket",
     "banned_reason",
+    "role",
     "game_server_address"
   };
   template<size_t Index>
@@ -510,6 +536,7 @@ inline ::flatbuffers::Offset<LoginWithSteamRes> CreateLoginWithSteamResDirect(
     const SF::Flat::AccountID *account_id = nullptr,
     uint64_t auth_ticket = 0,
     const char *banned_reason = nullptr,
+    SF::Flat::EAccountRole role = SF::Flat::EAccountRole::Player,
     const char *game_server_address = nullptr) {
   auto nick_name__ = nick_name ? _fbb.CreateString(nick_name) : 0;
   auto banned_reason__ = banned_reason ? _fbb.CreateString(banned_reason) : 0;
@@ -520,6 +547,7 @@ inline ::flatbuffers::Offset<LoginWithSteamRes> CreateLoginWithSteamResDirect(
       account_id,
       auth_ticket,
       banned_reason__,
+      role,
       game_server_address__);
 }
 

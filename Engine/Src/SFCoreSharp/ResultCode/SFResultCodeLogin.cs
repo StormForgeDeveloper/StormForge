@@ -50,6 +50,10 @@ namespace SF {
 		 public const int _LOGIN_INVALID_PLATFORM_LOGIN = (unchecked((int)0xE7060008)); 
 		public static readonly Result LOGIN_INVALID_PLATFORM_LOGIN = new Result(_LOGIN_INVALID_PLATFORM_LOGIN); 
 
+		// The user doesn't have enough priviledge 
+		 public const int _LOGIN_NOT_ENOUGH_PRIVILEDGE = (unchecked((int)0xE7060009)); 
+		public static readonly Result LOGIN_NOT_ENOUGH_PRIVILEDGE = new Result(_LOGIN_NOT_ENOUGH_PRIVILEDGE); 
+
 	}
 }
 

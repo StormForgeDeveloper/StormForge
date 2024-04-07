@@ -27,6 +27,13 @@ namespace SF
     {
     }
 
+    public enum EAccountRole
+    {
+        Player,
+        Tester,
+        Dev
+    };
+
     [Struct]
     [StructLayout(LayoutKind.Sequential)]
     public struct GameInstanceUID

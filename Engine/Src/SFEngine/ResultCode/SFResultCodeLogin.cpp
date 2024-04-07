@@ -29,6 +29,7 @@ namespace ResultCode {
 		codeMap.Insert((uint32_t)			LOGIN_ACCOUNT_BLOCKED        , {"			LOGIN_ACCOUNT_BLOCKED        ", "The user is blocked"});
 		codeMap.Insert((uint32_t)			LOGIN_ACCOUNT_DOES_NOT_EXIST        , {"			LOGIN_ACCOUNT_DOES_NOT_EXIST        ", "The user is not exist"});
 		codeMap.Insert((uint32_t)			LOGIN_INVALID_PLATFORM_LOGIN        , {"			LOGIN_INVALID_PLATFORM_LOGIN        ", "The user's platform login is invalid"});
+		codeMap.Insert((uint32_t)			LOGIN_NOT_ENOUGH_PRIVILEDGE        , {"			LOGIN_NOT_ENOUGH_PRIVILEDGE        ", "The user doesn't have enough priviledge"});
 
 	}//InitializeResultCode 
 }//namespace ResultCode 

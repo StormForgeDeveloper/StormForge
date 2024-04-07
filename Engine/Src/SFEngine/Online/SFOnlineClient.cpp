@@ -97,7 +97,7 @@ namespace SF
         {
             Result hr;
 
-            const MessageHeader2* messageHeader = reinterpret_cast<const MessageHeader2*>(recvData.data());
+            const MessageHeader* messageHeader = reinterpret_cast<const MessageHeader*>(recvData.data());
 
             uint expectedSize = messageHeader->MessageSize;
             if (recvData.size() != expectedSize)
@@ -114,6 +114,7 @@ namespace SF
             m_Owner.m_GameServerAddress = response->game_server_address()->c_str();
             m_Owner.m_AccountId = Flat::Helper::ParseAccountID(response->account_id());
             m_Owner.m_AuthTicket = response->auth_ticket();
+            m_Owner.m_AccountRole = Flat::Helper::ParseAccountRole(response->role());
             Result loginResult = messageHeader->GetTransactionResult();
 
             if (!loginResult)
@@ -228,8 +229,8 @@ namespace SF
             SFLog(Game, Info, "RequestingLogin: {0}, {1}", m_Owner.GetUserId(), (const char*)base64Password.data());
 
             String url;
-            url.Format("http://{0}/BR/Login/v1/idpw?AccessKey={1}&userId={2}&password={3}",
-                m_Owner.GetLoginAddresses(), "8FACAEB9-E54D-4CDF-BF85-23F7AF0B9147", m_Owner.GetUserId(), (const char*)base64Password.data());
+            url.Format("http://{0}/BR/Login/v1/idpw?Title={1}&Env={2}&userId={3}&password={4}",
+                m_Owner.GetLoginAddresses(), m_Owner.GetTitleUID().ToString(), m_Owner.GetTitleEnv(), m_Owner.GetUserId(), (const char*)base64Password.data());
             httpClient->SetURL(url);
             httpClient->SetMethod(true);
             httpClient->SetOnFinishedCallback([this](HTTPClient* pClient)
@@ -269,8 +270,8 @@ namespace SF
             SFLog(Game, Info, "RequestingSteamLogin: {0}, {1}", m_Owner.GetSteamUserId(), (const char*)base64PlatformName.data());
 
             String url;
-            url.Format("http://{0}/BR/Login/v1/steam?AccessKey={1}&steamAccountId={2}&steamUserName={3}&steamUserToken={4}",
-                m_Owner.GetLoginAddresses(), "8FACAEB9-E54D-4CDF-BF85-23F7AF0B9147", m_Owner.GetSteamUserId(), (const char*)base64PlatformName.data(), m_Owner.GetSteamUserToken());
+            url.Format("http://{0}/BR/Login/v1/steam?Title={1}&Env={2}&steamAccountId={3}&steamUserName={4}&steamUserToken={5}",
+                m_Owner.GetLoginAddresses(), m_Owner.GetTitleUID().ToString(), m_Owner.GetTitleEnv(), m_Owner.GetSteamUserId(), (const char*)base64PlatformName.data(), m_Owner.GetSteamUserToken());
 
             httpClient->SetURL(url);
             httpClient->SetMethod(true);

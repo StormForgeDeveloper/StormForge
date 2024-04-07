@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) StromForge
 // 
@@ -98,7 +98,7 @@ namespace SF.Net
  		} // public  LoginSvrRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 
 		// Cmd: Login with ID/PW request
-		public Result  LoginRes( SF.TransactionID InTransactionID, SF.Result InResult, System.String InNickName, SF.AccountID InAccountID, System.UInt64 InAuthTicket, System.String InBannedReason, System.String InGameServerAddress )
+		public Result  LoginRes( SF.TransactionID InTransactionID, SF.Result InResult, System.String InNickName, SF.AccountID InAccountID, System.UInt64 InAuthTicket, System.String InBannedReason, EAccountRole InRole, System.String InGameServerAddress )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
@@ -106,21 +106,23 @@ namespace SF.Net
 			var NickNameOffset = builder.CreateString(InNickName);
 			var AccountIDOffset = builder.CreateAccountID(InAccountID);
 			var BannedReasonOffset = builder.CreateString(InBannedReason);
+			var RoleOffset = builder.CreateEAccountRole(InRole);
 			var GameServerAddressOffset = builder.CreateString(InGameServerAddress);
 			SF.Flat.Login.LoginRes.StartLoginRes(builder);
 			SF.Flat.Login.LoginRes.AddNickName(builder, NickNameOffset);
 			SF.Flat.Login.LoginRes.AddAccountId(builder, AccountIDOffset);
 			SF.Flat.Login.LoginRes.AddAuthTicket(builder, InAuthTicket);
 			SF.Flat.Login.LoginRes.AddBannedReason(builder, BannedReasonOffset);
+			SF.Flat.Login.LoginRes.AddRole(builder, RoleOffset);
 			SF.Flat.Login.LoginRes.AddGameServerAddress(builder, GameServerAddressOffset);
 			var packetOffset = SF.Flat.Login.LoginRes.EndLoginRes(builder);
 			result = SendMessage(MessageIDLogin.LoginRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
 			return result;
-		} // public Result  LoginRes( SF.TransactionID InTransactionID, SF.Result InResult, System.String InNickName, SF.AccountID InAccountID, System.UInt64 InAuthTicket, System.String InBannedReason, System.String InGameServerAddress )
+		} // public Result  LoginRes( SF.TransactionID InTransactionID, SF.Result InResult, System.String InNickName, SF.AccountID InAccountID, System.UInt64 InAuthTicket, System.String InBannedReason, EAccountRole InRole, System.String InGameServerAddress )
 
 
 		// Cmd: Login with steam login info
-		public Result  LoginWithSteamRes( SF.TransactionID InTransactionID, SF.Result InResult, System.String InNickName, SF.AccountID InAccountID, System.UInt64 InAuthTicket, System.String InBannedReason, System.String InGameServerAddress )
+		public Result  LoginWithSteamRes( SF.TransactionID InTransactionID, SF.Result InResult, System.String InNickName, SF.AccountID InAccountID, System.UInt64 InAuthTicket, System.String InBannedReason, EAccountRole InRole, System.String InGameServerAddress )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
@@ -128,17 +130,19 @@ namespace SF.Net
 			var NickNameOffset = builder.CreateString(InNickName);
 			var AccountIDOffset = builder.CreateAccountID(InAccountID);
 			var BannedReasonOffset = builder.CreateString(InBannedReason);
+			var RoleOffset = builder.CreateEAccountRole(InRole);
 			var GameServerAddressOffset = builder.CreateString(InGameServerAddress);
 			SF.Flat.Login.LoginWithSteamRes.StartLoginWithSteamRes(builder);
 			SF.Flat.Login.LoginWithSteamRes.AddNickName(builder, NickNameOffset);
 			SF.Flat.Login.LoginWithSteamRes.AddAccountId(builder, AccountIDOffset);
 			SF.Flat.Login.LoginWithSteamRes.AddAuthTicket(builder, InAuthTicket);
 			SF.Flat.Login.LoginWithSteamRes.AddBannedReason(builder, BannedReasonOffset);
+			SF.Flat.Login.LoginWithSteamRes.AddRole(builder, RoleOffset);
 			SF.Flat.Login.LoginWithSteamRes.AddGameServerAddress(builder, GameServerAddressOffset);
 			var packetOffset = SF.Flat.Login.LoginWithSteamRes.EndLoginWithSteamRes(builder);
 			result = SendMessage(MessageIDLogin.LoginWithSteamRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
 			return result;
-		} // public Result  LoginWithSteamRes( SF.TransactionID InTransactionID, SF.Result InResult, System.String InNickName, SF.AccountID InAccountID, System.UInt64 InAuthTicket, System.String InBannedReason, System.String InGameServerAddress )
+		} // public Result  LoginWithSteamRes( SF.TransactionID InTransactionID, SF.Result InResult, System.String InNickName, SF.AccountID InAccountID, System.UInt64 InAuthTicket, System.String InBannedReason, EAccountRole InRole, System.String InGameServerAddress )
 
 
 	}; // public class LoginSvrRPCSendAdapter : RPCAdapter

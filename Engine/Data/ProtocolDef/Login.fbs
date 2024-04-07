@@ -14,6 +14,7 @@ table LoginRes
 	account_id:AccountID;
 	auth_ticket:uint64;
 	banned_reason:string;
+	role:EAccountRole;
 	game_server_address:string;
 } // table LoginRes
 
@@ -32,6 +33,7 @@ table LoginWithSteamRes
 	account_id:AccountID;
 	auth_ticket:uint64;
 	banned_reason:string;
+	role:EAccountRole;
 	game_server_address:string;
 } // table LoginWithSteamRes
 

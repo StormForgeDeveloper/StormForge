@@ -15,7 +15,7 @@
     <ResultCodeItem Severity="Error" CodeName="ACCOUNT_BLOCKED" Desc="The user is blocked"/>
     <ResultCodeItem Severity="Error" CodeName="ACCOUNT_DOES_NOT_EXIST" Desc="The user is not exist"/>
     <ResultCodeItem Severity="Error" CodeName="INVALID_PLATFORM_LOGIN" Desc="The user's platform login is invalid"/>
-
+    <ResultCodeItem Severity="Error" CodeName="NOT_ENOUGH_PRIVILEDGE" Desc="The user doesn't have enough priviledge"/>
 
 </ResultCodes>
 

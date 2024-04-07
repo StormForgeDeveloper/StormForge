@@ -45,6 +45,9 @@ namespace SF {
 			// The user's platform login is invalid 
 			constexpr Result 			LOGIN_INVALID_PLATFORM_LOGIN                                       ((int32_t)0xE7060008L);
 
+			// The user doesn't have enough priviledge 
+			constexpr Result 			LOGIN_NOT_ENOUGH_PRIVILEDGE                                        ((int32_t)0xE7060009L);
+
 	void InitializeResultCodeLogin();
 
 	}//namespace ResultCode 
