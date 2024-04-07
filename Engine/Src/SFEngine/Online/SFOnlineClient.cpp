@@ -717,7 +717,7 @@ namespace SF
             hr = NetAddress::ParseNameAddress(m_Owner.GetGameInstanceAddress(), netAddresses);
             if (!hr)
             {
-                SFLog(Net, Error, "Failed to get addresses: gameId:{0}, game:{1}, hr:{2}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress, hr);
+                SFLog(Net, Error, "Failed to get addresses: gameInsId:{0}, game:{1}, hr:{2}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress, hr);
                 SetResult(hr);
                 SetOnlineState(OnlineState::InGameServer);
                 return;
@@ -969,7 +969,7 @@ namespace SF
 	}
 
 
-	Result OnlineClient::StartConnection(uint64_t transactionId, StringCrc32 gameId, const char* loginAddress, uint64_t steamUserId, const char* steamUserName, const char* steamUserToken, const char* userId, const char* password)
+	Result OnlineClient::StartConnection(uint64_t transactionId, const char* loginAddress, uint64_t steamUserId, const char* steamUserName, const char* steamUserToken, const char* userId, const char* password)
 	{
         m_PreviousTickTime = Util::Time.GetTimeMs();
 
@@ -989,8 +989,6 @@ namespace SF
 		if (loginAddress != nullptr)
 			m_LoginAddresses = loginAddress;
 
-		m_GameId = gameId;
-
         m_SteamUserId = steamUserId;
         m_SteamUserName = steamUserName;
         m_SteamUserToken = steamUserToken;
@@ -1001,7 +999,7 @@ namespace SF
             m_Password = password;
         }
 
-        SFLog(Net, Info, "OnlineClient::StartConnection, {0}, {1}, steamUserId:{2}, {3}", gameId, loginAddress, steamUserId, steamUserName);
+        SFLog(Net, Info, "OnlineClient::StartConnection, titleUID:{0}, login:{1}, steamUserId:{2}, {3}", GetTitleUID(), loginAddress, steamUserId, steamUserName);
 
         if (m_SteamUserId != 0)
         {

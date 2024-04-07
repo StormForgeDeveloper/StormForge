@@ -91,7 +91,7 @@ SFDLL_EXPORT const char* SFOnlineClient_NativeGetTitleEnv(intptr_t nativeHandle)
     return pOnlineClient->GetTitleEnv().c_str();
 }
 
-SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnection(intptr_t nativeHandle, uint64_t transactionId, const char* gameId, const char* loginAddress,
+SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnection(intptr_t nativeHandle, uint64_t transactionId, const char* loginAddress,
     const char* userId, const char* password)
 {
 	if (nativeHandle == 0)
@@ -99,10 +99,10 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnection(intptr_t nativeHandle,
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
-	return (int32_t)pOnlineClient->StartConnection(transactionId, gameId, loginAddress, 0, nullptr, nullptr, userId, password);
+	return (int32_t)pOnlineClient->StartConnection(transactionId, loginAddress, 0, nullptr, nullptr, userId, password);
 }
 
-SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnectionSteam(intptr_t nativeHandle, uint64_t transactionId, const char* gameId, const char* loginAddress,
+SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnectionSteam(intptr_t nativeHandle, uint64_t transactionId, const char* loginAddress,
     uint64_t steamUserId, const char* steamUserName, const char* steamUserToken)
 {
     if (nativeHandle == 0)
@@ -110,7 +110,7 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnectionSteam(intptr_t nativeHa
 
     auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
-    return (int32_t)pOnlineClient->StartConnection(transactionId, gameId, loginAddress, steamUserId, steamUserName, steamUserToken, nullptr, nullptr);
+    return (int32_t)pOnlineClient->StartConnection(transactionId, loginAddress, steamUserId, steamUserName, steamUserToken, nullptr, nullptr);
 }
 
 SFDLL_EXPORT int32_t SFOnlineClient_NativeJoinGameInstance(intptr_t nativeHandle, uint64_t transactionId, uint32_t gameInstanceUID)
@@ -181,16 +181,6 @@ SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetActorId(intptr_t nativeHandle)
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
 	return pOnlineClient->GetActorID();
-}
-
-SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetGameId(intptr_t nativeHandle)
-{
-	if (nativeHandle == 0)
-		return (uint)ResultCode::NOT_INITIALIZED;
-
-	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
-
-	return (uint32_t)(pOnlineClient->GetGameId());
 }
 
 SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetGameInstanceUID(intptr_t nativeHandle)

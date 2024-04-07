@@ -81,16 +81,16 @@ namespace SF
             MessageRouter.AddUnique(m_RequestCallbackRouter);
         }
 
-        public Result StartConnection(TransactionID transactionId, string gameId, string loginAddress, string userId, string password, Action<SFMessage>? callback = null)
+        public Result StartConnection(TransactionID transactionId, string loginAddress, string userId, string password, Action<SFMessage>? callback = null)
         {
             ResetConnectionAdapter();
 
-            SF.Log.Info($"Online StartConnection: gameId:{gameId}, loginAddr:{loginAddress}, userId:{userId}");
+            SF.Log.Info($"Online StartConnection: loginAddr:{loginAddress}, userId:{userId}");
 
             if (!transactionId.IsValid)
                 transactionId = NewTransactionID();
 
-            Result res = new(NativeStartConnection(NativeHandle, transactionId.TransactionId, gameId, loginAddress, userId, password));
+            Result res = new(NativeStartConnection(NativeHandle, transactionId.TransactionId, loginAddress, userId, password));
             if (res.IsFailure)
                 return res;
 
@@ -99,16 +99,16 @@ namespace SF
             return res;
         }
 
-        public Result StartConnection(TransactionID transactionId, string gameId, string loginAddress, UInt64 steamUserId, string steamUserName, string steamUserToken, Action<SFMessage>? callback = null)
+        public Result StartConnection(TransactionID transactionId, string loginAddress, UInt64 steamUserId, string steamUserName, string steamUserToken, Action<SFMessage>? callback = null)
         {
             ResetConnectionAdapter();
 
-            SF.Log.Info($"Online StartConnection: gameId:{gameId}, loginAddr:{loginAddress}, steamUserId:{steamUserId}, steamUserName:{steamUserName}");
+            SF.Log.Info($"Online StartConnection: loginAddr:{loginAddress}, steamUserId:{steamUserId}, steamUserName:{steamUserName}");
 
             if (!transactionId.IsValid)
                 transactionId = NewTransactionID();
 
-            Result res = new(NativeStartConnectionSteam(NativeHandle, transactionId.TransactionId, gameId, loginAddress, steamUserId, steamUserName, steamUserToken));
+            Result res = new(NativeStartConnectionSteam(NativeHandle, transactionId.TransactionId, loginAddress, steamUserId, steamUserName, steamUserToken));
             if (res.IsFailure)
                 return res;
 
@@ -151,11 +151,6 @@ namespace SF
             var bytes = new byte[16];
             Marshal.Copy(valuePtr, bytes, 0, bytes.Length);
             return new AccountID(bytes);
-        }
-
-        public StringCrc32 GetGameId()
-        {
-            return new StringCrc32(NativeGetGameId(NativeHandle));
         }
 
         public SF.GameInstanceUID GetGameInstanceUID()
@@ -405,10 +400,10 @@ namespace SF
         static extern IntPtr NativeCreateOnlineClient();
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeStartConnection", CharSet = CharSet.Auto)]
-        static extern Int32 NativeStartConnection(IntPtr nativeHandle, UInt64 transactionId, [MarshalAs(UnmanagedType.LPStr)] string gameId, [MarshalAs(UnmanagedType.LPStr)] string loginAddress, [MarshalAs(UnmanagedType.LPStr)] string userId, [MarshalAs(UnmanagedType.LPStr)] string password);
+        static extern Int32 NativeStartConnection(IntPtr nativeHandle, UInt64 transactionId,  [MarshalAs(UnmanagedType.LPStr)] string loginAddress, [MarshalAs(UnmanagedType.LPStr)] string userId, [MarshalAs(UnmanagedType.LPStr)] string password);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeStartConnectionSteam", CharSet = CharSet.Auto)]
-        static extern Int32 NativeStartConnectionSteam(IntPtr nativeHandle, UInt64 transactionId, [MarshalAs(UnmanagedType.LPStr)] string gameId, [MarshalAs(UnmanagedType.LPStr)] string loginAddress, UInt64 steamUserId, [MarshalAs(UnmanagedType.LPStr)] string steamUserName, [MarshalAs(UnmanagedType.LPStr)] string steamUserToken);
+        static extern Int32 NativeStartConnectionSteam(IntPtr nativeHandle, UInt64 transactionId, [MarshalAs(UnmanagedType.LPStr)] string loginAddress, UInt64 steamUserId, [MarshalAs(UnmanagedType.LPStr)] string steamUserName, [MarshalAs(UnmanagedType.LPStr)] string steamUserToken);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeJoinGameInstance", CharSet = CharSet.Auto)]
         static extern Int32 NativeJoinGameInstance(IntPtr nativeHandle, UInt64 transactionId, UInt32 gameInstanceUID);
@@ -443,9 +438,6 @@ namespace SF
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetActorId", CharSet = CharSet.Auto)]
         static extern UInt32 NativeGetActorId(IntPtr nativeHandle);
-
-        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetGameId", CharSet = CharSet.Auto)]
-        static extern UInt32 NativeGetGameId(IntPtr nativeHandle);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetGameInstanceUID", CharSet = CharSet.Auto)]
         static extern UInt32 NativeGetGameInstanceUID(IntPtr nativeHandle);

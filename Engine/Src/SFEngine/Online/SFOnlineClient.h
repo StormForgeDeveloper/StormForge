@@ -120,7 +120,7 @@ namespace SF
         virtual Result InitializeObject() override;
 
 		// Initialize and start connection process
-		Result StartConnection(uint64_t transactionId, StringCrc32 gameId, const char* loginAddress, uint64_t steamUserId, const char* steamUserName, const char* steamUserToken, const char* userId, const char* password);
+		Result StartConnection(uint64_t transactionId, const char* loginAddress, uint64_t steamUserId, const char* steamUserName, const char* steamUserToken, const char* userId, const char* password);
 
 		// Join game instance
 		Result JoinGameInstance(uint64_t transactionId, GameInstanceUID gameInstanceId);
@@ -143,7 +143,6 @@ namespace SF
 		// Online State
 		SF_FORCEINLINE OnlineState GetOnlineState() const { return m_OnlineState; }
 
-		SF_FORCEINLINE StringCrc32 GetGameId() const { return m_GameId; }
         SF_FORCEINLINE uint64_t GetSteamUserId() const { return m_SteamUserId; }
         SF_FORCEINLINE const String& GetSteamUserName() const { return m_SteamUserName; }
         SF_FORCEINLINE const String& GetSteamUserToken() const { return m_SteamUserToken; }
@@ -218,7 +217,6 @@ namespace SF
 		// Online state
 		OnlineState m_OnlineState = OnlineState::None;
 
-		StringCrc32 m_GameId;
         uint64_t m_SteamUserId{};
         String m_SteamUserName;
         String m_SteamUserToken;
