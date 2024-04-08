@@ -98,8 +98,14 @@ namespace SF {
         if (registered)
 			Service::EngineObjectManager->RemoveObject(this);
 
-		AssertRel(m_ManagerListNodes.pNext == nullptr && m_ManagerListNodes.pPrev == nullptr);
-		for (auto& itNode : m_ListNodes)
+        if (m_ManagerListNodes.IsInAnyList())
+        {
+            SFLog(Engine, Error, "EngineObject:{0}, still in a manager list.", GetName());
+            assert(Service::EngineTaskManager->GetEngineThreadID() == ThisThread::GetThreadID());
+            m_ManagerListNodes.RemoveFromList();
+        }
+
+        for (auto& itNode : m_ListNodes)
 		{
 			AssertRel(itNode.pNext == nullptr && itNode.pPrev == nullptr);
 		}

@@ -10,10 +10,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 using System;
-using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 #nullable enable
@@ -21,6 +19,7 @@ using System.Runtime.InteropServices;
 namespace SF
 {
     using LogEntryID = System.UInt64;
+    using BinaryPrimitives = System.Buffers.Binary.BinaryPrimitives;
 
     // structure data type attribute, this is used for message builder
     public class StructAttribute : Attribute
