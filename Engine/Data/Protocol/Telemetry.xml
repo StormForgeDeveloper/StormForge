@@ -5,15 +5,15 @@
 
       <Command Name="PostEvent" Reliable="true" Crypto="No" Trace="Debug1" Desc="Post telemetry event">
           <Cmd>
-			<Params TypeName="String" Name="EventName" Desc="Name of the event"/>
-			<Params TypeName="uint64" Name="TimeStamp" Desc="Linux UCT time64_t"/>
-			<Params TypeName="String" Name="AppID" Desc="Application Id, alternatively GameID"/>
-			<Params TypeName="String" Name="MachineID" Desc="Machine unique Id"/>
-			<Params TypeName="uint32" Name="EventID" Desc="event unique Id assigned by client"/>
-			<Params TypeName="AccountID" Name="AccountID" Desc="AccountId"/>
-			<Params TypeName="bool" Name="IsPlayEvent" Desc="true if it is a play event"/>
-			<Params TypeName="uint8" IsArray="true" Name="SessionID" Desc="Session Id, UUID byte stream"/>
-			<Params TypeName="NamedVariable" IsArray="true" Name="Attributes" Desc="Attributes, array of named variables"/>
+		      <Params TypeName="String" Name="EventName" Desc="Name of the event"/>
+		      <Params TypeName="uint64" Name="TimeStamp" Desc="Linux UCT time64_t"/>
+              <Params TypeName="Guid" Name="Title" Desc="TitleUID"/>
+		      <Params TypeName="String" Name="MachineID" Desc="Machine unique Id"/>
+		      <Params TypeName="uint32" Name="EventID" Desc="event unique Id assigned by client"/>
+		      <Params TypeName="AccountID" Name="AccountID" Desc="AccountId"/>
+		      <Params TypeName="bool" Name="IsPlayEvent" Desc="true if it is a play event"/>
+              <Params TypeName="Guid" Name="SessionID" Desc="Session Id, UUID byte stream"/>
+		      <Params TypeName="NamedVariable" IsArray="true" Name="Attributes" Desc="Attributes, array of named variables"/>
           </Cmd>
           <Res>
           </Res>

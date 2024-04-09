@@ -31,7 +31,7 @@ struct PostEventCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_EVENT_NAME = 4,
     VT_TIME_STAMP = 6,
-    VT_APP_ID = 8,
+    VT_TITLE = 8,
     VT_MACHINE_ID = 10,
     VT_EVENT_ID = 12,
     VT_ACCOUNT_ID = 14,
@@ -45,8 +45,8 @@ struct PostEventCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   uint64_t time_stamp() const {
     return GetField<uint64_t>(VT_TIME_STAMP, 0);
   }
-  const ::flatbuffers::String *app_id() const {
-    return GetPointer<const ::flatbuffers::String *>(VT_APP_ID);
+  const SF::Flat::Guid *title() const {
+    return GetStruct<const SF::Flat::Guid *>(VT_TITLE);
   }
   const ::flatbuffers::String *machine_id() const {
     return GetPointer<const ::flatbuffers::String *>(VT_MACHINE_ID);
@@ -60,8 +60,8 @@ struct PostEventCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   bool is_play_event() const {
     return GetField<uint8_t>(VT_IS_PLAY_EVENT, 0) != 0;
   }
-  const ::flatbuffers::Vector<uint8_t> *session_id() const {
-    return GetPointer<const ::flatbuffers::Vector<uint8_t> *>(VT_SESSION_ID);
+  const SF::Flat::Guid *session_id() const {
+    return GetStruct<const SF::Flat::Guid *>(VT_SESSION_ID);
   }
   const ::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::NamedVariable>> *attributes() const {
     return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::NamedVariable>> *>(VT_ATTRIBUTES);
@@ -70,7 +70,7 @@ struct PostEventCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   auto get_field() const {
          if constexpr (Index == 0) return event_name();
     else if constexpr (Index == 1) return time_stamp();
-    else if constexpr (Index == 2) return app_id();
+    else if constexpr (Index == 2) return title();
     else if constexpr (Index == 3) return machine_id();
     else if constexpr (Index == 4) return event_id();
     else if constexpr (Index == 5) return account_id();
@@ -84,15 +84,13 @@ struct PostEventCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            VerifyOffset(verifier, VT_EVENT_NAME) &&
            verifier.VerifyString(event_name()) &&
            VerifyField<uint64_t>(verifier, VT_TIME_STAMP, 8) &&
-           VerifyOffset(verifier, VT_APP_ID) &&
-           verifier.VerifyString(app_id()) &&
+           VerifyField<SF::Flat::Guid>(verifier, VT_TITLE, 8) &&
            VerifyOffset(verifier, VT_MACHINE_ID) &&
            verifier.VerifyString(machine_id()) &&
            VerifyField<uint32_t>(verifier, VT_EVENT_ID, 4) &&
            VerifyField<SF::Flat::AccountID>(verifier, VT_ACCOUNT_ID, 8) &&
            VerifyField<uint8_t>(verifier, VT_IS_PLAY_EVENT, 1) &&
-           VerifyOffset(verifier, VT_SESSION_ID) &&
-           verifier.VerifyVector(session_id()) &&
+           VerifyField<SF::Flat::Guid>(verifier, VT_SESSION_ID, 8) &&
            VerifyOffset(verifier, VT_ATTRIBUTES) &&
            verifier.VerifyVector(attributes()) &&
            verifier.VerifyVectorOfTables(attributes()) &&
@@ -110,8 +108,8 @@ struct PostEventCmdBuilder {
   void add_time_stamp(uint64_t time_stamp) {
     fbb_.AddElement<uint64_t>(PostEventCmd::VT_TIME_STAMP, time_stamp, 0);
   }
-  void add_app_id(::flatbuffers::Offset<::flatbuffers::String> app_id) {
-    fbb_.AddOffset(PostEventCmd::VT_APP_ID, app_id);
+  void add_title(const SF::Flat::Guid *title) {
+    fbb_.AddStruct(PostEventCmd::VT_TITLE, title);
   }
   void add_machine_id(::flatbuffers::Offset<::flatbuffers::String> machine_id) {
     fbb_.AddOffset(PostEventCmd::VT_MACHINE_ID, machine_id);
@@ -125,8 +123,8 @@ struct PostEventCmdBuilder {
   void add_is_play_event(bool is_play_event) {
     fbb_.AddElement<uint8_t>(PostEventCmd::VT_IS_PLAY_EVENT, static_cast<uint8_t>(is_play_event), 0);
   }
-  void add_session_id(::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> session_id) {
-    fbb_.AddOffset(PostEventCmd::VT_SESSION_ID, session_id);
+  void add_session_id(const SF::Flat::Guid *session_id) {
+    fbb_.AddStruct(PostEventCmd::VT_SESSION_ID, session_id);
   }
   void add_attributes(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::NamedVariable>>> attributes) {
     fbb_.AddOffset(PostEventCmd::VT_ATTRIBUTES, attributes);
@@ -146,12 +144,12 @@ inline ::flatbuffers::Offset<PostEventCmd> CreatePostEventCmd(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     ::flatbuffers::Offset<::flatbuffers::String> event_name = 0,
     uint64_t time_stamp = 0,
-    ::flatbuffers::Offset<::flatbuffers::String> app_id = 0,
+    const SF::Flat::Guid *title = nullptr,
     ::flatbuffers::Offset<::flatbuffers::String> machine_id = 0,
     uint32_t event_id = 0,
     const SF::Flat::AccountID *account_id = nullptr,
     bool is_play_event = false,
-    ::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> session_id = 0,
+    const SF::Flat::Guid *session_id = nullptr,
     ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::NamedVariable>>> attributes = 0) {
   PostEventCmdBuilder builder_(_fbb);
   builder_.add_time_stamp(time_stamp);
@@ -160,7 +158,7 @@ inline ::flatbuffers::Offset<PostEventCmd> CreatePostEventCmd(
   builder_.add_account_id(account_id);
   builder_.add_event_id(event_id);
   builder_.add_machine_id(machine_id);
-  builder_.add_app_id(app_id);
+  builder_.add_title(title);
   builder_.add_event_name(event_name);
   builder_.add_is_play_event(is_play_event);
   return builder_.Finish();
@@ -175,7 +173,7 @@ struct PostEventCmd::Traits {
   static constexpr std::array<const char *, fields_number> field_names = {
     "event_name",
     "time_stamp",
-    "app_id",
+    "title",
     "machine_id",
     "event_id",
     "account_id",
@@ -191,28 +189,26 @@ inline ::flatbuffers::Offset<PostEventCmd> CreatePostEventCmdDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const char *event_name = nullptr,
     uint64_t time_stamp = 0,
-    const char *app_id = nullptr,
+    const SF::Flat::Guid *title = nullptr,
     const char *machine_id = nullptr,
     uint32_t event_id = 0,
     const SF::Flat::AccountID *account_id = nullptr,
     bool is_play_event = false,
-    const std::vector<uint8_t> *session_id = nullptr,
+    const SF::Flat::Guid *session_id = nullptr,
     const std::vector<::flatbuffers::Offset<SF::Flat::NamedVariable>> *attributes = nullptr) {
   auto event_name__ = event_name ? _fbb.CreateString(event_name) : 0;
-  auto app_id__ = app_id ? _fbb.CreateString(app_id) : 0;
   auto machine_id__ = machine_id ? _fbb.CreateString(machine_id) : 0;
-  auto session_id__ = session_id ? _fbb.CreateVector<uint8_t>(*session_id) : 0;
   auto attributes__ = attributes ? _fbb.CreateVector<::flatbuffers::Offset<SF::Flat::NamedVariable>>(*attributes) : 0;
   return SF::Flat::Telemetry::CreatePostEventCmd(
       _fbb,
       event_name__,
       time_stamp,
-      app_id__,
+      title,
       machine_id__,
       event_id,
       account_id,
       is_play_event,
-      session_id__,
+      session_id,
       attributes__);
 }
 

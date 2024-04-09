@@ -19,7 +19,7 @@ Post telemetry event
 
 1. Command interface
 
-        Result PostEventCmd(const TransactionID &InTransactionID, const char* InEventName, const uint64_t &InTimeStamp, const char* InAppID, const char* InMachineID, const uint32_t &InEventID, const AccountID &InAccountID, const bool &InIsPlayEvent, const Array<uint8_t>& InSessionID, const Array<NamedVariable>& InAttributes)
+        Result PostEventCmd(const TransactionID &InTransactionID, const char* InEventName, const uint64_t &InTimeStamp, const Guid &InTitle, const char* InMachineID, const uint32_t &InEventID, const AccountID &InAccountID, const bool &InIsPlayEvent, const Guid &InSessionID, const Array<NamedVariable>& InAttributes)
 
 		- TransactionID: type:TransactionID, 
 
@@ -27,7 +27,7 @@ Post telemetry event
 
 		- TimeStamp: type:uint64, Linux UCT time64_t
 
-		- AppID: type:String, Application Id, alternatively GameID
+		- Title: type:Guid, TitleUID
 
 		- MachineID: type:String, Machine unique Id
 
@@ -37,7 +37,7 @@ Post telemetry event
 
 		- IsPlayEvent: type:bool, true if it is a play event
 
-		- SessionID: type:uint8, Session Id, UUID byte stream
+		- SessionID: type:Guid, Session Id, UUID byte stream
 
 		- Attributes: type:NamedVariable, Attributes, array of named variables
 

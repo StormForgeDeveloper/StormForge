@@ -5,12 +5,12 @@ table PostEventCmd
 {
  	event_name:string;
 	time_stamp:uint64;
-	app_id:string;
+	title:Guid;
 	machine_id:string;
 	event_id:uint32;
 	account_id:AccountID;
 	is_play_event:bool;
-	session_id:[uint8];
+	session_id:Guid;
 	attributes:[NamedVariable];
 } // table PostEventCmd
 

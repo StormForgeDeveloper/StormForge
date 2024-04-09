@@ -27,13 +27,7 @@ public struct PostEventCmd : IFlatbufferObject
 #endif
   public byte[] GetEventNameArray() { return __p.__vector_as_array<byte>(4); }
   public ulong TimeStamp { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
-  public string AppId { get { int o = __p.__offset(8); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
-#if ENABLE_SPAN_T
-  public Span<byte> GetAppIdBytes() { return __p.__vector_as_span<byte>(8, 1); }
-#else
-  public ArraySegment<byte>? GetAppIdBytes() { return __p.__vector_as_arraysegment(8); }
-#endif
-  public byte[] GetAppIdArray() { return __p.__vector_as_array<byte>(8); }
+  public SF.Flat.Guid? Title { get { int o = __p.__offset(8); return o != 0 ? (SF.Flat.Guid?)(new SF.Flat.Guid()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public string MachineId { get { int o = __p.__offset(10); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
   public Span<byte> GetMachineIdBytes() { return __p.__vector_as_span<byte>(10, 1); }
@@ -44,31 +38,19 @@ public struct PostEventCmd : IFlatbufferObject
   public uint EventId { get { int o = __p.__offset(12); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
   public SF.Flat.AccountID? AccountId { get { int o = __p.__offset(14); return o != 0 ? (SF.Flat.AccountID?)(new SF.Flat.AccountID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public bool IsPlayEvent { get { int o = __p.__offset(16); return o != 0 ? 0!=__p.bb.Get(o + __p.bb_pos) : (bool)false; } }
-  public byte SessionId(int j) { int o = __p.__offset(18); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
-  public int SessionIdLength { get { int o = __p.__offset(18); return o != 0 ? __p.__vector_len(o) : 0; } }
-#if ENABLE_SPAN_T
-  public Span<byte> GetSessionIdBytes() { return __p.__vector_as_span<byte>(18, 1); }
-#else
-  public ArraySegment<byte>? GetSessionIdBytes() { return __p.__vector_as_arraysegment(18); }
-#endif
-  public byte[] GetSessionIdArray() { return __p.__vector_as_array<byte>(18); }
+  public SF.Flat.Guid? SessionId { get { int o = __p.__offset(18); return o != 0 ? (SF.Flat.Guid?)(new SF.Flat.Guid()).__assign(o + __p.bb_pos, __p.bb) : null; } }
   public SF.Flat.NamedVariable? Attributes(int j) { int o = __p.__offset(20); return o != 0 ? (SF.Flat.NamedVariable?)(new SF.Flat.NamedVariable()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
   public int AttributesLength { get { int o = __p.__offset(20); return o != 0 ? __p.__vector_len(o) : 0; } }
 
   public static void StartPostEventCmd(FlatBufferBuilder builder) { builder.StartTable(9); }
   public static void AddEventName(FlatBufferBuilder builder, StringOffset eventNameOffset) { builder.AddOffset(0, eventNameOffset.Value, 0); }
   public static void AddTimeStamp(FlatBufferBuilder builder, ulong timeStamp) { builder.AddUlong(1, timeStamp, 0); }
-  public static void AddAppId(FlatBufferBuilder builder, StringOffset appIdOffset) { builder.AddOffset(2, appIdOffset.Value, 0); }
+  public static void AddTitle(FlatBufferBuilder builder, Offset<SF.Flat.Guid> titleOffset) { builder.AddStruct(2, titleOffset.Value, 0); }
   public static void AddMachineId(FlatBufferBuilder builder, StringOffset machineIdOffset) { builder.AddOffset(3, machineIdOffset.Value, 0); }
   public static void AddEventId(FlatBufferBuilder builder, uint eventId) { builder.AddUint(4, eventId, 0); }
   public static void AddAccountId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> accountIdOffset) { builder.AddStruct(5, accountIdOffset.Value, 0); }
   public static void AddIsPlayEvent(FlatBufferBuilder builder, bool isPlayEvent) { builder.AddBool(6, isPlayEvent, false); }
-  public static void AddSessionId(FlatBufferBuilder builder, VectorOffset sessionIdOffset) { builder.AddOffset(7, sessionIdOffset.Value, 0); }
-  public static VectorOffset CreateSessionIdVector(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte(data[i]); return builder.EndVector(); }
-  public static VectorOffset CreateSessionIdVectorBlock(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateSessionIdVectorBlock(FlatBufferBuilder builder, ArraySegment<byte> data) { builder.StartVector(1, data.Count, 1); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateSessionIdVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<byte>(dataPtr, sizeInBytes); return builder.EndVector(); }
-  public static void StartSessionIdVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(1, numElems, 1); }
+  public static void AddSessionId(FlatBufferBuilder builder, Offset<SF.Flat.Guid> sessionIdOffset) { builder.AddStruct(7, sessionIdOffset.Value, 0); }
   public static void AddAttributes(FlatBufferBuilder builder, VectorOffset attributesOffset) { builder.AddOffset(8, attributesOffset.Value, 0); }
   public static VectorOffset CreateAttributesVector(FlatBufferBuilder builder, Offset<SF.Flat.NamedVariable>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
   public static VectorOffset CreateAttributesVectorBlock(FlatBufferBuilder builder, Offset<SF.Flat.NamedVariable>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
@@ -89,12 +71,12 @@ static public class PostEventCmdVerify
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyString(tablePos, 4 /*EventName*/, false)
       && verifier.VerifyField(tablePos, 6 /*TimeStamp*/, 8 /*ulong*/, 8, false)
-      && verifier.VerifyString(tablePos, 8 /*AppId*/, false)
+      && verifier.VerifyField(tablePos, 8 /*Title*/, 16 /*SF.Flat.Guid*/, 8, false)
       && verifier.VerifyString(tablePos, 10 /*MachineId*/, false)
       && verifier.VerifyField(tablePos, 12 /*EventId*/, 4 /*uint*/, 4, false)
       && verifier.VerifyField(tablePos, 14 /*AccountId*/, 16 /*SF.Flat.AccountID*/, 8, false)
       && verifier.VerifyField(tablePos, 16 /*IsPlayEvent*/, 1 /*bool*/, 1, false)
-      && verifier.VerifyVectorOfData(tablePos, 18 /*SessionId*/, 1 /*byte*/, false)
+      && verifier.VerifyField(tablePos, 18 /*SessionId*/, 16 /*SF.Flat.Guid*/, 8, false)
       && verifier.VerifyVectorOfTables(tablePos, 20 /*Attributes*/, SF.Flat.NamedVariableVerify.Verify, false)
       && verifier.VerifyTableEnd(tablePos);
   }
