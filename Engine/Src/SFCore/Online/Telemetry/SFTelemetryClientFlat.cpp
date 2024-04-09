@@ -226,11 +226,11 @@ namespace SF
 		Terminate();
 	}
 
-	Result TelemetryClientFlat::Initialize(const String& url, const uint64_t& applicationId, const String& authKey, bool bUseEventFileCache)
+	Result TelemetryClientFlat::Initialize(const String& url, const Guid& titleUID, const String& authKey, bool bUseEventFileCache)
 	{
 		Result hr;
 
-        m_ApplicationId.Format("{0}", applicationId);
+        m_TitleUID = titleUID;
 		m_AuthKey = authKey;
 
 		m_MachineId = Util::GetMachineUniqueId();
@@ -243,12 +243,7 @@ namespace SF
 		m_Client.SetUseTickThread(false); // We are using manual ticking
         m_Client.SetReconnectOnDisconnected(true);
 
-        char sessionId[128]{}, appId[128];
-        m_SessionId.ToString(sessionId);
-
-        StrUtil::Format(appId, "{0}", m_ApplicationId);
-
-        m_Client.AddParameter(KeyName_AppId, appId);
+        m_Client.AddParameter(KeyName_Title, GetTitleUID().ToString().c_str());
         m_Client.AddParameter(KeyName_AccessKey, m_AuthKey);
 
 		m_Client.OnRecvEvent().AddDelegate(uintptr_t(this), [&](const Array<uint8_t>& data)
@@ -381,18 +376,15 @@ namespace SF
 
         ::flatbuffers::FlatBufferBuilder& packetBuilder = pEvent->GetPacketBuilder();
 
-        Guid sessionId = GetSessionId();
-        ArrayView<const uint8_t> sessionIdView(sizeof(Guid), (uint8_t*)sessionId.data);
-        auto sessionIdOffset = packetBuilder.CreateVector(sessionIdView.data(), sessionIdView.size());
         auto attributesOffset = packetBuilder.CreateVector(pEvent->GetAttributeOffesets());
-        auto accountIdOffset = SF::Flat::Helper::CreateAccountID(packetBuilder, pInEvent->GetAccountID());
 
         ::flatbuffers::Offset<FlatPostEventRequest> payloadOffset = SF::Flat::Telemetry::CreatePostEventCmd(packetBuilder,
             packetBuilder.CreateString(pEvent->GetEventName().data()), Util::Time.GetRawUTCMs().time_since_epoch().count(),
-            packetBuilder.CreateString(GetApplicationId().data()),
+            SF::Flat::Helper::CreateGuid(packetBuilder, GetTitleUID()),
             packetBuilder.CreateString(GetMachineId().data()),
-            eventId, accountIdOffset, pEvent->IsPlayEvent(),
-            sessionIdOffset, attributesOffset
+            eventId, SF::Flat::Helper::CreateAccountID(packetBuilder, pInEvent->GetAccountID()),
+            pEvent->IsPlayEvent(),
+            SF::Flat::Helper::CreateGuid(packetBuilder, GetSessionId()), attributesOffset
             );
 
         packetBuilder.Finish(payloadOffset);

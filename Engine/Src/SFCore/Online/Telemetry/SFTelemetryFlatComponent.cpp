@@ -25,7 +25,7 @@ namespace SF
 	//	class TelemetryFlatComponent
 	//
 
-	TelemetryFlatComponent::TelemetryFlatComponent(const String& url, uint64_t clientId, const String& authTicket, bool bUseEventCacheFile)
+	TelemetryFlatComponent::TelemetryFlatComponent(const String& url, const Guid& clientId, const String& authTicket, bool bUseEventCacheFile)
         : LibraryComponent(TypeName)
         , m_Url(url)
         , m_ClientId(clientId)

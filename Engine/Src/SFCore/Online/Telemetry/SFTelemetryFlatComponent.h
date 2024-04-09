@@ -35,7 +35,7 @@ namespace SF
 
     public:
 
-        TelemetryFlatComponent(const String& url, uint64_t clientId, const String& authTicket, bool bUseEventCacheFile);
+        TelemetryFlatComponent(const String& url, const Guid& clientId, const String& authTicket, bool bUseEventCacheFile);
         virtual ~TelemetryFlatComponent();
 
 
@@ -51,7 +51,7 @@ namespace SF
         String m_Url;
 
         // client id
-        uint64_t m_ClientId{};
+        Guid m_ClientId{};
 
         // auth key
         String m_AuthTicket;

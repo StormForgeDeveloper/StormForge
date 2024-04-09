@@ -91,14 +91,14 @@ namespace SF
         static constexpr int64_t HeaderVersion = 4;
         static constexpr size_t MaxSerializationBufferSize = 6 * 1024;
 
-		static constexpr char KeyName_AppId[] = "appid";
+		static constexpr char KeyName_Title[] = "Title";
         static constexpr char KeyName_AccessKey[] = "AccessKey";
         static constexpr char KeyName_Protocol[] = "SFTelemetry";
 
         static constexpr char FieldName_IsPlayEvent[] = "IsPlayEvent";
         static constexpr char FieldName_EventId[] = "EventId";
         static constexpr char FieldName_SessionId[] = "SessionId";
-        static constexpr char FieldName_AppId[] = "AppId";
+        static constexpr char FieldName_Title[] = "Title";
         static constexpr char FieldName_MachineId[] = "MachineId";
         static constexpr char FieldName_EventName[] = "EventName";
         static constexpr char FieldName_AccountId[] = "AccountId";
@@ -112,7 +112,7 @@ namespace SF
 
 		SF_FORCEINLINE IHeap& GetHeap() const { return GetSystemHeap(); }
 
-        virtual Result Initialize(const String& url, const uint64_t& applicationId, const String& authKey, bool bUseEventFileCache);
+        virtual Result Initialize(const String& url, const Guid& titleUID, const String& authKey, bool bUseEventFileCache);
 		void Terminate();
 
         virtual Result RegisterEventSchema(const char* eventName, const char* eventSchema) override
@@ -124,7 +124,7 @@ namespace SF
         SF_FORCEINLINE bool IsInitialized() const { return m_Client.IsInitialized(); }
 		SF_FORCEINLINE bool IsConnected() const { return m_Client.IsConnected(); }
 
-        SF_FORCEINLINE const String& GetApplicationId() const { return m_ApplicationId; }
+        SF_FORCEINLINE const Guid& GetTitleUID() const { return m_TitleUID; }
         SF_FORCEINLINE const String& GetAuthKey() const { return m_AuthKey; }
         SF_FORCEINLINE const String& GetMachineId() const { return m_MachineId; }
         SF_FORCEINLINE const Guid& GetSessionId() const { return m_SessionId; }
@@ -145,7 +145,7 @@ namespace SF
 
 	private:
 
-        String m_ApplicationId;
+        Guid m_TitleUID;
 		String m_AuthKey;
 
 		String m_MachineId;
