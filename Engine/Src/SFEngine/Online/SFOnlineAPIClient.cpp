@@ -68,7 +68,7 @@ namespace SF
 
         m_Client.SetReconnectOnDisconnected(true);
 
-		hr = m_Client.Initialize(m_Url, "ws");
+		hr = m_Client.Initialize(m_Url);
 		if (!hr.IsSuccess())
 			return hr;
 
