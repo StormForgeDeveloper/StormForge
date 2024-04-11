@@ -102,7 +102,7 @@ namespace SF
             uint expectedSize = messageHeader->MessageSize;
             if (recvData.size() != expectedSize)
             {
-                SFLog(System, Warning, "ObjectDirectory received unexpected data size: expected:{0}, received:{1}", expectedSize, recvData.size());
+                SFLog(System, Warning, "Received unexpected data size: expected:{0}, received:{1}", expectedSize, recvData.size());
                 defCheck(ResultCode::INVALID_FORMAT);
             }
 
@@ -229,7 +229,7 @@ namespace SF
             SFLog(Game, Info, "RequestingLogin: {0}, {1}", m_Owner.GetUserId(), (const char*)base64Password.data());
 
             String url;
-            url.Format("http://{0}/BR/Login/v1/idpw?Title={1}&Env={2}&userId={3}&password={4}",
+            url.Format("{0}/v1/idpw?Title={1}&Env={2}&userId={3}&password={4}",
                 m_Owner.GetLoginAddresses(), m_Owner.GetTitleUID().ToString(), m_Owner.GetTitleEnv(), m_Owner.GetUserId(), (const char*)base64Password.data());
             httpClient->SetURL(url);
             httpClient->SetMethod(true);
@@ -270,7 +270,7 @@ namespace SF
             SFLog(Game, Info, "RequestingSteamLogin: {0}, {1}", m_Owner.GetSteamUserId(), (const char*)base64PlatformName.data());
 
             String url;
-            url.Format("http://{0}/BR/Login/v1/steam?Title={1}&Env={2}&steamAccountId={3}&steamUserName={4}&steamUserToken={5}",
+            url.Format("{0}/v1/steam?Title={1}&Env={2}&steamAccountId={3}&steamUserName={4}&steamUserToken={5}",
                 m_Owner.GetLoginAddresses(), m_Owner.GetTitleUID().ToString(), m_Owner.GetTitleEnv(), m_Owner.GetSteamUserId(), (const char*)base64PlatformName.data(), m_Owner.GetSteamUserToken());
 
             httpClient->SetURL(url);

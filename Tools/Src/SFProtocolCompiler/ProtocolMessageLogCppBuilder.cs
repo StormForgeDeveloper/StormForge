@@ -171,7 +171,6 @@ namespace ProtocolCompiler
             WriteLineWithIndent("std::string packetString;");
             WriteLineWithIndent($"static const std::string tableName = \"{messageStructName}\";");
             WriteLineWithIndent($"if (stm_Parser.LookupStruct(tableName)) {{");
-            //WriteLineWithIndent("    flatbuffers::GenText(stm_Parser, messageHeader->GetPayloadPtr(), &packetString);");
             WriteLineWithIndent("    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);");
             WriteLineWithIndent("}");
 
