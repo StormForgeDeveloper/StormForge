@@ -32,7 +32,7 @@ namespace SF
 	//	class OnlineServiceStatus
 	//
 
-    class OnlineAPIClient : public EngineObject
+    class OnlineNotificationClient : public EngineObject
     {
     public:
 
@@ -49,12 +49,12 @@ namespace SF
 
     public:
 
-        OnlineAPIClient(IHeap& heap);
-        virtual ~OnlineAPIClient();
+        OnlineNotificationClient(IHeap& heap);
+        virtual ~OnlineNotificationClient();
 
 		SF_FORCEINLINE IHeap& GetHeap() const { return GetSystemHeap(); }
 
-        virtual Result Connect(const String& url, const String& accessKey);
+        virtual Result Connect(const String& env, const String& url, const String& accessKey);
         Result Reconnect();
 		void Disconnect();
 
@@ -73,6 +73,7 @@ namespace SF
 
 	private:
         String m_Url;
+        String m_Env;
 		String m_AccessKey;
 		String m_MachineUID;
 

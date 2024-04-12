@@ -330,8 +330,8 @@ set(SUBOnline_FILES
 	Online/SFOnlineSessionGameplay.cpp
 	Online/SFOnlineActor.h
 	Online/SFOnlineActor.cpp
-    Online/SFOnlineAPIClient.h
-    Online/SFOnlineAPIClient.cpp
+    Online/SFOnlineNotificationClient.h
+    Online/SFOnlineNotificationClient.cpp
   )
 
 source_group(Online FILES
