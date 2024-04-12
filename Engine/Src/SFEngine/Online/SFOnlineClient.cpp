@@ -1215,18 +1215,9 @@ namespace SF
 		{
 			PlayInstanceRPCSendAdapter policy(GetConnectionGameInstance()->GetMessageEndpoint());
 			ActorMovement pMove{};
-			if (m_MyPlayerState != nullptr) // If it is not null it means  the player is standing
+			while (m_OutgoingMovement->DequeueMovement(pMove))
 			{
-				while (m_OutgoingMovement->DequeueMovement(pMove))
-				{
-				}
-			}
-			else
-			{
-				while (m_OutgoingMovement->DequeueMovement(pMove))
-				{
-					policy.PlayerMovementC2SEvt(GetGameInstanceUID(), GetPlayerID(), pMove);
-				}
+				policy.PlayerMovementC2SEvt(GetGameInstanceUID(), GetPlayerID(), pMove);
 			}
 		}
 
