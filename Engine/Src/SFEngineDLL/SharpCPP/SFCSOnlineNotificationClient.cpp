@@ -45,7 +45,7 @@ SFDLL_EXPORT intptr_t SFOnlineNotificationClient_NativeCreate()
 	return NativeObjectToIntptr(pOnlineNotificationClient.get());
 }
 
-SFDLL_EXPORT int32_t SFOnlineNotificationClient_NativeConnect(intptr_t nativeHandle, const char* url, const char* env, const char* accessKey)
+SFDLL_EXPORT int32_t SFOnlineNotificationClient_NativeConnect(intptr_t nativeHandle, const char* env, const char* url, const char* accessKey)
 {
 	if (nativeHandle == 0)
 		return (int)ResultCode::NOT_INITIALIZED;
