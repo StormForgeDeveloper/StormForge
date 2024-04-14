@@ -85,9 +85,7 @@ namespace SF
         {
             const char* file{};
             int line{};
-            const char* data{};
-            int flags{};
-            ERR_get_error_line_data(&file, &line, &data, &flags);
+            ERR_peek_error_line(&file, &line);
 
             SFLog(HTTP, Error, "Failed to import cert string, file:{0}:{1}", file, line);
 
