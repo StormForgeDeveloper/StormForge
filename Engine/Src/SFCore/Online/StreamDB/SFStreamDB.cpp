@@ -63,6 +63,8 @@ namespace SF
 		if (!m_Config)
 			return ResultCode::OUT_OF_MEMORY;
 
+        m_Server = brokers;
+
 		std::string errstr;
 		if (m_Config->set("bootstrap.servers", brokers.data(), errstr) != RdKafka::Conf::CONF_OK)
 		{
@@ -81,10 +83,10 @@ namespace SF
 			return ResultCode::INVALID_ARG;
 		}
 
-        // TODO: need to implement partitioning. enforce partition zero for now
-		m_Partition = 0;
+        // TODO: need to implement partitioning.
+		m_Partition = partition;
 
-		m_StreamName = topic;
+        m_Topic = topic;
 
 
 
@@ -194,9 +196,14 @@ namespace SF
 
 	class StreamDBSendReportCb : public RdKafka::DeliveryReportCb
 	{
+    private:
+
+        StreamDB& m_Owner;
+
 	public:
 
-		StreamDBSendReportCb()
+		StreamDBSendReportCb(StreamDB& owner)
+            : m_Owner(owner)
 		{}
 
 		virtual ~StreamDBSendReportCb()
@@ -211,7 +218,7 @@ namespace SF
 		/* If message.err() is non-zero the message delivery failed permanently for the message. */
 		if (message.err())
 		{
-			SFLog(Net, Error, "Kafka Message delivery failed: {0}", message.errstr());
+			SFLog(Net, Error, "Kafka Message delivery failed, server:{0}, channel:{1}, partition:{2}  error:{3}", m_Owner.GetServer(), m_Owner.GetTopic(), m_Owner.GetPartition(), message.errstr());
 		}
 		else
 		{
@@ -224,7 +231,7 @@ namespace SF
 
 
 	StreamDBProducer::StreamDBProducer()
-		: m_DeliveryCallback(new StreamDBSendReportCb)
+		: m_DeliveryCallback(new StreamDBSendReportCb(*this))
 	{
 		
 	}

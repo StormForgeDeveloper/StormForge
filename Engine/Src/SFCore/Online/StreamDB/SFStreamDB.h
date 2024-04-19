@@ -71,7 +71,8 @@ namespace SF
 
         virtual Result Initialize(const String& brokers, const String& topic, int32_t partition = 0);
 
-        const String& GetTopic() const { return m_StreamName; }
+        const String& GetServer() const { return m_Server; }
+        const String& GetTopic() const { return m_Topic; }
         int32_t GetPartition() const { return m_Partition; }
         void SetPartition(int32_t value) { m_Partition = value; }
 
@@ -95,8 +96,9 @@ namespace SF
 
     private:
 
+        String m_Server;
+        String m_Topic;
         int32_t m_Partition = -1;
-        String m_StreamName;
 
         UniquePtr<RdKafka::Conf> m_Config;
         UniquePtr<RdKafka::Conf> m_TopicConfig;
