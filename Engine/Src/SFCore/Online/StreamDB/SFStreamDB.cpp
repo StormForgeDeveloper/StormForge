@@ -81,7 +81,8 @@ namespace SF
 			return ResultCode::INVALID_ARG;
 		}
 
-		m_Partition = partition;
+        // TODO: need to implement partitioning. enforce partition zero for now
+		m_Partition = 0;
 
 		m_StreamName = topic;
 
