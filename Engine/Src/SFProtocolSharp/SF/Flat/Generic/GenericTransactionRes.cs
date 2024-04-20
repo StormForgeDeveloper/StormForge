@@ -16,7 +16,6 @@ public struct GenericTransactionRes : IFlatbufferObject
   public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_24_3_7(); }
   public static GenericTransactionRes GetRootAsGenericTransactionRes(ByteBuffer _bb) { return GetRootAsGenericTransactionRes(_bb, new GenericTransactionRes()); }
   public static GenericTransactionRes GetRootAsGenericTransactionRes(ByteBuffer _bb, GenericTransactionRes obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
-  public static bool VerifyGenericTransactionRes(ByteBuffer _bb) {Google.FlatBuffers.Verifier verifier = new Google.FlatBuffers.Verifier(_bb); return verifier.VerifyBuffer("", false, GenericTransactionResVerify.Verify); }
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public GenericTransactionRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
@@ -36,8 +35,6 @@ public struct GenericTransactionRes : IFlatbufferObject
     int o = builder.EndTable();
     return new Offset<SF.Flat.Generic.GenericTransactionRes>(o);
   }
-  public static void FinishGenericTransactionResBuffer(FlatBufferBuilder builder, Offset<SF.Flat.Generic.GenericTransactionRes> offset) { builder.Finish(offset.Value); }
-  public static void FinishSizePrefixedGenericTransactionResBuffer(FlatBufferBuilder builder, Offset<SF.Flat.Generic.GenericTransactionRes> offset) { builder.FinishSizePrefixed(offset.Value); }
 }
 
 
