@@ -3,6 +3,7 @@
   <ProtocolGroup Name="Generic" Desc="Generic Protocol">
     <!-- ============================  Server Generic  ============================================ -->
 
+
       <Command Name="GenericFailure" Reliable="true" Crypto="No" Trace="Debug1" Desc="Generic failure message">
           <Cmd>
           </Cmd>
