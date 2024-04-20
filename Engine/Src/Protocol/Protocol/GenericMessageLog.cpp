@@ -36,6 +36,12 @@ namespace SF
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Generic::MID_GenericFailureRes,&GenericFailureRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Generic::MID_GenericTransactionCmd,&GenericTransactionCmd));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Generic::MID_GenericTransactionRes,&GenericTransactionRes));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Generic::MID_MessageBusSendCmd,&MessageBusSendCmd));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Generic::MID_MessageBusSendRes,&MessageBusSendRes));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Generic::MID_MessageBusListenCmd,&MessageBusListenCmd));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Generic::MID_MessageBusListenRes,&MessageBusListenRes));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Generic::MID_PostLogDataCmd,&PostLogDataCmd));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Generic::MID_PostLogDataRes,&PostLogDataRes));
 
 
 		Protocol::LoadFlatSchema(stm_Parser, "Generic.fbs");
@@ -104,6 +110,96 @@ namespace SF
 
 		return hr;
 	}; // Result GenericMessageLog::GenericTransactionRes(const char* prefix, const MessageHeader* messageHeader)
+	Result GenericMessageLog::MessageBusSendCmd(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.Generic.MessageBusSendCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} Generic:MessageBusSendCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result GenericMessageLog::MessageBusSendCmd(const char* prefix, const MessageHeader* messageHeader)
+	Result GenericMessageLog::MessageBusSendRes(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.Generic.MessageBusSendRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} Generic:MessageBusSendRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result GenericMessageLog::MessageBusSendRes(const char* prefix, const MessageHeader* messageHeader)
+	Result GenericMessageLog::MessageBusListenCmd(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.Generic.MessageBusListenCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} Generic:MessageBusListenCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result GenericMessageLog::MessageBusListenCmd(const char* prefix, const MessageHeader* messageHeader)
+	Result GenericMessageLog::MessageBusListenRes(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.Generic.MessageBusListenRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} Generic:MessageBusListenRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result GenericMessageLog::MessageBusListenRes(const char* prefix, const MessageHeader* messageHeader)
+	Result GenericMessageLog::PostLogDataCmd(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.Generic.PostLogDataCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} Generic:PostLogDataCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result GenericMessageLog::PostLogDataCmd(const char* prefix, const MessageHeader* messageHeader)
+	Result GenericMessageLog::PostLogDataRes(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.Generic.PostLogDataRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} Generic:PostLogDataRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result GenericMessageLog::PostLogDataRes(const char* prefix, const MessageHeader* messageHeader)
 
 
 }; // namespace SF

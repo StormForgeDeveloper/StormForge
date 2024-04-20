@@ -40,6 +40,12 @@ namespace SF
 		Result GenericFailureCmd( const TransactionID &InTransactionID );
 		// Cmd: Generic transaction result
 		Result GenericTransactionCmd( const TransactionID &InTransactionID );
+		// Cmd: Message bus send message warpper through gateway. it conveys other message inside
+		Result MessageBusSendCmd( const TransactionID &InTransactionID );
+		// Cmd: Listen to the message
+		Result MessageBusListenCmd( const TransactionID &InTransactionID );
+		// Cmd: Post log data through gateway
+		Result PostLogDataCmd( const TransactionID &InTransactionID );
 
 	}; // class GenericRPCSendAdapter : public RPCSendAdapter
 
@@ -57,6 +63,12 @@ namespace SF
 		Result GenericFailureRes( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: Generic transaction result
 		Result GenericTransactionRes( const TransactionID &InTransactionID, const Result &InResult, const TransactionID &InFinishedTransaction, const char* InSignature );
+		// Cmd: Message bus send message warpper through gateway. it conveys other message inside
+		Result MessageBusSendRes( const TransactionID &InTransactionID, const Result &InResult, const char* InDestChannel, const Array<uint8_t>& InMessageData );
+		// Cmd: Listen to the message
+		Result MessageBusListenRes( const TransactionID &InTransactionID, const Result &InResult, const char* InChannelToListen );
+		// Cmd: Post log data through gateway
+		Result PostLogDataRes( const TransactionID &InTransactionID, const Result &InResult, const char* InDestLogChannel, const Array<uint8_t>& InMessageData );
 
 	}; // class GenericSvrRPCSendAdapter : public RPCSendAdapter
 

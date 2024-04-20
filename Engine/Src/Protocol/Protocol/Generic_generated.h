@@ -31,6 +31,24 @@ struct GenericTransactionCmdBuilder;
 struct GenericTransactionRes;
 struct GenericTransactionResBuilder;
 
+struct MessageBusSendCmd;
+struct MessageBusSendCmdBuilder;
+
+struct MessageBusSendRes;
+struct MessageBusSendResBuilder;
+
+struct MessageBusListenCmd;
+struct MessageBusListenCmdBuilder;
+
+struct MessageBusListenRes;
+struct MessageBusListenResBuilder;
+
+struct PostLogDataCmd;
+struct PostLogDataCmdBuilder;
+
+struct PostLogDataRes;
+struct PostLogDataResBuilder;
+
 struct GenericFailureCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef GenericFailureCmdBuilder Builder;
   struct Traits;
@@ -232,33 +250,392 @@ inline ::flatbuffers::Offset<GenericTransactionRes> CreateGenericTransactionResD
       signature__);
 }
 
-inline const SF::Flat::Generic::GenericTransactionRes *GetGenericTransactionRes(const void *buf) {
-  return ::flatbuffers::GetRoot<SF::Flat::Generic::GenericTransactionRes>(buf);
+struct MessageBusSendCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef MessageBusSendCmdBuilder Builder;
+  struct Traits;
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           verifier.EndTable();
+  }
+};
+
+struct MessageBusSendCmdBuilder {
+  typedef MessageBusSendCmd Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  explicit MessageBusSendCmdBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<MessageBusSendCmd> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<MessageBusSendCmd>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<MessageBusSendCmd> CreateMessageBusSendCmd(
+    ::flatbuffers::FlatBufferBuilder &_fbb) {
+  MessageBusSendCmdBuilder builder_(_fbb);
+  return builder_.Finish();
 }
 
-inline const SF::Flat::Generic::GenericTransactionRes *GetSizePrefixedGenericTransactionRes(const void *buf) {
-  return ::flatbuffers::GetSizePrefixedRoot<SF::Flat::Generic::GenericTransactionRes>(buf);
+struct MessageBusSendCmd::Traits {
+  using type = MessageBusSendCmd;
+  static auto constexpr Create = CreateMessageBusSendCmd;
+  static constexpr auto name = "MessageBusSendCmd";
+  static constexpr auto fully_qualified_name = "SF.Flat.Generic.MessageBusSendCmd";
+  static constexpr size_t fields_number = 0;
+  static constexpr std::array<const char *, fields_number> field_names = {};
+};
+
+struct MessageBusSendRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef MessageBusSendResBuilder Builder;
+  struct Traits;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_DEST_CHANNEL = 4,
+    VT_MESSAGE_DATA = 6
+  };
+  const ::flatbuffers::String *dest_channel() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_DEST_CHANNEL);
+  }
+  const ::flatbuffers::Vector<uint8_t> *message_data() const {
+    return GetPointer<const ::flatbuffers::Vector<uint8_t> *>(VT_MESSAGE_DATA);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return dest_channel();
+    else if constexpr (Index == 1) return message_data();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_DEST_CHANNEL) &&
+           verifier.VerifyString(dest_channel()) &&
+           VerifyOffset(verifier, VT_MESSAGE_DATA) &&
+           verifier.VerifyVector(message_data()) &&
+           verifier.EndTable();
+  }
+};
+
+struct MessageBusSendResBuilder {
+  typedef MessageBusSendRes Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_dest_channel(::flatbuffers::Offset<::flatbuffers::String> dest_channel) {
+    fbb_.AddOffset(MessageBusSendRes::VT_DEST_CHANNEL, dest_channel);
+  }
+  void add_message_data(::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> message_data) {
+    fbb_.AddOffset(MessageBusSendRes::VT_MESSAGE_DATA, message_data);
+  }
+  explicit MessageBusSendResBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<MessageBusSendRes> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<MessageBusSendRes>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<MessageBusSendRes> CreateMessageBusSendRes(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::String> dest_channel = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> message_data = 0) {
+  MessageBusSendResBuilder builder_(_fbb);
+  builder_.add_message_data(message_data);
+  builder_.add_dest_channel(dest_channel);
+  return builder_.Finish();
 }
 
-inline bool VerifyGenericTransactionResBuffer(
+struct MessageBusSendRes::Traits {
+  using type = MessageBusSendRes;
+  static auto constexpr Create = CreateMessageBusSendRes;
+  static constexpr auto name = "MessageBusSendRes";
+  static constexpr auto fully_qualified_name = "SF.Flat.Generic.MessageBusSendRes";
+  static constexpr size_t fields_number = 2;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "dest_channel",
+    "message_data"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
+inline ::flatbuffers::Offset<MessageBusSendRes> CreateMessageBusSendResDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const char *dest_channel = nullptr,
+    const std::vector<uint8_t> *message_data = nullptr) {
+  auto dest_channel__ = dest_channel ? _fbb.CreateString(dest_channel) : 0;
+  auto message_data__ = message_data ? _fbb.CreateVector<uint8_t>(*message_data) : 0;
+  return SF::Flat::Generic::CreateMessageBusSendRes(
+      _fbb,
+      dest_channel__,
+      message_data__);
+}
+
+struct MessageBusListenCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef MessageBusListenCmdBuilder Builder;
+  struct Traits;
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           verifier.EndTable();
+  }
+};
+
+struct MessageBusListenCmdBuilder {
+  typedef MessageBusListenCmd Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  explicit MessageBusListenCmdBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<MessageBusListenCmd> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<MessageBusListenCmd>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<MessageBusListenCmd> CreateMessageBusListenCmd(
+    ::flatbuffers::FlatBufferBuilder &_fbb) {
+  MessageBusListenCmdBuilder builder_(_fbb);
+  return builder_.Finish();
+}
+
+struct MessageBusListenCmd::Traits {
+  using type = MessageBusListenCmd;
+  static auto constexpr Create = CreateMessageBusListenCmd;
+  static constexpr auto name = "MessageBusListenCmd";
+  static constexpr auto fully_qualified_name = "SF.Flat.Generic.MessageBusListenCmd";
+  static constexpr size_t fields_number = 0;
+  static constexpr std::array<const char *, fields_number> field_names = {};
+};
+
+struct MessageBusListenRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef MessageBusListenResBuilder Builder;
+  struct Traits;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_CHANNEL_TO_LISTEN = 4
+  };
+  const ::flatbuffers::String *channel_to_listen() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_CHANNEL_TO_LISTEN);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return channel_to_listen();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_CHANNEL_TO_LISTEN) &&
+           verifier.VerifyString(channel_to_listen()) &&
+           verifier.EndTable();
+  }
+};
+
+struct MessageBusListenResBuilder {
+  typedef MessageBusListenRes Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_channel_to_listen(::flatbuffers::Offset<::flatbuffers::String> channel_to_listen) {
+    fbb_.AddOffset(MessageBusListenRes::VT_CHANNEL_TO_LISTEN, channel_to_listen);
+  }
+  explicit MessageBusListenResBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<MessageBusListenRes> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<MessageBusListenRes>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<MessageBusListenRes> CreateMessageBusListenRes(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::String> channel_to_listen = 0) {
+  MessageBusListenResBuilder builder_(_fbb);
+  builder_.add_channel_to_listen(channel_to_listen);
+  return builder_.Finish();
+}
+
+struct MessageBusListenRes::Traits {
+  using type = MessageBusListenRes;
+  static auto constexpr Create = CreateMessageBusListenRes;
+  static constexpr auto name = "MessageBusListenRes";
+  static constexpr auto fully_qualified_name = "SF.Flat.Generic.MessageBusListenRes";
+  static constexpr size_t fields_number = 1;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "channel_to_listen"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
+inline ::flatbuffers::Offset<MessageBusListenRes> CreateMessageBusListenResDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const char *channel_to_listen = nullptr) {
+  auto channel_to_listen__ = channel_to_listen ? _fbb.CreateString(channel_to_listen) : 0;
+  return SF::Flat::Generic::CreateMessageBusListenRes(
+      _fbb,
+      channel_to_listen__);
+}
+
+struct PostLogDataCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef PostLogDataCmdBuilder Builder;
+  struct Traits;
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           verifier.EndTable();
+  }
+};
+
+struct PostLogDataCmdBuilder {
+  typedef PostLogDataCmd Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  explicit PostLogDataCmdBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<PostLogDataCmd> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<PostLogDataCmd>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<PostLogDataCmd> CreatePostLogDataCmd(
+    ::flatbuffers::FlatBufferBuilder &_fbb) {
+  PostLogDataCmdBuilder builder_(_fbb);
+  return builder_.Finish();
+}
+
+struct PostLogDataCmd::Traits {
+  using type = PostLogDataCmd;
+  static auto constexpr Create = CreatePostLogDataCmd;
+  static constexpr auto name = "PostLogDataCmd";
+  static constexpr auto fully_qualified_name = "SF.Flat.Generic.PostLogDataCmd";
+  static constexpr size_t fields_number = 0;
+  static constexpr std::array<const char *, fields_number> field_names = {};
+};
+
+struct PostLogDataRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef PostLogDataResBuilder Builder;
+  struct Traits;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_DEST_LOG_CHANNEL = 4,
+    VT_MESSAGE_DATA = 6
+  };
+  const ::flatbuffers::String *dest_log_channel() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_DEST_LOG_CHANNEL);
+  }
+  const ::flatbuffers::Vector<uint8_t> *message_data() const {
+    return GetPointer<const ::flatbuffers::Vector<uint8_t> *>(VT_MESSAGE_DATA);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return dest_log_channel();
+    else if constexpr (Index == 1) return message_data();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_DEST_LOG_CHANNEL) &&
+           verifier.VerifyString(dest_log_channel()) &&
+           VerifyOffset(verifier, VT_MESSAGE_DATA) &&
+           verifier.VerifyVector(message_data()) &&
+           verifier.EndTable();
+  }
+};
+
+struct PostLogDataResBuilder {
+  typedef PostLogDataRes Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_dest_log_channel(::flatbuffers::Offset<::flatbuffers::String> dest_log_channel) {
+    fbb_.AddOffset(PostLogDataRes::VT_DEST_LOG_CHANNEL, dest_log_channel);
+  }
+  void add_message_data(::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> message_data) {
+    fbb_.AddOffset(PostLogDataRes::VT_MESSAGE_DATA, message_data);
+  }
+  explicit PostLogDataResBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<PostLogDataRes> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<PostLogDataRes>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<PostLogDataRes> CreatePostLogDataRes(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::String> dest_log_channel = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> message_data = 0) {
+  PostLogDataResBuilder builder_(_fbb);
+  builder_.add_message_data(message_data);
+  builder_.add_dest_log_channel(dest_log_channel);
+  return builder_.Finish();
+}
+
+struct PostLogDataRes::Traits {
+  using type = PostLogDataRes;
+  static auto constexpr Create = CreatePostLogDataRes;
+  static constexpr auto name = "PostLogDataRes";
+  static constexpr auto fully_qualified_name = "SF.Flat.Generic.PostLogDataRes";
+  static constexpr size_t fields_number = 2;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "dest_log_channel",
+    "message_data"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
+inline ::flatbuffers::Offset<PostLogDataRes> CreatePostLogDataResDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const char *dest_log_channel = nullptr,
+    const std::vector<uint8_t> *message_data = nullptr) {
+  auto dest_log_channel__ = dest_log_channel ? _fbb.CreateString(dest_log_channel) : 0;
+  auto message_data__ = message_data ? _fbb.CreateVector<uint8_t>(*message_data) : 0;
+  return SF::Flat::Generic::CreatePostLogDataRes(
+      _fbb,
+      dest_log_channel__,
+      message_data__);
+}
+
+inline const SF::Flat::Generic::PostLogDataRes *GetPostLogDataRes(const void *buf) {
+  return ::flatbuffers::GetRoot<SF::Flat::Generic::PostLogDataRes>(buf);
+}
+
+inline const SF::Flat::Generic::PostLogDataRes *GetSizePrefixedPostLogDataRes(const void *buf) {
+  return ::flatbuffers::GetSizePrefixedRoot<SF::Flat::Generic::PostLogDataRes>(buf);
+}
+
+inline bool VerifyPostLogDataResBuffer(
     ::flatbuffers::Verifier &verifier) {
-  return verifier.VerifyBuffer<SF::Flat::Generic::GenericTransactionRes>(nullptr);
+  return verifier.VerifyBuffer<SF::Flat::Generic::PostLogDataRes>(nullptr);
 }
 
-inline bool VerifySizePrefixedGenericTransactionResBuffer(
+inline bool VerifySizePrefixedPostLogDataResBuffer(
     ::flatbuffers::Verifier &verifier) {
-  return verifier.VerifySizePrefixedBuffer<SF::Flat::Generic::GenericTransactionRes>(nullptr);
+  return verifier.VerifySizePrefixedBuffer<SF::Flat::Generic::PostLogDataRes>(nullptr);
 }
 
-inline void FinishGenericTransactionResBuffer(
+inline void FinishPostLogDataResBuffer(
     ::flatbuffers::FlatBufferBuilder &fbb,
-    ::flatbuffers::Offset<SF::Flat::Generic::GenericTransactionRes> root) {
+    ::flatbuffers::Offset<SF::Flat::Generic::PostLogDataRes> root) {
   fbb.Finish(root);
 }
 
-inline void FinishSizePrefixedGenericTransactionResBuffer(
+inline void FinishSizePrefixedPostLogDataResBuffer(
     ::flatbuffers::FlatBufferBuilder &fbb,
-    ::flatbuffers::Offset<SF::Flat::Generic::GenericTransactionRes> root) {
+    ::flatbuffers::Offset<SF::Flat::Generic::PostLogDataRes> root) {
   fbb.FinishSizePrefixed(root);
 }
 

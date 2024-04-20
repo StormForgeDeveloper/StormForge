@@ -29,6 +29,18 @@ namespace SF
 			constexpr MessageID MID_GenericTransactionCmd(EMessageType::Command,1,MessageProtocol::Generic,1);
 			constexpr MessageID MID_GenericTransactionRes(EMessageType::Result,1,MessageProtocol::Generic,1);
 
+			// Cmd: Message bus send message warpper through gateway. it conveys other message inside
+			constexpr MessageID MID_MessageBusSendCmd(EMessageType::Command,1,MessageProtocol::Generic,2);
+			constexpr MessageID MID_MessageBusSendRes(EMessageType::Result,1,MessageProtocol::Generic,2);
+
+			// Cmd: Listen to the message
+			constexpr MessageID MID_MessageBusListenCmd(EMessageType::Command,1,MessageProtocol::Generic,3);
+			constexpr MessageID MID_MessageBusListenRes(EMessageType::Result,1,MessageProtocol::Generic,3);
+
+			// Cmd: Post log data through gateway
+			constexpr MessageID MID_PostLogDataCmd(EMessageType::Command,1,MessageProtocol::Generic,4);
+			constexpr MessageID MID_PostLogDataRes(EMessageType::Result,1,MessageProtocol::Generic,4);
+
 
 
 		} // namespace Generic

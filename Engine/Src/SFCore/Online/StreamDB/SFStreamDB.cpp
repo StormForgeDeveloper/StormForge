@@ -99,7 +99,7 @@ namespace SF
 			return ResultCode::NOT_INITIALIZED;
 
 		RdKafka::Metadata* metadata = nullptr;
-		int32_t metadataTimeout = 15 * 1000;
+		int32_t metadataTimeout = 5 * 1000;
 		RdKafka::ErrorCode errorCode = handle->metadata(false, GetTopicHandle().get(), &metadata, metadataTimeout);
 		if (errorCode != RdKafka::ErrorCode::ERR_NO_ERROR)
 		{

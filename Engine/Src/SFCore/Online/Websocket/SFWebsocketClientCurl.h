@@ -52,6 +52,9 @@ namespace SF
 		SF_FORCEINLINE bool IsInitialized() const { return !m_Url.IsNullOrEmpty(); }
         SF_FORCEINLINE bool IsConnected() const { return m_ConnectionState == ConnectionState::Connected; }
 
+        void SetGetMethod(bool bIsGet) { m_IsGetMethod = bIsGet; }
+        bool IsGetMethod() const { return m_IsGetMethod; }
+
 		SF_FORCEINLINE void SetUseTickThread(bool useTickThread) { m_UseTickThread = useTickThread; }
 		SF_FORCEINLINE bool IsUseTickThread() const { return m_UseTickThread; }
 
@@ -65,28 +68,13 @@ namespace SF
 		virtual void Terminate();
 
 		//static void CallbackTryConnect(struct lws_sorted_usec_list* pSortedUsecList);
-		void TryConnect();
+		Result TryConnect();
 
         void CloseConnection();
 
 		Result Send(const Array<uint8_t>& messageData);
         virtual void OnRecv(const Array<uint8_t>& messageData) { m_RecvDeletates.Invoke(messageData); }
         SF_FORCEINLINE RecvDeletates& OnRecvEvent() { return m_RecvDeletates; }
-
-		//virtual int OnProtocolInit(struct lws* wsi, void* user, void* in, size_t len) override;
-		//virtual int OnProtocolDestroy(struct lws* wsi, void* user, void* in, size_t len) override;
-		//virtual int OnClientAppendHeader(struct lws* wsi, void* user, void* in, size_t len) override
-		//{
-		//	if (m_ClientAppendHandler)
-		//		return m_ClientAppendHandler(wsi, user, in, len);
-		//	return 0;
-		//}
-		//virtual int OnConnectionEstablished(struct lws* wsi, void* user, void* in, size_t len) override;
-		//virtual int OnConnectionClosed(struct lws* wsi, void* user, void* in, size_t len) override;
-		//virtual int OnConnectionError(struct lws* wsi, void* user, void* in, size_t len) override;
-
-		//SF_FORCEINLINE void SetClientAppendHeaderFunction(const EventFunction& func) { m_ClientAppendHandler = func; }
-		//SF_FORCEINLINE void SetClientAppendHeaderFunction(EventFunction&& func) { m_ClientAppendHandler = Forward<EventFunction>(func); }
 
         SF_FORCEINLINE void SetOnConnectedCallback(const EventOnConnected& func) { m_OnConnectedHandler = func; }
 
@@ -95,6 +83,8 @@ namespace SF
         virtual void TickEventLoop(int iEvent) { TickUpdate(); }
 
     private:
+
+        Result SetPostFieldData(const Array<const char>& postFieldData);
 
         void StartThread();
 
@@ -110,6 +100,7 @@ namespace SF
         String m_Url;
         String m_Protocol;
         bool m_UseSSL = false;
+        bool m_IsGetMethod = true;
 
         CURL* m_Curl{};
         curl_slist* m_Headers{};

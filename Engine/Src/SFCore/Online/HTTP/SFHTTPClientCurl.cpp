@@ -142,7 +142,28 @@ namespace SF
 
         m_CurlResult = curl_easy_setopt(m_Curl, CURLOPT_HTTPGET, IsGetMethod() ? 1 : 0);
         defCheck(HTTPCurlImpl::CurlCodeToResult(m_CurlResult));
-        m_CurlResult = curl_easy_setopt(m_Curl, CURLOPT_URL, (const char*)m_URL);
+
+        String url = m_URL;
+        if (IsGetMethod())
+        {
+            url = m_URL;
+        }
+        else
+        {
+            int idxSplit = m_URL.IndexOf('?');
+            if (idxSplit > 0)
+            {
+                url = m_URL.SubString(0, idxSplit);
+                String parameters = m_URL.SubString(idxSplit+1);
+                defCheck(SetPostFieldData(ArrayView<const char>(parameters.length(), parameters.data())));
+            }
+            else
+            {
+                url = m_URL;
+            }
+        }
+
+        m_CurlResult = curl_easy_setopt(m_Curl, CURLOPT_URL, (const char*)url);
         defCheck(HTTPCurlImpl::CurlCodeToResult(m_CurlResult));
 
         // for release build peer also need to be turned off

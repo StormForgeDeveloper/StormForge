@@ -13,8 +13,8 @@
 #include "Util/SFString.h"
 #include "Util/SFStringFormat.h"
 #include "Online/Websocket/SFWebsocketClientCurl.h"
-
-
+#include "Online/HTTP/SFHTTPClientSystemCurl.h"
+#include "Util/SFTrace.h"
 
 namespace SF
 {
@@ -330,6 +330,19 @@ namespace SF
         m_Parameters.push_back(headerValue);
     }
 
+    Result WebsocketClientCurl::SetPostFieldData(const Array<const char>& postFieldData)
+    {
+        Result hr;
+        CURLcode result;
+
+        result = curl_easy_setopt(m_Curl, CURLOPT_POSTFIELDSIZE, postFieldData.size());
+        defCheck(HTTPCurlImpl::CurlCodeToResult(result));
+
+        result = curl_easy_setopt(m_Curl, CURLOPT_POSTFIELDS, (const char*)postFieldData.data());
+        defCheck(HTTPCurlImpl::CurlCodeToResult(result));
+
+        return hr;
+    }
 	Result WebsocketClientCurl::Initialize(const String& url, const String& protocol)
 	{
 		if (m_Curl) // probably initializing again
@@ -401,8 +414,9 @@ namespace SF
         m_TickThread.reset(pThread);
     }
 
-    void WebsocketClientCurl::TryConnect()
+    Result WebsocketClientCurl::TryConnect()
     {
+        Result hr;
         MutexScopeLock scopeLock(m_ContextLock);
         CURLcode result;
 
@@ -424,39 +438,61 @@ namespace SF
             m_Headers = curl_slist_append(m_Headers, m_ProtocolHeader.data());
         }
 
-        // TODO: Still working on this
-        //m_Headers = curl_slist_append(NULL, "HTTP/1.1 101 WebSocket Protocol Handshake");
-        //m_Headers = curl_slist_append(m_Headers, "Upgrade: WebSocket");
-        //m_Headers = curl_slist_append(m_Headers, "Connection: Upgrade");
-        //m_Headers = curl_slist_append(m_Headers, "Sec-WebSocket-Version: 13");
-        //m_Headers = curl_slist_append(m_Headers, "Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw=="); // ?
-        //result = curl_easy_setopt(m_Curl, CURLOPT_PRIVATE, this);
-        result = curl_easy_setopt(m_Curl, CURLOPT_SSL_VERIFYPEER, false);
-        result = curl_easy_setopt(m_Curl, CURLOPT_SSL_VERIFYHOST, 0L);
+        if (m_UseSSL)
+        {
+            result = curl_easy_setopt(m_Curl, CURLOPT_SSL_VERIFYPEER, false);
+            result = curl_easy_setopt(m_Curl, CURLOPT_SSL_VERIFYHOST, 1L);
+        }
 
-        result = curl_easy_setopt(m_Curl, CURLOPT_URL, (const char*)m_Url);
+        String url = m_Url;
+        if (IsGetMethod())
+        {
+            url = m_Url;
+        }
+        else
+        {
+            int idxSplit = m_Url.IndexOf('?');
+            if (idxSplit > 0)
+            {
+                url = m_Url.SubString(0, idxSplit);
+                String parameters = m_Url.SubString(idxSplit + 1);
+                SetPostFieldData(ArrayView<const char>(parameters.length(), parameters.data()));
+            }
+            else
+            {
+                url = m_Url;
+            }
+        }
+
+        result = curl_easy_setopt(m_Curl, CURLOPT_URL, (const char*)url);
+        defCheck(HTTPCurlImpl::CurlCodeToResult(result));
+
 
         // https://curl.se/docs/websocket.html
         // Method 2
         result = curl_easy_setopt(m_Curl, CURLOPT_CONNECT_ONLY, 2L);
+        defCheck(HTTPCurlImpl::CurlCodeToResult(result));
 
         result = curl_easy_setopt(m_Curl, CURLOPT_HTTPHEADER, m_Headers);
-        //curl_easy_setopt(m_Curl, CURLOPT_OPENSOCKETFUNCTION, my_opensocketfunc);
+        defCheck(HTTPCurlImpl::CurlCodeToResult(result));
+
         result = curl_easy_setopt(m_Curl, CURLOPT_HEADERFUNCTION, WebsocketClientCurlImpl::ReceiveHeader);
+        defCheck(HTTPCurlImpl::CurlCodeToResult(result));
+
         result = curl_easy_setopt(m_Curl, CURLOPT_HEADERDATA, this);
-        //result = curl_easy_setopt(m_Curl, CURLOPT_WRITEFUNCTION, WebsocketClientCurlImpl::ReceiveData);
-        //result = curl_easy_setopt(m_Curl, CURLOPT_WRITEDATA, this);
-        //curl_easy_setopt(m_Curl, CURLOPT_READFUNCTION, WebsocketClientCurlImpl::send_data);
-        //curl_easy_setopt(m_Curl, CURLOPT_READDATA, this);
+        defCheck(HTTPCurlImpl::CurlCodeToResult(result));
 
         m_ConnectedThisFrame = false;
 
         // Method 2 will finish handshake in curl_easy_perform
+        // it is blocking method, but much easier
         result = curl_easy_perform(m_Curl);
         if (result != CURLE_OK)
         {
             SFLog(Websocket, Info, "Websocket client initialization error : {0}, {1}:{2}", m_Url, int(result), curl_easy_strerror(result));
         }
+
+        return hr;
     }
 
     void WebsocketClientCurl::CloseConnection()
