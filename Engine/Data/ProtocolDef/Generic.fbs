@@ -19,34 +19,15 @@ table GenericTransactionRes
 	signature:string;
 } // table GenericTransactionRes
 
-table MessageBusSendCmd
-{
- } // table MessageBusSendCmd
-
-table MessageBusSendRes
-{
- 	dest_channel:string;
-	message_data:[uint8];
-} // table MessageBusSendRes
-
-table MessageBusListenCmd
-{
- } // table MessageBusListenCmd
-
-table MessageBusListenRes
-{
- 	channel_to_listen:string;
-} // table MessageBusListenRes
-
 table PostLogDataCmd
-{
- } // table PostLogDataCmd
-
-table PostLogDataRes
 {
  	dest_log_channel:string;
 	message_data:[uint8];
-} // table PostLogDataRes
+} // table PostLogDataCmd
+
+table PostLogDataRes
+{
+ } // table PostLogDataRes
 
 root_type PostLogDataRes;
 

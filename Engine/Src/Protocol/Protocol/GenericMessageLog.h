@@ -36,10 +36,6 @@ namespace SF
 		static Result GenericFailureRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result GenericTransactionCmd(const char* prefix, const MessageHeader* messageHeader);
 		static Result GenericTransactionRes(const char* prefix, const MessageHeader* messageHeader);
-		static Result MessageBusSendCmd(const char* prefix, const MessageHeader* messageHeader);
-		static Result MessageBusSendRes(const char* prefix, const MessageHeader* messageHeader);
-		static Result MessageBusListenCmd(const char* prefix, const MessageHeader* messageHeader);
-		static Result MessageBusListenRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result PostLogDataCmd(const char* prefix, const MessageHeader* messageHeader);
 		static Result PostLogDataRes(const char* prefix, const MessageHeader* messageHeader);
 

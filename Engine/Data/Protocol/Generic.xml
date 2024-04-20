@@ -23,34 +23,12 @@
 
       <!-- ============================  External gateway APIs  ============================================ -->
 
-      <Command Name="MessageBusSend" Reliable="true" Crypto="No" Trace="Debug1" Desc="Message bus send message warpper through gateway. it conveys other message inside">
-          <Cmd>
-          </Cmd>
-          <Res>
-              <Params TypeName="String" Name="DestChannel" Desc="Destination channel to post message data"/>
-              <Params TypeName="uint8" IsArray="true" Name="MessageData" Desc="Message data"/>
-          </Res>
-      </Command>
-
-      <Command Name="MessageBusListen" Reliable="true" Crypto="No" Trace="Debug1" Desc="Listen to the message">
-          <Cmd>
-          </Cmd>
-          <Res>
-              <Params TypeName="String" Name="ChannelToListen" Desc="Channel to listen to"/>
-          </Res>
-      </Command>
-
-      <S2CEvt Name="MessageBusMessageEvent" Reliable="true" Crypto="No" Trace="Debug1" Desc="">
-            <Params TypeName="String" Name="FromChannel" Desc="Channel name where the message was received"/>
-          <Params TypeName="uint8" IsArray="true" Name="MessageData" Desc="Message data"/>
-      </S2CEvt>
-
       <Command Name="PostLogData" Reliable="true" Crypto="No" Trace="Debug1" Desc="Post log data through gateway">
           <Cmd>
-          </Cmd>
-          <Res>
               <Params TypeName="String" Name="DestLogChannel" Desc="Destination log channel to post log data"/>
               <Params TypeName="uint8" IsArray="true" Name="MessageData" Desc="Message data"/>
+          </Cmd>
+          <Res>
           </Res>
       </Command>
 
