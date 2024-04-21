@@ -44,7 +44,6 @@ namespace SF {
 		, m_Handler()
 		, m_LogServerAddress(logServerAddress)
 	{
-        m_LogServerAddress.ReplaceInline("{TitleUID}", Util::GetTitleUID().ToString().c_str());
 	}
 
 	LogOutputLogServerComponent::~LogOutputLogServerComponent()
@@ -164,6 +163,8 @@ namespace SF {
 	// Initialize server component
 	Result LogOutputLogServerComponent::InitializeComponent()
 	{
+        m_LogServerAddress.ReplaceInline("{TitleUID}", Util::GetTitleUID().ToString().c_str());
+
 		m_Handler.Init(GetEngineHeap(), m_LogServerAddress);
 
 		Service::LogModule->RegisterOutputHandler(&m_Handler);
