@@ -408,22 +408,9 @@ namespace SF
         }
 
         String url = m_Url;
-        int idxSplit = m_Url.IndexOf('?');
-        if (idxSplit > 0)
-        {
-            url = m_Url.SubString(0, idxSplit);
-            String parameters = m_Url.SubString(idxSplit + 1);
-            SetPostFieldData(ArrayView<const char>(parameters.length(), parameters.data()));
-        }
-        else
-        {
-            url = m_Url;
-        }
-
 
         result = curl_easy_setopt(m_Curl, CURLOPT_URL, (const char*)url);
         defCheck(HTTPCurlImpl::CurlCodeToResult(result));
-
 
         // https://curl.se/docs/websocket.html
         // Method 2
