@@ -49,42 +49,6 @@ namespace SF
     {
     public:
 
-        static int WebsocketCurl_DebugFunc(CURL* handle,
-            curl_infotype type,
-            char* data,
-            size_t size,
-            void* userdata)
-        {
-            switch(type)
-            {
-            case CURLINFO_TEXT:
-                SFLog(LogCurl, Log, "CURLINFO_TEXT:{0}", data);
-                break;
-            case CURLINFO_HEADER_IN:
-                SFLog(LogCurl, Log, "CURLINFO_HEADER_IN");
-                break;
-            case CURLINFO_HEADER_OUT:
-                SFLog(LogCurl, Log, "CURLINFO_HEADER_OUT");
-                break;
-            case CURLINFO_DATA_IN:
-                SFLog(LogCurl, Log, "CURLINFO_DATA_IN");
-                break;
-            case CURLINFO_DATA_OUT:
-                SFLog(LogCurl, Log, "CURLINFO_DATA_OUT");
-                break;
-            case CURLINFO_SSL_DATA_IN:
-                SFLog(LogCurl, Log, "CURLINFO_SSL_DATA_IN");
-                break;
-            case CURLINFO_SSL_DATA_OUT:
-                SFLog(LogCurl, Log, "CURLINFO_SSL_DATA_OUT");
-                break;
-            default:
-                break;
-            }
-
-            return 0;
-        }
-
         static inline bool HeaderHasPrefix(const char* buffer, const size_t buflen, const char* prefix)
         {
             const size_t prefixlen = strlen(prefix);
@@ -402,9 +366,6 @@ namespace SF
             },
                 [this](Thread* pThread)
             {
-                if (!m_Curl)
-                    return false;
-
                 TickUpdate();
 
                 return true;
@@ -428,8 +389,10 @@ namespace SF
 
         m_Curl = curl_easy_init();
 
-        curl_easy_setopt(m_Curl, CURLOPT_DEBUGFUNCTION, WebsocketClientCurlImpl::WebsocketCurl_DebugFunc);
+        curl_easy_setopt(m_Curl, CURLOPT_VERBOSE, 1);
         curl_easy_setopt(m_Curl, CURLOPT_DEBUGDATA, this);
+        curl_easy_setopt(m_Curl, CURLOPT_DEBUGFUNCTION, &HTTPCurlImpl::CurlLogCB);
+
 
         if (!m_Protocol.IsNullOrEmpty())
         {
@@ -463,6 +426,10 @@ namespace SF
                 url = m_Url;
             }
         }
+
+
+        //result = curl_easy_setopt(m_Curl, CURLOPT_HTTPGET, IsGetMethod() ? 1 : 0);
+        //defCheck(HTTPCurlImpl::CurlCodeToResult(result));
 
         result = curl_easy_setopt(m_Curl, CURLOPT_URL, (const char*)url);
         defCheck(HTTPCurlImpl::CurlCodeToResult(result));
@@ -546,6 +513,11 @@ namespace SF
                 m_ConnectedThisFrame = false;
             }
 
+            if (m_Curl == nullptr)
+            {
+                CloseConnection();
+                return;
+            }
 
             size_t rlen{};
             const struct curl_ws_frame* frameMeta{};

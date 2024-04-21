@@ -18,9 +18,9 @@
 #include "Util/SFLog.h"
 #include "IO/SFFile.h"
 #include "Util/SFString.h"
-#include "Online/StreamDB/SFStreamDB.h"
-
-
+#include "Online/Websocket/SFWebsocketClientCurl.h"
+#include "flatbuffers/base.h"
+#include "flatbuffers/flatbuffer_builder.h"
 
 namespace SF {
 
@@ -45,7 +45,7 @@ namespace SF {
 
 
 		private:
-			SharedPointerT<StreamDBProducer> m_StreamProducer;
+			//SharedPointerT<StreamDBProducer> m_StreamProducer;
 
 			// It is running on log thread, we don't need double buffering 
 			// Moreover, StreamProducer creates a copy of data for transmition
@@ -53,15 +53,27 @@ namespace SF {
 
 			DynamicArray<uint8_t> m_CompressionBuffer;
 
+            WebsocketClientCurl m_Client;
+
+            String m_ChannelName;
+
+            ::flatbuffers::FlatBufferBuilder m_Builder;
 
 		public:
-			MyOutputHandler() : LogOutputHandler("OutputLogServer") {}
+			MyOutputHandler()
+                : LogOutputHandler("OutputLogServer")
+                , m_Client(GetSystemHeap())
+                , m_Builder(4096)
+            {
+            }
 
 			void Init(IHeap& heap, const String& logServer);
 			void Deinit();
 
 			virtual void PrintOutput(const Log::LogItem* logMessage) override;
 			virtual void Flush() override;
+
+            Result OnRecv(const Array<uint8_t>& recvData);
 		};
 
 

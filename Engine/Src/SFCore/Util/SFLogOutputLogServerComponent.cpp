@@ -22,6 +22,11 @@
 #include "Service/SFService.h"
 #include "Variable/SFVariableBoxing.h"
 #include "Stream/SFCompressedStream.h"
+#include "flatbuffers/base.h"
+#include "SFProtocolHelper.h"
+#include "MessageBus/SFMessageHeader.h"
+#include "Protocol/GenericMessageID.h"
+#include "Protocol/Generic_generated.h"
 
 
 namespace SF {
@@ -56,22 +61,31 @@ namespace SF {
 
         SFLog(System, Info, "Log server:{0}, channel:{1}", logServer, Util::GetServiceName());
 
-		m_StreamProducer = new(heap) StreamDBProducer();
-		m_StreamProducer->Initialize(logServer, Util::GetServiceName());
+        //m_Client.SetGetMethod(false);
+        // TODO: hard coded accesskey, need to get from client or server config system
+        m_Client.AddParameter("AccessKey", "B0B1F3DC-FC87-41EA-8FC2-E0BEDC7E1FDB");
+        m_Client.SetReconnectOnDisconnected(true);
+
+        m_Client.Initialize(logServer, "SFGateway");
+
+        m_ChannelName = Util::GetServiceName();
+		//m_StreamProducer = new(heap) StreamDBProducer();
+		//m_StreamProducer->Initialize(logServer, m_ChannelName);
 	}
 
 	void LogOutputLogServerComponent::MyOutputHandler::Deinit()
 	{
-		if (m_StreamProducer != nullptr)
-		{
-			m_StreamProducer->Flush(DurationMS(1000));
-			m_StreamProducer = nullptr;
-		}
+        m_Client.CloseConnection();
+		//if (m_StreamProducer != nullptr)
+		//{
+		//	m_StreamProducer->Flush(DurationMS(1000));
+		//	m_StreamProducer = nullptr;
+		//}
 	}
 
 	void LogOutputLogServerComponent::MyOutputHandler::PrintOutput(const Log::LogItem* logMessage)
 	{
-		if (logMessage == nullptr || m_StreamProducer == nullptr || logMessage->LogStringSize < 1) return;
+		if (logMessage == nullptr || logMessage->LogStringSize < 1) return;
 
 		// keep \n at the end of string 
 		ArrayView<const uint8_t> dataArray(logMessage->LogStringSize, reinterpret_cast<const uint8_t*>(logMessage->LogBuff));
@@ -93,15 +107,18 @@ namespace SF {
 		if (m_Buffer.size() == 0)
 			return;
 
+        if (!m_Client.IsConnected())
+            return;
+
 		m_CompressionBuffer.Reset();
 		OutputMemoryStream memoryStream(m_CompressionBuffer);
 
 		// write header
 		const uint8_t Signature[] = { 'S', 'F', 'C', 0 };
-		uint32_t uncompressedSize = 0;
+		uint32_t uncompressedSize = static_cast<uint32_t>(m_Buffer.size());
 		memoryStream.Write(Signature, countof(Signature));
 
-		auto uncompressedSizePos = m_CompressionBuffer.size();
+		//auto uncompressedSizePos = m_CompressionBuffer.size();
 		memoryStream.Write(&uncompressedSize, sizeof(uncompressedSize));
 
 		// Compress data
@@ -111,13 +128,36 @@ namespace SF {
 		compressedStream.Flush();
 		compressedStream.Close();
 
-		uncompressedSize = static_cast<uint32_t>(m_Buffer.size());
+		//uncompressedSize = static_cast<uint32_t>(m_Buffer.size());
 
 		// update compressed size in header area
-		memcpy(m_CompressionBuffer.data() + uncompressedSizePos, &uncompressedSize, sizeof(uncompressedSize));
+		//memcpy(m_CompressionBuffer.data() + uncompressedSizePos, &uncompressedSize, sizeof(uncompressedSize));
 
 
-		m_StreamProducer->SendRecord(ArrayView<const uint8_t>(m_CompressionBuffer.size(), m_CompressionBuffer.data()));
+		//m_StreamProducer->SendRecord(ArrayView<const uint8_t>(m_CompressionBuffer.size(), m_CompressionBuffer.data()));
+        
+        m_Builder.Clear();
+
+        auto dataOffset = m_Builder.CreateVector(m_CompressionBuffer.data(), m_CompressionBuffer.size());
+       
+        ::flatbuffers::Offset<SF::Flat::Generic::PostLogDataCmd> payloadOffset = SF::Flat::Generic::CreatePostLogDataCmd(m_Builder,
+            m_Builder.CreateString(m_ChannelName), dataOffset
+        );
+
+        m_Builder.Finish(payloadOffset);
+
+        MessageHeader2 packetHeader;
+        packetHeader.TransactionId = TransactionID();
+        packetHeader.MessageId = Message::Generic::MID_PostLogDataCmd;
+        Result resultPH;
+        packetHeader.UpdateNWriteTo(m_Builder, resultPH);
+
+        ArrayView<uint8_t> sendBuffer(m_Builder.GetSize(), (uint8_t*)m_Builder.GetBufferPointer());
+
+        SFLog(System, Debug4, "Send log size:{0}", m_Builder.GetSize());
+
+        m_Client.Send(sendBuffer);
+
 		m_Buffer.Reset();
 	}
 
