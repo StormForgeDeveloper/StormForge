@@ -527,23 +527,33 @@ namespace SF
                 return;
             }
 
-            MutexScopeLock scopeLock(m_ContextLock);
 
             size_t rlen{};
             const struct curl_ws_frame* frameMeta{};
             uint8_t readBuffer[4*1024];
+            CURLcode result;
+            bool bHasReadData = false;
 
-            CURLcode result = curl_ws_recv(m_Curl, readBuffer, sizeof(readBuffer), &rlen, &frameMeta);
+            {
+                MutexScopeLock scopeLock(m_ContextLock);
+
+                result = curl_ws_recv(m_Curl, readBuffer, sizeof(readBuffer), &rlen, &frameMeta);
+                if (result == CURLE_OK)
+                {
+                    if (frameMeta)
+                    {
+                        assert(frameMeta->len == rlen);
+                        bHasReadData = WebsocketClientCurlImpl::ReadData(frameMeta, readBuffer, m_ReceiveBuffer);
+                    }
+                }
+            }
+
             if (result == CURLE_OK)
             {
-                if (frameMeta)
+                if (bHasReadData && m_ReceiveBuffer.size() > 0)
                 {
-                    assert(frameMeta->len == rlen);
-                    if (WebsocketClientCurlImpl::ReadData(frameMeta, readBuffer, m_ReceiveBuffer))
-                    {
-                        OnRecv(m_ReceiveBuffer);
-                        m_ReceiveBuffer.resize(0);
-                    }
+                    OnRecv(m_ReceiveBuffer);
+                    m_ReceiveBuffer.resize(0);
                 }
             }
             else if (result == CURLE_GOT_NOTHING)
@@ -562,6 +572,7 @@ namespace SF
                 SFLog(Websocket, Error, "Failed to recv curl error:{0}, {1}", int(result), curl_easy_strerror(result));
                 CloseConnection();
             }
+
         }
     }
 
