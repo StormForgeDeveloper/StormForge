@@ -278,6 +278,33 @@ namespace SF
         }
 
 
+        CURLcode SSLCTXCallback(CURL* curl, void* sslctx, void* parm)
+        {
+            (void)curl;
+            (void)parm;
+
+            // Add additional trusted cert to the callback
+            X509_STORE* cts = SSL_CTX_get_cert_store((SSL_CTX*)sslctx);
+
+            for (STACK_OF(X509_INFO)* x509Stack : Service::HTTP->GetTrustedCerts())
+            {
+                for (int i = 0; i < sk_X509_INFO_num(x509Stack); i++)
+                {
+                    X509_INFO* itmp = sk_X509_INFO_value(x509Stack, i);
+                    if (itmp->x509)
+                    {
+                        X509_STORE_add_cert(cts, itmp->x509);
+                    }
+                    if (itmp->crl)
+                    {
+                        X509_STORE_add_crl(cts, itmp->crl);
+                    }
+                }
+            }
+
+            return CURLE_OK;
+        }
+
     };
 
     void WebsocketClientCurl::AddHeader(const char* headerKey, const char* headerString)
@@ -424,6 +451,10 @@ namespace SF
         defCheck(HTTPCurlImpl::CurlCodeToResult(result));
 
         result = curl_easy_setopt(m_Curl, CURLOPT_HEADERDATA, this);
+        defCheck(HTTPCurlImpl::CurlCodeToResult(result));
+
+        // Handle additional cert
+        result = curl_easy_setopt(m_Curl, CURLOPT_SSL_CTX_FUNCTION, &WebsocketClientCurlImpl::SSLCTXCallback);
         defCheck(HTTPCurlImpl::CurlCodeToResult(result));
 
         m_ConnectedThisFrame = false;
