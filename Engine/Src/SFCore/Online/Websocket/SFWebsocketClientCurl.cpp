@@ -278,7 +278,7 @@ namespace SF
         }
 
 
-        CURLcode SSLCTXCallback(CURL* curl, void* sslctx, void* parm)
+        static CURLcode SSLCTXCallback(CURL* curl, void* sslctx, void* parm)
         {
             (void)curl;
             (void)parm;
@@ -454,7 +454,7 @@ namespace SF
         defCheck(HTTPCurlImpl::CurlCodeToResult(result));
 
         // Handle additional cert
-        result = curl_easy_setopt(m_Curl, CURLOPT_SSL_CTX_FUNCTION, &WebsocketClientCurlImpl::SSLCTXCallback);
+        result = curl_easy_setopt(m_Curl, CURLOPT_SSL_CTX_FUNCTION, WebsocketClientCurlImpl::SSLCTXCallback);
         defCheck(HTTPCurlImpl::CurlCodeToResult(result));
 
         m_ConnectedThisFrame = false;
@@ -526,6 +526,8 @@ namespace SF
                 CloseConnection();
                 return;
             }
+
+            MutexScopeLock scopeLock(m_ContextLock);
 
             size_t rlen{};
             const struct curl_ws_frame* frameMeta{};
