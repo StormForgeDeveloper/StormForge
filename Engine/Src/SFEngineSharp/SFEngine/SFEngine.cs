@@ -35,7 +35,7 @@ namespace SF
 
         static public System.Guid GetTitleUID()
         {
-            IntPtr valuePtr = NativeGetTitleUID(NativeHandle);
+            IntPtr valuePtr = NativeGetTitleUID();
             if (valuePtr == IntPtr.Zero)
                 return System.Guid.Empty;
 
@@ -46,18 +46,18 @@ namespace SF
 
         static public void SetTitleUID(System.Guid uid)
         {
-            NativeSetTitleUID(NativeHandle, uid.ToByteArray());
+            NativeSetTitleUID(uid.ToByteArray());
         }
 
         static public string GetTitleEnv()
         {
-            string value = NativeGetTitleEnv(NativeHandle);
+            string value = NativeGetTitleEnv();
             return value;
         }
 
         static public void SetTitleEnv(string value)
         {
-            NativeSetTitleEnv(NativeHandle, value);
+            NativeSetTitleEnv(value);
         }
 
         public void StartEngine(string processName, string logServerAddress, string logFilePrefix, UInt32 globalLogMask = 0)
@@ -153,17 +153,17 @@ namespace SF
             "SFEngineDLL";
 #endif
 
-        [DllImport(NativeDLLName, EntryPoint = "SFEngine_NativeGetTitleUID", CharSet = CharSet.Auto)]
+        [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeGetTitleUID", CharSet = CharSet.Auto)]
         static extern IntPtr NativeGetTitleUID();
 
-        [DllImport(NativeDLLName, EntryPoint = "SFEngine_NativeSetTitleUID", CharSet = CharSet.Auto)]
+        [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeSetTitleUID", CharSet = CharSet.Auto)]
         static extern void NativeSetTitleUID([MarshalAs(UnmanagedType.LPArray)] byte[] bytes);
 
-        [DllImport(NativeDLLName, EntryPoint = "SFEngine_NativeGetTitleEnv", CharSet = CharSet.Auto)]
+        [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeGetTitleEnv", CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.LPStr)]
         static extern string NativeGetTitleEnv();
 
-        [DllImport(NativeDLLName, EntryPoint = "SFEngine_NativeSetTitleEnv", CharSet = CharSet.Auto)]
+        [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeSetTitleEnv", CharSet = CharSet.Auto)]
         static extern void NativeSetTitleEnv([MarshalAs(UnmanagedType.LPStr)] string env);
 
         [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeStartEngineWithLog", CharSet = CharSet.Auto)]
