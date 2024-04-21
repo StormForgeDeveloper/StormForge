@@ -47,6 +47,8 @@ namespace SF
         SetTickGroup(EngineTaskTick::SyncSystemTick);
 
         m_Url = url;
+        m_Url.ReplaceInline("{TitleUID}", Util::GetTitleUID().ToString().c_str());
+
         m_Env = env;
         m_AccessKey = accessKey;
         m_MachineUID = Util::GetMachineUniqueId();
