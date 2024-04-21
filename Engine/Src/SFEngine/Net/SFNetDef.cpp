@@ -41,8 +41,8 @@ namespace SF {
 		auto splitIndex = StrUtil::Indexof(srcAddress, '/');
 		if (splitIndex < 0)
 		{
-			SFLog(Net, Error, "EndpointAddress parsing has failed {0}", srcAddress);
-			MessageServer = "";
+            // Assuming that no channel is assigned
+			MessageServer = srcAddress;
 			Channel = "";
 			return *this;
 		}

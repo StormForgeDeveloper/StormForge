@@ -17,6 +17,7 @@
 #include "Util/SFStrUtil.h"
 #include "json/json.h"
 #include "IO/SFFile.h"
+#include "Util/SFGuid.h"
 
 
 namespace SF {
@@ -116,6 +117,27 @@ namespace Util {
 		StrUtil::StringCopy(g_szServiceName, serviceName);
 	}
 
+    Guid g_TitleUID;
+    const Guid& GetTitleUID()
+    {
+        return g_TitleUID;
+    }
+
+    void SetTitleUID(const Guid& titleUID)
+    {
+        g_TitleUID = titleUID;
+    }
+
+    char g_TitleEnv[256]{};
+    const char* GetTitleEnv()
+    {
+        return g_TitleEnv;
+    }
+
+    void SetTitleEnv(const char* titleEnv)
+    {
+        StrUtil::StringCopy(g_TitleEnv, titleEnv);
+    }
 
 	// Module Name
 

@@ -230,7 +230,7 @@ namespace SF
 
             String url;
             url.Format("{0}/v1/idpw?Title={1}&Env={2}&userId={3}&password={4}",
-                m_Owner.GetLoginAddresses(), m_Owner.GetTitleUID().ToString(), m_Owner.GetTitleEnv(), m_Owner.GetUserId(), (const char*)base64Password.data());
+                m_Owner.GetLoginAddresses(), Util::GetTitleUID().ToString(), Util::GetTitleEnv(), m_Owner.GetUserId(), (const char*)base64Password.data());
             httpClient->SetURL(url);
             httpClient->SetMethod(true);
             httpClient->SetOnFinishedCallback([this](HTTPClient* pClient)
@@ -271,7 +271,7 @@ namespace SF
 
             String url;
             url.Format("{0}/v1/steam?Title={1}&Env={2}&steamAccountId={3}&steamUserName={4}&steamUserToken={5}",
-                m_Owner.GetLoginAddresses(), m_Owner.GetTitleUID().ToString(), m_Owner.GetTitleEnv(), m_Owner.GetSteamUserId(), (const char*)base64PlatformName.data(), m_Owner.GetSteamUserToken());
+                m_Owner.GetLoginAddresses(), Util::GetTitleUID().ToString(), Util::GetTitleEnv(), m_Owner.GetSteamUserId(), (const char*)base64PlatformName.data(), m_Owner.GetSteamUserToken());
 
             httpClient->SetURL(url);
             httpClient->SetMethod(true);
@@ -999,7 +999,7 @@ namespace SF
             m_Password = password;
         }
 
-        SFLog(Net, Info, "OnlineClient::StartConnection, titleUID:{0}, login:{1}, steamUserId:{2}, {3}", GetTitleUID(), loginAddress, steamUserId, steamUserName);
+        SFLog(Net, Info, "OnlineClient::StartConnection, titleUID:{0}, login:{1}, steamUserId:{2}, {3}", Util::GetTitleUID(), loginAddress, steamUserId, steamUserName);
 
         if (m_SteamUserId != 0)
         {

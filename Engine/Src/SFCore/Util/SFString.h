@@ -568,16 +568,60 @@ namespace SF {
                 newBuffer->Append(m_Buffer->GetBufferPointer(), m_Buffer->GetStringLength());
 
                 m_Buffer = newBuffer;
+                m_StringView = m_Buffer->GetBufferPointer();
             }
 
             CharType* pCur = m_Buffer->GetBufferPointer();
             int iIndex = StrUtil::Indexof(pCur, from);
             while(iIndex >= 0)
             {
-                pCur[iIndex] = to;
-                pCur = pCur + 1;
+                pCur += iIndex;
+                *pCur++ = to;
                 iIndex = StrUtil::Indexof(pCur, from);
             }
+
+            return *this;
+        }
+
+        StringType& ReplaceInline(const CharType* from, const CharType* to)
+        {
+            if (!m_Buffer.IsValid())
+                return *this;
+
+            if (StrUtil::IsNullOrEmpty(from) || to == nullptr)
+                return *this;
+
+            size_t toLen = StrUtil::StringLen(to);
+
+            // just rough guess
+            size_t expectedBufferSize = (m_Buffer->GetStringLength() + toLen) * 2;
+
+            SharedStringBufferType* newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), expectedBufferSize);
+
+            CharType* pCur = m_Buffer->GetBufferPointer();
+            int iIndex = StrUtil::Indexof(pCur, from[0]);
+            size_t fromLen = StrUtil::StringLen(from);
+            while (iIndex >= 0)
+            {
+                newBuffer->Append(pCur, iIndex);
+                pCur += iIndex;
+                if (StrUtil::StringCompair(pCur, from, static_cast<int>(fromLen)))
+                {
+                    newBuffer->Append(to, toLen);
+                    pCur += fromLen;
+                }
+                else
+                {
+                    newBuffer->Append(pCur, 1);
+                    pCur++;
+                }
+                iIndex = StrUtil::Indexof(pCur, from[0]);
+            }
+            // Append remain string
+            newBuffer->Append(pCur, StrUtil::StringLen(pCur));
+
+            m_Buffer = newBuffer;
+            m_StringView = m_Buffer->GetBufferPointer();
 
             return *this;
         }

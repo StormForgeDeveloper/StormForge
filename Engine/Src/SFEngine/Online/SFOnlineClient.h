@@ -157,11 +157,6 @@ namespace SF
         SF_FORCEINLINE EAccountRole GetAccountRole() const { return m_AccountRole; }
         ActorID GetActorID() const;
 
-        SF_FORCEINLINE const Guid& GetTitleUID() const { return m_TitleUID; }
-        SF_FORCEINLINE void SetTitleUID(const Guid& titleUID) { m_TitleUID = titleUID; }
-        SF_FORCEINLINE const String& GetTitleEnv() const { return m_TitleEnv; }
-        SF_FORCEINLINE void SetTitleEnv(const String& env) { m_TitleEnv = env; }
-
 		SF_FORCEINLINE const CharacterID& GetCharacterId() const { return m_CharacterId; }
 
 		SF_FORCEINLINE EntityUID GetGameInstanceUID() const { return m_GameInstanceUID; }
@@ -222,11 +217,6 @@ namespace SF
         String m_SteamUserToken;
 		String m_UserId;
 		String m_Password;
-
-        // Title GUID
-        Guid m_TitleUID;
-        // Title environment
-        String m_TitleEnv;
 
 		String m_LoginAddresses;
 

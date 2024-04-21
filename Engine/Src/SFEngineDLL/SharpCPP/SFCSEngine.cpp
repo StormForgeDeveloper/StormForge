@@ -36,6 +36,26 @@ SFDLL_EXPORT void SFEngine_NativeInitializeTelemetry(const char* serverAddress, 
     //pEngine->AddComponent<TelemetryComponent>(serverAddress, gameId, authKey);
 }
 
+SFDLL_EXPORT void SFEngine_NativeSetTitleUID(const uint8_t* titleUIDBytes)
+{
+    Util::SetTitleUID(Guid::FromBytes(titleUIDBytes));
+}
+
+SFDLL_EXPORT intptr_t SFEngine_NativeGetTitleUID()
+{
+    return (intptr_t)Util::GetTitleUID().data;
+}
+
+SFDLL_EXPORT void SFEngine_NativeSetTitleEnv(const char* titleEnv)
+{
+    Util::SetTitleEnv(titleEnv);
+}
+
+SFDLL_EXPORT const char* SFEngine_NativeGetTitleEnv()
+{
+    return Util::GetTitleEnv();
+}
+
 SFDLL_EXPORT void SFEngine_NativeInitializeNativeUnhandledExceptionHandler(const char* crashDumpfilePrefix, const char* crashShellCommand)
 {
     auto* pEngine = SF::Engine::GetInstance();

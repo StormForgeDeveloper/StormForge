@@ -44,6 +44,7 @@ namespace SF {
 		, m_Handler()
 		, m_LogServerAddress(logServerAddress)
 	{
+        m_LogServerAddress.ReplaceInline("{TitleUID}", Util::GetTitleUID().ToString().c_str());
 	}
 
 	LogOutputLogServerComponent::~LogOutputLogServerComponent()
@@ -61,7 +62,6 @@ namespace SF {
 
         SFLog(System, Info, "Log server:{0}, channel:{1}", logServer, Util::GetServiceName());
 
-        //m_Client.SetGetMethod(false);
         // TODO: hard coded accesskey, need to get from client or server config system
         m_Client.AddParameter("AccessKey", "B0B1F3DC-FC87-41EA-8FC2-E0BEDC7E1FDB");
         m_Client.SetReconnectOnDisconnected(true);

@@ -52,9 +52,6 @@ namespace SF
 		SF_FORCEINLINE bool IsInitialized() const { return !m_Url.IsNullOrEmpty(); }
         SF_FORCEINLINE bool IsConnected() const { return m_ConnectionState == ConnectionState::Connected; }
 
-        void SetGetMethod(bool bIsGet) { m_IsGetMethod = bIsGet; }
-        bool IsGetMethod() const { return m_IsGetMethod; }
-
 		SF_FORCEINLINE void SetUseTickThread(bool useTickThread) { m_UseTickThread = useTickThread; }
 		SF_FORCEINLINE bool IsUseTickThread() const { return m_UseTickThread; }
 
@@ -100,7 +97,6 @@ namespace SF
         String m_Url;
         String m_Protocol;
         bool m_UseSSL = false;
-        bool m_IsGetMethod = true;
 
         CURL* m_Curl{};
         curl_slist* m_Headers{};

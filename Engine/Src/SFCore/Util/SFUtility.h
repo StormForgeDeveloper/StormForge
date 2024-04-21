@@ -17,6 +17,9 @@
 
 
 namespace SF {
+
+    class Guid;
+
 namespace Util {
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -69,6 +72,12 @@ namespace Util {
 	// Service Name
 	const char* GetServiceName();
 	void SetServiceName(const char* serviceName);
+
+    const Guid& GetTitleUID();
+    void SetTitleUID(const Guid& titleUID);
+
+    const char* GetTitleEnv();
+    void SetTitleEnv(const char* titleEnv);
 
 	// Module Name
 	const char* GetModuleName();

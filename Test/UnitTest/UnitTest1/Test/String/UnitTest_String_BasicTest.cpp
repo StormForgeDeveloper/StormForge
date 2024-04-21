@@ -203,3 +203,19 @@ TEST_F(StringTest, ToLowerToUpper)
     EXPECT_EQ(A.IsEqual("AB1CD2EF3GZ"), true);
     EXPECT_EQ(B.IsEqual("ab1cd2ef3gz"), true);
 }
+
+TEST_F(StringTest, Replace)
+{
+    String A("Ab1cd2b1bbZ");
+
+    A.ReplaceInline("b1", "HHHH");
+
+    EXPECT_EQ(A.IsEqual("AHHHHcd2HHHHbbZ"), true);
+
+
+    A = "bAb1cd2b1bb";
+
+    A.ReplaceInline("b1", "HHHH");
+
+    EXPECT_EQ(A.IsEqual("bAHHHHcd2HHHHbb"), true);
+}

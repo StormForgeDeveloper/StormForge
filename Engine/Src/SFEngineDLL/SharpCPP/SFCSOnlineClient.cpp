@@ -51,46 +51,6 @@ SFDLL_EXPORT intptr_t SFOnlineClient_NativeCreateOnlineClient()
 	return NativeObjectToIntptr(pOnlineClient.get());
 }
 
-SFDLL_EXPORT void SFOnlineClient_NativeSetTitleUID(intptr_t nativeHandle, const uint8_t* titleUIDBytes)
-{
-    if (nativeHandle == 0)
-        return;
-
-    auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
-
-    pOnlineClient->SetTitleUID(Guid::FromBytes(titleUIDBytes));
-}
-
-SFDLL_EXPORT intptr_t SFOnlineClient_NativeGetTitleUID(intptr_t nativeHandle)
-{
-    if (nativeHandle == 0)
-        return 0;
-
-    auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
-
-    return (intptr_t)pOnlineClient->GetTitleUID().data;
-}
-
-SFDLL_EXPORT void SFOnlineClient_NativeSetTitleEnv(intptr_t nativeHandle, const char* titleEnv)
-{
-    if (nativeHandle == 0)
-        return;
-
-    auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
-
-    pOnlineClient->SetTitleEnv(titleEnv);
-}
-
-SFDLL_EXPORT const char* SFOnlineClient_NativeGetTitleEnv(intptr_t nativeHandle)
-{
-    if (nativeHandle == 0)
-        return nullptr;
-
-    auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
-
-    return pOnlineClient->GetTitleEnv().c_str();
-}
-
 SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnection(intptr_t nativeHandle, uint64_t transactionId, const char* loginAddress,
     const char* userId, const char* password)
 {
