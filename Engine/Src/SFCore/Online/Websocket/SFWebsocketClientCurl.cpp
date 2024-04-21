@@ -348,7 +348,7 @@ namespace SF
 
         if (m_TickThread)
         {
-            m_TickThread->Stop();
+            m_TickThread->Stop(true);
             m_TickThread.reset();
         }
 	}
