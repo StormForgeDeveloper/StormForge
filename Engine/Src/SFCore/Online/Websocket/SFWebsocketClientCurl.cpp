@@ -466,6 +466,12 @@ namespace SF
         {
             SFLog(Websocket, Info, "Websocket client initialization error : {0}, {1}:{2}", m_Url, int(result), curl_easy_strerror(result));
         }
+        else
+        {
+            // if it hasn't triggered by wesocket header sequence, trigger it now.
+            if (m_ConnectionState != ConnectionState::Connected)
+                OnConnected();
+        }
 
         return hr;
     }

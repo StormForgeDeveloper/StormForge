@@ -93,6 +93,8 @@ namespace SF {
 		// Task run function. if repeat is bigger than 0 it will be called until repeat is 0 or below zero.
 		virtual void Run() override;
 
+        virtual void Wait() override;
+        virtual bool Wait(DurationMS waitTime) override;
 	};
 
 	extern template class SharedPointerT<EngineTask>;

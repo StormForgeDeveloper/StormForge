@@ -70,6 +70,23 @@ namespace SF {
 	{
 	}
 
+    void EngineTask::Wait()
+    {
+        if (m_TaskManagerNode.IsInAnyList())
+        {
+            super::Wait();
+        }
+    }
+
+    bool EngineTask::Wait(DurationMS waitTime)
+    {
+        if (m_TaskManagerNode.IsInAnyList())
+        {
+            return super::Wait(waitTime);
+        }
+
+        return true;
+    }
 
 	//void EngineTask::OnStarted()
 	//{

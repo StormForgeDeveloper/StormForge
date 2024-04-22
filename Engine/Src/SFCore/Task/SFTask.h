@@ -102,8 +102,8 @@ namespace SF {
 
 		virtual void Run() {}
 
-		void Wait();
-		bool Wait(DurationMS waitTime);
+		virtual void Wait();
+        virtual bool Wait(DurationMS waitTime);
 
 
 		//////////////////////////////////////////////////////////////////////
