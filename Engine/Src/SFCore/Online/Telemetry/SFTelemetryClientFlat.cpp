@@ -243,7 +243,7 @@ namespace SF
 		m_Client.SetUseTickThread(false); // We are using manual ticking
         m_Client.SetReconnectOnDisconnected(true);
 
-        m_Client.AddParameter(KeyName_Title, GetTitleUID().ToString().c_str());
+        m_Client.AddParameter(KeyName_TitleEnv, Util::GetTitleEnv());
         m_Client.AddParameter(KeyName_AccessKey, m_AuthKey);
 
 		m_Client.OnRecvEvent().AddDelegate(uintptr_t(this), [&](const Array<uint8_t>& data)

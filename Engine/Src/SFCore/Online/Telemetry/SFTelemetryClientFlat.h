@@ -91,7 +91,8 @@ namespace SF
         static constexpr int64_t HeaderVersion = 4;
         static constexpr size_t MaxSerializationBufferSize = 6 * 1024;
 
-		static constexpr char KeyName_Title[] = "Title";
+		static constexpr char KeyName_Title[] = "TitleUID";
+        static constexpr char KeyName_TitleEnv[] = "TitleEnv";
         static constexpr char KeyName_AccessKey[] = "AccessKey";
         static constexpr char KeyName_Protocol[] = "SFTelemetry";
 
