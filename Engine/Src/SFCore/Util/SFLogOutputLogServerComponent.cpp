@@ -68,18 +68,11 @@ namespace SF {
         m_Client.Initialize(logServer, "SFGateway");
 
         m_ChannelName = Util::GetServiceName();
-		//m_StreamProducer = new(heap) StreamDBProducer();
-		//m_StreamProducer->Initialize(logServer, m_ChannelName);
 	}
 
 	void LogOutputLogServerComponent::MyOutputHandler::Deinit()
 	{
         m_Client.CloseConnection();
-		//if (m_StreamProducer != nullptr)
-		//{
-		//	m_StreamProducer->Flush(DurationMS(1000));
-		//	m_StreamProducer = nullptr;
-		//}
 	}
 
 	void LogOutputLogServerComponent::MyOutputHandler::PrintOutput(const Log::LogItem* logMessage)
@@ -127,13 +120,6 @@ namespace SF {
 		compressedStream.Flush();
 		compressedStream.Close();
 
-		//uncompressedSize = static_cast<uint32_t>(m_Buffer.size());
-
-		// update compressed size in header area
-		//memcpy(m_CompressionBuffer.data() + uncompressedSizePos, &uncompressedSize, sizeof(uncompressedSize));
-
-
-		//m_StreamProducer->SendRecord(ArrayView<const uint8_t>(m_CompressionBuffer.size(), m_CompressionBuffer.data()));
         
         m_Builder.Clear();
 

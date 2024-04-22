@@ -52,6 +52,8 @@ namespace SF
             return hr;
         }
 
+        m_Url.ReplaceInline("{TitleUID}", Util::GetTitleUID().ToString().c_str());
+
         m_TelemetryPtr.reset(new(GetSystemHeap()) TelemetryClientFlat());
 
         SFLog(Telemetry, Info, "Telemetry initialize: {0}, clientId:{1}", m_Url, m_ClientId);
