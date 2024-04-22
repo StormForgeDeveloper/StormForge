@@ -53,6 +53,7 @@ namespace SF
         m_AccessKey = accessKey;
         m_MachineUID = Util::GetMachineUniqueId();
 
+        m_Client.SetUseTickThread(false);
         m_Client.OnRecvEvent().AddDelegate(uintptr_t(this), [this](const Array<uint8_t>& data)
             {
                 OnRecv(data);

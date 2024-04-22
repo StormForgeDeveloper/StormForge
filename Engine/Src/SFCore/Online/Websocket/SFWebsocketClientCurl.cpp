@@ -191,7 +191,8 @@ namespace SF
                 }
                 else
                 {
-                    wsClient->OnConnected();
+                    // We process on Connected in TryConnect
+                    //wsClient->OnConnected();
                     return len;
                 }
             }
