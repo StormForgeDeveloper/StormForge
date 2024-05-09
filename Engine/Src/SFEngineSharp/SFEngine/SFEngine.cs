@@ -51,8 +51,7 @@ namespace SF
 
         static public string GetTitleEnv()
         {
-            string value = NativeGetTitleEnv();
-            return value;
+            return Marshal.PtrToStringAnsi(NativeGetTitleEnv())??string.Empty;
         }
 
         static public void SetTitleEnv(string value)
@@ -160,8 +159,7 @@ namespace SF
         static extern void NativeSetTitleUID([MarshalAs(UnmanagedType.LPArray)] byte[] bytes);
 
         [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeGetTitleEnv", CharSet = CharSet.Auto)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        static extern string NativeGetTitleEnv();
+        static extern IntPtr NativeGetTitleEnv();
 
         [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeSetTitleEnv", CharSet = CharSet.Auto)]
         static extern void NativeSetTitleEnv([MarshalAs(UnmanagedType.LPStr)] string env);
