@@ -70,7 +70,7 @@ namespace SF {
 		ConnectionTask_DisconnectNClose::~ConnectionTask_DisconnectNClose()
 		{
 			// This is supposed to be cleaned up before come here
-			assert(m_pConnection == nullptr);
+            // Sometimes the task not being able to be run
 			if (m_pConnection != nullptr)
 			{
 				if (m_RemoveConnectionManagerTask != nullptr)
