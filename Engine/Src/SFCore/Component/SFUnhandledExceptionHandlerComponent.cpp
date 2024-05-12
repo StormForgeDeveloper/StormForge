@@ -20,6 +20,7 @@
 #include "Component/SFUnhandledExceptionHandlerComponent.h"
 
 #include <filesystem>
+#include <stacktrace>
 
 namespace SF {
 
@@ -71,12 +72,40 @@ namespace SF {
         }
     }
 
+    void UnhandledExceptionHandlerComponent::OnTerminate()
+    {
+        try {
+            auto unknown = std::current_exception();
+            if (unknown) {
+                std::stacktrace trace = std::stacktrace::current();
+
+                std::cerr << trace;
+
+                for (const std::stacktrace_entry& stackEntry : trace)
+                {
+                    SFLog(System, Factal, "Stack: {0}, {1}:{2}", stackEntry.description(), stackEntry.source_file(), stackEntry.source_line());
+                }
+                std::rethrow_exception(unknown);
+            }
+            else {
+                std::cerr << "normal termination" << std::endl;
+            }
+        }
+        catch (const std::exception& e) { // for proper `std::` exceptions
+            std::cerr << "unexpected exception: " << e.what() << std::endl;
+        }
+        catch (...) { // last resort for things like `throw 1;`
+            std::cerr << "unknown exception" << std::endl;
+        }
+    }
 	// Initialize component
 	Result UnhandledExceptionHandlerComponent::InitializeComponent()
 	{
 		auto result = LibraryComponent::InitializeComponent();
 		if (!result)
 			return result;
+
+        std::set_terminate(OnTerminate);
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 		::SetUnhandledExceptionFilter(&CrashHandler);
@@ -175,9 +204,6 @@ namespace SF {
             // Linux bg command
             StrUtil::StringCat(m_CrashShellCommand, " &");
 #endif
-
-            //SFLog(System, Info, "Running external command:{0}", m_CrashShellCommand);
-            //Service::LogModule->Flush();
 
             std::system(m_CrashShellCommand);
         }

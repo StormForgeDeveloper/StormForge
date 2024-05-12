@@ -1065,13 +1065,13 @@ namespace SF {
 
             Assert(m_UpdateSerial != mapNodeToClone->UpdateSerial);
 
-            MapNode* newNode = mapNodeToClone->ClonedNode.load(MemoryOrder::memory_order_acquire);
+            MapNode* newNode = mapNodeToClone->ClonedNode.load(MemoryOrder::acquire);
             Assert(newNode != mapNodeToClone);
 
             if (newNode == nullptr)
             {
                 m_pNodePool->Alloc(newNode);
-                mapNodeToClone->ClonedNode.store(newNode, MemoryOrder::memory_order_release);
+                mapNodeToClone->ClonedNode.store(newNode, MemoryOrder::release);
                 PendingFreeNode(mapNodeToClone);
 
                 assert(newNode != nullptr);

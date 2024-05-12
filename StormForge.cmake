@@ -4,13 +4,13 @@
 message ( "Platform=${CMAKE_SYSTEM_NAME}, Config=${CMAKE_BUILD_TYPE}" )
 
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON) #...is required...
 set(CMAKE_CXX_EXTENSIONS OFF) #...without compiler extensions like gnu++11
 
 
 if(WIN32) # MSVC isn't consistent. let's use WIN32 for windows
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++20")
+	#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++23")
 	set(ENABLE_CLANG OFF)
 else()
 	set(ENABLE_CLANG ON)

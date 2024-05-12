@@ -40,6 +40,7 @@ namespace SF {
 		static void WriteCrashDump(EXCEPTION_POINTERS* ipExPtrs, MINIDUMP_TYPE dumpType, const char* strMode);
 #endif
 
+        static void OnTerminate();
 
 	public:
 

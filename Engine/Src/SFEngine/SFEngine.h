@@ -58,7 +58,7 @@ namespace SF {
 		bool UseEngineThread = true; 
 
 		// Saving crash dump, Only windows platform is supported for now
-		bool EnableCrashDump = SF_PLATFORM == SF_PLATFORM_WINDOWS;
+		bool EnableCrashDump = true;
 
 		// Async task thread count. If you put higher number it will takes more CPU cores
 		int AsyncTaskThreadCount = 2;
