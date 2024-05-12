@@ -99,6 +99,7 @@
 #include <string.h>
 #include <inttypes.h>
 
+#include <threads.h>
 #include <thread>
 #include <mutex>
 

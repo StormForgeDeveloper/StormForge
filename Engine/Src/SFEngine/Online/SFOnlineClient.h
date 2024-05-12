@@ -247,7 +247,7 @@ namespace SF
             uint64_t TransactionId = 0;
             Result hr;
 
-            bool operator == (const FinishedTaskInfo& op) { return TransactionId == op.TransactionId && hr == op.hr; }
+            bool operator == (const FinishedTaskInfo& op) const { return TransactionId == op.TransactionId && hr == op.hr; }
         };
 		CircularQueue<FinishedTaskInfo, 4> m_FinishedTaskTransactionIds;
 

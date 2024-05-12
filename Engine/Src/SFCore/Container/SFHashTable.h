@@ -132,7 +132,7 @@ namespace SF {
 				{
 					// Validate only debug mode
 #ifdef _DEBUG
-					ItemContainer::iterator iter = m_Items.begin();
+					auto iter = m_Items.begin();
 					for( ; iter != m_Items.end(); ++iter )
 					{
 						KeyType curIdx = iter->Key;

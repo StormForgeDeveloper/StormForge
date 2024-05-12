@@ -160,8 +160,18 @@ namespace Net {
 
 	Result NetUDP::InitializeNet(const NetAddress& localAddress, MessageHandlerFunc &&Handler)
 	{
-		Result hr = ResultCode::SUCCESS;
-		SF_SOCKET socket = INVALID_SOCKET;
+        SF_SOCKET socket = INVALID_SOCKET;
+        ScopeContext hr([this, &socket](Result hr)
+            {
+                if (hr.IsFailure())
+                    TerminateNet();
+
+                if (socket != INVALID_SOCKET)
+                    Service::NetSystem->CloseSocket(socket);
+
+                SFLog(Net, Info, "NetUDP: Opened {0}, hr={1:X8}", m_LocalAddress, hr);
+
+            });
 		INT iOptValue;
 		//int bOptValue = 0;
 		sockaddr_storage bindAddr;
@@ -173,7 +183,7 @@ namespace Net {
 
 		if (StrUtil::IsNullOrEmpty(localAddress.Address) == '\0')
 		{
-			netChk(Net::GetLocalAddressIPv6(myAddress));
+			netCheck(Net::GetLocalAddressIPv6(myAddress));
 		}
 		else
 		{
@@ -190,16 +200,16 @@ namespace Net {
 		if (socket == INVALID_SOCKET)
 		{
 			SFLog(Net, Error, "NetUDP: Failed to Open NetUDP Socket {0}", GetLastNetSystemResult());
-			netErr(ResultCode::UNEXPECTED);
+			netCheck(ResultCode::UNEXPECTED);
 		}
 
 		iOptValue = 0;
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
-		INT iOptLen = sizeof(iOptValue);
+		int iOptLen = static_cast<int>(sizeof(iOptValue));
 		if (getsockopt(socket, SOL_SOCKET, SO_MAX_MSG_SIZE, (char *)&iOptValue, &iOptLen) == SOCKET_ERROR)
 		{
 			SFLog(Net, Error, "NetUDP: Failed to get socket option SO_MAX_MSG_SIZE = {0}, err = {1}", iOptValue, GetLastNetSystemResult());
-			netErr(ResultCode::UNEXPECTED);
+            netCheck(ResultCode::UNEXPECTED);
 		}
 		if (iOptValue < Const::PACKET_SIZE_MAX)
 		{
@@ -210,13 +220,13 @@ namespace Net {
 		unused(iOptValue);
 #endif
 
-		netChk(Service::NetSystem->SetupCommonSocketOptions(SocketType::DataGram, m_LocalAddress.SocketFamily, socket));
+        netCheck(Service::NetSystem->SetupCommonSocketOptions(SocketType::DataGram, m_LocalAddress.SocketFamily, socket));
 
 		GetAnyBindAddr(m_LocalSockAddress, bindAddr);
 		if (bind(socket, (sockaddr*)&bindAddr, sizeof(bindAddr)) == SOCKET_ERROR)
 		{
 			SFLog(Net, Error, "NetUDP: Socket bind failed, UDP err={0:X8}", GetLastNetSystemResult());
-			netErr(ResultCode::UNEXPECTED);
+            netCheck(ResultCode::UNEXPECTED);
 		}
 		m_LocalSockAddress = bindAddr;
 
@@ -224,31 +234,20 @@ namespace Net {
 		socket = INVALID_SOCKET;
 
 
-		netChk(Service::NetSystem->RegisterSocket(&m_NetIOAdapter));
+        netCheck(Service::NetSystem->RegisterSocket(&m_NetIOAdapter));
 
 
 		// Ready recv
 		if (NetSystem::IsProactorSystem())
 		{
 			if (m_pRecvBuffers) GetHeap().Delete(m_pRecvBuffers);
-			netMem(m_pRecvBuffers = new(GetHeap()) IOBUFFER_READ[Const::SVR_NUM_RECV_THREAD]);
+			netCheckPtr(m_pRecvBuffers = new(GetHeap()) IOBUFFER_READ[Const::SVR_NUM_RECV_THREAD]);
 
 			for (int uiRecv = 0; uiRecv < Const::SVR_NUM_RECV_THREAD; uiRecv++)
 			{
 				m_NetIOAdapter.PendingRecv(&m_pRecvBuffers[uiRecv]);
 			}
 		}
-
-
-	Proc_End:
-
-		if (hr.IsFailure())
-			TerminateNet();
-
-		if (socket != INVALID_SOCKET)
-			Service::NetSystem->CloseSocket(socket);
-
-		SFLog(Net, Info, "NetUDP: Opened {0}, hr={1:X8}", m_LocalAddress, hr);
 
 		return hr;
 	}

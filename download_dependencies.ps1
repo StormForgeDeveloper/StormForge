@@ -47,9 +47,7 @@ $deps_shared =
 	"libbson",
 	"protobuf",
 	"grpc",
-	"openssl",
-	"mongo-c-driver[icu]",
-	"zookeeper"
+	"openssl"
 
 
 # Doesn't compile nicely on windows		
@@ -101,7 +99,7 @@ try {
 	# protobuf uses x64-windows tool even though it has one for target triplet
 	./vcpkg.exe install $deps_shared --triplet $triplet_shared
 
-	./vcpkg.exe install $deps --triplet $triplet
+	./vcpkg.exe install $deps --triplet $triplet --allow-unsupported
 
 	
 	if ($upgrade = 1)

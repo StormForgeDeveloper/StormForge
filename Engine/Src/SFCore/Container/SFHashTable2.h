@@ -550,7 +550,7 @@ namespace SF {
 			bool Validate()
 			{
 #ifdef _DEBUG
-				BucketListType::iterator itBucket = m_Buckets.begin();
+				auto itBucket = m_Buckets.begin();
 				for( INT iBucket = 0; itBucket != m_Buckets.end(); ++itBucket, ++iBucket )
 				{
 					if( !itBucket->Validate( iBucket, m_Buckets.size() ) )

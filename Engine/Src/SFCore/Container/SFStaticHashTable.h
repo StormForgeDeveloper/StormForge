@@ -140,7 +140,7 @@ namespace SF {
 #ifdef _DEBUG
 					//_ReadBarrier();
 					std::atomic_thread_fence(std::memory_order_consume);
-					ItemContainer::iterator iter = m_Items.begin();
+					auto iter = m_Items.begin();
 					for( ; iter != m_Items.end(); ++iter )
 					{
 						KeyType curIdx = iter->Key;

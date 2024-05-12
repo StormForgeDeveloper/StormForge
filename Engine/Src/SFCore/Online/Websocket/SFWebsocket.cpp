@@ -433,7 +433,7 @@ namespace SF
 #endif
 			}
 
-			SFLog(Websocket, Debug4, "{0} WSCallback {1}, size:{2}", pInstance ? pInstance->GetName() : "", (int)reason, len);
+			SFLog(Websocket, Debug4, "{0} WSCallback {1}, size:{2}", pInstance ? pInstance->GetName().c_str() : "", (int)reason, len);
 
 			return 0;
 		}
