@@ -568,7 +568,8 @@ namespace SF
                 // Closed?
                 SFLog(Websocket, Warning, "Nothing? result:{0}, error:{1}", int(result), curl_easy_strerror(result));
                 // the connection might be disconnected
-                m_ConnectionState = ConnectionState::Disconnected;
+                // => No, weird, let's leave the connection
+                //m_ConnectionState = ConnectionState::Disconnected;
             }
             else if (result == CURLE_AGAIN)
             {
