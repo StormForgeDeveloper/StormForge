@@ -64,6 +64,9 @@ namespace SF {
 		PageQueue<SharedPointer> m_DetainedReleaseQueue2;
 		PageQueue<SharedPointer>* m_DetainedReleaseQueues[DetainedRelease_QueueCount]{ &m_DetainedReleaseQueue0, &m_DetainedReleaseQueue1, &m_DetainedReleaseQueue2 };
 
+    private:
+
+
 
 	public:
 

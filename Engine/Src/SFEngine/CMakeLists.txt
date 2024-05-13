@@ -115,6 +115,7 @@ set(SUBService_FILES
 	Service/SFConnectionManagerService.h
 	Service/SFEngineService.h
 	Service/SFEngineServices.h
+	Service/SFEngineServices.cpp
 	Service/SFIAssetImporterFactory.h
 	Service/SFIAssetSerializerFactory.h
 	Service/SFIGraphicDevice.h
@@ -386,7 +387,7 @@ set(SFENGINE_LIB_FILES
 
 
 
-add_library(SFEngine STATIC ${SFENGINE_LIB_FILES} ${SUBAudio_FILES} ${SUBNet_FILES} ${SUBAsset_FILES} ${SUBResource_FILES} ${SUBGraphics_FILES} ${SUBEngine_FILES} ${SUBApplication_FILES} ${SUBOnline_FILES})
+add_library(SFEngine STATIC ${SFENGINE_LIB_FILES} ${SUBAudio_FILES} ${SUBNet_FILES} ${SUBAsset_FILES} ${SUBResource_FILES} ${SUBService_FILES} ${SUBGraphics_FILES} ${SUBEngine_FILES} ${SUBApplication_FILES} ${SUBOnline_FILES})
 
 target_precompile_headers(SFEngine PRIVATE SFEnginePCH.h)
 

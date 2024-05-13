@@ -45,8 +45,8 @@ namespace SF {
 
 	private:
 
-		ThreadID m_EngineThreadID;
-		ThreadID m_RenderThreadID;
+		static ThreadID m_EngineThreadID;
+        static ThreadID m_RenderThreadID;
 
 	protected:
 		// Engine frame number
@@ -59,8 +59,8 @@ namespace SF {
 		friend class SetObjectTickFlagTask;
 
 
-		void SetEngineThreadID(ThreadID threadID) { m_EngineThreadID = threadID; }
-		void SetRenderThreadID(ThreadID threadID) { m_RenderThreadID = threadID; }
+        static void SetEngineThreadID(ThreadID threadID) { m_EngineThreadID = threadID; }
+        static void SetRenderThreadID(ThreadID threadID) { m_RenderThreadID = threadID; }
 
 	protected:
 
@@ -71,8 +71,8 @@ namespace SF {
 
 	public:
 
-		ThreadID GetEngineThreadID() { return m_EngineThreadID; }
-		ThreadID GetRenderThreadID() { return m_RenderThreadID; }
+		static ThreadID GetEngineThreadID() { return m_EngineThreadID; }
+        static ThreadID GetRenderThreadID() { return m_RenderThreadID; }
 
 		uint32_t GetFrameNumber() const { return m_FrameNumber.load(MemoryOrder::relaxed); }
 
