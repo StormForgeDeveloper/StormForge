@@ -99,17 +99,8 @@ namespace SF {
         if (!m_Client.IsConnected())
             return;
 
-        m_LastFlushTime = Util::Time.GetTimeMs();
-
-        // early out to avoid excessive lock
         if (m_Buffer.size() == 0)
 			return;
-
-        MutexScopeLock scopeLock(m_FlushLock);
-
-        // double check after lock
-        if (m_Buffer.size() == 0)
-            return;
 
 		m_CompressionBuffer.Reset();
 		OutputMemoryStream memoryStream(m_CompressionBuffer);
@@ -155,17 +146,6 @@ namespace SF {
 		m_Buffer.Reset();
 	}
 
-    void LogOutputLogServerComponent::MyOutputHandler::FlushIfNeed()
-    {
-        if (m_Buffer.size() == 0)
-            return;
-
-        if (Util::TimeSince(m_LastFlushTime) > DurationMS(5000))
-        {
-            Flush();
-        }
-    }
-
 	// Initialize server component
 	Result LogOutputLogServerComponent::InitializeComponent()
 	{
@@ -185,11 +165,6 @@ namespace SF {
 
 		m_Handler.Deinit();
 	}
-
-    void LogOutputLogServerComponent::TickUpdate()\
-    {
-        m_Handler.FlushIfNeed();
-    }
 
 
 }	// namespace SF

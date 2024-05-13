@@ -79,7 +79,6 @@ namespace Log {
 
 		// Flush log queue
 		virtual void Flush() override;
-
 	};
 
 

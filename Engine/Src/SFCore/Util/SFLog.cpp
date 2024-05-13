@@ -90,7 +90,7 @@ namespace Log {
 			auto timeWaitStart = Util::Time.GetTimeMs();
 			bool flushed = false;
 
-			auto pLockBuffer = m_LogSpinBuffer.Read_Lock( [&]()
+            LogSpinBuffer::BLOCK* pLockBuffer = m_LogSpinBuffer.Read_Lock( [&]()
 			{
 				// Flush if there is no log over 1 sec
 				if (!flushed && Util::TimeSince(timeWaitStart) > flushWaitTime)
