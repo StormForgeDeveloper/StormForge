@@ -151,7 +151,7 @@ namespace SF {
 					NumberOfChildren = 0;
 					Key = 0;
 					Value = 0;
-                    ClonedNode.store(nullptr, MemoryOrder::memory_order_release);
+                    ClonedNode.store(nullptr, MemoryOrder::release);
 					Left = nullptr;
 					Right = nullptr;
 					UpdateSerial = 0;
@@ -165,7 +165,7 @@ namespace SF {
 					Key = key;
 					Value = value;
 
-                    ClonedNode.store(nullptr, MemoryOrder::memory_order_release);
+                    ClonedNode.store(nullptr, MemoryOrder::release);
 					Left = nullptr;
 					Right = nullptr;
 					UpdateSerial = updateSerial;
@@ -178,7 +178,7 @@ namespace SF {
 					NumberOfChildren = src.NumberOfChildren;
 					Key = src.Key;
 					Value = src.Value;
-                    ClonedNode.store(nullptr, MemoryOrder::memory_order_release);
+                    ClonedNode.store(nullptr, MemoryOrder::release);
 					Left = src.Left;
 					Right = src.Right;
 					UpdateSerial = updateSerial;

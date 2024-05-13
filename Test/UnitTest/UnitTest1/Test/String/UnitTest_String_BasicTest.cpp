@@ -47,22 +47,22 @@ TEST_F(StringTest, CharBasic)
 
 	EXPECT_EQ(C.IsNullOrEmpty(), true);
 
-	EXPECT_EQ(A.IsEqual("A"), true);
+	EXPECT_EQ(A.Equals("A"), true);
 	EXPECT_EQ(A.size(), 1);
 	EXPECT_EQ(A.GetLength(), 1);
 	EXPECT_EQ(A.length(), 1);
 	EXPECT_EQ(A.IsNullOrEmpty(), false);
 
-	EXPECT_EQ(B.IsEqual("B"), true);
+	EXPECT_EQ(B.Equals("B"), true);
 
 	C = A + B;
-	EXPECT_EQ(C.IsEqual("AB"), true);
+	EXPECT_EQ(C.Equals("AB"), true);
 	EXPECT_EQ(C.length(), 2);
 
 	String D = A;
 	D.Append("B");
 	D.Append(B);
-	EXPECT_EQ(D.IsEqual("ABB"), true);
+	EXPECT_EQ(D.Equals("ABB"), true);
 	EXPECT_EQ(D.length(), 3);
 }
 
@@ -73,22 +73,22 @@ TEST_F(StringTest, Substring)
 	String B, C;
 
 	B = A.SubString(0, 5);
-	EXPECT_EQ(B.IsEqual("Test1"), true);
+	EXPECT_EQ(B.Equals("Test1"), true);
 
 	C = A.SubString(5, 10);
-	EXPECT_EQ(C.IsEqual("Test2Test3"), true);
+	EXPECT_EQ(C.Equals("Test2Test3"), true);
 
 	// over copy test
 	C = A.SubString(15, 7);
-	EXPECT_EQ(C.IsEqual("Abcdefg"), true);
+	EXPECT_EQ(C.Equals("Abcdefg"), true);
 	EXPECT_EQ(C.length(), 7);
 
 	C = A.SubString(15, 8);
-	EXPECT_EQ(C.IsEqual("Abcdefg"), true);
+	EXPECT_EQ(C.Equals("Abcdefg"), true);
 	EXPECT_EQ(C.length(), 7);
 
 	C = A.SubString(15, 20);
-	EXPECT_EQ(C.IsEqual("Abcdefg"), true);
+	EXPECT_EQ(C.Equals("Abcdefg"), true);
 	EXPECT_EQ(C.length(), 7);
 }
 
@@ -99,10 +99,10 @@ TEST_F(StringTest, Format)
 	String C;
 
 	C.Format("{0}/{1}", A, "DBInstance");
-	EXPECT_EQ(C.IsEqual("Test1/DBInstance"), true);
+	EXPECT_EQ(C.Equals("Test1/DBInstance"), true);
 
 	C.Format("{0}/{1}", A, B);
-	EXPECT_EQ(C.IsEqual("Test1/B"), true);
+	EXPECT_EQ(C.Equals("Test1/B"), true);
 }
 
 TEST_F(StringTest, SFStringBasic)
@@ -114,31 +114,31 @@ TEST_F(StringTest, SFStringBasic)
     WString WB(L"B");
     WString WC = WA + WB;
 
-    EXPECT_EQ(A.IsEqual("Test1"), true);
-    EXPECT_EQ(A.IsEqual("tEst1"), false);
-    EXPECT_EQ(A.IsEqualIgnoreCase("tEst1"), true);
+    EXPECT_EQ(A.Equals("Test1"), true);
+    EXPECT_EQ(A.Equals("tEst1"), false);
+    EXPECT_EQ(A.EqualsIgnoreCase("tEst1"), true);
     EXPECT_EQ(5, A.GetLength());
-    EXPECT_EQ(B.IsEqual("B"), true);
-    EXPECT_EQ(B.IsEqual("b"), false);
-    EXPECT_EQ(B.IsEqualIgnoreCase("b"), true);
+    EXPECT_EQ(B.Equals("B"), true);
+    EXPECT_EQ(B.Equals("b"), false);
+    EXPECT_EQ(B.EqualsIgnoreCase("b"), true);
     EXPECT_EQ(1, B.GetLength());
-    EXPECT_EQ(C.IsEqual("Test1B"), true);
-    EXPECT_EQ(C.IsEqual("TEsT1b"), false);
-    EXPECT_EQ(C.IsEqualIgnoreCase("TEsT1b"), true);
+    EXPECT_EQ(C.Equals("Test1B"), true);
+    EXPECT_EQ(C.Equals("TEsT1b"), false);
+    EXPECT_EQ(C.EqualsIgnoreCase("TEsT1b"), true);
     EXPECT_EQ(6, C.GetLength());
     EXPECT_GE(6+1, C.GetBufferLength());
 
-    EXPECT_EQ(WA.IsEqual(L"Test1"), true);
-    EXPECT_EQ(WA.IsEqual(L"tEst1"), false);
-    EXPECT_EQ(WA.IsEqualIgnoreCase(L"tEst1"), true);
+    EXPECT_EQ(WA.Equals(L"Test1"), true);
+    EXPECT_EQ(WA.Equals(L"tEst1"), false);
+    EXPECT_EQ(WA.EqualsIgnoreCase(L"tEst1"), true);
     EXPECT_EQ(5, WA.GetLength());
-    EXPECT_EQ(WB.IsEqual(L"B"), true);
-    EXPECT_EQ(WB.IsEqual(L"b"), false);
-    EXPECT_EQ(WB.IsEqualIgnoreCase(L"b"), true);
+    EXPECT_EQ(WB.Equals(L"B"), true);
+    EXPECT_EQ(WB.Equals(L"b"), false);
+    EXPECT_EQ(WB.EqualsIgnoreCase(L"b"), true);
     EXPECT_EQ(1, WB.GetLength());
-    EXPECT_EQ(WC.IsEqual(L"Test1B"), true);
-    EXPECT_EQ(WC.IsEqual(L"TeSt1b"), false);
-    EXPECT_EQ(WC.IsEqualIgnoreCase(L"TEsT1b"), true);
+    EXPECT_EQ(WC.Equals(L"Test1B"), true);
+    EXPECT_EQ(WC.Equals(L"TeSt1b"), false);
+    EXPECT_EQ(WC.EqualsIgnoreCase(L"TEsT1b"), true);
     EXPECT_EQ(6, WC.GetLength());
     EXPECT_EQ((6 + 1) * 2, WC.GetBufferLength());
 }
@@ -156,17 +156,17 @@ TEST_F(StringTest, SFStringConverter)
     WB = StringConverter<wchar_t, char>(B);
     WC = StringConverter<wchar_t, char>(C);
 
-    EXPECT_EQ(WA.IsEqual(L"Test1"), true);
-    EXPECT_EQ(WA.IsEqual(L"tEst1"), false);
-    EXPECT_EQ(WA.IsEqualIgnoreCase(L"tEst1"), true);
+    EXPECT_EQ(WA.Equals(L"Test1"), true);
+    EXPECT_EQ(WA.Equals(L"tEst1"), false);
+    EXPECT_EQ(WA.EqualsIgnoreCase(L"tEst1"), true);
     EXPECT_EQ(5, WA.GetLength());
-    EXPECT_EQ(WB.IsEqual(L"B"), true);
-    EXPECT_EQ(WB.IsEqual(L"b"), false);
-    EXPECT_EQ(WB.IsEqualIgnoreCase(L"b"), true);
+    EXPECT_EQ(WB.Equals(L"B"), true);
+    EXPECT_EQ(WB.Equals(L"b"), false);
+    EXPECT_EQ(WB.EqualsIgnoreCase(L"b"), true);
     EXPECT_EQ(1, WB.GetLength());
-    EXPECT_EQ(WC.IsEqual(L"Test1B"), true);
-    EXPECT_EQ(WC.IsEqual(L"TeSt1b"), false);
-    EXPECT_EQ(WC.IsEqualIgnoreCase(L"TEsT1b"), true);
+    EXPECT_EQ(WC.Equals(L"Test1B"), true);
+    EXPECT_EQ(WC.Equals(L"TeSt1b"), false);
+    EXPECT_EQ(WC.EqualsIgnoreCase(L"TEsT1b"), true);
     EXPECT_EQ(6, WC.GetLength());
     EXPECT_EQ((6 + 1) * 2, WC.GetBufferLength());
 
@@ -175,17 +175,17 @@ TEST_F(StringTest, SFStringConverter)
     B = StringConverter<char, wchar_t>(WB);
     C = StringConverter<char, wchar_t>(WC);
 
-    EXPECT_EQ(A.IsEqual("Test1"), true);
-    EXPECT_EQ(A.IsEqual("tEst1"), false);
-    EXPECT_EQ(A.IsEqualIgnoreCase("tEst1"), true);
+    EXPECT_EQ(A.Equals("Test1"), true);
+    EXPECT_EQ(A.Equals("tEst1"), false);
+    EXPECT_EQ(A.EqualsIgnoreCase("tEst1"), true);
     EXPECT_EQ(5, A.GetLength());
-    EXPECT_EQ(B.IsEqual("B"), true);
-    EXPECT_EQ(B.IsEqual("b"), false);
-    EXPECT_EQ(B.IsEqualIgnoreCase("b"), true);
+    EXPECT_EQ(B.Equals("B"), true);
+    EXPECT_EQ(B.Equals("b"), false);
+    EXPECT_EQ(B.EqualsIgnoreCase("b"), true);
     EXPECT_EQ(1, B.GetLength());
-    EXPECT_EQ(C.IsEqual("Test1B"), true);
-    EXPECT_EQ(C.IsEqual("TEsT1b"), false);
-    EXPECT_EQ(C.IsEqualIgnoreCase("TEsT1b"), true);
+    EXPECT_EQ(C.Equals("Test1B"), true);
+    EXPECT_EQ(C.Equals("TEsT1b"), false);
+    EXPECT_EQ(C.EqualsIgnoreCase("TEsT1b"), true);
     EXPECT_EQ(6, C.GetLength());
     EXPECT_GE(6 + 1, C.GetBufferLength());
 }
@@ -200,8 +200,8 @@ TEST_F(StringTest, ToLowerToUpper)
     B.ToLowerInline();
     A.ToUpperInline();
 
-    EXPECT_EQ(A.IsEqual("AB1CD2EF3GZ"), true);
-    EXPECT_EQ(B.IsEqual("ab1cd2ef3gz"), true);
+    EXPECT_EQ(A.Equals("AB1CD2EF3GZ"), true);
+    EXPECT_EQ(B.Equals("ab1cd2ef3gz"), true);
 }
 
 TEST_F(StringTest, Replace)
@@ -210,12 +210,12 @@ TEST_F(StringTest, Replace)
 
     A.ReplaceInline("b1", "HHHH");
 
-    EXPECT_EQ(A.IsEqual("AHHHHcd2HHHHbbZ"), true);
+    EXPECT_EQ(A.Equals("AHHHHcd2HHHHbbZ"), true);
 
 
     A = "bAb1cd2b1bb";
 
     A.ReplaceInline("b1", "HHHH");
 
-    EXPECT_EQ(A.IsEqual("bAHHHHcd2HHHHbb"), true);
+    EXPECT_EQ(A.Equals("bAHHHHcd2HHHHbb"), true);
 }

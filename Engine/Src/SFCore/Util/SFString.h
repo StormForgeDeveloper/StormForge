@@ -1043,26 +1043,32 @@ namespace SF {
             return *this;
         }
 
-		bool IsEqual(const StringType& op) const
+
+		bool Equals(const StringType& op, bool ignoreCase = false) const
 		{
-			return StrUtil::StringCompair((const CharType*)*this, (int)GetLength(), (const CharType*)op, (int)op.GetLength());
+            if (ignoreCase)
+    			return StrUtil::StringCompairIgnoreCase((const CharType*)*this, (int)GetLength(), (const CharType*)op, (int)op.GetLength());
+            else
+                return StrUtil::StringCompair((const CharType*)*this, (int)GetLength(), (const CharType*)op, (int)op.GetLength());
 		}
 
-		bool IsEqual(const CharType* op) const
+		bool Equals(const CharType* op, bool ignoreCase = false) const
 		{
 			auto opLen = op != nullptr ? StrUtil::StringLen(op) : 0;
-			return StrUtil::StringCompair((const CharType*)*this, (int)GetLength(), (const CharType*)op, (int)opLen);
+            if (ignoreCase)
+			    return StrUtil::StringCompairIgnoreCase((const CharType*)*this, (int)GetLength(), (const CharType*)op, (int)opLen);
+            else
+                return StrUtil::StringCompair((const CharType*)*this, (int)GetLength(), (const CharType*)op, (int)opLen);
 		}
 
-		bool IsEqualIgnoreCase(const StringType& op) const
-		{
-			return StrUtil::StringCompairIgnoreCase((const CharType*)*this, (int)GetLength(), (const CharType*)op, (int)op.GetLength());
-		}
-		bool IsEqualIgnoreCase(const CharType* op) const
-		{
-			auto opLen = op != nullptr ? StrUtil::StringLen(op) : 0;
-			return StrUtil::StringCompairIgnoreCase((const CharType*)*this, (int)GetLength(), (const CharType*)op, (int)opLen);
-		}
+        bool EqualsIgnoreCase(const StringType& op) const
+        {
+            return Equals(op,true);
+        }
+        bool EqualsIgnoreCase(const CharType* op) const
+        {
+            return Equals(op, true);
+        }
 
 		// Removes all leading and trailing white-space characters from the current TString object.
 		StringType Trim() const
@@ -1275,8 +1281,17 @@ namespace SF {
 
 		bool operator != (const CharType* src) const
 		{
-			return !this->operator == (src);
-		}
+            if (m_Buffer == nullptr && src == nullptr) return false;
+            if (m_Buffer == nullptr || src == nullptr) return true;
+
+            auto myBuffer = m_Buffer->GetBufferPointer();
+            auto opBuffer = src;
+            // Actually I want to check "myBuffer == nullptr && opBuffer == nullptr", but comparing both pointer will give me the result
+            if (myBuffer == opBuffer) return false;
+            if (myBuffer == nullptr) return true;
+
+            return !StrUtil::StringCompair(myBuffer, (INT)m_Buffer->GetStringBufferLength(), opBuffer, -1);
+        }
 
 
 		StringType& operator = (const StringType& src)

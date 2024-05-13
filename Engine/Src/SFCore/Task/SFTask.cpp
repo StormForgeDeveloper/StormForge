@@ -60,7 +60,7 @@ namespace SF {
 
 	Task::~Task()
 	{
-		if (!m_FinishedEventFired.load(MemoryOrder::memory_order_acquire))
+		if (!m_FinishedEventFired.load(MemoryOrder::acquire))
 		{
 			m_TaskFinishedHandlers.Invoke(this);
 		}
@@ -68,10 +68,10 @@ namespace SF {
 
 	void Task::NotifyFinished()
 	{
-		if (!m_FinishedEventFired.load(MemoryOrder::memory_order_acquire))
+		if (!m_FinishedEventFired.load(MemoryOrder::acquire))
 		{
 			m_TaskFinishedHandlers.Invoke(this);
-			m_FinishedEventFired.store(false, MemoryOrder::memory_order_release);
+			m_FinishedEventFired.store(false, MemoryOrder::release);
 		}
 	}
 

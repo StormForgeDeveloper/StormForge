@@ -60,7 +60,7 @@ TEST_F(HTTPTest, Client)
         httpClient->SetOnFinishedCallback([this, &ResponseCount](HTTPClient* pClient)
             {
                 SFLog(Game, Info, "Result:{0], ResultContent:{1}", pClient->GetResultCode(), (const char*)pClient->GetResultContent().data());
-                ResponseCount.fetch_add(1, MemoryOrder::memory_order_relaxed);
+                ResponseCount.fetch_add(1, MemoryOrder::relaxed);
             });
 
         httpClient->SendRequest();

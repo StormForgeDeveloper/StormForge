@@ -369,6 +369,16 @@ set(SFENGINE_LIB_FILES
 	SceneGraph/SFSceneNodeComponentMesh.h
 	SceneGraph/SFSceneNodeComponentSkeletalMesh.h
 
+	Service/SFConnectionManagerService.h
+	Service/SFEngineServices.h
+	Service/SFEngineService.cpp
+	Service/SFEngineService.h
+	Service/SFIAssetImporterFactory.h
+	Service/SFIAssetSerializerFactory.h
+	Service/SFIGraphicDevice.h
+	Service/SFNetSystemService.h
+	Service/SFResourceManagerService.h
+
     SFEnginePCH.h
 
 	StormForge.natvis

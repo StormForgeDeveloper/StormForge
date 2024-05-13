@@ -411,7 +411,7 @@ namespace SF
 		if (tailState != ItemState::Filled && curTail != pHead)
 			return PeekNext(curTail);
 
-        std::atomic_thread_fence(MemoryOrder::memory_order_acquire);
+        std::atomic_thread_fence(MemoryOrder::acquire);
 
 		return curTail;
 	}
@@ -438,7 +438,7 @@ namespace SF
 		if (curTail == pHead) // queue is empty
 			return nullptr;
 
-        std::atomic_thread_fence(MemoryOrder::memory_order_acquire);
+        std::atomic_thread_fence(MemoryOrder::acquire);
 
 		return curTail;
 	}

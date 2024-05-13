@@ -69,9 +69,6 @@ namespace SF {
 			Iterator& operator * () { return *this; }
 			Iterator& operator * () const { return *this; }
 
-			// compare item
-			bool operator == (const Iterator& op);
-
 			// move to next item
 			Iterator& operator ++();
 			const Iterator& operator ++() const;

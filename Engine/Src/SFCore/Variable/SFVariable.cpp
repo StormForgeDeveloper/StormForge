@@ -941,7 +941,7 @@ namespace SF
 
 	bool VariableString::GetValueBool() const
 	{
-		if (m_Value.IsEqualIgnoreCase(String_True))
+		if (m_Value.EqualsIgnoreCase(String_True))
 			return true;
 
 		return false;
@@ -1138,7 +1138,7 @@ namespace SF
 
 	bool VariableWString::GetValueBool() const
 	{
-		if (m_Value.IsEqualIgnoreCase(WString_True))
+		if (m_Value.EqualsIgnoreCase(WString_True))
 			return true;
 
 		return false;

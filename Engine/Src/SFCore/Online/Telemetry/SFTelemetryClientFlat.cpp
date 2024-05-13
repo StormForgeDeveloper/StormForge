@@ -309,7 +309,7 @@ namespace SF
 						auto sendRes = m_Client.Send(ArrayView<uint8_t>(pEventItem->GetDataSize() - sizeof(curEventId), (uint8_t*)pEventItem->GetDataPtr() + sizeof(curEventId)));
 						if (sendRes)
 						{
-							m_SentEventId.store(curEventId, MemoryOrder::memory_order_relaxed);
+							m_SentEventId.store(curEventId, MemoryOrder::relaxed);
 						}
 						else
 						{
@@ -355,9 +355,9 @@ namespace SF
 		if (!m_Client.IsInitialized())
 			return nullptr;
 
-		uint32_t eventId = m_EventId.fetch_add(1, MemoryOrder::memory_order_release) + 1;
+		uint32_t eventId = m_EventId.fetch_add(1, MemoryOrder::release) + 1;
 		if (eventId == 0)
-			eventId = m_EventId.fetch_add(1, MemoryOrder::memory_order_release) + 1;
+			eventId = m_EventId.fetch_add(1, MemoryOrder::release) + 1;
 
 		auto newEvent = new(GetSystemHeap()) TelemetryEventFlat(GetSystemHeap(), this, eventId, eventName);
 

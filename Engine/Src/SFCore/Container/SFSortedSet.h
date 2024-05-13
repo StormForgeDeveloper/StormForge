@@ -67,8 +67,8 @@ namespace SF {
 			operator KeyType() const { return GetKey(); }
 
 			// compare item
-			bool operator == (const Iterator& op);
-			bool operator != (const Iterator& op);
+			bool operator == (const Iterator& op) const;
+			bool operator != (const Iterator& op) const;
 
 			// move to next item
 			Iterator& operator ++();

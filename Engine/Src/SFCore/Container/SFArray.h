@@ -102,7 +102,7 @@ namespace SF {
             ArrayView(const Array<SrcDataType>& src)
             {
                 // We support force cast for pod types
-                if constexpr (std::is_pod_v<SrcDataType> && std::is_pod_v<SrcDataType>)
+                if constexpr (/*std::is_standard_layout_v<SrcDataType> && */std::is_trivial_v<SrcDataType>)
                 {
                     SetLinkedBuffer(src.size(), (DataType*)(src.data()));
                 }

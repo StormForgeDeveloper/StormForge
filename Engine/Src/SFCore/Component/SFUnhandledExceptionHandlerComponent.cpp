@@ -17,10 +17,14 @@
 #include "Util/SFLog.h"
 #include "Util/SFUtility.h"
 #include "Util/SFPath.h"
+#include "Platform/SFStackWalker.h"
 #include "Component/SFUnhandledExceptionHandlerComponent.h"
 
 #include <filesystem>
+
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
 #include <stacktrace>
+#endif
 
 namespace SF {
 
@@ -77,6 +81,8 @@ namespace SF {
         try {
             auto unknown = std::current_exception();
             if (unknown) {
+
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
                 std::stacktrace trace = std::stacktrace::current();
 
                 std::cerr << trace;
@@ -85,6 +91,10 @@ namespace SF {
                 {
                     SFLog(System, Factal, "Stack: {0}, {1}:{2}", stackEntry.description(), stackEntry.source_file(), stackEntry.source_line());
                 }
+#else
+                CallStackTraceT<20> trace;
+                trace.PrintStackTrace(CurrentProcessID);
+#endif
                 std::rethrow_exception(unknown);
             }
             else {

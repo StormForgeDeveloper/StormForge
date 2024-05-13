@@ -483,7 +483,7 @@ namespace Net {
         if (m_pMsgWnd == NULL)
             return ResultCode::SUCCESS;// nothing to release
 
-        int iIdx = MessageSequence::Difference(uiSequence, m_uiBaseSequence.load(MemoryOrder::memory_order_acquire));
+        int iIdx = MessageSequence::Difference(uiSequence, m_uiBaseSequence.load(MemoryOrder::acquire));
         if (iIdx >= GetAcceptableSequenceRange())
         {
             return ResultCode::IO_INVALID_SEQUENCE; // Out of range
@@ -505,7 +505,7 @@ namespace Net {
 
         uint32_t uiCurBit = 0, uiSyncMaskCur = 1;
 
-        auto baseSequence = m_uiBaseSequence.load(MemoryOrder::memory_order_acquire);
+        auto baseSequence = m_uiBaseSequence.load(MemoryOrder::acquire);
         int iIdx = MessageSequence::Difference(uiSequenceBase, baseSequence);
         if(  iIdx < 0 )
         {
@@ -557,7 +557,7 @@ namespace Net {
     {
         Result hr;
 
-        auto uiSequenceBase = m_uiBaseSequence.load(MemoryOrder::memory_order_acquire);
+        auto uiSequenceBase = m_uiBaseSequence.load(MemoryOrder::acquire);
         uint32_t sequence{};
         while (m_ReleasedMessageSequences.Dequeue(sequence))
         {

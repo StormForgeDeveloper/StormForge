@@ -87,6 +87,7 @@ namespace SF {
 		SF_FORCEINLINE Result Reserve(size_t szReserv)
 		{
 			assert(szReserv > countof(m_TraversalHistory));
+            return ResultCode::SUCCESS;
 		}
 
 		SF_FORCEINLINE int FindIndex(const MapNode* pNode) const

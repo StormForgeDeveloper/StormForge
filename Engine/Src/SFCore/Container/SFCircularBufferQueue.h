@@ -326,8 +326,8 @@ namespace SF
 		// forcefully reset the position. This is useful when you handle external buffer manually save/load from file system.
 		bool ForceReset(int headOffset, int tailOffset);
 
-		BufferItem* GetHead() const { return m_HeadPos.load(MemoryOrder::memory_order_acquire); }
-		BufferItem* GetTail() const { return m_TailPos.load(MemoryOrder::memory_order_acquire); }
+		BufferItem* GetHead() const { return m_HeadPos.load(MemoryOrder::acquire); }
+		BufferItem* GetTail() const { return m_TailPos.load(MemoryOrder::acquire); }
 
 		// Reserve buffer. The pointer it returns is reserved for writing, after done writing, Call SetReadyForRead to mark the buffer is ready for read
         ItemWritePtr AllocateWrite(size_t bufferSize);

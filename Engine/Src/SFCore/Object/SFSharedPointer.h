@@ -248,15 +248,15 @@ namespace SF {
         SF_FORCEINLINE ClassType* operator *()				{ return (ClassType*)m_pObject; }
         SF_FORCEINLINE ClassType* operator *() const		{ return (ClassType*)m_pObject; }
 
-		SF_FORCEINLINE bool operator == (const SharedPointer& src) const
-		{
-			return SharedPointer::operator == (src);
-		}
+        SF_FORCEINLINE bool operator == (const SharedPointer& src) const
+        {
+            return SharedPointer::operator == (src);
+        }
 
-		SF_FORCEINLINE bool operator != (const SharedPointer& src) const
-		{
-			return SharedPointer::operator != (src);
-		}
+        SF_FORCEINLINE bool operator != (const SharedPointer& src) const
+        {
+            return SharedPointer::operator != (src);
+        }
 
 		SF_FORCEINLINE bool operator == (SharedObject* pRef) const
 		{

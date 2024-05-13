@@ -143,7 +143,7 @@ namespace SF {
 
 			// Clone nodes along  the path
 			MapNode* pInserted = nullptr;
-			auto foundKey = pFound->Key.load(MemoryOrder::memory_order_acquire);
+			auto foundKey = pFound->Key.load(MemoryOrder::acquire);
 			if (key > foundKey) // duplicate key will be put at the left most side
 			{
 				auto right = pFound->Right;
@@ -205,7 +205,7 @@ namespace SF {
 				return ResultCode::INVALID_ARG;
 
 			// unique key
-			auto foundKey = pFound->Key.load(MemoryOrder::memory_order_acquire);
+			auto foundKey = pFound->Key.load(MemoryOrder::acquire);
 			if (foundKey != key)
 				return ResultCode::FAIL;
 
@@ -312,7 +312,7 @@ namespace SF {
 			}
 
 			// unique key
-			auto foundKey = pFound->Key.load(MemoryOrder::memory_order_acquire);
+			auto foundKey = pFound->Key.load(MemoryOrder::acquire);
 			if (foundKey != key)
 			{
 				return ResultCode::FAIL;
@@ -344,7 +344,7 @@ namespace SF {
 			Assert(m_WriteRoot == nullptr || m_WriteRoot.load() != oldRoot);
 			if (m_WriteRoot != nullptr)
 			{
-				assert(m_WriteRoot->ClonedNode.load(MemoryOrder::memory_order_relaxed) == nullptr);
+				assert(m_WriteRoot->ClonedNode.load(MemoryOrder::relaxed) == nullptr);
 			}
 
 			if (oldRoot != nullptr)
@@ -427,7 +427,7 @@ namespace SF {
 			}
 
 			// unique key
-			auto foundKey = pFound->Key.load(MemoryOrder::memory_order_acquire);
+			auto foundKey = pFound->Key.load(MemoryOrder::acquire);
 			if (foundKey != key)
 			{
 				return ResultCode::FAIL;
@@ -572,11 +572,11 @@ namespace SF {
 			do
 			{
 				Assert(pCurNode->UpdateSerial == m_UpdateSerial);
-				assert(pCurNode->ClonedNode.load(MemoryOrder::memory_order_relaxed) == nullptr);
+				assert(pCurNode->ClonedNode.load(MemoryOrder::relaxed) == nullptr);
 				travelHistory.AddHistory(pCurNode);
 
 				// multiple key
-				auto curKey = pCurNode->Key.load(MemoryOrder::memory_order_acquire);
+				auto curKey = pCurNode->Key.load(MemoryOrder::acquire);
 				if (curKey == key)
 				{
 					pNode = pCurNode;
@@ -613,7 +613,7 @@ namespace SF {
 						// choose left most one
 						if (curKey == key)
 						{
-							auto leftKey = left->Key.load(MemoryOrder::memory_order_acquire);
+							auto leftKey = left->Key.load(MemoryOrder::acquire);
 							if (leftKey != key)
 							{
 								pNode = FindBiggestNode(travelHistory, left);
@@ -685,7 +685,7 @@ namespace SF {
 				travelHistory.AddHistory(pCurNode);
 
 				// multiple key
-				auto curKey = pCurNode->Key.load(MemoryOrder::memory_order_acquire);
+				auto curKey = pCurNode->Key.load(MemoryOrder::acquire);
 				if (curKey == key)
 				{
 					pNode = pCurNode;
@@ -719,7 +719,7 @@ namespace SF {
 						// choose left most one
 						if (curKey == key)
 						{
-							auto leftKey = left->Key.load(MemoryOrder::memory_order_acquire);
+							auto leftKey = left->Key.load(MemoryOrder::acquire);
 							if (leftKey != key)
 							{
 								pNode = FindBiggestNodeRead(travelHistory, left);

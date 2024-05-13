@@ -36,6 +36,7 @@ set(SUBCONTAINER_FILES
 	Container/SFDoubleLinkedList.h
 	Container/SFDoubleLinkedListBase.h
 	Container/SFDualSortedMap.h
+	Container/SFDualSortedMap.inl
 	Container/SFSortedMap_Base.h
 	Container/SFHashTable.h
 	Container/SFHashTable2.h
@@ -45,27 +46,26 @@ set(SUBCONTAINER_FILES
 	Container/SFPageQueue.inl
     Container/SFArrayBase.h
 	Container/SFArray.h
+	Container/SFArray.inl
 	Container/SFArraySerialization.h
 	Container/SFSortedSet.h
+	Container/SFSortedSet.inl
 	Container/SFSortedArray.h
+	Container/SFSortedArray.inl
 	Container/SFSortedMap.h
+	Container/SFSortedMap.inl
 	Container/SFSpinBuffer.h
+	Container/SFSpinBuffer.inl
 	Container/SFSpinBufferMT.h
+	Container/SFSpinBufferMT.inl
 	Container/SFSpinSharedBuffer.h
+	Container/SFSpinSharedBuffer.inl
 	Container/SFStackPool.h
+	Container/SFStackPool.inl
 	Container/SFStaticDoubleLinkedList.h
 	Container/SFStaticHashTable.h
 	Container/SFStaticLinkedList.h
 	Container/SFCircularPageQueue.inl
-	Container/SFDualSortedMap.inl
-	Container/SFArray.inl
-	Container/SFSortedArray.inl
-	Container/SFSortedMap.inl
-	Container/SFSpinBuffer.inl
-	Container/SFSpinBufferMT.inl
-	Container/SFSpinSharedBuffer.inl
-	Container/SFStackPool.inl
-	Container/SFSortedSet.inl
   )
 
 source_group(Container FILES

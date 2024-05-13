@@ -162,7 +162,7 @@ namespace SF {
 			Assert(pAction->m_ScheduledKey.Components.NextTickTime == TimeStampMS::max());
 		}
 
-		Assert(removed == pAction);
+		assert(removed.get() == pAction.get());
 		pAction->m_ScheduledKey.Components.NextTickTime = TimeStampMS::max();
 
 //#ifdef DEBUG

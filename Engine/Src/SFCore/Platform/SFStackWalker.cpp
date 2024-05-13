@@ -126,11 +126,11 @@ namespace SF {
 			{
 				if( symbol )
 				{
-					SFLog(System, Debug, "{0}:{1}", (const wchar_t*)symbolInfo.Name, (uint32_t)lineInfo.LineNumber );
+					SFLog(System, Info, "{0}:{1}", (const wchar_t*)symbolInfo.Name, (uint32_t)lineInfo.LineNumber );
 				}
 				else
 				{
-					SFLog(System, Debug, "{0}:{1}", lineInfo.FileName, (uint32_t)lineInfo.LineNumber );
+					SFLog(System, Info, "{0}:{1}", lineInfo.FileName, (uint32_t)lineInfo.LineNumber );
 				}
 			}
 			else
@@ -140,7 +140,7 @@ namespace SF {
 					DWORD64 relativeAddress = (DWORD64)stackTrace[stackDepth] - ((DWORD64)STACKWALKER_MIN_EXE_OFFSET + MIN_EXEOFFSET);
 					sprintf_s( symbolInfo.Name, symbolInfo.MaxNameLen, "0x%p", (void*)relativeAddress );
 				}
-				SFLog(System, Debug, "{0}", (const wchar_t*)symbolInfo.Name );
+				SFLog(System, Info, "{0}", (const wchar_t*)symbolInfo.Name );
 			}
 		}
 
@@ -190,7 +190,7 @@ namespace SF {
 				symbol = info.dli_sname;
 			}
 
-			SFLog(System, Debug, "{0}", symbol);
+			SFLog(System, Info, "{0}", symbol);
 		}
 
 		Service::LogModule->Flush();
@@ -213,11 +213,11 @@ namespace SF {
 
 		strings = backtrace_symbols(stackTrace, (int)m_StackTraceCount);
 
-		SFLog(System, Debug, "m_StackTrace:" );
+		SFLog(System, Info, "m_StackTrace:" );
 
 		for (uint stackDepth = 0; stackDepth < m_StackTraceCount && strings != nullptr && strings[stackDepth] != 0; stackDepth++)
 		{
-			SFLog(System, Debug, "{0}", strings[stackDepth]);
+			SFLog(System, Info, "{0}", strings[stackDepth]);
 		}
 
 		free(strings);

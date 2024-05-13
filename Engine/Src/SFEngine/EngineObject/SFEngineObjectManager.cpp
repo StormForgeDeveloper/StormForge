@@ -165,7 +165,7 @@ namespace SF {
 	void EngineObjectManager::AddToDetainedRelease(const SharedPointer& obj)
 	{
 		// Engine tick can update m_FlushBufferSerial after we acquire buffer serial before end of this operation, but we still thread safety because the queue provide thread safety between read and write thread
-		auto bufferSerial = m_FlushBufferSerial.load(MemoryOrder::memory_order_acquire);
+		auto bufferSerial = m_FlushBufferSerial.load(MemoryOrder::acquire);
 		auto pQueue = m_DetainedReleaseQueues[bufferSerial % countof(m_DetainedReleaseQueues)];
 		if (pQueue == nullptr)
 		{
@@ -178,7 +178,7 @@ namespace SF {
 
 	void EngineObjectManager::AddToDetainedRelease(SharedPointer&& obj)
 	{
-		auto bufferSerial = m_FlushBufferSerial.load(MemoryOrder::memory_order_acquire);
+		auto bufferSerial = m_FlushBufferSerial.load(MemoryOrder::acquire);
 		auto pQueue = m_DetainedReleaseQueues[bufferSerial % countof(m_DetainedReleaseQueues)];
 		if (pQueue == nullptr)
 		{
@@ -197,7 +197,7 @@ namespace SF {
 		// Every 5 frame we flip detained queue and empty new one
 		if ((Service::EngineTaskManager->GetFrameNumber() % DetainedRelease_SwapTicks) == 0)
 		{
-			auto newBufferSerial = m_FlushBufferSerial.fetch_add(1, MemoryOrder::memory_order_release) + 1;
+			auto newBufferSerial = m_FlushBufferSerial.fetch_add(1, MemoryOrder::release) + 1;
 			auto pQueue = m_DetainedReleaseQueues[newBufferSerial % countof(m_DetainedReleaseQueues)];
 
 			// empty items in the queue

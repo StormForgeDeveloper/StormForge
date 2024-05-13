@@ -16,7 +16,7 @@ namespace SF
 	template<unsigned i>
 	inline float PackedSSEGet(__m128 V)
 	{
-#ifdef __SSE4_1__
+#ifdef SF_SIMD_SSE
 		return _mm_extract_epi32(V, i);
 #else
 		float ret;

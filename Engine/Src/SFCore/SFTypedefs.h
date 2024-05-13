@@ -55,9 +55,9 @@
 // define SSE flags
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 #	if defined(__x86_64__) || defined(_M_X64) || defined(_M_IX86) || defined(__i386__)
-	#define SF_SIMD_SSE
-	#define SF_SIMD_SSE42
-	#define SF_SIMD_AVX
+	#define SF_SIMD_SSE 1
+	#define SF_SIMD_SSE42 1
+	#define SF_SIMD_AVX 1
 #	elif defined(__arm__ ) || defined(_M_ARM)
 // TODO: detect ARM8 only
 		#define SF_SIMD_NEON
@@ -67,9 +67,19 @@
 #   endif
 // if Linux or other system
 #elif defined(__clang__)
-#define SF_SIMD_SSE
-#define SF_SIMD_SSE42
-#define SF_SIMD_AVX
+#define SF_SIMD_SSE 1
+#define SF_SIMD_SSE42 1
+#define SF_SIMD_AVX 1
+#else
+#if __SSE3__
+#define SF_SIMD_SSE 1
+#endif
+#if __SSE4_2__ 
+#define SF_SIMD_SSE42 1
+#endif
+#if __AVX2__
+#define SF_SIMD_AVX 1
+#endif
 #endif
 
 
@@ -727,20 +737,20 @@ namespace SF {
 		}
 
 		Atomic(const Atomic<DataType>& value)
-			: super(value.load(MemoryOrder::memory_order_acquire))
+			: super(value.load(MemoryOrder::acquire))
 		{
 		}
 
 
 		Atomic<DataType>& operator = (const Atomic<DataType>& src)
 		{
-			super::store(src.load(MemoryOrder::memory_order_acquire), MemoryOrder::memory_order_release);
+			super::store(src.load(MemoryOrder::acquire), MemoryOrder::release);
 			return *this;
 		}
 
 		Atomic<DataType>& operator = (const DataType& src)
 		{
-			super::store(src, MemoryOrder::memory_order_release);
+			super::store(src, MemoryOrder::release);
 			return *this;
 		}
 

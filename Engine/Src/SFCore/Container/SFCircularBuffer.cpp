@@ -177,7 +177,7 @@ namespace SF
 
 		} while (true);
 
-		m_ItemCount.fetch_add(1, MemoryOrder::memory_order_relaxed);
+		m_ItemCount.fetch_add(1, MemoryOrder::relaxed);
 
 		return nullptr;
 	}
@@ -242,7 +242,7 @@ namespace SF
 		}
 		m_TailPos.store(curTail, std::memory_order_relaxed);
 
-		m_ItemCount.fetch_sub(1, MemoryOrder::memory_order_relaxed);
+		m_ItemCount.fetch_sub(1, MemoryOrder::relaxed);
 
 		return ResultCode::SUCCESS;
 	}

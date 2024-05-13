@@ -49,7 +49,7 @@ namespace SF {
 			[this](Task* pTask)
 			{
 				unused(pTask);
-				m_EngineAsyncTaskCount.fetch_sub(1, MemoryOrder::memory_order_release);
+				m_EngineAsyncTaskCount.fetch_sub(1, MemoryOrder::release);
 			}
 		};
 
@@ -58,7 +58,7 @@ namespace SF {
 			[this](Task* pTask)
 			{
 				unused(pTask);
-				m_RenderAsyncTaskCount.fetch_sub(1, MemoryOrder::memory_order_release);
+				m_RenderAsyncTaskCount.fetch_sub(1, MemoryOrder::release);
 			}
 		};
 
@@ -365,7 +365,7 @@ namespace SF {
 
 	void EngineTaskManager::EngineTickUpdate()
 	{
-		m_FrameNumber.fetch_add(1, MemoryOrder::memory_order_release);
+		m_FrameNumber.fetch_add(1, MemoryOrder::release);
 
 		UpdatePendingTickAction();
 		UpdateEngineNewTasks();

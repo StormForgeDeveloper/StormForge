@@ -74,7 +74,7 @@ namespace SF {
 		ThreadID GetEngineThreadID() { return m_EngineThreadID; }
 		ThreadID GetRenderThreadID() { return m_RenderThreadID; }
 
-		uint32_t GetFrameNumber() const { return m_FrameNumber.load(MemoryOrder::memory_order_relaxed); }
+		uint32_t GetFrameNumber() const { return m_FrameNumber.load(MemoryOrder::relaxed); }
 
 
 		virtual void SetTickFlags(EngineObject* pObj, uint32_t tickFlag) { unused(pObj); unused(tickFlag); }

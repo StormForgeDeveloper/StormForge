@@ -328,7 +328,7 @@ namespace SF
 		{
 			DataType defaultValue{};
 			auto pElement = (Atomic<DataType>*)pMyPage->Element;
-			item = Forward<DataType>(pElement[myCellID].exchange(defaultValue, MemoryOrder::memory_order_acquire));
+			item = Forward<DataType>(pElement[myCellID].exchange(defaultValue, MemoryOrder::acquire));
 		}
 		else
 		{
@@ -369,7 +369,7 @@ namespace SF
 				continue;
 			}
 
-			auto CurReadCount = pCurPage->Header.ReadCounter.load(MemoryOrder::memory_order_acquire);
+			auto CurReadCount = pCurPage->Header.ReadCounter.load(MemoryOrder::acquire);
 			if (CurReadCount == m_NumberOfItemsPerPage)
 			{
 				DequeuePageMoveMT(CurDequeuePageId);
@@ -399,7 +399,7 @@ namespace SF
 		if constexpr (CanUseAtomic)
 		{
 			auto pElement = (Atomic<DataType>*)pMyDequeuePage->Element;
-			item = Forward<DataType>(pElement[myCellID].exchange(DataType{}, MemoryOrder::memory_order_acquire));
+			item = Forward<DataType>(pElement[myCellID].exchange(DataType{}, MemoryOrder::acquire));
 		}
 		else
 		{
@@ -408,7 +408,7 @@ namespace SF
 		}
 
 		// increment item read count
-		uint32_t ReadCount = pMyDequeuePage->Header.ReadCounter.fetch_add(1, MemoryOrder::memory_order_acq_rel) + 1;
+		uint32_t ReadCount = pMyDequeuePage->Header.ReadCounter.fetch_add(1, MemoryOrder::acq_rel) + 1;
 		AssertRel(ReadCount <= m_NumberOfItemsPerPage);
 
 		if (ReadCount == m_NumberOfItemsPerPage)
@@ -471,7 +471,7 @@ namespace SF
 		if constexpr (CanUseAtomic)
 		{
 			auto pElement = (Atomic<DataType>*)pMyPage->Element;
-			item = pElement[myCellID].load(MemoryOrder::memory_order_acquire);
+			item = pElement[myCellID].load(MemoryOrder::acquire);
 		}
 		else
 		{

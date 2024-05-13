@@ -68,14 +68,14 @@ namespace SF {
 		}
 
 		template<class KeyType>
-		bool SortedSet<KeyType>::Iterator::operator == (const Iterator& op)
+		bool SortedSet<KeyType>::Iterator::operator == (const Iterator& op) const
 		{
 			return m_Container == op.m_Container
 				&& m_CurrentIndex == op.m_CurrentIndex;
 		}
 
 		template<class KeyType>
-		bool SortedSet<KeyType>::Iterator::operator != (const Iterator& op)
+		bool SortedSet<KeyType>::Iterator::operator != (const Iterator& op) const
 		{
 			return m_Container != op.m_Container
 				|| m_CurrentIndex != op.m_CurrentIndex;

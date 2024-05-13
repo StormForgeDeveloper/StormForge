@@ -4,16 +4,18 @@
 message ( "Platform=${CMAKE_SYSTEM_NAME}, Config=${CMAKE_BUILD_TYPE}" )
 
 
-set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON) #...is required...
 set(CMAKE_CXX_EXTENSIONS OFF) #...without compiler extensions like gnu++11
 
 
 if(WIN32) # MSVC isn't consistent. let's use WIN32 for windows
 	#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++23")
+    set(CMAKE_CXX_STANDARD 23)
 	set(ENABLE_CLANG OFF)
 else()
-	set(ENABLE_CLANG ON)
+	#set(ENABLE_CLANG ON)
+    set(CMAKE_CXX_STANDARD 20)
+    set(ENABLE_CLANG ON)
 endif()
 
 
@@ -346,9 +348,9 @@ elseif(IOS)
 elseif(UNIX)
 
 	message ( "Setup UNIX configs" )
-
-	SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS}   -Wno-nonportable-include-path -g -frtti -pthread -march=native -msse4 -m64 -fPIC")
-	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-nonportable-include-path -g -fexceptions -frtti -march=native -pthread -msse4 -m64 -fPIC")
+	#-lstdc++exp
+	SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS}   -Wno-nonportable-include-path -Wno-ambiguous-reversed-operator -g -frtti -pthread -march=native -msse4 -m64 -fPIC")
+	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-nonportable-include-path -Wno-ambiguous-reversed-operator -g -fexceptions -frtti -march=native -pthread -msse4 -m64 -fPIC")
 
 	SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 	SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")

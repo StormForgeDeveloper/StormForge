@@ -77,9 +77,9 @@ namespace SF {
 		if (pComponent->GetIsInitialized())
 			return ResultCode::SUCCESS;
 
-		for (auto itDependency : pComponent->GetDependencies())
+		for (StringCrc64 itDependency : pComponent->GetDependencies())
 		{
-			auto pDependency = GetComponentByType(itDependency);
+			LibraryComponent* pDependency = GetComponentByType(itDependency);
 			if (pDependency != nullptr)
 			{
 				if (pComponent == pDependency)

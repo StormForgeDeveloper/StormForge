@@ -83,8 +83,8 @@ namespace SF {
 		virtual void SetValue(uint64_t value) override { m_Value = value == 0 ? false : true; }
 		virtual void SetValue(float value) override { m_Value = value == 0 ? false : true; }
 		virtual void SetValue(double value) override { m_Value = value == 0 ? false : true; }
-		virtual void SetValue(const char* value) override { m_Value = (value == nullptr || String_False.IsEqualIgnoreCase(value)) ? false : true; }
-		virtual void SetValue(const String& value) override { m_Value = (value == nullptr || String_False.IsEqualIgnoreCase(value)) ? false : true; }
+		virtual void SetValue(const char* value) override { m_Value = (value == nullptr || String_False.EqualsIgnoreCase(value)) ? false : true; }
+		virtual void SetValue(const String& value) override { m_Value = (value == nullptr || String_False.EqualsIgnoreCase(value)) ? false : true; }
 		virtual void SetValue(StringCrc32 value) override { m_Value = (value == nullptr || value == "false" || value == "False") ? false : true; }
 		virtual void SetValue(StringCrc64 value) override { m_Value = (value == nullptr || value == "false" || value == "False") ? false : true; }
 

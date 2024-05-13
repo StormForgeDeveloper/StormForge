@@ -97,13 +97,6 @@ namespace SF {
 		}
 
 		template<class KeyType, class ValueType, bool UseUniqueKey, bool UseBulkCopy>
-		bool SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::Iterator::operator == (const Iterator& op)
-		{
-			return m_Container == op.m_Container
-				&& m_CurrentIndex == op.m_CurrentIndex;
-		}
-
-		template<class KeyType, class ValueType, bool UseUniqueKey, bool UseBulkCopy>
 		typename SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::Iterator& SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::Iterator::operator ++()
 		{
 			if (!IsValid()) return *this;

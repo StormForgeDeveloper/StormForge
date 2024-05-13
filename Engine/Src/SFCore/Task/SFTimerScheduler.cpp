@@ -66,7 +66,7 @@ namespace SF {
 			hr = m_TimerMap.Remove(pAction->GetInQueueKey().TimerKey, removed);
 			Assert((hr));
 		}
-		Assert(removed == pAction);
+		assert(static_cast<const SharedPointerT<TimerAction>&>(pAction) == removed);
 		// removed clear in-queue time
 		pAction->m_ScheduledKey.Components.NextTickTime = TimeStampMS::max();
 		//pAction->m_Queued = false;

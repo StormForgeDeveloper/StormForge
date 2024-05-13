@@ -81,7 +81,7 @@ namespace SF
 				auto iDword = iElement >> 5;
 				auto iValue = iElement & ((uint(1) << 5) - 1);
 
-				ValueState[iDword].fetch_or(uint(1) << iValue, MemoryOrder::memory_order_release);
+				ValueState[iDword].fetch_or(uint(1) << iValue, MemoryOrder::release);
 			}
 
 			SF_FORCEINLINE bool HasValue(uint iElement)
@@ -89,7 +89,7 @@ namespace SF
 				auto iDword = iElement >> 5;
 				auto iValue = iElement & ((uint(1) << 5) - 1);
 
-				return (ValueState[iDword].load(MemoryOrder::memory_order_acquire) & (uint(1) << iValue)) != 0;
+				return (ValueState[iDword].load(MemoryOrder::acquire) & (uint(1) << iValue)) != 0;
 			}
 
 			void DeleteElements(uint32_t ItemCpacity)
@@ -99,7 +99,7 @@ namespace SF
 					auto pElement = (Atomic<DataType>*)Element;
 					for (uint32_t iEle = 1; iEle < ItemCpacity; iEle++)
 					{
-						pElement[iEle].Atomic<DataType>::~Atomic<DataType>();
+						pElement[iEle].~Atomic<DataType>();
 					}
 				}
 				else

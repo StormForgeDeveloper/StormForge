@@ -77,8 +77,8 @@ namespace SF
 				int checkIndex = checkStartIndex;
 				for (; checkIndex >= 0; checkIndex--, pCheckEnv = pCheckEnv->GetParent())
 				{
-					auto& checkPath = objectPath[checkIndex];
-					if (pCheckEnv->GetName() != checkPath)
+					const String& checkPath = objectPath[checkIndex];
+					if (!pCheckEnv->GetName().Equals(checkPath, true))
 						break;
 				}
 

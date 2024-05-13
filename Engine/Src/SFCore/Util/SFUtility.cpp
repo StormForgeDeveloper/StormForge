@@ -242,10 +242,10 @@ namespace Util {
 
 		// get MAC address
 		bool foundMac1 = false;
-		struct ifreq* ifr;
+        struct ifreq* ifr{};
 		for (ifr = conf.ifc_req; (char*)ifr < (char*)conf.ifc_req + conf.ifc_len; ifr++)
 		{
-			if (ifr->ifr_addr.sa_data == (ifr + 1)->ifr_addr.sa_data) // duplicate, skip it
+			if (memcmp(ifr->ifr_addr.sa_data, (ifr + 1)->ifr_addr.sa_data, sizeof(ifr->ifr_addr.sa_data)) == 0) // duplicate, skip it
 				continue;
 
 			if (ioctl(sock, SIOCGIFFLAGS, ifr)) // failed to get flags, skip it
