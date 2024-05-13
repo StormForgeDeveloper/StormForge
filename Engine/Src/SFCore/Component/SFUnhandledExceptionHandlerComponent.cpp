@@ -115,6 +115,9 @@ namespace SF {
 		if (!result)
 			return result;
 
+        std::out << "Initializing unhandled exception handler" << std::endl;
+        SFLog(System, Info, "Initializing unhandled exception handler");
+
         std::set_terminate(OnTerminate);
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
