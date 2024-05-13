@@ -115,7 +115,7 @@ namespace SF {
 		if (!result)
 			return result;
 
-        std::out << "Initializing unhandled exception handler" << std::endl;
+        std::cout << "Initializing unhandled exception handler" << std::endl;
         SFLog(System, Info, "Initializing unhandled exception handler");
 
         std::set_terminate(OnTerminate);

@@ -57,7 +57,7 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 	initParam.LogPrintMask = logMask.Composited;
 
     // Unity need to enable manually
-    initParam.EnableCrashDump = false;
+    initParam.EnableCrashDump = true;
 
 	if (!SF::StrUtil::IsNullOrEmpty(logServerAddress))
 		initParam.LogServerAddress = logServerAddress;
