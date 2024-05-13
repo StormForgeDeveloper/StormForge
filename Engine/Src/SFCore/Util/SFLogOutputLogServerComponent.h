@@ -47,11 +47,15 @@ namespace SF {
 		private:
 			//SharedPointerT<StreamDBProducer> m_StreamProducer;
 
+            CriticalSection m_FlushLock;
+
 			// It is running on log thread, we don't need double buffering 
 			// Moreover, StreamProducer creates a copy of data for transmition
 			DynamicArray<uint8_t> m_Buffer;
 
 			DynamicArray<uint8_t> m_CompressionBuffer;
+
+            TimeStampMS m_LastFlushTime;
 
             WebsocketClientCurl m_Client;
 
@@ -74,6 +78,8 @@ namespace SF {
 			virtual void Flush() override;
 
             Result OnRecv(const Array<uint8_t>& recvData);
+
+            void FlushIfNeed();
 		};
 
 
@@ -92,6 +98,8 @@ namespace SF {
 		virtual Result InitializeComponent() override;
 		// Terminate server component
 		virtual void DeinitializeComponent() override;
+
+        virtual void TickUpdate() override;
 
 	private:
 
