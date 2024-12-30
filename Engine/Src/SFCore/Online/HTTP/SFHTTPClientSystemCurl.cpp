@@ -42,6 +42,7 @@ namespace SF
             case CURLE_USE_SSL_FAILED:				return ResultCode::HTTP_USE_SSL_FAILED;
             case CURLE_NO_CONNECTION_AVAILABLE:		return ResultCode::HTTP_NO_CONNECTION_AVAILABLE;
             case CURLE_SSL_CONNECT_ERROR:           return ResultCode::HTTP_SSL_CONNECT_ERROR;
+            case CURLE_BAD_FUNCTION_ARGUMENT:       return ResultCode::HTTP_BAD_FUNCTION_ARGUMENT;
             default:
                 SFLog(System, Error, "Unknown CURL error:{0}", int(code));
                 return ResultCode::UNEXPECTED;

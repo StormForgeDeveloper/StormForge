@@ -28,8 +28,8 @@ namespace SF
         const int HeaderBaseSize = sizeof(UInt16) + sizeof(ulong) + sizeof(UInt32);
 
         public MessageID MessageId; // ID & sequence
-        public TransactionID TransactionId; // Payload size
-        public Result TransactionResult;
+        public TransactionID TransactionId; // transaction id
+        public Result TransactionResult; // transaction result if it is result
         public UInt16 PayloadSize; // Payload size
 
         public void WriteHeader(Google.FlatBuffers.FlatBufferBuilder buffer)

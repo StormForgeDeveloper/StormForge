@@ -41,7 +41,9 @@
 #include "Online/Websocket/SFWebsocketComponent.h"
 #include "Online/HTTP/SFHTTPClientSystem.h"
 #include "Component/SFLibraryComponent3rdParties.h"
-#include "Audio/SFAudioEngineComponentOpenAL.h"
+#if defined(SF_USE_WSAPI)
+#include "Audio/WSAPI/SFAudioEngineComponentWSAPI.h"
+#endif
 
 
 namespace SF
@@ -139,7 +141,9 @@ namespace SF
 
         if (m_InitParameter.EnableAudio)
         {
-            AddComponent<AudioEngineComponentOpenAL>();
+        #if defined(SF_USE_WSAPI)
+            AddComponent<AudioEngineComponentWSAPI>();
+        #endif
         }
 
 		if (m_InitParameter.NetworkThreadCount > 0)

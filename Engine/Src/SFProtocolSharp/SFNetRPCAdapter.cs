@@ -55,18 +55,15 @@ namespace SF.Net
 
             builder.Finish(packetOffset);
 
-            var packetHeader = new SF.MessageHeader()
+            var messageHeader = new SF.MessageHeader()
             {
                 MessageId = messageId,
                 TransactionId = transactionId,
                 TransactionResult = result,
             };
-            packetHeader.WriteHeader(builder);
 
-            var buf = builder.DataBuffer;
-            var segment = buf.ToArraySegment(buf.Position, buf.Length - buf.Position);
+            hr = m_Endpoint.SendMessage(ref messageHeader, builder);
 
-            hr = m_Endpoint.SendMessage(transactionId, segment);
             m_Endpoint.HandleSentMessage(hr, transactionId, messageId, callback);
 
             return hr;

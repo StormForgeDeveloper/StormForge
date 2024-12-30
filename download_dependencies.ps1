@@ -29,8 +29,9 @@ $deps = "vcpkg-pkgconfig-get-modules",
 		"openexr",
 		"jansson",
 		"libjpeg-turbo",
-		"openal-soft",
-		"sndfile",
+		#"openal-soft",
+		"libbson",
+		"libsndfile",
         "libogg",
         "libflac",
 		"opus",
@@ -40,11 +41,13 @@ $deps = "vcpkg-pkgconfig-get-modules",
 		"mysql-connector-cpp",
 		"gtest",
 		"recastnavigation",
-		"vulkan"
+		"vulkan",
+		"protobuf",
+		"grpc",
+		"openssl"
 
 #Those are complicated and being separated shared lib is better
 $deps_shared =
-	"libbson",
 	"protobuf",
 	"grpc",
 	"openssl"
@@ -97,7 +100,7 @@ try {
 	Write-Host "Beginning package install..."
 
 	# protobuf uses x64-windows tool even though it has one for target triplet
-	./vcpkg.exe install $deps_shared --triplet $triplet_shared
+	#./vcpkg.exe install $deps_shared --triplet $triplet_shared
 
 	./vcpkg.exe install $deps --triplet $triplet --allow-unsupported
 

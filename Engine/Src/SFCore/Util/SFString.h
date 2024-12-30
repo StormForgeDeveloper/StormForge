@@ -737,9 +737,9 @@ namespace SF {
 			if (IsNullOrEmpty()) return -1;
 			if (searchString == nullptr) return -1;
 
-			auto strLen = StrUtil::StringLen(searchString);
+			size_t strLen = StrUtil::StringLen(searchString);
 
-			auto len = GetLength();
+            size_t len = GetLength();
             CharType* pCur = m_Buffer->GetBufferPointer();
 
 			if (ignoreCase)
@@ -766,9 +766,9 @@ namespace SF {
 			if (IsNullOrEmpty()) return -1;
 			if (searchChars == nullptr) return -1;
 
-			auto numChar = StrUtil::StringLen(searchChars);
+            size_t numChar = StrUtil::StringLen(searchChars);
 
-			auto len = GetLength();
+            size_t len = GetLength();
             CharType* pCur = m_Buffer->GetBufferPointer();
 
 			for (size_t iOffset = 0; iOffset < len; iOffset++, pCur++)
@@ -788,9 +788,9 @@ namespace SF {
 			if (IsNullOrEmpty()) return -1;
 			if (searchString == nullptr) return -1;
 
-			auto strLen = (int)StrUtil::StringLen(searchString);
+            size_t strLen = (int)StrUtil::StringLen(searchString);
 
-			auto len = (int)GetLength() - strLen;
+            size_t len = (int)GetLength() - strLen;
             CharType* pCur = m_Buffer->GetBufferPointer() + len;
 
 			if (ignoreCase)
@@ -815,7 +815,7 @@ namespace SF {
 		{
 			if (IsNullOrEmpty()) return -1;
 
-			auto len = (int)GetLength() - 1;
+            size_t len = (int)GetLength() - 1;
             CharType* pCur = m_Buffer->GetBufferPointer() + len;
 
 			for (int iOffset = len; iOffset >= 0; iOffset--, pCur--)
@@ -831,9 +831,9 @@ namespace SF {
 			if (IsNullOrEmpty()) return -1;
 			if (searchChars == nullptr) return -1;
 
-			auto numChar = (int)StrUtil::StringLen(searchChars);
+            size_t numChar = StrUtil::StringLen(searchChars);
 
-			auto len = (int)GetLength() - 1;
+            size_t len = GetLength() - 1;
 			CharType* pCur = m_Buffer->GetBufferPointer() + len;
 
 			for (int iOffset = len; iOffset >= 0; iOffset--, pCur--)
@@ -1440,7 +1440,7 @@ namespace SF {
 
 	public:
 
-		StringBuilder(IHeap& heap, size_t growSize = 1024);
+		StringBuilder(IHeap& heap = GetSystemHeap(), size_t growSize = 1024);
 
 		IHeap& GetHeap() { return m_Buffer->GetHeap(); }
 

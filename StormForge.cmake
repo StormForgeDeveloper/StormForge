@@ -51,6 +51,8 @@ if(WIN32)
 	add_definitions(-DWIN64)
 	add_definitions(-DWIN32)
 	add_definitions(-D_WINDOWS)
+	#add_definitions(-DSF_USE_WSAPI)
+	#set(SF_USE_WSAPI ON)
 	
 	set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 	
@@ -218,8 +220,8 @@ list(APPEND THIRDPARTY_LIBS Opus::opus)
 find_package(SndFile CONFIG REQUIRED)
 list(APPEND THIRDPARTY_LIBS SndFile::sndfile)
 
-find_package(OpenAL CONFIG REQUIRED)
-list(APPEND THIRDPARTY_LIBS OpenAL::OpenAL)
+#find_package(OpenAL CONFIG REQUIRED)
+#list(APPEND THIRDPARTY_LIBS OpenAL::OpenAL)
 
 list(APPEND THIRDPARTY_LIBS flatbuffers)
 
@@ -232,6 +234,8 @@ list(APPEND THIRDPARTY_LIBS gRPC::gpr gRPC::grpc gRPC::grpc++ gRPC::grpc++_alts)
 find_package(recastnavigation CONFIG REQUIRED)
 list(APPEND THIRDPARTY_LIBS RecastNavigation::Detour RecastNavigation::Recast RecastNavigation::DebugUtils RecastNavigation::DetourCrowd)
 
+find_package(bson-1.0 CONFIG REQUIRED)
+list(APPEND THIRDPARTY_LIBS mongo::bson_static)
 
 
 add_definitions(-DHAVE_CONFIG_H=1)

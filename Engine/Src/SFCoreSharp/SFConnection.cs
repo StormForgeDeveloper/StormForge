@@ -212,8 +212,13 @@ namespace SF
             return NativeTimeSync(NativeHandle);
         }
 
-        public Result SendMessage(TransactionID transactionId, ArraySegment<byte> segment)
+        public Result SendMessage(ref SF.MessageHeader messageHeader, Google.FlatBuffers.FlatBufferBuilder builder)
         {
+            messageHeader.WriteHeader(builder);
+
+            var buf = builder.DataBuffer;
+            var segment = buf.ToArraySegment(buf.Position, buf.Length - buf.Position);
+
             if (segment.Array != null)
             {
                 return new Result(NativeSendMessage(NativeHandle, segment.Offset, segment.Count, segment.Array));

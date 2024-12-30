@@ -14,6 +14,7 @@
 #include "Component/SFLibraryComponent3rdParties.h"
 #include "openssl/evp.h"
 #include "curl/curl.h"
+#include <openssl/engine.h>
 
 namespace SF {
 
@@ -41,8 +42,12 @@ namespace SF {
 		Result hr = LibraryComponent::InitializeComponent();
 		if (!hr.IsSuccess()) return hr;
 
+        ENGINE_load_builtin_engines();
+        ENGINE_register_all_complete();
+
         OpenSSL_add_all_algorithms();
         OpenSSL_add_all_digests();
+
 
         curl_global_init(CURL_GLOBAL_ALL);
 
@@ -53,6 +58,8 @@ namespace SF {
 	void LibraryComponent3rdParties::DeinitializeComponent()
 	{
         curl_global_cleanup();
+
+        ENGINE_cleanup();
 
 		LibraryComponent::DeinitializeComponent();
 	}

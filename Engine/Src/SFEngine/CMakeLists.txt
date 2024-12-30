@@ -21,21 +21,45 @@ set(SUBAudio_FILES
     Audio/SFAudioSource.cpp
     Audio/SFAudioListener.h
     Audio/SFAudioListener.cpp
-    Audio/SFAudioSourceOpenAL.h
-    Audio/SFAudioSourceOpenAL.cpp
-    Audio/SFAudioListenerOpenAL.h
-    Audio/SFAudioListenerOpenAL.cpp
-    Audio/SFAudioRecorderOpenAL.h
-    Audio/SFAudioRecorderOpenAL.cpp
     Audio/SFAudioService.h
     Audio/SFAudioService.cpp
-    Audio/SFAudioOpenAL.h
-	Audio/SFAudioOpenAL.cpp
-    Audio/SFAudioDeviceOpenAL.h
-    Audio/SFAudioDeviceOpenAL.cpp
-    Audio/SFAudioEngineComponentOpenAL.h
-    Audio/SFAudioEngineComponentOpenAL.cpp
-  )
+	)
+
+if(SF_USE_OPENAL)
+
+	list(APPEND SUBAudio_FILES 
+		Audio/OpenAL/SFAudioSourceOpenAL.h
+		Audio/OpenAL/SFAudioSourceOpenAL.cpp
+		Audio/OpenAL/SFAudioListenerOpenAL.h
+		Audio/OpenAL/SFAudioListenerOpenAL.cpp
+		Audio/OpenAL/SFAudioRecorderOpenAL.h
+		Audio/OpenAL/SFAudioRecorderOpenAL.cpp
+		Audio/OpenAL/SFAudioOpenAL.h
+		Audio/OpenAL/SFAudioOpenAL.cpp
+		Audio/OpenAL/SFAudioDeviceOpenAL.h
+		Audio/OpenAL/SFAudioDeviceOpenAL.cpp
+		Audio/OpenAL/SFAudioEngineComponentOpenAL.h
+		Audio/OpenAL/SFAudioEngineComponentOpenAL.cpp
+	  )
+endif()
+
+if(SF_USE_WSAPI)
+
+	list(APPEND SUBAudio_FILES 
+		Audio/WSAPI/SFAudioSourceWSAPI.h
+		Audio/WSAPI/SFAudioSourceWSAPI.cpp
+		Audio/WSAPI/SFAudioListenerWSAPI.h
+		Audio/WSAPI/SFAudioListenerWSAPI.cpp
+		Audio/WSAPI/SFAudioRecorderWSAPI.h
+		Audio/WSAPI/SFAudioRecorderWSAPI.cpp
+		Audio/WSAPI/SFAudioWSAPI.h
+		Audio/WSAPI/SFAudioWSAPI.cpp
+		Audio/WSAPI/SFAudioDeviceWSAPI.h
+		Audio/WSAPI/SFAudioDeviceWSAPI.cpp
+		Audio/WSAPI/SFAudioEngineComponentWSAPI.h
+		Audio/WSAPI/SFAudioEngineComponentWSAPI.cpp
+	  )
+endif()
 
 source_group(Audio FILES
 	${SUBAudio_FILES} 

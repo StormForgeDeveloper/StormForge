@@ -95,8 +95,6 @@ namespace SF
         Result hr;
 
         defCheckMem(m_Headers = curl_slist_append(m_Headers, headerEntry));
-        m_CurlResult = curl_easy_setopt(m_Curl, CURLOPT_HTTPHEADER, m_Headers);
-        defCheck(HTTPCurlImpl::CurlCodeToResult(m_CurlResult));
 
         return hr;
     }
@@ -139,6 +137,12 @@ namespace SF
         // Debug logging
         curl_easy_setopt(GetCURL(), CURLOPT_VERBOSE, 1);
         curl_easy_setopt(GetCURL(), CURLOPT_DEBUGFUNCTION, &HTTPCurlImpl::CurlLogCB);
+
+        if (m_Headers != nullptr)
+        {
+            m_CurlResult = curl_easy_setopt(m_Curl, CURLOPT_HTTPHEADER, m_Headers);
+            defCheck(HTTPCurlImpl::CurlCodeToResult(m_CurlResult));
+        }
 
         m_CurlResult = curl_easy_setopt(m_Curl, CURLOPT_HTTPGET, IsGetMethod() ? 1 : 0);
         defCheck(HTTPCurlImpl::CurlCodeToResult(m_CurlResult));

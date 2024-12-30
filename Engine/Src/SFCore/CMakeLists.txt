@@ -22,6 +22,15 @@ source_group(Component FILES
 )
 
 
+set(OPENSSL_FILES
+	OpenSSL/SFOpenSSL.h
+	OpenSSL/SFOpenSSL.cpp
+  )
+
+source_group(OpenSSL FILES
+	${OPENSSL_FILES} 
+)
+
 set(SUBCONTAINER_FILES
 	Container/SFCircularBuffer.cpp
 	Container/SFCircularBufferQueue.cpp
@@ -422,7 +431,7 @@ set(SFCORE_LIB_FILES
 include_directories(./)
 
 
-add_library(SFCore STATIC ${SUBCOMPONENT_FILES} ${SUBCONTAINER_FILES} ${SUBIO_FILES} ${SUBResult_FILES} ${SUBService_FILES} ${SUBMemoryManager_FILES} ${SUBUtil_FILES} ${SUBVariable_FILES} ${SUBMath_FILES} ${SUBObject_FILES} ${SUBOnline_FILES} ${SUBScript_FILES} ${SFCORE_LIB_FILES})
+add_library(SFCore STATIC ${SUBCOMPONENT_FILES} ${OPENSSL_FILES} ${SUBCONTAINER_FILES} ${SUBIO_FILES} ${SUBResult_FILES} ${SUBService_FILES} ${SUBMemoryManager_FILES} ${SUBUtil_FILES} ${SUBVariable_FILES} ${SUBMath_FILES} ${SUBObject_FILES} ${SUBOnline_FILES} ${SUBScript_FILES} ${SFCORE_LIB_FILES})
 
 target_precompile_headers(SFCore PUBLIC SFCorePCH.h)
 target_include_directories (SFCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

@@ -20,7 +20,7 @@ namespace SF
     public interface IEndpoint
     {
         public TransactionID NewTransactionID();
-        public Result SendMessage(TransactionID transactionId, ArraySegment<byte> segment);
+        public Result SendMessage(ref SF.MessageHeader messageHeader, Google.FlatBuffers.FlatBufferBuilder builder);
         public void HandleSentMessage(Result result, TransactionID transId, MessageID messageID, Action<SFMessage>? callback = null);
 
     }
@@ -37,9 +37,14 @@ namespace SF
             return new TransactionID(m_TransactionIdGen++);
         }
 
-        public Result SendMessage(TransactionID transactionId, ArraySegment<byte> segment)
+        public Result SendMessage(ref SF.MessageHeader messageHeader, Google.FlatBuffers.FlatBufferBuilder builder)
         {
-            LastTransactionId = transactionId;
+            messageHeader.WriteHeader(builder);
+
+            var buf = builder.DataBuffer;
+            var segment = buf.ToArraySegment(buf.Position, buf.Length - buf.Position);
+
+            LastTransactionId = messageHeader.TransactionId;
             LastMessage = segment;
             return ResultCode.SUCCESS;
         }

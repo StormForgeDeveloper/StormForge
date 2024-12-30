@@ -36,6 +36,15 @@ namespace SF
             return builder.EndVector();
         }
 
+        public static VectorOffset CreatebyteVector(this Google.FlatBuffers.FlatBufferBuilder builder, byte[] data)
+        {
+            builder.StartVector(1, data.Length, 1);
+
+            builder.Add(data);
+
+            return builder.EndVector();
+        }
+
         public static VectorOffset Createuint32Vector(this Google.FlatBuffers.FlatBufferBuilder builder, UInt32[] data)
         {
             builder.StartVector(4, data.Length, 4);
