@@ -52,7 +52,7 @@ namespace SF
     public:
         static constexpr int MAX_MD_SIZE = 64;
 
-        SFOpenSSL_EVP_MD_CTX(const EVP_MD* md, ENGINE* impl = nullptr);
+        SFOpenSSL_EVP_MD_CTX(const EVP_MD* md);
 
         ~SFOpenSSL_EVP_MD_CTX();
 

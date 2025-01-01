@@ -77,10 +77,10 @@ namespace SF
 
     static_assert(SFOpenSSL_EVP_MD_CTX::MAX_MD_SIZE == EVP_MAX_MD_SIZE);
 
-    SFOpenSSL_EVP_MD_CTX::SFOpenSSL_EVP_MD_CTX(const EVP_MD* md, ENGINE* impl)
+    SFOpenSSL_EVP_MD_CTX::SFOpenSSL_EVP_MD_CTX(const EVP_MD* md)
     {
         m_Ctx = EVP_MD_CTX_create();
-        EVP_DigestInit_ex(m_Ctx, md, impl);
+        EVP_DigestInit_ex(m_Ctx, md, nullptr);
     }
 
 

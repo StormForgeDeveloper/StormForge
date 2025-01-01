@@ -21,8 +21,8 @@ sudo apt install -y autoconf autoconf-archive
 sudo apt install -y bison
 # for openssl through vcpkg
 sudo apt install -y linux-libc-dev
-# for freetype -> freeglut
-#sudo apt install -y libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev
+# for freetype(freeglut) and jasper require some libs from system packages
+sudo apt install -y libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev
 # for openal
 sudo apt install -y libtool
 
