@@ -13,38 +13,13 @@
 #pragma once
 
 #include <stdint.h>
-#include <openssl\types.h>
+#include <openssl/types.h>
 
 typedef struct bio_method_st BIO_METHOD;
 
 
 namespace SF
 {
-
-    class SFOpenSSL_HMAC_CTX
-    {
-    public:
-
-        SFOpenSSL_HMAC_CTX();
-        SFOpenSSL_HMAC_CTX(HMAC_CTX* ctx);
-
-        ~SFOpenSSL_HMAC_CTX();
-
-        void Reset();
-
-        bool IsValid() const { return m_Ctx; }
-        operator HMAC_CTX* () const { return m_Ctx; }
-
-        void Init(const String& key, const EVP_MD* md, ENGINE* impl = nullptr);
-
-        void Write(const unsigned char* data, size_t len);
-
-        void Flush(Array<uint8_t>& outBuffer);
-
-    private:
-
-        HMAC_CTX* m_Ctx{};
-    };
 
 
     class SFOpenSSL_BIO

@@ -42,9 +42,6 @@ namespace SF {
 		Result hr = LibraryComponent::InitializeComponent();
 		if (!hr.IsSuccess()) return hr;
 
-        ENGINE_load_builtin_engines();
-        ENGINE_register_all_complete();
-
         OpenSSL_add_all_algorithms();
         OpenSSL_add_all_digests();
 

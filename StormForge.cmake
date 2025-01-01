@@ -41,6 +41,7 @@ IF(NOT DEFINED ${VCPKG_DIR})
 ENDIF()
 set(CMAKE_TOOLCHAIN_FILE "${VCPKG_DIR}/scripts/buildsystems/vcpkg.cmake")
 
+
 if(WIN32)
 
 	message ( "Setup Windows configs" )
@@ -58,7 +59,7 @@ if(WIN32)
 	
 	set(ARTECTURE x64)
 	set(VCPKG_TARGET_TRIPLET ${ARTECTURE}-windows-static)
-	set(VCPKG_SHARED_TRIPLET ${ARTECTURE}-windows)
+	#set(VCPKG_SHARED_TRIPLET ${ARTECTURE}-windows)
 
 elseif(ANDROID_PLATFORM)
 
@@ -68,7 +69,7 @@ elseif(ANDROID_PLATFORM)
 
 	set(ARTECTURE ${CMAKE_ANDROID_ARCH_ABI})
 	set(VCPKG_TARGET_TRIPLET ${ARTECTURE}-android)
-	set(VCPKG_SHARED_TRIPLET ${VCPKG_TARGET_TRIPLET})
+	#set(VCPKG_SHARED_TRIPLET ${VCPKG_TARGET_TRIPLET})
 
 elseif(IOS)
 
@@ -80,7 +81,7 @@ elseif(IOS)
 
 	set(ARTECTURE ${CMAKE_OSX_ARCHITECTURES})
 	set(VCPKG_TARGET_TRIPLET ${ARTECTURE}-ios)
-	set(VCPKG_SHARED_TRIPLET ${VCPKG_TARGET_TRIPLET})
+	#set(VCPKG_SHARED_TRIPLET ${VCPKG_TARGET_TRIPLET})
 
 elseif(UNIX)
 
@@ -91,7 +92,7 @@ elseif(UNIX)
 
 	set(ARTECTURE x64)
 	set(VCPKG_TARGET_TRIPLET ${ARTECTURE}-linux)
-	set(VCPKG_SHARED_TRIPLET ${VCPKG_TARGET_TRIPLET})
+	#set(VCPKG_SHARED_TRIPLET ${VCPKG_TARGET_TRIPLET})
 
 endif()
 
@@ -171,7 +172,8 @@ if(MSVC)
     #list(APPEND THIRDPARTY_LIBS OpenSSL::SSL OpenSSL::Crypto)
  	list(APPEND THIRDPARTY_LIBS libssl libcrypto)
 else()
-	list(APPEND THIRDPARTY_LIBS ssl crypto)
+	#list(APPEND THIRDPARTY_LIBS ssl crypto)
+	list(APPEND THIRDPARTY_LIBS OpenSSL::SSL OpenSSL::Crypto)
  endif()
 
 find_package(tinyxml2 CONFIG REQUIRED)
@@ -324,7 +326,6 @@ elseif(ANDROID_PLATFORM)
 	add_definitions(-D__ANDROID__=1)
 
 	set(PLATFORM_LIBS android jnigraphics log GLESv1_CM GLESv2 EGL)
-	#list(APPEND ENGINE_LINK_LIBS ssl crypto)
 
 
 elseif(IOS)
@@ -344,9 +345,6 @@ elseif(IOS)
 
 	add_definitions(-D__IOS__=1)
 	add_definitions(-DKQUEUE)
-
-
-	#list(APPEND ENGINE_LINK_LIBS ssl crypto)
 
 
 elseif(UNIX)
