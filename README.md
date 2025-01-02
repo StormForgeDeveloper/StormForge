@@ -11,8 +11,8 @@ For now the development is still going on and have many missing modules, however
 
 # Prerequisites
 1. Linux sub system for WIndows. 
-	- It's tested on Ubuntu 24.02 with dotnet8.
-1. Visual Studio 2022 with dotnet 6. 
+	- It's tested on Ubuntu 24.04 with dotnet8.
+1. Visual Studio 2022 with dotnet 8. 
 1. CMake 3.27.1 or later
 1. VulkanSDK
 

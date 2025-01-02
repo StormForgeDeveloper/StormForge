@@ -6,6 +6,7 @@ param ($upgrade)
 
 $deps = "vcpkg-pkgconfig-get-modules",
         "zlib",
+		"zstd",
 		"liblzma",
 		"openssl",
 		"tinyxml2",
