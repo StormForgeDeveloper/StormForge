@@ -84,6 +84,10 @@ namespace Net {
 	bool operator != ( const NetAddress &op1, const NetAddress &op2 );
 
 
+    // resolve address
+    Result ResolveAddress(const char* address, Array<NetAddress>& outResolvedAddresses);
+
+
     ////////////////////////////////////////////////////////////////////////////////
     //
     //	Scoped net system init/uninit

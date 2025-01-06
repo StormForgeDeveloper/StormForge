@@ -165,10 +165,11 @@ namespace SF
                 }
                 else
                 {
-                    hr = ResultCode::INVALID_FORMAT;
+                    SFLog(System, Error, "Login result no data:{0}", hr);
+                    hr = ResultCode::NO_DATA_EXIST;
                 }
 
-                if (!hr.IsSuccess())
+                if (hr.IsFailure())
                 {
                     ArrayView<const char> charView(recvData);
                     String resultString = charView;

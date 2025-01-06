@@ -250,6 +250,64 @@ namespace Net {
 		return ResultCode::SUCCESS;
 	}
 
+    Result ResolveAddress(const char* address, Array<NetAddress>& outResolvedAddresses)
+    {
+        char tempBuffer[128];
+        //Convert IPV6 to IPV4
+        struct addrinfo hints, * res;
+
+        // Convert remote address
+        memset(&hints, 0, sizeof hints);
+        hints.ai_family = AF_UNSPEC;// AF_INET | AF_INET6;
+        hints.ai_socktype = SOCK_STREAM; // probably not important
+        hints.ai_flags = AI_PASSIVE;
+        int error = getaddrinfo("", nullptr, &hints, &res);
+        switch (error)
+        {
+        case 0:				break;
+        case EAI_AGAIN:		return ResultCode::IO_TRY_AGAIN;
+        case EAI_BADFLAGS:	return ResultCode::IO_BADFLAGS;
+        case EAI_FAIL:		return ResultCode::FAIL;
+        case EAI_FAMILY:	return ResultCode::IO_FAMILY;
+        case EAI_MEMORY:	return ResultCode::OUT_OF_MEMORY;
+        case EAI_NONAME:	return ResultCode::IO_HOST_NOT_FOUND;
+        case EAI_SERVICE:	return ResultCode::IO_INVALID_SERVICE;
+        case EAI_SOCKTYPE:	return ResultCode::IO_NOTSOCK;
+        default:			return ResultCode::UNEXPECTED;
+        }
+
+        for (const addrinfo* curAddr = res; curAddr != nullptr; curAddr = curAddr->ai_next)
+        {
+            SockFamily foundSocketFamily = SockFamily::None;
+            bool bConverted = false;
+            if (curAddr->ai_family == AF_INET)
+            {
+                sockaddr_in* psockAddr4 = ((sockaddr_in*)curAddr->ai_addr);
+                bConverted = inet_ntop(curAddr->ai_family, &psockAddr4->sin_addr, tempBuffer, sizeof tempBuffer) != nullptr;
+                if (bConverted)
+                    foundSocketFamily = SockFamily::IPV4;
+            }
+            else if (curAddr->ai_family == AF_INET6)
+            {
+                sockaddr_in6* psockAddr6 = ((sockaddr_in6*)curAddr->ai_addr);
+                if (psockAddr6->sin6_scope_id == 0)
+                {
+                    bConverted = inet_ntop(curAddr->ai_family, &psockAddr6->sin6_addr, tempBuffer, sizeof tempBuffer) != nullptr;
+                    if (bConverted)
+                        foundSocketFamily = SockFamily::IPV6;
+                }
+            }
+
+            if (foundSocketFamily != SockFamily::None)
+            {
+                outResolvedAddresses.push_back(NetAddress(foundSocketFamily, tempBuffer, 0));
+            }
+        }
+        freeaddrinfo(res);
+
+        return outResolvedAddresses.size() > 0 ? ResultCode::SUCCESS : ResultCode::FAIL;
+    }
+
 
 	Result GetLocalAddressBSD(SockFamily family, NetAddress &addr)
 	{
