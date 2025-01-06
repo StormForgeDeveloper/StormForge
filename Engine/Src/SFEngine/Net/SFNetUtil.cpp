@@ -260,7 +260,6 @@ namespace Net {
         memset(&hints, 0, sizeof hints);
         hints.ai_family = AF_UNSPEC;// AF_INET | AF_INET6;
         hints.ai_socktype = SOCK_STREAM; // probably not important
-        hints.ai_flags = AI_DNS_ONLY;
         int error = getaddrinfo(address, nullptr, &hints, &res);
         switch (error)
         {
