@@ -135,7 +135,7 @@ namespace SF
         }
 
         // Debug logging
-        curl_easy_setopt(GetCURL(), CURLOPT_VERBOSE, 1);
+        curl_easy_setopt(GetCURL(), CURLOPT_VERBOSE, 0);
         curl_easy_setopt(GetCURL(), CURLOPT_DEBUGFUNCTION, &HTTPCurlImpl::CurlLogCB);
 
         if (m_Headers != nullptr)
