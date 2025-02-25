@@ -75,7 +75,7 @@ namespace AsyncIO {
 		return ResultCode::SUCCESS;
 	}
 
-	Result IOWorker::UnregisterIO(AsyncIOAdapter* cbInstance)
+	Result IOWorker::UnregisterIO(AsyncIOAdapter* cbInstance, const char* strReason)
 	{
 		return ResultCode::SUCCESS;
 	}
@@ -133,14 +133,16 @@ namespace AsyncIO {
 	}
 
 
-	Result AsyncIOSystem_Reactor::UnregisterIO(AsyncIOAdapter* cbInstance)
+	Result AsyncIOSystem_Reactor::UnregisterIO(AsyncIOAdapter* cbInstance, const char* strReason)
 	{
 		Result hr = ResultCode::SUCCESS;
 
 		if (cbInstance == nullptr)
 			return ResultCode::INVALID_ARG;
 
-		cbInstance->OnIOUnregistered();
+        SFLog(Net, Info, "AsyncIOSystem_Reactor unregister sock:{0}, reason:{1}", (int)(intptr_t)cbInstance->GetIOHandle(), strReason);
+
+        cbInstance->OnIOUnregistered();
 
 		return hr;
 	}

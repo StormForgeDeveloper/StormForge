@@ -100,7 +100,8 @@ namespace AsyncIO {
 				{
 					AsyncIOAdapter *pCallback = (AsyncIOAdapter*)ulKey;
 					assert(pCallback->GetPendingReadCount() == 0 && pCallback->GetPendingWriteCount() == 0);
-					pCallback->OnIOUnregistered();
+                    SFLog(System, Info, "Closing IOCP for nativeHandle:{0}", pCallback->GetIOHandle());
+                    pCallback->OnIOUnregistered();
 				}
 				continue;
 			}
@@ -315,7 +316,7 @@ namespace AsyncIO {
 		return hr;
 	}
 
-	Result AsyncIOPortSystem::UnregisterIO(AsyncIOAdapter* cbInstance)
+	Result AsyncIOPortSystem::UnregisterIO(AsyncIOAdapter* cbInstance, const char* strReason)
 	{
 		Result hr = ResultCode::SUCCESS;
 
@@ -327,6 +328,8 @@ namespace AsyncIO {
 		//	SFLog(Net, Error, "Registering socket to IOCP is Failed, hr = {0:X8}", hr);
 		//	netErr(ResultCode::UNEXPECTED);
 		//}
+
+        SFLog(System, Info, "AsyncIOPortSystem::UnregisterIO nativeHandle:{0}, reason:{1}", cbInstance->GetIOHandle(), strReason);
 
 		// Just mark as unregistered
 		cbInstance->OnIOUnregistered();

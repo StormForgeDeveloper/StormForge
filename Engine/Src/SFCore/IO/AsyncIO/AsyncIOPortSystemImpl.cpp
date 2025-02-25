@@ -109,16 +109,17 @@ namespace AsyncIO {
 		return ResultCode::SUCCESS;
 	}
 
-	Result AsyncIOPortSystem_Impl::UnregisterIO(AsyncIOAdapter* cbInstance)
+	Result AsyncIOPortSystem_Impl::UnregisterIO(AsyncIOAdapter* cbInstance, const char* strReason)
 	{
-		auto assignIndex = cbInstance->GetAssignedIOWorker();
+        SFLog(Net, Info, "AsyncIOPortSystem_Impl unregister sock:{0}, reason:{1}", (int)(intptr_t)cbInstance->GetIOHandle(), strReason);
+
+        auto assignIndex = cbInstance->GetAssignedIOWorker();
 		auto pWorker = GetWorker(assignIndex);
 		if (pWorker != nullptr)
 		{
-			pWorker->UnregisterIO(cbInstance);
+			pWorker->UnregisterIO(cbInstance, strReason);
 			cbInstance->SetAssignedIOWorker(-1);
 		}
-
 
 		return ResultCode::SUCCESS;
 	}

@@ -66,7 +66,7 @@ namespace SF {
 
 			// Register the socket to EPOLL
 			virtual Result RegisterIO(AsyncIOAdapter* cbInstance) override;
-			virtual Result UnregisterIO(AsyncIOAdapter* cbInstance) override;
+			virtual Result UnregisterIO(AsyncIOAdapter* cbInstance, const char* strReason) override;
 
 			//virtual const char* EventFlagToString(int32_t bufferSize, char* stringBuffer, uint32_t eventFlags) override;
 	};

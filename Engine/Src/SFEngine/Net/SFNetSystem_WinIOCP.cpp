@@ -248,6 +248,8 @@ namespace Net {
 					if (ulKey != 0)
 					{
 						SocketIO *pCallback = (SocketIO*)ulKey;
+
+                        SFLog(Net, Info, "UnregisterSocket sock:{0}, reason:Null IOCP", pCallback->GetIOSocket());
 						assert(pCallback->GetPendingRecvCount() == 0 && pCallback->GetPendingSendCount() == 0);
 						pCallback->OnIOUnregistered();
 					}
@@ -566,6 +568,8 @@ namespace Net {
 		//	SFLog(Net, Error, "Registering socket to IOCP is Failed, hr = {0:X8}", hr);
 		//	netErr(ResultCode::UNEXPECTED);
 		//}
+
+        SFLog(Net, Info, "NetSystem::UnregisterSocket sock:{0}", cbInstance->GetIOSocket());
 
 		// Just mark as unregistered
 		cbInstance->OnIOUnregistered();

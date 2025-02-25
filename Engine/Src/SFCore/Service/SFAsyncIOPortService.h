@@ -47,7 +47,7 @@ namespace SF {
 		// Handler handling 
 
 		virtual Result RegisterIO(AsyncIO::AsyncIOAdapter* cbInstance) { return ResultCode::NOT_IMPLEMENTED; }
-		virtual Result UnregisterIO(AsyncIO::AsyncIOAdapter* cbInstance) { return ResultCode::NOT_IMPLEMENTED; }
+		virtual Result UnregisterIO(AsyncIO::AsyncIOAdapter* cbInstance, const char* strReason) { return ResultCode::NOT_IMPLEMENTED; }
 	};
 
 } // namespace SF

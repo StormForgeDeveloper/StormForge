@@ -153,7 +153,7 @@ namespace SF {
 			// Handler handling 
 
 			virtual Result RegisterIO(AsyncIOAdapter* cbInstance) override;
-			virtual Result UnregisterIO(AsyncIOAdapter* cbInstance) override;
+			virtual Result UnregisterIO(AsyncIOAdapter* cbInstance, const char* strReason) override;
 		};
 
 

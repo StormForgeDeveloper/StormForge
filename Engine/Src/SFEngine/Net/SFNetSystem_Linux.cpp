@@ -283,7 +283,9 @@ namespace Net {
 		netChkPtr(cbInstance);
 		//Assert(cbInstance->GetIOSocket() != INVALID_SOCKET);
 
-		netChk(GetNetIOSystem().UnregisterFromNETIO(cbInstance));
+        SFLog(Net, Info, "NetSystem::UnregisterSocket sock:{0}", cbInstance->GetIOSocket());
+
+        netChk(GetNetIOSystem().UnregisterFromNETIO(cbInstance));
 
 		cbInstance->OnIOUnregistered();
 

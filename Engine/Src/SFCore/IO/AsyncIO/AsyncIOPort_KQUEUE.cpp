@@ -222,7 +222,8 @@ namespace AsyncIO {
 
 				if (pCallback->GetIOHandle() == INVALID_NATIVE_HANDLE_VALUE)
 				{
-					pCallback->OnIOUnregistered();
+                    SFLog(System, Info, "IOWorkerKQUEUE UnregisterIO nativeHandle:{0}, reason:{1}", cbInstance->GetIOHandle(), "IOHandle is null");
+                    pCallback->OnIOUnregistered();
 				}
 
 			}

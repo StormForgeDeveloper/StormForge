@@ -78,7 +78,7 @@ namespace AsyncIO {
 		return ResultCode::SUCCESS;
 	}
 
-	Result IOWorkerEPOLL::UnregisterIO(AsyncIOAdapter* cbInstance)
+	Result IOWorkerEPOLL::UnregisterIO(AsyncIOAdapter* cbInstance, const char* strReason)
 	{
 		epoll_event epollEvent;
 
@@ -90,7 +90,7 @@ namespace AsyncIO {
 			return ResultCode::FAIL;
 		}
 
-		SFLog(Net, Info, "epoll unregister sock:{0}", (int)(intptr_t)cbInstance->GetIOHandle());
+		SFLog(Net, Info, "epoll unregister sock:{0}, reason:{1}", (int)(intptr_t)cbInstance->GetIOHandle(), strReason);
 
 		return ResultCode::SUCCESS;
 	}
@@ -171,7 +171,7 @@ namespace AsyncIO {
 				{
 					char stringBuffer[512];
 					SFLog(System, Info, "Closing epoll worker nativeHandle:{0}, event:{1}", pCallback->GetIOHandle(), GetOwner()->EventFlagToString(sizeof(stringBuffer), stringBuffer, curEvent.events));
-					GetOwner()->UnregisterIO(pCallback);
+					GetOwner()->UnregisterIO(pCallback,"EPOLL error");
 					pCallback->OnIOUnregistered();
 					continue;
 				}

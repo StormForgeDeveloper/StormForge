@@ -50,7 +50,7 @@ namespace SF {
 			int GetID() { return m_ID; }
 
 			virtual Result RegisterIO(AsyncIOAdapter* cbInstance);
-			virtual Result UnregisterIO(AsyncIOAdapter* cbInstance);
+			virtual Result UnregisterIO(AsyncIOAdapter* cbInstance, const char* strReason);
 
 		};
 
@@ -95,7 +95,7 @@ namespace SF {
 
 
 			virtual Result RegisterIO(AsyncIOAdapter* cbInstance);
-			virtual Result UnregisterIO(AsyncIOAdapter* cbInstance);
+			virtual Result UnregisterIO(AsyncIOAdapter* cbInstance, const char* strReason);
 
 			virtual const char* EventFlagToString(int32_t bufferSize, char* stringBuffer, uint32_t eventFlags) { return ""; }
 		};

@@ -286,6 +286,8 @@ namespace Net {
 
 					if (hangup && pCallback->GetIOSocket() == INVALID_SOCKET)
 					{
+                        SFLog(Net, Info, "Closing epoll sock:{0}, event:{1}, reason:InvalidSocket", sock, curEvent.flags);
+
 						pCallback->OnIOUnregistered();
 					}
 				}
