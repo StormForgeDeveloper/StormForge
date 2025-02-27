@@ -75,7 +75,7 @@ namespace SF
 
             if (value.GetType() == Avro::ValueType::Record || value.GetType() == Avro::ValueType::Array)
             {
-                auto numObjectFields = value.GetElementCount();
+                size_t numObjectFields = value.GetElementCount();
                 for (int iField = 0; iField < numObjectFields; iField++)
                 {
                     SF::AvroValue subValue;

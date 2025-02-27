@@ -57,5 +57,6 @@ if not exist "Test/UnitTest/UnitTest1/Test/LogServer/LocalData/serveraddress.txt
 
 powershell .\download_dependencies.ps1
 
+dotnet tool install --global Apache.Avro.Tools --version 1.12.0
 
 pause

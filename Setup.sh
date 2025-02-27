@@ -41,6 +41,7 @@ popd
 
 ./download_dependencies.sh
 
+dotnet tool install --global Apache.Avro.Tools --version 1.12.0
 
 echo ==============================================================
 echo Register test host names 
