@@ -35,13 +35,13 @@ namespace SF.Net
  		} // public  PlayInstanceRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 
 		// Cmd: Player Join request.
-		public Result  JoinPlayInstanceCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.String InPlayerIdentifier, Action<SFMessage>? callback = null )
+		public Result  JoinPlayInstanceCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.String InPlayerIdentifier, System.UInt32 InCustomZoneDataVersion, Action<SFMessage>? callback = null )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
-			return JoinPlayInstanceCmd(InTransactionID, InPlayInstanceUID, InPlayerID, InPlayerIdentifier, callback);
-		} // public Result  JoinPlayInstanceCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.String InPlayerIdentifier, Action<SFMessage>? callback = null )
-		public Result  JoinPlayInstanceCmd( SF.TransactionID InTransactionID, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.String InPlayerIdentifier, Action<SFMessage>? callback = null )
+			return JoinPlayInstanceCmd(InTransactionID, InPlayInstanceUID, InPlayerID, InPlayerIdentifier, InCustomZoneDataVersion, callback);
+		} // public Result  JoinPlayInstanceCmd( System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.String InPlayerIdentifier, System.UInt32 InCustomZoneDataVersion, Action<SFMessage>? callback = null )
+		public Result  JoinPlayInstanceCmd( SF.TransactionID InTransactionID, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.String InPlayerIdentifier, System.UInt32 InCustomZoneDataVersion, Action<SFMessage>? callback = null )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
@@ -53,10 +53,11 @@ namespace SF.Net
 			SF.Flat.PlayInstance.JoinPlayInstanceCmd.AddPlayInstanceUid(builder, PlayInstanceUIDOffset);
 			SF.Flat.PlayInstance.JoinPlayInstanceCmd.AddPlayerId(builder, PlayerIDOffset);
 			SF.Flat.PlayInstance.JoinPlayInstanceCmd.AddPlayerIdentifier(builder, PlayerIdentifierOffset);
+			SF.Flat.PlayInstance.JoinPlayInstanceCmd.AddCustomZoneDataVersion(builder, InCustomZoneDataVersion);
 			var packetOffset = SF.Flat.PlayInstance.JoinPlayInstanceCmd.EndJoinPlayInstanceCmd(builder);
 			result = SendMessage(MessageIDPlayInstance.JoinPlayInstanceCmd, builder, packetOffset.Value, transactionId:InTransactionID , callback:callback);
 			return result;
-		} // public Result  JoinPlayInstanceCmd( SF.TransactionID InTransactionID, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.String InPlayerIdentifier, Action<SFMessage>? callback = null )
+		} // public Result  JoinPlayInstanceCmd( SF.TransactionID InTransactionID, System.UInt32 InPlayInstanceUID, SF.AccountID InPlayerID, System.String InPlayerIdentifier, System.UInt32 InCustomZoneDataVersion, Action<SFMessage>? callback = null )
 
 		// C2S: Play packet
 		public Result  PlayPacketC2SEvt( SF.GameInstanceUID InPlayInstanceUID, System.UInt32 InSenderEndpointID, System.UInt32 InTargetEndpointMask, System.Byte[] InPayload )
@@ -443,6 +444,96 @@ namespace SF.Net
 			return result;
 		} // public Result  SendVoiceDataC2SEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt16 InFrameIndex, System.Byte[] InVoiceData )
 
+
+		// Cmd: UGC zone edit command
+		public Result  UGCEditAddCmd( System.UInt32 InEntityType, System.UInt32 InTableId, SF.SFVector4 InPosition, SF.SFVector4 InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
+		{
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID InTransactionID = NewTransactionID();
+			return UGCEditAddCmd(InTransactionID, InEntityType, InTableId, InPosition, InRotation, InScale, callback);
+		} // public Result  UGCEditAddCmd( System.UInt32 InEntityType, System.UInt32 InTableId, SF.SFVector4 InPosition, SF.SFVector4 InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
+		public Result  UGCEditAddCmd( SF.TransactionID InTransactionID, System.UInt32 InEntityType, System.UInt32 InTableId, SF.SFVector4 InPosition, SF.SFVector4 InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
+		{
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
+			Result result = ResultCode.SUCCESS;
+			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
+			var PositionOffset = builder.CreateVector4(InPosition);
+			var RotationOffset = builder.CreateVector4(InRotation);
+			var ScaleOffset = builder.CreateVector4(InScale);
+			SF.Flat.PlayInstance.UGCEditAddCmd.StartUGCEditAddCmd(builder);
+			SF.Flat.PlayInstance.UGCEditAddCmd.AddEntityType(builder, InEntityType);
+			SF.Flat.PlayInstance.UGCEditAddCmd.AddTableId(builder, InTableId);
+			SF.Flat.PlayInstance.UGCEditAddCmd.AddPosition(builder, PositionOffset);
+			SF.Flat.PlayInstance.UGCEditAddCmd.AddRotation(builder, RotationOffset);
+			SF.Flat.PlayInstance.UGCEditAddCmd.AddScale(builder, ScaleOffset);
+			var packetOffset = SF.Flat.PlayInstance.UGCEditAddCmd.EndUGCEditAddCmd(builder);
+			result = SendMessage(MessageIDPlayInstance.UGCEditAddCmd, builder, packetOffset.Value, transactionId:InTransactionID , callback:callback);
+			return result;
+		} // public Result  UGCEditAddCmd( SF.TransactionID InTransactionID, System.UInt32 InEntityType, System.UInt32 InTableId, SF.SFVector4 InPosition, SF.SFVector4 InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
+
+		// Cmd: UGC zone edit command
+		public Result  UGCEditMoveCmd( System.UInt32 InInstanceId, System.UInt32 InEntityType, SF.SFVector4 InPosition, SF.SFVector4 InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
+		{
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID InTransactionID = NewTransactionID();
+			return UGCEditMoveCmd(InTransactionID, InInstanceId, InEntityType, InPosition, InRotation, InScale, callback);
+		} // public Result  UGCEditMoveCmd( System.UInt32 InInstanceId, System.UInt32 InEntityType, SF.SFVector4 InPosition, SF.SFVector4 InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
+		public Result  UGCEditMoveCmd( SF.TransactionID InTransactionID, System.UInt32 InInstanceId, System.UInt32 InEntityType, SF.SFVector4 InPosition, SF.SFVector4 InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
+		{
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
+			Result result = ResultCode.SUCCESS;
+			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
+			var PositionOffset = builder.CreateVector4(InPosition);
+			var RotationOffset = builder.CreateVector4(InRotation);
+			var ScaleOffset = builder.CreateVector4(InScale);
+			SF.Flat.PlayInstance.UGCEditMoveCmd.StartUGCEditMoveCmd(builder);
+			SF.Flat.PlayInstance.UGCEditMoveCmd.AddInstanceId(builder, InInstanceId);
+			SF.Flat.PlayInstance.UGCEditMoveCmd.AddEntityType(builder, InEntityType);
+			SF.Flat.PlayInstance.UGCEditMoveCmd.AddPosition(builder, PositionOffset);
+			SF.Flat.PlayInstance.UGCEditMoveCmd.AddRotation(builder, RotationOffset);
+			SF.Flat.PlayInstance.UGCEditMoveCmd.AddScale(builder, ScaleOffset);
+			var packetOffset = SF.Flat.PlayInstance.UGCEditMoveCmd.EndUGCEditMoveCmd(builder);
+			result = SendMessage(MessageIDPlayInstance.UGCEditMoveCmd, builder, packetOffset.Value, transactionId:InTransactionID , callback:callback);
+			return result;
+		} // public Result  UGCEditMoveCmd( SF.TransactionID InTransactionID, System.UInt32 InInstanceId, System.UInt32 InEntityType, SF.SFVector4 InPosition, SF.SFVector4 InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
+
+		// Cmd: UGC zone edit command
+		public Result  UGCEditDeleteCmd( System.UInt32 InInstanceId, Action<SFMessage>? callback = null )
+		{
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID InTransactionID = NewTransactionID();
+			return UGCEditDeleteCmd(InTransactionID, InInstanceId, callback);
+		} // public Result  UGCEditDeleteCmd( System.UInt32 InInstanceId, Action<SFMessage>? callback = null )
+		public Result  UGCEditDeleteCmd( SF.TransactionID InTransactionID, System.UInt32 InInstanceId, Action<SFMessage>? callback = null )
+		{
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
+			Result result = ResultCode.SUCCESS;
+			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
+			SF.Flat.PlayInstance.UGCEditDeleteCmd.StartUGCEditDeleteCmd(builder);
+			SF.Flat.PlayInstance.UGCEditDeleteCmd.AddInstanceId(builder, InInstanceId);
+			var packetOffset = SF.Flat.PlayInstance.UGCEditDeleteCmd.EndUGCEditDeleteCmd(builder);
+			result = SendMessage(MessageIDPlayInstance.UGCEditDeleteCmd, builder, packetOffset.Value, transactionId:InTransactionID , callback:callback);
+			return result;
+		} // public Result  UGCEditDeleteCmd( SF.TransactionID InTransactionID, System.UInt32 InInstanceId, Action<SFMessage>? callback = null )
+
+		// Cmd: UGC zone edit command
+		public Result  UGCEditClaimBackCmd( System.UInt32 InInstanceId, Action<SFMessage>? callback = null )
+		{
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
+			TransactionID InTransactionID = NewTransactionID();
+			return UGCEditClaimBackCmd(InTransactionID, InInstanceId, callback);
+		} // public Result  UGCEditClaimBackCmd( System.UInt32 InInstanceId, Action<SFMessage>? callback = null )
+		public Result  UGCEditClaimBackCmd( SF.TransactionID InTransactionID, System.UInt32 InInstanceId, Action<SFMessage>? callback = null )
+		{
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
+			Result result = ResultCode.SUCCESS;
+			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
+			SF.Flat.PlayInstance.UGCEditClaimBackCmd.StartUGCEditClaimBackCmd(builder);
+			SF.Flat.PlayInstance.UGCEditClaimBackCmd.AddInstanceId(builder, InInstanceId);
+			var packetOffset = SF.Flat.PlayInstance.UGCEditClaimBackCmd.EndUGCEditClaimBackCmd(builder);
+			result = SendMessage(MessageIDPlayInstance.UGCEditClaimBackCmd, builder, packetOffset.Value, transactionId:InTransactionID , callback:callback);
+			return result;
+		} // public Result  UGCEditClaimBackCmd( SF.TransactionID InTransactionID, System.UInt32 InInstanceId, Action<SFMessage>? callback = null )
 
 		// Cmd: Create stream instance
 		public Result  CreateStreamCmd( System.UInt64 InTicket, System.String InStreamName, Action<SFMessage>? callback = null )
@@ -1086,6 +1177,133 @@ namespace SF.Net
 			result = SendMessage(MessageIDPlayInstance.VoiceDataS2CEvt, builder, packetOffset.Value);
 			return result;
 		} // public Result  VoiceDataS2CEvt( System.UInt32 InActorID, System.UInt16 InFrameIndex, System.Byte[] InVoiceData )
+
+
+		// Cmd: UGC zone edit command
+		public Result  UGCEditAddRes( SF.TransactionID InTransactionID, SF.Result InResult, System.UInt32 InInstanceId, System.UInt32 InTimeOffset, SF.VariableTable[] InInvenChanges )
+		{
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
+			Result result = ResultCode.SUCCESS;
+			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
+			var InvenChangesOffset = builder.CreateVariableTableVector(InInvenChanges);
+			SF.Flat.PlayInstance.UGCEditAddRes.StartUGCEditAddRes(builder);
+			SF.Flat.PlayInstance.UGCEditAddRes.AddInstanceId(builder, InInstanceId);
+			SF.Flat.PlayInstance.UGCEditAddRes.AddTimeOffset(builder, InTimeOffset);
+			SF.Flat.PlayInstance.UGCEditAddRes.AddInvenChanges(builder, InvenChangesOffset);
+			var packetOffset = SF.Flat.PlayInstance.UGCEditAddRes.EndUGCEditAddRes(builder);
+			result = SendMessage(MessageIDPlayInstance.UGCEditAddRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
+			return result;
+		} // public Result  UGCEditAddRes( SF.TransactionID InTransactionID, SF.Result InResult, System.UInt32 InInstanceId, System.UInt32 InTimeOffset, SF.VariableTable[] InInvenChanges )
+
+
+		// Cmd: UGC zone edit command
+		public Result  UGCEditMoveRes( SF.TransactionID InTransactionID, SF.Result InResult )
+		{
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
+			Result result = ResultCode.SUCCESS;
+			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
+			SF.Flat.PlayInstance.UGCEditMoveRes.StartUGCEditMoveRes(builder);
+			var packetOffset = SF.Flat.PlayInstance.UGCEditMoveRes.EndUGCEditMoveRes(builder);
+			result = SendMessage(MessageIDPlayInstance.UGCEditMoveRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
+			return result;
+		} // public Result  UGCEditMoveRes( SF.TransactionID InTransactionID, SF.Result InResult )
+
+
+		// Cmd: UGC zone edit command
+		public Result  UGCEditDeleteRes( SF.TransactionID InTransactionID, SF.Result InResult )
+		{
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
+			Result result = ResultCode.SUCCESS;
+			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
+			SF.Flat.PlayInstance.UGCEditDeleteRes.StartUGCEditDeleteRes(builder);
+			var packetOffset = SF.Flat.PlayInstance.UGCEditDeleteRes.EndUGCEditDeleteRes(builder);
+			result = SendMessage(MessageIDPlayInstance.UGCEditDeleteRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
+			return result;
+		} // public Result  UGCEditDeleteRes( SF.TransactionID InTransactionID, SF.Result InResult )
+
+
+		// Cmd: UGC zone edit command
+		public Result  UGCEditClaimBackRes( SF.TransactionID InTransactionID, SF.Result InResult, System.UInt32 InInstanceId, SF.VariableTable[] InInvenChanges )
+		{
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
+			Result result = ResultCode.SUCCESS;
+			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
+			var InvenChangesOffset = builder.CreateVariableTableVector(InInvenChanges);
+			SF.Flat.PlayInstance.UGCEditClaimBackRes.StartUGCEditClaimBackRes(builder);
+			SF.Flat.PlayInstance.UGCEditClaimBackRes.AddInstanceId(builder, InInstanceId);
+			SF.Flat.PlayInstance.UGCEditClaimBackRes.AddInvenChanges(builder, InvenChangesOffset);
+			var packetOffset = SF.Flat.PlayInstance.UGCEditClaimBackRes.EndUGCEditClaimBackRes(builder);
+			result = SendMessage(MessageIDPlayInstance.UGCEditClaimBackRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
+			return result;
+		} // public Result  UGCEditClaimBackRes( SF.TransactionID InTransactionID, SF.Result InResult, System.UInt32 InInstanceId, SF.VariableTable[] InInvenChanges )
+
+
+		// S2C: UGC zone edited event
+		public Result  UGCEditAddedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityType, System.UInt32 InTableId, System.UInt32 InTimeOffset, SF.SFVector4 InPosition, SF.SFVector4 InRotation, SF.SFVector4 InScale, System.UInt32 InInstanceId )
+		{
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
+			Result result = ResultCode.SUCCESS;
+			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
+			var PlayInstanceUIDOffset = builder.CreateGameInstanceUID(InPlayInstanceUID);
+			var OperatorPlayerIDOffset = builder.CreatePlayerID(InOperatorPlayerID);
+			var PositionOffset = builder.CreateVector4(InPosition);
+			var RotationOffset = builder.CreateVector4(InRotation);
+			var ScaleOffset = builder.CreateVector4(InScale);
+			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.StartUGCEditAddedS2CEvt(builder);
+			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddPlayInstanceUid(builder, PlayInstanceUIDOffset);
+			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddOperatorPlayerId(builder, OperatorPlayerIDOffset);
+			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddEntityType(builder, InEntityType);
+			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddTableId(builder, InTableId);
+			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddTimeOffset(builder, InTimeOffset);
+			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddPosition(builder, PositionOffset);
+			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddRotation(builder, RotationOffset);
+			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddScale(builder, ScaleOffset);
+			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddInstanceId(builder, InInstanceId);
+			var packetOffset = SF.Flat.PlayInstance.UGCEditAddedS2CEvt.EndUGCEditAddedS2CEvt(builder);
+			result = SendMessage(MessageIDPlayInstance.UGCEditAddedS2CEvt, builder, packetOffset.Value);
+			return result;
+		} // public Result  UGCEditAddedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityType, System.UInt32 InTableId, System.UInt32 InTimeOffset, SF.SFVector4 InPosition, SF.SFVector4 InRotation, SF.SFVector4 InScale, System.UInt32 InInstanceId )
+
+
+		// S2C: UGC zone edited event
+		public Result  UGCEditRemovedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InInstanceId )
+		{
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
+			Result result = ResultCode.SUCCESS;
+			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
+			var PlayInstanceUIDOffset = builder.CreateGameInstanceUID(InPlayInstanceUID);
+			var OperatorPlayerIDOffset = builder.CreatePlayerID(InOperatorPlayerID);
+			SF.Flat.PlayInstance.UGCEditRemovedS2CEvt.StartUGCEditRemovedS2CEvt(builder);
+			SF.Flat.PlayInstance.UGCEditRemovedS2CEvt.AddPlayInstanceUid(builder, PlayInstanceUIDOffset);
+			SF.Flat.PlayInstance.UGCEditRemovedS2CEvt.AddOperatorPlayerId(builder, OperatorPlayerIDOffset);
+			SF.Flat.PlayInstance.UGCEditRemovedS2CEvt.AddInstanceId(builder, InInstanceId);
+			var packetOffset = SF.Flat.PlayInstance.UGCEditRemovedS2CEvt.EndUGCEditRemovedS2CEvt(builder);
+			result = SendMessage(MessageIDPlayInstance.UGCEditRemovedS2CEvt, builder, packetOffset.Value);
+			return result;
+		} // public Result  UGCEditRemovedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InInstanceId )
+
+
+		// S2C: UGC zone edited event
+		public Result  UGCEditMovedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, SF.SFVector4 InPosition, SF.SFVector4 InRotation, SF.SFVector4 InScale )
+		{
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
+			Result result = ResultCode.SUCCESS;
+			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
+			var PlayInstanceUIDOffset = builder.CreateGameInstanceUID(InPlayInstanceUID);
+			var OperatorPlayerIDOffset = builder.CreatePlayerID(InOperatorPlayerID);
+			var PositionOffset = builder.CreateVector4(InPosition);
+			var RotationOffset = builder.CreateVector4(InRotation);
+			var ScaleOffset = builder.CreateVector4(InScale);
+			SF.Flat.PlayInstance.UGCEditMovedS2CEvt.StartUGCEditMovedS2CEvt(builder);
+			SF.Flat.PlayInstance.UGCEditMovedS2CEvt.AddPlayInstanceUid(builder, PlayInstanceUIDOffset);
+			SF.Flat.PlayInstance.UGCEditMovedS2CEvt.AddOperatorPlayerId(builder, OperatorPlayerIDOffset);
+			SF.Flat.PlayInstance.UGCEditMovedS2CEvt.AddPosition(builder, PositionOffset);
+			SF.Flat.PlayInstance.UGCEditMovedS2CEvt.AddRotation(builder, RotationOffset);
+			SF.Flat.PlayInstance.UGCEditMovedS2CEvt.AddScale(builder, ScaleOffset);
+			var packetOffset = SF.Flat.PlayInstance.UGCEditMovedS2CEvt.EndUGCEditMovedS2CEvt(builder);
+			result = SendMessage(MessageIDPlayInstance.UGCEditMovedS2CEvt, builder, packetOffset.Value);
+			return result;
+		} // public Result  UGCEditMovedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, SF.SFVector4 InPosition, SF.SFVector4 InRotation, SF.SFVector4 InScale )
 
 
 		// Cmd: Create stream instance

@@ -87,8 +87,15 @@ namespace SF {
 		return QuaternionSSE(_mm_div_ps(Packed, _mm_set1_ps(scala)));
 	}
 
-
-
+    inline bool QuaternionSSE::Comapre(const QuaternionSSE& q, float testEpsilon) const
+    {
+        __m128 diff = _mm_sub_ps(Packed, q.Packed);
+        __m128 diffSq = _mm_mul_ps(diff, diff);
+        const __m128 epsilonPacked = _mm_set1_ps(testEpsilon);
+        // use max with epsilon after abs(mul here)
+        int testMask = _mm_movemask_ps(_mm_cmpeq_ps(_mm_max_ps(diffSq, epsilonPacked), epsilonPacked));
+        return testMask == 0xF;
+    }
 	
 	inline QuaternionSSE QuaternionSSE::GetInverse() const
 	{

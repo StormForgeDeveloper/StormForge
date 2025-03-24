@@ -713,28 +713,6 @@ namespace SF.Net
 			return result;
 		} // public Result  SearchGameInstanceCmd( SF.TransactionID InTransactionID, System.String InSearchKeyword, System.UInt32 InZoneTableID, Action<SFMessage>? callback = null )
 
-		// Cmd: Search game instance
-		public Result  GetCharacterDataInGameInstanceCmd( SF.GameInstanceUID InGameInstanceUID, SF.AccountID InPlayerID, Action<SFMessage>? callback = null )
-		{
- 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID InTransactionID = NewTransactionID();
-			return GetCharacterDataInGameInstanceCmd(InTransactionID, InGameInstanceUID, InPlayerID, callback);
-		} // public Result  GetCharacterDataInGameInstanceCmd( SF.GameInstanceUID InGameInstanceUID, SF.AccountID InPlayerID, Action<SFMessage>? callback = null )
-		public Result  GetCharacterDataInGameInstanceCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InGameInstanceUID, SF.AccountID InPlayerID, Action<SFMessage>? callback = null )
-		{
- 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
-			Result result = ResultCode.SUCCESS;
-			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
-			var GameInstanceUIDOffset = builder.CreateGameInstanceUID(InGameInstanceUID);
-			var PlayerIDOffset = builder.CreatePlayerID(InPlayerID);
-			SF.Flat.Game.GetCharacterDataInGameInstanceCmd.StartGetCharacterDataInGameInstanceCmd(builder);
-			SF.Flat.Game.GetCharacterDataInGameInstanceCmd.AddGameInstanceUid(builder, GameInstanceUIDOffset);
-			SF.Flat.Game.GetCharacterDataInGameInstanceCmd.AddPlayerId(builder, PlayerIDOffset);
-			var packetOffset = SF.Flat.Game.GetCharacterDataInGameInstanceCmd.EndGetCharacterDataInGameInstanceCmd(builder);
-			result = SendMessage(MessageIDGame.GetCharacterDataInGameInstanceCmd, builder, packetOffset.Value, transactionId:InTransactionID , callback:callback);
-			return result;
-		} // public Result  GetCharacterDataInGameInstanceCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InGameInstanceUID, SF.AccountID InPlayerID, Action<SFMessage>? callback = null )
-
 		// Cmd: Request Game match
 		public Result  RequestGameMatchCmd( System.Byte InNumPlayer, System.Byte InRequestRole, Action<SFMessage>? callback = null )
 		{
@@ -1877,20 +1855,22 @@ namespace SF.Net
 
 
 		// Cmd: Join to a game instance
-		public Result  JoinGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.GameInstanceUID InInsUID, System.String InServerPublicAddress )
+		public Result  JoinGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.GameInstanceUID InInsUID, System.Byte[] InZoneCustomData, System.String InServerPublicAddress )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var InsUIDOffset = builder.CreateGameInstanceUID(InInsUID);
+			var ZoneCustomDataOffset = builder.CreatebyteVector(InZoneCustomData);
 			var ServerPublicAddressOffset = builder.CreateString(InServerPublicAddress);
 			SF.Flat.Game.JoinGameInstanceRes.StartJoinGameInstanceRes(builder);
 			SF.Flat.Game.JoinGameInstanceRes.AddInsUid(builder, InsUIDOffset);
+			SF.Flat.Game.JoinGameInstanceRes.AddZoneCustomData(builder, ZoneCustomDataOffset);
 			SF.Flat.Game.JoinGameInstanceRes.AddServerPublicAddress(builder, ServerPublicAddressOffset);
 			var packetOffset = SF.Flat.Game.JoinGameInstanceRes.EndJoinGameInstanceRes(builder);
 			result = SendMessage(MessageIDGame.JoinGameInstanceRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
 			return result;
-		} // public Result  JoinGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.GameInstanceUID InInsUID, System.String InServerPublicAddress )
+		} // public Result  JoinGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.GameInstanceUID InInsUID, System.Byte[] InZoneCustomData, System.String InServerPublicAddress )
 
 
 		// Cmd: Leave game instance
@@ -1919,23 +1899,6 @@ namespace SF.Net
 			result = SendMessage(MessageIDGame.SearchGameInstanceRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
 			return result;
 		} // public Result  SearchGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.VariableTable[] InGameInstances )
-
-
-		// Cmd: Search game instance
-		public Result  GetCharacterDataInGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.AccountID InPlayerID, SF.VariableTable InGameInstances )
-		{
- 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
-			Result result = ResultCode.SUCCESS;
-			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
-			var PlayerIDOffset = builder.CreatePlayerID(InPlayerID);
-			var GameInstancesOffset = builder.CreateVariableTable(InGameInstances);
-			SF.Flat.Game.GetCharacterDataInGameInstanceRes.StartGetCharacterDataInGameInstanceRes(builder);
-			SF.Flat.Game.GetCharacterDataInGameInstanceRes.AddPlayerId(builder, PlayerIDOffset);
-			SF.Flat.Game.GetCharacterDataInGameInstanceRes.AddGameInstances(builder, GameInstancesOffset);
-			var packetOffset = SF.Flat.Game.GetCharacterDataInGameInstanceRes.EndGetCharacterDataInGameInstanceRes(builder);
-			result = SendMessage(MessageIDGame.GetCharacterDataInGameInstanceRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
-			return result;
-		} // public Result  GetCharacterDataInGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.AccountID InPlayerID, SF.VariableTable InGameInstances )
 
 
 		// Cmd: Request Game match

@@ -166,6 +166,39 @@ struct SendVoiceDataC2SEvtBuilder;
 struct VoiceDataS2CEvt;
 struct VoiceDataS2CEvtBuilder;
 
+struct UGCEditAddCmd;
+struct UGCEditAddCmdBuilder;
+
+struct UGCEditAddRes;
+struct UGCEditAddResBuilder;
+
+struct UGCEditMoveCmd;
+struct UGCEditMoveCmdBuilder;
+
+struct UGCEditMoveRes;
+struct UGCEditMoveResBuilder;
+
+struct UGCEditDeleteCmd;
+struct UGCEditDeleteCmdBuilder;
+
+struct UGCEditDeleteRes;
+struct UGCEditDeleteResBuilder;
+
+struct UGCEditClaimBackCmd;
+struct UGCEditClaimBackCmdBuilder;
+
+struct UGCEditClaimBackRes;
+struct UGCEditClaimBackResBuilder;
+
+struct UGCEditAddedS2CEvt;
+struct UGCEditAddedS2CEvtBuilder;
+
+struct UGCEditRemovedS2CEvt;
+struct UGCEditRemovedS2CEvtBuilder;
+
+struct UGCEditMovedS2CEvt;
+struct UGCEditMovedS2CEvtBuilder;
+
 struct CreateStreamCmd;
 struct CreateStreamCmdBuilder;
 
@@ -196,7 +229,8 @@ struct JoinPlayInstanceCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tabl
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_PLAY_INSTANCE_UID = 4,
     VT_PLAYER_ID = 6,
-    VT_PLAYER_IDENTIFIER = 8
+    VT_PLAYER_IDENTIFIER = 8,
+    VT_CUSTOM_ZONE_DATA_VERSION = 10
   };
   const SF::Flat::EntityUID *play_instance_uid() const {
     return GetStruct<const SF::Flat::EntityUID *>(VT_PLAY_INSTANCE_UID);
@@ -207,11 +241,15 @@ struct JoinPlayInstanceCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tabl
   const ::flatbuffers::String *player_identifier() const {
     return GetPointer<const ::flatbuffers::String *>(VT_PLAYER_IDENTIFIER);
   }
+  uint32_t custom_zone_data_version() const {
+    return GetField<uint32_t>(VT_CUSTOM_ZONE_DATA_VERSION, 0);
+  }
   template<size_t Index>
   auto get_field() const {
          if constexpr (Index == 0) return play_instance_uid();
     else if constexpr (Index == 1) return player_id();
     else if constexpr (Index == 2) return player_identifier();
+    else if constexpr (Index == 3) return custom_zone_data_version();
     else static_assert(Index != Index, "Invalid Field Index");
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
@@ -220,6 +258,7 @@ struct JoinPlayInstanceCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tabl
            VerifyField<SF::Flat::AccountID>(verifier, VT_PLAYER_ID, 8) &&
            VerifyOffset(verifier, VT_PLAYER_IDENTIFIER) &&
            verifier.VerifyString(player_identifier()) &&
+           VerifyField<uint32_t>(verifier, VT_CUSTOM_ZONE_DATA_VERSION, 4) &&
            verifier.EndTable();
   }
 };
@@ -237,6 +276,9 @@ struct JoinPlayInstanceCmdBuilder {
   void add_player_identifier(::flatbuffers::Offset<::flatbuffers::String> player_identifier) {
     fbb_.AddOffset(JoinPlayInstanceCmd::VT_PLAYER_IDENTIFIER, player_identifier);
   }
+  void add_custom_zone_data_version(uint32_t custom_zone_data_version) {
+    fbb_.AddElement<uint32_t>(JoinPlayInstanceCmd::VT_CUSTOM_ZONE_DATA_VERSION, custom_zone_data_version, 0);
+  }
   explicit JoinPlayInstanceCmdBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
@@ -252,8 +294,10 @@ inline ::flatbuffers::Offset<JoinPlayInstanceCmd> CreateJoinPlayInstanceCmd(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const SF::Flat::EntityUID *play_instance_uid = nullptr,
     const SF::Flat::AccountID *player_id = nullptr,
-    ::flatbuffers::Offset<::flatbuffers::String> player_identifier = 0) {
+    ::flatbuffers::Offset<::flatbuffers::String> player_identifier = 0,
+    uint32_t custom_zone_data_version = 0) {
   JoinPlayInstanceCmdBuilder builder_(_fbb);
+  builder_.add_custom_zone_data_version(custom_zone_data_version);
   builder_.add_player_identifier(player_identifier);
   builder_.add_player_id(player_id);
   builder_.add_play_instance_uid(play_instance_uid);
@@ -265,11 +309,12 @@ struct JoinPlayInstanceCmd::Traits {
   static auto constexpr Create = CreateJoinPlayInstanceCmd;
   static constexpr auto name = "JoinPlayInstanceCmd";
   static constexpr auto fully_qualified_name = "SF.Flat.PlayInstance.JoinPlayInstanceCmd";
-  static constexpr size_t fields_number = 3;
+  static constexpr size_t fields_number = 4;
   static constexpr std::array<const char *, fields_number> field_names = {
     "play_instance_uid",
     "player_id",
-    "player_identifier"
+    "player_identifier",
+    "custom_zone_data_version"
   };
   template<size_t Index>
   using FieldType = decltype(std::declval<type>().get_field<Index>());
@@ -279,13 +324,15 @@ inline ::flatbuffers::Offset<JoinPlayInstanceCmd> CreateJoinPlayInstanceCmdDirec
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const SF::Flat::EntityUID *play_instance_uid = nullptr,
     const SF::Flat::AccountID *player_id = nullptr,
-    const char *player_identifier = nullptr) {
+    const char *player_identifier = nullptr,
+    uint32_t custom_zone_data_version = 0) {
   auto player_identifier__ = player_identifier ? _fbb.CreateString(player_identifier) : 0;
   return SF::Flat::PlayInstance::CreateJoinPlayInstanceCmd(
       _fbb,
       play_instance_uid,
       player_id,
-      player_identifier__);
+      player_identifier__,
+      custom_zone_data_version);
 }
 
 struct JoinPlayInstanceRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
@@ -4564,6 +4611,950 @@ inline ::flatbuffers::Offset<VoiceDataS2CEvt> CreateVoiceDataS2CEvtDirect(
       frame_index,
       voice_data__);
 }
+
+struct UGCEditAddCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UGCEditAddCmdBuilder Builder;
+  struct Traits;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_ENTITY_TYPE = 4,
+    VT_TABLE_ID = 6,
+    VT_POSITION = 8,
+    VT_ROTATION = 10,
+    VT_SCALE = 12
+  };
+  uint32_t entity_type() const {
+    return GetField<uint32_t>(VT_ENTITY_TYPE, 0);
+  }
+  uint32_t table_id() const {
+    return GetField<uint32_t>(VT_TABLE_ID, 0);
+  }
+  const SF::Flat::Vector4 *position() const {
+    return GetStruct<const SF::Flat::Vector4 *>(VT_POSITION);
+  }
+  const SF::Flat::Vector4 *rotation() const {
+    return GetStruct<const SF::Flat::Vector4 *>(VT_ROTATION);
+  }
+  const SF::Flat::Vector4 *scale() const {
+    return GetStruct<const SF::Flat::Vector4 *>(VT_SCALE);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return entity_type();
+    else if constexpr (Index == 1) return table_id();
+    else if constexpr (Index == 2) return position();
+    else if constexpr (Index == 3) return rotation();
+    else if constexpr (Index == 4) return scale();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint32_t>(verifier, VT_ENTITY_TYPE, 4) &&
+           VerifyField<uint32_t>(verifier, VT_TABLE_ID, 4) &&
+           VerifyField<SF::Flat::Vector4>(verifier, VT_POSITION, 4) &&
+           VerifyField<SF::Flat::Vector4>(verifier, VT_ROTATION, 4) &&
+           VerifyField<SF::Flat::Vector4>(verifier, VT_SCALE, 4) &&
+           verifier.EndTable();
+  }
+};
+
+struct UGCEditAddCmdBuilder {
+  typedef UGCEditAddCmd Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_entity_type(uint32_t entity_type) {
+    fbb_.AddElement<uint32_t>(UGCEditAddCmd::VT_ENTITY_TYPE, entity_type, 0);
+  }
+  void add_table_id(uint32_t table_id) {
+    fbb_.AddElement<uint32_t>(UGCEditAddCmd::VT_TABLE_ID, table_id, 0);
+  }
+  void add_position(const SF::Flat::Vector4 *position) {
+    fbb_.AddStruct(UGCEditAddCmd::VT_POSITION, position);
+  }
+  void add_rotation(const SF::Flat::Vector4 *rotation) {
+    fbb_.AddStruct(UGCEditAddCmd::VT_ROTATION, rotation);
+  }
+  void add_scale(const SF::Flat::Vector4 *scale) {
+    fbb_.AddStruct(UGCEditAddCmd::VT_SCALE, scale);
+  }
+  explicit UGCEditAddCmdBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UGCEditAddCmd> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UGCEditAddCmd>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UGCEditAddCmd> CreateUGCEditAddCmd(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint32_t entity_type = 0,
+    uint32_t table_id = 0,
+    const SF::Flat::Vector4 *position = nullptr,
+    const SF::Flat::Vector4 *rotation = nullptr,
+    const SF::Flat::Vector4 *scale = nullptr) {
+  UGCEditAddCmdBuilder builder_(_fbb);
+  builder_.add_scale(scale);
+  builder_.add_rotation(rotation);
+  builder_.add_position(position);
+  builder_.add_table_id(table_id);
+  builder_.add_entity_type(entity_type);
+  return builder_.Finish();
+}
+
+struct UGCEditAddCmd::Traits {
+  using type = UGCEditAddCmd;
+  static auto constexpr Create = CreateUGCEditAddCmd;
+  static constexpr auto name = "UGCEditAddCmd";
+  static constexpr auto fully_qualified_name = "SF.Flat.PlayInstance.UGCEditAddCmd";
+  static constexpr size_t fields_number = 5;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "entity_type",
+    "table_id",
+    "position",
+    "rotation",
+    "scale"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
+struct UGCEditAddRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UGCEditAddResBuilder Builder;
+  struct Traits;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_INSTANCE_ID = 4,
+    VT_TIME_OFFSET = 6,
+    VT_INVEN_CHANGES = 8
+  };
+  uint32_t instance_id() const {
+    return GetField<uint32_t>(VT_INSTANCE_ID, 0);
+  }
+  uint32_t time_offset() const {
+    return GetField<uint32_t>(VT_TIME_OFFSET, 0);
+  }
+  const ::flatbuffers::Vector<uint8_t> *inven_changes() const {
+    return GetPointer<const ::flatbuffers::Vector<uint8_t> *>(VT_INVEN_CHANGES);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return instance_id();
+    else if constexpr (Index == 1) return time_offset();
+    else if constexpr (Index == 2) return inven_changes();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint32_t>(verifier, VT_INSTANCE_ID, 4) &&
+           VerifyField<uint32_t>(verifier, VT_TIME_OFFSET, 4) &&
+           VerifyOffset(verifier, VT_INVEN_CHANGES) &&
+           verifier.VerifyVector(inven_changes()) &&
+           verifier.EndTable();
+  }
+};
+
+struct UGCEditAddResBuilder {
+  typedef UGCEditAddRes Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_instance_id(uint32_t instance_id) {
+    fbb_.AddElement<uint32_t>(UGCEditAddRes::VT_INSTANCE_ID, instance_id, 0);
+  }
+  void add_time_offset(uint32_t time_offset) {
+    fbb_.AddElement<uint32_t>(UGCEditAddRes::VT_TIME_OFFSET, time_offset, 0);
+  }
+  void add_inven_changes(::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> inven_changes) {
+    fbb_.AddOffset(UGCEditAddRes::VT_INVEN_CHANGES, inven_changes);
+  }
+  explicit UGCEditAddResBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UGCEditAddRes> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UGCEditAddRes>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UGCEditAddRes> CreateUGCEditAddRes(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint32_t instance_id = 0,
+    uint32_t time_offset = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> inven_changes = 0) {
+  UGCEditAddResBuilder builder_(_fbb);
+  builder_.add_inven_changes(inven_changes);
+  builder_.add_time_offset(time_offset);
+  builder_.add_instance_id(instance_id);
+  return builder_.Finish();
+}
+
+struct UGCEditAddRes::Traits {
+  using type = UGCEditAddRes;
+  static auto constexpr Create = CreateUGCEditAddRes;
+  static constexpr auto name = "UGCEditAddRes";
+  static constexpr auto fully_qualified_name = "SF.Flat.PlayInstance.UGCEditAddRes";
+  static constexpr size_t fields_number = 3;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "instance_id",
+    "time_offset",
+    "inven_changes"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
+inline ::flatbuffers::Offset<UGCEditAddRes> CreateUGCEditAddResDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint32_t instance_id = 0,
+    uint32_t time_offset = 0,
+    const std::vector<uint8_t> *inven_changes = nullptr) {
+  auto inven_changes__ = inven_changes ? _fbb.CreateVector<uint8_t>(*inven_changes) : 0;
+  return SF::Flat::PlayInstance::CreateUGCEditAddRes(
+      _fbb,
+      instance_id,
+      time_offset,
+      inven_changes__);
+}
+
+struct UGCEditMoveCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UGCEditMoveCmdBuilder Builder;
+  struct Traits;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_INSTANCE_ID = 4,
+    VT_ENTITY_TYPE = 6,
+    VT_POSITION = 8,
+    VT_ROTATION = 10,
+    VT_SCALE = 12
+  };
+  uint32_t instance_id() const {
+    return GetField<uint32_t>(VT_INSTANCE_ID, 0);
+  }
+  uint32_t entity_type() const {
+    return GetField<uint32_t>(VT_ENTITY_TYPE, 0);
+  }
+  const SF::Flat::Vector4 *position() const {
+    return GetStruct<const SF::Flat::Vector4 *>(VT_POSITION);
+  }
+  const SF::Flat::Vector4 *rotation() const {
+    return GetStruct<const SF::Flat::Vector4 *>(VT_ROTATION);
+  }
+  const SF::Flat::Vector4 *scale() const {
+    return GetStruct<const SF::Flat::Vector4 *>(VT_SCALE);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return instance_id();
+    else if constexpr (Index == 1) return entity_type();
+    else if constexpr (Index == 2) return position();
+    else if constexpr (Index == 3) return rotation();
+    else if constexpr (Index == 4) return scale();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint32_t>(verifier, VT_INSTANCE_ID, 4) &&
+           VerifyField<uint32_t>(verifier, VT_ENTITY_TYPE, 4) &&
+           VerifyField<SF::Flat::Vector4>(verifier, VT_POSITION, 4) &&
+           VerifyField<SF::Flat::Vector4>(verifier, VT_ROTATION, 4) &&
+           VerifyField<SF::Flat::Vector4>(verifier, VT_SCALE, 4) &&
+           verifier.EndTable();
+  }
+};
+
+struct UGCEditMoveCmdBuilder {
+  typedef UGCEditMoveCmd Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_instance_id(uint32_t instance_id) {
+    fbb_.AddElement<uint32_t>(UGCEditMoveCmd::VT_INSTANCE_ID, instance_id, 0);
+  }
+  void add_entity_type(uint32_t entity_type) {
+    fbb_.AddElement<uint32_t>(UGCEditMoveCmd::VT_ENTITY_TYPE, entity_type, 0);
+  }
+  void add_position(const SF::Flat::Vector4 *position) {
+    fbb_.AddStruct(UGCEditMoveCmd::VT_POSITION, position);
+  }
+  void add_rotation(const SF::Flat::Vector4 *rotation) {
+    fbb_.AddStruct(UGCEditMoveCmd::VT_ROTATION, rotation);
+  }
+  void add_scale(const SF::Flat::Vector4 *scale) {
+    fbb_.AddStruct(UGCEditMoveCmd::VT_SCALE, scale);
+  }
+  explicit UGCEditMoveCmdBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UGCEditMoveCmd> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UGCEditMoveCmd>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UGCEditMoveCmd> CreateUGCEditMoveCmd(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint32_t instance_id = 0,
+    uint32_t entity_type = 0,
+    const SF::Flat::Vector4 *position = nullptr,
+    const SF::Flat::Vector4 *rotation = nullptr,
+    const SF::Flat::Vector4 *scale = nullptr) {
+  UGCEditMoveCmdBuilder builder_(_fbb);
+  builder_.add_scale(scale);
+  builder_.add_rotation(rotation);
+  builder_.add_position(position);
+  builder_.add_entity_type(entity_type);
+  builder_.add_instance_id(instance_id);
+  return builder_.Finish();
+}
+
+struct UGCEditMoveCmd::Traits {
+  using type = UGCEditMoveCmd;
+  static auto constexpr Create = CreateUGCEditMoveCmd;
+  static constexpr auto name = "UGCEditMoveCmd";
+  static constexpr auto fully_qualified_name = "SF.Flat.PlayInstance.UGCEditMoveCmd";
+  static constexpr size_t fields_number = 5;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "instance_id",
+    "entity_type",
+    "position",
+    "rotation",
+    "scale"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
+struct UGCEditMoveRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UGCEditMoveResBuilder Builder;
+  struct Traits;
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           verifier.EndTable();
+  }
+};
+
+struct UGCEditMoveResBuilder {
+  typedef UGCEditMoveRes Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  explicit UGCEditMoveResBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UGCEditMoveRes> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UGCEditMoveRes>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UGCEditMoveRes> CreateUGCEditMoveRes(
+    ::flatbuffers::FlatBufferBuilder &_fbb) {
+  UGCEditMoveResBuilder builder_(_fbb);
+  return builder_.Finish();
+}
+
+struct UGCEditMoveRes::Traits {
+  using type = UGCEditMoveRes;
+  static auto constexpr Create = CreateUGCEditMoveRes;
+  static constexpr auto name = "UGCEditMoveRes";
+  static constexpr auto fully_qualified_name = "SF.Flat.PlayInstance.UGCEditMoveRes";
+  static constexpr size_t fields_number = 0;
+  static constexpr std::array<const char *, fields_number> field_names = {};
+};
+
+struct UGCEditDeleteCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UGCEditDeleteCmdBuilder Builder;
+  struct Traits;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_INSTANCE_ID = 4
+  };
+  uint32_t instance_id() const {
+    return GetField<uint32_t>(VT_INSTANCE_ID, 0);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return instance_id();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint32_t>(verifier, VT_INSTANCE_ID, 4) &&
+           verifier.EndTable();
+  }
+};
+
+struct UGCEditDeleteCmdBuilder {
+  typedef UGCEditDeleteCmd Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_instance_id(uint32_t instance_id) {
+    fbb_.AddElement<uint32_t>(UGCEditDeleteCmd::VT_INSTANCE_ID, instance_id, 0);
+  }
+  explicit UGCEditDeleteCmdBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UGCEditDeleteCmd> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UGCEditDeleteCmd>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UGCEditDeleteCmd> CreateUGCEditDeleteCmd(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint32_t instance_id = 0) {
+  UGCEditDeleteCmdBuilder builder_(_fbb);
+  builder_.add_instance_id(instance_id);
+  return builder_.Finish();
+}
+
+struct UGCEditDeleteCmd::Traits {
+  using type = UGCEditDeleteCmd;
+  static auto constexpr Create = CreateUGCEditDeleteCmd;
+  static constexpr auto name = "UGCEditDeleteCmd";
+  static constexpr auto fully_qualified_name = "SF.Flat.PlayInstance.UGCEditDeleteCmd";
+  static constexpr size_t fields_number = 1;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "instance_id"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
+struct UGCEditDeleteRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UGCEditDeleteResBuilder Builder;
+  struct Traits;
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           verifier.EndTable();
+  }
+};
+
+struct UGCEditDeleteResBuilder {
+  typedef UGCEditDeleteRes Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  explicit UGCEditDeleteResBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UGCEditDeleteRes> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UGCEditDeleteRes>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UGCEditDeleteRes> CreateUGCEditDeleteRes(
+    ::flatbuffers::FlatBufferBuilder &_fbb) {
+  UGCEditDeleteResBuilder builder_(_fbb);
+  return builder_.Finish();
+}
+
+struct UGCEditDeleteRes::Traits {
+  using type = UGCEditDeleteRes;
+  static auto constexpr Create = CreateUGCEditDeleteRes;
+  static constexpr auto name = "UGCEditDeleteRes";
+  static constexpr auto fully_qualified_name = "SF.Flat.PlayInstance.UGCEditDeleteRes";
+  static constexpr size_t fields_number = 0;
+  static constexpr std::array<const char *, fields_number> field_names = {};
+};
+
+struct UGCEditClaimBackCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UGCEditClaimBackCmdBuilder Builder;
+  struct Traits;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_INSTANCE_ID = 4
+  };
+  uint32_t instance_id() const {
+    return GetField<uint32_t>(VT_INSTANCE_ID, 0);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return instance_id();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint32_t>(verifier, VT_INSTANCE_ID, 4) &&
+           verifier.EndTable();
+  }
+};
+
+struct UGCEditClaimBackCmdBuilder {
+  typedef UGCEditClaimBackCmd Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_instance_id(uint32_t instance_id) {
+    fbb_.AddElement<uint32_t>(UGCEditClaimBackCmd::VT_INSTANCE_ID, instance_id, 0);
+  }
+  explicit UGCEditClaimBackCmdBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UGCEditClaimBackCmd> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UGCEditClaimBackCmd>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UGCEditClaimBackCmd> CreateUGCEditClaimBackCmd(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint32_t instance_id = 0) {
+  UGCEditClaimBackCmdBuilder builder_(_fbb);
+  builder_.add_instance_id(instance_id);
+  return builder_.Finish();
+}
+
+struct UGCEditClaimBackCmd::Traits {
+  using type = UGCEditClaimBackCmd;
+  static auto constexpr Create = CreateUGCEditClaimBackCmd;
+  static constexpr auto name = "UGCEditClaimBackCmd";
+  static constexpr auto fully_qualified_name = "SF.Flat.PlayInstance.UGCEditClaimBackCmd";
+  static constexpr size_t fields_number = 1;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "instance_id"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
+struct UGCEditClaimBackRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UGCEditClaimBackResBuilder Builder;
+  struct Traits;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_INSTANCE_ID = 4,
+    VT_INVEN_CHANGES = 6
+  };
+  uint32_t instance_id() const {
+    return GetField<uint32_t>(VT_INSTANCE_ID, 0);
+  }
+  const ::flatbuffers::Vector<uint8_t> *inven_changes() const {
+    return GetPointer<const ::flatbuffers::Vector<uint8_t> *>(VT_INVEN_CHANGES);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return instance_id();
+    else if constexpr (Index == 1) return inven_changes();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint32_t>(verifier, VT_INSTANCE_ID, 4) &&
+           VerifyOffset(verifier, VT_INVEN_CHANGES) &&
+           verifier.VerifyVector(inven_changes()) &&
+           verifier.EndTable();
+  }
+};
+
+struct UGCEditClaimBackResBuilder {
+  typedef UGCEditClaimBackRes Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_instance_id(uint32_t instance_id) {
+    fbb_.AddElement<uint32_t>(UGCEditClaimBackRes::VT_INSTANCE_ID, instance_id, 0);
+  }
+  void add_inven_changes(::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> inven_changes) {
+    fbb_.AddOffset(UGCEditClaimBackRes::VT_INVEN_CHANGES, inven_changes);
+  }
+  explicit UGCEditClaimBackResBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UGCEditClaimBackRes> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UGCEditClaimBackRes>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UGCEditClaimBackRes> CreateUGCEditClaimBackRes(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint32_t instance_id = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> inven_changes = 0) {
+  UGCEditClaimBackResBuilder builder_(_fbb);
+  builder_.add_inven_changes(inven_changes);
+  builder_.add_instance_id(instance_id);
+  return builder_.Finish();
+}
+
+struct UGCEditClaimBackRes::Traits {
+  using type = UGCEditClaimBackRes;
+  static auto constexpr Create = CreateUGCEditClaimBackRes;
+  static constexpr auto name = "UGCEditClaimBackRes";
+  static constexpr auto fully_qualified_name = "SF.Flat.PlayInstance.UGCEditClaimBackRes";
+  static constexpr size_t fields_number = 2;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "instance_id",
+    "inven_changes"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
+inline ::flatbuffers::Offset<UGCEditClaimBackRes> CreateUGCEditClaimBackResDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint32_t instance_id = 0,
+    const std::vector<uint8_t> *inven_changes = nullptr) {
+  auto inven_changes__ = inven_changes ? _fbb.CreateVector<uint8_t>(*inven_changes) : 0;
+  return SF::Flat::PlayInstance::CreateUGCEditClaimBackRes(
+      _fbb,
+      instance_id,
+      inven_changes__);
+}
+
+struct UGCEditAddedS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UGCEditAddedS2CEvtBuilder Builder;
+  struct Traits;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_PLAY_INSTANCE_UID = 4,
+    VT_OPERATOR_PLAYER_ID = 6,
+    VT_ENTITY_TYPE = 8,
+    VT_TABLE_ID = 10,
+    VT_TIME_OFFSET = 12,
+    VT_POSITION = 14,
+    VT_ROTATION = 16,
+    VT_SCALE = 18,
+    VT_INSTANCE_ID = 20
+  };
+  const SF::Flat::GameInstanceUID *play_instance_uid() const {
+    return GetStruct<const SF::Flat::GameInstanceUID *>(VT_PLAY_INSTANCE_UID);
+  }
+  const SF::Flat::AccountID *operator_player_id() const {
+    return GetStruct<const SF::Flat::AccountID *>(VT_OPERATOR_PLAYER_ID);
+  }
+  uint32_t entity_type() const {
+    return GetField<uint32_t>(VT_ENTITY_TYPE, 0);
+  }
+  uint32_t table_id() const {
+    return GetField<uint32_t>(VT_TABLE_ID, 0);
+  }
+  uint32_t time_offset() const {
+    return GetField<uint32_t>(VT_TIME_OFFSET, 0);
+  }
+  const SF::Flat::Vector4 *position() const {
+    return GetStruct<const SF::Flat::Vector4 *>(VT_POSITION);
+  }
+  const SF::Flat::Vector4 *rotation() const {
+    return GetStruct<const SF::Flat::Vector4 *>(VT_ROTATION);
+  }
+  const SF::Flat::Vector4 *scale() const {
+    return GetStruct<const SF::Flat::Vector4 *>(VT_SCALE);
+  }
+  uint32_t instance_id() const {
+    return GetField<uint32_t>(VT_INSTANCE_ID, 0);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return play_instance_uid();
+    else if constexpr (Index == 1) return operator_player_id();
+    else if constexpr (Index == 2) return entity_type();
+    else if constexpr (Index == 3) return table_id();
+    else if constexpr (Index == 4) return time_offset();
+    else if constexpr (Index == 5) return position();
+    else if constexpr (Index == 6) return rotation();
+    else if constexpr (Index == 7) return scale();
+    else if constexpr (Index == 8) return instance_id();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<SF::Flat::GameInstanceUID>(verifier, VT_PLAY_INSTANCE_UID, 4) &&
+           VerifyField<SF::Flat::AccountID>(verifier, VT_OPERATOR_PLAYER_ID, 8) &&
+           VerifyField<uint32_t>(verifier, VT_ENTITY_TYPE, 4) &&
+           VerifyField<uint32_t>(verifier, VT_TABLE_ID, 4) &&
+           VerifyField<uint32_t>(verifier, VT_TIME_OFFSET, 4) &&
+           VerifyField<SF::Flat::Vector4>(verifier, VT_POSITION, 4) &&
+           VerifyField<SF::Flat::Vector4>(verifier, VT_ROTATION, 4) &&
+           VerifyField<SF::Flat::Vector4>(verifier, VT_SCALE, 4) &&
+           VerifyField<uint32_t>(verifier, VT_INSTANCE_ID, 4) &&
+           verifier.EndTable();
+  }
+};
+
+struct UGCEditAddedS2CEvtBuilder {
+  typedef UGCEditAddedS2CEvt Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_play_instance_uid(const SF::Flat::GameInstanceUID *play_instance_uid) {
+    fbb_.AddStruct(UGCEditAddedS2CEvt::VT_PLAY_INSTANCE_UID, play_instance_uid);
+  }
+  void add_operator_player_id(const SF::Flat::AccountID *operator_player_id) {
+    fbb_.AddStruct(UGCEditAddedS2CEvt::VT_OPERATOR_PLAYER_ID, operator_player_id);
+  }
+  void add_entity_type(uint32_t entity_type) {
+    fbb_.AddElement<uint32_t>(UGCEditAddedS2CEvt::VT_ENTITY_TYPE, entity_type, 0);
+  }
+  void add_table_id(uint32_t table_id) {
+    fbb_.AddElement<uint32_t>(UGCEditAddedS2CEvt::VT_TABLE_ID, table_id, 0);
+  }
+  void add_time_offset(uint32_t time_offset) {
+    fbb_.AddElement<uint32_t>(UGCEditAddedS2CEvt::VT_TIME_OFFSET, time_offset, 0);
+  }
+  void add_position(const SF::Flat::Vector4 *position) {
+    fbb_.AddStruct(UGCEditAddedS2CEvt::VT_POSITION, position);
+  }
+  void add_rotation(const SF::Flat::Vector4 *rotation) {
+    fbb_.AddStruct(UGCEditAddedS2CEvt::VT_ROTATION, rotation);
+  }
+  void add_scale(const SF::Flat::Vector4 *scale) {
+    fbb_.AddStruct(UGCEditAddedS2CEvt::VT_SCALE, scale);
+  }
+  void add_instance_id(uint32_t instance_id) {
+    fbb_.AddElement<uint32_t>(UGCEditAddedS2CEvt::VT_INSTANCE_ID, instance_id, 0);
+  }
+  explicit UGCEditAddedS2CEvtBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UGCEditAddedS2CEvt> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UGCEditAddedS2CEvt>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UGCEditAddedS2CEvt> CreateUGCEditAddedS2CEvt(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const SF::Flat::GameInstanceUID *play_instance_uid = nullptr,
+    const SF::Flat::AccountID *operator_player_id = nullptr,
+    uint32_t entity_type = 0,
+    uint32_t table_id = 0,
+    uint32_t time_offset = 0,
+    const SF::Flat::Vector4 *position = nullptr,
+    const SF::Flat::Vector4 *rotation = nullptr,
+    const SF::Flat::Vector4 *scale = nullptr,
+    uint32_t instance_id = 0) {
+  UGCEditAddedS2CEvtBuilder builder_(_fbb);
+  builder_.add_instance_id(instance_id);
+  builder_.add_scale(scale);
+  builder_.add_rotation(rotation);
+  builder_.add_position(position);
+  builder_.add_time_offset(time_offset);
+  builder_.add_table_id(table_id);
+  builder_.add_entity_type(entity_type);
+  builder_.add_operator_player_id(operator_player_id);
+  builder_.add_play_instance_uid(play_instance_uid);
+  return builder_.Finish();
+}
+
+struct UGCEditAddedS2CEvt::Traits {
+  using type = UGCEditAddedS2CEvt;
+  static auto constexpr Create = CreateUGCEditAddedS2CEvt;
+  static constexpr auto name = "UGCEditAddedS2CEvt";
+  static constexpr auto fully_qualified_name = "SF.Flat.PlayInstance.UGCEditAddedS2CEvt";
+  static constexpr size_t fields_number = 9;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "play_instance_uid",
+    "operator_player_id",
+    "entity_type",
+    "table_id",
+    "time_offset",
+    "position",
+    "rotation",
+    "scale",
+    "instance_id"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
+struct UGCEditRemovedS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UGCEditRemovedS2CEvtBuilder Builder;
+  struct Traits;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_PLAY_INSTANCE_UID = 4,
+    VT_OPERATOR_PLAYER_ID = 6,
+    VT_INSTANCE_ID = 8
+  };
+  const SF::Flat::GameInstanceUID *play_instance_uid() const {
+    return GetStruct<const SF::Flat::GameInstanceUID *>(VT_PLAY_INSTANCE_UID);
+  }
+  const SF::Flat::AccountID *operator_player_id() const {
+    return GetStruct<const SF::Flat::AccountID *>(VT_OPERATOR_PLAYER_ID);
+  }
+  uint32_t instance_id() const {
+    return GetField<uint32_t>(VT_INSTANCE_ID, 0);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return play_instance_uid();
+    else if constexpr (Index == 1) return operator_player_id();
+    else if constexpr (Index == 2) return instance_id();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<SF::Flat::GameInstanceUID>(verifier, VT_PLAY_INSTANCE_UID, 4) &&
+           VerifyField<SF::Flat::AccountID>(verifier, VT_OPERATOR_PLAYER_ID, 8) &&
+           VerifyField<uint32_t>(verifier, VT_INSTANCE_ID, 4) &&
+           verifier.EndTable();
+  }
+};
+
+struct UGCEditRemovedS2CEvtBuilder {
+  typedef UGCEditRemovedS2CEvt Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_play_instance_uid(const SF::Flat::GameInstanceUID *play_instance_uid) {
+    fbb_.AddStruct(UGCEditRemovedS2CEvt::VT_PLAY_INSTANCE_UID, play_instance_uid);
+  }
+  void add_operator_player_id(const SF::Flat::AccountID *operator_player_id) {
+    fbb_.AddStruct(UGCEditRemovedS2CEvt::VT_OPERATOR_PLAYER_ID, operator_player_id);
+  }
+  void add_instance_id(uint32_t instance_id) {
+    fbb_.AddElement<uint32_t>(UGCEditRemovedS2CEvt::VT_INSTANCE_ID, instance_id, 0);
+  }
+  explicit UGCEditRemovedS2CEvtBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UGCEditRemovedS2CEvt> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UGCEditRemovedS2CEvt>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UGCEditRemovedS2CEvt> CreateUGCEditRemovedS2CEvt(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const SF::Flat::GameInstanceUID *play_instance_uid = nullptr,
+    const SF::Flat::AccountID *operator_player_id = nullptr,
+    uint32_t instance_id = 0) {
+  UGCEditRemovedS2CEvtBuilder builder_(_fbb);
+  builder_.add_instance_id(instance_id);
+  builder_.add_operator_player_id(operator_player_id);
+  builder_.add_play_instance_uid(play_instance_uid);
+  return builder_.Finish();
+}
+
+struct UGCEditRemovedS2CEvt::Traits {
+  using type = UGCEditRemovedS2CEvt;
+  static auto constexpr Create = CreateUGCEditRemovedS2CEvt;
+  static constexpr auto name = "UGCEditRemovedS2CEvt";
+  static constexpr auto fully_qualified_name = "SF.Flat.PlayInstance.UGCEditRemovedS2CEvt";
+  static constexpr size_t fields_number = 3;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "play_instance_uid",
+    "operator_player_id",
+    "instance_id"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
+struct UGCEditMovedS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UGCEditMovedS2CEvtBuilder Builder;
+  struct Traits;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_PLAY_INSTANCE_UID = 4,
+    VT_OPERATOR_PLAYER_ID = 6,
+    VT_POSITION = 8,
+    VT_ROTATION = 10,
+    VT_SCALE = 12
+  };
+  const SF::Flat::GameInstanceUID *play_instance_uid() const {
+    return GetStruct<const SF::Flat::GameInstanceUID *>(VT_PLAY_INSTANCE_UID);
+  }
+  const SF::Flat::AccountID *operator_player_id() const {
+    return GetStruct<const SF::Flat::AccountID *>(VT_OPERATOR_PLAYER_ID);
+  }
+  const SF::Flat::Vector4 *position() const {
+    return GetStruct<const SF::Flat::Vector4 *>(VT_POSITION);
+  }
+  const SF::Flat::Vector4 *rotation() const {
+    return GetStruct<const SF::Flat::Vector4 *>(VT_ROTATION);
+  }
+  const SF::Flat::Vector4 *scale() const {
+    return GetStruct<const SF::Flat::Vector4 *>(VT_SCALE);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return play_instance_uid();
+    else if constexpr (Index == 1) return operator_player_id();
+    else if constexpr (Index == 2) return position();
+    else if constexpr (Index == 3) return rotation();
+    else if constexpr (Index == 4) return scale();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<SF::Flat::GameInstanceUID>(verifier, VT_PLAY_INSTANCE_UID, 4) &&
+           VerifyField<SF::Flat::AccountID>(verifier, VT_OPERATOR_PLAYER_ID, 8) &&
+           VerifyField<SF::Flat::Vector4>(verifier, VT_POSITION, 4) &&
+           VerifyField<SF::Flat::Vector4>(verifier, VT_ROTATION, 4) &&
+           VerifyField<SF::Flat::Vector4>(verifier, VT_SCALE, 4) &&
+           verifier.EndTable();
+  }
+};
+
+struct UGCEditMovedS2CEvtBuilder {
+  typedef UGCEditMovedS2CEvt Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_play_instance_uid(const SF::Flat::GameInstanceUID *play_instance_uid) {
+    fbb_.AddStruct(UGCEditMovedS2CEvt::VT_PLAY_INSTANCE_UID, play_instance_uid);
+  }
+  void add_operator_player_id(const SF::Flat::AccountID *operator_player_id) {
+    fbb_.AddStruct(UGCEditMovedS2CEvt::VT_OPERATOR_PLAYER_ID, operator_player_id);
+  }
+  void add_position(const SF::Flat::Vector4 *position) {
+    fbb_.AddStruct(UGCEditMovedS2CEvt::VT_POSITION, position);
+  }
+  void add_rotation(const SF::Flat::Vector4 *rotation) {
+    fbb_.AddStruct(UGCEditMovedS2CEvt::VT_ROTATION, rotation);
+  }
+  void add_scale(const SF::Flat::Vector4 *scale) {
+    fbb_.AddStruct(UGCEditMovedS2CEvt::VT_SCALE, scale);
+  }
+  explicit UGCEditMovedS2CEvtBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UGCEditMovedS2CEvt> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UGCEditMovedS2CEvt>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UGCEditMovedS2CEvt> CreateUGCEditMovedS2CEvt(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const SF::Flat::GameInstanceUID *play_instance_uid = nullptr,
+    const SF::Flat::AccountID *operator_player_id = nullptr,
+    const SF::Flat::Vector4 *position = nullptr,
+    const SF::Flat::Vector4 *rotation = nullptr,
+    const SF::Flat::Vector4 *scale = nullptr) {
+  UGCEditMovedS2CEvtBuilder builder_(_fbb);
+  builder_.add_scale(scale);
+  builder_.add_rotation(rotation);
+  builder_.add_position(position);
+  builder_.add_operator_player_id(operator_player_id);
+  builder_.add_play_instance_uid(play_instance_uid);
+  return builder_.Finish();
+}
+
+struct UGCEditMovedS2CEvt::Traits {
+  using type = UGCEditMovedS2CEvt;
+  static auto constexpr Create = CreateUGCEditMovedS2CEvt;
+  static constexpr auto name = "UGCEditMovedS2CEvt";
+  static constexpr auto fully_qualified_name = "SF.Flat.PlayInstance.UGCEditMovedS2CEvt";
+  static constexpr size_t fields_number = 5;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "play_instance_uid",
+    "operator_player_id",
+    "position",
+    "rotation",
+    "scale"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
 
 struct CreateStreamCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef CreateStreamCmdBuilder Builder;

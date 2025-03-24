@@ -1,6 +1,6 @@
 ﻿***
  
- CopyRight (c) 2024 StormForge
+ CopyRight (c) 2025 StormForge
  
  Description : Game Message Protocol API Document
 
@@ -821,6 +821,7 @@ C++: Cast message to JoinGameInstanceRes to access values
 		- TransactionID: type:TransactionID, 
 		- Result: type:Result, 
 		- InsUID: type:GameInstanceUID, Game instance ID
+		- ZoneCustomData: type:byte, Game zone custom data like UGC modification
 		- ServerPublicAddress: type:String, Game instance address
 
 
@@ -865,30 +866,6 @@ C++: Cast message to SearchGameInstanceRes to access values
 		- TransactionID: type:TransactionID, 
 		- Result: type:Result, 
 		- GameInstances: type:VariableTable, Game instance informations
-
-
-## GetCharacterDataInGameInstance Request
-Search game instance
-
-1. Command interface
-
-        Result GetCharacterDataInGameInstanceCmd(const TransactionID &InTransactionID, const GameInstanceUID &InGameInstanceUID, const PlayerID &InPlayerID)
-
-		- TransactionID: type:TransactionID, 
-
-		- GameInstanceUID: type:GameInstanceUID, Game instance UID
-
-		- PlayerID: type:PlayerID, Player Id to get
-
-2. Result interface
-
-C++: Cast message to GetCharacterDataInGameInstanceRes to access values
-
-
-		- TransactionID: type:TransactionID, 
-		- Result: type:Result, 
-		- PlayerID: type:PlayerID, Player Movement
-		- GameInstances: type:VariableTable, Game instance ID
 
 
 ## RequestGameMatch Request

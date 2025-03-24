@@ -111,8 +111,6 @@ namespace SF
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_LeaveGameInstanceRes,&LeaveGameInstanceRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_SearchGameInstanceCmd,&SearchGameInstanceCmd));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_SearchGameInstanceRes,&SearchGameInstanceRes));
-		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_GetCharacterDataInGameInstanceCmd,&GetCharacterDataInGameInstanceCmd));
-		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_GetCharacterDataInGameInstanceRes,&GetCharacterDataInGameInstanceRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_RequestGameMatchCmd,&RequestGameMatchCmd));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_RequestGameMatchRes,&RequestGameMatchRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_GameMatchedS2CEvt,&GameMatchedS2CEvt));
@@ -1363,36 +1361,6 @@ namespace SF
 
 		return hr;
 	}; // Result GameMessageLog::SearchGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
-	Result GameMessageLog::GetCharacterDataInGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
-	{
- 		Result hr;
-
-		protocolCheckPtr(messageHeader);
-
-		std::string packetString;
-		static const std::string tableName = "SF.Flat.Game.GetCharacterDataInGameInstanceCmd";
-		if (stm_Parser.LookupStruct(tableName)) {
-		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
-		}
-		SFLog(Net, Debug1, "{0} Game:GetCharacterDataInGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
-
-		return hr;
-	}; // Result GameMessageLog::GetCharacterDataInGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
-	Result GameMessageLog::GetCharacterDataInGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
-	{
- 		Result hr;
-
-		protocolCheckPtr(messageHeader);
-
-		std::string packetString;
-		static const std::string tableName = "SF.Flat.Game.GetCharacterDataInGameInstanceRes";
-		if (stm_Parser.LookupStruct(tableName)) {
-		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
-		}
-		SFLog(Net, Debug1, "{0} Game:GetCharacterDataInGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
-
-		return hr;
-	}; // Result GameMessageLog::GetCharacterDataInGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
 	Result GameMessageLog::RequestGameMatchCmd(const char* prefix, const MessageHeader* messageHeader)
 	{
  		Result hr;

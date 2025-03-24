@@ -24,7 +24,7 @@
 namespace SF
 {
  	// Cmd: Player Join request.
-	Result PlayInstanceRPCSendAdapter::JoinPlayInstanceCmd( const TransactionID &InTransactionID, const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
+	Result PlayInstanceRPCSendAdapter::JoinPlayInstanceCmd( const TransactionID &InTransactionID, const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier, const uint32_t &InCustomZoneDataVersion )
 	{
  		Result hr;
 
@@ -38,6 +38,7 @@ namespace SF
 		_builder.add_play_instance_uid(PlayInstanceUIDOffset);
 		_builder.add_player_id(PlayerIDOffset);
 		_builder.add_player_identifier(PlayerIdentifierOffset);
+		_builder.add_custom_zone_data_version(InCustomZoneDataVersion);
 		flatbuffers::Offset<SF::Flat::PlayInstance::JoinPlayInstanceCmd> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
 
@@ -45,7 +46,7 @@ namespace SF
 
 
 		return hr;
-	}; // Result PlayInstanceRPCSendAdapter::JoinPlayInstanceCmd( const TransactionID &InTransactionID, const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
+	}; // Result PlayInstanceRPCSendAdapter::JoinPlayInstanceCmd( const TransactionID &InTransactionID, const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier, const uint32_t &InCustomZoneDataVersion )
 	// C2S: Play packet
 	Result PlayInstanceRPCSendAdapter::PlayPacketC2SEvt( const GameInstanceUID &InPlayInstanceUID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 	{
@@ -440,6 +441,92 @@ namespace SF
 
 		return hr;
 	}; // Result PlayInstanceRPCSendAdapter::SendVoiceDataC2SEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
+	// Cmd: UGC zone edit command
+	Result PlayInstanceRPCSendAdapter::UGCEditAddCmd( const TransactionID &InTransactionID, const StringCrc32 &InEntityType, const uint32_t &InTableId, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale )
+	{
+ 		Result hr;
+
+		protocolCheckPtr(m_Endpoint);
+
+		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
+		auto PositionOffset = SF::Flat::Helper::CreateVector4(fbb, InPosition);
+		auto RotationOffset = SF::Flat::Helper::CreateVector4(fbb, InRotation);
+		auto ScaleOffset = SF::Flat::Helper::CreateVector4(fbb, InScale);
+		SF::Flat::PlayInstance::UGCEditAddCmdBuilder _builder(fbb);
+		_builder.add_entity_type(InEntityType);
+		_builder.add_table_id(InTableId);
+		_builder.add_position(PositionOffset);
+		_builder.add_rotation(RotationOffset);
+		_builder.add_scale(ScaleOffset);
+		flatbuffers::Offset<SF::Flat::PlayInstance::UGCEditAddCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
+
+		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_UGCEditAddCmd, fbb));
+
+
+		return hr;
+	}; // Result PlayInstanceRPCSendAdapter::UGCEditAddCmd( const TransactionID &InTransactionID, const StringCrc32 &InEntityType, const uint32_t &InTableId, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale )
+	// Cmd: UGC zone edit command
+	Result PlayInstanceRPCSendAdapter::UGCEditMoveCmd( const TransactionID &InTransactionID, const uint32_t &InInstanceId, const StringCrc32 &InEntityType, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale )
+	{
+ 		Result hr;
+
+		protocolCheckPtr(m_Endpoint);
+
+		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
+		auto PositionOffset = SF::Flat::Helper::CreateVector4(fbb, InPosition);
+		auto RotationOffset = SF::Flat::Helper::CreateVector4(fbb, InRotation);
+		auto ScaleOffset = SF::Flat::Helper::CreateVector4(fbb, InScale);
+		SF::Flat::PlayInstance::UGCEditMoveCmdBuilder _builder(fbb);
+		_builder.add_instance_id(InInstanceId);
+		_builder.add_entity_type(InEntityType);
+		_builder.add_position(PositionOffset);
+		_builder.add_rotation(RotationOffset);
+		_builder.add_scale(ScaleOffset);
+		flatbuffers::Offset<SF::Flat::PlayInstance::UGCEditMoveCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
+
+		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_UGCEditMoveCmd, fbb));
+
+
+		return hr;
+	}; // Result PlayInstanceRPCSendAdapter::UGCEditMoveCmd( const TransactionID &InTransactionID, const uint32_t &InInstanceId, const StringCrc32 &InEntityType, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale )
+	// Cmd: UGC zone edit command
+	Result PlayInstanceRPCSendAdapter::UGCEditDeleteCmd( const TransactionID &InTransactionID, const uint32_t &InInstanceId )
+	{
+ 		Result hr;
+
+		protocolCheckPtr(m_Endpoint);
+
+		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
+		SF::Flat::PlayInstance::UGCEditDeleteCmdBuilder _builder(fbb);
+		_builder.add_instance_id(InInstanceId);
+		flatbuffers::Offset<SF::Flat::PlayInstance::UGCEditDeleteCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
+
+		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_UGCEditDeleteCmd, fbb));
+
+
+		return hr;
+	}; // Result PlayInstanceRPCSendAdapter::UGCEditDeleteCmd( const TransactionID &InTransactionID, const uint32_t &InInstanceId )
+	// Cmd: UGC zone edit command
+	Result PlayInstanceRPCSendAdapter::UGCEditClaimBackCmd( const TransactionID &InTransactionID, const uint32_t &InInstanceId )
+	{
+ 		Result hr;
+
+		protocolCheckPtr(m_Endpoint);
+
+		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
+		SF::Flat::PlayInstance::UGCEditClaimBackCmdBuilder _builder(fbb);
+		_builder.add_instance_id(InInstanceId);
+		flatbuffers::Offset<SF::Flat::PlayInstance::UGCEditClaimBackCmd> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
+
+		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::PlayInstance::MID_UGCEditClaimBackCmd, fbb));
+
+
+		return hr;
+	}; // Result PlayInstanceRPCSendAdapter::UGCEditClaimBackCmd( const TransactionID &InTransactionID, const uint32_t &InInstanceId )
 	// Cmd: Create stream instance
 	Result PlayInstanceRPCSendAdapter::CreateStreamCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 	{
@@ -1193,6 +1280,161 @@ namespace SF
 
 		return hr;
 	}; // Result PlayInstanceSvrRPCSendAdapter::VoiceDataS2CEvt( const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
+	// Cmd: UGC zone edit command
+	Result PlayInstanceSvrRPCSendAdapter::UGCEditAddRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InInstanceId, const uint32_t &InTimeOffset, const Array<VariableTable>& InInvenChanges )
+	{
+ 		Result hr;
+
+		protocolCheckPtr(m_Endpoint);
+
+		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
+		auto InvenChangesOffset = SF::Flat::Helper::CreateVariableTableVector(fbb, InInvenChanges);
+		SF::Flat::PlayInstance::UGCEditAddResBuilder _builder(fbb);
+		_builder.add_instance_id(InInstanceId);
+		_builder.add_time_offset(InTimeOffset);
+		_builder.add_inven_changes(InvenChangesOffset);
+		flatbuffers::Offset<SF::Flat::PlayInstance::UGCEditAddRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
+
+		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_UGCEditAddRes, fbb));
+
+
+		return hr;
+	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditAddRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InInstanceId, const uint32_t &InTimeOffset, const Array<VariableTable>& InInvenChanges )
+	// Cmd: UGC zone edit command
+	Result PlayInstanceSvrRPCSendAdapter::UGCEditMoveRes( const TransactionID &InTransactionID, const Result &InResult )
+	{
+ 		Result hr;
+
+		protocolCheckPtr(m_Endpoint);
+
+		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
+		SF::Flat::PlayInstance::UGCEditMoveResBuilder _builder(fbb);
+		flatbuffers::Offset<SF::Flat::PlayInstance::UGCEditMoveRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
+
+		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_UGCEditMoveRes, fbb));
+
+
+		return hr;
+	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditMoveRes( const TransactionID &InTransactionID, const Result &InResult )
+	// Cmd: UGC zone edit command
+	Result PlayInstanceSvrRPCSendAdapter::UGCEditDeleteRes( const TransactionID &InTransactionID, const Result &InResult )
+	{
+ 		Result hr;
+
+		protocolCheckPtr(m_Endpoint);
+
+		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
+		SF::Flat::PlayInstance::UGCEditDeleteResBuilder _builder(fbb);
+		flatbuffers::Offset<SF::Flat::PlayInstance::UGCEditDeleteRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
+
+		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_UGCEditDeleteRes, fbb));
+
+
+		return hr;
+	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditDeleteRes( const TransactionID &InTransactionID, const Result &InResult )
+	// Cmd: UGC zone edit command
+	Result PlayInstanceSvrRPCSendAdapter::UGCEditClaimBackRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InInstanceId, const Array<VariableTable>& InInvenChanges )
+	{
+ 		Result hr;
+
+		protocolCheckPtr(m_Endpoint);
+
+		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
+		auto InvenChangesOffset = SF::Flat::Helper::CreateVariableTableVector(fbb, InInvenChanges);
+		SF::Flat::PlayInstance::UGCEditClaimBackResBuilder _builder(fbb);
+		_builder.add_instance_id(InInstanceId);
+		_builder.add_inven_changes(InvenChangesOffset);
+		flatbuffers::Offset<SF::Flat::PlayInstance::UGCEditClaimBackRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
+
+		protocolCheck(Send(InTransactionID, InResult, Message::PlayInstance::MID_UGCEditClaimBackRes, fbb));
+
+
+		return hr;
+	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditClaimBackRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InInstanceId, const Array<VariableTable>& InInvenChanges )
+	// S2C: UGC zone edited event
+	Result PlayInstanceSvrRPCSendAdapter::UGCEditAddedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const StringCrc32 &InEntityType, const uint32_t &InTableId, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale, const uint32_t &InInstanceId )
+	{
+ 		Result hr;
+
+		protocolCheckPtr(m_Endpoint);
+
+		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
+		auto PlayInstanceUIDOffset = SF::Flat::Helper::CreateGameInstanceUID(fbb, InPlayInstanceUID);
+		auto OperatorPlayerIDOffset = SF::Flat::Helper::CreatePlayerID(fbb, InOperatorPlayerID);
+		auto PositionOffset = SF::Flat::Helper::CreateVector4(fbb, InPosition);
+		auto RotationOffset = SF::Flat::Helper::CreateVector4(fbb, InRotation);
+		auto ScaleOffset = SF::Flat::Helper::CreateVector4(fbb, InScale);
+		SF::Flat::PlayInstance::UGCEditAddedS2CEvtBuilder _builder(fbb);
+		_builder.add_play_instance_uid(PlayInstanceUIDOffset);
+		_builder.add_operator_player_id(OperatorPlayerIDOffset);
+		_builder.add_entity_type(InEntityType);
+		_builder.add_table_id(InTableId);
+		_builder.add_time_offset(InTimeOffset);
+		_builder.add_position(PositionOffset);
+		_builder.add_rotation(RotationOffset);
+		_builder.add_scale(ScaleOffset);
+		_builder.add_instance_id(InInstanceId);
+		flatbuffers::Offset<SF::Flat::PlayInstance::UGCEditAddedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
+
+		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_UGCEditAddedS2CEvt, fbb));
+
+
+		return hr;
+	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditAddedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const StringCrc32 &InEntityType, const uint32_t &InTableId, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale, const uint32_t &InInstanceId )
+	// S2C: UGC zone edited event
+	Result PlayInstanceSvrRPCSendAdapter::UGCEditRemovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InInstanceId )
+	{
+ 		Result hr;
+
+		protocolCheckPtr(m_Endpoint);
+
+		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
+		auto PlayInstanceUIDOffset = SF::Flat::Helper::CreateGameInstanceUID(fbb, InPlayInstanceUID);
+		auto OperatorPlayerIDOffset = SF::Flat::Helper::CreatePlayerID(fbb, InOperatorPlayerID);
+		SF::Flat::PlayInstance::UGCEditRemovedS2CEvtBuilder _builder(fbb);
+		_builder.add_play_instance_uid(PlayInstanceUIDOffset);
+		_builder.add_operator_player_id(OperatorPlayerIDOffset);
+		_builder.add_instance_id(InInstanceId);
+		flatbuffers::Offset<SF::Flat::PlayInstance::UGCEditRemovedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
+
+		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_UGCEditRemovedS2CEvt, fbb));
+
+
+		return hr;
+	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditRemovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InInstanceId )
+	// S2C: UGC zone edited event
+	Result PlayInstanceSvrRPCSendAdapter::UGCEditMovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale )
+	{
+ 		Result hr;
+
+		protocolCheckPtr(m_Endpoint);
+
+		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
+		auto PlayInstanceUIDOffset = SF::Flat::Helper::CreateGameInstanceUID(fbb, InPlayInstanceUID);
+		auto OperatorPlayerIDOffset = SF::Flat::Helper::CreatePlayerID(fbb, InOperatorPlayerID);
+		auto PositionOffset = SF::Flat::Helper::CreateVector4(fbb, InPosition);
+		auto RotationOffset = SF::Flat::Helper::CreateVector4(fbb, InRotation);
+		auto ScaleOffset = SF::Flat::Helper::CreateVector4(fbb, InScale);
+		SF::Flat::PlayInstance::UGCEditMovedS2CEvtBuilder _builder(fbb);
+		_builder.add_play_instance_uid(PlayInstanceUIDOffset);
+		_builder.add_operator_player_id(OperatorPlayerIDOffset);
+		_builder.add_position(PositionOffset);
+		_builder.add_rotation(RotationOffset);
+		_builder.add_scale(ScaleOffset);
+		flatbuffers::Offset<SF::Flat::PlayInstance::UGCEditMovedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
+
+		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_UGCEditMovedS2CEvt, fbb));
+
+
+		return hr;
+	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditMovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale )
 	// Cmd: Create stream instance
 	Result PlayInstanceSvrRPCSendAdapter::CreateStreamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
 	{

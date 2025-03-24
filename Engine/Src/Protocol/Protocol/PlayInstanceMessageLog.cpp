@@ -81,6 +81,17 @@ namespace SF
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_CallFunctionRes,&CallFunctionRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_SendVoiceDataC2SEvt,&SendVoiceDataC2SEvt));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_VoiceDataS2CEvt,&VoiceDataS2CEvt));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_UGCEditAddCmd,&UGCEditAddCmd));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_UGCEditAddRes,&UGCEditAddRes));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_UGCEditMoveCmd,&UGCEditMoveCmd));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_UGCEditMoveRes,&UGCEditMoveRes));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_UGCEditDeleteCmd,&UGCEditDeleteCmd));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_UGCEditDeleteRes,&UGCEditDeleteRes));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_UGCEditClaimBackCmd,&UGCEditClaimBackCmd));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_UGCEditClaimBackRes,&UGCEditClaimBackRes));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_UGCEditAddedS2CEvt,&UGCEditAddedS2CEvt));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_UGCEditRemovedS2CEvt,&UGCEditRemovedS2CEvt));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_UGCEditMovedS2CEvt,&UGCEditMovedS2CEvt));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_CreateStreamCmd,&CreateStreamCmd));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_CreateStreamRes,&CreateStreamRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_FindStreamCmd,&FindStreamCmd));
@@ -832,6 +843,171 @@ namespace SF
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::VoiceDataS2CEvt(const char* prefix, const MessageHeader* messageHeader)
+	Result PlayInstanceMessageLog::UGCEditAddCmd(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.PlayInstance.UGCEditAddCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} PlayInstance:UGCEditAddCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result PlayInstanceMessageLog::UGCEditAddCmd(const char* prefix, const MessageHeader* messageHeader)
+	Result PlayInstanceMessageLog::UGCEditAddRes(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.PlayInstance.UGCEditAddRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} PlayInstance:UGCEditAddRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result PlayInstanceMessageLog::UGCEditAddRes(const char* prefix, const MessageHeader* messageHeader)
+	Result PlayInstanceMessageLog::UGCEditMoveCmd(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.PlayInstance.UGCEditMoveCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} PlayInstance:UGCEditMoveCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result PlayInstanceMessageLog::UGCEditMoveCmd(const char* prefix, const MessageHeader* messageHeader)
+	Result PlayInstanceMessageLog::UGCEditMoveRes(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.PlayInstance.UGCEditMoveRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} PlayInstance:UGCEditMoveRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result PlayInstanceMessageLog::UGCEditMoveRes(const char* prefix, const MessageHeader* messageHeader)
+	Result PlayInstanceMessageLog::UGCEditDeleteCmd(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.PlayInstance.UGCEditDeleteCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} PlayInstance:UGCEditDeleteCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result PlayInstanceMessageLog::UGCEditDeleteCmd(const char* prefix, const MessageHeader* messageHeader)
+	Result PlayInstanceMessageLog::UGCEditDeleteRes(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.PlayInstance.UGCEditDeleteRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} PlayInstance:UGCEditDeleteRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result PlayInstanceMessageLog::UGCEditDeleteRes(const char* prefix, const MessageHeader* messageHeader)
+	Result PlayInstanceMessageLog::UGCEditClaimBackCmd(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.PlayInstance.UGCEditClaimBackCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} PlayInstance:UGCEditClaimBackCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result PlayInstanceMessageLog::UGCEditClaimBackCmd(const char* prefix, const MessageHeader* messageHeader)
+	Result PlayInstanceMessageLog::UGCEditClaimBackRes(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.PlayInstance.UGCEditClaimBackRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} PlayInstance:UGCEditClaimBackRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result PlayInstanceMessageLog::UGCEditClaimBackRes(const char* prefix, const MessageHeader* messageHeader)
+	Result PlayInstanceMessageLog::UGCEditAddedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.PlayInstance.UGCEditAddedS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} PlayInstance:UGCEditAddedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result PlayInstanceMessageLog::UGCEditAddedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
+	Result PlayInstanceMessageLog::UGCEditRemovedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.PlayInstance.UGCEditRemovedS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} PlayInstance:UGCEditRemovedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result PlayInstanceMessageLog::UGCEditRemovedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
+	Result PlayInstanceMessageLog::UGCEditMovedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.PlayInstance.UGCEditMovedS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} PlayInstance:UGCEditMovedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result PlayInstanceMessageLog::UGCEditMovedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
 	Result PlayInstanceMessageLog::CreateStreamCmd(const char* prefix, const MessageHeader* messageHeader)
 	{
  		Result hr;

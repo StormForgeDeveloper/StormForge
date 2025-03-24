@@ -673,27 +673,6 @@ namespace SF
 
 		return hr;
 	}; // Result GameRPCSendAdapter::SearchGameInstanceCmd( const TransactionID &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID )
-	// Cmd: Search game instance
-	Result GameRPCSendAdapter::GetCharacterDataInGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InGameInstanceUID, const PlayerID &InPlayerID )
-	{
- 		Result hr;
-
-		protocolCheckPtr(m_Endpoint);
-
-		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
-		auto GameInstanceUIDOffset = SF::Flat::Helper::CreateGameInstanceUID(fbb, InGameInstanceUID);
-		auto PlayerIDOffset = SF::Flat::Helper::CreatePlayerID(fbb, InPlayerID);
-		SF::Flat::Game::GetCharacterDataInGameInstanceCmdBuilder _builder(fbb);
-		_builder.add_game_instance_uid(GameInstanceUIDOffset);
-		_builder.add_player_id(PlayerIDOffset);
-		flatbuffers::Offset<SF::Flat::Game::GetCharacterDataInGameInstanceCmd> packetOffset = _builder.Finish();
-		fbb.Finish(packetOffset);
-
-		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_GetCharacterDataInGameInstanceCmd, fbb));
-
-
-		return hr;
-	}; // Result GameRPCSendAdapter::GetCharacterDataInGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InGameInstanceUID, const PlayerID &InPlayerID )
 	// Cmd: Request Game match
 	Result GameRPCSendAdapter::RequestGameMatchCmd( const TransactionID &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole )
 	{
@@ -1970,7 +1949,7 @@ namespace SF
 		return hr;
 	}; // Result GameSvrRPCSendAdapter::PartyChatMessageS2CEvt( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
 	// Cmd: Join to a game instance
-	Result GameSvrRPCSendAdapter::JoinGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InInsUID, const char* InServerPublicAddress )
+	Result GameSvrRPCSendAdapter::JoinGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InInsUID, const Array<uint8_t>& InZoneCustomData, const char* InServerPublicAddress )
 	{
  		Result hr;
 
@@ -1978,9 +1957,11 @@ namespace SF
 
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		auto InsUIDOffset = SF::Flat::Helper::CreateGameInstanceUID(fbb, InInsUID);
+		auto ZoneCustomDataOffset = SF::Flat::Helper::CreatebyteVector(fbb, InZoneCustomData);
 		auto ServerPublicAddressOffset = SF::Flat::Helper::CreateString(fbb, InServerPublicAddress);
 		SF::Flat::Game::JoinGameInstanceResBuilder _builder(fbb);
 		_builder.add_ins_uid(InsUIDOffset);
+		_builder.add_zone_custom_data(ZoneCustomDataOffset);
 		_builder.add_server_public_address(ServerPublicAddressOffset);
 		flatbuffers::Offset<SF::Flat::Game::JoinGameInstanceRes> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
@@ -1989,7 +1970,7 @@ namespace SF
 
 
 		return hr;
-	}; // Result GameSvrRPCSendAdapter::JoinGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InInsUID, const char* InServerPublicAddress )
+	}; // Result GameSvrRPCSendAdapter::JoinGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InInsUID, const Array<uint8_t>& InZoneCustomData, const char* InServerPublicAddress )
 	// Cmd: Leave game instance
 	Result GameSvrRPCSendAdapter::LeaveGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult )
 	{
@@ -2026,27 +2007,6 @@ namespace SF
 
 		return hr;
 	}; // Result GameSvrRPCSendAdapter::SearchGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances )
-	// Cmd: Search game instance
-	Result GameSvrRPCSendAdapter::GetCharacterDataInGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances )
-	{
- 		Result hr;
-
-		protocolCheckPtr(m_Endpoint);
-
-		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
-		auto PlayerIDOffset = SF::Flat::Helper::CreatePlayerID(fbb, InPlayerID);
-		auto GameInstancesOffset = SF::Flat::Helper::CreateVariableTable(fbb, InGameInstances);
-		SF::Flat::Game::GetCharacterDataInGameInstanceResBuilder _builder(fbb);
-		_builder.add_player_id(PlayerIDOffset);
-		_builder.add_game_instances(GameInstancesOffset);
-		flatbuffers::Offset<SF::Flat::Game::GetCharacterDataInGameInstanceRes> packetOffset = _builder.Finish();
-		fbb.Finish(packetOffset);
-
-		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_GetCharacterDataInGameInstanceRes, fbb));
-
-
-		return hr;
-	}; // Result GameSvrRPCSendAdapter::GetCharacterDataInGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances )
 	// Cmd: Request Game match
 	Result GameSvrRPCSendAdapter::RequestGameMatchRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 	{

@@ -111,8 +111,6 @@ namespace SF
 		static Result LeaveGameInstanceRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result SearchGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader);
 		static Result SearchGameInstanceRes(const char* prefix, const MessageHeader* messageHeader);
-		static Result GetCharacterDataInGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader);
-		static Result GetCharacterDataInGameInstanceRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result RequestGameMatchCmd(const char* prefix, const MessageHeader* messageHeader);
 		static Result RequestGameMatchRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result GameMatchedS2CEvt(const char* prefix, const MessageHeader* messageHeader);

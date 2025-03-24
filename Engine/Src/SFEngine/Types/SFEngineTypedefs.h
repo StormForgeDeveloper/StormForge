@@ -121,9 +121,10 @@ namespace SF {
 	const char* ToString(ClusterID clusterId);
 	StringCrc64 ToStringCrc64(ClusterID clusterId);
 
-	inline ClusterID operator++(ClusterID clusterID)
+	inline ClusterID& operator++(ClusterID& clusterID)
 	{
-		return static_cast<ClusterID>((INT)clusterID + 1);
+        clusterID = static_cast<ClusterID>((INT)clusterID + 1);
+        return clusterID;
 	}
 
 	inline ClusterID operator++(ClusterID& clusterID, int)

@@ -497,6 +497,8 @@ namespace SF {
 			}
 			Result find(const KeyType& keyVal, ItemType &data) const { return Find(keyVal, data); }
 
+            Result Contains(const KeyType& keyVal) const { ItemType data; return Find(keyVal, data); }
+
 			// Erase a data from hash map
 			Result Erase(const KeyType &key, ValueType& erasedValue)
 			{

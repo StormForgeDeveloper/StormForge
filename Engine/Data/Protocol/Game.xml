@@ -387,8 +387,9 @@
 			</Cmd>
 			<Res>
 				<Params TypeName="GameInstanceUID" Name="InsUID" Desc="Game instance ID"/>
-				<Params TypeName="String" Name="ServerPublicAddress" Desc="Game instance address"/>
-			</Res>
+                <Params TypeName="byte" IsArray="true" Name="ZoneCustomData" Desc="Game zone custom data like UGC modification"/>
+                <Params TypeName="String" Name="ServerPublicAddress" Desc="Game instance address"/>
+            </Res>
 		</Command>
 
 		<Command Name="LeaveGameInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Leave game instance">
@@ -408,18 +409,6 @@
 				<Params TypeName="VariableTable" IsArray="true" Name="GameInstances" Desc="Game instance informations"/>
 			</Res>
 		</Command>
-
-		<Command Name="GetCharacterDataInGameInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Search game instance">
-			<Cmd>
-				<Params TypeName="GameInstanceUID" Name="GameInstanceUID" Desc="Game instance UID"/>
-				<Params TypeName="PlayerID" Name="PlayerID" Desc="Player Id to get"/>
-			</Cmd>
-			<Res>
-				<Params TypeName="PlayerID" Name="PlayerID" Desc="Player Movement"/>
-				<Params TypeName="VariableTable" Name="GameInstances" Desc="Game instance ID"/>
-			</Res>
-		</Command>
-
 
 		<!-- ===================================================  Game matching  ================================================== -->
 

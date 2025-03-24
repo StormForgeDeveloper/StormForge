@@ -9,6 +9,7 @@
 				<Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance to join"/>
 				<Params TypeName="PlayerID" Name="PlayerID" Desc="Joining player id"/>
 				<Params TypeName="String" Name="PlayerIdentifier" Desc="Joining player identifier. string value"/>
+                <Params TypeName="uint32" Name="CustomZoneDataVersion" Desc="Custom zone data version the client has"/>
 			</Cmd>
 			<Res>
 				<Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="joined Play instance ID"/>
@@ -51,8 +52,7 @@
 			<Params TypeName="uint32" Name="ActorID" Desc="Removed actor Id"/>
 		</S2CEvent>
 
-
-		<C2SEvent Name="PlayerMovement" Reliable="false" Crypto="No" Trace="Debug3" Desc="Player Movement">
+        <C2SEvent Name="PlayerMovement" Reliable="false" Crypto="No" Trace="Debug3" Desc="Player Movement">
 			<Params TypeName="GameInstanceUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
 			<Params TypeName="PlayerID" Name="PlayerID" Desc="Player Id"/>
 			<Params TypeName="ActorMovement" Name="Movement" Desc="Movement attributes"/>
@@ -328,7 +328,80 @@
             <Params TypeName="uint16" Name="FrameIndex" Desc="voice frame index"/>
             <Params TypeName="uint8" IsArray="true" Name="VoiceData" Desc="Voice data"/>
         </S2CEvent>
-        
+
+        <!-- ============================= UGC zone edit ======================================= -->
+
+        <Command Name="UGCEditAdd" Reliable="true" Crypto="No" Trace="Debug1" Desc="UGC zone edit command">
+            <Cmd>
+                <Params TypeName="StringCrc32" Name="EntityType" Desc="EntityType"/>
+                <Params TypeName="uint32" Name="TableId" Desc="Data table Id"/>
+                <Params TypeName="Vector4" Name="Position" Desc="Position"/>
+                <Params TypeName="Vector4" Name="Rotation" Desc="Rotation quaternion value"/>
+                <Params TypeName="Vector4" Name="Scale" Desc="Scale"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="uint32" Name="InstanceId" Desc="Added entity's Instance Id"/>
+                <Params TypeName="uint32" Name="TimeOffset" Desc="TimeOffset for animation sync"/>
+                <Params TypeName="VariableTable" IsArray="true" Name="InvenChanges" Desc="Inventory changes"/>
+            </Res>
+        </Command>
+
+        <Command Name="UGCEditMove" Reliable="true" Crypto="No" Trace="Debug1" Desc="UGC zone edit command">
+            <Cmd>
+                <Params TypeName="uint32" Name="InstanceId" Desc="Added entity's Instance Id"/>
+                <Params TypeName="StringCrc32" Name="EntityType" Desc="EntityType"/>
+                <Params TypeName="Vector4" Name="Position" Desc="Position"/>
+                <Params TypeName="Vector4" Name="Rotation" Desc="Rotation quaternion value"/>
+                <Params TypeName="Vector4" Name="Scale" Desc="Scale"/>
+            </Cmd>
+            <Res>
+            </Res>
+        </Command>
+
+        <Command Name="UGCEditDelete" Reliable="true" Crypto="No" Trace="Debug1" Desc="UGC zone edit command">
+            <Cmd>
+                <Params TypeName="uint32" Name="InstanceId" Desc="Entity's Instance Id to delete"/>
+            </Cmd>
+            <Res>
+            </Res>
+        </Command>
+
+        <Command Name="UGCEditClaimBack" Reliable="true" Crypto="No" Trace="Debug1" Desc="UGC zone edit command">
+            <Cmd>
+                <Params TypeName="uint32" Name="InstanceId" Desc="Entity's Instance Id"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="uint32" Name="InstanceId" Desc="Entity's Instance Id"/>
+                <Params TypeName="VariableTable" IsArray="true" Name="InvenChanges" Desc="Inventory changes"/>
+            </Res>
+        </Command>
+
+        <S2CEvent Name="UGCEditAdded" Reliable="true" Crypto="No" Trace="Debug1" Desc="UGC zone edited event">
+            <Params TypeName="GameInstanceUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+            <Params TypeName="PlayerID" Name="OperatorPlayerID" Desc="Player who operated"/>
+            <Params TypeName="StringCrc32" Name="EntityType" Desc="EntityType"/>
+            <Params TypeName="uint32" Name="TableId" Desc="Data table Id"/>
+            <Params TypeName="uint32" Name="TimeOffset" Desc="TimeOffset for animation sync"/>
+            <Params TypeName="Vector4" Name="Position" Desc="Position"/>
+            <Params TypeName="Vector4" Name="Rotation" Desc="Rotation quaternion value"/>
+            <Params TypeName="Vector4" Name="Scale" Desc="Scale"/>
+            <Params TypeName="uint32" Name="InstanceId" Desc="Entity's Instance Id to delete"/>
+        </S2CEvent>
+
+        <S2CEvent Name="UGCEditRemoved" Reliable="true" Crypto="No" Trace="Debug1" Desc="UGC zone edited event">
+            <Params TypeName="GameInstanceUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+            <Params TypeName="PlayerID" Name="OperatorPlayerID" Desc="Player who operated"/>
+            <Params TypeName="uint32" Name="InstanceId" Desc="Entity's Instance Id to delete"/>
+        </S2CEvent>
+
+        <S2CEvent Name="UGCEditMoved" Reliable="true" Crypto="No" Trace="Debug1" Desc="UGC zone edited event">
+            <Params TypeName="GameInstanceUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+            <Params TypeName="PlayerID" Name="OperatorPlayerID" Desc="Player who operated"/>
+            <Params TypeName="Vector4" Name="Position" Desc="Position"/>
+            <Params TypeName="Vector4" Name="Rotation" Desc="Rotation"/>
+            <Params TypeName="Vector4" Name="Scale" Desc="Scale"/>
+        </S2CEvent>
+
         <!-- ============================  Streaming ============================================ -->
 
         <Command Name="CreateStream" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create stream instance">

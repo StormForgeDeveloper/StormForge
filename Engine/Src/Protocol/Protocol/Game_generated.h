@@ -256,12 +256,6 @@ struct SearchGameInstanceCmdBuilder;
 struct SearchGameInstanceRes;
 struct SearchGameInstanceResBuilder;
 
-struct GetCharacterDataInGameInstanceCmd;
-struct GetCharacterDataInGameInstanceCmdBuilder;
-
-struct GetCharacterDataInGameInstanceRes;
-struct GetCharacterDataInGameInstanceResBuilder;
-
 struct RequestGameMatchCmd;
 struct RequestGameMatchCmdBuilder;
 
@@ -5318,10 +5312,14 @@ struct JoinGameInstanceRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tabl
   struct Traits;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_INS_UID = 4,
-    VT_SERVER_PUBLIC_ADDRESS = 6
+    VT_ZONE_CUSTOM_DATA = 6,
+    VT_SERVER_PUBLIC_ADDRESS = 8
   };
   const SF::Flat::GameInstanceUID *ins_uid() const {
     return GetStruct<const SF::Flat::GameInstanceUID *>(VT_INS_UID);
+  }
+  const ::flatbuffers::Vector<uint8_t> *zone_custom_data() const {
+    return GetPointer<const ::flatbuffers::Vector<uint8_t> *>(VT_ZONE_CUSTOM_DATA);
   }
   const ::flatbuffers::String *server_public_address() const {
     return GetPointer<const ::flatbuffers::String *>(VT_SERVER_PUBLIC_ADDRESS);
@@ -5329,12 +5327,15 @@ struct JoinGameInstanceRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tabl
   template<size_t Index>
   auto get_field() const {
          if constexpr (Index == 0) return ins_uid();
-    else if constexpr (Index == 1) return server_public_address();
+    else if constexpr (Index == 1) return zone_custom_data();
+    else if constexpr (Index == 2) return server_public_address();
     else static_assert(Index != Index, "Invalid Field Index");
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<SF::Flat::GameInstanceUID>(verifier, VT_INS_UID, 4) &&
+           VerifyOffset(verifier, VT_ZONE_CUSTOM_DATA) &&
+           verifier.VerifyVector(zone_custom_data()) &&
            VerifyOffset(verifier, VT_SERVER_PUBLIC_ADDRESS) &&
            verifier.VerifyString(server_public_address()) &&
            verifier.EndTable();
@@ -5347,6 +5348,9 @@ struct JoinGameInstanceResBuilder {
   ::flatbuffers::uoffset_t start_;
   void add_ins_uid(const SF::Flat::GameInstanceUID *ins_uid) {
     fbb_.AddStruct(JoinGameInstanceRes::VT_INS_UID, ins_uid);
+  }
+  void add_zone_custom_data(::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> zone_custom_data) {
+    fbb_.AddOffset(JoinGameInstanceRes::VT_ZONE_CUSTOM_DATA, zone_custom_data);
   }
   void add_server_public_address(::flatbuffers::Offset<::flatbuffers::String> server_public_address) {
     fbb_.AddOffset(JoinGameInstanceRes::VT_SERVER_PUBLIC_ADDRESS, server_public_address);
@@ -5365,9 +5369,11 @@ struct JoinGameInstanceResBuilder {
 inline ::flatbuffers::Offset<JoinGameInstanceRes> CreateJoinGameInstanceRes(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const SF::Flat::GameInstanceUID *ins_uid = nullptr,
+    ::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> zone_custom_data = 0,
     ::flatbuffers::Offset<::flatbuffers::String> server_public_address = 0) {
   JoinGameInstanceResBuilder builder_(_fbb);
   builder_.add_server_public_address(server_public_address);
+  builder_.add_zone_custom_data(zone_custom_data);
   builder_.add_ins_uid(ins_uid);
   return builder_.Finish();
 }
@@ -5377,9 +5383,10 @@ struct JoinGameInstanceRes::Traits {
   static auto constexpr Create = CreateJoinGameInstanceRes;
   static constexpr auto name = "JoinGameInstanceRes";
   static constexpr auto fully_qualified_name = "SF.Flat.Game.JoinGameInstanceRes";
-  static constexpr size_t fields_number = 2;
+  static constexpr size_t fields_number = 3;
   static constexpr std::array<const char *, fields_number> field_names = {
     "ins_uid",
+    "zone_custom_data",
     "server_public_address"
   };
   template<size_t Index>
@@ -5389,11 +5396,14 @@ struct JoinGameInstanceRes::Traits {
 inline ::flatbuffers::Offset<JoinGameInstanceRes> CreateJoinGameInstanceResDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const SF::Flat::GameInstanceUID *ins_uid = nullptr,
+    const std::vector<uint8_t> *zone_custom_data = nullptr,
     const char *server_public_address = nullptr) {
+  auto zone_custom_data__ = zone_custom_data ? _fbb.CreateVector<uint8_t>(*zone_custom_data) : 0;
   auto server_public_address__ = server_public_address ? _fbb.CreateString(server_public_address) : 0;
   return SF::Flat::Game::CreateJoinGameInstanceRes(
       _fbb,
       ins_uid,
+      zone_custom_data__,
       server_public_address__);
 }
 
@@ -5647,162 +5657,6 @@ inline ::flatbuffers::Offset<SearchGameInstanceRes> CreateSearchGameInstanceResD
   auto game_instances__ = game_instances ? _fbb.CreateVector<uint8_t>(*game_instances) : 0;
   return SF::Flat::Game::CreateSearchGameInstanceRes(
       _fbb,
-      game_instances__);
-}
-
-struct GetCharacterDataInGameInstanceCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef GetCharacterDataInGameInstanceCmdBuilder Builder;
-  struct Traits;
-  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_GAME_INSTANCE_UID = 4,
-    VT_PLAYER_ID = 6
-  };
-  const SF::Flat::GameInstanceUID *game_instance_uid() const {
-    return GetStruct<const SF::Flat::GameInstanceUID *>(VT_GAME_INSTANCE_UID);
-  }
-  const SF::Flat::AccountID *player_id() const {
-    return GetStruct<const SF::Flat::AccountID *>(VT_PLAYER_ID);
-  }
-  template<size_t Index>
-  auto get_field() const {
-         if constexpr (Index == 0) return game_instance_uid();
-    else if constexpr (Index == 1) return player_id();
-    else static_assert(Index != Index, "Invalid Field Index");
-  }
-  bool Verify(::flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           VerifyField<SF::Flat::GameInstanceUID>(verifier, VT_GAME_INSTANCE_UID, 4) &&
-           VerifyField<SF::Flat::AccountID>(verifier, VT_PLAYER_ID, 8) &&
-           verifier.EndTable();
-  }
-};
-
-struct GetCharacterDataInGameInstanceCmdBuilder {
-  typedef GetCharacterDataInGameInstanceCmd Table;
-  ::flatbuffers::FlatBufferBuilder &fbb_;
-  ::flatbuffers::uoffset_t start_;
-  void add_game_instance_uid(const SF::Flat::GameInstanceUID *game_instance_uid) {
-    fbb_.AddStruct(GetCharacterDataInGameInstanceCmd::VT_GAME_INSTANCE_UID, game_instance_uid);
-  }
-  void add_player_id(const SF::Flat::AccountID *player_id) {
-    fbb_.AddStruct(GetCharacterDataInGameInstanceCmd::VT_PLAYER_ID, player_id);
-  }
-  explicit GetCharacterDataInGameInstanceCmdBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  ::flatbuffers::Offset<GetCharacterDataInGameInstanceCmd> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<GetCharacterDataInGameInstanceCmd>(end);
-    return o;
-  }
-};
-
-inline ::flatbuffers::Offset<GetCharacterDataInGameInstanceCmd> CreateGetCharacterDataInGameInstanceCmd(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    const SF::Flat::GameInstanceUID *game_instance_uid = nullptr,
-    const SF::Flat::AccountID *player_id = nullptr) {
-  GetCharacterDataInGameInstanceCmdBuilder builder_(_fbb);
-  builder_.add_player_id(player_id);
-  builder_.add_game_instance_uid(game_instance_uid);
-  return builder_.Finish();
-}
-
-struct GetCharacterDataInGameInstanceCmd::Traits {
-  using type = GetCharacterDataInGameInstanceCmd;
-  static auto constexpr Create = CreateGetCharacterDataInGameInstanceCmd;
-  static constexpr auto name = "GetCharacterDataInGameInstanceCmd";
-  static constexpr auto fully_qualified_name = "SF.Flat.Game.GetCharacterDataInGameInstanceCmd";
-  static constexpr size_t fields_number = 2;
-  static constexpr std::array<const char *, fields_number> field_names = {
-    "game_instance_uid",
-    "player_id"
-  };
-  template<size_t Index>
-  using FieldType = decltype(std::declval<type>().get_field<Index>());
-};
-
-struct GetCharacterDataInGameInstanceRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef GetCharacterDataInGameInstanceResBuilder Builder;
-  struct Traits;
-  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_PLAYER_ID = 4,
-    VT_GAME_INSTANCES = 6
-  };
-  const SF::Flat::AccountID *player_id() const {
-    return GetStruct<const SF::Flat::AccountID *>(VT_PLAYER_ID);
-  }
-  const ::flatbuffers::Vector<uint8_t> *game_instances() const {
-    return GetPointer<const ::flatbuffers::Vector<uint8_t> *>(VT_GAME_INSTANCES);
-  }
-  template<size_t Index>
-  auto get_field() const {
-         if constexpr (Index == 0) return player_id();
-    else if constexpr (Index == 1) return game_instances();
-    else static_assert(Index != Index, "Invalid Field Index");
-  }
-  bool Verify(::flatbuffers::Verifier &verifier) const {
-    return VerifyTableStart(verifier) &&
-           VerifyField<SF::Flat::AccountID>(verifier, VT_PLAYER_ID, 8) &&
-           VerifyOffset(verifier, VT_GAME_INSTANCES) &&
-           verifier.VerifyVector(game_instances()) &&
-           verifier.EndTable();
-  }
-};
-
-struct GetCharacterDataInGameInstanceResBuilder {
-  typedef GetCharacterDataInGameInstanceRes Table;
-  ::flatbuffers::FlatBufferBuilder &fbb_;
-  ::flatbuffers::uoffset_t start_;
-  void add_player_id(const SF::Flat::AccountID *player_id) {
-    fbb_.AddStruct(GetCharacterDataInGameInstanceRes::VT_PLAYER_ID, player_id);
-  }
-  void add_game_instances(::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> game_instances) {
-    fbb_.AddOffset(GetCharacterDataInGameInstanceRes::VT_GAME_INSTANCES, game_instances);
-  }
-  explicit GetCharacterDataInGameInstanceResBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
-        : fbb_(_fbb) {
-    start_ = fbb_.StartTable();
-  }
-  ::flatbuffers::Offset<GetCharacterDataInGameInstanceRes> Finish() {
-    const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<GetCharacterDataInGameInstanceRes>(end);
-    return o;
-  }
-};
-
-inline ::flatbuffers::Offset<GetCharacterDataInGameInstanceRes> CreateGetCharacterDataInGameInstanceRes(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    const SF::Flat::AccountID *player_id = nullptr,
-    ::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> game_instances = 0) {
-  GetCharacterDataInGameInstanceResBuilder builder_(_fbb);
-  builder_.add_game_instances(game_instances);
-  builder_.add_player_id(player_id);
-  return builder_.Finish();
-}
-
-struct GetCharacterDataInGameInstanceRes::Traits {
-  using type = GetCharacterDataInGameInstanceRes;
-  static auto constexpr Create = CreateGetCharacterDataInGameInstanceRes;
-  static constexpr auto name = "GetCharacterDataInGameInstanceRes";
-  static constexpr auto fully_qualified_name = "SF.Flat.Game.GetCharacterDataInGameInstanceRes";
-  static constexpr size_t fields_number = 2;
-  static constexpr std::array<const char *, fields_number> field_names = {
-    "player_id",
-    "game_instances"
-  };
-  template<size_t Index>
-  using FieldType = decltype(std::declval<type>().get_field<Index>());
-};
-
-inline ::flatbuffers::Offset<GetCharacterDataInGameInstanceRes> CreateGetCharacterDataInGameInstanceResDirect(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    const SF::Flat::AccountID *player_id = nullptr,
-    const std::vector<uint8_t> *game_instances = nullptr) {
-  auto game_instances__ = game_instances ? _fbb.CreateVector<uint8_t>(*game_instances) : 0;
-  return SF::Flat::Game::CreateGetCharacterDataInGameInstanceRes(
-      _fbb,
-      player_id,
       game_instances__);
 }
 

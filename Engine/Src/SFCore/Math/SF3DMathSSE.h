@@ -456,6 +456,8 @@ namespace SF {
 		QuaternionSSE operator * (const QuaternionSSE& q);
 		QuaternionSSE& operator *= (const QuaternionSSE& q);
 
+        // Compare two quaternion
+        bool Comapre(const QuaternionSSE& q, float testEpsilon = std::numeric_limits<float>::epsilon()) const;
 
 		// scala operation
 		QuaternionSSE operator-(float scala) const;

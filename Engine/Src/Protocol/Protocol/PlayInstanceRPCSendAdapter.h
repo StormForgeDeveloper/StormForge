@@ -37,7 +37,7 @@ namespace SF
 		{}
 
 		// Cmd: Player Join request.
-		Result JoinPlayInstanceCmd( const TransactionID &InTransactionID, const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
+		Result JoinPlayInstanceCmd( const TransactionID &InTransactionID, const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier, const uint32_t &InCustomZoneDataVersion );
 		// C2S: Play packet
 		Result PlayPacketC2SEvt( const GameInstanceUID &InPlayInstanceUID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload );
 		// C2S: Player Movement
@@ -72,6 +72,14 @@ namespace SF
 		Result CallFunctionCmd( const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters );
 		// C2S: Send coded voice data to server
 		Result SendVoiceDataC2SEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InPlayerID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
+		// Cmd: UGC zone edit command
+		Result UGCEditAddCmd( const TransactionID &InTransactionID, const StringCrc32 &InEntityType, const uint32_t &InTableId, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale );
+		// Cmd: UGC zone edit command
+		Result UGCEditMoveCmd( const TransactionID &InTransactionID, const uint32_t &InInstanceId, const StringCrc32 &InEntityType, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale );
+		// Cmd: UGC zone edit command
+		Result UGCEditDeleteCmd( const TransactionID &InTransactionID, const uint32_t &InInstanceId );
+		// Cmd: UGC zone edit command
+		Result UGCEditClaimBackCmd( const TransactionID &InTransactionID, const uint32_t &InInstanceId );
 		// Cmd: Create stream instance
 		Result CreateStreamCmd( const TransactionID &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
 		// Cmd: Open stream instance
@@ -155,6 +163,20 @@ namespace SF
 		Result CallFunctionRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InResults );
 		// S2C: Voice data
 		Result VoiceDataS2CEvt( const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
+		// Cmd: UGC zone edit command
+		Result UGCEditAddRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InInstanceId, const uint32_t &InTimeOffset, const Array<VariableTable>& InInvenChanges );
+		// Cmd: UGC zone edit command
+		Result UGCEditMoveRes( const TransactionID &InTransactionID, const Result &InResult );
+		// Cmd: UGC zone edit command
+		Result UGCEditDeleteRes( const TransactionID &InTransactionID, const Result &InResult );
+		// Cmd: UGC zone edit command
+		Result UGCEditClaimBackRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InInstanceId, const Array<VariableTable>& InInvenChanges );
+		// S2C: UGC zone edited event
+		Result UGCEditAddedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const StringCrc32 &InEntityType, const uint32_t &InTableId, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale, const uint32_t &InInstanceId );
+		// S2C: UGC zone edited event
+		Result UGCEditRemovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InInstanceId );
+		// S2C: UGC zone edited event
+		Result UGCEditMovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale );
 		// Cmd: Create stream instance
 		Result CreateStreamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName );
 		// Cmd: Open stream instance

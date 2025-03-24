@@ -161,6 +161,7 @@ namespace SF
 
 		SF_FORCEINLINE EntityUID GetGameInstanceUID() const { return m_GameInstanceUID; }
 		SF_FORCEINLINE const String& GetGameInstanceAddress() const { return m_GameInstanceAddress; }
+        SF_FORCEINLINE uint32_t GetCustomZoneDataVersion() const { return m_CustomZoneDataVersion; }
 
 		SF_FORCEINLINE const SharedPointerT<Net::Connection>& GetConnectionGame() const { return m_Game; }
 		SF_FORCEINLINE const SharedPointerT<Net::Connection>& GetConnectionGameInstance() const { return m_GameInstance; }
@@ -228,6 +229,7 @@ namespace SF
 		String m_NickName;
 		CharacterID m_CharacterId{};
 		GameInstanceUID m_GameInstanceUID{};
+        uint32_t m_CustomZoneDataVersion{};
 		StringCrc32 m_MyPlayerState;
 		uint64_t m_PartyUID{};
 		AccountID m_PartyLeaderId{};

@@ -28,11 +28,13 @@ public struct JoinPlayInstanceCmd : IFlatbufferObject
   public ArraySegment<byte>? GetPlayerIdentifierBytes() { return __p.__vector_as_arraysegment(8); }
 #endif
   public byte[] GetPlayerIdentifierArray() { return __p.__vector_as_array<byte>(8); }
+  public uint CustomZoneDataVersion { get { int o = __p.__offset(10); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
 
-  public static void StartJoinPlayInstanceCmd(FlatBufferBuilder builder) { builder.StartTable(3); }
+  public static void StartJoinPlayInstanceCmd(FlatBufferBuilder builder) { builder.StartTable(4); }
   public static void AddPlayInstanceUid(FlatBufferBuilder builder, Offset<SF.Flat.EntityUID> playInstanceUidOffset) { builder.AddStruct(0, playInstanceUidOffset.Value, 0); }
   public static void AddPlayerId(FlatBufferBuilder builder, Offset<SF.Flat.AccountID> playerIdOffset) { builder.AddStruct(1, playerIdOffset.Value, 0); }
   public static void AddPlayerIdentifier(FlatBufferBuilder builder, StringOffset playerIdentifierOffset) { builder.AddOffset(2, playerIdentifierOffset.Value, 0); }
+  public static void AddCustomZoneDataVersion(FlatBufferBuilder builder, uint customZoneDataVersion) { builder.AddUint(3, customZoneDataVersion, 0); }
   public static Offset<SF.Flat.PlayInstance.JoinPlayInstanceCmd> EndJoinPlayInstanceCmd(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.PlayInstance.JoinPlayInstanceCmd>(o);
@@ -48,6 +50,7 @@ static public class JoinPlayInstanceCmdVerify
       && verifier.VerifyField(tablePos, 4 /*PlayInstanceUid*/, 4 /*SF.Flat.EntityUID*/, 4, false)
       && verifier.VerifyField(tablePos, 6 /*PlayerId*/, 16 /*SF.Flat.AccountID*/, 8, false)
       && verifier.VerifyString(tablePos, 8 /*PlayerIdentifier*/, false)
+      && verifier.VerifyField(tablePos, 10 /*CustomZoneDataVersion*/, 4 /*uint*/, 4, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

@@ -55,6 +55,9 @@ namespace SF
 
         // Dump Avro schema structure of the value
         void DumpAvroDataFormat(const AvroValue& value, int indent = 0);
+
+        // helper function
+        Result ParseAvroValue(const Array<const uint8_t>& avorData, AvroValue& outValue);
 	}
 
 
@@ -76,6 +79,7 @@ namespace SF
         void Reset();
 
 		// initialize with schema string data
+        Result Init(const avro_schema_t& schema);
         Result Init(const Array<char>& schemaData);
         Result Init(const String& schemaData)        { return Init(ArrayView<const char>(schemaData.GetBufferLength(), schemaData.data())); }
         Result Init(const Array<const char>& schemaData);
@@ -102,6 +106,9 @@ namespace SF
 		operator avro_schema_t() { return m_Handle; }
 		operator avro_schema_t() const { return m_Handle; }
         const String& GetSchemaString() const;
+
+        // Get Array item schema if it is array
+        avro_schema_t GetArrayItemsSchema() const;
 
         // bson binary stream
         Result operator << (IInputStream& in);
@@ -157,12 +164,19 @@ namespace SF
 
 		~AvroValue();
 
-
+        // Init value with schema
         void Init(const AvroSchema& schema);
 
+        // Reset and clear all allocated values
+        void Reset();
 
 		operator avro_value_t* () const { return &m_DataValue; }
 
+        // Get serialized size of this value
+        size_t GetSerializedSize() const;
+
+        // Get avor value schema
+        Result GetAvroSchema(AvroSchema& outSchema);
 
 		Avro::ValueType GetType() const;
 
@@ -186,13 +200,13 @@ namespace SF
 		ArrayView<const uint8_t> AsBytes() const;
 
 
-		// for array/map
-		size_t GetElementCount() const;
-        size_t GetFieldCount() const { return GetElementCount(); }
+		// for array
+		size_t GetArraySize() const;
+		Result GetArrayItem(int i, AvroValue& value, const char*& outName) const;
+        Result NewArrayItem(AvroValue& outValue);
 
-		// for array/map
-		Result GetElement(int i, AvroValue& value, const char*& name) const;
-
+        // for map
+        size_t GetFieldCount() const { return GetArraySize(); }
         Result GetFieldByIndex(int i, AvroValue& value, const char*& name) const;
 
 		template<class FieldDataType>
@@ -226,8 +240,6 @@ namespace SF
 
 		uint8_t m_ValueBuffer[2 * sizeof(intptr_t)]{};
 		avro_value_t& m_DataValue = *(avro_value_t*)m_ValueBuffer;
-
-		avro_value_iface_t* m_DataClass{};
 	};
 
 	template<> inline const char* AvroValue::As() const { return AsString(); }
@@ -255,6 +267,7 @@ namespace SF
 		}
 
 		AvroReader(const SF::Array<char>& binData);
+        AvroReader(const SF::Array<const uint8_t>& binData);
 
 		~AvroReader();
 
@@ -288,6 +301,7 @@ namespace SF
         }
 
         AvroWriter(SF::Array<char>& memoryBuffer);
+        AvroWriter(SF::Array<uint8_t>& memoryBuffer);
 
         ~AvroWriter();
 

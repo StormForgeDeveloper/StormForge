@@ -104,8 +104,6 @@ namespace SF
 		Result LeaveGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID );
 		// Cmd: Search game instance
 		Result SearchGameInstanceCmd( const TransactionID &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID );
-		// Cmd: Search game instance
-		Result GetCharacterDataInGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InGameInstanceUID, const PlayerID &InPlayerID );
 		// Cmd: Request Game match
 		Result RequestGameMatchCmd( const TransactionID &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole );
 		// Cmd: Cancel Game match
@@ -250,13 +248,11 @@ namespace SF
 		// S2C: Party Chatting message event
 		Result PartyChatMessageS2CEvt( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage );
 		// Cmd: Join to a game instance
-		Result JoinGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InInsUID, const char* InServerPublicAddress );
+		Result JoinGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InInsUID, const Array<uint8_t>& InZoneCustomData, const char* InServerPublicAddress );
 		// Cmd: Leave game instance
 		Result LeaveGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: Search game instance
 		Result SearchGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances );
-		// Cmd: Search game instance
-		Result GetCharacterDataInGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances );
 		// Cmd: Request Game match
 		Result RequestGameMatchRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 		// S2C: Game matched

@@ -119,21 +119,43 @@ namespace SF
 			constexpr MessageID MID_SendVoiceDataC2SEvt(EMessageType::Event,0,MessageProtocol::PlayInstance,34);
 			// S2C: Voice data
 			constexpr MessageID MID_VoiceDataS2CEvt(EMessageType::Event,0,MessageProtocol::PlayInstance,35);
+			// Cmd: UGC zone edit command
+			constexpr MessageID MID_UGCEditAddCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,36);
+			constexpr MessageID MID_UGCEditAddRes(EMessageType::Result,1,MessageProtocol::PlayInstance,36);
+
+			// Cmd: UGC zone edit command
+			constexpr MessageID MID_UGCEditMoveCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,37);
+			constexpr MessageID MID_UGCEditMoveRes(EMessageType::Result,1,MessageProtocol::PlayInstance,37);
+
+			// Cmd: UGC zone edit command
+			constexpr MessageID MID_UGCEditDeleteCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,38);
+			constexpr MessageID MID_UGCEditDeleteRes(EMessageType::Result,1,MessageProtocol::PlayInstance,38);
+
+			// Cmd: UGC zone edit command
+			constexpr MessageID MID_UGCEditClaimBackCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,39);
+			constexpr MessageID MID_UGCEditClaimBackRes(EMessageType::Result,1,MessageProtocol::PlayInstance,39);
+
+			// S2C: UGC zone edited event
+			constexpr MessageID MID_UGCEditAddedS2CEvt(EMessageType::Event,1,MessageProtocol::PlayInstance,40);
+			// S2C: UGC zone edited event
+			constexpr MessageID MID_UGCEditRemovedS2CEvt(EMessageType::Event,1,MessageProtocol::PlayInstance,41);
+			// S2C: UGC zone edited event
+			constexpr MessageID MID_UGCEditMovedS2CEvt(EMessageType::Event,1,MessageProtocol::PlayInstance,42);
 			// Cmd: Create stream instance
-			constexpr MessageID MID_CreateStreamCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,36);
-			constexpr MessageID MID_CreateStreamRes(EMessageType::Result,1,MessageProtocol::PlayInstance,36);
+			constexpr MessageID MID_CreateStreamCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,43);
+			constexpr MessageID MID_CreateStreamRes(EMessageType::Result,1,MessageProtocol::PlayInstance,43);
 
 			// Cmd: Open stream instance
-			constexpr MessageID MID_FindStreamCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,37);
-			constexpr MessageID MID_FindStreamRes(EMessageType::Result,1,MessageProtocol::PlayInstance,37);
+			constexpr MessageID MID_FindStreamCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,44);
+			constexpr MessageID MID_FindStreamRes(EMessageType::Result,1,MessageProtocol::PlayInstance,44);
 
 			// Cmd: Delete stream instance
-			constexpr MessageID MID_DeleteStreamCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,38);
-			constexpr MessageID MID_DeleteStreamRes(EMessageType::Result,1,MessageProtocol::PlayInstance,38);
+			constexpr MessageID MID_DeleteStreamCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,45);
+			constexpr MessageID MID_DeleteStreamRes(EMessageType::Result,1,MessageProtocol::PlayInstance,45);
 
 			// Cmd: Get stream list
-			constexpr MessageID MID_GetStreamListCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,39);
-			constexpr MessageID MID_GetStreamListRes(EMessageType::Result,1,MessageProtocol::PlayInstance,39);
+			constexpr MessageID MID_GetStreamListCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,46);
+			constexpr MessageID MID_GetStreamListRes(EMessageType::Result,1,MessageProtocol::PlayInstance,46);
 
 
 

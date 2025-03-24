@@ -451,6 +451,8 @@ namespace SF
         if (hr.IsFailure())
             return false;
 
+        _mm_popcnt_u32(intValue);
+
         outGuid = Guid::FromUInt64(intValue);
 
         return true;

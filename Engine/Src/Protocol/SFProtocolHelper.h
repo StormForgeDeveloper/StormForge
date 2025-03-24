@@ -111,6 +111,10 @@ namespace SF {
             {
                 return fbb.CreateVector(value.data(), value.size());
             }
+            inline Offset<::flatbuffers::Vector<uint8_t>> CreatebyteVector(FlatBufferBuilder& fbb, const Array<uint8_t>& value)
+            {
+                return fbb.CreateVector(value.data(), value.size());
+            }
 
             inline Offset<::flatbuffers::Vector<int16_t>> Createint16Vector(FlatBufferBuilder& fbb, const Array<int16_t>& value)
             {

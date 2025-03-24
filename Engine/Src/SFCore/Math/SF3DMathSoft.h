@@ -672,6 +672,13 @@ namespace SF {
 		QuaternionSoft<T> operator / (T scala) const;
 		//friend QuaternionSoft<T> operator*(const QuaternionSoft<T>& q1, const QuaternionSoft<T>& q2);
 
+        bool Comapre(const QuaternionSoft<T>& q, float testEpsilon = std::numeric_limits<float>::epsilon()) const {
+            return std::abs(x - q.x) < testEpsilon
+                && std::abs(y - q.y) < testEpsilon
+                && std::abs(z - q.z) < testEpsilon
+                && std::abs(w - q.w) < testEpsilon;
+        }
+
 
 		QuaternionSoft<T> GetInverse() const;
 		QuaternionSoft<T> GetConjugate() const;

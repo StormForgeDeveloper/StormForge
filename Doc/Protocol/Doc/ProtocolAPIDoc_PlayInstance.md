@@ -1,6 +1,6 @@
 ﻿***
  
- CopyRight (c) 2024 StormForge
+ CopyRight (c) 2025 StormForge
  
  Description : PlayInstance Message Protocol API Document
 
@@ -19,7 +19,7 @@ Player Join request.
 
 1. Command interface
 
-        Result JoinPlayInstanceCmd(const TransactionID &InTransactionID, const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier)
+        Result JoinPlayInstanceCmd(const TransactionID &InTransactionID, const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier, const uint32_t &InCustomZoneDataVersion)
 
 		- TransactionID: type:TransactionID, 
 
@@ -28,6 +28,8 @@ Player Join request.
 		- PlayerID: type:PlayerID, Joining player id
 
 		- PlayerIdentifier: type:String, Joining player identifier. string value
+
+		- CustomZoneDataVersion: type:uint32, Custom zone data version the client has
 
 2. Result interface
 
@@ -649,6 +651,159 @@ Voice data
 		- OutInFrameIndex: uint16 type. voice frame index
 
 		- OutInVoiceData: uint8 type. Voice data
+
+
+## UGCEditAdd Request
+UGC zone edit command
+
+1. Command interface
+
+        Result UGCEditAddCmd(const TransactionID &InTransactionID, const StringCrc32 &InEntityType, const uint32_t &InTableId, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale)
+
+		- TransactionID: type:TransactionID, 
+
+		- EntityType: type:StringCrc32, EntityType
+
+		- TableId: type:uint32, Data table Id
+
+		- Position: type:Vector4, Position
+
+		- Rotation: type:Vector4, Rotation quaternion value
+
+		- Scale: type:Vector4, Scale
+
+2. Result interface
+
+C++: Cast message to UGCEditAddRes to access values
+
+
+		- TransactionID: type:TransactionID, 
+		- Result: type:Result, 
+		- InstanceId: type:uint32, Added entity's Instance Id
+		- TimeOffset: type:uint32, TimeOffset for animation sync
+		- InvenChanges: type:VariableTable, Inventory changes
+
+
+## UGCEditMove Request
+UGC zone edit command
+
+1. Command interface
+
+        Result UGCEditMoveCmd(const TransactionID &InTransactionID, const uint32_t &InInstanceId, const StringCrc32 &InEntityType, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale)
+
+		- TransactionID: type:TransactionID, 
+
+		- InstanceId: type:uint32, Added entity's Instance Id
+
+		- EntityType: type:StringCrc32, EntityType
+
+		- Position: type:Vector4, Position
+
+		- Rotation: type:Vector4, Rotation quaternion value
+
+		- Scale: type:Vector4, Scale
+
+2. Result interface
+
+C++: Cast message to UGCEditMoveRes to access values
+
+
+		- TransactionID: type:TransactionID, 
+		- Result: type:Result, 
+
+
+## UGCEditDelete Request
+UGC zone edit command
+
+1. Command interface
+
+        Result UGCEditDeleteCmd(const TransactionID &InTransactionID, const uint32_t &InInstanceId)
+
+		- TransactionID: type:TransactionID, 
+
+		- InstanceId: type:uint32, Entity's Instance Id to delete
+
+2. Result interface
+
+C++: Cast message to UGCEditDeleteRes to access values
+
+
+		- TransactionID: type:TransactionID, 
+		- Result: type:Result, 
+
+
+## UGCEditClaimBack Request
+UGC zone edit command
+
+1. Command interface
+
+        Result UGCEditClaimBackCmd(const TransactionID &InTransactionID, const uint32_t &InInstanceId)
+
+		- TransactionID: type:TransactionID, 
+
+		- InstanceId: type:uint32, Entity's Instance Id
+
+2. Result interface
+
+C++: Cast message to UGCEditClaimBackRes to access values
+
+
+		- TransactionID: type:TransactionID, 
+		- Result: type:Result, 
+		- InstanceId: type:uint32, Entity's Instance Id
+		- InvenChanges: type:VariableTable, Inventory changes
+
+
+## UGCEditAddedS2CEvt
+UGC zone edited event
+
+        Result UGCEditAddedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const StringCrc32 &InEntityType, const uint32_t &InTableId, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale, const uint32_t &InInstanceId)
+
+		- OutInPlayInstanceUID: GameInstanceUID type. Game instance UID
+
+		- OutInOperatorPlayerID: PlayerID type. Player who operated
+
+		- OutInEntityType: StringCrc32 type. EntityType
+
+		- OutInTableId: uint32 type. Data table Id
+
+		- OutInTimeOffset: uint32 type. TimeOffset for animation sync
+
+		- OutInPosition: Vector4 type. Position
+
+		- OutInRotation: Vector4 type. Rotation quaternion value
+
+		- OutInScale: Vector4 type. Scale
+
+		- OutInInstanceId: uint32 type. Entity's Instance Id to delete
+
+
+## UGCEditRemovedS2CEvt
+UGC zone edited event
+
+        Result UGCEditRemovedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InInstanceId)
+
+		- OutInPlayInstanceUID: GameInstanceUID type. Game instance UID
+
+		- OutInOperatorPlayerID: PlayerID type. Player who operated
+
+		- OutInInstanceId: uint32 type. Entity's Instance Id to delete
+
+
+## UGCEditMovedS2CEvt
+UGC zone edited event
+
+        Result UGCEditMovedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale)
+
+		- OutInPlayInstanceUID: GameInstanceUID type. Game instance UID
+
+		- OutInOperatorPlayerID: PlayerID type. Player who operated
+
+		- OutInPosition: Vector4 type. Position
+
+		- OutInRotation: Vector4 type. Rotation
+
+		- OutInScale: Vector4 type. Scale
 
 
 ## CreateStream Request

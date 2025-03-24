@@ -400,7 +400,24 @@ namespace SF {
 			return true;
 		}
 
-		Array<DataType>& operator = (const Array<DataType>& src) = delete;
+        Array<DataType>& operator = (const Array<DataType>& src)
+        {
+            // should I use is_trivial_v ?
+            constexpr bool bBulkCopy = std::is_trivially_copy_constructible_v<DataType>;
+
+            if constexpr (bBulkCopy)
+            {
+                resize(src.size());
+                memcpy((void*)m_pDataPtr, src.data(), src.size() * sizeof(DataType));
+            }
+            else
+            {
+                resize(src.size());
+                for (size_t iItem = 0; iItem < src.size(); iItem++)
+                    m_pDataPtr[iItem] = src[iItem];
+            }
+            return *this;
+        }
 
 		// copy operator
 		template<class SrcDataType>

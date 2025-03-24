@@ -81,6 +81,17 @@ namespace SF
 		static Result CallFunctionRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result SendVoiceDataC2SEvt(const char* prefix, const MessageHeader* messageHeader);
 		static Result VoiceDataS2CEvt(const char* prefix, const MessageHeader* messageHeader);
+		static Result UGCEditAddCmd(const char* prefix, const MessageHeader* messageHeader);
+		static Result UGCEditAddRes(const char* prefix, const MessageHeader* messageHeader);
+		static Result UGCEditMoveCmd(const char* prefix, const MessageHeader* messageHeader);
+		static Result UGCEditMoveRes(const char* prefix, const MessageHeader* messageHeader);
+		static Result UGCEditDeleteCmd(const char* prefix, const MessageHeader* messageHeader);
+		static Result UGCEditDeleteRes(const char* prefix, const MessageHeader* messageHeader);
+		static Result UGCEditClaimBackCmd(const char* prefix, const MessageHeader* messageHeader);
+		static Result UGCEditClaimBackRes(const char* prefix, const MessageHeader* messageHeader);
+		static Result UGCEditAddedS2CEvt(const char* prefix, const MessageHeader* messageHeader);
+		static Result UGCEditRemovedS2CEvt(const char* prefix, const MessageHeader* messageHeader);
+		static Result UGCEditMovedS2CEvt(const char* prefix, const MessageHeader* messageHeader);
 		static Result CreateStreamCmd(const char* prefix, const MessageHeader* messageHeader);
 		static Result CreateStreamRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result FindStreamCmd(const char* prefix, const MessageHeader* messageHeader);

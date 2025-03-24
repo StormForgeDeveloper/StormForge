@@ -119,21 +119,43 @@ namespace SF.Net
 		public static readonly MessageID SendVoiceDataC2SEvt = MessageID.MakeMessageID(EMessageType.Event, 0, SF.MessageProtocol.PlayInstance, 34);
 		// S2C: Voice data
 		public static readonly MessageID VoiceDataS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 0, SF.MessageProtocol.PlayInstance, 35);
+		// Cmd: UGC zone edit command
+		public static readonly MessageID UGCEditAddCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.PlayInstance, 36);
+		public static readonly MessageID UGCEditAddRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.PlayInstance, 36);
+
+		// Cmd: UGC zone edit command
+		public static readonly MessageID UGCEditMoveCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.PlayInstance, 37);
+		public static readonly MessageID UGCEditMoveRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.PlayInstance, 37);
+
+		// Cmd: UGC zone edit command
+		public static readonly MessageID UGCEditDeleteCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.PlayInstance, 38);
+		public static readonly MessageID UGCEditDeleteRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.PlayInstance, 38);
+
+		// Cmd: UGC zone edit command
+		public static readonly MessageID UGCEditClaimBackCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.PlayInstance, 39);
+		public static readonly MessageID UGCEditClaimBackRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.PlayInstance, 39);
+
+		// S2C: UGC zone edited event
+		public static readonly MessageID UGCEditAddedS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.PlayInstance, 40);
+		// S2C: UGC zone edited event
+		public static readonly MessageID UGCEditRemovedS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.PlayInstance, 41);
+		// S2C: UGC zone edited event
+		public static readonly MessageID UGCEditMovedS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.PlayInstance, 42);
 		// Cmd: Create stream instance
-		public static readonly MessageID CreateStreamCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.PlayInstance, 36);
-		public static readonly MessageID CreateStreamRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.PlayInstance, 36);
+		public static readonly MessageID CreateStreamCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.PlayInstance, 43);
+		public static readonly MessageID CreateStreamRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.PlayInstance, 43);
 
 		// Cmd: Open stream instance
-		public static readonly MessageID FindStreamCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.PlayInstance, 37);
-		public static readonly MessageID FindStreamRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.PlayInstance, 37);
+		public static readonly MessageID FindStreamCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.PlayInstance, 44);
+		public static readonly MessageID FindStreamRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.PlayInstance, 44);
 
 		// Cmd: Delete stream instance
-		public static readonly MessageID DeleteStreamCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.PlayInstance, 38);
-		public static readonly MessageID DeleteStreamRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.PlayInstance, 38);
+		public static readonly MessageID DeleteStreamCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.PlayInstance, 45);
+		public static readonly MessageID DeleteStreamRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.PlayInstance, 45);
 
 		// Cmd: Get stream list
-		public static readonly MessageID GetStreamListCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.PlayInstance, 39);
-		public static readonly MessageID GetStreamListRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.PlayInstance, 39);
+		public static readonly MessageID GetStreamListCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.PlayInstance, 46);
+		public static readonly MessageID GetStreamListRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.PlayInstance, 46);
 
 	}; // public static class MessageIDPlayInstance
 

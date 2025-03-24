@@ -45,7 +45,8 @@ $deps = "vcpkg-pkgconfig-get-modules",
 		"vulkan",
 		"protobuf",
 		"grpc",
-		"openssl"
+		"openssl",
+		"msquic[0-rtt]"
 
 #Those are complicated and being separated shared lib is better
 $deps_shared =

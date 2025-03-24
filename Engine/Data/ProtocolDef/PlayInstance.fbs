@@ -6,6 +6,7 @@ table JoinPlayInstanceCmd
  	play_instance_uid:EntityUID;
 	player_id:AccountID;
 	player_identifier:string;
+	custom_zone_data_version:uint32;
 } // table JoinPlayInstanceCmd
 
 table JoinPlayInstanceRes
@@ -337,6 +338,84 @@ table VoiceDataS2CEvt
 	frame_index:uint16;
 	voice_data:[uint8];
 } // table VoiceDataS2CEvt
+
+table UGCEditAddCmd
+{
+ 	entity_type:uint32;
+	table_id:uint32;
+	position:Vector4;
+	rotation:Vector4;
+	scale:Vector4;
+} // table UGCEditAddCmd
+
+table UGCEditAddRes
+{
+ 	instance_id:uint32;
+	time_offset:uint32;
+	inven_changes:[ubyte];
+} // table UGCEditAddRes
+
+table UGCEditMoveCmd
+{
+ 	instance_id:uint32;
+	entity_type:uint32;
+	position:Vector4;
+	rotation:Vector4;
+	scale:Vector4;
+} // table UGCEditMoveCmd
+
+table UGCEditMoveRes
+{
+ } // table UGCEditMoveRes
+
+table UGCEditDeleteCmd
+{
+ 	instance_id:uint32;
+} // table UGCEditDeleteCmd
+
+table UGCEditDeleteRes
+{
+ } // table UGCEditDeleteRes
+
+table UGCEditClaimBackCmd
+{
+ 	instance_id:uint32;
+} // table UGCEditClaimBackCmd
+
+table UGCEditClaimBackRes
+{
+ 	instance_id:uint32;
+	inven_changes:[ubyte];
+} // table UGCEditClaimBackRes
+
+table UGCEditAddedS2CEvt
+{
+ 	play_instance_uid:GameInstanceUID;
+	operator_player_id:AccountID;
+	entity_type:uint32;
+	table_id:uint32;
+	time_offset:uint32;
+	position:Vector4;
+	rotation:Vector4;
+	scale:Vector4;
+	instance_id:uint32;
+} // table UGCEditAddedS2CEvt
+
+table UGCEditRemovedS2CEvt
+{
+ 	play_instance_uid:GameInstanceUID;
+	operator_player_id:AccountID;
+	instance_id:uint32;
+} // table UGCEditRemovedS2CEvt
+
+table UGCEditMovedS2CEvt
+{
+ 	play_instance_uid:GameInstanceUID;
+	operator_player_id:AccountID;
+	position:Vector4;
+	rotation:Vector4;
+	scale:Vector4;
+} // table UGCEditMovedS2CEvt
 
 table CreateStreamCmd
 {

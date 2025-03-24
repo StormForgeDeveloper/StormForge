@@ -75,12 +75,12 @@ namespace SF
 
             if (value.GetType() == Avro::ValueType::Record || value.GetType() == Avro::ValueType::Array)
             {
-                size_t numObjectFields = value.GetElementCount();
+                size_t numObjectFields = value.GetArraySize();
                 for (int iField = 0; iField < numObjectFields; iField++)
                 {
                     SF::AvroValue subValue;
                     const char* subValueName{};
-                    value.GetElement(iField, subValue, subValueName);
+                    value.GetArrayItem(iField, subValue, subValueName);
 
                     SFLog(System, Info, "{0}name:{1}, type:{2}", indentString, subValueName, ValueTypeNames[(int)subValue.GetType()]);
 
@@ -94,13 +94,29 @@ namespace SF
 
             Service::LogModule->Flush();
         }
+
+        Result ParseAvroValue(const Array<const uint8_t>& avorData, AvroValue& outValue)
+        {
+            AvroReader reader(avorData);
+
+            String schemaString = reader.ReadString();
+
+            AvroSchema schema(schemaString);
+
+            AvroValue readValue(schema);
+            return reader.ReadValue(readValue);
+        }
 	}
 
 
-	AvroSchema::AvroSchema(const avro_schema_t& schema)
-		: m_Handle(schema)
-	{
-	}
+    AvroSchema::AvroSchema(const avro_schema_t& schema)
+        : m_Handle(schema)
+    {
+        if (m_Handle)
+        {
+            avro_schema_incref(m_Handle);
+        }
+    }
 
 	AvroSchema::AvroSchema(const AvroSchema& schema)
 		: m_Handle(schema.m_Handle)
@@ -136,6 +152,22 @@ namespace SF
     bool AvroSchema::IsValid() const
     {
         return m_Handle != nullptr;
+    }
+
+    Result AvroSchema::Init(const avro_schema_t& schema)
+    {
+        Reset();
+
+        m_Handle = schema;
+
+        if (m_Handle)
+        {
+            avro_schema_incref(m_Handle);
+        }
+
+        m_SchemaString = nullptr;
+
+        return ResultCode::SUCCESS;
     }
 
 	Result AvroSchema::Init(const Array<const char>& schemaData)
@@ -263,6 +295,11 @@ namespace SF
         return m_SchemaString;
     }
 
+    avro_schema_t AvroSchema::GetArrayItemsSchema() const
+    {
+        return avro_schema_array_items(m_Handle);
+    }
+
     // 
     Result AvroSchema::operator << (IInputStream& in)
     {
@@ -327,13 +364,15 @@ namespace SF
         return out.WriteString(schemaString);
     }
 
+    static_assert(sizeof(AvroValue::m_ValueBuffer) >= sizeof(avro_value_t));
+
 	AvroValue::AvroValue(const AvroSchema& schema)
 	{
 		m_OwnerOfValue = true;
-		m_DataClass = avro_generic_class_from_schema(schema);
-        if (m_DataClass != nullptr)
+        avro_value_iface_t* dataClass = avro_generic_class_from_schema(schema);
+        if (dataClass != nullptr)
         {
-            avro_generic_value_new(m_DataClass, &m_DataValue);
+            avro_generic_value_new(dataClass, &m_DataValue);
         }
         else
         {
@@ -347,11 +386,6 @@ namespace SF
         if (src.m_OwnerOfValue)
         {
             m_OwnerOfValue = true;
-            m_DataClass = src.m_DataClass;
-            if (m_DataClass)
-            {
-                avro_value_iface_incref(m_DataClass);
-            }
             avro_value_copy_ref(&m_DataValue, &src.m_DataValue);
         }
     }
@@ -360,20 +394,40 @@ namespace SF
 	{
 		if (m_OwnerOfValue)
 			avro_value_decref(&m_DataValue);
-
-		if (m_DataClass != nullptr)
-		{
-			avro_value_iface_decref(m_DataClass);
-		}
+        m_DataValue = {};
 	}
 
     void AvroValue::Init(const AvroSchema& schema)
     {
         m_OwnerOfValue = true;
-        m_DataClass = avro_generic_class_from_schema(schema);
-        avro_generic_value_new(m_DataClass, &m_DataValue);
+        avro_value_iface_t* dataClass = avro_generic_class_from_schema(schema);
+        if (dataClass == nullptr)
+        {
+            SFLog(System, Error, "AvroValue::Init, Creating generic avro value form schema has failed, invalid dataClass");
+            return;
+        }
+        avro_generic_value_new(dataClass, &m_DataValue);
     }
 
+    void AvroValue::Reset()
+    {
+        if (m_OwnerOfValue)
+            avro_value_decref(&m_DataValue);
+        m_DataValue = {};
+    }
+
+    size_t AvroValue::GetSerializedSize() const
+    {
+        size_t valueSize{};
+        avro_value_sizeof(&m_DataValue, &valueSize);
+        return valueSize;
+    }
+
+    Result AvroValue::GetAvroSchema(AvroSchema& outSchema)
+    {
+        avro_schema_t schema = avro_value_get_schema(&m_DataValue);
+        return outSchema.Init(schema);
+    }
 
 	Avro::ValueType AvroValue::GetType() const
 	{
@@ -503,7 +557,7 @@ namespace SF
 	}
 
 	// for array/map
-	size_t AvroValue::GetElementCount() const
+	size_t AvroValue::GetArraySize() const
 	{
 		size_t value{};
 		int res = avro_value_get_size(&m_DataValue, &value);
@@ -517,7 +571,7 @@ namespace SF
 	}
 
 	// for array/map
-	Result AvroValue::GetElement(int i, AvroValue& value, const char*& name) const
+	Result AvroValue::GetArrayItem(int i, AvroValue& value, const char*& name) const
 	{
 		int res = avro_value_get_by_index(&m_DataValue, i, value, &name);
 		if (res != 0)
@@ -525,6 +579,16 @@ namespace SF
 
 		return ResultCode::SUCCESS;
 	}
+
+    Result AvroValue::NewArrayItem(AvroValue& outValue)
+    {
+        outValue.Reset();
+        int res = avro_value_append(&m_DataValue, outValue, nullptr);
+        if (res != 0)
+            return ResultCode::NOT_EXIST;
+
+        return ResultCode::SUCCESS;
+    }
 
     Result AvroValue::GetFieldByIndex(int i, AvroValue& value, const char*& name) const
     {
@@ -752,7 +816,11 @@ namespace SF
 		m_Handle = avro_reader_memory(binData.data(), binData.size());
 	}
 
-	AvroReader::~AvroReader()
+    AvroReader::AvroReader(const SF::Array<const uint8_t>& binData)
+    {
+        m_Handle = avro_reader_memory(reinterpret_cast<const char*>(binData.data()), binData.size());
+    }
+    AvroReader::~AvroReader()
 	{
 		if (m_Handle != nullptr)
 			avro_reader_free(m_Handle);
@@ -846,6 +914,11 @@ namespace SF
         m_Handle = avro_writer_memory(memoryBuffer.data(), memoryBuffer.size());
     }
 
+    AvroWriter::AvroWriter(SF::Array<uint8_t>& memoryBuffer)
+    {
+        m_Handle = avro_writer_memory((char*)memoryBuffer.data(), memoryBuffer.size());
+    }
+
     AvroWriter::~AvroWriter()
     {
         if (m_Handle != nullptr)
@@ -917,7 +990,7 @@ namespace SF
         int iRet = avro_write(m_Handle, (void*)value.data(), len);
         if (iRet)
         {
-            SFLog(System, Error, "Avro Error read string: {0}", avro_strerror());
+            SFLog(System, Error, "Avro Error write string: {0}", avro_strerror());
             return ResultCode::FAIL;
         }
 

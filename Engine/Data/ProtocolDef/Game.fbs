@@ -402,6 +402,7 @@ table JoinGameInstanceCmd
 table JoinGameInstanceRes
 {
  	ins_uid:GameInstanceUID;
+	zone_custom_data:[ubyte];
 	server_public_address:string;
 } // table JoinGameInstanceRes
 
@@ -424,18 +425,6 @@ table SearchGameInstanceRes
 {
  	game_instances:[ubyte];
 } // table SearchGameInstanceRes
-
-table GetCharacterDataInGameInstanceCmd
-{
- 	game_instance_uid:GameInstanceUID;
-	player_id:AccountID;
-} // table GetCharacterDataInGameInstanceCmd
-
-table GetCharacterDataInGameInstanceRes
-{
- 	player_id:AccountID;
-	game_instances:[ubyte];
-} // table GetCharacterDataInGameInstanceRes
 
 table RequestGameMatchCmd
 {

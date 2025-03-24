@@ -29,7 +29,7 @@
 #include "Util/SFStringFormat.h"
 #include "MessageBus/SFMessageHeader.h"
 #include "Util/SFGuidHelper.h"
-
+#include "Avro/SFAvro.h"
 #include "Protocol/GameMessageID.h"
 #include "Protocol/PlayInstanceMessageID.h"
 
@@ -659,7 +659,7 @@ namespace SF
 				if (evt.Components.hr)
 				{
 					PlayInstanceRPCSendAdapter policy(m_Owner.GetConnectionGameInstance()->GetMessageEndpoint());
-					auto res = policy.JoinPlayInstanceCmd(intptr_t(this), m_Owner.GetGameInstanceUID(), m_Owner.GetPlayerID(), "??");
+					Result res = policy.JoinPlayInstanceCmd(intptr_t(this), m_Owner.GetGameInstanceUID(), m_Owner.GetPlayerID(), "??", m_Owner.GetCustomZoneDataVersion());
 					if (!res)
 					{
 						SetResult(res);
@@ -709,6 +709,36 @@ namespace SF
             m_Owner.SetupInstanceInfo();
             m_Owner.m_GameInstanceUID = SF::Flat::Helper::ParseGameInstanceUID(responseData->ins_uid());
             m_Owner.m_GameInstanceAddress = responseData->server_public_address()->c_str();
+            const ::flatbuffers::Vector<uint8_t>* customZoneData = responseData->zone_custom_data();
+            if (customZoneData && customZoneData->size() > 0)
+            {
+                ArrayView<const uint8_t> customZoneDataView(customZoneData->size(), customZoneData->data());
+                AvroValue customZoneDataValue;
+                hr = Avro::ParseAvroValue(customZoneDataView, customZoneDataValue);
+                if (hr.IsFailure())
+                {
+                    SFLog(Net, Error, "Failed to parse custom zone data: gameInsId:{0}, game:{1}, hr:{2}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress, hr);
+                    SetResult(hr);
+                    SetOnlineState(OnlineState::InGameServer);
+                    return;
+                }
+
+                AvroValue dataVersion;
+                hr = customZoneDataValue.GetField("DataVersion", dataVersion);
+                if (hr.IsFailure())
+                {
+                    SFLog(Net, Error, "Failed to parse custom zone data, no DataVersion: gameInsId:{0}, game:{1}, hr:{2}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress, hr);
+                    SetResult(hr);
+                    SetOnlineState(OnlineState::InGameServer);
+                    return;
+                }
+
+                m_Owner.m_CustomZoneDataVersion = dataVersion.AsInt();
+            }
+            else
+            {
+                m_Owner.m_CustomZoneDataVersion = 0;
+            }
 			
 			SFLog(Net, Info, "Game instance joined: {0}, game:{1}, {2}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress);
 
