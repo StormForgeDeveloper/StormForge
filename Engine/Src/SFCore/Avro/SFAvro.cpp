@@ -364,10 +364,10 @@ namespace SF
         return out.WriteString(schemaString);
     }
 
-    static_assert(sizeof(AvroValue::m_ValueBuffer) >= sizeof(avro_value_t));
-
 	AvroValue::AvroValue(const AvroSchema& schema)
 	{
+        static_assert(sizeof(AvroValue::m_ValueBuffer) >= sizeof(avro_value_t));
+
 		m_OwnerOfValue = true;
         avro_value_iface_t* dataClass = avro_generic_class_from_schema(schema);
         if (dataClass != nullptr)

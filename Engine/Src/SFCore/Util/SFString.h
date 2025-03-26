@@ -795,16 +795,16 @@ namespace SF {
 
 			if (ignoreCase)
 			{
-				for (int iOffset = len; iOffset >= 0; iOffset--, pCur--)
+				for (int iOffset = static_cast<int>(len); iOffset >= 0; iOffset--, pCur--)
 				{
-					if (StrUtil::StringCompairIgnoreCase(pCur, strLen, searchString, strLen)) return iOffset;
+					if (StrUtil::StringCompairIgnoreCase(pCur, static_cast<int>(strLen), searchString, static_cast<int>(strLen))) return iOffset;
 				}
 			}
 			else
 			{
-				for (int iOffset = len; iOffset >= 0; iOffset--, pCur--)
+				for (int iOffset = static_cast<int>(len); iOffset >= 0; iOffset--, pCur--)
 				{
-					if (StrUtil::StringCompair(pCur, strLen, searchString, strLen)) return iOffset;
+					if (StrUtil::StringCompair(pCur, static_cast<int>(strLen), searchString, static_cast<int>(strLen))) return iOffset;
 				}
 			}
 
@@ -818,7 +818,7 @@ namespace SF {
             size_t len = (int)GetLength() - 1;
             CharType* pCur = m_Buffer->GetBufferPointer() + len;
 
-			for (int iOffset = len; iOffset >= 0; iOffset--, pCur--)
+			for (int iOffset = static_cast<int>(len); iOffset >= 0; iOffset--, pCur--)
 			{
 				if (*pCur == searchChar) return iOffset;
 			}
