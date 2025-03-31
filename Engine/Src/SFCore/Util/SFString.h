@@ -836,7 +836,7 @@ namespace SF {
             size_t len = GetLength() - 1;
 			CharType* pCur = m_Buffer->GetBufferPointer() + len;
 
-			for (int iOffset = len; iOffset >= 0; iOffset--, pCur--)
+			for (int iOffset = static_cast<int>(len); iOffset >= 0; iOffset--, pCur--)
 			{
 				for (int iChar = 0; iChar < numChar; iChar++)
 				{

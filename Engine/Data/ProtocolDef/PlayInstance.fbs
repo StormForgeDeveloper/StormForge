@@ -341,26 +341,29 @@ table VoiceDataS2CEvt
 
 table UGCEditAddCmd
 {
- 	entity_type:uint32;
-	table_id:uint32;
+ 	play_instance_uid:GameInstanceUID;
+	player_id:AccountID;
+	inven_item_uid:uint32;
+	group_instance_id:uint32;
 	position:Vector4;
-	rotation:Vector4;
+	rotation:Quaternion;
 	scale:Vector4;
 } // table UGCEditAddCmd
 
 table UGCEditAddRes
 {
- 	instance_id:uint32;
+ 	entity_instance_id:uint32;
 	time_offset:uint32;
 	inven_changes:[ubyte];
 } // table UGCEditAddRes
 
 table UGCEditMoveCmd
 {
- 	instance_id:uint32;
-	entity_type:uint32;
+ 	play_instance_uid:GameInstanceUID;
+	player_id:AccountID;
+	entity_instance_id:uint32;
 	position:Vector4;
-	rotation:Vector4;
+	rotation:Quaternion;
 	scale:Vector4;
 } // table UGCEditMoveCmd
 
@@ -370,7 +373,9 @@ table UGCEditMoveRes
 
 table UGCEditDeleteCmd
 {
- 	instance_id:uint32;
+ 	play_instance_uid:GameInstanceUID;
+	player_id:AccountID;
+	entity_instance_id:uint32;
 } // table UGCEditDeleteCmd
 
 table UGCEditDeleteRes
@@ -379,12 +384,14 @@ table UGCEditDeleteRes
 
 table UGCEditClaimBackCmd
 {
- 	instance_id:uint32;
+ 	play_instance_uid:GameInstanceUID;
+	player_id:AccountID;
+	entity_instance_id:uint32;
 } // table UGCEditClaimBackCmd
 
 table UGCEditClaimBackRes
 {
- 	instance_id:uint32;
+ 	entity_instance_id:uint32;
 	inven_changes:[ubyte];
 } // table UGCEditClaimBackRes
 
@@ -392,28 +399,29 @@ table UGCEditAddedS2CEvt
 {
  	play_instance_uid:GameInstanceUID;
 	operator_player_id:AccountID;
+	entity_instance_id:uint32;
 	entity_type:uint32;
 	table_id:uint32;
 	time_offset:uint32;
 	position:Vector4;
-	rotation:Vector4;
+	rotation:Quaternion;
 	scale:Vector4;
-	instance_id:uint32;
 } // table UGCEditAddedS2CEvt
 
 table UGCEditRemovedS2CEvt
 {
  	play_instance_uid:GameInstanceUID;
 	operator_player_id:AccountID;
-	instance_id:uint32;
+	entity_instance_id:uint32;
 } // table UGCEditRemovedS2CEvt
 
 table UGCEditMovedS2CEvt
 {
  	play_instance_uid:GameInstanceUID;
 	operator_player_id:AccountID;
+	entity_instance_id:uint32;
 	position:Vector4;
-	rotation:Vector4;
+	rotation:Quaternion;
 	scale:Vector4;
 } // table UGCEditMovedS2CEvt
 

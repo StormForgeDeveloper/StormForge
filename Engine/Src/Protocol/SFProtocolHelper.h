@@ -167,6 +167,20 @@ namespace SF {
             }
 
 
+            inline FlatValueHolder<SF::Flat::Quaternion> CreateQuaternion(FlatBufferBuilder& fbb, const SF::Quaternion& value)
+            {
+                return FlatValueHolder<SF::Flat::Quaternion>(SF::Flat::Quaternion(value.x, value.y, value.z, value.w));
+            }
+
+            inline SF::Quaternion ParseQuaternion(const SF::Flat::Quaternion* value)
+            {
+                if (value == nullptr)
+                    return {};
+                else
+                    return SF::Quaternion(value->x(), value->y(), value->z(), value->w());
+            }
+
+
             inline FlatValueHolder<SF::Flat::Time32> CreateTime32(FlatBufferBuilder& fbb, const SF::Time32& value)
             {
                 return FlatValueHolder<SF::Flat::Time32>(SF::Flat::Time32(value));

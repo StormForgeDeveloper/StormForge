@@ -219,11 +219,12 @@ namespace SF {
 
 
 		// set timer
-		Result TimeStampTimer::SetTimer(DurationMS TimerDuration)
+		Result TimeStampTimer::SetTimer(DurationMS TimerDuration, bool bRepeat)
 		{
-			TimeStampMS ulNewTime = Time.GetTimeMs() + TimerDuration;
+            m_TimerDuration = TimerDuration;
+            m_bRepeat = bRepeat;
 
-			m_ulTimeToExpire = ulNewTime;
+			m_ulTimeToExpire = Time.GetTimeMs() + TimerDuration;
 			if (m_ulTimeToExpire.time_since_epoch().count() == 0)
 				m_ulTimeToExpire = Time.GetTimeMs();
 
@@ -245,9 +246,19 @@ namespace SF {
 				if (m_delOnExpired)
 					m_delOnExpired();
 
-				// Clear timer
-				m_ulTimeToExpirePrev = m_ulTimeToExpire;
-				m_ulTimeToExpire = InvalidTime;
+                if (m_bRepeat)
+                {
+                    // restart timer
+                    m_ulTimeToExpire = Time.GetTimeMs() + m_TimerDuration;
+                    if (m_ulTimeToExpire.time_since_epoch().count() == 0)
+                        m_ulTimeToExpire = Time.GetTimeMs();
+                }
+                else
+                {
+                    // Clear timer
+                    m_ulTimeToExpirePrev = m_ulTimeToExpire;
+                    m_ulTimeToExpire = InvalidTime;
+                }
 			}
 
 			return bExpired;

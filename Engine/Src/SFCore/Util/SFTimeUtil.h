@@ -102,8 +102,14 @@ namespace SF {
 			const static TimeStampMS	InvalidTime;
 
 		private:
+
+            DurationMS m_TimerDuration;
+
 			TimeStampMS	m_ulTimeToExpire;
 			TimeStampMS	m_ulTimeToExpirePrev;
+
+            // if set repeat after expire
+            bool m_bRepeat = false;
 
 			// Timer expire caller
 			std::function<void()> m_delOnExpired;
@@ -117,7 +123,7 @@ namespace SF {
             inline  void	SetTimerFunc(std::function<void()> funcOnExpired) { m_delOnExpired = funcOnExpired; }
 
 			// set timer
-			Result	SetTimer(DurationMS TimerDuration);
+			Result	SetTimer(DurationMS TimerDuration, bool bRepeat = false);
 
 			// clear timer
 			inline void	ClearTimer() { m_ulTimeToExpire = InvalidTime; }

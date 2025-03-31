@@ -658,17 +658,21 @@ UGC zone edit command
 
 1. Command interface
 
-        Result UGCEditAddCmd(const TransactionID &InTransactionID, const StringCrc32 &InEntityType, const uint32_t &InTableId, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale)
+        Result UGCEditAddCmd(const TransactionID &InTransactionID, const GameInstanceUID &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InInvenItemUID, const uint32_t &InGroupInstanceID, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale)
 
 		- TransactionID: type:TransactionID, 
 
-		- EntityType: type:StringCrc32, EntityType
+		- PlayInstanceUID: type:GameInstanceUID, Play instance ID
 
-		- TableId: type:uint32, Data table Id
+		- PlayerID: type:PlayerID, Operator PlayerID
 
-		- Position: type:Vector4, Position
+		- InvenItemUID: type:uint32, Inventory Item UID to place in the zone
 
-		- Rotation: type:Vector4, Rotation quaternion value
+		- GroupInstanceID: type:uint32, Group instance Id such as Aquarium instance Id
+
+		- Position: type:Vector4, Position to place
+
+		- Rotation: type:Quaternion, Rotation of the placement, quaternion value
 
 		- Scale: type:Vector4, Scale
 
@@ -679,7 +683,7 @@ C++: Cast message to UGCEditAddRes to access values
 
 		- TransactionID: type:TransactionID, 
 		- Result: type:Result, 
-		- InstanceId: type:uint32, Added entity's Instance Id
+		- EntityInstanceId: type:uint32, Added entity's Instance Id
 		- TimeOffset: type:uint32, TimeOffset for animation sync
 		- InvenChanges: type:VariableTable, Inventory changes
 
@@ -689,17 +693,19 @@ UGC zone edit command
 
 1. Command interface
 
-        Result UGCEditMoveCmd(const TransactionID &InTransactionID, const uint32_t &InInstanceId, const StringCrc32 &InEntityType, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale)
+        Result UGCEditMoveCmd(const TransactionID &InTransactionID, const GameInstanceUID &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InEntityInstanceId, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale)
 
 		- TransactionID: type:TransactionID, 
 
-		- InstanceId: type:uint32, Added entity's Instance Id
+		- PlayInstanceUID: type:GameInstanceUID, Play instance ID
 
-		- EntityType: type:StringCrc32, EntityType
+		- PlayerID: type:PlayerID, Operator PlayerID
+
+		- EntityInstanceId: type:uint32, Entity's Instance Id to move
 
 		- Position: type:Vector4, Position
 
-		- Rotation: type:Vector4, Rotation quaternion value
+		- Rotation: type:Quaternion, Rotation quaternion value
 
 		- Scale: type:Vector4, Scale
 
@@ -717,11 +723,15 @@ UGC zone edit command
 
 1. Command interface
 
-        Result UGCEditDeleteCmd(const TransactionID &InTransactionID, const uint32_t &InInstanceId)
+        Result UGCEditDeleteCmd(const TransactionID &InTransactionID, const GameInstanceUID &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InEntityInstanceId)
 
 		- TransactionID: type:TransactionID, 
 
-		- InstanceId: type:uint32, Entity's Instance Id to delete
+		- PlayInstanceUID: type:GameInstanceUID, Play instance ID
+
+		- PlayerID: type:PlayerID, Operator PlayerID
+
+		- EntityInstanceId: type:uint32, Entity's Instance Id to delete
 
 2. Result interface
 
@@ -737,11 +747,15 @@ UGC zone edit command
 
 1. Command interface
 
-        Result UGCEditClaimBackCmd(const TransactionID &InTransactionID, const uint32_t &InInstanceId)
+        Result UGCEditClaimBackCmd(const TransactionID &InTransactionID, const GameInstanceUID &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InEntityInstanceId)
 
 		- TransactionID: type:TransactionID, 
 
-		- InstanceId: type:uint32, Entity's Instance Id
+		- PlayInstanceUID: type:GameInstanceUID, Play instance ID
+
+		- PlayerID: type:PlayerID, Operator PlayerID
+
+		- EntityInstanceId: type:uint32, Entity's Instance Id to claim back
 
 2. Result interface
 
@@ -750,18 +764,20 @@ C++: Cast message to UGCEditClaimBackRes to access values
 
 		- TransactionID: type:TransactionID, 
 		- Result: type:Result, 
-		- InstanceId: type:uint32, Entity's Instance Id
+		- EntityInstanceId: type:uint32, Entity's Instance Id to claim back
 		- InvenChanges: type:VariableTable, Inventory changes
 
 
 ## UGCEditAddedS2CEvt
 UGC zone edited event
 
-        Result UGCEditAddedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const StringCrc32 &InEntityType, const uint32_t &InTableId, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale, const uint32_t &InInstanceId)
+        Result UGCEditAddedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const StringCrc32 &InEntityType, const uint32_t &InTableId, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale)
 
 		- OutInPlayInstanceUID: GameInstanceUID type. Game instance UID
 
 		- OutInOperatorPlayerID: PlayerID type. Player who operated
+
+		- OutInEntityInstanceId: uint32 type. Entity's Instance Id to delete
 
 		- OutInEntityType: StringCrc32 type. EntityType
 
@@ -771,37 +787,37 @@ UGC zone edited event
 
 		- OutInPosition: Vector4 type. Position
 
-		- OutInRotation: Vector4 type. Rotation quaternion value
+		- OutInRotation: Quaternion type. Rotation quaternion value
 
 		- OutInScale: Vector4 type. Scale
-
-		- OutInInstanceId: uint32 type. Entity's Instance Id to delete
 
 
 ## UGCEditRemovedS2CEvt
 UGC zone edited event
 
-        Result UGCEditRemovedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InInstanceId)
+        Result UGCEditRemovedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId)
 
 		- OutInPlayInstanceUID: GameInstanceUID type. Game instance UID
 
 		- OutInOperatorPlayerID: PlayerID type. Player who operated
 
-		- OutInInstanceId: uint32 type. Entity's Instance Id to delete
+		- OutInEntityInstanceId: uint32 type. Entity's Instance Id to delete
 
 
 ## UGCEditMovedS2CEvt
 UGC zone edited event
 
-        Result UGCEditMovedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const Vector4 &InPosition, const Vector4 &InRotation, const Vector4 &InScale)
+        Result UGCEditMovedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale)
 
 		- OutInPlayInstanceUID: GameInstanceUID type. Game instance UID
 
 		- OutInOperatorPlayerID: PlayerID type. Player who operated
 
+		- OutInEntityInstanceId: uint32 type. Moved Entity's Instance Id
+
 		- OutInPosition: Vector4 type. Position
 
-		- OutInRotation: Vector4 type. Rotation
+		- OutInRotation: Quaternion type. Rotation
 
 		- OutInScale: Vector4 type. Scale
 

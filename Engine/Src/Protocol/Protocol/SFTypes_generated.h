@@ -30,6 +30,8 @@ struct TransactionID;
 
 struct Vector4;
 
+struct Quaternion;
+
 struct UInt128;
 
 struct Guid;
@@ -754,6 +756,65 @@ struct Vector4::Traits {
   using type = Vector4;
   static constexpr auto name = "Vector4";
   static constexpr auto fully_qualified_name = "SF.Flat.Vector4";
+  static constexpr size_t fields_number = 4;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "x",
+    "y",
+    "z",
+    "w"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
+FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) Quaternion FLATBUFFERS_FINAL_CLASS {
+ private:
+  float x_;
+  float y_;
+  float z_;
+  float w_;
+
+ public:
+  struct Traits;
+  Quaternion()
+      : x_(0),
+        y_(0),
+        z_(0),
+        w_(0) {
+  }
+  Quaternion(float _x, float _y, float _z, float _w)
+      : x_(::flatbuffers::EndianScalar(_x)),
+        y_(::flatbuffers::EndianScalar(_y)),
+        z_(::flatbuffers::EndianScalar(_z)),
+        w_(::flatbuffers::EndianScalar(_w)) {
+  }
+  float x() const {
+    return ::flatbuffers::EndianScalar(x_);
+  }
+  float y() const {
+    return ::flatbuffers::EndianScalar(y_);
+  }
+  float z() const {
+    return ::flatbuffers::EndianScalar(z_);
+  }
+  float w() const {
+    return ::flatbuffers::EndianScalar(w_);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return x();
+    else if constexpr (Index == 1) return y();
+    else if constexpr (Index == 2) return z();
+    else if constexpr (Index == 3) return w();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
+};
+FLATBUFFERS_STRUCT_END(Quaternion, 16);
+
+struct Quaternion::Traits {
+  using type = Quaternion;
+  static constexpr auto name = "Quaternion";
+  static constexpr auto fully_qualified_name = "SF.Flat.Quaternion";
   static constexpr size_t fields_number = 4;
   static constexpr std::array<const char *, fields_number> field_names = {
     "x",
