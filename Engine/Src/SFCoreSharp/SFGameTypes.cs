@@ -407,6 +407,15 @@ namespace SF
         public float w;
     };
 
+    [Struct()]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SFQuaternion
+    {
+        public float x;
+        public float y;
+        public float z;
+        public float w;
+    };
 
     // Manages pinned byte buffer
     public class PinnedByteBuffer : IDisposable

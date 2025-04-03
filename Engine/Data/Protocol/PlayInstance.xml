@@ -4,6 +4,7 @@
 
 		<!-- ============================  Game instance ============================================ -->
 
+
 		<Command Name="JoinPlayInstance" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Player Join request.">
 			<Cmd>
 				<Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance to join"/>

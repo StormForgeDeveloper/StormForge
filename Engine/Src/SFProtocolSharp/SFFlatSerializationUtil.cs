@@ -857,6 +857,30 @@ namespace SF
             return Parse(value.Value);
         }
 
+        public static Offset<SF.Flat.Quaternion> CreateQuaternion(this Google.FlatBuffers.FlatBufferBuilder builder, SF.SFQuaternion data)
+        {
+            return SF.Flat.Quaternion.CreateQuaternion(builder, data.x, data.y, data.z, data.w);
+        }
+
+        public static SF.SFQuaternion Parse(this SF.Flat.Quaternion value)
+        {
+            return new SF.SFQuaternion()
+            {
+                x = value.X,
+                y = value.Y,
+                z = value.Z,
+                w = value.W
+            };
+        }
+
+        public static SF.SFQuaternion Parse(this SF.Flat.Quaternion? value)
+        {
+            if (value == null)
+                return default(SF.SFQuaternion);
+
+            return Parse(value.Value);
+        }
+
         public static Offset<SF.Flat.ActorMovement> CreateActorMovement(this Google.FlatBuffers.FlatBufferBuilder builder, SF.ActorMovement data)
         {
             //ActorMovement.StartActorMovement(builder);

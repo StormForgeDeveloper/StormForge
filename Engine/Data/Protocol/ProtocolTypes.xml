@@ -6,5 +6,5 @@
     <DataType TypeName="LogEntryID" IsEnum="false" CppTypeName="uint32_t" IsVariableSize="false" CSharpTypeName="UInt32" IsCSharpStruct="false" IsCSharpArray="false" Desc="32bit log entry id assigned by system"/>
     <DataType TypeName="UGCID" IsEnum="false" CppTypeName="uint64_t" IsVariableSize="false" CSharpTypeName="UInt64" IsCSharpStruct="false" IsCSharpArray="false" Desc="64bit UGC content id assigned by system"/>
     <DataType TypeName="EAccountRole" IsEnum="false" CppTypeName="EAccountRole" IsVariableSize="false" CSharpTypeName="EAccountRole" IsCSharpStruct="false" IsCSharpArray="false" Desc="Account role"/>
-    <DataType TypeName="Quaternion" IsEnum="false" CppTypeName="Quaternion" IsVariableSize="false" CSharpTypeName="Quaternion" IsCSharpStruct="true" IsCSharpArray="false" Desc="Quaternion struct"/>
+    <DataType TypeName="Quaternion" IsEnum="false" CppTypeName="Quaternion" IsVariableSize="false" CSharpTypeName="SFQuaternion" IsCSharpStruct="true" IsCSharpArray="false" Desc="Quaternion struct"/>
 </ProtocolTypes>

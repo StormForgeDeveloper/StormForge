@@ -446,13 +446,13 @@ namespace SF.Net
 
 
 		// Cmd: UGC zone edit command
-		public Result  UGCEditAddCmd( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InInvenItemUID, System.UInt32 InGroupInstanceID, SF.SFVector4 InPosition, Quaternion InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
+		public Result  UGCEditAddCmd( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InInvenItemUID, System.UInt32 InGroupInstanceID, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return UGCEditAddCmd(InTransactionID, InPlayInstanceUID, InPlayerID, InInvenItemUID, InGroupInstanceID, InPosition, InRotation, InScale, callback);
-		} // public Result  UGCEditAddCmd( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InInvenItemUID, System.UInt32 InGroupInstanceID, SF.SFVector4 InPosition, Quaternion InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
-		public Result  UGCEditAddCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InInvenItemUID, System.UInt32 InGroupInstanceID, SF.SFVector4 InPosition, Quaternion InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
+		} // public Result  UGCEditAddCmd( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InInvenItemUID, System.UInt32 InGroupInstanceID, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
+		public Result  UGCEditAddCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InInvenItemUID, System.UInt32 InGroupInstanceID, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
@@ -473,16 +473,16 @@ namespace SF.Net
 			var packetOffset = SF.Flat.PlayInstance.UGCEditAddCmd.EndUGCEditAddCmd(builder);
 			result = SendMessage(MessageIDPlayInstance.UGCEditAddCmd, builder, packetOffset.Value, transactionId:InTransactionID , callback:callback);
 			return result;
-		} // public Result  UGCEditAddCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InInvenItemUID, System.UInt32 InGroupInstanceID, SF.SFVector4 InPosition, Quaternion InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
+		} // public Result  UGCEditAddCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InInvenItemUID, System.UInt32 InGroupInstanceID, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
 
 		// Cmd: UGC zone edit command
-		public Result  UGCEditMoveCmd( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InEntityInstanceId, SF.SFVector4 InPosition, Quaternion InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
+		public Result  UGCEditMoveCmd( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InEntityInstanceId, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
 			return UGCEditMoveCmd(InTransactionID, InPlayInstanceUID, InPlayerID, InEntityInstanceId, InPosition, InRotation, InScale, callback);
-		} // public Result  UGCEditMoveCmd( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InEntityInstanceId, SF.SFVector4 InPosition, Quaternion InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
-		public Result  UGCEditMoveCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InEntityInstanceId, SF.SFVector4 InPosition, Quaternion InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
+		} // public Result  UGCEditMoveCmd( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InEntityInstanceId, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
+		public Result  UGCEditMoveCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InEntityInstanceId, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
@@ -502,7 +502,7 @@ namespace SF.Net
 			var packetOffset = SF.Flat.PlayInstance.UGCEditMoveCmd.EndUGCEditMoveCmd(builder);
 			result = SendMessage(MessageIDPlayInstance.UGCEditMoveCmd, builder, packetOffset.Value, transactionId:InTransactionID , callback:callback);
 			return result;
-		} // public Result  UGCEditMoveCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InEntityInstanceId, SF.SFVector4 InPosition, Quaternion InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
+		} // public Result  UGCEditMoveCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InEntityInstanceId, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale, Action<SFMessage>? callback = null )
 
 		// Cmd: UGC zone edit command
 		public Result  UGCEditDeleteCmd( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InPlayerID, System.UInt32 InEntityInstanceId, Action<SFMessage>? callback = null )
@@ -1254,7 +1254,7 @@ namespace SF.Net
 
 
 		// S2C: UGC zone edited event
-		public Result  UGCEditAddedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, System.UInt32 InEntityType, System.UInt32 InTableId, System.UInt32 InTimeOffset, SF.SFVector4 InPosition, Quaternion InRotation, SF.SFVector4 InScale )
+		public Result  UGCEditAddedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, System.UInt32 InEntityType, System.UInt32 InTableId, System.UInt32 InTimeOffset, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
@@ -1277,7 +1277,7 @@ namespace SF.Net
 			var packetOffset = SF.Flat.PlayInstance.UGCEditAddedS2CEvt.EndUGCEditAddedS2CEvt(builder);
 			result = SendMessage(MessageIDPlayInstance.UGCEditAddedS2CEvt, builder, packetOffset.Value);
 			return result;
-		} // public Result  UGCEditAddedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, System.UInt32 InEntityType, System.UInt32 InTableId, System.UInt32 InTimeOffset, SF.SFVector4 InPosition, Quaternion InRotation, SF.SFVector4 InScale )
+		} // public Result  UGCEditAddedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, System.UInt32 InEntityType, System.UInt32 InTableId, System.UInt32 InTimeOffset, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale )
 
 
 		// S2C: UGC zone edited event
@@ -1299,7 +1299,7 @@ namespace SF.Net
 
 
 		// S2C: UGC zone edited event
-		public Result  UGCEditMovedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, SF.SFVector4 InPosition, Quaternion InRotation, SF.SFVector4 InScale )
+		public Result  UGCEditMovedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
@@ -1319,7 +1319,7 @@ namespace SF.Net
 			var packetOffset = SF.Flat.PlayInstance.UGCEditMovedS2CEvt.EndUGCEditMovedS2CEvt(builder);
 			result = SendMessage(MessageIDPlayInstance.UGCEditMovedS2CEvt, builder, packetOffset.Value);
 			return result;
-		} // public Result  UGCEditMovedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, SF.SFVector4 InPosition, Quaternion InRotation, SF.SFVector4 InScale )
+		} // public Result  UGCEditMovedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale )
 
 
 		// Cmd: Create stream instance
