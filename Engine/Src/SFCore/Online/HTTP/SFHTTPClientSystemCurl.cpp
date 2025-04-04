@@ -96,7 +96,33 @@ namespace SF
             }
 
             std::string strData(data, data + size);
-            SFLog(HTTP, Custom1, "CURL: {0}:{1}", typeName, strData);
+            switch (type)
+            {
+            case CURLINFO_TEXT:
+                SFLog(HTTP, Debug3, "CURL: {0}:{1}", typeName, strData);
+                break;
+            case CURLINFO_HEADER_IN:
+                SFLog(HTTP, Debug6, "CURL: {0}:{1}", typeName, strData);
+                break;
+            case CURLINFO_HEADER_OUT:
+                SFLog(HTTP, Debug6, "CURL: {0}:{1}", typeName, strData);
+                break;
+            case CURLINFO_DATA_IN:
+                SFLog(HTTP, Debug5, "CURL: {0}:{1}", typeName, strData);
+                break;
+            case CURLINFO_DATA_OUT:
+                SFLog(HTTP, Debug5, "CURL: {0}:{1}", typeName, strData);
+                break;
+            case CURLINFO_SSL_DATA_IN:
+                SFLog(HTTP, Debug4, "CURL: {0}:{1}", typeName, strData);
+                break;
+            case CURLINFO_SSL_DATA_OUT:
+                SFLog(HTTP, Debug4, "CURL: {0}:{1}", typeName, strData);
+                break;
+            default:
+                SFLog(HTTP, Debug, "CURL: {0}:{1}", typeName, strData);
+                break;
+            }
 
             return 0;
         }
