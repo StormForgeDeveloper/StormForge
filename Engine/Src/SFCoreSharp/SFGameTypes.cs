@@ -417,7 +417,7 @@ namespace SF
         public float w;
     };
 
-    public struct SFUGCGameInfo
+    public struct UGCGameInfo
     {
         public Guid UGCContentId;
         public uint TableId;
