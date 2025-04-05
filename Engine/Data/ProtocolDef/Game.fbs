@@ -418,7 +418,6 @@ table LeaveGameInstanceRes
 table SearchGameInstanceCmd
 {
  	search_keyword:string;
-	zone_table_id:uint32;
 } // table SearchGameInstanceCmd
 
 table SearchGameInstanceRes
@@ -487,16 +486,16 @@ table GetUGCTemplatesRes
  	ugcids:uint64;
 } // table GetUGCTemplatesRes
 
-table SaveUGCCmd
+table UploadUGCCmd
 {
  	ugcmeta_data:[ubyte];
 	ugccontents:[ubyte];
-} // table SaveUGCCmd
+} // table UploadUGCCmd
 
-table SaveUGCRes
+table UploadUGCRes
 {
  	ugcid:uint64;
-} // table SaveUGCRes
+} // table UploadUGCRes
 
 table SearchUGCCmd
 {
@@ -528,15 +527,15 @@ table DownloadUGCContentRes
  	ugcmeta_data:[ubyte];
 } // table DownloadUGCContentRes
 
-table RequestUGCZoneInstanceCmd
+table RequestUGCGameInstanceCmd
 {
- 	ugcid:uint64;
-} // table RequestUGCZoneInstanceCmd
+ 	ugcpath:string;
+} // table RequestUGCGameInstanceCmd
 
-table RequestUGCZoneInstanceRes
+table RequestUGCGameInstanceRes
 {
  	game_instance:[ubyte];
-} // table RequestUGCZoneInstanceRes
+} // table RequestUGCGameInstanceRes
 
 table BuyShopItemPrepareCmd
 {

@@ -175,7 +175,7 @@ namespace SF.Net
 		public static readonly MessageID LeaveGameInstanceCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 44);
 		public static readonly MessageID LeaveGameInstanceRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 44);
 
-		// Cmd: Search game instance
+		// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
 		public static readonly MessageID SearchGameInstanceCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 45);
 		public static readonly MessageID SearchGameInstanceRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 45);
 
@@ -199,9 +199,9 @@ namespace SF.Net
 		public static readonly MessageID GetUGCTemplatesCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 52);
 		public static readonly MessageID GetUGCTemplatesRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 52);
 
-		// Cmd: Save UGC content data
-		public static readonly MessageID SaveUGCCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 53);
-		public static readonly MessageID SaveUGCRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 53);
+		// Cmd: Upload UGC content data
+		public static readonly MessageID UploadUGCCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 53);
+		public static readonly MessageID UploadUGCRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 53);
 
 		// Cmd: Request WhiteboardSharing
 		public static readonly MessageID SearchUGCCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 54);
@@ -215,9 +215,9 @@ namespace SF.Net
 		public static readonly MessageID DownloadUGCContentCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 56);
 		public static readonly MessageID DownloadUGCContentRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 56);
 
-		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
-		public static readonly MessageID RequestUGCZoneInstanceCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 57);
-		public static readonly MessageID RequestUGCZoneInstanceRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 57);
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
+		public static readonly MessageID RequestUGCGameInstanceCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 57);
+		public static readonly MessageID RequestUGCGameInstanceRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 57);
 
 		// Cmd: Buy shop item prepare
 		public static readonly MessageID BuyShopItemPrepareCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 58);

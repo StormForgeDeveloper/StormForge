@@ -175,7 +175,7 @@ namespace SF
 			constexpr MessageID MID_LeaveGameInstanceCmd(EMessageType::Command,1,MessageProtocol::Game,44);
 			constexpr MessageID MID_LeaveGameInstanceRes(EMessageType::Result,1,MessageProtocol::Game,44);
 
-			// Cmd: Search game instance
+			// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
 			constexpr MessageID MID_SearchGameInstanceCmd(EMessageType::Command,1,MessageProtocol::Game,45);
 			constexpr MessageID MID_SearchGameInstanceRes(EMessageType::Result,1,MessageProtocol::Game,45);
 
@@ -199,9 +199,9 @@ namespace SF
 			constexpr MessageID MID_GetUGCTemplatesCmd(EMessageType::Command,1,MessageProtocol::Game,52);
 			constexpr MessageID MID_GetUGCTemplatesRes(EMessageType::Result,1,MessageProtocol::Game,52);
 
-			// Cmd: Save UGC content data
-			constexpr MessageID MID_SaveUGCCmd(EMessageType::Command,1,MessageProtocol::Game,53);
-			constexpr MessageID MID_SaveUGCRes(EMessageType::Result,1,MessageProtocol::Game,53);
+			// Cmd: Upload UGC content data
+			constexpr MessageID MID_UploadUGCCmd(EMessageType::Command,1,MessageProtocol::Game,53);
+			constexpr MessageID MID_UploadUGCRes(EMessageType::Result,1,MessageProtocol::Game,53);
 
 			// Cmd: Request WhiteboardSharing
 			constexpr MessageID MID_SearchUGCCmd(EMessageType::Command,1,MessageProtocol::Game,54);
@@ -215,9 +215,9 @@ namespace SF
 			constexpr MessageID MID_DownloadUGCContentCmd(EMessageType::Command,1,MessageProtocol::Game,56);
 			constexpr MessageID MID_DownloadUGCContentRes(EMessageType::Result,1,MessageProtocol::Game,56);
 
-			// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
-			constexpr MessageID MID_RequestUGCZoneInstanceCmd(EMessageType::Command,1,MessageProtocol::Game,57);
-			constexpr MessageID MID_RequestUGCZoneInstanceRes(EMessageType::Result,1,MessageProtocol::Game,57);
+			// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
+			constexpr MessageID MID_RequestUGCGameInstanceCmd(EMessageType::Command,1,MessageProtocol::Game,57);
+			constexpr MessageID MID_RequestUGCGameInstanceRes(EMessageType::Result,1,MessageProtocol::Game,57);
 
 			// Cmd: Buy shop item prepare
 			constexpr MessageID MID_BuyShopItemPrepareCmd(EMessageType::Command,1,MessageProtocol::Game,58);

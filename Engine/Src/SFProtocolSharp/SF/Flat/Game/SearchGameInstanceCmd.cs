@@ -26,20 +26,16 @@ public struct SearchGameInstanceCmd : IFlatbufferObject
   public ArraySegment<byte>? GetSearchKeywordBytes() { return __p.__vector_as_arraysegment(4); }
 #endif
   public byte[] GetSearchKeywordArray() { return __p.__vector_as_array<byte>(4); }
-  public uint ZoneTableId { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUint(o + __p.bb_pos) : (uint)0; } }
 
   public static Offset<SF.Flat.Game.SearchGameInstanceCmd> CreateSearchGameInstanceCmd(FlatBufferBuilder builder,
-      StringOffset search_keywordOffset = default(StringOffset),
-      uint zone_table_id = 0) {
-    builder.StartTable(2);
-    SearchGameInstanceCmd.AddZoneTableId(builder, zone_table_id);
+      StringOffset search_keywordOffset = default(StringOffset)) {
+    builder.StartTable(1);
     SearchGameInstanceCmd.AddSearchKeyword(builder, search_keywordOffset);
     return SearchGameInstanceCmd.EndSearchGameInstanceCmd(builder);
   }
 
-  public static void StartSearchGameInstanceCmd(FlatBufferBuilder builder) { builder.StartTable(2); }
+  public static void StartSearchGameInstanceCmd(FlatBufferBuilder builder) { builder.StartTable(1); }
   public static void AddSearchKeyword(FlatBufferBuilder builder, StringOffset searchKeywordOffset) { builder.AddOffset(0, searchKeywordOffset.Value, 0); }
-  public static void AddZoneTableId(FlatBufferBuilder builder, uint zoneTableId) { builder.AddUint(1, zoneTableId, 0); }
   public static Offset<SF.Flat.Game.SearchGameInstanceCmd> EndSearchGameInstanceCmd(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.SearchGameInstanceCmd>(o);
@@ -53,7 +49,6 @@ static public class SearchGameInstanceCmdVerify
   {
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyString(tablePos, 4 /*SearchKeyword*/, false)
-      && verifier.VerifyField(tablePos, 6 /*ZoneTableId*/, 4 /*uint*/, 4, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

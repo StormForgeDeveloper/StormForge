@@ -400,15 +400,19 @@
 			</Res>
 		</Command>
 
-		<Command Name="SearchGameInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Search game instance">
+		<Command Name="SearchGameInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Search game instance. directory based search schema. 
+		@SearchKeyword
+		 - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*
+		 - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*
+		">
 			<Cmd>
 				<Params TypeName="String" Name="SearchKeyword" Desc="Search keyword"/>
-                <Params TypeName="uint32" Name="ZoneTableID" Desc="Search keyword, zone table id, ignored if it is zero"/>
 			</Cmd>
 			<Res>
 				<Params TypeName="VariableTable" IsArray="true" Name="GameInstances" Desc="Game instance informations"/>
 			</Res>
 		</Command>
+
 
 		<!-- ===================================================  Game matching  ================================================== -->
 
@@ -469,7 +473,7 @@
             </Res>
         </Command>
 
-        <Command Name="SaveUGC" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Save UGC content data">
+        <Command Name="UploadUGC" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Upload UGC content data">
             <Cmd>
                 <Params TypeName="VariableTable" Name="UGCMetaData" Desc="Metadata will be linked with. This is quick access data like name and thumb image"/>
                 <Params TypeName="VariableTable" Name="UGCContents" Desc="UGCContents data. main content binary and so on"/>
@@ -506,15 +510,14 @@
             </Res>
         </Command>
 
-        <Command Name="RequestUGCZoneInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone">
+        <Command Name="RequestUGCGameInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.">
             <Cmd>
-                <Params TypeName="UGCID" Name="UGCID" Desc="UGC content id"/>
+                <Params TypeName="String" Name="UGCPath" Desc="UGC path"/>
             </Cmd>
             <Res>
                 <Params TypeName="VariableTable" Name="GameInstance" Desc="Privisoned UGC zone instance information"/>
             </Res>
         </Command>
-
 
         <!-- ===================================================  Shop & Item ================================================== -->
 

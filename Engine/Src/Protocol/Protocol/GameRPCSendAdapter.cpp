@@ -653,8 +653,8 @@ namespace SF
 
 		return hr;
 	}; // Result GameRPCSendAdapter::LeaveGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID )
-	// Cmd: Search game instance
-	Result GameRPCSendAdapter::SearchGameInstanceCmd( const TransactionID &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID )
+	// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
+	Result GameRPCSendAdapter::SearchGameInstanceCmd( const TransactionID &InTransactionID, const char* InSearchKeyword )
 	{
  		Result hr;
 
@@ -664,7 +664,6 @@ namespace SF
 		auto SearchKeywordOffset = SF::Flat::Helper::CreateString(fbb, InSearchKeyword);
 		SF::Flat::Game::SearchGameInstanceCmdBuilder _builder(fbb);
 		_builder.add_search_keyword(SearchKeywordOffset);
-		_builder.add_zone_table_id(InZoneTableID);
 		flatbuffers::Offset<SF::Flat::Game::SearchGameInstanceCmd> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
 
@@ -672,7 +671,7 @@ namespace SF
 
 
 		return hr;
-	}; // Result GameRPCSendAdapter::SearchGameInstanceCmd( const TransactionID &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID )
+	}; // Result GameRPCSendAdapter::SearchGameInstanceCmd( const TransactionID &InTransactionID, const char* InSearchKeyword )
 	// Cmd: Request Game match
 	Result GameRPCSendAdapter::RequestGameMatchCmd( const TransactionID &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole )
 	{
@@ -728,8 +727,8 @@ namespace SF
 
 		return hr;
 	}; // Result GameRPCSendAdapter::GetUGCTemplatesCmd( const TransactionID &InTransactionID, const Array<const char*>& InTags )
-	// Cmd: Save UGC content data
-	Result GameRPCSendAdapter::SaveUGCCmd( const TransactionID &InTransactionID, const VariableTable &InUGCMetaData, const VariableTable &InUGCContents )
+	// Cmd: Upload UGC content data
+	Result GameRPCSendAdapter::UploadUGCCmd( const TransactionID &InTransactionID, const VariableTable &InUGCMetaData, const VariableTable &InUGCContents )
 	{
  		Result hr;
 
@@ -738,17 +737,17 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		auto UGCMetaDataOffset = SF::Flat::Helper::CreateVariableTable(fbb, InUGCMetaData);
 		auto UGCContentsOffset = SF::Flat::Helper::CreateVariableTable(fbb, InUGCContents);
-		SF::Flat::Game::SaveUGCCmdBuilder _builder(fbb);
+		SF::Flat::Game::UploadUGCCmdBuilder _builder(fbb);
 		_builder.add_ugcmeta_data(UGCMetaDataOffset);
 		_builder.add_ugccontents(UGCContentsOffset);
-		flatbuffers::Offset<SF::Flat::Game::SaveUGCCmd> packetOffset = _builder.Finish();
+		flatbuffers::Offset<SF::Flat::Game::UploadUGCCmd> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
 
-		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_SaveUGCCmd, fbb));
+		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_UploadUGCCmd, fbb));
 
 
 		return hr;
-	}; // Result GameRPCSendAdapter::SaveUGCCmd( const TransactionID &InTransactionID, const VariableTable &InUGCMetaData, const VariableTable &InUGCContents )
+	}; // Result GameRPCSendAdapter::UploadUGCCmd( const TransactionID &InTransactionID, const VariableTable &InUGCMetaData, const VariableTable &InUGCContents )
 	// Cmd: Request WhiteboardSharing
 	Result GameRPCSendAdapter::SearchUGCCmd( const TransactionID &InTransactionID, const Array<const char*>& InTags )
 	{
@@ -805,24 +804,25 @@ namespace SF
 
 		return hr;
 	}; // Result GameRPCSendAdapter::DownloadUGCContentCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID, const uint8_t &InIsIncludeMetaData )
-	// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
-	Result GameRPCSendAdapter::RequestUGCZoneInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID )
+	// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
+	Result GameRPCSendAdapter::RequestUGCGameInstanceCmd( const TransactionID &InTransactionID, const char* InUGCPath )
 	{
  		Result hr;
 
 		protocolCheckPtr(m_Endpoint);
 
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
-		SF::Flat::Game::RequestUGCZoneInstanceCmdBuilder _builder(fbb);
-		_builder.add_ugcid(InUGCID);
-		flatbuffers::Offset<SF::Flat::Game::RequestUGCZoneInstanceCmd> packetOffset = _builder.Finish();
+		auto UGCPathOffset = SF::Flat::Helper::CreateString(fbb, InUGCPath);
+		SF::Flat::Game::RequestUGCGameInstanceCmdBuilder _builder(fbb);
+		_builder.add_ugcpath(UGCPathOffset);
+		flatbuffers::Offset<SF::Flat::Game::RequestUGCGameInstanceCmd> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
 
-		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_RequestUGCZoneInstanceCmd, fbb));
+		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_RequestUGCGameInstanceCmd, fbb));
 
 
 		return hr;
-	}; // Result GameRPCSendAdapter::RequestUGCZoneInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID )
+	}; // Result GameRPCSendAdapter::RequestUGCGameInstanceCmd( const TransactionID &InTransactionID, const char* InUGCPath )
 	// Cmd: Buy shop item prepare
 	Result GameRPCSendAdapter::BuyShopItemPrepareCmd( const TransactionID &InTransactionID, const uint32_t &InShopItemID )
 	{
@@ -1988,7 +1988,7 @@ namespace SF
 
 		return hr;
 	}; // Result GameSvrRPCSendAdapter::LeaveGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult )
-	// Cmd: Search game instance
+	// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
 	Result GameSvrRPCSendAdapter::SearchGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances )
 	{
  		Result hr;
@@ -2149,24 +2149,24 @@ namespace SF
 
 		return hr;
 	}; // Result GameSvrRPCSendAdapter::GetUGCTemplatesRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCIDs )
-	// Cmd: Save UGC content data
-	Result GameSvrRPCSendAdapter::SaveUGCRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCID )
+	// Cmd: Upload UGC content data
+	Result GameSvrRPCSendAdapter::UploadUGCRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCID )
 	{
  		Result hr;
 
 		protocolCheckPtr(m_Endpoint);
 
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
-		SF::Flat::Game::SaveUGCResBuilder _builder(fbb);
+		SF::Flat::Game::UploadUGCResBuilder _builder(fbb);
 		_builder.add_ugcid(InUGCID);
-		flatbuffers::Offset<SF::Flat::Game::SaveUGCRes> packetOffset = _builder.Finish();
+		flatbuffers::Offset<SF::Flat::Game::UploadUGCRes> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
 
-		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_SaveUGCRes, fbb));
+		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_UploadUGCRes, fbb));
 
 
 		return hr;
-	}; // Result GameSvrRPCSendAdapter::SaveUGCRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCID )
+	}; // Result GameSvrRPCSendAdapter::UploadUGCRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCID )
 	// Cmd: Request WhiteboardSharing
 	Result GameSvrRPCSendAdapter::SearchUGCRes( const TransactionID &InTransactionID, const Result &InResult )
 	{
@@ -2222,8 +2222,8 @@ namespace SF
 
 		return hr;
 	}; // Result GameSvrRPCSendAdapter::DownloadUGCContentRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData )
-	// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
-	Result GameSvrRPCSendAdapter::RequestUGCZoneInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
+	// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
+	Result GameSvrRPCSendAdapter::RequestUGCGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
 	{
  		Result hr;
 
@@ -2231,16 +2231,16 @@ namespace SF
 
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		auto GameInstanceOffset = SF::Flat::Helper::CreateVariableTable(fbb, InGameInstance);
-		SF::Flat::Game::RequestUGCZoneInstanceResBuilder _builder(fbb);
+		SF::Flat::Game::RequestUGCGameInstanceResBuilder _builder(fbb);
 		_builder.add_game_instance(GameInstanceOffset);
-		flatbuffers::Offset<SF::Flat::Game::RequestUGCZoneInstanceRes> packetOffset = _builder.Finish();
+		flatbuffers::Offset<SF::Flat::Game::RequestUGCGameInstanceRes> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
 
-		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_RequestUGCZoneInstanceRes, fbb));
+		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_RequestUGCGameInstanceRes, fbb));
 
 
 		return hr;
-	}; // Result GameSvrRPCSendAdapter::RequestUGCZoneInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
+	}; // Result GameSvrRPCSendAdapter::RequestUGCGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
 	// Cmd: Buy shop item prepare
 	Result GameSvrRPCSendAdapter::BuyShopItemPrepareRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID )
 	{

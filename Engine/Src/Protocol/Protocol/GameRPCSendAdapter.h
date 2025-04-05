@@ -102,24 +102,24 @@ namespace SF
 		Result JoinGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID );
 		// Cmd: Leave game instance
 		Result LeaveGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID );
-		// Cmd: Search game instance
-		Result SearchGameInstanceCmd( const TransactionID &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID );
+		// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
+		Result SearchGameInstanceCmd( const TransactionID &InTransactionID, const char* InSearchKeyword );
 		// Cmd: Request Game match
 		Result RequestGameMatchCmd( const TransactionID &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole );
 		// Cmd: Cancel Game match
 		Result CancelGameMatchCmd( const TransactionID &InTransactionID );
 		// Cmd: Request UGC template list
 		Result GetUGCTemplatesCmd( const TransactionID &InTransactionID, const Array<const char*>& InTags );
-		// Cmd: Save UGC content data
-		Result SaveUGCCmd( const TransactionID &InTransactionID, const VariableTable &InUGCMetaData, const VariableTable &InUGCContents );
+		// Cmd: Upload UGC content data
+		Result UploadUGCCmd( const TransactionID &InTransactionID, const VariableTable &InUGCMetaData, const VariableTable &InUGCContents );
 		// Cmd: Request WhiteboardSharing
 		Result SearchUGCCmd( const TransactionID &InTransactionID, const Array<const char*>& InTags );
 		// Cmd: Get UGC content info, name, thumb image and so on
 		Result GetUGCContentInfoCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID );
 		// Cmd: Request WhiteboardSharing
 		Result DownloadUGCContentCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID, const uint8_t &InIsIncludeMetaData );
-		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
-		Result RequestUGCZoneInstanceCmd( const TransactionID &InTransactionID, const uint64_t &InUGCID );
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
+		Result RequestUGCGameInstanceCmd( const TransactionID &InTransactionID, const char* InUGCPath );
 		// Cmd: Buy shop item prepare
 		Result BuyShopItemPrepareCmd( const TransactionID &InTransactionID, const uint32_t &InShopItemID );
 		// Cmd: Buy shop item
@@ -251,7 +251,7 @@ namespace SF
 		Result JoinGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InInsUID, const Array<uint8_t>& InZoneCustomData, const char* InServerPublicAddress );
 		// Cmd: Leave game instance
 		Result LeaveGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult );
-		// Cmd: Search game instance
+		// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
 		Result SearchGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances );
 		// Cmd: Request Game match
 		Result RequestGameMatchRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
@@ -267,16 +267,16 @@ namespace SF
 		Result GameMatchingCanceledS2CEvt(  );
 		// Cmd: Request UGC template list
 		Result GetUGCTemplatesRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCIDs );
-		// Cmd: Save UGC content data
-		Result SaveUGCRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCID );
+		// Cmd: Upload UGC content data
+		Result UploadUGCRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCID );
 		// Cmd: Request WhiteboardSharing
 		Result SearchUGCRes( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: Get UGC content info, name, thumb image and so on
 		Result GetUGCContentInfoRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData );
 		// Cmd: Request WhiteboardSharing
 		Result DownloadUGCContentRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InUGCMetaData );
-		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
-		Result RequestUGCZoneInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance );
+		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
+		Result RequestUGCGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance );
 		// Cmd: Buy shop item prepare
 		Result BuyShopItemPrepareRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID );
 		// Cmd: Buy shop item

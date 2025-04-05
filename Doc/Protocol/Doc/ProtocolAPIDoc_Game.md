@@ -846,17 +846,15 @@ C++: Cast message to LeaveGameInstanceRes to access values
 
 
 ## SearchGameInstance Request
-Search game instance
+Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
 
 1. Command interface
 
-        Result SearchGameInstanceCmd(const TransactionID &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID)
+        Result SearchGameInstanceCmd(const TransactionID &InTransactionID, const char* InSearchKeyword)
 
 		- TransactionID: type:TransactionID, 
 
 		- SearchKeyword: type:String, Search keyword
-
-		- ZoneTableID: type:uint32, Search keyword, zone table id, ignored if it is zero
 
 2. Result interface
 
@@ -985,12 +983,12 @@ C++: Cast message to GetUGCTemplatesRes to access values
 		- UGCIDs: type:UGCID, search result UGC ids
 
 
-## SaveUGC Request
-Save UGC content data
+## UploadUGC Request
+Upload UGC content data
 
 1. Command interface
 
-        Result SaveUGCCmd(const TransactionID &InTransactionID, const Array<uint8_t>& InUGCMetaData, const Array<uint8_t>& InUGCContents)
+        Result UploadUGCCmd(const TransactionID &InTransactionID, const Array<uint8_t>& InUGCMetaData, const Array<uint8_t>& InUGCContents)
 
 		- TransactionID: type:TransactionID, 
 
@@ -1000,7 +998,7 @@ Save UGC content data
 
 2. Result interface
 
-C++: Cast message to SaveUGCRes to access values
+C++: Cast message to UploadUGCRes to access values
 
 
 		- TransactionID: type:TransactionID, 
@@ -1072,20 +1070,20 @@ C++: Cast message to DownloadUGCContentRes to access values
 		- UGCMetaData: type:VariableTable, UGCContents metadata
 
 
-## RequestUGCZoneInstance Request
-Request ugc zone instance. It will provision new zone instance if there is none for the player. Issues: Limit(?), what happens if friend try to get into other player's Aquarium zone
+## RequestUGCGameInstance Request
+Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
 
 1. Command interface
 
-        Result RequestUGCZoneInstanceCmd(const TransactionID &InTransactionID, const uint64_t &InUGCID)
+        Result RequestUGCGameInstanceCmd(const TransactionID &InTransactionID, const char* InUGCPath)
 
 		- TransactionID: type:TransactionID, 
 
-		- UGCID: type:UGCID, UGC content id
+		- UGCPath: type:String, UGC path
 
 2. Result interface
 
-C++: Cast message to RequestUGCZoneInstanceRes to access values
+C++: Cast message to RequestUGCGameInstanceRes to access values
 
 
 		- TransactionID: type:TransactionID, 
