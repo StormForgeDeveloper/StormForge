@@ -13,6 +13,7 @@
 #pragma once
 
 #include "SFTypedefs.h"
+#include "Util/SFString.h"
 #include "Util/SFGuid.h"
 #include "Util/SFStringCrc32.h"
 #include "Util/SFStringCrc64.h"
@@ -337,6 +338,14 @@ namespace SF {
 		bool operator == (const PlayerInformation& src) const;
 	};
 
+    // UGC game information
+    struct UGCGameInfo
+    {
+        Guid	    UGCContentId;
+        uint32_t    TableId;
+        String      Name;
+    };
+
     // deprecated
 	struct RankingPlayerInformation : public PlayerInformation
 	{
@@ -363,7 +372,6 @@ namespace SF {
 		bool operator == (const FriendInformation& src) const;
 	};
 
-	
     // deprecated
 	struct TotalRankingPlayerInformation
 	{

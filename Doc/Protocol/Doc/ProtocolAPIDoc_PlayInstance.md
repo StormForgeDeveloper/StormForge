@@ -72,7 +72,7 @@ Play packet
 ## NewActorInViewS2CEvt
 New actor in get view
 
-        Result NewActorInViewS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerPlatformID &InPlayerPlatformId, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InEquipData, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues)
+        Result NewActorInViewS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerPlatformID &InPlayerPlatformId, const VariableTable &InPublicData, const VariableTable &InEquipData, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues)
 
 		- OutInPlayInstanceUID: GameInstanceUID type. Game instance UID
 
@@ -136,7 +136,7 @@ Player Movement
 ## PlayerStateChangedS2CEvt
 Player state change
 
-        Result PlayerStateChangedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition, const Array<uint8_t>& InStateValues)
+        Result PlayerStateChangedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition, const VariableTable &InStateValues)
 
 		- OutInPlayInstanceUID: GameInstanceUID type. Game instance UID
 
@@ -154,7 +154,7 @@ Player state change
 ## ClientSyncReliableC2SEvt
 Reliable player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
 
-        Result ClientSyncReliableC2SEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InSyncData)
+        Result ClientSyncReliableC2SEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData)
 
 		- OutInPlayInstanceUID: GameInstanceUID type. Game instance UID
 
@@ -166,7 +166,7 @@ Reliable player Sync packet. We shares packet for C2S and S2C, meaning other cli
 ## ClientSyncC2SEvt
 Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
 
-        Result ClientSyncC2SEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InSyncData)
+        Result ClientSyncC2SEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData)
 
 		- OutInPlayInstanceUID: GameInstanceUID type. Game instance UID
 
@@ -202,7 +202,7 @@ C++: Cast message to SetCharacterPublicMessageRes to access values
 ## CharacterPrivateDataChangedS2CEvt
 Character's private data has changed
 
-        Result CharacterPrivateDataChangedS2CEvt(const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const Array<uint8_t>& InPrivateData)
+        Result CharacterPrivateDataChangedS2CEvt(const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const VariableTable &InPrivateData)
 
 		- OutInPlayInstanceUID: EntityUID type. Play instance
 
@@ -216,7 +216,7 @@ Character's private data has changed
 ## CharacterPublicDataChangedS2CEvt
 Player public data has been changed
 
-        Result CharacterPublicDataChangedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InPublicData)
+        Result CharacterPublicDataChangedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InPublicData)
 
 		- OutInPlayInstanceUID: GameInstanceUID type. Game instance UID
 
@@ -230,7 +230,7 @@ Request WhiteboardSharing
 
 1. Command interface
 
-        Result RequestWhiteboardSharingCmd(const TransactionID &InTransactionID, const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InTargetPlayerID, const Array<uint8_t>& InWhiteboardInfo)
+        Result RequestWhiteboardSharingCmd(const TransactionID &InTransactionID, const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InTargetPlayerID, const VariableTable &InWhiteboardInfo)
 
 		- TransactionID: type:TransactionID, 
 
@@ -304,7 +304,7 @@ Add new log entry to WhiteboardSharing. The other client will receive Whiteboard
 
 1. Command interface
 
-        Result AddWhiteboardSharingLogEntryCmd(const TransactionID &InTransactionID, const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry)
+        Result AddWhiteboardSharingLogEntryCmd(const TransactionID &InTransactionID, const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry)
 
 		- TransactionID: type:TransactionID, 
 
@@ -329,7 +329,7 @@ Add new log entry to WhiteboardSharing. The other client will receive Whiteboard
 
 1. Command interface
 
-        Result UpdateWhiteboardSharingLogEntryCmd(const TransactionID &InTransactionID, const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry)
+        Result UpdateWhiteboardSharingLogEntryCmd(const TransactionID &InTransactionID, const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry)
 
 		- TransactionID: type:TransactionID, 
 
@@ -399,7 +399,7 @@ WhiteboardSharing has been requested
 ## WhiteboardSharingStartedS2CEvt
 WhiteboardSharing has been started
 
-        Result WhiteboardSharingStartedS2CEvt(const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InOtherPlayerID, const Array<uint8_t>& InWhiteboardInfo)
+        Result WhiteboardSharingStartedS2CEvt(const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerID &InOtherPlayerID, const VariableTable &InWhiteboardInfo)
 
 		- OutInPlayInstanceUID: EntityUID type. Play instance
 
@@ -425,7 +425,7 @@ WhiteboardSharing has been closed
 ## WhiteboardSharingNewLogEntryAddedS2CEvt
 WhiteboardSharing new log entry has been added
 
-        Result WhiteboardSharingNewLogEntryAddedS2CEvt(const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry)
+        Result WhiteboardSharingNewLogEntryAddedS2CEvt(const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry)
 
 		- OutInPlayInstanceUID: EntityUID type. Play instance
 
@@ -449,7 +449,7 @@ WhiteboardSharing new log entry has been removed
 ## WhiteboardSharingNewLogEntryUpdatedS2CEvt
 WhiteboardSharing new log entry has been updated
 
-        Result WhiteboardSharingNewLogEntryUpdatedS2CEvt(const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InLogEntry)
+        Result WhiteboardSharingNewLogEntryUpdatedS2CEvt(const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InLogEntry)
 
 		- OutInPlayInstanceUID: EntityUID type. Play instance
 
@@ -519,7 +519,7 @@ Use map object
 
 1. Command interface
 
-        Result UseMapObjectCmd(const TransactionID &InTransactionID, const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InUseParameters)
+        Result UseMapObjectCmd(const TransactionID &InTransactionID, const EntityUID &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters)
 
 		- TransactionID: type:TransactionID, 
 
@@ -549,7 +549,7 @@ Send zone chatting
 
 1. Command interface
 
-        Result ZoneChatCmd(const TransactionID &InTransactionID, const GameInstanceUID &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
+        Result ZoneChatCmd(const TransactionID &InTransactionID, const GameInstanceUID &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage)
 
 		- TransactionID: type:TransactionID, 
 
@@ -575,7 +575,7 @@ C++: Cast message to ZoneChatRes to access values
 ## ZoneChatS2CEvt
 Player state change
 
-        Result ZoneChatS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InSenderID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
+        Result ZoneChatS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InSenderID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage)
 
 		- OutInPlayInstanceUID: GameInstanceUID type. Game instance UID
 
@@ -607,7 +607,7 @@ To call general functionality
 
 1. Command interface
 
-        Result CallFunctionCmd(const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters)
+        Result CallFunctionCmd(const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters)
 
 		- TransactionID: type:TransactionID, 
 

@@ -10,7 +10,6 @@
 						<xs:attribute name="CppTypeName" type="xs:string" use="required"/>
 						<xs:attribute name="CppTypeForward" type="xs:string" use="required"/>
 						<xs:attribute name="CppTypeInclude" type="xs:string" use="required"/>
-						<xs:attribute name="IsVariableSize" type="xs:boolean" use="required"/>
 						<xs:attribute name="CSharpTypeName" type="xs:string" use="required"/>
 						<xs:attribute name="IsCSharpStruct" type="xs:boolean" use="optional" default="false"/>
 						<xs:attribute name="IsCSharpArray" type="xs:boolean" use="optional" default="false"/>

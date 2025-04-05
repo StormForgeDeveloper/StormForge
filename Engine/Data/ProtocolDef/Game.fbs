@@ -476,6 +476,26 @@ table GameMatchingCanceledS2CEvt
 {
  } // table GameMatchingCanceledS2CEvt
 
+table GetMyUGCGamesCmd
+{
+ 	ugccontent_id:Guid;
+} // table GetMyUGCGamesCmd
+
+table GetMyUGCGamesRes
+{
+ 	ugccontents:[UGCGameInfo];
+} // table GetMyUGCGamesRes
+
+table RequestUGCGameInstanceCmd
+{
+ 	ugccontent_id:Guid;
+} // table RequestUGCGameInstanceCmd
+
+table RequestUGCGameInstanceRes
+{
+ 	game_instance:[ubyte];
+} // table RequestUGCGameInstanceRes
+
 table GetUGCTemplatesCmd
 {
  	tags:[string];
@@ -526,16 +546,6 @@ table DownloadUGCContentRes
 {
  	ugcmeta_data:[ubyte];
 } // table DownloadUGCContentRes
-
-table RequestUGCGameInstanceCmd
-{
- 	ugcpath:string;
-} // table RequestUGCGameInstanceCmd
-
-table RequestUGCGameInstanceRes
-{
- 	game_instance:[ubyte];
-} // table RequestUGCGameInstanceRes
 
 table BuyShopItemPrepareCmd
 {

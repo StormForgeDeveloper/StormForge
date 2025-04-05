@@ -119,6 +119,10 @@ namespace SF
 		static Result CancelGameMatchCmd(const char* prefix, const MessageHeader* messageHeader);
 		static Result CancelGameMatchRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result GameMatchingCanceledS2CEvt(const char* prefix, const MessageHeader* messageHeader);
+		static Result GetMyUGCGamesCmd(const char* prefix, const MessageHeader* messageHeader);
+		static Result GetMyUGCGamesRes(const char* prefix, const MessageHeader* messageHeader);
+		static Result RequestUGCGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader);
+		static Result RequestUGCGameInstanceRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result GetUGCTemplatesCmd(const char* prefix, const MessageHeader* messageHeader);
 		static Result GetUGCTemplatesRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result UploadUGCCmd(const char* prefix, const MessageHeader* messageHeader);
@@ -129,8 +133,6 @@ namespace SF
 		static Result GetUGCContentInfoRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result DownloadUGCContentCmd(const char* prefix, const MessageHeader* messageHeader);
 		static Result DownloadUGCContentRes(const char* prefix, const MessageHeader* messageHeader);
-		static Result RequestUGCGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader);
-		static Result RequestUGCGameInstanceRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result BuyShopItemPrepareCmd(const char* prefix, const MessageHeader* messageHeader);
 		static Result BuyShopItemPrepareRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result BuyShopItemCmd(const char* prefix, const MessageHeader* messageHeader);

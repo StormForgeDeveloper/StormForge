@@ -324,7 +324,7 @@ C++: Cast message to AcceptNotificationRes to access values
 ## NotifyS2CEvt
 Notify new notification
 
-        Result NotifyS2CEvt(const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const Array<uint8_t>& InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp)
+        Result NotifyS2CEvt(const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const VariableTable &InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp)
 
 		- OutInNotificationID: uint32 type. Notification ID. Zero if it is an instant notification(not saved to db).
 
@@ -962,6 +962,48 @@ game matching canceled
         Result GameMatchingCanceledS2CEvt()
 
 
+## GetMyUGCGames Request
+Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
+
+1. Command interface
+
+        Result GetMyUGCGamesCmd(const TransactionID &InTransactionID, const Guid &InUGCContentId)
+
+		- TransactionID: type:TransactionID, 
+
+		- UGCContentId: type:Guid, UGC ContentId
+
+2. Result interface
+
+C++: Cast message to GetMyUGCGamesRes to access values
+
+
+		- TransactionID: type:TransactionID, 
+		- Result: type:Result, 
+		- UGCContents: type:UGCGameInfo, UGC Game infos
+
+
+## RequestUGCGameInstance Request
+Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
+
+1. Command interface
+
+        Result RequestUGCGameInstanceCmd(const TransactionID &InTransactionID, const Guid &InUGCContentId)
+
+		- TransactionID: type:TransactionID, 
+
+		- UGCContentId: type:Guid, UGC ContentId
+
+2. Result interface
+
+C++: Cast message to RequestUGCGameInstanceRes to access values
+
+
+		- TransactionID: type:TransactionID, 
+		- Result: type:Result, 
+		- GameInstance: type:VariableTable, Privisoned UGC zone instance information
+
+
 ## GetUGCTemplates Request
 Request UGC template list
 
@@ -988,7 +1030,7 @@ Upload UGC content data
 
 1. Command interface
 
-        Result UploadUGCCmd(const TransactionID &InTransactionID, const Array<uint8_t>& InUGCMetaData, const Array<uint8_t>& InUGCContents)
+        Result UploadUGCCmd(const TransactionID &InTransactionID, const VariableTable &InUGCMetaData, const VariableTable &InUGCContents)
 
 		- TransactionID: type:TransactionID, 
 
@@ -1068,27 +1110,6 @@ C++: Cast message to DownloadUGCContentRes to access values
 		- TransactionID: type:TransactionID, 
 		- Result: type:Result, 
 		- UGCMetaData: type:VariableTable, UGCContents metadata
-
-
-## RequestUGCGameInstance Request
-Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
-
-1. Command interface
-
-        Result RequestUGCGameInstanceCmd(const TransactionID &InTransactionID, const char* InUGCPath)
-
-		- TransactionID: type:TransactionID, 
-
-		- UGCPath: type:String, UGC path
-
-2. Result interface
-
-C++: Cast message to RequestUGCGameInstanceRes to access values
-
-
-		- TransactionID: type:TransactionID, 
-		- Result: type:Result, 
-		- GameInstance: type:VariableTable, Privisoned UGC zone instance information
 
 
 ## BuyShopItemPrepare Request
@@ -1283,7 +1304,7 @@ Chat channel sending chatting message
 
 1. Command interface
 
-        Result ChatChannelChatMessageCmd(const TransactionID &InTransactionID, const EntityUID &InChatUID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
+        Result ChatChannelChatMessageCmd(const TransactionID &InTransactionID, const EntityUID &InChatUID, const VariableTable &InChatMetaData, const char* InChatMessage)
 
 		- TransactionID: type:TransactionID, 
 
@@ -1305,7 +1326,7 @@ C++: Cast message to ChatChannelChatMessageRes to access values
 ## ChatChannelChatMessageS2CEvt
 ChatChannel Chatting message event
 
-        Result ChatChannelChatMessageS2CEvt(const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
+        Result ChatChannelChatMessageS2CEvt(const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage)
 
 		- OutInSenderID: PlayerID type. Sender PlayerID
 
@@ -1319,7 +1340,7 @@ Whisper(tell) other player chatting
 
 1. Command interface
 
-        Result WhisperMessageCmd(const TransactionID &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
+        Result WhisperMessageCmd(const TransactionID &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage)
 
 		- TransactionID: type:TransactionID, 
 
@@ -1343,7 +1364,7 @@ C++: Cast message to WhisperMessageRes to access values
 ## WhisperMessageS2CEvt
 Other player whispered(tell) to me message event
 
-        Result WhisperMessageS2CEvt(const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
+        Result WhisperMessageS2CEvt(const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage)
 
 		- OutInSenderID: PlayerID type. Sender PlayerID
 
@@ -1357,7 +1378,7 @@ Create character
 
 1. Command interface
 
-        Result CreateCharacterCmd(const TransactionID &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InPrivateData)
+        Result CreateCharacterCmd(const TransactionID &InTransactionID, const char* InCharacterName, const VariableTable &InPublicData, const VariableTable &InPrivateData)
 
 		- TransactionID: type:TransactionID, 
 
@@ -1493,7 +1514,7 @@ To call general functionality
 
 1. Command interface
 
-        Result CallFunctionCmd(const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const Array<uint8_t>& InParameters)
+        Result CallFunctionCmd(const TransactionID &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters)
 
 		- TransactionID: type:TransactionID, 
 

@@ -464,6 +464,24 @@
 
         <!-- ============================= UGC ======================================= -->
 
+        <Command Name="GetMyUGCGames" Reliable="true" Crypto="No" Trace="Debug1" Desc="Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.">
+            <Cmd>
+				<Params TypeName="Guid" Name="UGCContentId" Desc="UGC ContentId"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="UGCGameInfo" IsArray="true" Name="UGCContents" Desc="UGC Game infos"/>
+            </Res>
+        </Command>
+
+        <Command Name="RequestUGCGameInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.">
+            <Cmd>
+				<Params TypeName="Guid" Name="UGCContentId" Desc="UGC ContentId"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="VariableTable" Name="GameInstance" Desc="Privisoned UGC zone instance information"/>
+            </Res>
+        </Command>
+
         <Command Name="GetUGCTemplates" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Request UGC template list">
             <Cmd>
                 <Params TypeName="String" Name="Tags" IsArray="true" Desc="Tags, used for search"/>
@@ -507,15 +525,6 @@
             </Cmd>
             <Res>
                 <Params TypeName="VariableTable" Name="UGCMetaData" Desc="UGCContents metadata"/>
-            </Res>
-        </Command>
-
-        <Command Name="RequestUGCGameInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.">
-            <Cmd>
-                <Params TypeName="String" Name="UGCPath" Desc="UGC path"/>
-            </Cmd>
-            <Res>
-                <Params TypeName="VariableTable" Name="GameInstance" Desc="Privisoned UGC zone instance information"/>
             </Res>
         </Command>
 

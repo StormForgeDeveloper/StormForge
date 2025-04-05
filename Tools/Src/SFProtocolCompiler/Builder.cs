@@ -341,12 +341,6 @@ namespace ProtocolCompiler
             return typeInfo.CSharpTypeName;
         }
 
-        public virtual bool IsVariableSizeType(Parameter param)
-        {
-            var typeInfo = SystemTypeInfo.GetParameterInfo(param);
-            return typeInfo.IsVariableSize;
-        }
-
         public bool IsStruct(Parameter param)
         {
             var typeInfo = SystemTypeInfo.GetParameterInfo(param);
@@ -457,10 +451,6 @@ namespace ProtocolCompiler
                 {
                     strParams += string.Format("const {0} {1}", StrTypeString(param), InParamName(param.Name));
                 }
-                else if (!bUseOriginalType && IsVariableSizeType(param))
-                {
-                    strParams += string.Format("const Array<uint8_t>& {0}", InParamName(param.Name));
-                }
                 else // generic type
                 {
                     strParams += string.Format("const {0} &{1}", ToTargetTypeName(param), InParamName(param.Name));
@@ -495,10 +485,6 @@ namespace ProtocolCompiler
                     strParams += InParamName(param.Name);
                 }
                 else if (param.IsArray) // array
-                {
-                    strParams += InParamName(param.Name);
-                }
-                else if (IsVariableSizeType(param))
                 {
                     strParams += InParamName(param.Name);
                 }

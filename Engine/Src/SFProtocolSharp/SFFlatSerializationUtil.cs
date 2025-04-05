@@ -810,6 +810,20 @@ namespace SF
             return builder.EndVector();
         }
 
+        public static Offset<SF.Flat.UGCGameInfo> CreateUGCGameInfo(this Google.FlatBuffers.FlatBufferBuilder builder, SF.UGCGameInfo data)
+        {
+            var contentIdOffset = builder.CreateGuid(data.UGCContentId);
+            var nameOffset = builder.CreateString(data.Name);
+
+            SF.Flat.UGCGameInfo.StartUGCGameInfo(builder);
+            SF.Flat.UGCGameInfo.AddUGCContentId(builder, contentIdOffset);
+            SF.Flat.UGCGameInfo.AddTableId(builder, data.TableId);
+            SF.Flat.UGCGameInfo.AddName(builder, nameOffset);
+            // TODO: Other informations are planed to be changed
+            return SF.Flat.UGCGameInfo.EndUGCGameInfo(builder);
+        }
+
+
         public static SF.Flat.GameStateID CreateGameStateID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.GameStateID data)
         {
             return (SF.Flat.GameStateID)data;

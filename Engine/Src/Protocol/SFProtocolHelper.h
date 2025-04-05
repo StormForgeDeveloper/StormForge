@@ -372,6 +372,33 @@ namespace SF {
                 return SF::EPlatform::BR;
             }
 
+            inline Offset<SF::Flat::UGCGameInfo> CreateUGCGameInfo(FlatBufferBuilder& fbb, const SF::UGCGameInfo& value)
+            {
+                SF::Flat::UGCGameInfoBuilder builder(fbb);
+
+                builder.add_ugc_content_id(CreateGuid(fbb, value.UGCContentId));
+                builder.add_table_id(value.TableId);
+                builder.add_name(CreateString(fbb, value.Name));
+
+                return builder.Finish();
+            }
+
+            inline SF::UGCGameInfo ParseUGCGameInfo(const SF::Flat::UGCGameInfo* value)
+            {
+                return { ParseGuid(value->ugc_content_id()), value->table_id(), value->name()->c_str()};
+            }
+
+            inline Offset<Vector<Offset<SF::Flat::UGCGameInfo>>> CreateUGCGameInfoVector(FlatBufferBuilder& fbb, const Array<SF::UGCGameInfo>& value)
+            {
+                std::vector<Offset<SF::Flat::UGCGameInfo>> elems;
+                elems.reserve(value.size());
+                for (const SF::UGCGameInfo& item : value)
+                {
+                    elems.push_back(CreateUGCGameInfo(fbb, item));
+                }
+                return fbb.CreateVector(elems.data(), elems.size());
+            }
+
             inline FlatValueHolder<SF::Flat::PlayerPlatformID> CreatePlayerPlatformID(FlatBufferBuilder& fbb, const SF::PlayerPlatformID& value)
             {
                 return FlatValueHolder<SF::Flat::PlayerPlatformID>(

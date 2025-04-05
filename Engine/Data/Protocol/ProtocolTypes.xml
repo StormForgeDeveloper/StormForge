@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ProtocolTypes xmlns="http://www.StormForge.com/XMLProtocol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.StormForge.com/XMLProtocol ProtocolTypeDef.xsd">
-	<DataType TypeName="ActorMovement" IsEnum="false" CppTypeName="ActorMovement" IsVariableSize="false" CSharpTypeName="ActorMovement" IsCSharpStruct="true" IsCSharpArray="false" Desc="ActorMovement struct"/>
-	<DataType TypeName="PlayerPlatformID" IsEnum="false" CppTypeName="PlayerPlatformID" IsVariableSize="false" CSharpTypeName="PlayerPlatformID" IsCSharpStruct="true" IsCSharpArray="false" Desc="Unified player ID cross multiplatform"/>
-    <DataType TypeName="AchievementStat" IsEnum="false" CppTypeName="AchievementStat" IsVariableSize="false" CSharpTypeName="AchievementStat" IsCSharpStruct="true" IsCSharpArray="false" Desc="AchievementStat struct"/>
-    <DataType TypeName="LogEntryID" IsEnum="false" CppTypeName="uint32_t" IsVariableSize="false" CSharpTypeName="UInt32" IsCSharpStruct="false" IsCSharpArray="false" Desc="32bit log entry id assigned by system"/>
-    <DataType TypeName="UGCID" IsEnum="false" CppTypeName="uint64_t" IsVariableSize="false" CSharpTypeName="UInt64" IsCSharpStruct="false" IsCSharpArray="false" Desc="64bit UGC content id assigned by system"/>
-    <DataType TypeName="EAccountRole" IsEnum="false" CppTypeName="EAccountRole" IsVariableSize="false" CSharpTypeName="EAccountRole" IsCSharpStruct="false" IsCSharpArray="false" Desc="Account role"/>
-    <DataType TypeName="Quaternion" IsEnum="false" CppTypeName="Quaternion" IsVariableSize="false" CSharpTypeName="SFQuaternion" IsCSharpStruct="true" IsCSharpArray="false" Desc="Quaternion struct"/>
+	<DataType TypeName="ActorMovement" IsEnum="false" CppTypeName="ActorMovement" CSharpTypeName="ActorMovement" IsCSharpStruct="true" IsCSharpArray="false" Desc="ActorMovement struct"/>
+	<DataType TypeName="PlayerPlatformID" IsEnum="false" CppTypeName="PlayerPlatformID" CSharpTypeName="PlayerPlatformID" IsCSharpStruct="true" IsCSharpArray="false" Desc="Unified player ID cross multiplatform"/>
+    <DataType TypeName="AchievementStat" IsEnum="false" CppTypeName="AchievementStat" CSharpTypeName="AchievementStat" IsCSharpStruct="true" IsCSharpArray="false" Desc="AchievementStat struct"/>
+    <DataType TypeName="LogEntryID" IsEnum="false" CppTypeName="uint32_t" CSharpTypeName="UInt32" IsCSharpStruct="false" IsCSharpArray="false" Desc="32bit log entry id assigned by system"/>
+    <DataType TypeName="UGCID" IsEnum="false" CppTypeName="uint64_t" CSharpTypeName="UInt64" IsCSharpStruct="false" IsCSharpArray="false" Desc="64bit UGC content id assigned by system"/>
+    <DataType TypeName="EAccountRole" IsEnum="false" CppTypeName="EAccountRole" CSharpTypeName="EAccountRole" IsCSharpStruct="false" IsCSharpArray="false" Desc="Account role"/>
+    <DataType TypeName="Quaternion" IsEnum="false" CppTypeName="Quaternion" CSharpTypeName="SFQuaternion" IsCSharpStruct="true" IsCSharpArray="false" Desc="Quaternion struct"/>
+    <DataType TypeName="UGCGameInfo" IsEnum="false" CppTypeName="UGCGameInfo" CSharpTypeName="SFUGCGameInfo" IsCSharpStruct="true" IsCSharpArray="false" Desc="UGCGameInfo struct"/>
 </ProtocolTypes>

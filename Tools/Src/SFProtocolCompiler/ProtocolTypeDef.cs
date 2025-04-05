@@ -56,8 +56,6 @@ namespace ProtocolXml {
         
         private string cppTypeIncludeField;
         
-        private bool isVariableSizeField;
-        
         private string cSharpTypeNameField;
         
         private bool isCSharpStructField;
@@ -126,17 +124,6 @@ namespace ProtocolXml {
             }
             set {
                 this.cppTypeIncludeField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
-        public bool IsVariableSize {
-            get {
-                return this.isVariableSizeField;
-            }
-            set {
-                this.isVariableSizeField = value;
             }
         }
         

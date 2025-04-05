@@ -230,7 +230,7 @@
     <CustomBuild Include="..\..\..\Engine\Data\Protocol\ProtocolTypeDef.xsd">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">xsd  %(Identity) /language:CS /classes /nologo /out:..\SFProtocolCompiler\ /namespace:ProtocolXml</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">xsd  %(Identity) /language:CS /classes /nologo /out:..\SFProtocolCompiler\ /namespace:ProtocolXml</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\SFProtocolCompiler\%(Filename).cs</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\SFProtocolCompiler\ProtocolTypeDef.cs</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\SFProtocolCompiler\%(Filename).cs</Outputs>
     </CustomBuild>
   </ItemGroup>

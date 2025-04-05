@@ -83,6 +83,13 @@ table GenericError {
 	reason:string(required);
 }
 
+table UGCGameInfo
+{
+	ugc_content_id:Guid;
+	table_id:uint32;
+	name:string(required);
+}
+
 struct EntityUID
 {
 	entity_id:uint32;

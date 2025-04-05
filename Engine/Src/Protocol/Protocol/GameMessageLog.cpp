@@ -119,6 +119,10 @@ namespace SF
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_CancelGameMatchCmd,&CancelGameMatchCmd));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_CancelGameMatchRes,&CancelGameMatchRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_GameMatchingCanceledS2CEvt,&GameMatchingCanceledS2CEvt));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_GetMyUGCGamesCmd,&GetMyUGCGamesCmd));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_GetMyUGCGamesRes,&GetMyUGCGamesRes));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_RequestUGCGameInstanceCmd,&RequestUGCGameInstanceCmd));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_RequestUGCGameInstanceRes,&RequestUGCGameInstanceRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_GetUGCTemplatesCmd,&GetUGCTemplatesCmd));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_GetUGCTemplatesRes,&GetUGCTemplatesRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_UploadUGCCmd,&UploadUGCCmd));
@@ -129,8 +133,6 @@ namespace SF
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_GetUGCContentInfoRes,&GetUGCContentInfoRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_DownloadUGCContentCmd,&DownloadUGCContentCmd));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_DownloadUGCContentRes,&DownloadUGCContentRes));
-		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_RequestUGCGameInstanceCmd,&RequestUGCGameInstanceCmd));
-		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_RequestUGCGameInstanceRes,&RequestUGCGameInstanceRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_BuyShopItemPrepareCmd,&BuyShopItemPrepareCmd));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_BuyShopItemPrepareRes,&BuyShopItemPrepareRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_BuyShopItemCmd,&BuyShopItemCmd));
@@ -1481,6 +1483,66 @@ namespace SF
 
 		return hr;
 	}; // Result GameMessageLog::GameMatchingCanceledS2CEvt(const char* prefix, const MessageHeader* messageHeader)
+	Result GameMessageLog::GetMyUGCGamesCmd(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.Game.GetMyUGCGamesCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} Game:GetMyUGCGamesCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result GameMessageLog::GetMyUGCGamesCmd(const char* prefix, const MessageHeader* messageHeader)
+	Result GameMessageLog::GetMyUGCGamesRes(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.Game.GetMyUGCGamesRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} Game:GetMyUGCGamesRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result GameMessageLog::GetMyUGCGamesRes(const char* prefix, const MessageHeader* messageHeader)
+	Result GameMessageLog::RequestUGCGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.Game.RequestUGCGameInstanceCmd";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} Game:RequestUGCGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result GameMessageLog::RequestUGCGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
+	Result GameMessageLog::RequestUGCGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.Game.RequestUGCGameInstanceRes";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} Game:RequestUGCGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result GameMessageLog::RequestUGCGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
 	Result GameMessageLog::GetUGCTemplatesCmd(const char* prefix, const MessageHeader* messageHeader)
 	{
  		Result hr;
@@ -1631,36 +1693,6 @@ namespace SF
 
 		return hr;
 	}; // Result GameMessageLog::DownloadUGCContentRes(const char* prefix, const MessageHeader* messageHeader)
-	Result GameMessageLog::RequestUGCGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
-	{
- 		Result hr;
-
-		protocolCheckPtr(messageHeader);
-
-		std::string packetString;
-		static const std::string tableName = "SF.Flat.Game.RequestUGCGameInstanceCmd";
-		if (stm_Parser.LookupStruct(tableName)) {
-		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
-		}
-		SFLog(Net, Debug1, "{0} Game:RequestUGCGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
-
-		return hr;
-	}; // Result GameMessageLog::RequestUGCGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
-	Result GameMessageLog::RequestUGCGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
-	{
- 		Result hr;
-
-		protocolCheckPtr(messageHeader);
-
-		std::string packetString;
-		static const std::string tableName = "SF.Flat.Game.RequestUGCGameInstanceRes";
-		if (stm_Parser.LookupStruct(tableName)) {
-		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
-		}
-		SFLog(Net, Debug1, "{0} Game:RequestUGCGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
-
-		return hr;
-	}; // Result GameMessageLog::RequestUGCGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
 	Result GameMessageLog::BuyShopItemPrepareCmd(const char* prefix, const MessageHeader* messageHeader)
 	{
  		Result hr;

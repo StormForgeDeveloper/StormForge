@@ -417,6 +417,14 @@ namespace SF
         public float w;
     };
 
+    public struct SFUGCGameInfo
+    {
+        public Guid UGCContentId;
+        public uint TableId;
+        public string Name;
+    };
+
+
     // Manages pinned byte buffer
     public class PinnedByteBuffer : IDisposable
     {
