@@ -709,16 +709,14 @@ namespace SF
 		return hr;
 	}; // Result GameRPCSendAdapter::CancelGameMatchCmd( const TransactionID &InTransactionID )
 	// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
-	Result GameRPCSendAdapter::GetMyUGCGamesCmd( const TransactionID &InTransactionID, const Guid &InUGCContentId )
+	Result GameRPCSendAdapter::GetMyUGCGamesCmd( const TransactionID &InTransactionID )
 	{
  		Result hr;
 
 		protocolCheckPtr(m_Endpoint);
 
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
-		auto UGCContentIdOffset = SF::Flat::Helper::CreateGuid(fbb, InUGCContentId);
 		SF::Flat::Game::GetMyUGCGamesCmdBuilder _builder(fbb);
-		_builder.add_ugccontent_id(UGCContentIdOffset);
 		flatbuffers::Offset<SF::Flat::Game::GetMyUGCGamesCmd> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
 
@@ -726,7 +724,7 @@ namespace SF
 
 
 		return hr;
-	}; // Result GameRPCSendAdapter::GetMyUGCGamesCmd( const TransactionID &InTransactionID, const Guid &InUGCContentId )
+	}; // Result GameRPCSendAdapter::GetMyUGCGamesCmd( const TransactionID &InTransactionID )
 	// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
 	Result GameRPCSendAdapter::RequestUGCGameInstanceCmd( const TransactionID &InTransactionID, const Guid &InUGCContentId )
 	{
@@ -2170,16 +2168,18 @@ namespace SF
 		return hr;
 	}; // Result GameSvrRPCSendAdapter::GetMyUGCGamesRes( const TransactionID &InTransactionID, const Result &InResult, const Array<UGCGameInfo>& InUGCContents )
 	// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
-	Result GameSvrRPCSendAdapter::RequestUGCGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
+	Result GameSvrRPCSendAdapter::RequestUGCGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InGameInstanceID, const char* InGameInstanceAddress )
 	{
  		Result hr;
 
 		protocolCheckPtr(m_Endpoint);
 
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
-		auto GameInstanceOffset = SF::Flat::Helper::CreateVariableTable(fbb, InGameInstance);
+		auto GameInstanceIDOffset = SF::Flat::Helper::CreateGameInstanceUID(fbb, InGameInstanceID);
+		auto GameInstanceAddressOffset = SF::Flat::Helper::CreateString(fbb, InGameInstanceAddress);
 		SF::Flat::Game::RequestUGCGameInstanceResBuilder _builder(fbb);
-		_builder.add_game_instance(GameInstanceOffset);
+		_builder.add_game_instance_id(GameInstanceIDOffset);
+		_builder.add_game_instance_address(GameInstanceAddressOffset);
 		flatbuffers::Offset<SF::Flat::Game::RequestUGCGameInstanceRes> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
 
@@ -2187,7 +2187,7 @@ namespace SF
 
 
 		return hr;
-	}; // Result GameSvrRPCSendAdapter::RequestUGCGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const VariableTable &InGameInstance )
+	}; // Result GameSvrRPCSendAdapter::RequestUGCGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InGameInstanceID, const char* InGameInstanceAddress )
 	// Cmd: Request UGC template list
 	Result GameSvrRPCSendAdapter::GetUGCTemplatesRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCIDs )
 	{

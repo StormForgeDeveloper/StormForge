@@ -751,24 +751,22 @@ namespace SF.Net
 		} // public Result  CancelGameMatchCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 
 		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
-		public Result  GetMyUGCGamesCmd( System.Guid InUGCContentId, Action<SFMessage>? callback = null )
+		public Result  GetMyUGCGamesCmd( Action<SFMessage>? callback = null )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			TransactionID InTransactionID = NewTransactionID();
-			return GetMyUGCGamesCmd(InTransactionID, InUGCContentId, callback);
-		} // public Result  GetMyUGCGamesCmd( System.Guid InUGCContentId, Action<SFMessage>? callback = null )
-		public Result  GetMyUGCGamesCmd( SF.TransactionID InTransactionID, System.Guid InUGCContentId, Action<SFMessage>? callback = null )
+			return GetMyUGCGamesCmd(InTransactionID, callback);
+		} // public Result  GetMyUGCGamesCmd( Action<SFMessage>? callback = null )
+		public Result  GetMyUGCGamesCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
-			var UGCContentIdOffset = builder.CreateGuid(InUGCContentId);
 			SF.Flat.Game.GetMyUGCGamesCmd.StartGetMyUGCGamesCmd(builder);
-			SF.Flat.Game.GetMyUGCGamesCmd.AddUgccontentId(builder, UGCContentIdOffset);
 			var packetOffset = SF.Flat.Game.GetMyUGCGamesCmd.EndGetMyUGCGamesCmd(builder);
 			result = SendMessage(MessageIDGame.GetMyUGCGamesCmd, builder, packetOffset.Value, transactionId:InTransactionID , callback:callback);
 			return result;
-		} // public Result  GetMyUGCGamesCmd( SF.TransactionID InTransactionID, System.Guid InUGCContentId, Action<SFMessage>? callback = null )
+		} // public Result  GetMyUGCGamesCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 
 		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
 		public Result  RequestUGCGameInstanceCmd( System.Guid InUGCContentId, Action<SFMessage>? callback = null )
@@ -2022,7 +2020,7 @@ namespace SF.Net
 
 
 		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
-		public Result  GetMyUGCGamesRes( SF.TransactionID InTransactionID, SF.Result InResult, SFUGCGameInfo[] InUGCContents )
+		public Result  GetMyUGCGamesRes( SF.TransactionID InTransactionID, SF.Result InResult, UGCGameInfo[] InUGCContents )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
@@ -2033,22 +2031,24 @@ namespace SF.Net
 			var packetOffset = SF.Flat.Game.GetMyUGCGamesRes.EndGetMyUGCGamesRes(builder);
 			result = SendMessage(MessageIDGame.GetMyUGCGamesRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
 			return result;
-		} // public Result  GetMyUGCGamesRes( SF.TransactionID InTransactionID, SF.Result InResult, SFUGCGameInfo[] InUGCContents )
+		} // public Result  GetMyUGCGamesRes( SF.TransactionID InTransactionID, SF.Result InResult, UGCGameInfo[] InUGCContents )
 
 
 		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
-		public Result  RequestUGCGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.VariableTable InGameInstance )
+		public Result  RequestUGCGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.GameInstanceUID InGameInstanceID, System.String InGameInstanceAddress )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
-			var GameInstanceOffset = builder.CreateVariableTable(InGameInstance);
+			var GameInstanceIDOffset = builder.CreateGameInstanceUID(InGameInstanceID);
+			var GameInstanceAddressOffset = builder.CreateString(InGameInstanceAddress);
 			SF.Flat.Game.RequestUGCGameInstanceRes.StartRequestUGCGameInstanceRes(builder);
-			SF.Flat.Game.RequestUGCGameInstanceRes.AddGameInstance(builder, GameInstanceOffset);
+			SF.Flat.Game.RequestUGCGameInstanceRes.AddGameInstanceId(builder, GameInstanceIDOffset);
+			SF.Flat.Game.RequestUGCGameInstanceRes.AddGameInstanceAddress(builder, GameInstanceAddressOffset);
 			var packetOffset = SF.Flat.Game.RequestUGCGameInstanceRes.EndRequestUGCGameInstanceRes(builder);
 			result = SendMessage(MessageIDGame.RequestUGCGameInstanceRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
 			return result;
-		} // public Result  RequestUGCGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.VariableTable InGameInstance )
+		} // public Result  RequestUGCGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.GameInstanceUID InGameInstanceID, System.String InGameInstanceAddress )
 
 
 		// Cmd: Request UGC template list

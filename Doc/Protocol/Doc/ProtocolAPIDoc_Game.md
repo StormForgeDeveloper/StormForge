@@ -967,11 +967,9 @@ Request ugc zone instance. It will provision new zone instance if there is none 
 
 1. Command interface
 
-        Result GetMyUGCGamesCmd(const TransactionID &InTransactionID, const Guid &InUGCContentId)
+        Result GetMyUGCGamesCmd(const TransactionID &InTransactionID)
 
 		- TransactionID: type:TransactionID, 
-
-		- UGCContentId: type:Guid, UGC ContentId
 
 2. Result interface
 
@@ -1001,7 +999,8 @@ C++: Cast message to RequestUGCGameInstanceRes to access values
 
 		- TransactionID: type:TransactionID, 
 		- Result: type:Result, 
-		- GameInstance: type:VariableTable, Privisoned UGC zone instance information
+		- GameInstanceID: type:GameInstanceUID, Privisoned UGC zone instance id
+		- GameInstanceAddress: type:String, Privisoned UGC zone instance address
 
 
 ## GetUGCTemplates Request

@@ -478,8 +478,7 @@ table GameMatchingCanceledS2CEvt
 
 table GetMyUGCGamesCmd
 {
- 	ugccontent_id:Guid;
-} // table GetMyUGCGamesCmd
+ } // table GetMyUGCGamesCmd
 
 table GetMyUGCGamesRes
 {
@@ -493,7 +492,8 @@ table RequestUGCGameInstanceCmd
 
 table RequestUGCGameInstanceRes
 {
- 	game_instance:[ubyte];
+ 	game_instance_id:GameInstanceUID;
+	game_instance_address:string;
 } // table RequestUGCGameInstanceRes
 
 table GetUGCTemplatesCmd

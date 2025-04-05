@@ -466,7 +466,6 @@
 
         <Command Name="GetMyUGCGames" Reliable="true" Crypto="No" Trace="Debug1" Desc="Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.">
             <Cmd>
-				<Params TypeName="Guid" Name="UGCContentId" Desc="UGC ContentId"/>
             </Cmd>
             <Res>
                 <Params TypeName="UGCGameInfo" IsArray="true" Name="UGCContents" Desc="UGC Game infos"/>
@@ -478,7 +477,8 @@
 				<Params TypeName="Guid" Name="UGCContentId" Desc="UGC ContentId"/>
             </Cmd>
             <Res>
-                <Params TypeName="VariableTable" Name="GameInstance" Desc="Privisoned UGC zone instance information"/>
+				<Params TypeName="GameInstanceUID" Name="GameInstanceID" Desc="Privisoned UGC zone instance id"/>
+                <Params TypeName="String" Name="GameInstanceAddress" Desc="Privisoned UGC zone instance address"/>
             </Res>
         </Command>
 
