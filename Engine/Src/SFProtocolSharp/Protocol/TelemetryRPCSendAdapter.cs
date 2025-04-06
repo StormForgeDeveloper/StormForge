@@ -35,12 +35,6 @@ namespace SF.Net
  		} // public  TelemetryRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 
 		// Cmd: Post telemetry event
-		public Result  PostEventCmd( System.String InEventName, System.UInt64 InTimeStamp, System.Guid InTitle, System.String InMachineID, System.UInt32 InEventID, SF.AccountID InAccountID, System.Boolean InIsPlayEvent, System.Guid InSessionID, SF.NamedVariable[] InAttributes, Action<SFMessage>? callback = null )
-		{
- 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID InTransactionID = NewTransactionID();
-			return PostEventCmd(InTransactionID, InEventName, InTimeStamp, InTitle, InMachineID, InEventID, InAccountID, InIsPlayEvent, InSessionID, InAttributes, callback);
-		} // public Result  PostEventCmd( System.String InEventName, System.UInt64 InTimeStamp, System.Guid InTitle, System.String InMachineID, System.UInt32 InEventID, SF.AccountID InAccountID, System.Boolean InIsPlayEvent, System.Guid InSessionID, SF.NamedVariable[] InAttributes, Action<SFMessage>? callback = null )
 		public Result  PostEventCmd( SF.TransactionID InTransactionID, System.String InEventName, System.UInt64 InTimeStamp, System.Guid InTitle, System.String InMachineID, System.UInt32 InEventID, SF.AccountID InAccountID, System.Boolean InIsPlayEvent, System.Guid InSessionID, SF.NamedVariable[] InAttributes, Action<SFMessage>? callback = null )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;

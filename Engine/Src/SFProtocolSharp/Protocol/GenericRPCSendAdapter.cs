@@ -35,12 +35,6 @@ namespace SF.Net
  		} // public  GenericRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 
 		// Cmd: Generic failure message
-		public Result  GenericFailureCmd( Action<SFMessage>? callback = null )
-		{
- 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID InTransactionID = NewTransactionID();
-			return GenericFailureCmd(InTransactionID, callback);
-		} // public Result  GenericFailureCmd( Action<SFMessage>? callback = null )
 		public Result  GenericFailureCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
@@ -53,12 +47,6 @@ namespace SF.Net
 		} // public Result  GenericFailureCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 
 		// Cmd: Generic transaction result
-		public Result  GenericTransactionCmd( Action<SFMessage>? callback = null )
-		{
- 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID InTransactionID = NewTransactionID();
-			return GenericTransactionCmd(InTransactionID, callback);
-		} // public Result  GenericTransactionCmd( Action<SFMessage>? callback = null )
 		public Result  GenericTransactionCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
@@ -71,12 +59,6 @@ namespace SF.Net
 		} // public Result  GenericTransactionCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 
 		// Cmd: Post log data through gateway
-		public Result  PostLogDataCmd( System.String InDestLogChannel, System.Byte[] InMessageData, Action<SFMessage>? callback = null )
-		{
- 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID InTransactionID = NewTransactionID();
-			return PostLogDataCmd(InTransactionID, InDestLogChannel, InMessageData, callback);
-		} // public Result  PostLogDataCmd( System.String InDestLogChannel, System.Byte[] InMessageData, Action<SFMessage>? callback = null )
 		public Result  PostLogDataCmd( SF.TransactionID InTransactionID, System.String InDestLogChannel, System.Byte[] InMessageData, Action<SFMessage>? callback = null )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;

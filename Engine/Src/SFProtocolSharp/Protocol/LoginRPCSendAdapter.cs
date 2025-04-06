@@ -35,12 +35,6 @@ namespace SF.Net
  		} // public  LoginRPCSendAdapter( SF.IEndpoint endpoint ) : base(endpoint)
 
 		// Cmd: Login with ID/PW request
-		public Result  LoginCmd( System.String InUserId, System.String InPassword, System.String InGameID, Action<SFMessage>? callback = null )
-		{
- 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID InTransactionID = NewTransactionID();
-			return LoginCmd(InTransactionID, InUserId, InPassword, InGameID, callback);
-		} // public Result  LoginCmd( System.String InUserId, System.String InPassword, System.String InGameID, Action<SFMessage>? callback = null )
 		public Result  LoginCmd( SF.TransactionID InTransactionID, System.String InUserId, System.String InPassword, System.String InGameID, Action<SFMessage>? callback = null )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
@@ -59,12 +53,6 @@ namespace SF.Net
 		} // public Result  LoginCmd( SF.TransactionID InTransactionID, System.String InUserId, System.String InPassword, System.String InGameID, Action<SFMessage>? callback = null )
 
 		// Cmd: Login with steam login info
-		public Result  LoginWithSteamCmd( System.UInt64 InSteamAppID, System.UInt64 InSteamPlayerID, System.String InSteamPlayerName, System.String InSteamPlayerToken, System.String InGameID, Action<SFMessage>? callback = null )
-		{
- 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
-			TransactionID InTransactionID = NewTransactionID();
-			return LoginWithSteamCmd(InTransactionID, InSteamAppID, InSteamPlayerID, InSteamPlayerName, InSteamPlayerToken, InGameID, callback);
-		} // public Result  LoginWithSteamCmd( System.UInt64 InSteamAppID, System.UInt64 InSteamPlayerID, System.String InSteamPlayerName, System.String InSteamPlayerToken, System.String InGameID, Action<SFMessage>? callback = null )
 		public Result  LoginWithSteamCmd( SF.TransactionID InTransactionID, System.UInt64 InSteamAppID, System.UInt64 InSteamPlayerID, System.String InSteamPlayerName, System.String InSteamPlayerToken, System.String InGameID, Action<SFMessage>? callback = null )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
