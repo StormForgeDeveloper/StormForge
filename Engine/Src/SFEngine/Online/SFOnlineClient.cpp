@@ -227,7 +227,7 @@ namespace SF
 
             base64Password.push_back('\0');
 
-            SFLog(Game, Info, "RequestingLogin: {0}, {1}", m_Owner.GetUserId(), (const char*)base64Password.data());
+            SFLog(Game, Info, "RequestingLogin: {0}, User:{1}/{2}", m_Owner.GetLoginAddresses(), m_Owner.GetUserId(), (const char*)base64Password.data());
 
             String url;
             url.Format("{0}/v1/idpw?Title={1}&Env={2}&userId={3}&password={4}",

@@ -141,9 +141,11 @@ namespace SF
 
 	Result HTTPClientComponent::InitializeComponent()
 	{
+        Result hr;
+
         Service::HTTP = new(GetSystemHeap()) HTTPClientSystemCurl;
 
-        static const char* SelfSignedCert = 
+        static const char* SelfSignedCerts[] = {
 "-----BEGIN CERTIFICATE-----\n\
 MIIDlDCCAnygAwIBAgIUJAp0wrANOLgW3OuKCD1JY7Z0S3QwDQYJKoZIhvcNAQEL\
 BQAwPzELMAkGA1UEBhMCS1IxDjAMBgNVBAgMBUtvcmVhMQ8wDQYDVQQHDAZCcmF2\
@@ -165,11 +167,40 @@ x4hVse6yYbzoGFfJiucqcC1HDyLBVSV9YUcmcytcA7m0I3vBUtAF5Klu7Aqaxeby\
 S5rSPguuEgBTsacinIzkVE6Ttql/thKNz/vntQbw4wmMh3iLnor4iUAGS0hENgFj\
 w7WQzWNIexoxAlvTwO6Ai+jHz/vJsSWhyCUfC4BEFruznlAM8CzZ1nOfKJGrsVjI\
 om8DoC7cXOw=\n\
------END CERTIFICATE-----";
+-----END CERTIFICATE-----",
+// New one
+"-----BEGIN CERTIFICATE-----\n\
+MIIDlDCCAnygAwIBAgIUJrpHHMJyOMi3u1fP6Bi/9sbXu5swDQYJKoZIhvcNAQEL\
+BQAwPzELMAkGA1UEBhMCS1IxDjAMBgNVBAgMBUtvcmVhMQ8wDQYDVQQHDAZCcmF2\
+ZXMxDzANBgNVBAsMBkJyYXZlczAeFw0yNTAxMTUwNzU4MTVaFw0zNTAxMTMwNzU4\
+MTVaMD8xCzAJBgNVBAYTAktSMQ4wDAYDVQQIDAVLb3JlYTEPMA0GA1UEBwwGQnJh\
+dmVzMQ8wDQYDVQQLDAZCcmF2ZXMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK\
+AoIBAQCoBOd06OBePJUd0rkCPmdEbEiis7Jk/9kxHPq+0jihIiKkG3lYWv58wedG\
+iQAigGYS24x0Fg/9GPlLpEqxHVn4vTVVZKKlmcnTbP5RIvTBYvY9jzwJdMsIRhoe\
+BXeZ4/F8Rc8PCeyNbWwFSpab3aK1hpEYjOXJZIcE2xIaZMvJi+yKhg33DYjTfoqu\
+S/+mZ/jWfUOnGt3PzsFe3Xu7oEdbkAYfKsWXgX8NdjPfjo9hvlFW/yKjpSLZD+yN\
+IFh+HvvjVoAM5n/b1jHHi5CoPPeY43mvVf2oDUa+DD1x1x2K7K7Jjg4tQDvPe3kH\
+XRu5c7v7lBEqLpVOLo33NIlTA+UVAgMBAAGjgYcwgYQwCQYDVR0TBAIwADALBgNV\
+HQ8EBAMCBeAwSwYDVR0RBEQwQoIQKi5zdG9ybWZvcmdlLmFydIIQKi5maXNoaW5n\
+LW9uLmNvbYIKKi5ra29sLmNvbYcEwKgAVIcEwKgAVYcEwKgAXDAdBgNVHQ4EFgQU\
+I3QbVJSVGLlZVTCISozQWkInoBswDQYJKoZIhvcNAQELBQADggEBAGm39e6fMxUr\
+YTVGfeW3C7gUmcczP+SJ4XdYOkGNBRrwmZpG25DZfbdjZvZHaPIy5+C3vqNlWlfw\
+03OGORZULMqbEoSR3KFdl7+mT0GSH+qoSFRr11FL6oxDS2qb5DVo3G9Kla7kf9J/\
+SDW4+0WuG91CHGarCFFuSxni0Afqc8iRZqFr6fFneF1y4LCyVPkei6zQClt3zBfw\
+53puTsQukfMtG7ZN8Q+b5bYBX3uxOMBJzXErHHQp8k8Onl9CoVWnCM2oHDe+gyoo\
+wTnDpv4r3wuSH/KdArkkWBMmXo1gFRwO7yp9NzV2CW9zYa3AptJafGh8c4hbGfK1\
+OyGU210KPqc=\n\
+-----END CERTIFICATE-----"
+        };
 
-        Service::HTTP->AddTrustedCert(SelfSignedCert);
+        for (const char* SelfSignedCert : SelfSignedCerts)
+        {
+            defCheck(Service::HTTP->AddTrustedCert(SelfSignedCert));
+        }
 
-		return super::InitializeComponent();
+		defCheck(super::InitializeComponent());
+
+        return hr;
 	}
 
     void HTTPClientComponent::DeinitializeComponent()
