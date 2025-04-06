@@ -33,10 +33,8 @@ namespace SF
         }
 
         // IOS IL2CPP doesn't support native callback of instance, so it has to be static
-        static public byte[] MessageBuffer = new byte[32 * 1024];
         static public SFConnection? stm_MessageDequeueConnection = null;
         static public object stm_ParsingLock = new object();
-        static public SFConnection.Event stm_Event;
     }
 }
 
