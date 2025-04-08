@@ -87,7 +87,7 @@ namespace SF {
 		return QuaternionSSE(_mm_div_ps(Packed, _mm_set1_ps(scala)));
 	}
 
-    inline bool QuaternionSSE::Comapre(const QuaternionSSE& q, float testEpsilon) const
+    inline bool QuaternionSSE::Compare(const QuaternionSSE& q, float testEpsilon) const
     {
         __m128 diff = _mm_sub_ps(Packed, q.Packed);
         __m128 diffSq = _mm_mul_ps(diff, diff);

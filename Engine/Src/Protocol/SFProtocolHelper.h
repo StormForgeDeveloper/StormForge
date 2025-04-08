@@ -385,7 +385,11 @@ namespace SF {
 
             inline SF::UGCGameInfo ParseUGCGameInfo(const SF::Flat::UGCGameInfo* value)
             {
-                return { ParseGuid(value->ugc_content_id()), value->table_id(), value->name()->c_str()};
+                SF::UGCGameInfo gameInfo;
+                gameInfo.UGCContentId = ParseGuid(value->ugc_content_id());
+                gameInfo.TableId = value->table_id();
+                gameInfo.Name = value->name()->c_str();
+                return gameInfo;
             }
 
             inline Offset<Vector<Offset<SF::Flat::UGCGameInfo>>> CreateUGCGameInfoVector(FlatBufferBuilder& fbb, const Array<SF::UGCGameInfo>& value)

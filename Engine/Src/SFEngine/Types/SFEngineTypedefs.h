@@ -341,9 +341,9 @@ namespace SF {
     // UGC game information
     struct UGCGameInfo
     {
-        Guid	    UGCContentId;
-        uint32_t    TableId;
         String      Name;
+        uint32_t    TableId;
+        Guid	    UGCContentId;
     };
 
     // deprecated

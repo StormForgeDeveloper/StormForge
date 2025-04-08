@@ -15,6 +15,7 @@ namespace SF {
 		CircularQueue<T, SIZE_BUFFER>::CircularQueue()
 			: m_nReadPtr(0), m_nWritePtr(0), m_nItemCount(0)
 		{
+            // TODO: Need to check POD
 			memset(m_Buffer, 0, sizeof(m_Buffer));
 		}
 
@@ -28,6 +29,7 @@ namespace SF {
 		inline void CircularQueue<T, SIZE_BUFFER>::ClearQueue()
 		{
 			m_nReadPtr = m_nWritePtr = m_nItemCount = 0;
+            // TODO: Need to check POD
 			memset(m_Buffer, 0, sizeof(m_Buffer));
 		}
 
@@ -57,7 +59,6 @@ namespace SF {
 				return ResultCode::FAIL;
 			}
 
-			Assert(T(0) == m_Buffer[m_nWritePtr]);
 			m_Buffer[m_nWritePtr] = Forward<T>(item);
 
 			m_nWritePtr = (m_nWritePtr + 1) % SIZE_BUFFER;
@@ -75,7 +76,6 @@ namespace SF {
 				return ResultCode::FAIL;
 			}
 
-			Assert(T{} == m_Buffer[m_nWritePtr]);
 			m_Buffer[m_nWritePtr] = item;
 
 			m_nWritePtr = (m_nWritePtr + 1) % SIZE_BUFFER;
@@ -118,7 +118,6 @@ namespace SF {
 			return m_Buffer[readIndex];
 		}
 
-		// foreach items in queue
 		template <typename T, int SIZE_BUFFER>
 		inline void CircularQueue<T, SIZE_BUFFER>::ReverseForeach(uint from, uint count, std::function<bool(const T& item)> func)
 		{
@@ -144,12 +143,39 @@ namespace SF {
 			}
 		}
 
-		// foreach items in queue
 		template <typename T, int SIZE_BUFFER>
 		inline void CircularQueue<T, SIZE_BUFFER>::ReverseForeach(uint from, uint count, std::function<bool(const T& item)> func) const
 		{
 			const_cast<CircularQueue<T, SIZE_BUFFER>*>(this)->ReverseForeach(from, count, func);
 		}
+
+        template <typename T, int SIZE_BUFFER>
+        inline void CircularQueue<T, SIZE_BUFFER>::Foreach(uint from, uint count, std::function<bool(const T& item)> func)
+        {
+            // nothing to process
+            if (m_nItemCount <= from)
+                return;
+
+            int iCurPos = m_nReadPtr + from;
+
+            for (uint numItem = 0; numItem < count; numItem++, iCurPos++)
+            {
+                iCurPos = iCurPos % SIZE_BUFFER;
+
+                // If we've done, break
+                if (iCurPos == m_nWritePtr)
+                    break;
+
+                if (!func(m_Buffer[iCurPos]))
+                    return;
+            }
+        }
+
+        template <typename T, int SIZE_BUFFER>
+        inline void CircularQueue<T, SIZE_BUFFER>::Foreach(uint from, uint count, std::function<bool(const T& item)> func) const
+        {
+            const_cast<CircularQueue<T, SIZE_BUFFER>*>(this)->Foreach(from, count, func);
+        }
 
 
 }

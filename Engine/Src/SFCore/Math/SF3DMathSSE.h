@@ -457,7 +457,7 @@ namespace SF {
 		QuaternionSSE& operator *= (const QuaternionSSE& q);
 
         // Compare two quaternion
-        bool Comapre(const QuaternionSSE& q, float testEpsilon = std::numeric_limits<float>::epsilon()) const;
+        bool Compare(const QuaternionSSE& q, float testEpsilon = std::numeric_limits<float>::epsilon()) const;
 
 		// scala operation
 		QuaternionSSE operator-(float scala) const;
@@ -466,6 +466,13 @@ namespace SF {
 		QuaternionSSE operator / (float scala) const;
 
 		//friend QuaternionSSE operator*(const QuaternionSSE& q1, const QuaternionSSE& q2);
+
+        SF_FORCEINLINE bool operator==(const QuaternionSSE& u) const
+        {
+            __m128i vcmp = _mm_castps_si128(_mm_cmpneq_ps(Packed, u.Packed));
+            int test = _mm_movemask_epi8(vcmp);
+            return test == 0;
+        }
 
 
 		QuaternionSSE GetInverse() const;

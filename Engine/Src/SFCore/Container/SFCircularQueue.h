@@ -54,9 +54,14 @@ namespace SF {
 			// Dequeue an element
 			Result Dequeue(T& item);
 
+            // Peek front(next dequeue) item
+            const T& GetFront() const { return (*this)[0]; }
+
 			// Get item count
 			uint GetSize() const { return m_nItemCount; }
 			size_t size() const { return m_nItemCount; }
+
+            constexpr size_t capacity() const { return SIZE_BUFFER; }
 
 			// Clear all items
 			void ClearQueue();
@@ -65,10 +70,14 @@ namespace SF {
 			// index: 0 is front
 			const T& operator[](int iIndex);
 
-			// foreach items in queue
+			// foreach items in queue, from recent to oldest
 			void ReverseForeach(uint from, uint Count, std::function<bool(const T& item)> func) const;
 			void ReverseForeach(uint from, uint Count, std::function<bool(const T& item)> func);
-		};
+
+            // foreach from oldest to recent
+            void Foreach(uint from, uint Count, std::function<bool(const T& item)> func) const;
+            void Foreach(uint from, uint Count, std::function<bool(const T& item)> func);
+        };
 
 
 }
