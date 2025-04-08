@@ -65,10 +65,11 @@ namespace SF {
 
 			// Clear all items
 			void ClearQueue();
+            void clear() { ClearQueue(); }
 
 			// index based access
 			// index: 0 is front
-			const T& operator[](int iIndex);
+			const T& operator[](int iIndex) const;
 
 			// foreach items in queue, from recent to oldest
 			void ReverseForeach(uint from, uint Count, std::function<bool(const T& item)> func) const;

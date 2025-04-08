@@ -104,7 +104,7 @@ namespace SF {
 		}
 
 		template <typename T, int SIZE_BUFFER>
-		inline const T& CircularQueue<T, SIZE_BUFFER>::operator[](int iIndex)
+		inline const T& CircularQueue<T, SIZE_BUFFER>::operator[](int iIndex) const
 		{
 			static const T dummy{};
 			if (int(m_nItemCount) <= iIndex)
