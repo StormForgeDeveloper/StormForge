@@ -538,7 +538,7 @@ namespace SF
             size_t rlen{};
             const struct curl_ws_frame* frameMeta{};
             uint8_t readBuffer[4*1024];
-            CURLcode result;
+            CURLcode result = CURLE_OK;
             bool bHasReadData = false;
 
             {
