@@ -108,8 +108,8 @@ namespace SF
 
             AvroSchema schema(schemaString);
 
-            AvroValue readValue(schema);
-            return reader.ReadValue(readValue);
+            outValue.Init(schema);
+            return reader.ReadValue(outValue);
         }
 	}
 
