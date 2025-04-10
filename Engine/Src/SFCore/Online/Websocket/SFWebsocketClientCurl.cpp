@@ -544,13 +544,16 @@ namespace SF
             {
                 MutexScopeLock scopeLock(m_ContextLock);
 
-                result = curl_ws_recv(m_Curl, readBuffer, sizeof(readBuffer), &rlen, &frameMeta);
-                if (result == CURLE_OK)
+                if (m_Curl)
                 {
-                    if (frameMeta)
+                    result = curl_ws_recv(m_Curl, readBuffer, sizeof(readBuffer), &rlen, &frameMeta);
+                    if (result == CURLE_OK)
                     {
-                        assert(frameMeta->len == rlen);
-                        bHasReadData = WebsocketClientCurlImpl::ReadData(frameMeta, readBuffer, m_ReceiveBuffer);
+                        if (frameMeta)
+                        {
+                            assert(frameMeta->len == rlen);
+                            bHasReadData = WebsocketClientCurlImpl::ReadData(frameMeta, readBuffer, m_ReceiveBuffer);
+                        }
                     }
                 }
             }
