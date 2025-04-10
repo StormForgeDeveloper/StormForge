@@ -886,9 +886,26 @@ namespace SF
             return Parse(value.Value);
         }
 
-        public static Offset<SF.Flat.Quaternion> CreateQuaternion(this Google.FlatBuffers.FlatBufferBuilder builder, SF.SFQuaternion data)
+		public struct FlatValueQuaternion
+		{
+			public Google.FlatBuffers.FlatBufferBuilder Builder;
+			public SF.SFQuaternion Value;
+
+			public FlatValueQuaternion(Google.FlatBuffers.FlatBufferBuilder builder, SF.SFQuaternion value)
+			{
+				Builder = builder;
+				Value = value;
+			}
+
+			public static implicit operator Offset<SF.Flat.Quaternion>(FlatValueQuaternion value)
+			{
+				return SF.Flat.Quaternion.CreateQuaternion(value.Builder, value.Value.x, value.Value.y, value.Value.z, value.Value.w);
+			}
+		}
+
+		public static FlatValueQuaternion CreateQuaternion(this Google.FlatBuffers.FlatBufferBuilder builder, SF.SFQuaternion data)
         {
-            return SF.Flat.Quaternion.CreateQuaternion(builder, data.x, data.y, data.z, data.w);
+            return new FlatValueQuaternion(builder, data);
         }
 
         public static SF.SFQuaternion Parse(this SF.Flat.Quaternion value)
