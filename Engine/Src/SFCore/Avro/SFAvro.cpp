@@ -97,9 +97,14 @@ namespace SF
 
         Result ParseAvroValue(const Array<const uint8_t>& avorData, AvroValue& outValue)
         {
+            if (avorData.size() == 0)
+                return ResultCode::NO_DATA_EXIST;
+
             AvroReader reader(avorData);
 
             String schemaString = reader.ReadString();
+            if (schemaString.IsNullOrEmpty())
+                return ResultCode::INVALID_DATA;
 
             AvroSchema schema(schemaString);
 
