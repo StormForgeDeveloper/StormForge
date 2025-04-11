@@ -39,7 +39,7 @@ namespace ResultCode {
 		codeMap.Insert((uint32_t)			GAME_OCCUPIED_MAPOBJECT_IS_REQUIRED        , {"			GAME_OCCUPIED_MAPOBJECT_IS_REQUIRED        ", "Map object is required to be occupied"});
 		codeMap.Insert((uint32_t)			GAME_MAPOBJECT_ALREADY_IN_USE        , {"			GAME_MAPOBJECT_ALREADY_IN_USE        ", "Map object is already in use"});
 		codeMap.Insert((uint32_t)			GAME_MAPOBJECT_NOT_IN_USE        , {"			GAME_MAPOBJECT_NOT_IN_USE        ", "Map object is not in use"});
-		codeMap.Insert((uint32_t)			GAME_MAPOBJECT_NOT_FOUND        , {"			GAME_MAPOBJECT_NOT_FOUND        ", "Map object is already in use"});
+		codeMap.Insert((uint32_t)			GAME_MAPOBJECT_NOT_FOUND        , {"			GAME_MAPOBJECT_NOT_FOUND        ", "Map object not found"});
 		codeMap.Insert((uint32_t)			GAME_MAPOBJECT_NOT_OCCUPIED_BY_PLAYER        , {"			GAME_MAPOBJECT_NOT_OCCUPIED_BY_PLAYER        ", "Map object is not occupied by the player"});
 		codeMap.Insert((uint32_t)			GAME_INVALID_NPCID        , {"			GAME_INVALID_NPCID        ", "Invalid NPC id"});
 		codeMap.Insert((uint32_t)			GAME_UNEXPECTED_TABLE_VALUE        , {"			GAME_UNEXPECTED_TABLE_VALUE        ", "Unexpected table value"});
@@ -59,6 +59,7 @@ namespace ResultCode {
 		codeMap.Insert((uint32_t)			GAME_INVALID_COSTID        , {"			GAME_INVALID_COSTID        ", "Invalid cost table id"});
 		codeMap.Insert((uint32_t)			GAME_INVALID_BOTTALK_TABLE        , {"			GAME_INVALID_BOTTALK_TABLE        ", "Invalid bot talk table"});
 		codeMap.Insert((uint32_t)			GAME_REQUEST_HAS_EXPIRED        , {"			GAME_REQUEST_HAS_EXPIRED        ", "Request has expired"});
+		codeMap.Insert((uint32_t)			GAME_GROUP_OBJECT_NOT_FOUND        , {"			GAME_GROUP_OBJECT_NOT_FOUND        ", "Group object not found"});
 
 	}//InitializeResultCode 
 }//namespace ResultCode 

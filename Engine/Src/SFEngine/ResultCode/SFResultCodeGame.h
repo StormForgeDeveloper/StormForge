@@ -75,7 +75,7 @@ namespace SF {
 			// Map object is not in use 
 			constexpr Result 			GAME_MAPOBJECT_NOT_IN_USE                                          ((int32_t)0xE7040012L);
 
-			// Map object is already in use 
+			// Map object not found 
 			constexpr Result 			GAME_MAPOBJECT_NOT_FOUND                                           ((int32_t)0xE7040013L);
 
 			// Map object is not occupied by the player 
@@ -134,6 +134,9 @@ namespace SF {
 
 			// Request has expired 
 			constexpr Result 			GAME_REQUEST_HAS_EXPIRED                                           ((int32_t)0xE7040026L);
+
+			// Group object not found 
+			constexpr Result 			GAME_GROUP_OBJECT_NOT_FOUND                                        ((int32_t)0xE7040027L);
 
 	void InitializeResultCodeGame();
 

@@ -90,7 +90,7 @@ namespace SF {
 		 public const int _GAME_MAPOBJECT_NOT_IN_USE = (unchecked((int)0xE7040012)); 
 		public static readonly Result GAME_MAPOBJECT_NOT_IN_USE = new Result(_GAME_MAPOBJECT_NOT_IN_USE); 
 
-		// Map object is already in use 
+		// Map object not found 
 		 public const int _GAME_MAPOBJECT_NOT_FOUND = (unchecked((int)0xE7040013)); 
 		public static readonly Result GAME_MAPOBJECT_NOT_FOUND = new Result(_GAME_MAPOBJECT_NOT_FOUND); 
 
@@ -169,6 +169,10 @@ namespace SF {
 		// Request has expired 
 		 public const int _GAME_REQUEST_HAS_EXPIRED = (unchecked((int)0xE7040026)); 
 		public static readonly Result GAME_REQUEST_HAS_EXPIRED = new Result(_GAME_REQUEST_HAS_EXPIRED); 
+
+		// Group object not found 
+		 public const int _GAME_GROUP_OBJECT_NOT_FOUND = (unchecked((int)0xE7040027)); 
+		public static readonly Result GAME_GROUP_OBJECT_NOT_FOUND = new Result(_GAME_GROUP_OBJECT_NOT_FOUND); 
 
 	}
 }

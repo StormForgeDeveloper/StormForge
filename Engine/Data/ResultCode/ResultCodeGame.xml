@@ -31,7 +31,7 @@
 	<ResultCodeItem Severity="Error" CodeName="OCCUPIED_MAPOBJECT_IS_REQUIRED" Desc="Map object is required to be occupied"/>
 	<ResultCodeItem Severity="Error" CodeName="MAPOBJECT_ALREADY_IN_USE" Desc="Map object is already in use"/>
 	<ResultCodeItem Severity="Error" CodeName="MAPOBJECT_NOT_IN_USE" Desc="Map object is not in use"/>
-	<ResultCodeItem Severity="Error" CodeName="MAPOBJECT_NOT_FOUND" Desc="Map object is already in use"/>
+	<ResultCodeItem Severity="Error" CodeName="MAPOBJECT_NOT_FOUND" Desc="Map object not found"/>
 	<ResultCodeItem Severity="Error" CodeName="MAPOBJECT_NOT_OCCUPIED_BY_PLAYER" Desc="Map object is not occupied by the player"/>
 
 	<ResultCodeItem Severity="Error" CodeName="INVALID_NPCID" Desc="Invalid NPC id"/>
@@ -56,6 +56,8 @@
 	<ResultCodeItem Severity="Error" CodeName="INVALID_BOTTALK_TABLE" Desc="Invalid bot talk table"/>
     
     <ResultCodeItem Severity="Error" CodeName="REQUEST_HAS_EXPIRED" Desc="Request has expired"/>
+
+    <ResultCodeItem Severity="Error" CodeName="GROUP_OBJECT_NOT_FOUND" Desc="Group object not found"/>
 
 </ResultCodes>
 
