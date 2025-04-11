@@ -1069,7 +1069,7 @@ namespace SF.Net
 
 
 		// Cmd: UGC zone edit command
-		public Result  UGCEditAddRes( SF.TransactionID InTransactionID, SF.Result InResult, System.UInt32 InEntityInstanceId, System.UInt32 InTimeOffset, SF.VariableTable[] InInvenChanges )
+		public Result  UGCEditAddRes( SF.TransactionID InTransactionID, SF.Result InResult, System.UInt32 InEntityInstanceId, System.UInt32 InGroupInstanceID, System.UInt32 InTimeOffset, SF.VariableTable[] InInvenChanges )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
@@ -1077,12 +1077,13 @@ namespace SF.Net
 			var InvenChangesOffset = builder.CreateVariableTableVector(InInvenChanges);
 			SF.Flat.PlayInstance.UGCEditAddRes.StartUGCEditAddRes(builder);
 			SF.Flat.PlayInstance.UGCEditAddRes.AddEntityInstanceId(builder, InEntityInstanceId);
+			SF.Flat.PlayInstance.UGCEditAddRes.AddGroupInstanceId(builder, InGroupInstanceID);
 			SF.Flat.PlayInstance.UGCEditAddRes.AddTimeOffset(builder, InTimeOffset);
 			SF.Flat.PlayInstance.UGCEditAddRes.AddInvenChanges(builder, InvenChangesOffset);
 			var packetOffset = SF.Flat.PlayInstance.UGCEditAddRes.EndUGCEditAddRes(builder);
 			result = SendMessage(MessageIDPlayInstance.UGCEditAddRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
 			return result;
-		} // public Result  UGCEditAddRes( SF.TransactionID InTransactionID, SF.Result InResult, System.UInt32 InEntityInstanceId, System.UInt32 InTimeOffset, SF.VariableTable[] InInvenChanges )
+		} // public Result  UGCEditAddRes( SF.TransactionID InTransactionID, SF.Result InResult, System.UInt32 InEntityInstanceId, System.UInt32 InGroupInstanceID, System.UInt32 InTimeOffset, SF.VariableTable[] InInvenChanges )
 
 
 		// Cmd: UGC zone edit command
@@ -1112,7 +1113,7 @@ namespace SF.Net
 
 
 		// Cmd: UGC zone edit command
-		public Result  UGCEditClaimBackRes( SF.TransactionID InTransactionID, SF.Result InResult, System.UInt32 InEntityInstanceId, SF.VariableTable[] InInvenChanges )
+		public Result  UGCEditClaimBackRes( SF.TransactionID InTransactionID, SF.Result InResult, System.UInt32 InEntityInstanceId, System.UInt32 InGroupInstanceID, SF.VariableTable[] InInvenChanges )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
@@ -1120,15 +1121,16 @@ namespace SF.Net
 			var InvenChangesOffset = builder.CreateVariableTableVector(InInvenChanges);
 			SF.Flat.PlayInstance.UGCEditClaimBackRes.StartUGCEditClaimBackRes(builder);
 			SF.Flat.PlayInstance.UGCEditClaimBackRes.AddEntityInstanceId(builder, InEntityInstanceId);
+			SF.Flat.PlayInstance.UGCEditClaimBackRes.AddGroupInstanceId(builder, InGroupInstanceID);
 			SF.Flat.PlayInstance.UGCEditClaimBackRes.AddInvenChanges(builder, InvenChangesOffset);
 			var packetOffset = SF.Flat.PlayInstance.UGCEditClaimBackRes.EndUGCEditClaimBackRes(builder);
 			result = SendMessage(MessageIDPlayInstance.UGCEditClaimBackRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
 			return result;
-		} // public Result  UGCEditClaimBackRes( SF.TransactionID InTransactionID, SF.Result InResult, System.UInt32 InEntityInstanceId, SF.VariableTable[] InInvenChanges )
+		} // public Result  UGCEditClaimBackRes( SF.TransactionID InTransactionID, SF.Result InResult, System.UInt32 InEntityInstanceId, System.UInt32 InGroupInstanceID, SF.VariableTable[] InInvenChanges )
 
 
 		// S2C: UGC zone edited event
-		public Result  UGCEditAddedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, System.UInt32 InEntityType, System.UInt32 InTableId, System.UInt32 InTimeOffset, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale )
+		public Result  UGCEditAddedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, System.UInt32 InGroupInstanceID, System.UInt32 InEntityType, System.UInt32 InTableId, System.UInt32 InTimeOffset, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
@@ -1142,6 +1144,7 @@ namespace SF.Net
 			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddPlayInstanceUid(builder, PlayInstanceUIDOffset);
 			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddOperatorPlayerId(builder, OperatorPlayerIDOffset);
 			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddEntityInstanceId(builder, InEntityInstanceId);
+			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddGroupInstanceId(builder, InGroupInstanceID);
 			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddEntityType(builder, InEntityType);
 			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddTableId(builder, InTableId);
 			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddTimeOffset(builder, InTimeOffset);
@@ -1151,11 +1154,11 @@ namespace SF.Net
 			var packetOffset = SF.Flat.PlayInstance.UGCEditAddedS2CEvt.EndUGCEditAddedS2CEvt(builder);
 			result = SendMessage(MessageIDPlayInstance.UGCEditAddedS2CEvt, builder, packetOffset.Value);
 			return result;
-		} // public Result  UGCEditAddedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, System.UInt32 InEntityType, System.UInt32 InTableId, System.UInt32 InTimeOffset, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale )
+		} // public Result  UGCEditAddedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, System.UInt32 InGroupInstanceID, System.UInt32 InEntityType, System.UInt32 InTableId, System.UInt32 InTimeOffset, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale )
 
 
 		// S2C: UGC zone edited event
-		public Result  UGCEditRemovedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId )
+		public Result  UGCEditRemovedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, System.UInt32 InGroupInstanceID )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
@@ -1166,14 +1169,15 @@ namespace SF.Net
 			SF.Flat.PlayInstance.UGCEditRemovedS2CEvt.AddPlayInstanceUid(builder, PlayInstanceUIDOffset);
 			SF.Flat.PlayInstance.UGCEditRemovedS2CEvt.AddOperatorPlayerId(builder, OperatorPlayerIDOffset);
 			SF.Flat.PlayInstance.UGCEditRemovedS2CEvt.AddEntityInstanceId(builder, InEntityInstanceId);
+			SF.Flat.PlayInstance.UGCEditRemovedS2CEvt.AddGroupInstanceId(builder, InGroupInstanceID);
 			var packetOffset = SF.Flat.PlayInstance.UGCEditRemovedS2CEvt.EndUGCEditRemovedS2CEvt(builder);
 			result = SendMessage(MessageIDPlayInstance.UGCEditRemovedS2CEvt, builder, packetOffset.Value);
 			return result;
-		} // public Result  UGCEditRemovedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId )
+		} // public Result  UGCEditRemovedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, System.UInt32 InGroupInstanceID )
 
 
 		// S2C: UGC zone edited event
-		public Result  UGCEditMovedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale )
+		public Result  UGCEditMovedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, System.UInt32 InGroupInstanceID, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
@@ -1187,13 +1191,14 @@ namespace SF.Net
 			SF.Flat.PlayInstance.UGCEditMovedS2CEvt.AddPlayInstanceUid(builder, PlayInstanceUIDOffset);
 			SF.Flat.PlayInstance.UGCEditMovedS2CEvt.AddOperatorPlayerId(builder, OperatorPlayerIDOffset);
 			SF.Flat.PlayInstance.UGCEditMovedS2CEvt.AddEntityInstanceId(builder, InEntityInstanceId);
+			SF.Flat.PlayInstance.UGCEditMovedS2CEvt.AddGroupInstanceId(builder, InGroupInstanceID);
 			SF.Flat.PlayInstance.UGCEditMovedS2CEvt.AddPosition(builder, PositionOffset);
 			SF.Flat.PlayInstance.UGCEditMovedS2CEvt.AddRotation(builder, RotationOffset);
 			SF.Flat.PlayInstance.UGCEditMovedS2CEvt.AddScale(builder, ScaleOffset);
 			var packetOffset = SF.Flat.PlayInstance.UGCEditMovedS2CEvt.EndUGCEditMovedS2CEvt(builder);
 			result = SendMessage(MessageIDPlayInstance.UGCEditMovedS2CEvt, builder, packetOffset.Value);
 			return result;
-		} // public Result  UGCEditMovedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale )
+		} // public Result  UGCEditMovedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, System.UInt32 InGroupInstanceID, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale )
 
 
 		// Cmd: Create stream instance

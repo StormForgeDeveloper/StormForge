@@ -164,19 +164,19 @@ namespace SF
 		// S2C: Voice data
 		Result VoiceDataS2CEvt( const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData );
 		// Cmd: UGC zone edit command
-		Result UGCEditAddRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InEntityInstanceId, const uint32_t &InTimeOffset, const Array<VariableTable>& InInvenChanges );
+		Result UGCEditAddRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const uint32_t &InTimeOffset, const Array<VariableTable>& InInvenChanges );
 		// Cmd: UGC zone edit command
 		Result UGCEditMoveRes( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: UGC zone edit command
 		Result UGCEditDeleteRes( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: UGC zone edit command
-		Result UGCEditClaimBackRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InEntityInstanceId, const Array<VariableTable>& InInvenChanges );
+		Result UGCEditClaimBackRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const Array<VariableTable>& InInvenChanges );
 		// S2C: UGC zone edited event
-		Result UGCEditAddedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const StringCrc32 &InEntityType, const uint32_t &InTableId, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale );
+		Result UGCEditAddedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const StringCrc32 &InEntityType, const uint32_t &InTableId, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale );
 		// S2C: UGC zone edited event
-		Result UGCEditRemovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId );
+		Result UGCEditRemovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID );
 		// S2C: UGC zone edited event
-		Result UGCEditMovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale );
+		Result UGCEditMovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale );
 		// Cmd: Create stream instance
 		Result CreateStreamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName );
 		// Cmd: Open stream instance

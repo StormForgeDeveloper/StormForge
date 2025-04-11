@@ -295,6 +295,7 @@ namespace SF
     }
 
     const Guid Guid::Empty(0,0);
+    const Guid Guid::Invalid(0, 0);
 
 
     Guid::Guid(uint64_t low, uint64_t high)

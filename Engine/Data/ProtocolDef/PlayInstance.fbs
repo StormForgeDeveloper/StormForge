@@ -353,6 +353,7 @@ table UGCEditAddCmd
 table UGCEditAddRes
 {
  	entity_instance_id:uint32;
+	group_instance_id:uint32;
 	time_offset:uint32;
 	inven_changes:[ubyte];
 } // table UGCEditAddRes
@@ -392,6 +393,7 @@ table UGCEditClaimBackCmd
 table UGCEditClaimBackRes
 {
  	entity_instance_id:uint32;
+	group_instance_id:uint32;
 	inven_changes:[ubyte];
 } // table UGCEditClaimBackRes
 
@@ -400,6 +402,7 @@ table UGCEditAddedS2CEvt
  	play_instance_uid:GameInstanceUID;
 	operator_player_id:AccountID;
 	entity_instance_id:uint32;
+	group_instance_id:uint32;
 	entity_type:uint32;
 	table_id:uint32;
 	time_offset:uint32;
@@ -413,6 +416,7 @@ table UGCEditRemovedS2CEvt
  	play_instance_uid:GameInstanceUID;
 	operator_player_id:AccountID;
 	entity_instance_id:uint32;
+	group_instance_id:uint32;
 } // table UGCEditRemovedS2CEvt
 
 table UGCEditMovedS2CEvt
@@ -420,6 +424,7 @@ table UGCEditMovedS2CEvt
  	play_instance_uid:GameInstanceUID;
 	operator_player_id:AccountID;
 	entity_instance_id:uint32;
+	group_instance_id:uint32;
 	position:Vector4;
 	rotation:Quaternion;
 	scale:Vector4;

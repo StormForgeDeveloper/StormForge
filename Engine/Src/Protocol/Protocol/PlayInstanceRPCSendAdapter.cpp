@@ -1296,7 +1296,7 @@ namespace SF
 		return hr;
 	}; // Result PlayInstanceSvrRPCSendAdapter::VoiceDataS2CEvt( const uint32_t &InActorID, const uint16_t &InFrameIndex, const Array<uint8_t>& InVoiceData )
 	// Cmd: UGC zone edit command
-	Result PlayInstanceSvrRPCSendAdapter::UGCEditAddRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InEntityInstanceId, const uint32_t &InTimeOffset, const Array<VariableTable>& InInvenChanges )
+	Result PlayInstanceSvrRPCSendAdapter::UGCEditAddRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const uint32_t &InTimeOffset, const Array<VariableTable>& InInvenChanges )
 	{
  		Result hr;
 
@@ -1306,6 +1306,7 @@ namespace SF
 		auto InvenChangesOffset = SF::Flat::Helper::CreateVariableTableVector(fbb, InInvenChanges);
 		SF::Flat::PlayInstance::UGCEditAddResBuilder _builder(fbb);
 		_builder.add_entity_instance_id(InEntityInstanceId);
+		_builder.add_group_instance_id(InGroupInstanceID);
 		_builder.add_time_offset(InTimeOffset);
 		_builder.add_inven_changes(InvenChangesOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::UGCEditAddRes> packetOffset = _builder.Finish();
@@ -1315,7 +1316,7 @@ namespace SF
 
 
 		return hr;
-	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditAddRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InEntityInstanceId, const uint32_t &InTimeOffset, const Array<VariableTable>& InInvenChanges )
+	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditAddRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const uint32_t &InTimeOffset, const Array<VariableTable>& InInvenChanges )
 	// Cmd: UGC zone edit command
 	Result PlayInstanceSvrRPCSendAdapter::UGCEditMoveRes( const TransactionID &InTransactionID, const Result &InResult )
 	{
@@ -1351,7 +1352,7 @@ namespace SF
 		return hr;
 	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditDeleteRes( const TransactionID &InTransactionID, const Result &InResult )
 	// Cmd: UGC zone edit command
-	Result PlayInstanceSvrRPCSendAdapter::UGCEditClaimBackRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InEntityInstanceId, const Array<VariableTable>& InInvenChanges )
+	Result PlayInstanceSvrRPCSendAdapter::UGCEditClaimBackRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const Array<VariableTable>& InInvenChanges )
 	{
  		Result hr;
 
@@ -1361,6 +1362,7 @@ namespace SF
 		auto InvenChangesOffset = SF::Flat::Helper::CreateVariableTableVector(fbb, InInvenChanges);
 		SF::Flat::PlayInstance::UGCEditClaimBackResBuilder _builder(fbb);
 		_builder.add_entity_instance_id(InEntityInstanceId);
+		_builder.add_group_instance_id(InGroupInstanceID);
 		_builder.add_inven_changes(InvenChangesOffset);
 		flatbuffers::Offset<SF::Flat::PlayInstance::UGCEditClaimBackRes> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
@@ -1369,9 +1371,9 @@ namespace SF
 
 
 		return hr;
-	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditClaimBackRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InEntityInstanceId, const Array<VariableTable>& InInvenChanges )
+	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditClaimBackRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const Array<VariableTable>& InInvenChanges )
 	// S2C: UGC zone edited event
-	Result PlayInstanceSvrRPCSendAdapter::UGCEditAddedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const StringCrc32 &InEntityType, const uint32_t &InTableId, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale )
+	Result PlayInstanceSvrRPCSendAdapter::UGCEditAddedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const StringCrc32 &InEntityType, const uint32_t &InTableId, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale )
 	{
  		Result hr;
 
@@ -1387,6 +1389,7 @@ namespace SF
 		_builder.add_play_instance_uid(PlayInstanceUIDOffset);
 		_builder.add_operator_player_id(OperatorPlayerIDOffset);
 		_builder.add_entity_instance_id(InEntityInstanceId);
+		_builder.add_group_instance_id(InGroupInstanceID);
 		_builder.add_entity_type(InEntityType);
 		_builder.add_table_id(InTableId);
 		_builder.add_time_offset(InTimeOffset);
@@ -1400,9 +1403,9 @@ namespace SF
 
 
 		return hr;
-	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditAddedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const StringCrc32 &InEntityType, const uint32_t &InTableId, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale )
+	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditAddedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const StringCrc32 &InEntityType, const uint32_t &InTableId, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale )
 	// S2C: UGC zone edited event
-	Result PlayInstanceSvrRPCSendAdapter::UGCEditRemovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId )
+	Result PlayInstanceSvrRPCSendAdapter::UGCEditRemovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID )
 	{
  		Result hr;
 
@@ -1415,6 +1418,7 @@ namespace SF
 		_builder.add_play_instance_uid(PlayInstanceUIDOffset);
 		_builder.add_operator_player_id(OperatorPlayerIDOffset);
 		_builder.add_entity_instance_id(InEntityInstanceId);
+		_builder.add_group_instance_id(InGroupInstanceID);
 		flatbuffers::Offset<SF::Flat::PlayInstance::UGCEditRemovedS2CEvt> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
 
@@ -1422,9 +1426,9 @@ namespace SF
 
 
 		return hr;
-	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditRemovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId )
+	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditRemovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID )
 	// S2C: UGC zone edited event
-	Result PlayInstanceSvrRPCSendAdapter::UGCEditMovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale )
+	Result PlayInstanceSvrRPCSendAdapter::UGCEditMovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale )
 	{
  		Result hr;
 
@@ -1440,6 +1444,7 @@ namespace SF
 		_builder.add_play_instance_uid(PlayInstanceUIDOffset);
 		_builder.add_operator_player_id(OperatorPlayerIDOffset);
 		_builder.add_entity_instance_id(InEntityInstanceId);
+		_builder.add_group_instance_id(InGroupInstanceID);
 		_builder.add_position(PositionOffset);
 		_builder.add_rotation(RotationOffset);
 		_builder.add_scale(ScaleOffset);
@@ -1450,7 +1455,7 @@ namespace SF
 
 
 		return hr;
-	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditMovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale )
+	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditMovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale )
 	// Cmd: Create stream instance
 	Result PlayInstanceSvrRPCSendAdapter::CreateStreamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
 	{

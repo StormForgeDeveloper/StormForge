@@ -24,6 +24,7 @@ namespace SF {
     public:
 
         static const Guid Empty;
+        static const Guid Invalid;
 
         Guid()
         {

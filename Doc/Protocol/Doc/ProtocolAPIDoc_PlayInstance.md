@@ -684,6 +684,7 @@ C++: Cast message to UGCEditAddRes to access values
 		- TransactionID: type:TransactionID, 
 		- Result: type:Result, 
 		- EntityInstanceId: type:uint32, Added entity's Instance Id
+		- GroupInstanceID: type:uint32, Group instance Id such as Aquarium instance Id
 		- TimeOffset: type:uint32, TimeOffset for animation sync
 		- InvenChanges: type:VariableTable, Inventory changes
 
@@ -765,19 +766,22 @@ C++: Cast message to UGCEditClaimBackRes to access values
 		- TransactionID: type:TransactionID, 
 		- Result: type:Result, 
 		- EntityInstanceId: type:uint32, Entity's Instance Id to claim back
+		- GroupInstanceID: type:uint32, Group instance Id such as Aquarium instance Id
 		- InvenChanges: type:VariableTable, Inventory changes
 
 
 ## UGCEditAddedS2CEvt
 UGC zone edited event
 
-        Result UGCEditAddedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const StringCrc32 &InEntityType, const uint32_t &InTableId, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale)
+        Result UGCEditAddedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const StringCrc32 &InEntityType, const uint32_t &InTableId, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale)
 
 		- OutInPlayInstanceUID: GameInstanceUID type. Game instance UID
 
 		- OutInOperatorPlayerID: PlayerID type. Player who operated
 
 		- OutInEntityInstanceId: uint32 type. Entity's Instance Id to delete
+
+		- OutInGroupInstanceID: uint32 type. Group instance Id such as Aquarium instance Id
 
 		- OutInEntityType: StringCrc32 type. EntityType
 
@@ -795,7 +799,7 @@ UGC zone edited event
 ## UGCEditRemovedS2CEvt
 UGC zone edited event
 
-        Result UGCEditRemovedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId)
+        Result UGCEditRemovedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID)
 
 		- OutInPlayInstanceUID: GameInstanceUID type. Game instance UID
 
@@ -803,17 +807,21 @@ UGC zone edited event
 
 		- OutInEntityInstanceId: uint32 type. Entity's Instance Id to delete
 
+		- OutInGroupInstanceID: uint32 type. Group instance Id such as Aquarium instance Id
+
 
 ## UGCEditMovedS2CEvt
 UGC zone edited event
 
-        Result UGCEditMovedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale)
+        Result UGCEditMovedS2CEvt(const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale)
 
 		- OutInPlayInstanceUID: GameInstanceUID type. Game instance UID
 
 		- OutInOperatorPlayerID: PlayerID type. Player who operated
 
 		- OutInEntityInstanceId: uint32 type. Moved Entity's Instance Id
+
+		- OutInGroupInstanceID: uint32 type. Group instance Id such as Aquarium instance Id
 
 		- OutInPosition: Vector4 type. Position
 

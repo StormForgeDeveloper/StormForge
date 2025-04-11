@@ -344,6 +344,7 @@
             </Cmd>
             <Res>
                 <Params TypeName="uint32" Name="EntityInstanceId" Desc="Added entity's Instance Id"/>
+                <Params TypeName="uint32" Name="GroupInstanceID" Desc="Group instance Id such as Aquarium instance Id"/>
                 <Params TypeName="uint32" Name="TimeOffset" Desc="TimeOffset for animation sync"/>
                 <Params TypeName="VariableTable" IsArray="true" Name="InvenChanges" Desc="Inventory changes"/>
             </Res>
@@ -380,6 +381,7 @@
             </Cmd>
             <Res>
                 <Params TypeName="uint32" Name="EntityInstanceId" Desc="Entity's Instance Id to claim back"/>
+                <Params TypeName="uint32" Name="GroupInstanceID" Desc="Group instance Id such as Aquarium instance Id"/>
                 <Params TypeName="VariableTable" IsArray="true" Name="InvenChanges" Desc="Inventory changes"/>
             </Res>
         </Command>
@@ -388,6 +390,7 @@
             <Params TypeName="GameInstanceUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
             <Params TypeName="PlayerID" Name="OperatorPlayerID" Desc="Player who operated"/>
             <Params TypeName="uint32" Name="EntityInstanceId" Desc="Entity's Instance Id to delete"/>
+            <Params TypeName="uint32" Name="GroupInstanceID" Desc="Group instance Id such as Aquarium instance Id"/>
             <Params TypeName="StringCrc32" Name="EntityType" Desc="EntityType"/>
             <Params TypeName="uint32" Name="TableId" Desc="Data table Id"/>
             <Params TypeName="uint32" Name="TimeOffset" Desc="TimeOffset for animation sync"/>
@@ -400,12 +403,14 @@
             <Params TypeName="GameInstanceUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
             <Params TypeName="PlayerID" Name="OperatorPlayerID" Desc="Player who operated"/>
             <Params TypeName="uint32" Name="EntityInstanceId" Desc="Entity's Instance Id to delete"/>
+            <Params TypeName="uint32" Name="GroupInstanceID" Desc="Group instance Id such as Aquarium instance Id"/>
         </S2CEvent>
 
         <S2CEvent Name="UGCEditMoved" Reliable="true" Crypto="No" Trace="Debug1" Desc="UGC zone edited event">
             <Params TypeName="GameInstanceUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
             <Params TypeName="PlayerID" Name="OperatorPlayerID" Desc="Player who operated"/>
             <Params TypeName="uint32" Name="EntityInstanceId" Desc="Moved Entity's Instance Id"/>
+            <Params TypeName="uint32" Name="GroupInstanceID" Desc="Group instance Id such as Aquarium instance Id"/>
             <Params TypeName="Vector4" Name="Position" Desc="Position"/>
             <Params TypeName="Quaternion" Name="Rotation" Desc="Rotation"/>
             <Params TypeName="Vector4" Name="Scale" Desc="Scale"/>
