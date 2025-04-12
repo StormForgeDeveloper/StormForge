@@ -5329,7 +5329,7 @@ struct UGCEditAddedS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table
     VT_ENTITY_INSTANCE_ID = 8,
     VT_GROUP_INSTANCE_ID = 10,
     VT_ENTITY_TYPE = 12,
-    VT_TABLE_ID = 14,
+    VT_ITEM_INFO = 14,
     VT_TIME_OFFSET = 16,
     VT_POSITION = 18,
     VT_ROTATION = 20,
@@ -5350,8 +5350,8 @@ struct UGCEditAddedS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table
   uint32_t entity_type() const {
     return GetField<uint32_t>(VT_ENTITY_TYPE, 0);
   }
-  uint32_t table_id() const {
-    return GetField<uint32_t>(VT_TABLE_ID, 0);
+  const SF::Flat::UGCItemInfo *item_info() const {
+    return GetStruct<const SF::Flat::UGCItemInfo *>(VT_ITEM_INFO);
   }
   uint32_t time_offset() const {
     return GetField<uint32_t>(VT_TIME_OFFSET, 0);
@@ -5372,7 +5372,7 @@ struct UGCEditAddedS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table
     else if constexpr (Index == 2) return entity_instance_id();
     else if constexpr (Index == 3) return group_instance_id();
     else if constexpr (Index == 4) return entity_type();
-    else if constexpr (Index == 5) return table_id();
+    else if constexpr (Index == 5) return item_info();
     else if constexpr (Index == 6) return time_offset();
     else if constexpr (Index == 7) return position();
     else if constexpr (Index == 8) return rotation();
@@ -5386,7 +5386,7 @@ struct UGCEditAddedS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table
            VerifyField<uint32_t>(verifier, VT_ENTITY_INSTANCE_ID, 4) &&
            VerifyField<uint32_t>(verifier, VT_GROUP_INSTANCE_ID, 4) &&
            VerifyField<uint32_t>(verifier, VT_ENTITY_TYPE, 4) &&
-           VerifyField<uint32_t>(verifier, VT_TABLE_ID, 4) &&
+           VerifyField<SF::Flat::UGCItemInfo>(verifier, VT_ITEM_INFO, 4) &&
            VerifyField<uint32_t>(verifier, VT_TIME_OFFSET, 4) &&
            VerifyField<SF::Flat::Vector4>(verifier, VT_POSITION, 4) &&
            VerifyField<SF::Flat::Quaternion>(verifier, VT_ROTATION, 4) &&
@@ -5414,8 +5414,8 @@ struct UGCEditAddedS2CEvtBuilder {
   void add_entity_type(uint32_t entity_type) {
     fbb_.AddElement<uint32_t>(UGCEditAddedS2CEvt::VT_ENTITY_TYPE, entity_type, 0);
   }
-  void add_table_id(uint32_t table_id) {
-    fbb_.AddElement<uint32_t>(UGCEditAddedS2CEvt::VT_TABLE_ID, table_id, 0);
+  void add_item_info(const SF::Flat::UGCItemInfo *item_info) {
+    fbb_.AddStruct(UGCEditAddedS2CEvt::VT_ITEM_INFO, item_info);
   }
   void add_time_offset(uint32_t time_offset) {
     fbb_.AddElement<uint32_t>(UGCEditAddedS2CEvt::VT_TIME_OFFSET, time_offset, 0);
@@ -5447,7 +5447,7 @@ inline ::flatbuffers::Offset<UGCEditAddedS2CEvt> CreateUGCEditAddedS2CEvt(
     uint32_t entity_instance_id = 0,
     uint32_t group_instance_id = 0,
     uint32_t entity_type = 0,
-    uint32_t table_id = 0,
+    const SF::Flat::UGCItemInfo *item_info = nullptr,
     uint32_t time_offset = 0,
     const SF::Flat::Vector4 *position = nullptr,
     const SF::Flat::Quaternion *rotation = nullptr,
@@ -5457,7 +5457,7 @@ inline ::flatbuffers::Offset<UGCEditAddedS2CEvt> CreateUGCEditAddedS2CEvt(
   builder_.add_rotation(rotation);
   builder_.add_position(position);
   builder_.add_time_offset(time_offset);
-  builder_.add_table_id(table_id);
+  builder_.add_item_info(item_info);
   builder_.add_entity_type(entity_type);
   builder_.add_group_instance_id(group_instance_id);
   builder_.add_entity_instance_id(entity_instance_id);
@@ -5478,7 +5478,7 @@ struct UGCEditAddedS2CEvt::Traits {
     "entity_instance_id",
     "group_instance_id",
     "entity_type",
-    "table_id",
+    "item_info",
     "time_offset",
     "position",
     "rotation",

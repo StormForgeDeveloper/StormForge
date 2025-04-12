@@ -172,7 +172,7 @@ namespace SF
 		// Cmd: UGC zone edit command
 		Result UGCEditClaimBackRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const Array<VariableTable>& InInvenChanges );
 		// S2C: UGC zone edited event
-		Result UGCEditAddedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const StringCrc32 &InEntityType, const uint32_t &InTableId, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale );
+		Result UGCEditAddedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const StringCrc32 &InEntityType, const SUGCItemInfo &InItemInfo, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale );
 		// S2C: UGC zone edited event
 		Result UGCEditRemovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID );
 		// S2C: UGC zone edited event

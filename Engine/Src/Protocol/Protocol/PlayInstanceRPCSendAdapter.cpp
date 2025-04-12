@@ -1373,7 +1373,7 @@ namespace SF
 		return hr;
 	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditClaimBackRes( const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const Array<VariableTable>& InInvenChanges )
 	// S2C: UGC zone edited event
-	Result PlayInstanceSvrRPCSendAdapter::UGCEditAddedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const StringCrc32 &InEntityType, const uint32_t &InTableId, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale )
+	Result PlayInstanceSvrRPCSendAdapter::UGCEditAddedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const StringCrc32 &InEntityType, const SUGCItemInfo &InItemInfo, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale )
 	{
  		Result hr;
 
@@ -1382,6 +1382,7 @@ namespace SF
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		auto PlayInstanceUIDOffset = SF::Flat::Helper::CreateGameInstanceUID(fbb, InPlayInstanceUID);
 		auto OperatorPlayerIDOffset = SF::Flat::Helper::CreatePlayerID(fbb, InOperatorPlayerID);
+		auto ItemInfoOffset = SF::Flat::Helper::CreateUGCItemInfo(fbb, InItemInfo);
 		auto PositionOffset = SF::Flat::Helper::CreateVector4(fbb, InPosition);
 		auto RotationOffset = SF::Flat::Helper::CreateQuaternion(fbb, InRotation);
 		auto ScaleOffset = SF::Flat::Helper::CreateVector4(fbb, InScale);
@@ -1391,7 +1392,7 @@ namespace SF
 		_builder.add_entity_instance_id(InEntityInstanceId);
 		_builder.add_group_instance_id(InGroupInstanceID);
 		_builder.add_entity_type(InEntityType);
-		_builder.add_table_id(InTableId);
+		_builder.add_item_info(ItemInfoOffset);
 		_builder.add_time_offset(InTimeOffset);
 		_builder.add_position(PositionOffset);
 		_builder.add_rotation(RotationOffset);
@@ -1403,7 +1404,7 @@ namespace SF
 
 
 		return hr;
-	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditAddedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const StringCrc32 &InEntityType, const uint32_t &InTableId, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale )
+	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditAddedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const StringCrc32 &InEntityType, const SUGCItemInfo &InItemInfo, const uint32_t &InTimeOffset, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale )
 	// S2C: UGC zone edited event
 	Result PlayInstanceSvrRPCSendAdapter::UGCEditRemovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID )
 	{

@@ -1130,13 +1130,14 @@ namespace SF.Net
 
 
 		// S2C: UGC zone edited event
-		public Result  UGCEditAddedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, System.UInt32 InGroupInstanceID, System.UInt32 InEntityType, System.UInt32 InTableId, System.UInt32 InTimeOffset, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale )
+		public Result  UGCEditAddedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, System.UInt32 InGroupInstanceID, System.UInt32 InEntityType, SFUGCItemInfo InItemInfo, System.UInt32 InTimeOffset, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var PlayInstanceUIDOffset = builder.CreateGameInstanceUID(InPlayInstanceUID);
 			var OperatorPlayerIDOffset = builder.CreatePlayerID(InOperatorPlayerID);
+			var ItemInfoOffset = builder.CreateUGCItemInfo(InItemInfo);
 			var PositionOffset = builder.CreateVector4(InPosition);
 			var RotationOffset = builder.CreateQuaternion(InRotation);
 			var ScaleOffset = builder.CreateVector4(InScale);
@@ -1146,7 +1147,7 @@ namespace SF.Net
 			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddEntityInstanceId(builder, InEntityInstanceId);
 			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddGroupInstanceId(builder, InGroupInstanceID);
 			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddEntityType(builder, InEntityType);
-			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddTableId(builder, InTableId);
+			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddItemInfo(builder, ItemInfoOffset);
 			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddTimeOffset(builder, InTimeOffset);
 			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddPosition(builder, PositionOffset);
 			SF.Flat.PlayInstance.UGCEditAddedS2CEvt.AddRotation(builder, RotationOffset);
@@ -1154,7 +1155,7 @@ namespace SF.Net
 			var packetOffset = SF.Flat.PlayInstance.UGCEditAddedS2CEvt.EndUGCEditAddedS2CEvt(builder);
 			result = SendMessage(MessageIDPlayInstance.UGCEditAddedS2CEvt, builder, packetOffset.Value);
 			return result;
-		} // public Result  UGCEditAddedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, System.UInt32 InGroupInstanceID, System.UInt32 InEntityType, System.UInt32 InTableId, System.UInt32 InTimeOffset, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale )
+		} // public Result  UGCEditAddedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, System.UInt32 InGroupInstanceID, System.UInt32 InEntityType, SFUGCItemInfo InItemInfo, System.UInt32 InTimeOffset, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale )
 
 
 		// S2C: UGC zone edited event

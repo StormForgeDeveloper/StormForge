@@ -392,6 +392,11 @@ namespace SF {
                 return gameInfo;
             }
 
+            inline FlatValueHolder<SF::Flat::UGCItemInfo> CreateUGCItemInfo(FlatBufferBuilder& fbb, const SF::SUGCItemInfo& value)
+            {
+                return FlatValueHolder<SF::Flat::UGCItemInfo>(SF::Flat::UGCItemInfo(value.ItemTableId, value.UTCExpire, value.EffectIds[0], value.EffectIds[1]));
+            }
+
             inline Offset<Vector<Offset<SF::Flat::UGCGameInfo>>> CreateUGCGameInfoVector(FlatBufferBuilder& fbb, const Array<SF::UGCGameInfo>& value)
             {
                 std::vector<Offset<SF::Flat::UGCGameInfo>> elems;

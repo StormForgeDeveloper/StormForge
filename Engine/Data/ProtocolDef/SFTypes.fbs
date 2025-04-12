@@ -90,6 +90,14 @@ table UGCGameInfo
 	name:string(required);
 }
 
+struct UGCItemInfo
+{
+	table_id:uint32;
+	utc_expire:uint32;
+	effect0:uint32;
+	effect1:uint32;
+}
+
 struct EntityUID
 {
 	entity_id:uint32;

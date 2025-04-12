@@ -424,6 +424,14 @@ namespace SF
         public string Name;
     };
 
+    public struct UGCItemInfo
+    {
+        public uint TableId;
+        public uint UTCExpire;
+        public uint Effect0;
+        public uint Effect1;
+    };
+
 
     // Manages pinned byte buffer
     public class PinnedByteBuffer : IDisposable

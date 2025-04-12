@@ -392,7 +392,7 @@
             <Params TypeName="uint32" Name="EntityInstanceId" Desc="Entity's Instance Id to delete"/>
             <Params TypeName="uint32" Name="GroupInstanceID" Desc="Group instance Id such as Aquarium instance Id"/>
             <Params TypeName="StringCrc32" Name="EntityType" Desc="EntityType"/>
-            <Params TypeName="uint32" Name="TableId" Desc="Data table Id"/>
+            <Params TypeName="UGCItemInfo" Name="ItemInfo" Desc="UGC item info"/>
             <Params TypeName="uint32" Name="TimeOffset" Desc="TimeOffset for animation sync"/>
             <Params TypeName="Vector4" Name="Position" Desc="Position"/>
             <Params TypeName="Quaternion" Name="Rotation" Desc="Rotation quaternion value"/>

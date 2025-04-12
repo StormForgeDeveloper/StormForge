@@ -404,7 +404,7 @@ table UGCEditAddedS2CEvt
 	entity_instance_id:uint32;
 	group_instance_id:uint32;
 	entity_type:uint32;
-	table_id:uint32;
+	item_info:UGCItemInfo;
 	time_offset:uint32;
 	position:Vector4;
 	rotation:Quaternion;

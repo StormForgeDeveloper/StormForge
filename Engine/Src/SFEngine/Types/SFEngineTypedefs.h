@@ -407,6 +407,22 @@ namespace SF {
 		bool operator == (const TotalRankingPlayerInformation& src) const;
 	};
 
+    // UGC item info
+    struct SUGCItemInfo
+    {
+        static constexpr int MaximumEffect = 2;
+
+        uint32_t ItemTableId{};
+        uint32_t UTCExpire{};            // UTC expire time stamp(sec)
+        uint32_t EffectIds[MaximumEffect]{};
+
+        bool operator == (const SUGCItemInfo& op) const {
+            return ItemTableId == op.ItemTableId
+                && UTCExpire == op.UTCExpire
+                && EffectIds[0] == op.EffectIds[0]
+                && EffectIds[1] == op.EffectIds[1];
+        }
+    };
 
 
 	////////////////////////////////////////////////////////////////////////////

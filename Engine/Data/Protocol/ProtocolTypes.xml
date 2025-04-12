@@ -8,4 +8,5 @@
     <DataType TypeName="EAccountRole" IsEnum="false" CppTypeName="EAccountRole" CSharpTypeName="EAccountRole" IsCSharpStruct="false" IsCSharpArray="false" Desc="Account role"/>
     <DataType TypeName="Quaternion" IsEnum="false" CppTypeName="Quaternion" CSharpTypeName="SFQuaternion" IsCSharpStruct="true" IsCSharpArray="false" Desc="Quaternion struct"/>
     <DataType TypeName="UGCGameInfo" IsEnum="false" CppTypeName="UGCGameInfo" CSharpTypeName="UGCGameInfo" IsCSharpStruct="true" IsCSharpArray="false" Desc="UGCGameInfo struct"/>
+    <DataType TypeName="UGCItemInfo" IsEnum="false" CppTypeName="SUGCItemInfo" CSharpTypeName="SFUGCItemInfo" IsCSharpStruct="true" IsCSharpArray="false" Desc="UGCItemInfo struct"/>
 </ProtocolTypes>

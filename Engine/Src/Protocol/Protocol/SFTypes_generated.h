@@ -46,6 +46,8 @@ struct GenericErrorBuilder;
 struct UGCGameInfo;
 struct UGCGameInfoBuilder;
 
+struct UGCItemInfo;
+
 struct EntityUID;
 
 struct PlayerPlatformID;
@@ -996,6 +998,65 @@ struct CharacterID::Traits {
   static constexpr std::array<const char *, fields_number> field_names = {
     "low",
     "high"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
+FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) UGCItemInfo FLATBUFFERS_FINAL_CLASS {
+ private:
+  uint32_t table_id_;
+  uint32_t utc_expire_;
+  uint32_t effect0_;
+  uint32_t effect1_;
+
+ public:
+  struct Traits;
+  UGCItemInfo()
+      : table_id_(0),
+        utc_expire_(0),
+        effect0_(0),
+        effect1_(0) {
+  }
+  UGCItemInfo(uint32_t _table_id, uint32_t _utc_expire, uint32_t _effect0, uint32_t _effect1)
+      : table_id_(::flatbuffers::EndianScalar(_table_id)),
+        utc_expire_(::flatbuffers::EndianScalar(_utc_expire)),
+        effect0_(::flatbuffers::EndianScalar(_effect0)),
+        effect1_(::flatbuffers::EndianScalar(_effect1)) {
+  }
+  uint32_t table_id() const {
+    return ::flatbuffers::EndianScalar(table_id_);
+  }
+  uint32_t utc_expire() const {
+    return ::flatbuffers::EndianScalar(utc_expire_);
+  }
+  uint32_t effect0() const {
+    return ::flatbuffers::EndianScalar(effect0_);
+  }
+  uint32_t effect1() const {
+    return ::flatbuffers::EndianScalar(effect1_);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return table_id();
+    else if constexpr (Index == 1) return utc_expire();
+    else if constexpr (Index == 2) return effect0();
+    else if constexpr (Index == 3) return effect1();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
+};
+FLATBUFFERS_STRUCT_END(UGCItemInfo, 16);
+
+struct UGCItemInfo::Traits {
+  using type = UGCItemInfo;
+  static constexpr auto name = "UGCItemInfo";
+  static constexpr auto fully_qualified_name = "SF.Flat.UGCItemInfo";
+  static constexpr size_t fields_number = 4;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "table_id",
+    "utc_expire",
+    "effect0",
+    "effect1"
   };
   template<size_t Index>
   using FieldType = decltype(std::declval<type>().get_field<Index>());
