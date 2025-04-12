@@ -424,7 +424,7 @@ namespace SF
         public string Name;
     };
 
-    public struct UGCItemInfo
+    public struct SFUGCItemInfo
     {
         public uint TableId;
         public uint UTCExpire;
