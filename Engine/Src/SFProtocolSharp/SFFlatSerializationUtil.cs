@@ -838,6 +838,28 @@ namespace SF
             return builder.EndVector();
         }
 
+        public struct FlatValueUGCItemInfo
+        {
+            public Google.FlatBuffers.FlatBufferBuilder Builder;
+            public SF.SFUGCItemInfo Value;
+
+            public FlatValueUGCItemInfo(Google.FlatBuffers.FlatBufferBuilder builder, SF.SFUGCItemInfo value)
+            {
+                Builder = builder;
+                Value = value;
+            }
+
+            public static implicit operator Offset<SF.Flat.UGCItemInfo>(FlatValueUGCItemInfo value)
+            {
+                return SF.Flat.UGCItemInfo.CreateUGCItemInfo(value.Builder, value.Value.TableId, value.Value.UTCExpire, value.Value.Effect0, value.Value.Effect1);
+            }
+        }
+
+        public static FlatValueUGCItemInfo CreateUGCItemInfo(this Google.FlatBuffers.FlatBufferBuilder builder, SF.SFUGCItemInfo data)
+        {
+            return new FlatValueUGCItemInfo(builder, data);
+        }
+
 
         public static SF.Flat.GameStateID CreateGameStateID(this Google.FlatBuffers.FlatBufferBuilder builder, SF.GameStateID data)
         {
