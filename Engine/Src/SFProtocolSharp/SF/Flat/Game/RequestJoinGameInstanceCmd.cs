@@ -9,28 +9,28 @@ using global::System;
 using global::System.Collections.Generic;
 using global::Google.FlatBuffers;
 
-public struct LeaveGameInstanceCmd : IFlatbufferObject
+public struct RequestJoinGameInstanceCmd : IFlatbufferObject
 {
   private Table __p;
   public ByteBuffer ByteBuffer { get { return __p.bb; } }
   public static void ValidateVersion() { FlatBufferConstants.FLATBUFFERS_24_3_7(); }
-  public static LeaveGameInstanceCmd GetRootAsLeaveGameInstanceCmd(ByteBuffer _bb) { return GetRootAsLeaveGameInstanceCmd(_bb, new LeaveGameInstanceCmd()); }
-  public static LeaveGameInstanceCmd GetRootAsLeaveGameInstanceCmd(ByteBuffer _bb, LeaveGameInstanceCmd obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
+  public static RequestJoinGameInstanceCmd GetRootAsRequestJoinGameInstanceCmd(ByteBuffer _bb) { return GetRootAsRequestJoinGameInstanceCmd(_bb, new RequestJoinGameInstanceCmd()); }
+  public static RequestJoinGameInstanceCmd GetRootAsRequestJoinGameInstanceCmd(ByteBuffer _bb, RequestJoinGameInstanceCmd obj) { return (obj.__assign(_bb.GetInt(_bb.Position) + _bb.Position, _bb)); }
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
-  public LeaveGameInstanceCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
+  public RequestJoinGameInstanceCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public SF.Flat.GameInstanceUID? InsUid { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.GameInstanceUID?)(new SF.Flat.GameInstanceUID()).__assign(o + __p.bb_pos, __p.bb) : null; } }
 
-  public static void StartLeaveGameInstanceCmd(FlatBufferBuilder builder) { builder.StartTable(1); }
+  public static void StartRequestJoinGameInstanceCmd(FlatBufferBuilder builder) { builder.StartTable(1); }
   public static void AddInsUid(FlatBufferBuilder builder, Offset<SF.Flat.GameInstanceUID> insUidOffset) { builder.AddStruct(0, insUidOffset.Value, 0); }
-  public static Offset<SF.Flat.Game.LeaveGameInstanceCmd> EndLeaveGameInstanceCmd(FlatBufferBuilder builder) {
+  public static Offset<SF.Flat.Game.RequestJoinGameInstanceCmd> EndRequestJoinGameInstanceCmd(FlatBufferBuilder builder) {
     int o = builder.EndTable();
-    return new Offset<SF.Flat.Game.LeaveGameInstanceCmd>(o);
+    return new Offset<SF.Flat.Game.RequestJoinGameInstanceCmd>(o);
   }
 }
 
 
-static public class LeaveGameInstanceCmdVerify
+static public class RequestJoinGameInstanceCmdVerify
 {
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
