@@ -106,6 +106,7 @@ namespace SF
 		operator avro_schema_t() { return m_Handle; }
 		operator avro_schema_t() const { return m_Handle; }
         const String& GetSchemaString() const;
+        const String& ToString() const { return GetSchemaString(); }
 
         // Get Array item schema if it is array
         avro_schema_t GetArrayItemsSchema() const;
