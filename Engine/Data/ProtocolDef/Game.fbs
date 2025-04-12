@@ -394,26 +394,26 @@ table PartyChatMessageS2CEvt
 	chat_message:string;
 } // table PartyChatMessageS2CEvt
 
-table JoinGameInstanceCmd
+table RequestJoinGameInstanceCmd
 {
  	ins_uid:GameInstanceUID;
-} // table JoinGameInstanceCmd
+} // table RequestJoinGameInstanceCmd
 
-table JoinGameInstanceRes
+table RequestJoinGameInstanceRes
 {
  	ins_uid:GameInstanceUID;
 	zone_custom_data:[ubyte];
 	server_public_address:string;
-} // table JoinGameInstanceRes
+} // table RequestJoinGameInstanceRes
 
-table LeaveGameInstanceCmd
+table RequestLeaveGameInstanceCmd
 {
  	ins_uid:GameInstanceUID;
-} // table LeaveGameInstanceCmd
+} // table RequestLeaveGameInstanceCmd
 
-table LeaveGameInstanceRes
+table RequestLeaveGameInstanceRes
 {
- } // table LeaveGameInstanceRes
+ } // table RequestLeaveGameInstanceRes
 
 table SearchGameInstanceCmd
 {

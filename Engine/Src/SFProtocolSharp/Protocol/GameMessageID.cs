@@ -168,12 +168,12 @@ namespace SF.Net
 		// S2C: Party Chatting message event
 		public static readonly MessageID PartyChatMessageS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.Game, 42);
 		// Cmd: Join to a game instance
-		public static readonly MessageID JoinGameInstanceCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 43);
-		public static readonly MessageID JoinGameInstanceRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 43);
+		public static readonly MessageID RequestJoinGameInstanceCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 43);
+		public static readonly MessageID RequestJoinGameInstanceRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 43);
 
 		// Cmd: Leave game instance
-		public static readonly MessageID LeaveGameInstanceCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 44);
-		public static readonly MessageID LeaveGameInstanceRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 44);
+		public static readonly MessageID RequestLeaveGameInstanceCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 44);
+		public static readonly MessageID RequestLeaveGameInstanceRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 44);
 
 		// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
 		public static readonly MessageID SearchGameInstanceCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 45);

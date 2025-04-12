@@ -105,10 +105,10 @@ namespace SF
 		static Result PartyChatMessageCmd(const char* prefix, const MessageHeader* messageHeader);
 		static Result PartyChatMessageRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result PartyChatMessageS2CEvt(const char* prefix, const MessageHeader* messageHeader);
-		static Result JoinGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader);
-		static Result JoinGameInstanceRes(const char* prefix, const MessageHeader* messageHeader);
-		static Result LeaveGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader);
-		static Result LeaveGameInstanceRes(const char* prefix, const MessageHeader* messageHeader);
+		static Result RequestJoinGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader);
+		static Result RequestJoinGameInstanceRes(const char* prefix, const MessageHeader* messageHeader);
+		static Result RequestLeaveGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader);
+		static Result RequestLeaveGameInstanceRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result SearchGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader);
 		static Result SearchGameInstanceRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result RequestGameMatchCmd(const char* prefix, const MessageHeader* messageHeader);

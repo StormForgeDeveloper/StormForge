@@ -802,12 +802,12 @@ Party Chatting message event
 		- OutInChatMessage: String type. Message text
 
 
-## JoinGameInstance Request
+## RequestJoinGameInstance Request
 Join to a game instance
 
 1. Command interface
 
-        Result JoinGameInstanceCmd(const TransactionID &InTransactionID, const GameInstanceUID &InInsUID)
+        Result RequestJoinGameInstanceCmd(const TransactionID &InTransactionID, const GameInstanceUID &InInsUID)
 
 		- TransactionID: type:TransactionID, 
 
@@ -815,7 +815,7 @@ Join to a game instance
 
 2. Result interface
 
-C++: Cast message to JoinGameInstanceRes to access values
+C++: Cast message to RequestJoinGameInstanceRes to access values
 
 
 		- TransactionID: type:TransactionID, 
@@ -825,12 +825,12 @@ C++: Cast message to JoinGameInstanceRes to access values
 		- ServerPublicAddress: type:String, Game instance address
 
 
-## LeaveGameInstance Request
+## RequestLeaveGameInstance Request
 Leave game instance
 
 1. Command interface
 
-        Result LeaveGameInstanceCmd(const TransactionID &InTransactionID, const GameInstanceUID &InInsUID)
+        Result RequestLeaveGameInstanceCmd(const TransactionID &InTransactionID, const GameInstanceUID &InInsUID)
 
 		- TransactionID: type:TransactionID, 
 
@@ -838,7 +838,7 @@ Leave game instance
 
 2. Result interface
 
-C++: Cast message to LeaveGameInstanceRes to access values
+C++: Cast message to RequestLeaveGameInstanceRes to access values
 
 
 		- TransactionID: type:TransactionID, 

@@ -105,10 +105,10 @@ namespace SF
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_PartyChatMessageCmd,&PartyChatMessageCmd));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_PartyChatMessageRes,&PartyChatMessageRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_PartyChatMessageS2CEvt,&PartyChatMessageS2CEvt));
-		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_JoinGameInstanceCmd,&JoinGameInstanceCmd));
-		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_JoinGameInstanceRes,&JoinGameInstanceRes));
-		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_LeaveGameInstanceCmd,&LeaveGameInstanceCmd));
-		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_LeaveGameInstanceRes,&LeaveGameInstanceRes));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_RequestJoinGameInstanceCmd,&RequestJoinGameInstanceCmd));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_RequestJoinGameInstanceRes,&RequestJoinGameInstanceRes));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_RequestLeaveGameInstanceCmd,&RequestLeaveGameInstanceCmd));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_RequestLeaveGameInstanceRes,&RequestLeaveGameInstanceRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_SearchGameInstanceCmd,&SearchGameInstanceCmd));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_SearchGameInstanceRes,&SearchGameInstanceRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_RequestGameMatchCmd,&RequestGameMatchCmd));
@@ -1273,66 +1273,66 @@ namespace SF
 
 		return hr;
 	}; // Result GameMessageLog::PartyChatMessageS2CEvt(const char* prefix, const MessageHeader* messageHeader)
-	Result GameMessageLog::JoinGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
+	Result GameMessageLog::RequestJoinGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
 	{
  		Result hr;
 
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		static const std::string tableName = "SF.Flat.Game.JoinGameInstanceCmd";
+		static const std::string tableName = "SF.Flat.Game.RequestJoinGameInstanceCmd";
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug1, "{0} Game:JoinGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:RequestJoinGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
-	}; // Result GameMessageLog::JoinGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
-	Result GameMessageLog::JoinGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
+	}; // Result GameMessageLog::RequestJoinGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
+	Result GameMessageLog::RequestJoinGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
 	{
  		Result hr;
 
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		static const std::string tableName = "SF.Flat.Game.JoinGameInstanceRes";
+		static const std::string tableName = "SF.Flat.Game.RequestJoinGameInstanceRes";
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug1, "{0} Game:JoinGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:RequestJoinGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
-	}; // Result GameMessageLog::JoinGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
-	Result GameMessageLog::LeaveGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
+	}; // Result GameMessageLog::RequestJoinGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
+	Result GameMessageLog::RequestLeaveGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
 	{
  		Result hr;
 
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		static const std::string tableName = "SF.Flat.Game.LeaveGameInstanceCmd";
+		static const std::string tableName = "SF.Flat.Game.RequestLeaveGameInstanceCmd";
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug1, "{0} Game:LeaveGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:RequestLeaveGameInstanceCmd: tid:{1}, sz:{2}: {3}", prefix, messageHeader->TransactionId, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
-	}; // Result GameMessageLog::LeaveGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
-	Result GameMessageLog::LeaveGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
+	}; // Result GameMessageLog::RequestLeaveGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
+	Result GameMessageLog::RequestLeaveGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
 	{
  		Result hr;
 
 		protocolCheckPtr(messageHeader);
 
 		std::string packetString;
-		static const std::string tableName = "SF.Flat.Game.LeaveGameInstanceRes";
+		static const std::string tableName = "SF.Flat.Game.RequestLeaveGameInstanceRes";
 		if (stm_Parser.LookupStruct(tableName)) {
 		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
 		}
-		SFLog(Net, Debug1, "{0} Game:LeaveGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+		SFLog(Net, Debug1, "{0} Game:RequestLeaveGameInstanceRes: tid:{1}, res:{2} sz:{3}: {4}", prefix, messageHeader->TransactionId, messageHeader->GetTransactionResult(), messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
 
 		return hr;
-	}; // Result GameMessageLog::LeaveGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
+	}; // Result GameMessageLog::RequestLeaveGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
 	Result GameMessageLog::SearchGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader)
 	{
  		Result hr;

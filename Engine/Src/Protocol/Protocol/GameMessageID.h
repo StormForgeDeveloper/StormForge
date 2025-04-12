@@ -168,12 +168,12 @@ namespace SF
 			// S2C: Party Chatting message event
 			constexpr MessageID MID_PartyChatMessageS2CEvt(EMessageType::Event,1,MessageProtocol::Game,42);
 			// Cmd: Join to a game instance
-			constexpr MessageID MID_JoinGameInstanceCmd(EMessageType::Command,1,MessageProtocol::Game,43);
-			constexpr MessageID MID_JoinGameInstanceRes(EMessageType::Result,1,MessageProtocol::Game,43);
+			constexpr MessageID MID_RequestJoinGameInstanceCmd(EMessageType::Command,1,MessageProtocol::Game,43);
+			constexpr MessageID MID_RequestJoinGameInstanceRes(EMessageType::Result,1,MessageProtocol::Game,43);
 
 			// Cmd: Leave game instance
-			constexpr MessageID MID_LeaveGameInstanceCmd(EMessageType::Command,1,MessageProtocol::Game,44);
-			constexpr MessageID MID_LeaveGameInstanceRes(EMessageType::Result,1,MessageProtocol::Game,44);
+			constexpr MessageID MID_RequestLeaveGameInstanceCmd(EMessageType::Command,1,MessageProtocol::Game,44);
+			constexpr MessageID MID_RequestLeaveGameInstanceRes(EMessageType::Result,1,MessageProtocol::Game,44);
 
 			// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
 			constexpr MessageID MID_SearchGameInstanceCmd(EMessageType::Command,1,MessageProtocol::Game,45);

@@ -473,32 +473,32 @@ namespace SF.Net
 		} // public Result  PartyChatMessageCmd( SF.TransactionID InTransactionID, System.String InChatMessage, Action<SFMessage>? callback = null )
 
 		// Cmd: Join to a game instance
-		public Result  JoinGameInstanceCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InInsUID, Action<SFMessage>? callback = null )
+		public Result  RequestJoinGameInstanceCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InInsUID, Action<SFMessage>? callback = null )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var InsUIDOffset = builder.CreateGameInstanceUID(InInsUID);
-			SF.Flat.Game.JoinGameInstanceCmd.StartJoinGameInstanceCmd(builder);
-			SF.Flat.Game.JoinGameInstanceCmd.AddInsUid(builder, InsUIDOffset);
-			var packetOffset = SF.Flat.Game.JoinGameInstanceCmd.EndJoinGameInstanceCmd(builder);
-			result = SendMessage(MessageIDGame.JoinGameInstanceCmd, builder, packetOffset.Value, transactionId:InTransactionID , callback:callback);
+			SF.Flat.Game.RequestJoinGameInstanceCmd.StartRequestJoinGameInstanceCmd(builder);
+			SF.Flat.Game.RequestJoinGameInstanceCmd.AddInsUid(builder, InsUIDOffset);
+			var packetOffset = SF.Flat.Game.RequestJoinGameInstanceCmd.EndRequestJoinGameInstanceCmd(builder);
+			result = SendMessage(MessageIDGame.RequestJoinGameInstanceCmd, builder, packetOffset.Value, transactionId:InTransactionID , callback:callback);
 			return result;
-		} // public Result  JoinGameInstanceCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InInsUID, Action<SFMessage>? callback = null )
+		} // public Result  RequestJoinGameInstanceCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InInsUID, Action<SFMessage>? callback = null )
 
 		// Cmd: Leave game instance
-		public Result  LeaveGameInstanceCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InInsUID, Action<SFMessage>? callback = null )
+		public Result  RequestLeaveGameInstanceCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InInsUID, Action<SFMessage>? callback = null )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
 			var InsUIDOffset = builder.CreateGameInstanceUID(InInsUID);
-			SF.Flat.Game.LeaveGameInstanceCmd.StartLeaveGameInstanceCmd(builder);
-			SF.Flat.Game.LeaveGameInstanceCmd.AddInsUid(builder, InsUIDOffset);
-			var packetOffset = SF.Flat.Game.LeaveGameInstanceCmd.EndLeaveGameInstanceCmd(builder);
-			result = SendMessage(MessageIDGame.LeaveGameInstanceCmd, builder, packetOffset.Value, transactionId:InTransactionID , callback:callback);
+			SF.Flat.Game.RequestLeaveGameInstanceCmd.StartRequestLeaveGameInstanceCmd(builder);
+			SF.Flat.Game.RequestLeaveGameInstanceCmd.AddInsUid(builder, InsUIDOffset);
+			var packetOffset = SF.Flat.Game.RequestLeaveGameInstanceCmd.EndRequestLeaveGameInstanceCmd(builder);
+			result = SendMessage(MessageIDGame.RequestLeaveGameInstanceCmd, builder, packetOffset.Value, transactionId:InTransactionID , callback:callback);
 			return result;
-		} // public Result  LeaveGameInstanceCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InInsUID, Action<SFMessage>? callback = null )
+		} // public Result  RequestLeaveGameInstanceCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InInsUID, Action<SFMessage>? callback = null )
 
 		// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
 		public Result  SearchGameInstanceCmd( SF.TransactionID InTransactionID, System.String InSearchKeyword, Action<SFMessage>? callback = null )
@@ -1531,7 +1531,7 @@ namespace SF.Net
 
 
 		// Cmd: Join to a game instance
-		public Result  JoinGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.GameInstanceUID InInsUID, System.Byte[] InZoneCustomData, System.String InServerPublicAddress )
+		public Result  RequestJoinGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.GameInstanceUID InInsUID, System.Byte[] InZoneCustomData, System.String InServerPublicAddress )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
@@ -1539,27 +1539,27 @@ namespace SF.Net
 			var InsUIDOffset = builder.CreateGameInstanceUID(InInsUID);
 			var ZoneCustomDataOffset = builder.CreatebyteVector(InZoneCustomData);
 			var ServerPublicAddressOffset = builder.CreateString(InServerPublicAddress);
-			SF.Flat.Game.JoinGameInstanceRes.StartJoinGameInstanceRes(builder);
-			SF.Flat.Game.JoinGameInstanceRes.AddInsUid(builder, InsUIDOffset);
-			SF.Flat.Game.JoinGameInstanceRes.AddZoneCustomData(builder, ZoneCustomDataOffset);
-			SF.Flat.Game.JoinGameInstanceRes.AddServerPublicAddress(builder, ServerPublicAddressOffset);
-			var packetOffset = SF.Flat.Game.JoinGameInstanceRes.EndJoinGameInstanceRes(builder);
-			result = SendMessage(MessageIDGame.JoinGameInstanceRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
+			SF.Flat.Game.RequestJoinGameInstanceRes.StartRequestJoinGameInstanceRes(builder);
+			SF.Flat.Game.RequestJoinGameInstanceRes.AddInsUid(builder, InsUIDOffset);
+			SF.Flat.Game.RequestJoinGameInstanceRes.AddZoneCustomData(builder, ZoneCustomDataOffset);
+			SF.Flat.Game.RequestJoinGameInstanceRes.AddServerPublicAddress(builder, ServerPublicAddressOffset);
+			var packetOffset = SF.Flat.Game.RequestJoinGameInstanceRes.EndRequestJoinGameInstanceRes(builder);
+			result = SendMessage(MessageIDGame.RequestJoinGameInstanceRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
 			return result;
-		} // public Result  JoinGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.GameInstanceUID InInsUID, System.Byte[] InZoneCustomData, System.String InServerPublicAddress )
+		} // public Result  RequestJoinGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.GameInstanceUID InInsUID, System.Byte[] InZoneCustomData, System.String InServerPublicAddress )
 
 
 		// Cmd: Leave game instance
-		public Result  LeaveGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult )
+		public Result  RequestLeaveGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
-			SF.Flat.Game.LeaveGameInstanceRes.StartLeaveGameInstanceRes(builder);
-			var packetOffset = SF.Flat.Game.LeaveGameInstanceRes.EndLeaveGameInstanceRes(builder);
-			result = SendMessage(MessageIDGame.LeaveGameInstanceRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
+			SF.Flat.Game.RequestLeaveGameInstanceRes.StartRequestLeaveGameInstanceRes(builder);
+			var packetOffset = SF.Flat.Game.RequestLeaveGameInstanceRes.EndRequestLeaveGameInstanceRes(builder);
+			result = SendMessage(MessageIDGame.RequestLeaveGameInstanceRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
 			return result;
-		} // public Result  LeaveGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult )
+		} // public Result  RequestLeaveGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult )
 
 
 		// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   

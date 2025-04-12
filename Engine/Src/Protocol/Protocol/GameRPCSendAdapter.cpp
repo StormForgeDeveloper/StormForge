@@ -616,7 +616,7 @@ namespace SF
 		return hr;
 	}; // Result GameRPCSendAdapter::PartyChatMessageCmd( const TransactionID &InTransactionID, const char* InChatMessage )
 	// Cmd: Join to a game instance
-	Result GameRPCSendAdapter::JoinGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID )
+	Result GameRPCSendAdapter::RequestJoinGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID )
 	{
  		Result hr;
 
@@ -624,18 +624,18 @@ namespace SF
 
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		auto InsUIDOffset = SF::Flat::Helper::CreateGameInstanceUID(fbb, InInsUID);
-		SF::Flat::Game::JoinGameInstanceCmdBuilder _builder(fbb);
+		SF::Flat::Game::RequestJoinGameInstanceCmdBuilder _builder(fbb);
 		_builder.add_ins_uid(InsUIDOffset);
-		flatbuffers::Offset<SF::Flat::Game::JoinGameInstanceCmd> packetOffset = _builder.Finish();
+		flatbuffers::Offset<SF::Flat::Game::RequestJoinGameInstanceCmd> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
 
-		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_JoinGameInstanceCmd, fbb));
+		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_RequestJoinGameInstanceCmd, fbb));
 
 
 		return hr;
-	}; // Result GameRPCSendAdapter::JoinGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID )
+	}; // Result GameRPCSendAdapter::RequestJoinGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID )
 	// Cmd: Leave game instance
-	Result GameRPCSendAdapter::LeaveGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID )
+	Result GameRPCSendAdapter::RequestLeaveGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID )
 	{
  		Result hr;
 
@@ -643,16 +643,16 @@ namespace SF
 
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
 		auto InsUIDOffset = SF::Flat::Helper::CreateGameInstanceUID(fbb, InInsUID);
-		SF::Flat::Game::LeaveGameInstanceCmdBuilder _builder(fbb);
+		SF::Flat::Game::RequestLeaveGameInstanceCmdBuilder _builder(fbb);
 		_builder.add_ins_uid(InsUIDOffset);
-		flatbuffers::Offset<SF::Flat::Game::LeaveGameInstanceCmd> packetOffset = _builder.Finish();
+		flatbuffers::Offset<SF::Flat::Game::RequestLeaveGameInstanceCmd> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
 
-		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_LeaveGameInstanceCmd, fbb));
+		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Game::MID_RequestLeaveGameInstanceCmd, fbb));
 
 
 		return hr;
-	}; // Result GameRPCSendAdapter::LeaveGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID )
+	}; // Result GameRPCSendAdapter::RequestLeaveGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID )
 	// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
 	Result GameRPCSendAdapter::SearchGameInstanceCmd( const TransactionID &InTransactionID, const char* InSearchKeyword )
 	{
@@ -1966,7 +1966,7 @@ namespace SF
 		return hr;
 	}; // Result GameSvrRPCSendAdapter::PartyChatMessageS2CEvt( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
 	// Cmd: Join to a game instance
-	Result GameSvrRPCSendAdapter::JoinGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InInsUID, const Array<uint8_t>& InZoneCustomData, const char* InServerPublicAddress )
+	Result GameSvrRPCSendAdapter::RequestJoinGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InInsUID, const Array<uint8_t>& InZoneCustomData, const char* InServerPublicAddress )
 	{
  		Result hr;
 
@@ -1976,35 +1976,35 @@ namespace SF
 		auto InsUIDOffset = SF::Flat::Helper::CreateGameInstanceUID(fbb, InInsUID);
 		auto ZoneCustomDataOffset = SF::Flat::Helper::CreatebyteVector(fbb, InZoneCustomData);
 		auto ServerPublicAddressOffset = SF::Flat::Helper::CreateString(fbb, InServerPublicAddress);
-		SF::Flat::Game::JoinGameInstanceResBuilder _builder(fbb);
+		SF::Flat::Game::RequestJoinGameInstanceResBuilder _builder(fbb);
 		_builder.add_ins_uid(InsUIDOffset);
 		_builder.add_zone_custom_data(ZoneCustomDataOffset);
 		_builder.add_server_public_address(ServerPublicAddressOffset);
-		flatbuffers::Offset<SF::Flat::Game::JoinGameInstanceRes> packetOffset = _builder.Finish();
+		flatbuffers::Offset<SF::Flat::Game::RequestJoinGameInstanceRes> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
 
-		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_JoinGameInstanceRes, fbb));
+		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_RequestJoinGameInstanceRes, fbb));
 
 
 		return hr;
-	}; // Result GameSvrRPCSendAdapter::JoinGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InInsUID, const Array<uint8_t>& InZoneCustomData, const char* InServerPublicAddress )
+	}; // Result GameSvrRPCSendAdapter::RequestJoinGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InInsUID, const Array<uint8_t>& InZoneCustomData, const char* InServerPublicAddress )
 	// Cmd: Leave game instance
-	Result GameSvrRPCSendAdapter::LeaveGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult )
+	Result GameSvrRPCSendAdapter::RequestLeaveGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult )
 	{
  		Result hr;
 
 		protocolCheckPtr(m_Endpoint);
 
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
-		SF::Flat::Game::LeaveGameInstanceResBuilder _builder(fbb);
-		flatbuffers::Offset<SF::Flat::Game::LeaveGameInstanceRes> packetOffset = _builder.Finish();
+		SF::Flat::Game::RequestLeaveGameInstanceResBuilder _builder(fbb);
+		flatbuffers::Offset<SF::Flat::Game::RequestLeaveGameInstanceRes> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
 
-		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_LeaveGameInstanceRes, fbb));
+		protocolCheck(Send(InTransactionID, InResult, Message::Game::MID_RequestLeaveGameInstanceRes, fbb));
 
 
 		return hr;
-	}; // Result GameSvrRPCSendAdapter::LeaveGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult )
+	}; // Result GameSvrRPCSendAdapter::RequestLeaveGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult )
 	// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
 	Result GameSvrRPCSendAdapter::SearchGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances )
 	{

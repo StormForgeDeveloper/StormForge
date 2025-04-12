@@ -238,17 +238,17 @@ struct PartyChatMessageResBuilder;
 struct PartyChatMessageS2CEvt;
 struct PartyChatMessageS2CEvtBuilder;
 
-struct JoinGameInstanceCmd;
-struct JoinGameInstanceCmdBuilder;
+struct RequestJoinGameInstanceCmd;
+struct RequestJoinGameInstanceCmdBuilder;
 
-struct JoinGameInstanceRes;
-struct JoinGameInstanceResBuilder;
+struct RequestJoinGameInstanceRes;
+struct RequestJoinGameInstanceResBuilder;
 
-struct LeaveGameInstanceCmd;
-struct LeaveGameInstanceCmdBuilder;
+struct RequestLeaveGameInstanceCmd;
+struct RequestLeaveGameInstanceCmdBuilder;
 
-struct LeaveGameInstanceRes;
-struct LeaveGameInstanceResBuilder;
+struct RequestLeaveGameInstanceRes;
+struct RequestLeaveGameInstanceResBuilder;
 
 struct SearchGameInstanceCmd;
 struct SearchGameInstanceCmdBuilder;
@@ -5253,8 +5253,8 @@ inline ::flatbuffers::Offset<PartyChatMessageS2CEvt> CreatePartyChatMessageS2CEv
       chat_message__);
 }
 
-struct JoinGameInstanceCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef JoinGameInstanceCmdBuilder Builder;
+struct RequestJoinGameInstanceCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef RequestJoinGameInstanceCmdBuilder Builder;
   struct Traits;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_INS_UID = 4
@@ -5274,37 +5274,37 @@ struct JoinGameInstanceCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tabl
   }
 };
 
-struct JoinGameInstanceCmdBuilder {
-  typedef JoinGameInstanceCmd Table;
+struct RequestJoinGameInstanceCmdBuilder {
+  typedef RequestJoinGameInstanceCmd Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
   void add_ins_uid(const SF::Flat::GameInstanceUID *ins_uid) {
-    fbb_.AddStruct(JoinGameInstanceCmd::VT_INS_UID, ins_uid);
+    fbb_.AddStruct(RequestJoinGameInstanceCmd::VT_INS_UID, ins_uid);
   }
-  explicit JoinGameInstanceCmdBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+  explicit RequestJoinGameInstanceCmdBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ::flatbuffers::Offset<JoinGameInstanceCmd> Finish() {
+  ::flatbuffers::Offset<RequestJoinGameInstanceCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<JoinGameInstanceCmd>(end);
+    auto o = ::flatbuffers::Offset<RequestJoinGameInstanceCmd>(end);
     return o;
   }
 };
 
-inline ::flatbuffers::Offset<JoinGameInstanceCmd> CreateJoinGameInstanceCmd(
+inline ::flatbuffers::Offset<RequestJoinGameInstanceCmd> CreateRequestJoinGameInstanceCmd(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const SF::Flat::GameInstanceUID *ins_uid = nullptr) {
-  JoinGameInstanceCmdBuilder builder_(_fbb);
+  RequestJoinGameInstanceCmdBuilder builder_(_fbb);
   builder_.add_ins_uid(ins_uid);
   return builder_.Finish();
 }
 
-struct JoinGameInstanceCmd::Traits {
-  using type = JoinGameInstanceCmd;
-  static auto constexpr Create = CreateJoinGameInstanceCmd;
-  static constexpr auto name = "JoinGameInstanceCmd";
-  static constexpr auto fully_qualified_name = "SF.Flat.Game.JoinGameInstanceCmd";
+struct RequestJoinGameInstanceCmd::Traits {
+  using type = RequestJoinGameInstanceCmd;
+  static auto constexpr Create = CreateRequestJoinGameInstanceCmd;
+  static constexpr auto name = "RequestJoinGameInstanceCmd";
+  static constexpr auto fully_qualified_name = "SF.Flat.Game.RequestJoinGameInstanceCmd";
   static constexpr size_t fields_number = 1;
   static constexpr std::array<const char *, fields_number> field_names = {
     "ins_uid"
@@ -5313,8 +5313,8 @@ struct JoinGameInstanceCmd::Traits {
   using FieldType = decltype(std::declval<type>().get_field<Index>());
 };
 
-struct JoinGameInstanceRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef JoinGameInstanceResBuilder Builder;
+struct RequestJoinGameInstanceRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef RequestJoinGameInstanceResBuilder Builder;
   struct Traits;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_INS_UID = 4,
@@ -5348,47 +5348,47 @@ struct JoinGameInstanceRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tabl
   }
 };
 
-struct JoinGameInstanceResBuilder {
-  typedef JoinGameInstanceRes Table;
+struct RequestJoinGameInstanceResBuilder {
+  typedef RequestJoinGameInstanceRes Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
   void add_ins_uid(const SF::Flat::GameInstanceUID *ins_uid) {
-    fbb_.AddStruct(JoinGameInstanceRes::VT_INS_UID, ins_uid);
+    fbb_.AddStruct(RequestJoinGameInstanceRes::VT_INS_UID, ins_uid);
   }
   void add_zone_custom_data(::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> zone_custom_data) {
-    fbb_.AddOffset(JoinGameInstanceRes::VT_ZONE_CUSTOM_DATA, zone_custom_data);
+    fbb_.AddOffset(RequestJoinGameInstanceRes::VT_ZONE_CUSTOM_DATA, zone_custom_data);
   }
   void add_server_public_address(::flatbuffers::Offset<::flatbuffers::String> server_public_address) {
-    fbb_.AddOffset(JoinGameInstanceRes::VT_SERVER_PUBLIC_ADDRESS, server_public_address);
+    fbb_.AddOffset(RequestJoinGameInstanceRes::VT_SERVER_PUBLIC_ADDRESS, server_public_address);
   }
-  explicit JoinGameInstanceResBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+  explicit RequestJoinGameInstanceResBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ::flatbuffers::Offset<JoinGameInstanceRes> Finish() {
+  ::flatbuffers::Offset<RequestJoinGameInstanceRes> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<JoinGameInstanceRes>(end);
+    auto o = ::flatbuffers::Offset<RequestJoinGameInstanceRes>(end);
     return o;
   }
 };
 
-inline ::flatbuffers::Offset<JoinGameInstanceRes> CreateJoinGameInstanceRes(
+inline ::flatbuffers::Offset<RequestJoinGameInstanceRes> CreateRequestJoinGameInstanceRes(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const SF::Flat::GameInstanceUID *ins_uid = nullptr,
     ::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> zone_custom_data = 0,
     ::flatbuffers::Offset<::flatbuffers::String> server_public_address = 0) {
-  JoinGameInstanceResBuilder builder_(_fbb);
+  RequestJoinGameInstanceResBuilder builder_(_fbb);
   builder_.add_server_public_address(server_public_address);
   builder_.add_zone_custom_data(zone_custom_data);
   builder_.add_ins_uid(ins_uid);
   return builder_.Finish();
 }
 
-struct JoinGameInstanceRes::Traits {
-  using type = JoinGameInstanceRes;
-  static auto constexpr Create = CreateJoinGameInstanceRes;
-  static constexpr auto name = "JoinGameInstanceRes";
-  static constexpr auto fully_qualified_name = "SF.Flat.Game.JoinGameInstanceRes";
+struct RequestJoinGameInstanceRes::Traits {
+  using type = RequestJoinGameInstanceRes;
+  static auto constexpr Create = CreateRequestJoinGameInstanceRes;
+  static constexpr auto name = "RequestJoinGameInstanceRes";
+  static constexpr auto fully_qualified_name = "SF.Flat.Game.RequestJoinGameInstanceRes";
   static constexpr size_t fields_number = 3;
   static constexpr std::array<const char *, fields_number> field_names = {
     "ins_uid",
@@ -5399,22 +5399,22 @@ struct JoinGameInstanceRes::Traits {
   using FieldType = decltype(std::declval<type>().get_field<Index>());
 };
 
-inline ::flatbuffers::Offset<JoinGameInstanceRes> CreateJoinGameInstanceResDirect(
+inline ::flatbuffers::Offset<RequestJoinGameInstanceRes> CreateRequestJoinGameInstanceResDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const SF::Flat::GameInstanceUID *ins_uid = nullptr,
     const std::vector<uint8_t> *zone_custom_data = nullptr,
     const char *server_public_address = nullptr) {
   auto zone_custom_data__ = zone_custom_data ? _fbb.CreateVector<uint8_t>(*zone_custom_data) : 0;
   auto server_public_address__ = server_public_address ? _fbb.CreateString(server_public_address) : 0;
-  return SF::Flat::Game::CreateJoinGameInstanceRes(
+  return SF::Flat::Game::CreateRequestJoinGameInstanceRes(
       _fbb,
       ins_uid,
       zone_custom_data__,
       server_public_address__);
 }
 
-struct LeaveGameInstanceCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef LeaveGameInstanceCmdBuilder Builder;
+struct RequestLeaveGameInstanceCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef RequestLeaveGameInstanceCmdBuilder Builder;
   struct Traits;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_INS_UID = 4
@@ -5434,37 +5434,37 @@ struct LeaveGameInstanceCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tab
   }
 };
 
-struct LeaveGameInstanceCmdBuilder {
-  typedef LeaveGameInstanceCmd Table;
+struct RequestLeaveGameInstanceCmdBuilder {
+  typedef RequestLeaveGameInstanceCmd Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
   void add_ins_uid(const SF::Flat::GameInstanceUID *ins_uid) {
-    fbb_.AddStruct(LeaveGameInstanceCmd::VT_INS_UID, ins_uid);
+    fbb_.AddStruct(RequestLeaveGameInstanceCmd::VT_INS_UID, ins_uid);
   }
-  explicit LeaveGameInstanceCmdBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+  explicit RequestLeaveGameInstanceCmdBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ::flatbuffers::Offset<LeaveGameInstanceCmd> Finish() {
+  ::flatbuffers::Offset<RequestLeaveGameInstanceCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<LeaveGameInstanceCmd>(end);
+    auto o = ::flatbuffers::Offset<RequestLeaveGameInstanceCmd>(end);
     return o;
   }
 };
 
-inline ::flatbuffers::Offset<LeaveGameInstanceCmd> CreateLeaveGameInstanceCmd(
+inline ::flatbuffers::Offset<RequestLeaveGameInstanceCmd> CreateRequestLeaveGameInstanceCmd(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const SF::Flat::GameInstanceUID *ins_uid = nullptr) {
-  LeaveGameInstanceCmdBuilder builder_(_fbb);
+  RequestLeaveGameInstanceCmdBuilder builder_(_fbb);
   builder_.add_ins_uid(ins_uid);
   return builder_.Finish();
 }
 
-struct LeaveGameInstanceCmd::Traits {
-  using type = LeaveGameInstanceCmd;
-  static auto constexpr Create = CreateLeaveGameInstanceCmd;
-  static constexpr auto name = "LeaveGameInstanceCmd";
-  static constexpr auto fully_qualified_name = "SF.Flat.Game.LeaveGameInstanceCmd";
+struct RequestLeaveGameInstanceCmd::Traits {
+  using type = RequestLeaveGameInstanceCmd;
+  static auto constexpr Create = CreateRequestLeaveGameInstanceCmd;
+  static constexpr auto name = "RequestLeaveGameInstanceCmd";
+  static constexpr auto fully_qualified_name = "SF.Flat.Game.RequestLeaveGameInstanceCmd";
   static constexpr size_t fields_number = 1;
   static constexpr std::array<const char *, fields_number> field_names = {
     "ins_uid"
@@ -5473,8 +5473,8 @@ struct LeaveGameInstanceCmd::Traits {
   using FieldType = decltype(std::declval<type>().get_field<Index>());
 };
 
-struct LeaveGameInstanceRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef LeaveGameInstanceResBuilder Builder;
+struct RequestLeaveGameInstanceRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef RequestLeaveGameInstanceResBuilder Builder;
   struct Traits;
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -5482,32 +5482,32 @@ struct LeaveGameInstanceRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Tab
   }
 };
 
-struct LeaveGameInstanceResBuilder {
-  typedef LeaveGameInstanceRes Table;
+struct RequestLeaveGameInstanceResBuilder {
+  typedef RequestLeaveGameInstanceRes Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
-  explicit LeaveGameInstanceResBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+  explicit RequestLeaveGameInstanceResBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ::flatbuffers::Offset<LeaveGameInstanceRes> Finish() {
+  ::flatbuffers::Offset<RequestLeaveGameInstanceRes> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<LeaveGameInstanceRes>(end);
+    auto o = ::flatbuffers::Offset<RequestLeaveGameInstanceRes>(end);
     return o;
   }
 };
 
-inline ::flatbuffers::Offset<LeaveGameInstanceRes> CreateLeaveGameInstanceRes(
+inline ::flatbuffers::Offset<RequestLeaveGameInstanceRes> CreateRequestLeaveGameInstanceRes(
     ::flatbuffers::FlatBufferBuilder &_fbb) {
-  LeaveGameInstanceResBuilder builder_(_fbb);
+  RequestLeaveGameInstanceResBuilder builder_(_fbb);
   return builder_.Finish();
 }
 
-struct LeaveGameInstanceRes::Traits {
-  using type = LeaveGameInstanceRes;
-  static auto constexpr Create = CreateLeaveGameInstanceRes;
-  static constexpr auto name = "LeaveGameInstanceRes";
-  static constexpr auto fully_qualified_name = "SF.Flat.Game.LeaveGameInstanceRes";
+struct RequestLeaveGameInstanceRes::Traits {
+  using type = RequestLeaveGameInstanceRes;
+  static auto constexpr Create = CreateRequestLeaveGameInstanceRes;
+  static constexpr auto name = "RequestLeaveGameInstanceRes";
+  static constexpr auto fully_qualified_name = "SF.Flat.Game.RequestLeaveGameInstanceRes";
   static constexpr size_t fields_number = 0;
   static constexpr std::array<const char *, fields_number> field_names = {};
 };

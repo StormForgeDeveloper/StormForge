@@ -99,9 +99,9 @@ namespace SF
 		// Cmd: Party chatting
 		Result PartyChatMessageCmd( const TransactionID &InTransactionID, const char* InChatMessage );
 		// Cmd: Join to a game instance
-		Result JoinGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID );
+		Result RequestJoinGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID );
 		// Cmd: Leave game instance
-		Result LeaveGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID );
+		Result RequestLeaveGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID );
 		// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
 		Result SearchGameInstanceCmd( const TransactionID &InTransactionID, const char* InSearchKeyword );
 		// Cmd: Request Game match
@@ -250,9 +250,9 @@ namespace SF
 		// S2C: Party Chatting message event
 		Result PartyChatMessageS2CEvt( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage );
 		// Cmd: Join to a game instance
-		Result JoinGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InInsUID, const Array<uint8_t>& InZoneCustomData, const char* InServerPublicAddress );
+		Result RequestJoinGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InInsUID, const Array<uint8_t>& InZoneCustomData, const char* InServerPublicAddress );
 		// Cmd: Leave game instance
-		Result LeaveGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult );
+		Result RequestLeaveGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
 		Result SearchGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances );
 		// Cmd: Request Game match

@@ -537,10 +537,10 @@ namespace SF
                 });
 
             m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-                Message::Game::MID_JoinGameInstanceRes,
+                Message::Game::MID_RequestJoinGameInstanceRes,
                 [this](const MessageHeader* pHeader)
                 {
-                    OnJoinGameInstanceRes(pHeader);
+                    OnRequestJoinGameInstanceRes(pHeader);
                 });
 
 		}
@@ -638,7 +638,7 @@ namespace SF
 
 			SetOnlineState(OnlineState::InGameJoiningGameInstance);
 			GameRPCSendAdapter policy(m_Owner.GetConnectionGame()->GetMessageEndpoint());
-			auto res = policy.JoinGameInstanceCmd(intptr_t(this), m_Owner.GetGameInstanceUID());
+			auto res = policy.RequestJoinGameInstanceCmd(intptr_t(this), m_Owner.GetGameInstanceUID());
 			if (!res)
 			{
 				SetResult(res);
@@ -686,9 +686,9 @@ namespace SF
 			}
 		}
 
-		void OnJoinGameInstanceRes(const MessageHeader* pHeader)
+		void OnRequestJoinGameInstanceRes(const MessageHeader* pHeader)
 		{
-            const auto* responseData = flatbuffers::GetRoot<Flat::Game::JoinGameInstanceRes>(pHeader->GetPayloadPtr());
+            const auto* responseData = flatbuffers::GetRoot<Flat::Game::RequestJoinGameInstanceRes>(pHeader->GetPayloadPtr());
             if (!responseData)
 			{
 				SFLog(Net, Error, "JoinGameInstanceRes: Packet parsing error");
@@ -856,7 +856,7 @@ namespace SF
 
 
         m_MessageHandlerMap.AddMessageDelegateUnique(uintptr_t(this),
-            Message::Game::MID_LeaveGameInstanceRes,
+            Message::Game::MID_RequestLeaveGameInstanceRes,
             [this](const MessageHeader* pMsgData)
             {
                 m_GameInstanceUID = 0;
