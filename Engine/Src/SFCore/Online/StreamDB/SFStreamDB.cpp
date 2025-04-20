@@ -13,6 +13,7 @@
 
 #include "Online/StreamDB/SFStreamDB.h"
 #include "Util/SFStringFormat.h"
+#include "Util/SFTrace.h"
 
 #ifdef USE_STREAMDB
 
@@ -23,7 +24,10 @@
 namespace SF
 {
 
-
+    namespace Log
+    {
+        LogChannel Kafka("Kafka", LogOutputType::Debug4);
+    }
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -68,7 +72,7 @@ namespace SF
 		std::string errstr;
 		if (m_Config->set("bootstrap.servers", brokers.data(), errstr) != RdKafka::Conf::CONF_OK)
 		{
-			SFLog(Net, Error, "Kafka server configuration has failed: {0}", errstr);
+			SFLog(Kafka, Error, "Kafka server configuration has failed: {0}", errstr);
 			return ResultCode::INVALID_ARG;
 		}
 
@@ -79,7 +83,7 @@ namespace SF
 
 		if (m_Config->set("default_topic_conf", m_TopicConfig.get(), errstr) != RdKafka::Conf::CONF_OK)
 		{
-			SFLog(Net, Error, "Kafka configuration has failed: {0}", errstr);
+			SFLog(Kafka, Error, "Kafka configuration has failed: {0}", errstr);
 			return ResultCode::INVALID_ARG;
 		}
 
@@ -103,19 +107,19 @@ namespace SF
 		RdKafka::ErrorCode errorCode = handle->metadata(false, GetTopicHandle().get(), &metadata, metadataTimeout);
 		if (errorCode != RdKafka::ErrorCode::ERR_NO_ERROR)
 		{
-			SFLog(Net, Error, "Kafka getting metadata has failed: {0}:{1}", int(errorCode), RdKafka::err2str(errorCode));
+			SFLog(Kafka, Error, "Kafka getting metadata has failed: {0}:{1}", int(errorCode), RdKafka::err2str(errorCode));
 			return ResultCode::STREAM_NOT_EXIST;
 		}
 
 		if (metadata == nullptr)
 		{
-			SFLog(Net, Error, "Kafka getting metadata has failed: nullptr returned");
+			SFLog(Kafka, Error, "Kafka getting metadata has failed: nullptr returned");
 			return ResultCode::UNEXPECTED;
 		}
 
 		m_TopicMetadata.reset(metadata);
 
-		SFLog(Net, Debug, "Metadata for {0}, brokerId:{1}, {2}", GetTopic(), metadata->orig_broker_id(), metadata->orig_broker_name());
+		SFLog(Kafka, Debug, "Metadata for {0}, brokerId:{1}, {2}", GetTopic(), metadata->orig_broker_id(), metadata->orig_broker_name());
 
 		m_PartitionIds.Clear();
 
@@ -127,21 +131,21 @@ namespace SF
 		{
             if ((*it)->err() == RdKafka::ERR_UNKNOWN_TOPIC_OR_PART)
             {
-                SFLog(Net, Info, "Topic or partition doesn't exist");
+                SFLog(Kafka, Info, "Topic or partition doesn't exist");
                 continue;
             }
 
 			if ((*it)->err() != RdKafka::ERR_NO_ERROR)
 			{
                 errorCode = (*it)->err();
-				SFLog(Net, Error, "Topic metadata error, topic:{0}, {1}:{2}", (*it)->topic(), int(errorCode), err2str(errorCode));
+				SFLog(Kafka, Error, "Topic metadata error, topic:{0}, {1}:{2}", (*it)->topic(), int(errorCode), err2str(errorCode));
 				continue;
 			}
 
 			if (GetTopic() != (*it)->topic().c_str())
 				continue;
 
-			SFLog(Net, Debug, "Topic metadata, topic:{0}", (*it)->topic());
+			SFLog(Kafka, Debug, "Topic metadata, topic:{0}", (*it)->topic());
 
 			// Iterate topic's partitions
 			RdKafka::TopicMetadata::PartitionMetadataIterator ip;
@@ -149,7 +153,7 @@ namespace SF
 				ip != (*it)->partitions()->end();
 				++ip)
 			{
-				SFLog(Net, Debug, " partition:{0}, leader:{1}", (*ip)->id(), (*ip)->leader());
+				SFLog(Kafka, Debug, " partition:{0}, leader:{1}", (*ip)->id(), (*ip)->leader());
 
 				m_PartitionIds.push_back((*ip)->id());
 
@@ -159,14 +163,14 @@ namespace SF
 					ir != (*ip)->replicas()->end();
 					++ir)
 				{
-					SFLog(Net, Debug, "     Replica:{0}", *ir);
+					SFLog(Kafka, Debug, "     Replica:{0}", *ir);
 				}
 
 				// Iterate partition's ISRs 
 				RdKafka::PartitionMetadata::ISRSIterator iis;
 				for (iis = (*ip)->isrs()->begin(); iis != (*ip)->isrs()->end(); ++iis)
 				{
-					SFLog(Net, Debug2, "     ISR:{0}", *iis);
+					SFLog(Kafka, Debug2, "     ISR:{0}", *iis);
 				}
 			}
 		}
@@ -218,11 +222,11 @@ namespace SF
 		/* If message.err() is non-zero the message delivery failed permanently for the message. */
 		if (message.err())
 		{
-			SFLog(Net, Error, "Kafka Message delivery failed, server:{0}, channel:{1}, partition:{2}  error:{3}", m_Owner.GetServer(), m_Owner.GetTopic(), m_Owner.GetPartition(), message.errstr());
+			SFLog(Kafka, Error, "Kafka Message delivery failed, server:{0}, channel:{1}, partition:{2}  error:{3}", m_Owner.GetServer(), m_Owner.GetTopic(), m_Owner.GetPartition(), message.errstr());
 		}
 		else
 		{
-			//SFLog(Net, Debug1, "Kafka Message delivered to topic:{0}, partition:{1}", message.topic_name(), message.partition());
+			//SFLog(Kafka, Debug1, "Kafka Message delivered to topic:{0}, partition:{1}", message.topic_name(), message.partition());
 		}
 	}
 
@@ -246,7 +250,7 @@ namespace SF
 	{
 		if (serverAddress.IsNullOrEmpty() || path.IsNullOrEmpty())
 		{
-			SFLog(Net, Error, "Stream producer has invalid parameter: {0}", serverAddress, path);
+			SFLog(Kafka, Error, "Stream producer has invalid parameter: {0}", serverAddress, path);
 			return ResultCode::INVALID_ARG;
 		}
 
@@ -256,14 +260,14 @@ namespace SF
 
 		std::string errstr;
 		if (GetConfig()->set("dr_cb", m_DeliveryCallback.get(), errstr) != RdKafka::Conf::CONF_OK) {
-			SFLog(Net, Error, "Kafka callback registration has failed: {0}", errstr);
+			SFLog(Kafka, Error, "Kafka callback registration has failed: {0}", errstr);
 			return ResultCode::INVALID_ARG;
 		}
 
 		RdKafka::Producer* producer = RdKafka::Producer::create(GetConfig().get(), errstr);
 		if (!producer)
 		{
-			SFLog(Net, Error, "Kafka producer creation has failed: {0}", errstr);
+			SFLog(Kafka, Error, "Kafka producer creation has failed: {0}", errstr);
 			return ResultCode::INVALID_ARG;
 		}
 
@@ -272,7 +276,7 @@ namespace SF
 		RdKafka::Topic* topicHandle = RdKafka::Topic::create(m_Producer.get(), GetTopic().data(), GetTopicConfig().get(), errstr);
 		if (topicHandle == nullptr)
 		{
-			SFLog(Net, Error, "Kafka consumer topic creation has failed: {0}", errstr);
+			SFLog(Kafka, Error, "Kafka consumer topic creation has failed: {0}", errstr);
 			return ResultCode::OUT_OF_MEMORY;
 		}
 
@@ -311,7 +315,7 @@ namespace SF
 
 		if (err != RdKafka::ERR_NO_ERROR)
 		{
-			SFLog(Net, Error, "Kafka Failed to send data, topic:{0}, error:{1}{2}", GetTopic(), int(err), RdKafka::err2str(err));
+			SFLog(Kafka, Error, "Kafka Failed to send data, topic:{0}, error:{1}{2}", GetTopic(), int(err), RdKafka::err2str(err));
 
 			if (err == RdKafka::ERR__QUEUE_FULL)
 			{
@@ -325,7 +329,7 @@ namespace SF
 		}
 		else
 		{
-			//SFLog(Net, Debug, "Kafka Enqueued message: {0}, size:{1}", GetTopic(), data.size());
+			//SFLog(Kafka, Debug, "Kafka Enqueued message: {0}, size:{1}", GetTopic(), data.size());
 		}
 
 		// TODO:  I might want to do it on specific thread
@@ -415,7 +419,7 @@ namespace SF
 
 		if (serverAddress.IsNullOrEmpty() || path.IsNullOrEmpty())
 		{
-			SFLog(Net, Error, "Stream consumer has invalid parameter: {0}", serverAddress, path);
+			SFLog(Kafka, Error, "Stream consumer has invalid parameter: {0}", serverAddress, path);
 			return ResultCode::INVALID_ARG;
 		}
 
@@ -428,7 +432,7 @@ namespace SF
 		RdKafka::Consumer* consumer = RdKafka::Consumer::create(GetConfig().get(), errstr);
 		if (!consumer)
 		{
-			SFLog(Net, Error, "Kafka consumer creation has failed: {0}", errstr);
+			SFLog(Kafka, Error, "Kafka consumer creation has failed: {0}", errstr);
 			return ResultCode::OUT_OF_MEMORY;
 		}
 
@@ -437,7 +441,7 @@ namespace SF
 		RdKafka::Topic* topicHandle = RdKafka::Topic::create(m_Consumer.get(), GetTopic().data(), GetTopicConfig().get(), errstr);
 		if (topicHandle == nullptr)
 		{
-			SFLog(Net, Error, "Kafka consumer topic creation has failed: {0}", errstr);
+			SFLog(Kafka, Error, "Kafka consumer topic creation has failed: {0}", errstr);
 			return ResultCode::OUT_OF_MEMORY;
 		}
 
@@ -463,7 +467,7 @@ namespace SF
 		RdKafka::ErrorCode resp = m_Consumer->start(GetTopicHandle().get(), GetPartition(), start_offset);
 		if (resp != RdKafka::ERR_NO_ERROR)
 		{
-			SFLog(Net, Debug, "Failed to start consumer: {0}:{1}", int(resp), RdKafka::err2str(resp));
+			SFLog(Kafka, Log, "Failed to start consumer: {0}:{1}", int(resp), RdKafka::err2str(resp));
 			return ResultCode::FAIL;
 		}
 
@@ -483,6 +487,13 @@ namespace SF
 		if (!m_Consumer)
 			return hr = ResultCode::NOT_INITIALIZED;
 
+        if (m_PartitionIds.size() == 0)
+        {
+            SFLog(Kafka, Log, "Consumer::PollData, there are no partition, querying again");
+
+            trcCheck(UpdateTopicMetadata(m_Consumer.get()));
+        }
+
 		UniquePtr<RdKafka::Message> message(m_Consumer->consume(GetTopicHandle().get(), GetPartition(), timeoutMS));
 		if (message == nullptr)
 			return hr = ResultCode::NO_DATA_EXIST;
@@ -490,31 +501,33 @@ namespace SF
 		switch (message->err())
 		{
 		case RdKafka::ERR__TIMED_OUT:
-			hr = ResultCode::NO_DATA_EXIST;
+            SFLog(Kafka, Debug4, "Consume Timedout");
+            hr = ResultCode::NO_DATA_EXIST;
 			break;
 
 		case RdKafka::ERR_NO_ERROR:
 
 			/* Real message */
-			SFLog(Net, Debug4, "Read msg at offset:{0}, size:{1}", message->offset(), message->len());
+			SFLog(Kafka, Debug4, "Read msg at offset:{0}, size:{1}", message->offset(), message->len());
 
 			receivedMessageData.reset(new(GetSystemHeap()) StreamMessageData(message.release()));
 			break;
 
 		case RdKafka::ERR__PARTITION_EOF:
 			// Last message
+            SFLog(Kafka, Debug4, "Consume ERR__PARTITION_EOF");
 			hr = ResultCode::END_OF_STREAM;
 			break;
 
 		case RdKafka::ERR__UNKNOWN_TOPIC:
 		case RdKafka::ERR__UNKNOWN_PARTITION:
         case RdKafka::ERR_UNKNOWN_TOPIC_OR_PART:
-            SFLog(Net, Error, "Consume failed: part:{0}, stream:{1}, error:{2}", GetPartition(), GetTopic(), message->errstr());
+            SFLog(Kafka, Error, "Consume failed: part:{0}, stream:{1}, error:{2}", GetPartition(), GetTopic(), message->errstr());
 			hr = ResultCode::STREAM_NOT_EXIST;
 			break;
 
 		default:
-			SFLog(Net, Error, "Consume failed: {0}:{1}", int(message->err()), message->errstr());
+			SFLog(Kafka, Error, "Consume failed: {0}:{1}", int(message->err()), message->errstr());
 			hr = ResultCode::UNEXPECTED;
 		}
 
@@ -583,7 +596,7 @@ namespace SF
 		auto* consumer = RdKafka::KafkaConsumer::create(GetConfig().get(), errstr);
 		if (!consumer)
 		{
-			SFLog(Net, Error, "Kafka consumer creation has failed: {0}", errstr);
+			SFLog(Kafka, Error, "Kafka consumer creation has failed: {0}", errstr);
 			return ResultCode::OUT_OF_MEMORY;
 		}
 
@@ -592,7 +605,7 @@ namespace SF
 		RdKafka::Topic* topicHandle = RdKafka::Topic::create(m_Consumer.get(), GetTopic().data(), GetTopicConfig().get(), errstr);
 		if (topicHandle == nullptr)
 		{
-			SFLog(Net, Error, "Kafka consumer topic creation has failed: {0}", errstr);
+			SFLog(Kafka, Error, "Kafka consumer topic creation has failed: {0}", errstr);
 			return ResultCode::OUT_OF_MEMORY;
 		}
 
@@ -616,7 +629,7 @@ namespace SF
 		RdKafka::ErrorCode resp = m_Consumer->subscribe(topics);
 		if (resp != RdKafka::ERR_NO_ERROR)
 		{
-			SFLog(Net, Debug, "Failed to Subscribe consumer: {0}:{1}", int(resp), RdKafka::err2str(resp));
+			SFLog(Kafka, Debug, "Failed to Subscribe consumer: {0}:{1}", int(resp), RdKafka::err2str(resp));
 			return ResultCode::FAIL;
 		}
 
@@ -639,7 +652,7 @@ namespace SF
 		RdKafka::ErrorCode resp = m_Consumer->unsubscribe();
 		if (resp != RdKafka::ERR_NO_ERROR)
 		{
-			SFLog(Net, Debug, "Failed to unsubscribe consumer: {0}:{1}", int(resp), RdKafka::err2str(resp));
+			SFLog(Kafka, Debug, "Failed to unsubscribe consumer: {0}:{1}", int(resp), RdKafka::err2str(resp));
 			return ResultCode::FAIL;
 		}
 
@@ -672,7 +685,7 @@ namespace SF
 		case RdKafka::ERR_NO_ERROR:
 
 			/* Real message */
-			SFLog(Net, Debug4, "Read msg at offset:{0}, size:{1}", message->offset(), message->len());
+			SFLog(Kafka, Debug4, "Read msg at offset:{0}, size:{1}", message->offset(), message->len());
 
 			receivedMessageData.reset(new(GetSystemHeap()) StreamMessageData(message.release()));
 			break;
@@ -685,12 +698,12 @@ namespace SF
 		case RdKafka::ERR__UNKNOWN_TOPIC:
 		case RdKafka::ERR__UNKNOWN_PARTITION:
         case RdKafka::ERR_UNKNOWN_TOPIC_OR_PART:
-            SFLog(Net, Error, "Consume failed: part:{0}, stream:{1}, error:{2}", GetPartition(), GetTopic(), message->errstr());
+            SFLog(Kafka, Error, "Consume failed: part:{0}, stream:{1}, error:{2}", GetPartition(), GetTopic(), message->errstr());
 			hr = ResultCode::STREAM_NOT_EXIST;
 			break;
 
 		default:
-			SFLog(Net, Error, "Consume failed: {0}:{1}", int(message->err()), message->errstr());
+			SFLog(Kafka, Error, "Consume failed: {0}:{1}", int(message->err()), message->errstr());
 			hr = ResultCode::UNEXPECTED;
 		}
 
@@ -705,7 +718,7 @@ namespace SF
 		RdKafka::ErrorCode resp = m_Consumer->commitAsync();
 		if (resp != RdKafka::ERR_NO_ERROR)
 		{
-			SFLog(Net, Debug, "Failed to unsubscribe consumer: {0}:{1}", int(resp), RdKafka::err2str(resp));
+			SFLog(Kafka, Debug, "Failed to unsubscribe consumer: {0}:{1}", int(resp), RdKafka::err2str(resp));
 			return ResultCode::FAIL;
 		}
 

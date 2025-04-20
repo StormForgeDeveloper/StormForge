@@ -7,6 +7,7 @@
 
 
 	<ResultCodeItem Severity="Error" CodeName="ALREADY_IN_GAME" Desc="User is already in a game"/>
+	<ResultCodeItem Severity="Error" CodeName="WAITING_CLEANUP" Desc="User was in game and waiting on clean up"/>
 	<ResultCodeItem Severity="Error" CodeName="INVALID_PLAYER" Desc="Invalid player"/>
 	<ResultCodeItem Severity="Error" CodeName="NOTREADY" Desc="Game is not ready"/>
 

@@ -28,7 +28,9 @@ namespace SF
 		}
 		else
 		{
-			return "UNKNOWN_ERROR_CODE";
+            static char buffer[4096];
+            StrUtil::Format(buffer, "0x{0:8x}", m_Value.HResultCode);
+			return buffer;
 		}
 	}
 
@@ -42,8 +44,10 @@ namespace SF
 		}
 		else
 		{
-			return "UNKNOWN_ERROR_CODE";
-		}
+            static char buffer[4096];
+            StrUtil::Format(buffer, "0x{0:8x}", m_Value.HResultCode);
+            return buffer;
+        }
 	}
 
 }

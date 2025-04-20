@@ -36,6 +36,12 @@ namespace RdKafka
 
 namespace SF
 {
+    namespace Log
+    {
+        extern LogChannel Kafka;
+    }
+
+
     class StreamDBSendReportCb;
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +91,7 @@ namespace SF
 
     protected:
 
-        Result UpdateTopicMetadata(RdKafka::Handle* handle);
+        virtual Result UpdateTopicMetadata(RdKafka::Handle* handle);
 
         void SetTopicHandle(RdKafka::Topic* topic);
 

@@ -21,122 +21,125 @@ namespace SF {
 			// User is already in a game 
 			constexpr Result 			GAME_ALREADY_IN_GAME                                               ((int32_t)0xE7040000L);
 
+			// User was in game and waiting on clean up 
+			constexpr Result 			GAME_WAITING_CLEANUP                                               ((int32_t)0xE7040001L);
+
 			// Invalid player 
-			constexpr Result 			GAME_INVALID_PLAYER                                                ((int32_t)0xE7040001L);
+			constexpr Result 			GAME_INVALID_PLAYER                                                ((int32_t)0xE7040002L);
 
 			// Game is not ready 
-			constexpr Result 			GAME_NOTREADY                                                      ((int32_t)0xE7040002L);
+			constexpr Result 			GAME_NOTREADY                                                      ((int32_t)0xE7040003L);
 
 			// Invalid player state to do the action 
-			constexpr Result 			GAME_INVALID_PLAYER_STATE                                          ((int32_t)0xE7040003L);
+			constexpr Result 			GAME_INVALID_PLAYER_STATE                                          ((int32_t)0xE7040004L);
 
 			// Failed to find matching harvest id 
-			constexpr Result 			GAME_NO_MATCHING_HARVEST_ID                                        ((int32_t)0xE7040004L);
+			constexpr Result 			GAME_NO_MATCHING_HARVEST_ID                                        ((int32_t)0xE7040005L);
 
 			// Invalid shop item data 
-			constexpr Result 			GAME_INVALID_SHOPITEM                                              ((int32_t)0xE7040005L);
+			constexpr Result 			GAME_INVALID_SHOPITEM                                              ((int32_t)0xE7040006L);
 
 			// Invalid shop item id 
-			constexpr Result 			GAME_INVALID_SHOPITEMID                                            ((int32_t)0xE7040006L);
+			constexpr Result 			GAME_INVALID_SHOPITEMID                                            ((int32_t)0xE7040007L);
 
 			// User is already in a party 
-			constexpr Result 			GAME_ALREADY_IN_PARTY                                              ((int32_t)0xE7040007L);
+			constexpr Result 			GAME_ALREADY_IN_PARTY                                              ((int32_t)0xE7040008L);
 
 			// Invalid partyID 
-			constexpr Result 			GAME_INVALID_PARTYID                                               ((int32_t)0xE7040008L);
+			constexpr Result 			GAME_INVALID_PARTYID                                               ((int32_t)0xE7040009L);
 
 			// Invalid player count for game 
-			constexpr Result 			GAME_INVALID_PLAYER_COUNT                                          ((int32_t)0xE7040009L);
+			constexpr Result 			GAME_INVALID_PLAYER_COUNT                                          ((int32_t)0xE704000AL);
 
 			// User doesn't have eligible privilege 
-			constexpr Result 			GAME_NO_PRIVILEGE                                                  ((int32_t)0xE704000AL);
+			constexpr Result 			GAME_NO_PRIVILEGE                                                  ((int32_t)0xE704000BL);
 
 			// Not enough money(gold, gem, etc) 
-			constexpr Result 			GAME_NOTENOUGH_RESOURCE                                            ((int32_t)0xE704000BL);
+			constexpr Result 			GAME_NOTENOUGH_RESOURCE                                            ((int32_t)0xE704000CL);
 
 			// Maximum notification count 
-			constexpr Result 			GAME_MAX_NOTIFICATION                                              ((int32_t)0xE704000CL);
+			constexpr Result 			GAME_MAX_NOTIFICATION                                              ((int32_t)0xE704000DL);
 
 			// Maximum try reached 
-			constexpr Result 			GAME_MAX_TRY                                                       ((int32_t)0xE704000DL);
+			constexpr Result 			GAME_MAX_TRY                                                       ((int32_t)0xE704000EL);
 
 			// User is already in a chatting channel 
-			constexpr Result 			GAME_ALREADY_IN_CHAT                                               ((int32_t)0xE704000EL);
+			constexpr Result 			GAME_ALREADY_IN_CHAT                                               ((int32_t)0xE704000FL);
 
 			// Map object is invalid 
-			constexpr Result 			GAME_MAPOBJECT_INVALID                                             ((int32_t)0xE704000FL);
+			constexpr Result 			GAME_MAPOBJECT_INVALID                                             ((int32_t)0xE7040010L);
 
 			// Map object is required to be occupied 
-			constexpr Result 			GAME_OCCUPIED_MAPOBJECT_IS_REQUIRED                                ((int32_t)0xE7040010L);
+			constexpr Result 			GAME_OCCUPIED_MAPOBJECT_IS_REQUIRED                                ((int32_t)0xE7040011L);
 
 			// Map object is already in use 
-			constexpr Result 			GAME_MAPOBJECT_ALREADY_IN_USE                                      ((int32_t)0xE7040011L);
+			constexpr Result 			GAME_MAPOBJECT_ALREADY_IN_USE                                      ((int32_t)0xE7040012L);
 
 			// Map object is not in use 
-			constexpr Result 			GAME_MAPOBJECT_NOT_IN_USE                                          ((int32_t)0xE7040012L);
+			constexpr Result 			GAME_MAPOBJECT_NOT_IN_USE                                          ((int32_t)0xE7040013L);
 
 			// Map object not found 
-			constexpr Result 			GAME_MAPOBJECT_NOT_FOUND                                           ((int32_t)0xE7040013L);
+			constexpr Result 			GAME_MAPOBJECT_NOT_FOUND                                           ((int32_t)0xE7040014L);
 
 			// Map object is not occupied by the player 
-			constexpr Result 			GAME_MAPOBJECT_NOT_OCCUPIED_BY_PLAYER                              ((int32_t)0xE7040014L);
+			constexpr Result 			GAME_MAPOBJECT_NOT_OCCUPIED_BY_PLAYER                              ((int32_t)0xE7040015L);
 
 			// Invalid NPC id 
-			constexpr Result 			GAME_INVALID_NPCID                                                 ((int32_t)0xE7040015L);
+			constexpr Result 			GAME_INVALID_NPCID                                                 ((int32_t)0xE7040016L);
 
 			// Unexpected table value 
-			constexpr Result 			GAME_UNEXPECTED_TABLE_VALUE                                        ((int32_t)0xE7040016L);
+			constexpr Result 			GAME_UNEXPECTED_TABLE_VALUE                                        ((int32_t)0xE7040017L);
 
 			// Not enough currency 
-			constexpr Result 			GAME_NOT_ENOUGH_CURRENCY                                           ((int32_t)0xE7040017L);
+			constexpr Result 			GAME_NOT_ENOUGH_CURRENCY                                           ((int32_t)0xE7040018L);
 
 			// Not enough stamina 
-			constexpr Result 			GAME_NOT_ENOUGH_STAMINA                                            ((int32_t)0xE7040018L);
+			constexpr Result 			GAME_NOT_ENOUGH_STAMINA                                            ((int32_t)0xE7040019L);
 
 			// The player is busy 
-			constexpr Result 			GAME_PLAYER_IS_BUSY                                                ((int32_t)0xE7040019L);
+			constexpr Result 			GAME_PLAYER_IS_BUSY                                                ((int32_t)0xE704001AL);
 
 			// The player is too far away 
-			constexpr Result 			GAME_PLAYER_TOO_FAR_AWAY                                           ((int32_t)0xE704001AL);
+			constexpr Result 			GAME_PLAYER_TOO_FAR_AWAY                                           ((int32_t)0xE704001BL);
 
 			// Invalid gold value has been specified 
-			constexpr Result 			GAME_INVALID_GOLD_VALUE                                            ((int32_t)0xE704001BL);
+			constexpr Result 			GAME_INVALID_GOLD_VALUE                                            ((int32_t)0xE704001CL);
 
 			// Invalid player role 
-			constexpr Result 			GAME_INVALID_ROLE                                                  ((int32_t)0xE704001CL);
+			constexpr Result 			GAME_INVALID_ROLE                                                  ((int32_t)0xE704001DL);
 
 			// Not ready for next game play state 
-			constexpr Result 			GAME_NOT_READY_FOR_NEXT_STATE                                      ((int32_t)0xE704001DL);
+			constexpr Result 			GAME_NOT_READY_FOR_NEXT_STATE                                      ((int32_t)0xE704001EL);
 
 			// Invalid vote type 
-			constexpr Result 			GAME_INVALID_VOTETYPE                                              ((int32_t)0xE704001EL);
+			constexpr Result 			GAME_INVALID_VOTETYPE                                              ((int32_t)0xE704001FL);
 
 			// Invalid vote state 
-			constexpr Result 			GAME_INVALID_VOTE_STATE                                            ((int32_t)0xE704001FL);
+			constexpr Result 			GAME_INVALID_VOTE_STATE                                            ((int32_t)0xE7040020L);
 
 			// Invalid vote target 
-			constexpr Result 			GAME_INVALID_VOTE_TARGET                                           ((int32_t)0xE7040020L);
+			constexpr Result 			GAME_INVALID_VOTE_TARGET                                           ((int32_t)0xE7040021L);
 
 			// No suffrage 
-			constexpr Result 			GAME_NO_SUFFRAGE                                                   ((int32_t)0xE7040021L);
+			constexpr Result 			GAME_NO_SUFFRAGE                                                   ((int32_t)0xE7040022L);
 
 			// Invalid game state 
-			constexpr Result 			GAME_INVALID_GAMESTATE                                             ((int32_t)0xE7040022L);
+			constexpr Result 			GAME_INVALID_GAMESTATE                                             ((int32_t)0xE7040023L);
 
 			// Doesn't have enough stamina 
-			constexpr Result 			GAME_LOW_STAMINA                                                   ((int32_t)0xE7040023L);
+			constexpr Result 			GAME_LOW_STAMINA                                                   ((int32_t)0xE7040024L);
 
 			// Invalid cost table id 
-			constexpr Result 			GAME_INVALID_COSTID                                                ((int32_t)0xE7040024L);
+			constexpr Result 			GAME_INVALID_COSTID                                                ((int32_t)0xE7040025L);
 
 			// Invalid bot talk table 
-			constexpr Result 			GAME_INVALID_BOTTALK_TABLE                                         ((int32_t)0xE7040025L);
+			constexpr Result 			GAME_INVALID_BOTTALK_TABLE                                         ((int32_t)0xE7040026L);
 
 			// Request has expired 
-			constexpr Result 			GAME_REQUEST_HAS_EXPIRED                                           ((int32_t)0xE7040026L);
+			constexpr Result 			GAME_REQUEST_HAS_EXPIRED                                           ((int32_t)0xE7040027L);
 
 			// Group object not found 
-			constexpr Result 			GAME_GROUP_OBJECT_NOT_FOUND                                        ((int32_t)0xE7040027L);
+			constexpr Result 			GAME_GROUP_OBJECT_NOT_FOUND                                        ((int32_t)0xE7040028L);
 
 	void InitializeResultCodeGame();
 

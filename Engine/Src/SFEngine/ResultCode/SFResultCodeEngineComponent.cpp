@@ -14,7 +14,8 @@
 #include "ResultCode/SFResultCodeLibrary.h"
 #include "ResultCode/SFResultCodeEngine.h"
 #include "ResultCode/SFResultCodeEngineComponent.h"
-
+#include "ResultCode/SFResultCodeGame.h"
+#include "ResultCode/SFResultCodeLogin.h"
 
 
 namespace SF {
@@ -46,6 +47,8 @@ namespace SF {
 		ResultCode::InitializeResultCodeSystem();
 		ResultCode::InitializeResultCodeSF();
 		ResultCode::InitializeResultCodeEngine();
+        ResultCode::InitializeResultCodeGame();
+        ResultCode::InitializeResultCodeLogin();
 
 		return ResultCode::SUCCESS;
 	}

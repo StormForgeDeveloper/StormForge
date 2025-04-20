@@ -21,6 +21,7 @@ namespace ResultCode {
 
 		auto& codeMap = ResultTable::GetOrAddFacility(1796);
 		codeMap.Insert((uint32_t)			GAME_ALREADY_IN_GAME        , {"			GAME_ALREADY_IN_GAME        ", "User is already in a game"});
+		codeMap.Insert((uint32_t)			GAME_WAITING_CLEANUP        , {"			GAME_WAITING_CLEANUP        ", "User was in game and waiting on clean up"});
 		codeMap.Insert((uint32_t)			GAME_INVALID_PLAYER        , {"			GAME_INVALID_PLAYER        ", "Invalid player"});
 		codeMap.Insert((uint32_t)			GAME_NOTREADY        , {"			GAME_NOTREADY        ", "Game is not ready"});
 		codeMap.Insert((uint32_t)			GAME_INVALID_PLAYER_STATE        , {"			GAME_INVALID_PLAYER_STATE        ", "Invalid player state to do the action"});
