@@ -635,7 +635,7 @@ namespace SF
 
 		// TODO: handle bSeekToEnd. I need to find assigned partition list and seek each of them to end
 
-
+        SFLog(Kafka, Log, "Subscribed consumer: {0}", GetTopic());
 		m_IsSubscribed = true;
 
 		return ResultCode::SUCCESS;
@@ -652,7 +652,7 @@ namespace SF
 		RdKafka::ErrorCode resp = m_Consumer->unsubscribe();
 		if (resp != RdKafka::ERR_NO_ERROR)
 		{
-			SFLog(Kafka, Debug, "Failed to unsubscribe consumer: {0}:{1}", int(resp), RdKafka::err2str(resp));
+			SFLog(Kafka, Debug, "Unsubscribe, Failed to unsubscribe consumer: {0}:{1}", int(resp), RdKafka::err2str(resp));
 			return ResultCode::FAIL;
 		}
 
@@ -718,7 +718,7 @@ namespace SF
 		RdKafka::ErrorCode resp = m_Consumer->commitAsync();
 		if (resp != RdKafka::ERR_NO_ERROR)
 		{
-			SFLog(Kafka, Debug, "Failed to unsubscribe consumer: {0}:{1}", int(resp), RdKafka::err2str(resp));
+			SFLog(Kafka, Debug, "CommitConsumeState, Failed to unsubscribe consumer: {0}:{1}", int(resp), RdKafka::err2str(resp));
 			return ResultCode::FAIL;
 		}
 
