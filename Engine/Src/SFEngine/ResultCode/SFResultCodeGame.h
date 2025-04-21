@@ -141,6 +141,9 @@ namespace SF {
 			// Group object not found 
 			constexpr Result 			GAME_GROUP_OBJECT_NOT_FOUND                                        ((int32_t)0xE7040028L);
 
+			// The player's level is too low 
+			constexpr Result 			GAME_LOW_PLAYER_LEVEL                                              ((int32_t)0xE7040029L);
+
 	void InitializeResultCodeGame();
 
 	}//namespace ResultCode 

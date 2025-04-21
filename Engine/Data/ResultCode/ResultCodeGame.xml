@@ -60,5 +60,7 @@
 
     <ResultCodeItem Severity="Error" CodeName="GROUP_OBJECT_NOT_FOUND" Desc="Group object not found"/>
 
+    <ResultCodeItem Severity="Error" CodeName="LOW_PLAYER_LEVEL" Desc="The player's level is too low"/>
+
 </ResultCodes>
 

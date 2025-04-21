@@ -178,6 +178,10 @@ namespace SF {
 		 public const int _GAME_GROUP_OBJECT_NOT_FOUND = (unchecked((int)0xE7040028)); 
 		public static readonly Result GAME_GROUP_OBJECT_NOT_FOUND = new Result(_GAME_GROUP_OBJECT_NOT_FOUND); 
 
+		// The player's level is too low 
+		 public const int _GAME_LOW_PLAYER_LEVEL = (unchecked((int)0xE7040029)); 
+		public static readonly Result GAME_LOW_PLAYER_LEVEL = new Result(_GAME_LOW_PLAYER_LEVEL); 
+
 	}
 }
 

@@ -61,6 +61,7 @@ namespace ResultCode {
 		codeMap.Insert((uint32_t)			GAME_INVALID_BOTTALK_TABLE        , {"			GAME_INVALID_BOTTALK_TABLE        ", "Invalid bot talk table"});
 		codeMap.Insert((uint32_t)			GAME_REQUEST_HAS_EXPIRED        , {"			GAME_REQUEST_HAS_EXPIRED        ", "Request has expired"});
 		codeMap.Insert((uint32_t)			GAME_GROUP_OBJECT_NOT_FOUND        , {"			GAME_GROUP_OBJECT_NOT_FOUND        ", "Group object not found"});
+		codeMap.Insert((uint32_t)			GAME_LOW_PLAYER_LEVEL        , {"			GAME_LOW_PLAYER_LEVEL        ", "The player's level is too low"});
 
 	}//InitializeResultCode 
 }//namespace ResultCode 
