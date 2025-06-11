@@ -9,4 +9,5 @@
     <DataType TypeName="Quaternion" IsEnum="false" CppTypeName="Quaternion" CSharpTypeName="SFQuaternion" IsCSharpStruct="true" IsCSharpArray="false" Desc="Quaternion struct"/>
     <DataType TypeName="UGCGameInfo" IsEnum="false" CppTypeName="UGCGameInfo" CSharpTypeName="UGCGameInfo" IsCSharpStruct="true" IsCSharpArray="false" Desc="UGCGameInfo struct"/>
     <DataType TypeName="UGCItemInfo" IsEnum="false" CppTypeName="SUGCItemInfo" CSharpTypeName="SFUGCItemInfo" IsCSharpStruct="true" IsCSharpArray="false" Desc="UGCItemInfo struct"/>
+    <DataType TypeName="GameInstanceInfo" IsEnum="false" CppTypeName="SGameInstanceInfo" CSharpTypeName="SGameInstanceInfo" IsCSharpStruct="false" IsCSharpArray="false" Desc="GameInstanceInfo struct"/>
 </ProtocolTypes>

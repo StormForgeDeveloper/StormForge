@@ -9,9 +9,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+using Google.FlatBuffers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
+using System.Numerics;
 using System.Runtime.InteropServices;
 
 #nullable enable
@@ -380,6 +383,12 @@ namespace SF
         }
     }
 
+    public struct SGameInstanceInfo
+    {
+        public string InstanceName;
+        public uint PlayerCount;
+    };
+
     [Struct()]
     [StructLayout(LayoutKind.Sequential)]
     public struct SFVector2
@@ -467,6 +476,16 @@ namespace SF
     {
         public static readonly TransactionID Empty = new TransactionID();
 
+        // Random Transid helper
+        public static readonly Random TransactionIdRandom = new Random();
+        public static TransactionID NewTransactionId()
+        {
+            lock(TransactionIdRandom)
+            {
+                return new TransactionID((uint)TransactionIdRandom.Next());
+            }
+        }
+
         public ulong TransactionId;
 
         public bool IsValid => TransactionId != 0;
@@ -479,6 +498,38 @@ namespace SF
         public new string ToString()
         {
             return $"{TransactionId}";
+        }
+
+        public bool Equals(TransactionID other)
+        {
+            return TransactionId == other.TransactionId;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (!(obj is TransactionID))
+            {
+                return false;
+            }
+            var other = (TransactionID)obj;
+
+            return TransactionId == other.TransactionId;
+
+        }
+
+        public override int GetHashCode()
+        {
+            return TransactionId.GetHashCode();
+        }
+
+        public static bool operator ==(TransactionID c1, TransactionID c2)
+        {
+            return c1.Equals(c2);
+        }
+
+        public static bool operator !=(TransactionID c1, TransactionID c2)
+        {
+            return !c1.Equals(c2);
         }
     }
 

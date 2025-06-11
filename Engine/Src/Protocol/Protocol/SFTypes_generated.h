@@ -50,6 +50,9 @@ struct UGCItemInfo;
 
 struct EntityUID;
 
+struct GameInstanceInfo;
+struct GameInstanceInfoBuilder;
+
 struct PlayerPlatformID;
 
 struct PlayerInformation;
@@ -1482,6 +1485,91 @@ inline ::flatbuffers::Offset<UGCGameInfo> CreateUGCGameInfoDirect(
       ugc_content_id,
       table_id,
       name__);
+}
+
+struct GameInstanceInfo FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef GameInstanceInfoBuilder Builder;
+  struct Traits;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_INSTANCE_NAME = 4,
+    VT_PLAYER_COUNT = 6
+  };
+  const ::flatbuffers::String *instance_name() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_INSTANCE_NAME);
+  }
+  uint32_t player_count() const {
+    return GetField<uint32_t>(VT_PLAYER_COUNT, 0);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return instance_name();
+    else if constexpr (Index == 1) return player_count();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffsetRequired(verifier, VT_INSTANCE_NAME) &&
+           verifier.VerifyString(instance_name()) &&
+           VerifyField<uint32_t>(verifier, VT_PLAYER_COUNT, 4) &&
+           verifier.EndTable();
+  }
+};
+
+struct GameInstanceInfoBuilder {
+  typedef GameInstanceInfo Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_instance_name(::flatbuffers::Offset<::flatbuffers::String> instance_name) {
+    fbb_.AddOffset(GameInstanceInfo::VT_INSTANCE_NAME, instance_name);
+  }
+  void add_player_count(uint32_t player_count) {
+    fbb_.AddElement<uint32_t>(GameInstanceInfo::VT_PLAYER_COUNT, player_count, 0);
+  }
+  explicit GameInstanceInfoBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<GameInstanceInfo> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<GameInstanceInfo>(end);
+    fbb_.Required(o, GameInstanceInfo::VT_INSTANCE_NAME);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<GameInstanceInfo> CreateGameInstanceInfo(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::String> instance_name = 0,
+    uint32_t player_count = 0) {
+  GameInstanceInfoBuilder builder_(_fbb);
+  builder_.add_player_count(player_count);
+  builder_.add_instance_name(instance_name);
+  return builder_.Finish();
+}
+
+struct GameInstanceInfo::Traits {
+  using type = GameInstanceInfo;
+  static auto constexpr Create = CreateGameInstanceInfo;
+  static constexpr auto name = "GameInstanceInfo";
+  static constexpr auto fully_qualified_name = "SF.Flat.GameInstanceInfo";
+  static constexpr size_t fields_number = 2;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "instance_name",
+    "player_count"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
+inline ::flatbuffers::Offset<GameInstanceInfo> CreateGameInstanceInfoDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const char *instance_name = nullptr,
+    uint32_t player_count = 0) {
+  auto instance_name__ = instance_name ? _fbb.CreateString(instance_name) : 0;
+  return SF::Flat::CreateGameInstanceInfo(
+      _fbb,
+      instance_name__,
+      player_count);
 }
 
 struct PlayerInformation FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {

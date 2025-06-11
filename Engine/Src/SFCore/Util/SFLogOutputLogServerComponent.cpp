@@ -28,7 +28,6 @@
 #include "Protocol/GenericMessageID.h"
 #include "Protocol/Generic_generated.h"
 
-
 namespace SF {
 
 
@@ -67,7 +66,7 @@ namespace SF {
 
         m_Client.Initialize(logServer, "SFGateway");
 
-        m_ChannelName = Util::GetServiceName();
+        m_ChannelName.Format("{0}-{1}", Util::GetTitleEnv(), Util::GetServiceName());
 	}
 
 	void LogOutputLogServerComponent::MyOutputHandler::Deinit()

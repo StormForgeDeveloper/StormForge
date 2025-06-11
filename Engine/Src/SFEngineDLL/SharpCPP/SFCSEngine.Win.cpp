@@ -113,7 +113,7 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 	initParam.AsyncTaskThreadCount = 6;
 	initParam.NetworkThreadCount = 4;
 
-	auto pEngine = SF::Engine::Start(initParam);
+    SF::Engine* pEngine = SF::Engine::Start(initParam);
 	return pEngine;
 }
 

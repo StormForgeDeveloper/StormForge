@@ -103,6 +103,12 @@ struct EntityUID
 	entity_id:uint32;
 }
 
+table GameInstanceInfo
+{
+	instance_name:string(required);
+	player_count:uint32;
+}
+
 enum Platform : byte
 {
     BR,         // Braves player Id
