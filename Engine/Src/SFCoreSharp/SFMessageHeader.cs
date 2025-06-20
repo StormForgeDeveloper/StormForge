@@ -60,14 +60,15 @@ namespace SF
 
         public void ReadHeader(Google.FlatBuffers.ByteBuffer buffer)
         {
-            MessageId.MessageIdRaw = buffer.GetUint(0);
-            TransactionId.TransactionId = buffer.GetUlong(4);
-            PayloadSize = buffer.GetUshort(12);
+            var offset = buffer.Position;
+            MessageId.MessageIdRaw = buffer.GetUint(offset);
+            TransactionId.TransactionId = buffer.GetUlong(offset + 4);
+            PayloadSize = buffer.GetUshort(offset + 12);
             buffer.Position += HeaderBaseSize;
 
             if (MessageId.Type == EMessageType.Result)
             {
-                TransactionResult.Code = buffer.GetInt(14);
+                TransactionResult.Code = buffer.GetInt(offset + HeaderBaseSize);
                 buffer.Position += sizeof(Int32);
             }
             else
