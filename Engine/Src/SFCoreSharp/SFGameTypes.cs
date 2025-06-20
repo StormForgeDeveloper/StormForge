@@ -497,7 +497,7 @@ namespace SF
 
         public new string ToString()
         {
-            return $"{TransactionId}";
+            return $"{TransactionId:X16}";
         }
 
         public bool Equals(TransactionID other)
