@@ -441,15 +441,13 @@ namespace SF
 
         public static VectorOffset CreateAccountIDVector(this Google.FlatBuffers.FlatBufferBuilder builder, SF.AccountID[] data)
         {
-            int[] offsets = new int[data.Length];
-            for (int i = 0; i < data.Length; i++)
-            {
-                Offset<SF.Flat.AccountID> offset = CreateAccountID(builder, data[i]);
-                offsets[i] = offset.Value;
-            }
-            builder.StartVector(4, data.Length, 4);
+            builder.StartVector(16, data.Length, 1);
 
-            builder.Add(offsets);
+            foreach (var item in data)
+            {
+                var u128 = item.ToUInt128();
+                SF.Flat.Guid.CreateGuid(builder, u128.Low, u128.High);
+            }
 
             return builder.EndVector();
         }
@@ -563,16 +561,13 @@ namespace SF
         }
         public static VectorOffset CreateGuidVector(this Google.FlatBuffers.FlatBufferBuilder builder, System.Guid[] data)
         {
-            int[] offsets = new int[data.Length];
-            for (int i = 0; i < data.Length; i++)
-            {
-                var dataValue = data[i].ToUInt128();
-                Offset<SF.Flat.Guid> offset = SF.Flat.Guid.CreateGuid(builder, dataValue.Low, dataValue.High);
-                offsets[i] = offset.Value;
-            }
-            builder.StartVector(4, data.Length, 4);
+            builder.StartVector(16, data.Length, 1);
 
-            builder.Add(offsets);
+            foreach (var item in data)
+            {
+                var u128 = item.ToUInt128();
+                SF.Flat.Guid.CreateGuid(builder, u128.Low, u128.High);
+            }
 
             return builder.EndVector();
         }
