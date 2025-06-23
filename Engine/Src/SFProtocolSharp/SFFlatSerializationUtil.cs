@@ -23,15 +23,16 @@ namespace SF
     {
         public static VectorOffset CreateStringVector(this Google.FlatBuffers.FlatBufferBuilder builder, string[] data)
         {
-            int[] offsets = new int[data.Length];
+            StringOffset[] offsets = new StringOffset[data.Length];
             for (int i = 0; i < data.Length; i++)
             {
-                offsets[i] = builder.CreateString(data[i]).Value;
+                offsets[i] = builder.CreateString(data[i]);
             }
 
-            builder.StartVector(4, data.Length, 4);
+            builder.StartVector(4, offsets.Length, 4);
 
-            builder.Add(offsets);
+            for (int i = offsets.Length - 1; i >= 0; i--)
+                builder.AddOffset(offsets[i].Value);
 
             return builder.EndVector();
         }
