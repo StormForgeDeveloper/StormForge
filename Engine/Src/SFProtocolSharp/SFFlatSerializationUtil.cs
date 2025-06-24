@@ -379,67 +379,6 @@ namespace SF
             }
         }
 
-        public static Offset<SF.Flat.GameInstanceInfo> CreateGameInstanceInfo(this Google.FlatBuffers.FlatBufferBuilder builder, SF.SGameInstanceInfo? inValue)
-        {
-            if (inValue == null)
-            {
-                return default(Offset<SF.Flat.GameInstanceInfo>);
-            }
-            else
-            {
-                var value = inValue.Value;
-                var nameOffset = builder.CreateString(value.InstanceName);
-
-                SF.Flat.GameInstanceInfo.StartGameInstanceInfo(builder);
-                SF.Flat.GameInstanceInfo.AddPlayerCount(builder, value.PlayerCount);
-                SF.Flat.GameInstanceInfo.AddInstanceName(builder, nameOffset);
-                var objectOffset = SF.Flat.GameInstanceInfo.EndGameInstanceInfo(builder);
-
-                return objectOffset;
-            }
-        }
-
-        public static SF.SGameInstanceInfo Parse(this SF.Flat.GameInstanceInfo value)
-        {
-            return new SF.SGameInstanceInfo() { InstanceName = value.InstanceName, PlayerCount = value.PlayerCount };
-        }
-
-        public static SF.SGameInstanceInfo Parse(this SF.Flat.GameInstanceInfo? value)
-        {
-            if (value.HasValue)
-            {
-                return Parse(value.Value);
-            }
-            else
-            {
-                return new SF.SGameInstanceInfo();
-            }
-        }
-
-        public static VectorOffset CreateGameInstanceInfoVector(this Google.FlatBuffers.FlatBufferBuilder builder, List<SF.SGameInstanceInfo>? objectList)
-        {
-            return CreateGameInstanceInfoVector(builder, objectList?.ToArray());
-        }
-
-        public static VectorOffset CreateGameInstanceInfoVector(this Google.FlatBuffers.FlatBufferBuilder builder, SF.SGameInstanceInfo[]? objectList)
-        {
-            if (objectList == null)
-                return default(VectorOffset);
-
-            Offset<SF.Flat.GameInstanceInfo>[] offsets = new Offset<SF.Flat.GameInstanceInfo>[objectList.Length];
-            for (int iObject = 0; iObject < objectList.Length; iObject++)
-            {
-                offsets[iObject] = builder.CreateGameInstanceInfo(objectList[iObject]);
-            }
-
-            builder.StartVector(4, offsets.Length, 4);
-            for (int iObject = 0; iObject < offsets.Length; iObject++)
-            {
-                builder.AddOffset(offsets[iObject].Value);
-            }
-            return builder.EndVector();
-        }
-
         public static VectorOffset CreateAccountIDVector(this Google.FlatBuffers.FlatBufferBuilder builder, SF.AccountID[] data)
         {
             builder.StartVector(16, data.Length, 1);
