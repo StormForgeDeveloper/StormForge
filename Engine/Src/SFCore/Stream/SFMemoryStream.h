@@ -120,5 +120,43 @@ namespace SF
 	};
 
 
+    class InputMemoryStreamView
+    {
+        struct membuf : std::streambuf
+        {
+            membuf(uint8_t const* base, size_t size)
+            {
+                char* p(const_cast<char*>(reinterpret_cast<const char*>(base)));
+                this->setg(p, p, p + size);
+            }
+        };
+
+        membuf m_memoryBuff;
+        std::istream m_stream;
+
+    public:
+        InputMemoryStreamView(uint8_t const* base, size_t size)
+            : m_memoryBuff(base, size)
+            , m_stream(&m_memoryBuff)
+        {
+        }
+
+        InputMemoryStreamView(const Array<const uint8_t>& content)
+            : m_memoryBuff(content.data(), content.size())
+            , m_stream(&m_memoryBuff)
+        {
+        }
+
+        operator std::istream&()
+        {
+            return m_stream;
+        }
+    };
+
+
+
+
+    
+
 } // namespace SF
 
