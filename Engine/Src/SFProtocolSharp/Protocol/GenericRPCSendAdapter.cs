@@ -58,6 +58,19 @@ namespace SF.Net
 			return result;
 		} // public Result  GenericTransactionCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 
+		// C2S: Client heartbeat
+		public Result  HeartbeatC2SEvt(  )
+		{
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
+			Result result = ResultCode.SUCCESS;
+			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
+			SF.Flat.Generic.HeartbeatC2SEvt.StartHeartbeatC2SEvt(builder);
+			var packetOffset = SF.Flat.Generic.HeartbeatC2SEvt.EndHeartbeatC2SEvt(builder);
+			result = SendMessage(MessageIDGeneric.HeartbeatC2SEvt, builder, packetOffset.Value);
+			return result;
+		} // public Result  HeartbeatC2SEvt(  )
+
+
 		// Cmd: Post log data through gateway
 		public Result  PostLogDataCmd( SF.TransactionID InTransactionID, System.String InDestLogChannel, System.Byte[] InMessageData, Action<SFMessage>? callback = null )
 		{

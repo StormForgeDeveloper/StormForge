@@ -57,6 +57,23 @@ namespace SF
 
 		return hr;
 	}; // Result GenericRPCSendAdapter::GenericTransactionCmd( const TransactionID &InTransactionID )
+	// C2S: Client heartbeat
+	Result GenericRPCSendAdapter::HeartbeatC2SEvt(  )
+	{
+ 		Result hr;
+
+		protocolCheckPtr(m_Endpoint);
+
+		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
+		SF::Flat::Generic::HeartbeatC2SEvtBuilder _builder(fbb);
+		flatbuffers::Offset<SF::Flat::Generic::HeartbeatC2SEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
+
+		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Generic::MID_HeartbeatC2SEvt, fbb));
+
+
+		return hr;
+	}; // Result GenericRPCSendAdapter::HeartbeatC2SEvt(  )
 	// Cmd: Post log data through gateway
 	Result GenericRPCSendAdapter::PostLogDataCmd( const TransactionID &InTransactionID, const char* InDestLogChannel, const Array<uint8_t>& InMessageData )
 	{

@@ -19,6 +19,10 @@ table GenericTransactionRes
 	signature:string;
 } // table GenericTransactionRes
 
+table HeartbeatC2SEvt
+{
+ } // table HeartbeatC2SEvt
+
 table PostLogDataCmd
 {
  	dest_log_channel:string;

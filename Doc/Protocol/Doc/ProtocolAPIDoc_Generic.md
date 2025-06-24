@@ -52,6 +52,12 @@ C++: Cast message to GenericTransactionRes to access values
 		- Signature: type:String, Transaction signature
 
 
+## HeartbeatC2SEvt
+Client heartbeat
+
+        Result HeartbeatC2SEvt()
+
+
 ## PostLogData Request
 Post log data through gateway
 

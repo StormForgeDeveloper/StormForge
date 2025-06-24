@@ -36,6 +36,7 @@ namespace SF
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Generic::MID_GenericFailureRes,&GenericFailureRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Generic::MID_GenericTransactionCmd,&GenericTransactionCmd));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Generic::MID_GenericTransactionRes,&GenericTransactionRes));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Generic::MID_HeartbeatC2SEvt,&HeartbeatC2SEvt));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Generic::MID_PostLogDataCmd,&PostLogDataCmd));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Generic::MID_PostLogDataRes,&PostLogDataRes));
 
@@ -106,6 +107,21 @@ namespace SF
 
 		return hr;
 	}; // Result GenericMessageLog::GenericTransactionRes(const char* prefix, const MessageHeader* messageHeader)
+	Result GenericMessageLog::HeartbeatC2SEvt(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.Generic.HeartbeatC2SEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug7, "{0} Generic:HeartbeatC2SEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result GenericMessageLog::HeartbeatC2SEvt(const char* prefix, const MessageHeader* messageHeader)
 	Result GenericMessageLog::PostLogDataCmd(const char* prefix, const MessageHeader* messageHeader)
 	{
  		Result hr;

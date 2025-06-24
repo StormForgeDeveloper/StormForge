@@ -20,6 +20,8 @@
           </Res>
       </Command>
 
+      <C2SEvent Name="Heartbeat" Reliable="true" Crypto="No" Trace="Debug7" Desc="Client heartbeat">
+      </C2SEvent>
 
       <!-- ============================  External gateway APIs  ============================================ -->
 
@@ -31,6 +33,7 @@
           <Res>
           </Res>
       </Command>
+
 
 
   </ProtocolGroup>
