@@ -135,7 +135,7 @@ namespace SF
         }
 
         // Debug logging
-        curl_easy_setopt(GetCURL(), CURLOPT_VERBOSE, 0);
+        curl_easy_setopt(GetCURL(), CURLOPT_VERBOSE, static_cast<int>(Log::Curl.GetChannelLogMask().Debug));
         curl_easy_setopt(GetCURL(), CURLOPT_DEBUGFUNCTION, &HTTPCurlImpl::CurlLogCB);
 
         if (m_Headers != nullptr)

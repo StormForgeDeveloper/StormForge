@@ -20,6 +20,11 @@ namespace SF
 {
     class HTTPClientCurl;
 
+    namespace Log
+    {
+        extern LogChannel Curl;
+    }
+
     namespace HTTPCurlImpl
     {
         // Convert Curl code to Result

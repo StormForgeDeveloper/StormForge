@@ -18,6 +18,11 @@
 
 namespace SF
 {
+    namespace Log
+    {
+        // Enable debug channel to print out curl internal logs
+        LogChannel Curl("Curl", LogOutputType::Info);
+    }
 
     namespace HTTPCurlImpl
     {
@@ -99,28 +104,28 @@ namespace SF
             switch (type)
             {
             case CURLINFO_TEXT:
-                SFLog(HTTP, Debug3, "CURL: {0}:{1}", typeName, strData);
+                SFLog(Curl, Debug, "{0}:{1}", typeName, strData);
                 break;
             case CURLINFO_HEADER_IN:
-                SFLog(HTTP, Debug6, "CURL: {0}:{1}", typeName, strData);
+                SFLog(Curl, Debug, "{0}:{1}", typeName, strData);
                 break;
             case CURLINFO_HEADER_OUT:
-                SFLog(HTTP, Debug6, "CURL: {0}:{1}", typeName, strData);
+                SFLog(Curl, Debug, "{0}:{1}", typeName, strData);
                 break;
             case CURLINFO_DATA_IN:
-                SFLog(HTTP, Debug5, "CURL: {0}:{1}", typeName, strData);
+                SFLog(Curl, Debug1, "{0}:{1}", typeName, strData);
                 break;
             case CURLINFO_DATA_OUT:
-                SFLog(HTTP, Debug5, "CURL: {0}:{1}", typeName, strData);
+                SFLog(Curl, Debug1, "{0}:{1}", typeName, strData);
                 break;
             case CURLINFO_SSL_DATA_IN:
-                SFLog(HTTP, Debug4, "CURL: {0}:{1}", typeName, strData);
+                SFLog(Curl, Debug4, "{0}:{1}", typeName, strData);
                 break;
             case CURLINFO_SSL_DATA_OUT:
-                SFLog(HTTP, Debug4, "CURL: {0}:{1}", typeName, strData);
+                SFLog(Curl, Debug4, "{0}:{1}", typeName, strData);
                 break;
             default:
-                SFLog(HTTP, Debug, "CURL: {0}:{1}", typeName, strData);
+                SFLog(Curl, Debug5, "{0}:{1}", typeName, strData);
                 break;
             }
 
