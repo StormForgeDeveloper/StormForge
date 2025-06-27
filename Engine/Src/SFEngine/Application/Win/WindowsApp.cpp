@@ -19,21 +19,7 @@
 
 #include "WindowsApp.h"
 #include "WindowsAppTasks.h"
-
-
-#include "Task/SFAsyncTaskManager.h"
 #include "Util/SFLog.h"
-#include "Util/SFLogComponent.h"
-#include "Object/SFObjectManager.h"
-#include "Util/SFTimeUtil.h"
-#include "EngineObject/SFEngineObjectManager.h"
-#include "EngineObject/SFEngineTaskManager.h"
-#include "Net/SFNetSystem.h"
-#include "Net/SFConnectionManager.h"
-#include "Resource/SFResourceManager.h"
-#include "Graphics/SFGraphicDeviceGLES.h"
-#include "Net/SFNetConst.h"
-#include "Service/SFEngineService.h"
 
 
 

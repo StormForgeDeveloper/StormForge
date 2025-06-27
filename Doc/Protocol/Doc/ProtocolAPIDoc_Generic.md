@@ -52,10 +52,22 @@ C++: Cast message to GenericTransactionRes to access values
 		- Signature: type:String, Transaction signature
 
 
-## HeartbeatC2SEvt
-Client heartbeat
+## Heartbeat Request
+Generic heartbeat
 
-        Result HeartbeatC2SEvt()
+1. Command interface
+
+        Result HeartbeatCmd(const TransactionID &InTransactionID)
+
+		- TransactionID: type:TransactionID, 
+
+2. Result interface
+
+C++: Cast message to HeartbeatRes to access values
+
+
+		- TransactionID: type:TransactionID, 
+		- Result: type:Result, 
 
 
 ## PostLogData Request

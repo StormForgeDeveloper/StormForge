@@ -57,23 +57,23 @@ namespace SF
 
 		return hr;
 	}; // Result GenericRPCSendAdapter::GenericTransactionCmd( const TransactionID &InTransactionID )
-	// C2S: Client heartbeat
-	Result GenericRPCSendAdapter::HeartbeatC2SEvt(  )
+	// Cmd: Generic heartbeat
+	Result GenericRPCSendAdapter::HeartbeatCmd( const TransactionID &InTransactionID )
 	{
  		Result hr;
 
 		protocolCheckPtr(m_Endpoint);
 
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
-		SF::Flat::Generic::HeartbeatC2SEvtBuilder _builder(fbb);
-		flatbuffers::Offset<SF::Flat::Generic::HeartbeatC2SEvt> packetOffset = _builder.Finish();
+		SF::Flat::Generic::HeartbeatCmdBuilder _builder(fbb);
+		flatbuffers::Offset<SF::Flat::Generic::HeartbeatCmd> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
 
-		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::Generic::MID_HeartbeatC2SEvt, fbb));
+		protocolCheck(Send(InTransactionID, ResultCode::SUCCESS, Message::Generic::MID_HeartbeatCmd, fbb));
 
 
 		return hr;
-	}; // Result GenericRPCSendAdapter::HeartbeatC2SEvt(  )
+	}; // Result GenericRPCSendAdapter::HeartbeatCmd( const TransactionID &InTransactionID )
 	// Cmd: Post log data through gateway
 	Result GenericRPCSendAdapter::PostLogDataCmd( const TransactionID &InTransactionID, const char* InDestLogChannel, const Array<uint8_t>& InMessageData )
 	{
@@ -135,6 +135,23 @@ namespace SF
 
 		return hr;
 	}; // Result GenericSvrRPCSendAdapter::GenericTransactionRes( const TransactionID &InTransactionID, const Result &InResult, const TransactionID &InFinishedTransaction, const char* InSignature )
+	// Cmd: Generic heartbeat
+	Result GenericSvrRPCSendAdapter::HeartbeatRes( const TransactionID &InTransactionID, const Result &InResult )
+	{
+ 		Result hr;
+
+		protocolCheckPtr(m_Endpoint);
+
+		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
+		SF::Flat::Generic::HeartbeatResBuilder _builder(fbb);
+		flatbuffers::Offset<SF::Flat::Generic::HeartbeatRes> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
+
+		protocolCheck(Send(InTransactionID, InResult, Message::Generic::MID_HeartbeatRes, fbb));
+
+
+		return hr;
+	}; // Result GenericSvrRPCSendAdapter::HeartbeatRes( const TransactionID &InTransactionID, const Result &InResult )
 	// Cmd: Post log data through gateway
 	Result GenericSvrRPCSendAdapter::PostLogDataRes( const TransactionID &InTransactionID, const Result &InResult )
 	{

@@ -58,18 +58,17 @@ namespace SF.Net
 			return result;
 		} // public Result  GenericTransactionCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 
-		// C2S: Client heartbeat
-		public Result  HeartbeatC2SEvt(  )
+		// Cmd: Generic heartbeat
+		public Result  HeartbeatCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
-			SF.Flat.Generic.HeartbeatC2SEvt.StartHeartbeatC2SEvt(builder);
-			var packetOffset = SF.Flat.Generic.HeartbeatC2SEvt.EndHeartbeatC2SEvt(builder);
-			result = SendMessage(MessageIDGeneric.HeartbeatC2SEvt, builder, packetOffset.Value);
+			SF.Flat.Generic.HeartbeatCmd.StartHeartbeatCmd(builder);
+			var packetOffset = SF.Flat.Generic.HeartbeatCmd.EndHeartbeatCmd(builder);
+			result = SendMessage(MessageIDGeneric.HeartbeatCmd, builder, packetOffset.Value, transactionId:InTransactionID , callback:callback);
 			return result;
-		} // public Result  HeartbeatC2SEvt(  )
-
+		} // public Result  HeartbeatCmd( SF.TransactionID InTransactionID, Action<SFMessage>? callback = null )
 
 		// Cmd: Post log data through gateway
 		public Result  PostLogDataCmd( SF.TransactionID InTransactionID, System.String InDestLogChannel, System.Byte[] InMessageData, Action<SFMessage>? callback = null )
@@ -128,6 +127,19 @@ namespace SF.Net
 			result = SendMessage(MessageIDGeneric.GenericTransactionRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
 			return result;
 		} // public Result  GenericTransactionRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.TransactionID InFinishedTransaction, System.String InSignature )
+
+
+		// Cmd: Generic heartbeat
+		public Result  HeartbeatRes( SF.TransactionID InTransactionID, SF.Result InResult )
+		{
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
+			Result result = ResultCode.SUCCESS;
+			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
+			SF.Flat.Generic.HeartbeatRes.StartHeartbeatRes(builder);
+			var packetOffset = SF.Flat.Generic.HeartbeatRes.EndHeartbeatRes(builder);
+			result = SendMessage(MessageIDGeneric.HeartbeatRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
+			return result;
+		} // public Result  HeartbeatRes( SF.TransactionID InTransactionID, SF.Result InResult )
 
 
 		// Cmd: Post log data through gateway

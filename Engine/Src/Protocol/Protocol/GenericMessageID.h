@@ -29,8 +29,10 @@ namespace SF
 			constexpr MessageID MID_GenericTransactionCmd(EMessageType::Command,1,MessageProtocol::Generic,1);
 			constexpr MessageID MID_GenericTransactionRes(EMessageType::Result,1,MessageProtocol::Generic,1);
 
-			// C2S: Client heartbeat
-			constexpr MessageID MID_HeartbeatC2SEvt(EMessageType::Event,1,MessageProtocol::Generic,2);
+			// Cmd: Generic heartbeat
+			constexpr MessageID MID_HeartbeatCmd(EMessageType::Command,1,MessageProtocol::Generic,2);
+			constexpr MessageID MID_HeartbeatRes(EMessageType::Result,1,MessageProtocol::Generic,2);
+
 			// Cmd: Post log data through gateway
 			constexpr MessageID MID_PostLogDataCmd(EMessageType::Command,1,MessageProtocol::Generic,3);
 			constexpr MessageID MID_PostLogDataRes(EMessageType::Result,1,MessageProtocol::Generic,3);

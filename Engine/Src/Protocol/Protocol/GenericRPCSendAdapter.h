@@ -40,8 +40,8 @@ namespace SF
 		Result GenericFailureCmd( const TransactionID &InTransactionID );
 		// Cmd: Generic transaction result
 		Result GenericTransactionCmd( const TransactionID &InTransactionID );
-		// C2S: Client heartbeat
-		Result HeartbeatC2SEvt(  );
+		// Cmd: Generic heartbeat
+		Result HeartbeatCmd( const TransactionID &InTransactionID );
 		// Cmd: Post log data through gateway
 		Result PostLogDataCmd( const TransactionID &InTransactionID, const char* InDestLogChannel, const Array<uint8_t>& InMessageData );
 
@@ -61,6 +61,8 @@ namespace SF
 		Result GenericFailureRes( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: Generic transaction result
 		Result GenericTransactionRes( const TransactionID &InTransactionID, const Result &InResult, const TransactionID &InFinishedTransaction, const char* InSignature );
+		// Cmd: Generic heartbeat
+		Result HeartbeatRes( const TransactionID &InTransactionID, const Result &InResult );
 		// Cmd: Post log data through gateway
 		Result PostLogDataRes( const TransactionID &InTransactionID, const Result &InResult );
 

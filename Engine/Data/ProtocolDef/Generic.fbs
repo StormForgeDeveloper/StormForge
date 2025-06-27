@@ -19,9 +19,13 @@ table GenericTransactionRes
 	signature:string;
 } // table GenericTransactionRes
 
-table HeartbeatC2SEvt
+table HeartbeatCmd
 {
- } // table HeartbeatC2SEvt
+ } // table HeartbeatCmd
+
+table HeartbeatRes
+{
+ } // table HeartbeatRes
 
 table PostLogDataCmd
 {

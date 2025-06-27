@@ -31,8 +31,11 @@ struct GenericTransactionCmdBuilder;
 struct GenericTransactionRes;
 struct GenericTransactionResBuilder;
 
-struct HeartbeatC2SEvt;
-struct HeartbeatC2SEvtBuilder;
+struct HeartbeatCmd;
+struct HeartbeatCmdBuilder;
+
+struct HeartbeatRes;
+struct HeartbeatResBuilder;
 
 struct PostLogDataCmd;
 struct PostLogDataCmdBuilder;
@@ -241,8 +244,8 @@ inline ::flatbuffers::Offset<GenericTransactionRes> CreateGenericTransactionResD
       signature__);
 }
 
-struct HeartbeatC2SEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef HeartbeatC2SEvtBuilder Builder;
+struct HeartbeatCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef HeartbeatCmdBuilder Builder;
   struct Traits;
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -250,32 +253,71 @@ struct HeartbeatC2SEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
 };
 
-struct HeartbeatC2SEvtBuilder {
-  typedef HeartbeatC2SEvt Table;
+struct HeartbeatCmdBuilder {
+  typedef HeartbeatCmd Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
-  explicit HeartbeatC2SEvtBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+  explicit HeartbeatCmdBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ::flatbuffers::Offset<HeartbeatC2SEvt> Finish() {
+  ::flatbuffers::Offset<HeartbeatCmd> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<HeartbeatC2SEvt>(end);
+    auto o = ::flatbuffers::Offset<HeartbeatCmd>(end);
     return o;
   }
 };
 
-inline ::flatbuffers::Offset<HeartbeatC2SEvt> CreateHeartbeatC2SEvt(
+inline ::flatbuffers::Offset<HeartbeatCmd> CreateHeartbeatCmd(
     ::flatbuffers::FlatBufferBuilder &_fbb) {
-  HeartbeatC2SEvtBuilder builder_(_fbb);
+  HeartbeatCmdBuilder builder_(_fbb);
   return builder_.Finish();
 }
 
-struct HeartbeatC2SEvt::Traits {
-  using type = HeartbeatC2SEvt;
-  static auto constexpr Create = CreateHeartbeatC2SEvt;
-  static constexpr auto name = "HeartbeatC2SEvt";
-  static constexpr auto fully_qualified_name = "SF.Flat.Generic.HeartbeatC2SEvt";
+struct HeartbeatCmd::Traits {
+  using type = HeartbeatCmd;
+  static auto constexpr Create = CreateHeartbeatCmd;
+  static constexpr auto name = "HeartbeatCmd";
+  static constexpr auto fully_qualified_name = "SF.Flat.Generic.HeartbeatCmd";
+  static constexpr size_t fields_number = 0;
+  static constexpr std::array<const char *, fields_number> field_names = {};
+};
+
+struct HeartbeatRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef HeartbeatResBuilder Builder;
+  struct Traits;
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           verifier.EndTable();
+  }
+};
+
+struct HeartbeatResBuilder {
+  typedef HeartbeatRes Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  explicit HeartbeatResBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<HeartbeatRes> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<HeartbeatRes>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<HeartbeatRes> CreateHeartbeatRes(
+    ::flatbuffers::FlatBufferBuilder &_fbb) {
+  HeartbeatResBuilder builder_(_fbb);
+  return builder_.Finish();
+}
+
+struct HeartbeatRes::Traits {
+  using type = HeartbeatRes;
+  static auto constexpr Create = CreateHeartbeatRes;
+  static constexpr auto name = "HeartbeatRes";
+  static constexpr auto fully_qualified_name = "SF.Flat.Generic.HeartbeatRes";
   static constexpr size_t fields_number = 0;
   static constexpr std::array<const char *, fields_number> field_names = {};
 };
