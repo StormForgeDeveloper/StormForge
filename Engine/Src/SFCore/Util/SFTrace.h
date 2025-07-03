@@ -131,15 +131,7 @@ namespace SF {
 
 #ifdef TRACE_DBG
 
-	#define TrcErrJmp(trcMod, errval, __var) \
-	do {\
-		__var = errval;\
-		SFLog(trcMod, Error, "{0}({1}): {2}",     \
-			__FILE__, __LINE__, hr ); \
-		goto Proc_End;\
-	} while(0);
-
-	#define TrcErrReturn(trcMod, errval) \
+	#define SFErrReturn(trcMod, errval) \
 	do {\
 		SFLog(trcMod, Error, "{0}({1}): {2}",     \
 			__FILE__, __LINE__, (SF::Result)errval ); \
@@ -147,100 +139,41 @@ namespace SF {
 	} while(0);
 
 // Basic check&branch routine
-#define trcChk(checkState) \
+
+
+
+#define SFCheck(trcMod,checkState) \
 	do{\
 		hr = checkState;\
 		if( !hr.IsSuccess() )\
 		{\
-			defTrace( Error, "{0}({1}): {2}", __FILE__, __LINE__, hr ); \
-			goto Proc_End;\
-		}\
-	}while(0)\
-
-#define trcErr(errVal) \
-	do{\
-		defTrace( Error, "{0}({1}): {2}", __FILE__, __LINE__, hr ); \
-		hr = errVal;\
-		goto Proc_End;\
-	}while(0)\
-
-
-#define trcMem(checkPointer) \
-	do {\
-		if( (checkPointer) == NULL )\
-		{\
-			defTrace( Error, "{0}({1}): Null Exception",     \
-				__FILE__, __LINE__ ); \
-			hr = ResultCode::OUT_OF_MEMORY;\
-			goto Proc_End;\
-		}\
-	} while(0);\
-
-
-#define trcChkPtr(checkPointer) \
-	do{\
-		if( (checkPointer) == NULL )\
-		{\
-			defTrace( Error, "{0}({1}): Invalid Pointer", __FILE__, __LINE__ ); \
-			hr = ResultCode::INVALID_POINTER;\
-			goto Proc_End;\
-		}\
-	}while(0);\
-
-
-#define trcCheck(checkState) \
-	do{\
-		hr = checkState;\
-		if( !hr.IsSuccess() )\
-		{\
-			defTrace( Error, "{0}({1}): {2}", __FILE__, __LINE__, hr ); \
+			SFLog(trcMod, Error, "{0}({1}): {2}", __FILE__, __LINE__, hr ); \
 			return hr;\
 		}\
 	}while(0)\
 
-#define trcError(errVal) \
+#define SFError(trcMod, errVal) \
 	do{\
-		defTrace( Error, "{0}({1}): {2}", __FILE__, __LINE__, hr ); \
+		SFLog(trcMod, Error, "{0}({1}): {2}", __FILE__, __LINE__, hr ); \
 		hr = errVal;\
 		return hr;\
 	}while(0)\
 
 
-#define trcCheckPtr(checkPointer) \
-	do{\
-		if( (checkPointer) == nullptr )\
-		{\
-			defTrace( Error, "{0}({1}): Invalid Pointer", __FILE__, __LINE__ ); \
-			hr = ResultCode::INVALID_POINTER;\
-			return hr;\
-		}\
-	}while(0);\
-
-#define trcCheckMem(checkPointer) \
-	do{\
-		auto pResult = checkPointer;\
-		if( pResult == nullptr )\
-		{\
-			defTrace( Error, "{0}({1}): Invalid Pointer", __FILE__, __LINE__ ); \
-			hr = ResultCode::INVALID_POINTER;\
-			return hr;\
-		}\
-	}while(0);\
-
-#define trcCheckCondition(condi) \
+#define SFCheckCondition(trcMod,condi) \
 				do{ \
 					if( !(condi) ) {\
-					defTrace( Factal, "{0}({1}): Assert occure : {2}", __FILE__, __LINE__, #condi );  SF::Service::LogModule->Flush();\
+					SFLog(trcMod, Factal, "{0}({1}): Assert occure : {2}", __FILE__, __LINE__, #condi );  SF::Service::LogModule->Flush();\
 						return hr = ResultCode::UNEXPECTED;\
 					}\
 				}while(0) \
 
 
 // Assert with expression
-#define trcCheckConditionExp(condi,expr) \
+#define SFCheckConditionExp(trcMod,condi,expr) \
 				do{ \
 					if( !(condi).IsSuccess() ) {\
-						defTrace( Factal, "{0}({1}): Assert occure : {2} : {3}", __FILE__, __LINE__, #condi, expr ); SF::Service::LogModule->Flush();\
+						SFLog(trcMod, Factal, "{0}({1}): Assert occure : {2} : {3}", __FILE__, __LINE__, #condi, expr ); SF::Service::LogModule->Flush();\
 						return hr = ResultCode::UNEXPECTED;\
 					}\
 				}while(0) \
@@ -248,19 +181,14 @@ namespace SF {
 
 
 #else
-	#define TrcErrJmp(trcMod, errval, var) \
-	do {\
-		var = errval;\
-		goto Proc_End;\
-	} while(0);
 
-	#define TrcErrReturn(trcMod, errval) \
+	#define SFErrReturn(trcMod, errval) \
 	do {\
 		return errval;\
 	} while(0);
 
 // Basic check&branch routine
-#define trcChk(checkState) \
+#define SFCheck(trcMod, checkState) \
 	do{\
 		hr = checkState;\
 		if( !hr.IsSuccess() )\
@@ -269,31 +197,12 @@ namespace SF {
 		}\
 	}while(0)\
 
-#define trcErr(errVal) \
+#define SFError(trcMod,errVal) \
 	do {\
 		hr = errVal;\
 		goto Proc_End;\
 	} while(0);\
 
-
-#define trcMem(checkPointer) \
-	do{\
-		if( (checkPointer) == NULL )\
-		{\
-			hr = ResultCode::OUT_OF_MEMORY;\
-			goto Proc_End;\
-		}\
-	}while(0)\
-
-
-#define trcChkPtr(checkPointer) \
-	do{\
-		if( (checkPointer) == NULL )\
-		{\
-			hr = ResultCode::INVALID_POINTER;\
-			goto Proc_End;\
-		}\
-	}while(0)\
 
 
 
@@ -307,7 +216,7 @@ namespace SF {
 					if( !(condi) ) {\
 						CallStackTraceT<15> stackTrace; stackTrace.CaptureCallStack(); stackTrace.PrintStackTrace(CurrentProcessID);\
 					defTrace( Factal, "{0}({1}): Assert occure : {2}", __FILE__, __LINE__, #condi );  SF::Service::LogModule->Flush();\
-						trcCheck(ResultCode::UNEXPECTED);\
+						SFCheck(ResultCode::UNEXPECTED);\
 					}\
 				}while(0) \
 
@@ -318,7 +227,7 @@ namespace SF {
 					if( !(condi) ) {\
 						CallStackTraceT<15> stackTrace; stackTrace.CaptureCallStack(); stackTrace.PrintStackTrace(CurrentProcessID);\
 						defTrace(Factal, "{0}({1}): Assert occure : {2} : {3}", __FILE__, __LINE__, #condi, expr ); SF::Service::LogModule->Flush();\
-						trcCheck(ResultCode::UNEXPECTED);\
+						SFCheck(ResultCode::UNEXPECTED);\
 					}\
 				}while(0) \
 
@@ -370,12 +279,9 @@ namespace SF {
 				do{ \
 					if( !(condi) ) {\
 						AssertRel(condi);\
-						trcErr(ResultCode::UNEXPECTED);\
+						SFError(ResultCode::UNEXPECTED);\
 					}\
 				} while(0)\
-
-
-
 
 
 
@@ -385,22 +291,22 @@ namespace SF {
 //
 
 
-#define defError(e)			trcError(e)
-#define defCheck(e)			trcCheck(e)
-#define defCheckError(ErrCode,exp)			{ do{ Result hRes = exp; if( !hRes.IsSuccess() ) TrcErrJmp(Svr,ErrCode,hr); } while(0); }
-#define defCheckMem(a)			trcCheckMem(a)
-#define defCheckPtr(a)			trcCheckMem(a)
-#define defChkPtr(a)		trcChkPtr(a)
+#define defError(e)			SFError(e)
+#define defCheck(e)			SFCheck(System,e)
+#define defCheckError(ErrCode,exp)			{ do{ Result hRes = exp; if( !hRes.IsSuccess() ) SFErrJmp(Svr,ErrCode); } while(0); }
+#define defCheckMem(a)			SFCheckPtr(System,a)
+#define defCheckPtr(a)			SFCheckPtr(System,a)
+#define defChkPtr(a)		SFCheckPtr(System,a)
 
 
-#define defErr(e)			trcErr(e)
-#define defChk(e)			trcChk(e)
-#define defChkErr(ErrCode,exp)			{ do{ Result hRes = exp; if( !hRes.IsSuccess() ) TrcErrJmp(Svr,ErrCode,hr); } while(0); }
-#define defMem(a)			trcMem(a)
-#define defChkPtr(a)		trcChkPtr(a)
+#define defErr(e)			SFError(e)
+#define defChk(e)			SFCheck(System,e)
+#define defChkErr(ErrCode,exp)			{ do{ Result hRes = exp; if( !hRes.IsSuccess() ) SFErrJmp(Svr,ErrCode); } while(0); }
+#define defMem(a)			SFCheckPtr(System,a)
+#define defChkPtr(a)		SFCheckPtr(System,a)
 
-#define defAssert(e)			trcAssert(e)
-#define defAssertExp(e,expr)	trcAssertExp(e,expr)
+#define defAssert(e)			assert(e)
+#define defAssertExp(__condi,expr)	SFAssertMsg(__condi,expr)
 #define defTrace(lModeMask, ...)				SFLog(System,lModeMask,__VA_ARGS__)
 
 #define defChkSilent(e)		trcChkSilent(e)

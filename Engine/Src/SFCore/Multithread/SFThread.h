@@ -184,11 +184,25 @@ namespace SF {
 			: m_FuncTick(tickFunc)
 		{}
 
+        FunctorTickThread(TickFunc tickFunc, const char* name)
+            : Thread(name)
+            , m_FuncTick(tickFunc)
+        {
+        }
+
         FunctorTickThread(EventFunc onStart, EventFunc onStop, TickFunc tickFunc)
             : m_FuncOnStart(onStart)
             , m_FuncOnStop(onStop)
             , m_FuncTick(tickFunc)
         {}
+
+        FunctorTickThread(EventFunc onStart, EventFunc onStop, TickFunc tickFunc, const char* name)
+            : Thread(name)
+            , m_FuncOnStart(onStart)
+            , m_FuncOnStop(onStop)
+            , m_FuncTick(tickFunc)
+        {
+        }
 
 
         virtual void Run() override

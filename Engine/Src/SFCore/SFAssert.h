@@ -52,6 +52,12 @@ inline void ReportAssert() { SF::CallStackTraceT<15> trace; trace.PrintStackTrac
 
 #endif
 
+#define SFAssertMsg(__condi, msg) \
+                do{ \
+                    assert((__condi) && msg);\
+                } while(0)
+
+
 namespace SF {
 
 

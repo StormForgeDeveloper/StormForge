@@ -139,7 +139,7 @@ namespace SF {
 	//
 	//	Entity unique ID in local
 	//
-	union EntityID
+	union EntityUID
 	{
 		enum {
 			MAX_IDBIT = 24,
@@ -155,27 +155,51 @@ namespace SF {
 		uint32_t ID;
 
 
-		inline EntityID();
-		inline EntityID(const EntityID& entityID);
-		inline EntityID(ServerID serverId, EntityFaculty facultyID, uint32_t entityLID);
-		inline EntityID(uint32_t uiID);
+		EntityUID()
+            :ID(0)
+        {
+        }
+
+		EntityUID(const EntityUID& entityID)
+            : ID(entityID.ID)
+        {
+        }
+
+		EntityUID(ServerID serverId, EntityFaculty facultyID, uint32_t entityLID)
+        {
+            Components.ServerID = serverId;
+            Components.FacultyID = (uint)facultyID;
+            Components.EntityLID = entityLID & 0xFFFF; // to avoid wconversion warning
+        }
+
+		EntityUID(uint32_t uiID)
+            :ID(uiID)
+        {
+        }
 
 		uint32_t GetServerID() const { return Components.ServerID; }
         uint32_t GetEntityLID() const { return Components.EntityLID; }
 		uint32_t GetFacultyID() const { return Components.FacultyID; }
 
         bool IsValid() const { return ID != 0; }
-		inline EntityID& operator = (const EntityID& entityID);
+		EntityUID& operator = (const EntityUID& entityID)
+        {
+            ID = entityID.ID;
 
-		//inline bool operator == ( const EntityID& src ) const;
-		//inline bool operator != ( const EntityID& src ) const;
-#if !defined(SWIG)
-		inline operator uint32_t() const;
-#endif
+            return *this;
+        }
+
+
+		//inline bool operator == ( const EntityUID& src ) const;
+		//inline bool operator != ( const EntityUID& src ) const;
+		operator uint32_t() const
+        {
+            return (uint32_t)ID;
+        }
 	};
 
     // We now use same type. will be merged gradually
-    using EntityUID = EntityID;
+    using EntityID = EntityUID;
 
 
 	using GameInsUID = EntityUID;
@@ -196,45 +220,77 @@ namespace SF {
 	{
 		struct TransactionIDComponent {
             uint32_t	TransID = 0;
-            EntityID	EntityId;
+            EntityUID	EntityUid;
 
 			TransactionIDComponent() {}
-			TransactionIDComponent(EntityID InEntID, uint32_t InTransID)
-				: EntityId(InEntID)
+			TransactionIDComponent(EntityUID InEntID, uint32_t InTransID)
+				: EntityUid(InEntID)
 				, TransID(InTransID)
 			{}
 			TransactionIDComponent(const TransactionIDComponent& src)
-				: EntityId(src.EntityId)
+				: EntityUid(src.EntityUid)
 				, TransID(src.TransID)
 			{}
 
 		} Components{};
 		uint64_t ID;
 
-		inline TransactionID();
-		inline TransactionID(const TransactionID& transID);
-		inline TransactionID(EntityID entityID, uint32_t transID);
-		inline TransactionID(Context context);
+		TransactionID()
+        {
+        }
 
-		inline bool IsValid() const;
+		TransactionID(const TransactionID& transID)
+            : Components(transID.Components)
+        {
+        }
 
-		EntityID GetEntityID() const { return Components.EntityId; }
+		TransactionID(EntityUID entityID, uint32_t transID)
+            : Components(entityID, transID)
+        {
+        }
+
+
+		TransactionID(Context context)
+        {
+            ID = context;
+        }
+
+
+		bool IsValid() const
+        {
+            TransactionID trans;
+            return trans.ID != ID;
+        }
+
+        EntityUID GetEntityUID() const { return Components.EntityUid; }
 		uint32_t GetTransactionIndex() const { return Components.TransID; }
 
-		inline TransactionID& operator = (const TransactionID& transID);
+		TransactionID& operator = (const TransactionID& transID)
+        {
+            ID = transID.ID;
 
-		inline operator uint64_t() const { return ID; }
+            return *this;
+        }
 
-		inline bool operator != (const TransactionID& src) const;
-		inline bool operator == (const TransactionID& src) const;
+		operator uint64_t() const { return ID; }
+
+		bool operator != (const TransactionID& src) const
+        {
+            return ID != src.ID;
+        }
+
+        bool operator == (const TransactionID& src) const
+        {
+            return ID == src.ID;
+        }
 
 	};
 
 
 
 	using AuthTicket = uint64_t;
-	using PartyID = EntityID;
-	using GameInsID = EntityID;
+	using PartyID = EntityUID;
+	using GameInsID = EntityUID;
 	using GameInsUID = EntityUID;
 
 

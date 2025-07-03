@@ -272,12 +272,11 @@ namespace SF {
 
 			// read Root
 			// ping pong counter
-			SyncCounter m_ReadCount[3];
+			mutable SyncCounter m_ReadCount[3];
 			ReferenceAccessPoint m_ReadRoot;
 			SynchronizeCounter m_ReadIndex;
 
 			//For read debug
-			ReferenceAccessPoint m_CurReadRoot;
 			volatile MapNode* m_PrevReadRoot;
 
 			// Write root
@@ -320,12 +319,12 @@ namespace SF {
 			Result CommitChanges();
 
 			// Find a key value
-			Result Find(KeyType key, ValueType& value, int64_t *pOrder = nullptr);
+			Result Find(KeyType key, ValueType& value, int64_t *pOrder = nullptr) const;
 
 			bool Contains(KeyType key);
 
 			// Find biggest from less than or equal to
-			Result FindBiggest(KeyType key, ValueType& value, int64_t *pOrder = nullptr);
+			Result FindBiggest(KeyType key, ValueType& value, int64_t *pOrder = nullptr) const;
 
 			// get number of values
 			size_t size() const { return m_ReadItemCount; }
@@ -345,8 +344,7 @@ namespace SF {
 				auto readIdx = m_ReadIndex.load(std::memory_order_relaxed) % countof(m_ReadCount);
 				ScopeCounter localCounter(m_ReadCount[readIdx]);
 
-				m_CurReadRoot = m_ReadRoot.load(std::memory_order_acquire);
-				auto readRoot = (MapNode*)m_CurReadRoot.load();
+				auto readRoot = (MapNode*)m_ReadRoot.load(std::memory_order_acquire);
 				if (readRoot == nullptr)
 					return ResultCode::FAIL;
 
@@ -359,8 +357,7 @@ namespace SF {
 				auto readIdx = m_ReadIndex.load(std::memory_order_relaxed) % countof(m_ReadCount);
 				ScopeCounter localCounter(m_ReadCount[readIdx]);
 
-				m_CurReadRoot = m_ReadRoot.load(std::memory_order_acquire);
-				auto readRoot = (MapNode*)m_CurReadRoot.load();
+				auto readRoot = (MapNode*)m_ReadRoot.load(std::memory_order_acquire);
 				if (readRoot == nullptr)
 					return ResultCode::FAIL;
 
@@ -388,9 +385,9 @@ namespace SF {
 			MapNode* FindSmallestNode(OperationTraversalHistory &travelHistory, MapNode* pRootNode);
 			MapNode* FindBiggestNode(OperationTraversalHistory &travelHistory, MapNode* pRootNode);
 
-			Result FindNodeRead(OperationTraversalHistory &travelHistory, MapNode* pRootNode, KeyType key, MapNode* &pNode);
-			MapNode* FindSmallestNodeRead(OperationTraversalHistory &travelHistory, MapNode* pRootNode);
-			MapNode* FindBiggestNodeRead(OperationTraversalHistory &travelHistory, MapNode* pRootNode);
+			Result FindNodeRead(OperationTraversalHistory &travelHistory, MapNode* pRootNode, KeyType key, MapNode* &pNode) const;
+			MapNode* FindSmallestNodeRead(OperationTraversalHistory &travelHistory, MapNode* pRootNode) const;
+			MapNode* FindBiggestNodeRead(OperationTraversalHistory &travelHistory, MapNode* pRootNode) const;
 
 			template<class Func>
 			Result ForeachOrder(MapNode* pRootNode, INT startOrderIndex, uint count, const Func& functor)
@@ -605,7 +602,7 @@ namespace SF {
 			// Update valance factor and return new balance value
 			void FixupBalance(OperationTraversalHistory &travelHistory);
 
-			int64_t CalculateOrder(OperationTraversalHistory &travelHistory, MapNode* pNode);
+			int64_t CalculateOrder(OperationTraversalHistory &travelHistory, MapNode* pNode) const;
 
 			// Commit pending free list
 			void CommitPendingFree();

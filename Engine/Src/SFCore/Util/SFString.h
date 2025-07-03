@@ -1405,9 +1405,8 @@ namespace SF {
 	extern template class TString<wchar_t>;
 
 
-	using String = TString<char>;
-	using WString = TString<wchar_t>;
-
+    using String = TString<char>;
+    using WString = TString<wchar_t>;
 
 	extern const String String_Empty;
 	extern const String String_True;

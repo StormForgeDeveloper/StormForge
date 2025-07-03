@@ -94,7 +94,8 @@ namespace SF
     {
         Result hr;
 
-        defCheckMem(m_Headers = curl_slist_append(m_Headers, headerEntry));
+        m_Headers = curl_slist_append(m_Headers, headerEntry);
+        SFCheckPtr(System,m_Headers);
 
         return hr;
     }

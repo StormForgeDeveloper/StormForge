@@ -13,6 +13,7 @@
 
 #include <stdint.h>
 #include "SFHasher64.h"
+#include "Container/SFIndexing.h"
 
 // MSVC compiler generates warning 4307 with constexpr functions which can't be avoided
 #ifdef _MSC_VER
@@ -78,5 +79,35 @@ namespace SF {
         return Hasher_Murmur64().Hash(0, s, sz);
     }
 
+
+
+    template<>
+    class hash<StringCrc64>
+    {
+    public:
+        typedef StringCrc64 KeyType;
+
+        size_t operator()(const KeyType& _Keyval) const
+        {
+            return _Keyval.GetHash();
+        }
+    };
+
 }
 
+namespace std
+{
+
+    template<>
+    class hash<SF::StringCrc64>
+    {
+    public:
+        typedef SF::StringCrc64 KeyType;
+
+        size_t operator()(const KeyType& _Keyval) const
+        {
+            return _Keyval.GetHash();
+        }
+    };
+
+}

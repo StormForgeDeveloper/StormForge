@@ -62,7 +62,7 @@ namespace SF
             });
 
 
-        if (!(_ToString(context, Data.GetEntityID())))
+        if (!(_ToString(context, Data.GetEntityUID())))
             return ResultCode::FAIL;
 
         if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))

@@ -52,7 +52,6 @@ namespace SF {
 			: m_Heap(memoryManager)
 			, m_ReadRoot(nullptr)
 			, m_ReadIndex(0)
-			, m_CurReadRoot(nullptr)
 			, m_PrevReadRoot(nullptr)
 			, m_WriteRoot(nullptr)
 			, m_PendingFreeCount(0)
@@ -402,13 +401,12 @@ namespace SF {
 
 		// Find a key value
 		template<class KeyType, class ValueType>
-		Result DualSortedMap<KeyType, ValueType>::Find(KeyType key, ValueType& value, int64_t *pOrder)
+		Result DualSortedMap<KeyType, ValueType>::Find(KeyType key, ValueType& value, int64_t *pOrder) const
 		{
 			auto readIdx = m_ReadIndex.load(std::memory_order_relaxed) % countof(m_ReadCount);
 			ScopeCounter localCounter(m_ReadCount[readIdx]);
 
-			m_CurReadRoot = m_ReadRoot.load(std::memory_order_acquire);
-			MapNode* pReadRoot = (MapNode*)m_CurReadRoot.load();
+			MapNode* pReadRoot = (MapNode*)m_ReadRoot.load(std::memory_order_acquire);
 			if (pReadRoot == nullptr)
 			{
 				return ResultCode::FAIL;
@@ -445,13 +443,12 @@ namespace SF {
 
 		// Find biggest from less than or equal to
 		template<class KeyType, class ValueType>
-		Result DualSortedMap<KeyType, ValueType>::FindBiggest(KeyType key, ValueType& value, int64_t *pOrder)
+		Result DualSortedMap<KeyType, ValueType>::FindBiggest(KeyType key, ValueType& value, int64_t *pOrder) const
 		{
 			auto readIdx = m_ReadIndex.load(std::memory_order_relaxed) % countof(m_ReadCount);
 			ScopeCounter localCounter(m_ReadCount[readIdx]);
 
-			m_CurReadRoot = m_ReadRoot.load(std::memory_order_acquire);
-			auto pReadRoot = (MapNode*)m_CurReadRoot.load();
+			auto pReadRoot = (MapNode*)m_ReadRoot.load(std::memory_order_acquire);
 			if (pReadRoot == nullptr)
 			{
 				return ResultCode::FAIL;
@@ -674,7 +671,7 @@ namespace SF {
 		}
 
 		template<class KeyType, class ValueType>
-		Result DualSortedMap<KeyType, ValueType>::FindNodeRead(OperationTraversalHistory &travelHistory, MapNode* pRootNode, KeyType key, MapNode* &pNode)
+		Result DualSortedMap<KeyType, ValueType>::FindNodeRead(OperationTraversalHistory &travelHistory, MapNode* pRootNode, KeyType key, MapNode* &pNode) const
 		{
 			MapNode* pCurNode = pRootNode;
 			if (pCurNode == nullptr)
@@ -736,7 +733,7 @@ namespace SF {
 		}
 
 		template<class KeyType, class ValueType>
-		typename DualSortedMap<KeyType, ValueType>::MapNode* DualSortedMap<KeyType, ValueType>::FindSmallestNodeRead(OperationTraversalHistory &travelHistory, MapNode* pRootNode)
+		typename DualSortedMap<KeyType, ValueType>::MapNode* DualSortedMap<KeyType, ValueType>::FindSmallestNodeRead(OperationTraversalHistory &travelHistory, MapNode* pRootNode) const
 		{
 			if (pRootNode == nullptr) return nullptr;
 
@@ -756,7 +753,7 @@ namespace SF {
 		}
 
 		template<class KeyType, class ValueType>
-		typename DualSortedMap<KeyType, ValueType>::MapNode* DualSortedMap<KeyType, ValueType>::FindBiggestNodeRead(OperationTraversalHistory &travelHistory, MapNode* pRootNode)
+		typename DualSortedMap<KeyType, ValueType>::MapNode* DualSortedMap<KeyType, ValueType>::FindBiggestNodeRead(OperationTraversalHistory &travelHistory, MapNode* pRootNode) const
 		{
 			if (pRootNode == nullptr) return nullptr;
 
@@ -976,7 +973,7 @@ namespace SF {
 		}
 
 		template<class KeyType, class ValueType>
-		int64_t DualSortedMap<KeyType, ValueType>::CalculateOrder(OperationTraversalHistory &travelHistory, MapNode* pNode)
+        int64_t DualSortedMap<KeyType, ValueType>::CalculateOrder(OperationTraversalHistory& travelHistory, MapNode* pNode) const
 		{
 			if (pNode == nullptr)
 				return 0;

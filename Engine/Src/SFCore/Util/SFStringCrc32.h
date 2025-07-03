@@ -12,7 +12,7 @@
 
 #include <stdint.h>
 #include "SFHasher32C.h"
-
+#include "Container/SFIndexing.h"
 
 namespace SF
 {
@@ -57,4 +57,34 @@ namespace SF
     constexpr StringCrc32 operator "" _crc32c(const char* s, size_t sz) {
         return Hasher_Crc32C::Hash(s);
     }
+
+
+    template<>
+    class hash<StringCrc32>
+    {
+    public:
+        typedef StringCrc32 KeyType;
+
+        size_t operator()(const KeyType& _Keyval) const
+        {
+            return _Keyval.GetHash();
+        }
+    };
+
+}
+
+namespace std
+{
+    template<>
+    class hash<SF::StringCrc32>
+    {
+    public:
+        typedef SF::StringCrc32 KeyType;
+
+        size_t operator()(const KeyType& _Keyval) const
+        {
+            return _Keyval.GetHash();
+        }
+    };
+
 }

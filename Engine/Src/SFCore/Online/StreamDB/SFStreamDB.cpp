@@ -23,7 +23,6 @@
 
 namespace SF
 {
-
     namespace Log
     {
         LogChannel Kafka("Kafka", LogOutputType::Debug4);
@@ -491,7 +490,7 @@ namespace SF
         {
             SFLog(Kafka, Log, "Consumer::PollData, there are no partition, querying again");
 
-            trcCheck(UpdateTopicMetadata(m_Consumer.get()));
+            SFCheck(Kafka, UpdateTopicMetadata(m_Consumer.get()));
         }
 
 		UniquePtr<RdKafka::Message> message(m_Consumer->consume(GetTopicHandle().get(), GetPartition(), timeoutMS));

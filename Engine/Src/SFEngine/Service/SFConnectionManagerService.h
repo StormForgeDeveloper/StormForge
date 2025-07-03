@@ -17,7 +17,7 @@
 #include "Util/SFStringCrcDB.h"
 #include "Net/SFNetDef.h"
 #include "Task/SFTask.h"
-
+#include "Container/SFIndexingEngineTypes.h"
 
 
 namespace SF {
