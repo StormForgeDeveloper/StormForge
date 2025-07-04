@@ -389,7 +389,7 @@ namespace SF
 
         packetBuilder.Finish(payloadOffset);
 
-        MessageHeader2 packetHeader;
+        MessageHeader packetHeader;
         packetHeader.TransactionId = TransactionID(eventId);
         packetHeader.MessageId = Message::Telemetry::MID_PostEventCmd;
         Result resultPH;
@@ -410,7 +410,7 @@ namespace SF
         if (recvData.size() == 0)
             return hr;
 
-        const MessageHeader2* messageHeader = reinterpret_cast<const MessageHeader2*>(recvData.data());
+        const MessageHeader* messageHeader = reinterpret_cast<const MessageHeader*>(recvData.data());
 
         uint expectedSize = messageHeader->MessageSize;
         if (recvData.size() != expectedSize)

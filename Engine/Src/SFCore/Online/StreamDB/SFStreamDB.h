@@ -150,7 +150,7 @@ namespace SF
 
 	////////////////////////////////////////////////////////////////////////////////////////////
 	//
-	//  class StreamDBConsumer
+    //  class StreamMessageData wraps the kafka message data
 	//
 
 	class StreamMessageData : public ArrayView<const uint8_t>

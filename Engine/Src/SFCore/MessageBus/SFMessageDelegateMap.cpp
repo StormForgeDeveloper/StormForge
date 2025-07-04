@@ -54,7 +54,7 @@ namespace SF
         m_RecvMessageDelegatesByMsgId.clear();
     }
 
-    Result MessageDelegateMap2::OnMessage(const MessageHeader2* pMsgHeader)
+    Result MessageDelegateMap2::OnMessage(const MessageHeader* pMsgHeader)
     {
         Result hr;
 

@@ -25,9 +25,9 @@ namespace SF
     //	Network Message header2
     //
 
-    MessageHeader2* MessageHeader2::Clone(IHeap& heap)
+    MessageHeader* MessageHeader::Clone(IHeap& heap)
     {
-        MessageHeader2* pNewHeader = reinterpret_cast<MessageHeader2*>(heap.Alloc(MessageSize));
+        MessageHeader* pNewHeader = reinterpret_cast<MessageHeader*>(heap.Alloc(MessageSize));
         if (pNewHeader)
         {
             memcpy(pNewHeader, this, MessageSize);
@@ -36,7 +36,7 @@ namespace SF
         return pNewHeader;
     }
 
-    void MessageHeader2::UpdateNWriteTo(::flatbuffers::FlatBufferBuilder& packetBuilder, Result result)
+    void MessageHeader::UpdateNWriteTo(::flatbuffers::FlatBufferBuilder& packetBuilder, Result result)
     {
         if (MessageId.GetMessageType() == EMessageType::Result)
         {
@@ -44,9 +44,9 @@ namespace SF
         }
 
         // Update size
-        MessageSize = (uint16_t)(packetBuilder.GetSize() + sizeof(MessageHeader2));
+        MessageSize = (uint16_t)(packetBuilder.GetSize() + sizeof(MessageHeader));
 
-        packetBuilder.PushBytes((const uint8_t*)this, sizeof(MessageHeader2));
+        packetBuilder.PushBytes((const uint8_t*)this, sizeof(MessageHeader));
     }
 
 

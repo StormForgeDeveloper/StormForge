@@ -31,7 +31,7 @@ namespace SF {
     //
     //	Network Packet Message base Header
     //
-    struct MessageHeader2
+    struct MessageHeader
     {
         // Message ID
         MessageID	MessageId;
@@ -45,9 +45,9 @@ namespace SF {
         uint16_t GetHeaderSize() const
         {
             if (MessageId.GetMessageType() == EMessageType::Result)
-                return static_cast<uint16_t>(sizeof(MessageHeader2) + sizeof(Result));
+                return static_cast<uint16_t>(sizeof(MessageHeader) + sizeof(Result));
             else
-                return static_cast<uint16_t>(sizeof(MessageHeader2));
+                return static_cast<uint16_t>(sizeof(MessageHeader));
         }
 
         // Read and return result if it is transaction result 
@@ -55,7 +55,7 @@ namespace SF {
         {
             if (MessageId.GetMessageType() == EMessageType::Result)
             {
-                return *reinterpret_cast<const Result*>(reinterpret_cast<uintptr_t>(this) + sizeof(MessageHeader2));
+                return *reinterpret_cast<const Result*>(reinterpret_cast<uintptr_t>(this) + sizeof(MessageHeader));
             }
             else
                 return ResultCode::SUCCESS_FALSE;
@@ -101,18 +101,16 @@ namespace SF {
         }
 
         // Make a clone of this message
-        MessageHeader2* Clone(IHeap& heap);
+        MessageHeader* Clone(IHeap& heap);
 
         // Update size and write to flat packet builder
         void UpdateNWriteTo(::flatbuffers::FlatBufferBuilder& packetBuilder, Result result);
 
     };
 
-    static_assert((sizeof(uint16_t) * 7) == sizeof(MessageHeader2), "MessageHeader should fit");
+    static_assert((sizeof(uint16_t) * 7) == sizeof(MessageHeader), "MessageHeader should fit");
 
 #pragma pack(pop)
-
-    using MessageHeader = MessageHeader2;
 
 } // SF
 

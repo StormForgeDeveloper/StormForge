@@ -58,13 +58,13 @@ namespace SF
         {
             Result hr;
 
-            MessageHeader2 messageHeader;
+            MessageHeader messageHeader;
             messageHeader.MessageId = messageId;
             messageHeader.TransactionId = transactionId;
 
             messageHeader.UpdateNWriteTo(fbb, result);
 
-            const MessageHeader2* pMessageHeader = reinterpret_cast<const MessageHeader2*>(fbb.GetBufferPointer());
+            const MessageHeader* pMessageHeader = reinterpret_cast<const MessageHeader*>(fbb.GetBufferPointer());
             return m_Endpoint->SendMsg(pMessageHeader);
         }
     };

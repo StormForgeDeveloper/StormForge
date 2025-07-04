@@ -128,19 +128,19 @@ namespace SF
 
 		void Invoke(const std::remove_reference_t<ArgTypes>&... args)
 		{
-			m_CallSerial++;
+			auto callSerial = ++m_CallSerial;
 
 			for (uint iArray = 0; iArray < m_DelegateArray.size(); iArray++)
 			{
 				auto& itDelegate = m_DelegateArray[iArray];
 				// Skip if it is already invoked
-				if (itDelegate.CallSerial == m_CallSerial)
+				if (itDelegate.CallSerial == callSerial)
 					continue;
 
-				itDelegate.CallSerial = m_CallSerial;
+				itDelegate.CallSerial = callSerial;
 				itDelegate.Func(args...);
 
-				if (itDelegate.CallSerial != m_CallSerial) // something removed
+				if (itDelegate.CallSerial != callSerial) // something removed
 				{
 					iArray = 0; // need to search from the beginning
 				}

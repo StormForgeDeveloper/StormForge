@@ -78,7 +78,7 @@ namespace SF {
     class  MessageDelegateMap2
     {
     public:
-        using RecvMessageDelegates = EventDelegateList<const MessageHeader2*>;
+        using RecvMessageDelegates = EventDelegateList<const MessageHeader*>;
 
         MessageDelegateMap2();
         ~MessageDelegateMap2();
@@ -105,7 +105,7 @@ namespace SF {
             }
         }
 
-        Result OnMessage(const MessageHeader2* pMsgHeader);
+        Result OnMessage(const MessageHeader* pMsgHeader);
 
     private:
         // Received message handler map by msgId
