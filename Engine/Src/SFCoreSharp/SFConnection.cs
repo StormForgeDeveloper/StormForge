@@ -21,7 +21,37 @@ using AOT;
 
 namespace SF
 {
-    public class SFConnection : SFObject, IEndpoint
+
+    public class SFConnectionEndpointAdapter : IEndpoint
+    {
+        public SFConnection Connection { get; private set; }
+
+        public SFConnectionEndpointAdapter(SFConnection connection)
+        {
+            Connection = connection;
+        }
+
+        public override TransactionID NewTransactionID()
+        {
+            return Connection.NewTransactionID();
+        }
+        public override Result SendMessage(ref SF.MessageHeader messageHeader, Google.FlatBuffers.FlatBufferBuilder builder)
+        {
+            return Connection.SendMessage(ref messageHeader, builder);
+        }
+        public override Result SendMessage(string destTopic, ref SF.MessageHeader messageHeader, Google.FlatBuffers.FlatBufferBuilder builder)
+        {
+            // We don't support destTopic for SFConnection
+            return Connection.SendMessage(ref messageHeader, builder);
+        }
+        public override void HandleSentMessage(Result result, TransactionID transId, MessageID messageID, Action<SFMessage>? callback = null)
+        {
+            Connection.HandleSentMessage(result, transId, messageID, callback);
+        }
+    }
+
+
+    public class SFConnection : SFObject
     {
 
         // Connection state
@@ -80,15 +110,6 @@ namespace SF
         readonly SFIMessageRouter m_MessageRouter;
 
         public SFIMessageRouter MessageRouter { get { return m_MessageRouter; } }
-
-
-        public void HandleSentMessage(Result result, TransactionID transId, MessageID messageID, Action<SFMessage>? callback = null)
-        {
-            if (m_MessageRouter != null)
-            {
-                m_MessageRouter.HandleSentMessage(result, transId, messageID, callback);
-            }
-        }
 
         public OnlineTransactionIDGenerator? TransactionIDGenerator { get; private set; } = null;
         public TransactionID NewTransactionID()
@@ -227,6 +248,13 @@ namespace SF
             return default(Result);
         }
 
+        public void HandleSentMessage(Result result, TransactionID transId, MessageID messageID, Action<SFMessage>? callback = null)
+        {
+            if (m_MessageRouter != null)
+            {
+                m_MessageRouter.HandleSentMessage(result, transId, messageID, callback);
+            }
+        }
 
         #region Message Parsing
 

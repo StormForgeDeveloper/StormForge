@@ -17,11 +17,16 @@ using System.Text;
 
 namespace SF
 {
-    public interface IEndpoint
+    public abstract class IEndpoint
     {
-        public TransactionID NewTransactionID();
-        public Result SendMessage(ref SF.MessageHeader messageHeader, Google.FlatBuffers.FlatBufferBuilder builder);
-        public void HandleSentMessage(Result result, TransactionID transId, MessageID messageID, Action<SFMessage>? callback = null);
+        public abstract TransactionID NewTransactionID();
+        public abstract Result SendMessage(ref SF.MessageHeader messageHeader, Google.FlatBuffers.FlatBufferBuilder builder);
+        public abstract Result SendMessage(string destTopic, ref SF.MessageHeader messageHeader, Google.FlatBuffers.FlatBufferBuilder builder);
+        public abstract void HandleSentMessage(Result result, TransactionID transId, MessageID messageID, Action<SFMessage>? callback = null);
+        public virtual void HandleSentMessage(Result result, TransactionID transId, string topic, MessageID messageID, Action<SFMessage>? callback = null)
+        {
+            HandleSentMessage(result, transId, messageID, callback);
+        }
 
     }
 
@@ -32,12 +37,12 @@ namespace SF
         public ArraySegment<byte>? LastMessage { get; private set; }
 
 
-        public TransactionID NewTransactionID()
+        public override TransactionID NewTransactionID()
         {
             return new TransactionID(m_TransactionIdGen++);
         }
 
-        public Result SendMessage(ref SF.MessageHeader messageHeader, Google.FlatBuffers.FlatBufferBuilder builder)
+        public override Result SendMessage(ref SF.MessageHeader messageHeader, Google.FlatBuffers.FlatBufferBuilder builder)
         {
             messageHeader.WriteHeader(builder);
 
@@ -46,10 +51,28 @@ namespace SF
 
             LastTransactionId = messageHeader.TransactionId;
             LastMessage = segment;
+
+            HandleSentMessage(ResultCode.SUCCESS, messageHeader.TransactionId, string.Empty, messageHeader.MessageId);
+
             return ResultCode.SUCCESS;
         }
 
-        public void HandleSentMessage(Result result, TransactionID transId, MessageID messageID, Action<SFMessage>? callback = null)
+        public override Result SendMessage(string destTopic, ref SF.MessageHeader messageHeader, Google.FlatBuffers.FlatBufferBuilder builder)
+        {
+            messageHeader.WriteHeader(builder);
+
+            var buf = builder.DataBuffer;
+            var segment = buf.ToArraySegment(buf.Position, buf.Length - buf.Position);
+
+            LastTransactionId = messageHeader.TransactionId;
+            LastMessage = segment;
+
+            HandleSentMessage(ResultCode.SUCCESS, messageHeader.TransactionId, destTopic, messageHeader.MessageId);
+
+            return ResultCode.SUCCESS;
+        }
+
+        public override void HandleSentMessage(Result result, TransactionID transId, MessageID messageID, Action<SFMessage>? callback = null)
         {
         }
 

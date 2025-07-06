@@ -41,7 +41,7 @@ namespace SF {
 		// Close entity and clear transaction
 		virtual Result Terminate();
 
-        const String& GetChannel() const { return m_EndpointAddress.Channel; }
+        virtual StringCrc32 GetChannel() const override { return m_EndpointAddress.Channel.c_str(); }
 
 		virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) override;
         virtual Result SendMsg(const MessageHeader* messageData) override;

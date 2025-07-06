@@ -196,6 +196,7 @@ namespace Net {
         virtual flatbuffers::FlatBufferBuilder* GetBuilder() { return nullptr; };
 
         virtual SharedPointerT<Net::Connection> GetConnection() const { return {}; }
+        virtual StringCrc32 GetChannel() const { return {}; }
 		virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) = 0;
         virtual Result SendMsg(const MessageHeader* messageData) = 0;
 	};

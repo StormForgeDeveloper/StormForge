@@ -472,7 +472,7 @@ namespace SF
 
     [Struct]
     [StructLayout(LayoutKind.Sequential)]
-    public struct TransactionID
+    public struct TransactionID : IFormattable
     {
         public static readonly TransactionID Empty = new TransactionID();
 
@@ -496,6 +496,11 @@ namespace SF
         }
 
         public new string ToString()
+        {
+            return $"{TransactionId:X16}";
+        }
+
+        public string ToString(string? format, IFormatProvider? formatProvider)
         {
             return $"{TransactionId:X16}";
         }
