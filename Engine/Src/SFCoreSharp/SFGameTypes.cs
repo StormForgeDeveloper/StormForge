@@ -490,6 +490,9 @@ namespace SF
 
         public bool IsValid => TransactionId != 0;
 
+        public UInt32 EntityUID => (UInt32)(TransactionId >> 32);
+        public UInt32 TransactionIndex => (UInt32)(TransactionId);
+
         public TransactionID(ulong transactionId)
         {
             TransactionId = transactionId;

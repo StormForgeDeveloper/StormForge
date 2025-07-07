@@ -9,9 +9,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
+using SF;
 using System;
 using System.Diagnostics;
-using SF;
 
 #nullable enable
 
@@ -26,14 +26,16 @@ namespace SF.Net
 
 		public SF.IEndpoint? Endpoint { get { return m_Endpoint; } set { m_Endpoint = value; } }
 
+        bool TryToRouteResultToSender = false;
 
-		public RPCAdapter()
+        public RPCAdapter()
 		{
 		}
 
-        public RPCAdapter(SF.IEndpoint endpoint)
+        public RPCAdapter(SF.IEndpoint endpoint, bool tryToRouteResultToSender = false)
         {
             m_Endpoint = endpoint;
+            TryToRouteResultToSender = tryToRouteResultToSender;
         }
 
         public TransactionID NewTransactionID()
@@ -62,7 +64,17 @@ namespace SF.Net
                 TransactionResult = result,
             };
 
-            hr = m_Endpoint.SendMessage(ref messageHeader, builder);
+            // try to returning message to destination target directly
+            if (TryToRouteResultToSender && messageHeader.MessageId.MessageType == EMessageType.Result && messageHeader.TransactionId.EntityUID != 0)
+            {
+                // Service::ServerConfig->ServerEndpointAddress.Channel
+                string destTopic = $"Ent_{transactionId.EntityUID:X8}";
+                hr = m_Endpoint.SendMessage(destTopic, ref messageHeader, builder);
+            }
+            else
+            {
+                hr = m_Endpoint.SendMessage(ref messageHeader, builder);
+            }
 
             m_Endpoint.HandleSentMessage(hr, transactionId, messageId, callback);
 

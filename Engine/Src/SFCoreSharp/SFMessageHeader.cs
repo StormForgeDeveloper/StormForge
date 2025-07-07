@@ -38,7 +38,7 @@ namespace SF
 
             Google.FlatBuffers.ByteBuffer byteBuffer = buffer.DataBuffer;
 
-            if (MessageId.Type == EMessageType.Result)
+            if (MessageId.MessageType == EMessageType.Result)
             {
                 byteBuffer.Position -= sizeof(Int32);
                 byteBuffer.PutInt(byteBuffer.Position, TransactionResult.Code);
@@ -66,7 +66,7 @@ namespace SF
             PayloadSize = buffer.GetUshort(offset + 12);
             buffer.Position += HeaderBaseSize;
 
-            if (MessageId.Type == EMessageType.Result)
+            if (MessageId.MessageType == EMessageType.Result)
             {
                 TransactionResult.Code = buffer.GetInt(offset + HeaderBaseSize);
                 buffer.Position += sizeof(Int32);
