@@ -141,6 +141,8 @@ namespace SF {
 	//
 	union EntityUID
 	{
+        static const EntityUID Invalid;
+
 		enum {
 			MAX_IDBIT = 24,
 		};
@@ -180,6 +182,10 @@ namespace SF {
 		uint32_t GetServerID() const { return Components.ServerID; }
         uint32_t GetEntityLID() const { return Components.EntityLID; }
 		uint32_t GetFacultyID() const { return Components.FacultyID; }
+        EntityUID GetServerEntityUID() const
+        {
+            return EntityUID(Components.ServerID, EntityFaculty::Server, 0);
+        }
 
         bool IsValid() const { return ID != 0; }
 		EntityUID& operator = (const EntityUID& entityID)

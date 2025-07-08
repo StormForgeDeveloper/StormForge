@@ -370,6 +370,8 @@ set(SUBOnline_FILES
 	MessageBus/SFMessageDelegateMap.cpp
 	MessageBus/SFMemoryEndpoint.h
 	MessageBus/SFMemoryEndpoint.cpp
+	MessageBus/SFRPCSendAdapter.h
+	MessageBus/SFRPCSendAdapter.cpp
   )
 
 source_group(Online FILES

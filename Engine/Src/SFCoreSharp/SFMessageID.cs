@@ -70,13 +70,14 @@ namespace SF
         const uint NET_RELIABILITY_SHIFT = NET_TYPE_SHIFT - NET_RELIABILITY_BITS;
         const uint NET_RELIABILITY_MASK = ((uint)(1 << (int)NET_RELIABILITY_BITS) - 1) << (int)NET_RELIABILITY_SHIFT;
 
-        const uint NET_BROADCAST_BITS = 1;
-        const uint NET_BROADCAST_SHIFT = NET_RELIABILITY_SHIFT - NET_BROADCAST_BITS;
-        const uint NET_BROADCAST_MASK = ((uint)(1 << (int)NET_BROADCAST_BITS) - 1) << (int)NET_BROADCAST_SHIFT;
+        const uint NET_INTERSERVER_BITS = 1;
+        const uint NET_INTERSERVER_SHIFT = NET_RELIABILITY_SHIFT - NET_INTERSERVER_BITS;
+        const uint NET_INTERSERVER_MASK = ((uint)(1 << (int)NET_INTERSERVER_BITS) - 1) << (int)NET_INTERSERVER_SHIFT;
 
         public uint ProtocolId => ((MessageIdRaw & NET_PROTOCOL_MASK) >> (int)NET_PROTOCOL_SHIFT);
         public uint CodeIndex => ((MessageIdRaw & NET_CODE_MASK) >> (int)NET_CODE_SHIFT);
         public EMessageType MessageType => (EMessageType)((MessageIdRaw & NET_TYPE_MASK) >> (int)NET_TYPE_SHIFT);
+        public bool InterServer => ((MessageIdRaw & NET_INTERSERVER_MASK) >> (int)NET_INTERSERVER_SHIFT) != 0;
         public UInt32 IDOnly => MessageIdRaw & (~NET_SEQUENCE_MASK);
         public UInt32 Sequence => MessageIdRaw & NET_SEQUENCE_MASK;
 
@@ -87,7 +88,7 @@ namespace SF
 
         public static MessageID MakeMessageID(EMessageType type, uint uiReliability, uint uiProtocol, uint uiCode)
         {
-            uint uiBroadcast = 0;// deprecated
+            uint uiInterServer = 0;
             return new MessageID()
             {
                 MessageIdRaw = (uint)0
@@ -95,7 +96,7 @@ namespace SF
                     | ((uiCode << (int)NET_CODE_SHIFT) & NET_CODE_MASK)
                     | (((uint)type << (int)NET_TYPE_SHIFT) & NET_TYPE_MASK)
                     | ((uiReliability << (int)NET_RELIABILITY_SHIFT) & NET_RELIABILITY_MASK)
-                    | ((uiBroadcast << (int)NET_BROADCAST_SHIFT) & NET_BROADCAST_MASK)
+                    | ((uiInterServer << (int)NET_INTERSERVER_SHIFT) & NET_INTERSERVER_MASK)
 
             };
         }

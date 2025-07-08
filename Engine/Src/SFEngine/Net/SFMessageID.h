@@ -82,13 +82,10 @@ namespace SF {
         uint32_t ID;
 
         EMessageType GetMessageType() const { return (EMessageType)IDs.Type; }
+        bool IsInterServer() const { return !!IDs.InterServer; }
 
         constexpr MessageID() : ID(0) {}
         constexpr MessageID(uint32_t uiID) : ID(uiID) {}
-        constexpr MessageID(EMessageType type, uint uiReliability, uint uiInterServer, uint uiProtocol, uint uiCode)
-            : IDs({ 0, uiInterServer, uiReliability, (uint)type, uiCode, uiProtocol })
-        {
-        }
 
         constexpr MessageID(EMessageType type, uint uiReliability, uint uiProtocol, uint uiCode)
             : IDs({ 0, 0, uiReliability, (uint)type, uiCode, uiProtocol })

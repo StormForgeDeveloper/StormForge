@@ -44,21 +44,55 @@ namespace SF {
 
         uint16_t GetHeaderSize() const
         {
+            uint16_t headerSize = static_cast<uint16_t>(sizeof(MessageHeader));
+
+            if (MessageId.IsInterServer())
+                headerSize += sizeof(EntityUID);
+
             if (MessageId.GetMessageType() == EMessageType::Result)
-                return static_cast<uint16_t>(sizeof(MessageHeader) + sizeof(Result));
-            else
-                return static_cast<uint16_t>(sizeof(MessageHeader));
+                headerSize += sizeof(Result);
+
+            return headerSize;
         }
 
         // Read and return result if it is transaction result 
         Result GetTransactionResult() const
         {
+            uintptr_t offset = reinterpret_cast<uintptr_t>(this) + sizeof(MessageHeader);
+
+            if (MessageId.IsInterServer())
+                offset += sizeof(EntityUID);
+
             if (MessageId.GetMessageType() == EMessageType::Result)
             {
-                return *reinterpret_cast<const Result*>(reinterpret_cast<uintptr_t>(this) + sizeof(MessageHeader));
+                return *reinterpret_cast<const Result*>(offset);
             }
             else
                 return ResultCode::SUCCESS_FALSE;
+        }
+
+        void SetDestinationEntityUID(const EntityUID& requester)
+        {
+            uintptr_t offset = reinterpret_cast<uintptr_t>(this) + sizeof(MessageHeader);
+
+            if (MessageId.IsInterServer())
+            {
+                *reinterpret_cast<EntityUID*>(offset) = requester;
+            }
+        }
+
+        const EntityUID& GetDestinationEntityUID() const
+        {
+            uintptr_t offset = reinterpret_cast<uintptr_t>(this) + sizeof(MessageHeader);
+
+            if (MessageId.IsInterServer())
+            {
+                return *reinterpret_cast<const EntityUID*>(offset);
+            }
+            else
+            {
+                return EntityUID::Invalid;
+            }
         }
 
         constexpr MessageID GetMessageID() const { return MessageId.GetMessageID(); }

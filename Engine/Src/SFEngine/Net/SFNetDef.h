@@ -198,6 +198,8 @@ namespace Net {
         virtual SharedPointerT<Net::Connection> GetConnection() const { return {}; }
         virtual const String& GetChannel() const { static String Dummy; return Dummy; }
 		virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) = 0;
+        virtual const EntityUID& GetDestinationEntityUID() const { return EntityUID::Invalid; }
+
         virtual Result SendMsg(const MessageHeader* messageData) = 0;
 	};
 

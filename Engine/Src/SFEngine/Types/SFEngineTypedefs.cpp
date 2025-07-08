@@ -16,11 +16,7 @@
 #include "ResultCode/SFResultCodeSystem.h"
 
 
-
-
-
 namespace SF {
-
 
 #define _SFCLUSTERID(x) #x
 
@@ -85,6 +81,9 @@ namespace SF {
 
         return true;
     }
+
+
+    const EntityUID EntityUID::Invalid = EntityUID(0);
 
 	/////////////////////////////////////////////////////////////////////
 	//

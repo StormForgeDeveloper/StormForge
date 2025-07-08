@@ -30,6 +30,7 @@ namespace SF
         public MessageID MessageId; // ID & sequence
         public TransactionID TransactionId; // transaction id
         public Result TransactionResult; // transaction result if it is result
+        public EntityUID RequesterUID; // When MessageId.InterServer=true, this is the requester UID
         public UInt16 PayloadSize; // Payload size
 
         public void WriteHeader(Google.FlatBuffers.FlatBufferBuilder buffer)
@@ -42,6 +43,12 @@ namespace SF
             {
                 byteBuffer.Position -= sizeof(Int32);
                 byteBuffer.PutInt(byteBuffer.Position, TransactionResult.Code);
+            }
+
+            if (MessageId.InterServer)
+            {
+                byteBuffer.Position -= sizeof(UInt32);
+                byteBuffer.PutUint(byteBuffer.Position, RequesterUID.UID);
             }
 
             // Update size
@@ -66,9 +73,19 @@ namespace SF
             PayloadSize = buffer.GetUshort(offset + 12);
             buffer.Position += HeaderBaseSize;
 
+            if (MessageId.InterServer)
+            {
+                RequesterUID.UID = buffer.GetUint(buffer.Position);
+                buffer.Position += sizeof(UInt32);
+            }
+            else
+            {
+                RequesterUID.UID = 0;
+            }
+
             if (MessageId.MessageType == EMessageType.Result)
             {
-                TransactionResult.Code = buffer.GetInt(offset + HeaderBaseSize);
+                TransactionResult.Code = buffer.GetInt(buffer.Position);
                 buffer.Position += sizeof(Int32);
             }
             else

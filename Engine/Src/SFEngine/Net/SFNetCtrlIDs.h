@@ -47,20 +47,20 @@ namespace Net {
 		NetCtrlCode_Max,
 	};
 
-    static constexpr MessageID PACKET_NETCTRL_NONE = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_None);
-    static constexpr MessageID PACKET_NETCTRL_ACK = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_Ack);
-    static constexpr MessageID PACKET_NETCTRL_NACK = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_Nack);
-    static constexpr MessageID PACKET_NETCTRL_HEARTBEAT = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_Heartbeat);
-    static constexpr MessageID PACKET_NETCTRL_DISCONNECT = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_Disconnect);
-    static constexpr MessageID PACKET_NETCTRL_CONNECT = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_Connect);
-    static constexpr MessageID PACKET_NETCTRL_CONNECTPEER = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_ConnectPeer);
-    static constexpr MessageID PACKET_NETCTRL_SYNCRELIABLE = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_SyncReliable);
-    static constexpr MessageID PACKET_NETCTRL_TIMESYNC = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_TimeSync);
-    static constexpr MessageID PACKET_NETCTRL_TIMESYNC_RTN = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_TimeSyncRtn);
-	static constexpr MessageID PACKET_NETCTRL_SEQUENCE_FRAME   = MessageID(EMessageType::Event,      MSGTYPE_RELIABLE, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_SequenceFrame);
+    static constexpr MessageID PACKET_NETCTRL_NONE = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_None);
+    static constexpr MessageID PACKET_NETCTRL_ACK = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_Ack);
+    static constexpr MessageID PACKET_NETCTRL_NACK = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_Nack);
+    static constexpr MessageID PACKET_NETCTRL_HEARTBEAT = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_Heartbeat);
+    static constexpr MessageID PACKET_NETCTRL_DISCONNECT = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_Disconnect);
+    static constexpr MessageID PACKET_NETCTRL_CONNECT = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_Connect);
+    static constexpr MessageID PACKET_NETCTRL_CONNECTPEER = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_ConnectPeer);
+    static constexpr MessageID PACKET_NETCTRL_SYNCRELIABLE = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_SyncReliable);
+    static constexpr MessageID PACKET_NETCTRL_TIMESYNC = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_TimeSync);
+    static constexpr MessageID PACKET_NETCTRL_TIMESYNC_RTN = MessageID(EMessageType::NetCtrl, MSGTYPE_NONE, MessageProtocol::None, NetCtrlCode_TimeSyncRtn);
+	static constexpr MessageID PACKET_NETCTRL_SEQUENCE_FRAME   = MessageID(EMessageType::Event, MSGTYPE_RELIABLE, MessageProtocol::None, NetCtrlCode_SequenceFrame);
 
-    static constexpr MessageID PACKET_NETEXT_QOS = MessageID(EMessageType::Event, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetExt_QOS);
-    static constexpr MessageID PACKET_NETEXT_STUN = MessageID(EMessageType::Event, MSGTYPE_NONE, MSGTYPE_NONE, MessageProtocol::None, NetExt_Stun);
+    static constexpr MessageID PACKET_NETEXT_QOS = MessageID(EMessageType::Event, MSGTYPE_NONE, MessageProtocol::None, NetExt_QOS);
+    static constexpr MessageID PACKET_NETEXT_STUN = MessageID(EMessageType::Event, MSGTYPE_NONE, MessageProtocol::None, NetExt_Stun);
 
 } // namespace Net
 } // namespace SF

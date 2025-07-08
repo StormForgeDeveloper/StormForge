@@ -43,6 +43,11 @@ namespace SF
             packetBuilder.PushBytes((const uint8_t*)&result, sizeof(Result));
         }
 
+        if (MessageId.IsInterServer())
+        {
+            packetBuilder.PushBytes((const uint8_t*)&GetDestinationEntityUID(), sizeof(EntityUID));
+        }
+
         // Update size
         MessageSize = (uint16_t)(packetBuilder.GetSize() + sizeof(MessageHeader));
 
