@@ -25,7 +25,7 @@ namespace SF
 {
     namespace Log
     {
-        LogChannel Kafka("Kafka", LogOutputType::Debug4);
+        LogChannel Kafka("Kafka", LogOutputType::Debug3);
     }
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
