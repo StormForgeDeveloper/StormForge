@@ -9,10 +9,10 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+using Google.FlatBuffers;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Google.FlatBuffers;
 
 
 #nullable enable
@@ -869,6 +869,57 @@ namespace SF
         public static FlatValueUGCItemInfo CreateUGCItemInfo(this Google.FlatBuffers.FlatBufferBuilder builder, SF.SFUGCItemInfo data)
         {
             return new FlatValueUGCItemInfo(builder, data);
+        }
+
+
+        public static Offset<Flat.AttributeString> CreateAttributeString(this Google.FlatBuffers.FlatBufferBuilder builder, SF.AttributeString attrString)
+        {
+            var nameOffset = builder.CreateString(attrString.Name);
+            var valueOffset = builder.CreateString(attrString.Value);
+
+            return SF.Flat.AttributeString.CreateAttributeString(builder, nameOffset, valueOffset);
+        }
+        public static VectorOffset CreateAttributeStringVector(this Google.FlatBuffers.FlatBufferBuilder builder, SF.AttributeString[] attrString)
+        {
+            var attrVector = new Offset<SF.Flat.AttributeString>[attrString.Length];
+            for (int iAttr = 0; iAttr < attrString.Length; iAttr++)
+            {
+                attrVector[iAttr] = CreateAttributeString(builder, attrString[iAttr]);
+            }
+
+            builder.StartVector(4, attrVector.Length, 4);
+
+            builder.Add(attrVector);
+
+            return builder.EndVector();
+        }
+
+        public static Offset<SF.Flat.UGCContentInfo> CreateUGCContentInfo(this Google.FlatBuffers.FlatBufferBuilder builder, SF.UGCContentInfo data)
+        {
+            var attributesOffset = CreateAttributeStringVector(builder, data.Attributes.ToArray());
+
+
+            SF.Flat.UGCContentInfo.StartUGCContentInfo(builder);
+
+            SF.Flat.UGCContentInfo.AddUgcContentId(builder, builder.CreateGuid(data.UGCContentId));
+            SF.Flat.UGCContentInfo.AddAttributes(builder, attributesOffset);
+
+            return SF.Flat.UGCContentInfo.EndUGCContentInfo(builder);
+        }
+
+        public static VectorOffset CreateUGCContentInfoVector(this Google.FlatBuffers.FlatBufferBuilder builder, SF.UGCContentInfo[] data)
+        {
+            var contentVector = new Offset<SF.Flat.UGCContentInfo>[data.Length];
+            for (int iAttr = 0; iAttr < data.Length; iAttr++)
+            {
+                contentVector[iAttr] = CreateUGCContentInfo(builder, data[iAttr]);
+            }
+
+            builder.StartVector(4, data.Length, 4);
+
+            builder.Add(contentVector);
+
+            return builder.EndVector();
         }
 
 

@@ -7,7 +7,7 @@
     <DataType TypeName="UGCID" IsEnum="false" CppTypeName="uint64_t" CSharpTypeName="UInt64" IsCSharpStruct="false" IsCSharpArray="false" Desc="64bit UGC content id assigned by system"/>
     <DataType TypeName="EAccountRole" IsEnum="false" CppTypeName="EAccountRole" CSharpTypeName="EAccountRole" IsCSharpStruct="false" IsCSharpArray="false" Desc="Account role"/>
     <DataType TypeName="Quaternion" IsEnum="false" CppTypeName="Quaternion" CSharpTypeName="SFQuaternion" IsCSharpStruct="true" IsCSharpArray="false" Desc="Quaternion struct"/>
-    <DataType TypeName="UGCContentInfo" IsEnum="false" CppTypeName="UGCContentInfo" CSharpTypeName="UGCContentInfo" IsCSharpStruct="true" IsCSharpArray="false" Desc="UGCContentInfo struct"/>
+    <DataType TypeName="UGCContentInfo" IsEnum="false" CppTypeName="UGCContentInfo" CSharpTypeName="SF.UGCContentInfo" IsCSharpStruct="true" IsCSharpArray="false" Desc="UGCContentInfo struct"/>
     <DataType TypeName="UGCItemInfo" IsEnum="false" CppTypeName="SUGCItemInfo" CSharpTypeName="SFUGCItemInfo" IsCSharpStruct="true" IsCSharpArray="false" Desc="UGCItemInfo struct"/>
     <DataType TypeName="GameInstanceInfo" IsEnum="false" CppTypeName="GameInstanceInfo" CSharpTypeName="GameInstanceInfo" IsCSharpStruct="false" IsCSharpArray="false" Desc="GameInstanceInfo struct"/>
     <DataType TypeName="AttributeString" IsEnum="false" CppTypeName="AttributeString" CSharpTypeName="AttributeString" IsCSharpStruct="true" IsCSharpArray="false" Desc="AttributeString struct"/>

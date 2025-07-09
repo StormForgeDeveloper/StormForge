@@ -383,7 +383,7 @@ namespace SF
         }
     }
 
-    public struct SGameInstanceInfo
+    public struct GameInstanceInfo
     {
         public string InstanceName;
         public uint PlayerCount;
@@ -426,12 +426,24 @@ namespace SF
         public float w;
     };
 
+    public struct AttributeString
+    {
+        public string Name;
+        public string Value;
+    };
+
+    public struct UGCContentInfo
+    {
+        public Guid UGCContentId;
+        public List<AttributeString> Attributes; // attributes of the content
+    }
+
     public struct UGCGameInfo
     {
         public Guid UGCContentId;
         public uint TableId;
         public string Name;
-    };
+    }
 
     public struct SFUGCItemInfo
     {
@@ -439,7 +451,7 @@ namespace SF
         public uint UTCExpire;
         public uint Effect0;
         public uint Effect1;
-    };
+    }
 
 
     // Manages pinned byte buffer
