@@ -20,7 +20,7 @@ namespace SF
 {
     namespace Log
     {
-        LogChannel LogCurl("LogCurl", LogOutputType::Debug);
+        LogChannel LogCurl("LogCurl", ELogLevel::Debug);
     };
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -585,6 +585,8 @@ namespace SF
             }
 
         }
+
+        m_TickDeletates.Invoke(0);
     }
 
     void WebsocketClientCurl::OnConnectionError(Result result)

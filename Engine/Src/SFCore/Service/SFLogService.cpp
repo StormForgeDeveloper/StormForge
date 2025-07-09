@@ -21,15 +21,15 @@ namespace SF
 {
 	namespace Log
 	{
-        LogChannel Global("Global", LogOutputType::CustomMax);
-		LogChannel System("System", LogOutputType::CustomMax);
-		LogChannel Net("Net", LogOutputType::CustomMax);
-		LogChannel IO("IO", LogOutputType::CustomMax);
-		LogChannel ThirdParty("ThirdParty", LogOutputType::CustomMax);
-		LogChannel Engine("Engine", LogOutputType::CustomMax);
-		LogChannel Protocol("Protocol", LogOutputType::CustomMax);
-		LogChannel Editor("Editor", LogOutputType::CustomMax);
-		LogChannel Game("Game", LogOutputType::CustomMax);
+        LogChannel Global("Global", ELogLevel::CustomMax);
+		LogChannel System("System", ELogLevel::CustomMax);
+		LogChannel Net("Net", ELogLevel::CustomMax);
+		LogChannel IO("IO", ELogLevel::CustomMax);
+		LogChannel ThirdParty("ThirdParty", ELogLevel::CustomMax);
+		LogChannel Engine("Engine", ELogLevel::CustomMax);
+		LogChannel Protocol("Protocol", ELogLevel::CustomMax);
+		LogChannel Editor("Editor", ELogLevel::CustomMax);
+		LogChannel Game("Game", ELogLevel::CustomMax);
 	}
 
 	static const char* g_LogOutputTypeNames[] = {
@@ -67,7 +67,7 @@ namespace SF
     Log::LogChannel* LogService::stm_ChannelList = nullptr;
 
 
-    Log::LogChannel::LogChannel(const char* channelName, LogOutputType defaultLogLevel)
+    Log::LogChannel::LogChannel(const char* channelName, ELogLevel defaultLogLevel)
     {
         uint32_t channelMask = static_cast<uint32_t>((1 << (static_cast<uint32_t>(defaultLogLevel) + 1)) - 1);
 
@@ -81,7 +81,7 @@ namespace SF
         AddToChannelList();
     }
 
-    void Log::LogChannel::SetChannelLogLevel(LogOutputType logLevel)
+    void Log::LogChannel::SetChannelLogLevel(ELogLevel logLevel)
     {
         uint32_t channelMask = static_cast<uint32_t>((1 << (static_cast<uint32_t>(logLevel) + 1)) - 1);
         SetChannelLogMask(channelMask);
@@ -168,7 +168,7 @@ namespace SF
         StrUtil::StringCopy(m_LogFileName, logFileName);
     }
 
-	const char* ToString(LogOutputType logOutputType)
+	const char* ToString(ELogLevel logOutputType)
 	{
 		return g_LogOutputTypeNames[(int)logOutputType];
 	}

@@ -70,7 +70,7 @@ SFDLL_EXPORT uint32_t SFCSLog_NativeSetLogLevel(const char* channelName, uint32_
         return (uint32_t)ResultCode::OBJECT_NOT_FOUND;
     }
 
-    pChannel->SetChannelLogLevel((LogOutputType)logLevel);
+    pChannel->SetChannelLogLevel((ELogLevel)logLevel);
 
     return (uint32_t)ResultCode::SUCCESS;
 }

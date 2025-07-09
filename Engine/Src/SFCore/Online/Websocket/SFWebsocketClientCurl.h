@@ -39,14 +39,13 @@ namespace SF
 		};
 
         using EventOnConnected = std::function<void()>;
-        //using RecvDeletates = EventDelegateList<struct WSSessionData*, const Array<uint8_t>&>;
-        //using EventFunction = std::function<int(struct lws*, void*, void*, size_t)>; // Return non-zero to disallow the connection.
         using RecvDeletates = EventDelegateList<const Array<uint8_t>&>;
+        using TickDeletates = EventDelegateList<int>;
 
 
 	public:
 
-		WebsocketClientCurl(IHeap& heap);
+		WebsocketClientCurl(IHeap& heap = GetSystemHeap());
 		~WebsocketClientCurl();
 
 		SF_FORCEINLINE bool IsInitialized() const { return !m_Url.IsNullOrEmpty(); }
@@ -70,8 +69,11 @@ namespace SF
         void CloseConnection();
 
 		Result Send(const Array<uint8_t>& messageData);
+
         virtual void OnRecv(const Array<uint8_t>& messageData) { m_RecvDeletates.Invoke(messageData); }
         SF_FORCEINLINE RecvDeletates& OnRecvEvent() { return m_RecvDeletates; }
+
+        SF_FORCEINLINE TickDeletates& OnTickEvent() { return m_TickDeletates; }
 
         SF_FORCEINLINE void SetOnConnectedCallback(const EventOnConnected& func) { m_OnConnectedHandler = func; }
 
@@ -131,9 +133,14 @@ namespace SF
         // Connection state
 		ConnectionState m_ConnectionState = ConnectionState::Disconnected;
 
-        // Client append handler
+        // Connected event handler
         EventOnConnected m_OnConnectedHandler;
+
+        // Recv Message delegate
         RecvDeletates m_RecvDeletates;
+
+        // Tick delegate
+        TickDeletates m_TickDeletates;
     };
 
 }

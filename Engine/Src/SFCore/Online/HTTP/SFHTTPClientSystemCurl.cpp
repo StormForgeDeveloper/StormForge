@@ -21,7 +21,7 @@ namespace SF
     namespace Log
     {
         // Enable debug channel to print out curl internal logs
-        LogChannel Curl("Curl", LogOutputType::Info);
+        LogChannel Curl("Curl", ELogLevel::Info);
     }
 
     namespace HTTPCurlImpl

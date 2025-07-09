@@ -33,7 +33,7 @@ namespace SF {
 
     namespace Log
     {
-        LogChannel OutputConsole("OutputConsole", LogOutputType::Debug3);
+        LogChannel OutputConsole("OutputConsole", ELogLevel::Debug3);
     }
 
 	LogOutputConsoleComponent::LogOutputConsoleComponent()
@@ -117,7 +117,7 @@ namespace SF {
 
     namespace Log
     {
-        LogChannel OutputDebugger("OutputDebugger", LogOutputType::Max);
+        LogChannel OutputDebugger("OutputDebugger", ELogLevel::Max);
     }
 
 	constexpr StringCrc64 LogOutputDebuggerComponent::TypeName;
@@ -159,7 +159,7 @@ namespace SF {
 
     namespace Log
     {
-        LogChannel OutputFile("OutputFile", LogOutputType::Max);
+        LogChannel OutputFile("OutputFile", ELogLevel::Max);
     }
 
 	constexpr StringCrc64 LogOutputFileComponent::TypeName;

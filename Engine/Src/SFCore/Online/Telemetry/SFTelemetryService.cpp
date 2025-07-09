@@ -23,7 +23,7 @@ namespace SF
 
 	namespace Log
 	{
-		LogChannel Telemetry("Telemetry", LogOutputType::Debug3);
+		LogChannel Telemetry("Telemetry", ELogLevel::Debug3);
 	};
 
 	namespace Service

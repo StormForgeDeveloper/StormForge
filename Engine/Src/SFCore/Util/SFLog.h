@@ -125,7 +125,7 @@ namespace Log {
 //  Declare trace module
 //
 
-#define SFLog(channel,outputType, ...) SFLog2(::SF::Log::channel, ::SF::LogOutputType::outputType, __VA_ARGS__)
+#define SFLog(channel,outputType, ...) SFLog2(::SF::Log::channel, ::SF::ELogLevel::outputType, __VA_ARGS__)
 
 
 #define SFLog2(channel,outputType, ...) \

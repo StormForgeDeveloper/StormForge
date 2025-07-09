@@ -33,7 +33,7 @@ namespace SF {
 
     namespace Log
     {
-        LogChannel OutputLogServer("OutputLogServer", LogOutputType::Max);
+        LogChannel OutputLogServer("OutputLogServer", ELogLevel::Max);
     }
 
 	const StringCrc64 LogOutputLogServerComponent::TypeName = Hash64("LogOutputLogServerComponent");

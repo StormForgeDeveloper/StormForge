@@ -27,7 +27,7 @@ namespace SF
 {
     namespace Log
     {
-        LogChannel HTTP("HTTP", LogOutputType::Info);
+        LogChannel HTTP("HTTP", ELogLevel::Info);
     }
 
     namespace Service

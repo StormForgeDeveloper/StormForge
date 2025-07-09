@@ -19,7 +19,7 @@ namespace SF {
 
 	//////////////////////////////////////////////////////////////////////////
 	// sub channel
-	enum class LogOutputType : uint32_t
+	enum class ELogLevel : uint32_t
 	{
 		// Generic trace
 		Error,
@@ -54,7 +54,7 @@ namespace SF {
 		Max,
 	};
 
-	const char* ToString(LogOutputType logOutputType);
+	const char* ToString(ELogLevel logOutputType);
 
 	union LogOutputMask
 	{
@@ -143,7 +143,7 @@ namespace SF {
         public: // used to be a structure, and allow access until we update all access
 
 
-            LogChannel(const char* channelName, LogOutputType defaultLogLevel);
+            LogChannel(const char* channelName, ELogLevel defaultLogLevel);
             LogChannel(const char* channelName, uint32_t channelMask);
 
             const LogOutputMask& GetChannelLogMask() const { return m_ChannelMask; }
@@ -151,7 +151,7 @@ namespace SF {
             const char* GetChannelNameString() const { return m_ChannelNameString; }
             StringCrc32 GetChannelName() const { return m_ChannelName; }
 
-            void SetChannelLogLevel(LogOutputType logLevel);
+            void SetChannelLogLevel(ELogLevel logLevel);
             void SetChannelLogMask(uint32_t logMask);
             void SetChannelLogMask(const LogOutputMask& logMask);
 
@@ -161,7 +161,7 @@ namespace SF {
 				return *this;
 			}
 
-			void EnableChannel(LogOutputType subChannel, bool enable)
+			void EnableChannel(ELogLevel subChannel, bool enable)
 			{
 				auto channelMask = 1 << static_cast<uint32_t>(subChannel);
 				if (enable)
@@ -178,33 +178,33 @@ namespace SF {
 
 
 
-		constexpr LogOutputType Error = LogOutputType::Error;
-		constexpr LogOutputType Warning = LogOutputType::Warning;
-		constexpr LogOutputType Factal = LogOutputType::Factal;
-		constexpr LogOutputType Info = LogOutputType::Info;
-        constexpr LogOutputType Log = LogOutputType::Log;
+		constexpr ELogLevel Error = ELogLevel::Error;
+		constexpr ELogLevel Warning = ELogLevel::Warning;
+		constexpr ELogLevel Factal = ELogLevel::Factal;
+		constexpr ELogLevel Info = ELogLevel::Info;
+        constexpr ELogLevel Log = ELogLevel::Log;
 
 		// Module additional traces
-		constexpr LogOutputType Custom1 = LogOutputType::Custom1;
-		constexpr LogOutputType Custom2 = LogOutputType::Custom2;
-		constexpr LogOutputType Custom3 = LogOutputType::Custom3;
-		constexpr LogOutputType Custom4 = LogOutputType::Custom4;
-		constexpr LogOutputType Custom5 = LogOutputType::Custom5;
-		constexpr LogOutputType Custom6 = LogOutputType::Custom6;
-		constexpr LogOutputType Custom7 = LogOutputType::Custom7;
-		constexpr LogOutputType Custom8 = LogOutputType::Custom8;
-		constexpr LogOutputType Custom9 = LogOutputType::Custom9;
-		constexpr LogOutputType Custom10 = LogOutputType::Custom10;
+		constexpr ELogLevel Custom1 = ELogLevel::Custom1;
+		constexpr ELogLevel Custom2 = ELogLevel::Custom2;
+		constexpr ELogLevel Custom3 = ELogLevel::Custom3;
+		constexpr ELogLevel Custom4 = ELogLevel::Custom4;
+		constexpr ELogLevel Custom5 = ELogLevel::Custom5;
+		constexpr ELogLevel Custom6 = ELogLevel::Custom6;
+		constexpr ELogLevel Custom7 = ELogLevel::Custom7;
+		constexpr ELogLevel Custom8 = ELogLevel::Custom8;
+		constexpr ELogLevel Custom9 = ELogLevel::Custom9;
+		constexpr ELogLevel Custom10 = ELogLevel::Custom10;
 
-		constexpr LogOutputType Debug = LogOutputType::Debug;
-		constexpr LogOutputType Debug1 = LogOutputType::Debug1;
-		constexpr LogOutputType Debug2 = LogOutputType::Debug2;
-		constexpr LogOutputType Debug3 = LogOutputType::Debug3;
-		constexpr LogOutputType Debug4 = LogOutputType::Debug4;
-		constexpr LogOutputType Debug5 = LogOutputType::Debug5;
-		constexpr LogOutputType Debug6 = LogOutputType::Debug6;
-		constexpr LogOutputType Debug7 = LogOutputType::Debug7;
-		constexpr LogOutputType Debug8 = LogOutputType::Debug8;
+		constexpr ELogLevel Debug = ELogLevel::Debug;
+		constexpr ELogLevel Debug1 = ELogLevel::Debug1;
+		constexpr ELogLevel Debug2 = ELogLevel::Debug2;
+		constexpr ELogLevel Debug3 = ELogLevel::Debug3;
+		constexpr ELogLevel Debug4 = ELogLevel::Debug4;
+		constexpr ELogLevel Debug5 = ELogLevel::Debug5;
+		constexpr ELogLevel Debug6 = ELogLevel::Debug6;
+		constexpr ELogLevel Debug7 = ELogLevel::Debug7;
+		constexpr ELogLevel Debug8 = ELogLevel::Debug8;
 
 		// Predefined Log channels
 		extern LogChannel Global;
@@ -223,7 +223,7 @@ namespace SF {
 		struct LogItem
 		{
 			LogChannel* Channel{};
-			LogOutputType		OutputType{};
+			ELogLevel		OutputType{};
 			LogOutputMask		OutputMask{}; // GlobalMask & LogChannelMask
             UTCTimeStampMS	TimeStamp{};
 			size_t LogStringSize = 0;
@@ -266,7 +266,7 @@ namespace SF {
 			return mainChannel.GetChannelLogMask();
 		}
 
-		static LogOutputMask ToChannelMask(LogOutputType subChannel)
+		static LogOutputMask ToChannelMask(ELogLevel subChannel)
 		{
 			LogOutputMask channelMask;
 			channelMask.Composited = (((uint32_t)1) << (int)subChannel);
