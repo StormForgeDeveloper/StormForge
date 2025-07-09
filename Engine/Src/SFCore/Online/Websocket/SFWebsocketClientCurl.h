@@ -45,8 +45,10 @@ namespace SF
 
 	public:
 
-		WebsocketClientCurl(IHeap& heap = GetSystemHeap());
+		WebsocketClientCurl(const String& name);
 		~WebsocketClientCurl();
+
+        const String& GetName() const { return m_Name; }
 
 		SF_FORCEINLINE bool IsInitialized() const { return !m_Url.IsNullOrEmpty(); }
         SF_FORCEINLINE bool IsConnected() const { return m_ConnectionState == ConnectionState::Connected; }
@@ -96,6 +98,7 @@ namespace SF
 
         CriticalSection m_ContextLock;
 
+        String m_Name;
         String m_Url;
         String m_Protocol;
         bool m_UseSSL = false;

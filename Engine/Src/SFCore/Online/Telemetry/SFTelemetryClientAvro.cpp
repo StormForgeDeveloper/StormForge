@@ -223,7 +223,7 @@ namespace SF
 	//
 
 	TelemetryClientAvro::TelemetryClientAvro()
-		: m_Client(GetSystemHeap())
+		: m_Client("TelemetryClient")
 		, m_EventQueue(GetSystemHeap())
 	{
 	}

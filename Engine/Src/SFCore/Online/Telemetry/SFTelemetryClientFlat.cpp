@@ -216,7 +216,7 @@ namespace SF
 	//
 
 	TelemetryClientFlat::TelemetryClientFlat()
-		: m_Client(GetSystemHeap())
+		: m_Client("TelemetryClient")
 		, m_EventQueue(GetSystemHeap())
 	{
 	}

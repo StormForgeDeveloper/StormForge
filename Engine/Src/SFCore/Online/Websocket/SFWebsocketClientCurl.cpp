@@ -29,10 +29,12 @@ namespace SF
     //
 
 
-    WebsocketClientCurl::WebsocketClientCurl(IHeap& heap)
-        : m_ReceiveBuffer(heap)
-        , m_RecvDeletates(heap)
+    WebsocketClientCurl::WebsocketClientCurl(const String& name)
+        : m_Name(name)
+        , m_ReceiveBuffer(GetSystemHeap())
+        , m_RecvDeletates(GetSystemHeap())
     {
+        assert(m_Name.length() > 0);
     }
 
     WebsocketClientCurl::~WebsocketClientCurl()
@@ -185,7 +187,7 @@ namespace SF
                 curl_easy_getinfo(curl, CURLINFO_HTTP_CONNECTCODE, &status);
                 if (!wsStatus.Accepted)
                 {
-                    SFLog(Websocket, Error, "Connection failed httpCode:{0} connectCode:{1}", http_status, status);
+                    SFLog(Websocket, Error, "Connection failed {0}, httpCode:{1} connectCode:{2}", wsClient->GetName(), http_status, status);
                     wsClient->OnConnectionError(ResultCode::IO_DISCONNECTED);
                     return 0;
                 }
@@ -360,6 +362,8 @@ namespace SF
             strPrefix = "&";
         }
 
+        SFLog(Websocket, Info, "WebsocketClientCurl Initialize, {0}, url:{1}, protocol:{2}", GetName(), url, protocol);
+
         TryConnect();
 
 		if (IsUseTickThread())
@@ -409,7 +413,7 @@ namespace SF
         MutexScopeLock scopeLock(m_ContextLock);
         CURLcode result;
 
-        SFLog(Websocket, Info, "Connecting websocket server: {0}", m_Url);
+        SFLog(Websocket, Info, "Connecting websocket server: {0}", GetName());
 
         // clean up first
         if (m_Curl)
@@ -465,7 +469,7 @@ namespace SF
         result = curl_easy_perform(m_Curl);
         if (result != CURLE_OK)
         {
-            SFLog(Websocket, Info, "Websocket client initialization error : {0}, {1}:{2}", m_Url, int(result), curl_easy_strerror(result));
+            SFLog(Websocket, Info, "Websocket client initialization error : {0}, {1}:{2}", GetName(), int(result), curl_easy_strerror(result));
         }
         else
         {

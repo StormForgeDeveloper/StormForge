@@ -62,7 +62,7 @@ namespace SF {
 		public:
 			MyOutputHandler()
                 : LogOutputHandler("OutputLogServer")
-                , m_Client(GetSystemHeap())
+                , m_Client("OutputLogServer")
                 , m_Builder(4096)
             {
             }
