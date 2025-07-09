@@ -218,6 +218,7 @@
 "GetMyUGCGames"
 "GetMyUGCGamesCmd"
 "GetMyUGCGamesRes"
+"Category"
 "RequestUGCGameInstance"
 "RequestUGCGameInstanceCmd"
 "RequestUGCGameInstanceRes"

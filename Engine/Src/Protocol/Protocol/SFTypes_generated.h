@@ -32,6 +32,9 @@ struct Vector4;
 
 struct Quaternion;
 
+struct AttributeString;
+struct AttributeStringBuilder;
+
 struct UInt128;
 
 struct Guid;
@@ -43,8 +46,8 @@ struct CharacterID;
 struct GenericError;
 struct GenericErrorBuilder;
 
-struct UGCGameInfo;
-struct UGCGameInfoBuilder;
+struct UGCContentInfo;
+struct UGCContentInfoBuilder;
 
 struct UGCItemInfo;
 
@@ -1314,6 +1317,94 @@ struct ActorMovement::Traits {
   using FieldType = decltype(std::declval<type>().get_field<Index>());
 };
 
+struct AttributeString FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef AttributeStringBuilder Builder;
+  struct Traits;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_NAME = 4,
+    VT_VALUE = 6
+  };
+  const ::flatbuffers::String *name() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_NAME);
+  }
+  const ::flatbuffers::String *value() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_VALUE);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return name();
+    else if constexpr (Index == 1) return value();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyOffsetRequired(verifier, VT_NAME) &&
+           verifier.VerifyString(name()) &&
+           VerifyOffsetRequired(verifier, VT_VALUE) &&
+           verifier.VerifyString(value()) &&
+           verifier.EndTable();
+  }
+};
+
+struct AttributeStringBuilder {
+  typedef AttributeString Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_name(::flatbuffers::Offset<::flatbuffers::String> name) {
+    fbb_.AddOffset(AttributeString::VT_NAME, name);
+  }
+  void add_value(::flatbuffers::Offset<::flatbuffers::String> value) {
+    fbb_.AddOffset(AttributeString::VT_VALUE, value);
+  }
+  explicit AttributeStringBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<AttributeString> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<AttributeString>(end);
+    fbb_.Required(o, AttributeString::VT_NAME);
+    fbb_.Required(o, AttributeString::VT_VALUE);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<AttributeString> CreateAttributeString(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::String> name = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> value = 0) {
+  AttributeStringBuilder builder_(_fbb);
+  builder_.add_value(value);
+  builder_.add_name(name);
+  return builder_.Finish();
+}
+
+struct AttributeString::Traits {
+  using type = AttributeString;
+  static auto constexpr Create = CreateAttributeString;
+  static constexpr auto name = "AttributeString";
+  static constexpr auto fully_qualified_name = "SF.Flat.AttributeString";
+  static constexpr size_t fields_number = 2;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "name",
+    "value"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
+inline ::flatbuffers::Offset<AttributeString> CreateAttributeStringDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const char *name = nullptr,
+    const char *value = nullptr) {
+  auto name__ = name ? _fbb.CreateString(name) : 0;
+  auto value__ = value ? _fbb.CreateString(value) : 0;
+  return SF::Flat::CreateAttributeString(
+      _fbb,
+      name__,
+      value__);
+}
+
 struct GenericError FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef GenericErrorBuilder Builder;
   struct Traits;
@@ -1385,103 +1476,89 @@ inline ::flatbuffers::Offset<GenericError> CreateGenericErrorDirect(
       reason__);
 }
 
-struct UGCGameInfo FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
-  typedef UGCGameInfoBuilder Builder;
+struct UGCContentInfo FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UGCContentInfoBuilder Builder;
   struct Traits;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_UGC_CONTENT_ID = 4,
-    VT_TABLE_ID = 6,
-    VT_NAME = 8
+    VT_ATTRIBUTES = 6
   };
   const SF::Flat::Guid *ugc_content_id() const {
     return GetStruct<const SF::Flat::Guid *>(VT_UGC_CONTENT_ID);
   }
-  uint32_t table_id() const {
-    return GetField<uint32_t>(VT_TABLE_ID, 0);
-  }
-  const ::flatbuffers::String *name() const {
-    return GetPointer<const ::flatbuffers::String *>(VT_NAME);
+  const ::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::AttributeString>> *attributes() const {
+    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::AttributeString>> *>(VT_ATTRIBUTES);
   }
   template<size_t Index>
   auto get_field() const {
          if constexpr (Index == 0) return ugc_content_id();
-    else if constexpr (Index == 1) return table_id();
-    else if constexpr (Index == 2) return name();
+    else if constexpr (Index == 1) return attributes();
     else static_assert(Index != Index, "Invalid Field Index");
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<SF::Flat::Guid>(verifier, VT_UGC_CONTENT_ID, 8) &&
-           VerifyField<uint32_t>(verifier, VT_TABLE_ID, 4) &&
-           VerifyOffsetRequired(verifier, VT_NAME) &&
-           verifier.VerifyString(name()) &&
+           VerifyOffset(verifier, VT_ATTRIBUTES) &&
+           verifier.VerifyVector(attributes()) &&
+           verifier.VerifyVectorOfTables(attributes()) &&
            verifier.EndTable();
   }
 };
 
-struct UGCGameInfoBuilder {
-  typedef UGCGameInfo Table;
+struct UGCContentInfoBuilder {
+  typedef UGCContentInfo Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
   void add_ugc_content_id(const SF::Flat::Guid *ugc_content_id) {
-    fbb_.AddStruct(UGCGameInfo::VT_UGC_CONTENT_ID, ugc_content_id);
+    fbb_.AddStruct(UGCContentInfo::VT_UGC_CONTENT_ID, ugc_content_id);
   }
-  void add_table_id(uint32_t table_id) {
-    fbb_.AddElement<uint32_t>(UGCGameInfo::VT_TABLE_ID, table_id, 0);
+  void add_attributes(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::AttributeString>>> attributes) {
+    fbb_.AddOffset(UGCContentInfo::VT_ATTRIBUTES, attributes);
   }
-  void add_name(::flatbuffers::Offset<::flatbuffers::String> name) {
-    fbb_.AddOffset(UGCGameInfo::VT_NAME, name);
-  }
-  explicit UGCGameInfoBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+  explicit UGCContentInfoBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
   }
-  ::flatbuffers::Offset<UGCGameInfo> Finish() {
+  ::flatbuffers::Offset<UGCContentInfo> Finish() {
     const auto end = fbb_.EndTable(start_);
-    auto o = ::flatbuffers::Offset<UGCGameInfo>(end);
-    fbb_.Required(o, UGCGameInfo::VT_NAME);
+    auto o = ::flatbuffers::Offset<UGCContentInfo>(end);
     return o;
   }
 };
 
-inline ::flatbuffers::Offset<UGCGameInfo> CreateUGCGameInfo(
+inline ::flatbuffers::Offset<UGCContentInfo> CreateUGCContentInfo(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const SF::Flat::Guid *ugc_content_id = nullptr,
-    uint32_t table_id = 0,
-    ::flatbuffers::Offset<::flatbuffers::String> name = 0) {
-  UGCGameInfoBuilder builder_(_fbb);
-  builder_.add_name(name);
-  builder_.add_table_id(table_id);
+    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::AttributeString>>> attributes = 0) {
+  UGCContentInfoBuilder builder_(_fbb);
+  builder_.add_attributes(attributes);
   builder_.add_ugc_content_id(ugc_content_id);
   return builder_.Finish();
 }
 
-struct UGCGameInfo::Traits {
-  using type = UGCGameInfo;
-  static auto constexpr Create = CreateUGCGameInfo;
-  static constexpr auto name = "UGCGameInfo";
-  static constexpr auto fully_qualified_name = "SF.Flat.UGCGameInfo";
-  static constexpr size_t fields_number = 3;
+struct UGCContentInfo::Traits {
+  using type = UGCContentInfo;
+  static auto constexpr Create = CreateUGCContentInfo;
+  static constexpr auto name = "UGCContentInfo";
+  static constexpr auto fully_qualified_name = "SF.Flat.UGCContentInfo";
+  static constexpr size_t fields_number = 2;
   static constexpr std::array<const char *, fields_number> field_names = {
     "ugc_content_id",
-    "table_id",
-    "name"
+    "attributes"
   };
   template<size_t Index>
   using FieldType = decltype(std::declval<type>().get_field<Index>());
 };
 
-inline ::flatbuffers::Offset<UGCGameInfo> CreateUGCGameInfoDirect(
+inline ::flatbuffers::Offset<UGCContentInfo> CreateUGCContentInfoDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const SF::Flat::Guid *ugc_content_id = nullptr,
-    uint32_t table_id = 0,
-    const char *name = nullptr) {
-  auto name__ = name ? _fbb.CreateString(name) : 0;
-  return SF::Flat::CreateUGCGameInfo(
+    const std::vector<::flatbuffers::Offset<SF::Flat::AttributeString>> *attributes = nullptr) {
+  auto attributes__ = attributes ? _fbb.CreateVector<::flatbuffers::Offset<SF::Flat::AttributeString>>(*attributes) : 0;
+  return SF::Flat::CreateUGCContentInfo(
       _fbb,
       ugc_content_id,
-      table_id,
-      name__);
+      attributes__);
 }
 
 struct PlayerInformation FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {

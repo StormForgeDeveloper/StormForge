@@ -37,6 +37,8 @@ namespace SF
     using ServerID = UInt32;
     using ServerUID = UInt64;
     using System.Runtime.InteropServices;
+    using System.Diagnostics;
+    using System.Security.AccessControl;
 
 
 

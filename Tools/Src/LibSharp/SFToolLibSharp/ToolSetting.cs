@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2018 Kyungkun Ko
 // 
@@ -322,6 +322,20 @@ namespace SF.Tool
             if (stringValue == null) return defaultValue;
 
             return stringValue;
+        }
+
+        public bool GetValueBool(string key, bool defaultValue)
+        {
+            object value;
+            key = key.ToLower();
+            if (!m_Configurations.TryGetValue(key.ToLower(), out value)) return defaultValue;
+            var stringValue = value as string;
+            if (stringValue == null) return defaultValue;
+
+            bool result;
+            if (!bool.TryParse(stringValue, out result)) return defaultValue;
+
+            return result;
         }
 
         public int GetValueInt(string key, int defaultValue)

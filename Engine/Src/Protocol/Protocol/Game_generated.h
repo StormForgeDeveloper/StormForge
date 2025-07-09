@@ -6269,8 +6269,21 @@ struct GameMatchingCanceledS2CEvt::Traits {
 struct GetMyUGCGamesCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef GetMyUGCGamesCmdBuilder Builder;
   struct Traits;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_CATEGORY = 4
+  };
+  const ::flatbuffers::String *category() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_CATEGORY);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return category();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_CATEGORY) &&
+           verifier.VerifyString(category()) &&
            verifier.EndTable();
   }
 };
@@ -6279,6 +6292,9 @@ struct GetMyUGCGamesCmdBuilder {
   typedef GetMyUGCGamesCmd Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
+  void add_category(::flatbuffers::Offset<::flatbuffers::String> category) {
+    fbb_.AddOffset(GetMyUGCGamesCmd::VT_CATEGORY, category);
+  }
   explicit GetMyUGCGamesCmdBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
     start_ = fbb_.StartTable();
@@ -6291,8 +6307,10 @@ struct GetMyUGCGamesCmdBuilder {
 };
 
 inline ::flatbuffers::Offset<GetMyUGCGamesCmd> CreateGetMyUGCGamesCmd(
-    ::flatbuffers::FlatBufferBuilder &_fbb) {
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::String> category = 0) {
   GetMyUGCGamesCmdBuilder builder_(_fbb);
+  builder_.add_category(category);
   return builder_.Finish();
 }
 
@@ -6301,29 +6319,42 @@ struct GetMyUGCGamesCmd::Traits {
   static auto constexpr Create = CreateGetMyUGCGamesCmd;
   static constexpr auto name = "GetMyUGCGamesCmd";
   static constexpr auto fully_qualified_name = "SF.Flat.Game.GetMyUGCGamesCmd";
-  static constexpr size_t fields_number = 0;
-  static constexpr std::array<const char *, fields_number> field_names = {};
+  static constexpr size_t fields_number = 1;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "category"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
 };
+
+inline ::flatbuffers::Offset<GetMyUGCGamesCmd> CreateGetMyUGCGamesCmdDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const char *category = nullptr) {
+  auto category__ = category ? _fbb.CreateString(category) : 0;
+  return SF::Flat::Game::CreateGetMyUGCGamesCmd(
+      _fbb,
+      category__);
+}
 
 struct GetMyUGCGamesRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef GetMyUGCGamesResBuilder Builder;
   struct Traits;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_UGCCONTENTS = 4
+    VT_CONTENT_INFOS = 4
   };
-  const ::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::UGCGameInfo>> *ugccontents() const {
-    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::UGCGameInfo>> *>(VT_UGCCONTENTS);
+  const ::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::UGCContentInfo>> *content_infos() const {
+    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::UGCContentInfo>> *>(VT_CONTENT_INFOS);
   }
   template<size_t Index>
   auto get_field() const {
-         if constexpr (Index == 0) return ugccontents();
+         if constexpr (Index == 0) return content_infos();
     else static_assert(Index != Index, "Invalid Field Index");
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffset(verifier, VT_UGCCONTENTS) &&
-           verifier.VerifyVector(ugccontents()) &&
-           verifier.VerifyVectorOfTables(ugccontents()) &&
+           VerifyOffset(verifier, VT_CONTENT_INFOS) &&
+           verifier.VerifyVector(content_infos()) &&
+           verifier.VerifyVectorOfTables(content_infos()) &&
            verifier.EndTable();
   }
 };
@@ -6332,8 +6363,8 @@ struct GetMyUGCGamesResBuilder {
   typedef GetMyUGCGamesRes Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
-  void add_ugccontents(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::UGCGameInfo>>> ugccontents) {
-    fbb_.AddOffset(GetMyUGCGamesRes::VT_UGCCONTENTS, ugccontents);
+  void add_content_infos(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::UGCContentInfo>>> content_infos) {
+    fbb_.AddOffset(GetMyUGCGamesRes::VT_CONTENT_INFOS, content_infos);
   }
   explicit GetMyUGCGamesResBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
@@ -6348,9 +6379,9 @@ struct GetMyUGCGamesResBuilder {
 
 inline ::flatbuffers::Offset<GetMyUGCGamesRes> CreateGetMyUGCGamesRes(
     ::flatbuffers::FlatBufferBuilder &_fbb,
-    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::UGCGameInfo>>> ugccontents = 0) {
+    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::UGCContentInfo>>> content_infos = 0) {
   GetMyUGCGamesResBuilder builder_(_fbb);
-  builder_.add_ugccontents(ugccontents);
+  builder_.add_content_infos(content_infos);
   return builder_.Finish();
 }
 
@@ -6361,7 +6392,7 @@ struct GetMyUGCGamesRes::Traits {
   static constexpr auto fully_qualified_name = "SF.Flat.Game.GetMyUGCGamesRes";
   static constexpr size_t fields_number = 1;
   static constexpr std::array<const char *, fields_number> field_names = {
-    "ugccontents"
+    "content_infos"
   };
   template<size_t Index>
   using FieldType = decltype(std::declval<type>().get_field<Index>());
@@ -6369,11 +6400,11 @@ struct GetMyUGCGamesRes::Traits {
 
 inline ::flatbuffers::Offset<GetMyUGCGamesRes> CreateGetMyUGCGamesResDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
-    const std::vector<::flatbuffers::Offset<SF::Flat::UGCGameInfo>> *ugccontents = nullptr) {
-  auto ugccontents__ = ugccontents ? _fbb.CreateVector<::flatbuffers::Offset<SF::Flat::UGCGameInfo>>(*ugccontents) : 0;
+    const std::vector<::flatbuffers::Offset<SF::Flat::UGCContentInfo>> *content_infos = nullptr) {
+  auto content_infos__ = content_infos ? _fbb.CreateVector<::flatbuffers::Offset<SF::Flat::UGCContentInfo>>(*content_infos) : 0;
   return SF::Flat::Game::CreateGetMyUGCGamesRes(
       _fbb,
-      ugccontents__);
+      content_infos__);
 }
 
 struct RequestUGCGameInstanceCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {

@@ -400,12 +400,18 @@ namespace SF {
 		bool operator == (const PlayerInformation& src) const;
 	};
 
-    // UGC game information
-    struct UGCGameInfo
+    // generit attribute key and string value pair
+    struct AttributeString
     {
-        String      Name;
-        uint32_t    TableId;
+        std::string Name;
+        std::string Value;
+    };
+
+    // UGC contnet information
+    struct UGCContentInfo
+    {
         Guid	    UGCContentId;
+        DynamicArray<AttributeString> Attributes; // attributes of the content
     };
 
     // deprecated

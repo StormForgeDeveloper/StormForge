@@ -90,36 +90,6 @@ namespace SF {
 	//	Type utility
 	//
 
-	//GameInstanceInfo::GameInstanceInfo(const GameInstanceInfo& src)
-	//	: GameInstanceUID(src.GameInstanceUID)
-	//	, TypeName(src.TypeName)
-	//	, ZoneTableID(src.ZoneTableID)
-	//{
-	//}
-
-	//GameInstanceInfo::GameInstanceInfo(GameInsUID InGameInstanceUID, StringCrc32 InTypeName, uint32_t InZoneTableID)
-	//	: GameInstanceUID(InGameInstanceUID)
-	//	, TypeName(InTypeName)
-	//	, ZoneTableID(InZoneTableID)
-	//{
-	//}
-
-	//GameInstanceInfo& GameInstanceInfo::operator = (const GameInstanceInfo& src)
-	//{
-	//	GameInstanceUID = src.GameInstanceUID;
-	//	TypeName = src.TypeName;
-	//	ZoneTableID = src.ZoneTableID;
-
-	//	return *this;
-	//}
-
-	//bool GameInstanceInfo::operator == (const GameInstanceInfo& src) const
-	//{
-	//	return GameInstanceUID == src.GameInstanceUID
-	//		&& TypeName == src.TypeName
-	//		&& ZoneTableID == src.ZoneTableID;
-	//}
-
 
 
 	////////////////////////////////////////////////////////////////////////////////////

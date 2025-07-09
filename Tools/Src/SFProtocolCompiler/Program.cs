@@ -51,6 +51,7 @@ namespace ProtocolCompiler
                 if (typeDefs != null)
                 {
                     var typeLoader = new ProtocolTypeLoader();
+                    typeLoader.bPrintDebugInfo = AppConfig.GetValueBool("TypeDefPrintDebug", false);
                     foreach (var typeDef in typeDefs)
                     {
                         typeLoader.LoadFile(typeDef.Key);

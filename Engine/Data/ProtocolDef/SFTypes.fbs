@@ -55,6 +55,12 @@ enum EAccountRole : byte
     Dev,
 }
 
+table AttributeString {
+
+	name:string(required);
+	value:string(required);
+}
+
 struct UInt128
 {
 	low:uint64;
@@ -83,11 +89,10 @@ table GenericError {
 	reason:string(required);
 }
 
-table UGCGameInfo
-{
+table UGCContentInfo {
+
 	ugc_content_id:Guid;
-	table_id:uint32;
-	name:string(required);
+	attributes:[AttributeString];
 }
 
 struct UGCItemInfo

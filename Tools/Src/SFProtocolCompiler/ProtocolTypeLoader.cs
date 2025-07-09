@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -11,21 +11,24 @@
 
 
 
+using SF;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
+using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using System.IO;
-using System.Data;
-using System.Collections;
-using SF;
 
 namespace ProtocolCompiler
 {
     class ProtocolTypeLoader
     {
+        public bool bPrintDebugInfo { get; set; } = false;
+
         public ProtocolTypeLoader()
         {
         }
@@ -42,6 +45,11 @@ namespace ProtocolCompiler
 
                 foreach (var itDataType in protocolTypes.DataType)
                 {
+                    if (bPrintDebugInfo)
+                    {
+                        System.Console.WriteLine($"New Type: {itDataType.TypeName}, cpp:{itDataType.CppTypeName}, c#:{itDataType.CSharpTypeName}");
+                    }
+
                     SystemTypeInfo.AddTypeInfo(itDataType);
                 }
             }

@@ -478,11 +478,12 @@ table GameMatchingCanceledS2CEvt
 
 table GetMyUGCGamesCmd
 {
- } // table GetMyUGCGamesCmd
+ 	category:string;
+} // table GetMyUGCGamesCmd
 
 table GetMyUGCGamesRes
 {
- 	ugccontents:[UGCGameInfo];
+ 	content_infos:[UGCContentInfo];
 } // table GetMyUGCGamesRes
 
 table RequestUGCGameInstanceCmd

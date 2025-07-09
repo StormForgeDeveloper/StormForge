@@ -19,23 +19,23 @@ public struct GetMyUGCGamesRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public GetMyUGCGamesRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public SF.Flat.UGCGameInfo? Ugccontents(int j) { int o = __p.__offset(4); return o != 0 ? (SF.Flat.UGCGameInfo?)(new SF.Flat.UGCGameInfo()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
-  public int UgccontentsLength { get { int o = __p.__offset(4); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public SF.Flat.UGCContentInfo? ContentInfos(int j) { int o = __p.__offset(4); return o != 0 ? (SF.Flat.UGCContentInfo?)(new SF.Flat.UGCContentInfo()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
+  public int ContentInfosLength { get { int o = __p.__offset(4); return o != 0 ? __p.__vector_len(o) : 0; } }
 
   public static Offset<SF.Flat.Game.GetMyUGCGamesRes> CreateGetMyUGCGamesRes(FlatBufferBuilder builder,
-      VectorOffset ugccontentsOffset = default(VectorOffset)) {
+      VectorOffset content_infosOffset = default(VectorOffset)) {
     builder.StartTable(1);
-    GetMyUGCGamesRes.AddUgccontents(builder, ugccontentsOffset);
+    GetMyUGCGamesRes.AddContentInfos(builder, content_infosOffset);
     return GetMyUGCGamesRes.EndGetMyUGCGamesRes(builder);
   }
 
   public static void StartGetMyUGCGamesRes(FlatBufferBuilder builder) { builder.StartTable(1); }
-  public static void AddUgccontents(FlatBufferBuilder builder, VectorOffset ugccontentsOffset) { builder.AddOffset(0, ugccontentsOffset.Value, 0); }
-  public static VectorOffset CreateUgccontentsVector(FlatBufferBuilder builder, Offset<SF.Flat.UGCGameInfo>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
-  public static VectorOffset CreateUgccontentsVectorBlock(FlatBufferBuilder builder, Offset<SF.Flat.UGCGameInfo>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateUgccontentsVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<SF.Flat.UGCGameInfo>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateUgccontentsVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<SF.Flat.UGCGameInfo>>(dataPtr, sizeInBytes); return builder.EndVector(); }
-  public static void StartUgccontentsVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static void AddContentInfos(FlatBufferBuilder builder, VectorOffset contentInfosOffset) { builder.AddOffset(0, contentInfosOffset.Value, 0); }
+  public static VectorOffset CreateContentInfosVector(FlatBufferBuilder builder, Offset<SF.Flat.UGCContentInfo>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
+  public static VectorOffset CreateContentInfosVectorBlock(FlatBufferBuilder builder, Offset<SF.Flat.UGCContentInfo>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateContentInfosVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<SF.Flat.UGCContentInfo>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
+  public static VectorOffset CreateContentInfosVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<SF.Flat.UGCContentInfo>>(dataPtr, sizeInBytes); return builder.EndVector(); }
+  public static void StartContentInfosVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
   public static Offset<SF.Flat.Game.GetMyUGCGamesRes> EndGetMyUGCGamesRes(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.GetMyUGCGamesRes>(o);
@@ -48,7 +48,7 @@ static public class GetMyUGCGamesResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyVectorOfTables(tablePos, 4 /*Ugccontents*/, SF.Flat.UGCGameInfoVerify.Verify, false)
+      && verifier.VerifyVectorOfTables(tablePos, 4 /*ContentInfos*/, SF.Flat.UGCContentInfoVerify.Verify, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

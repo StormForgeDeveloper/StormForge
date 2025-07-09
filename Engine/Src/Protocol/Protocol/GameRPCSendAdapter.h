@@ -109,7 +109,7 @@ namespace SF
 		// Cmd: Cancel Game match
 		Result CancelGameMatchCmd( const TransactionID &InTransactionID );
 		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
-		Result GetMyUGCGamesCmd( const TransactionID &InTransactionID );
+		Result GetMyUGCGamesCmd( const TransactionID &InTransactionID, const char* InCategory );
 		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
 		Result RequestUGCGameInstanceCmd( const TransactionID &InTransactionID, const Guid &InUGCContentId );
 		// Cmd: Request UGC template list
@@ -268,7 +268,7 @@ namespace SF
 		// S2C: game matching canceled
 		Result GameMatchingCanceledS2CEvt(  );
 		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
-		Result GetMyUGCGamesRes( const TransactionID &InTransactionID, const Result &InResult, const Array<UGCGameInfo>& InUGCContents );
+		Result GetMyUGCGamesRes( const TransactionID &InTransactionID, const Result &InResult, const Array<UGCContentInfo>& InContentInfos );
 		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
 		Result RequestUGCGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InGameInstanceID, const char* InGameInstanceAddress );
 		// Cmd: Request UGC template list

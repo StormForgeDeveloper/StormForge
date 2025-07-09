@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2018 Kyungkun Ko
 // 
@@ -131,6 +131,11 @@ namespace SF.Tool
         static public int GetValueInt(string key, int defaultValue)
         {
             return ConfigSetting.GetValueInt(key, defaultValue);
+        }
+
+        static public bool GetValueBool(string key, bool defaultValue)
+        {
+            return ConfigSetting.GetValueBool(key, defaultValue);
         }
 
         static public float GetValueFloat(string key, float defaultValue)

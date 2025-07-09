@@ -709,14 +709,16 @@ namespace SF
 		return hr;
 	}; // Result GameRPCSendAdapter::CancelGameMatchCmd( const TransactionID &InTransactionID )
 	// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
-	Result GameRPCSendAdapter::GetMyUGCGamesCmd( const TransactionID &InTransactionID )
+	Result GameRPCSendAdapter::GetMyUGCGamesCmd( const TransactionID &InTransactionID, const char* InCategory )
 	{
  		Result hr;
 
 		protocolCheckPtr(m_Endpoint);
 
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
+		auto CategoryOffset = SF::Flat::Helper::CreateString(fbb, InCategory);
 		SF::Flat::Game::GetMyUGCGamesCmdBuilder _builder(fbb);
+		_builder.add_category(CategoryOffset);
 		flatbuffers::Offset<SF::Flat::Game::GetMyUGCGamesCmd> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
 
@@ -724,7 +726,7 @@ namespace SF
 
 
 		return hr;
-	}; // Result GameRPCSendAdapter::GetMyUGCGamesCmd( const TransactionID &InTransactionID )
+	}; // Result GameRPCSendAdapter::GetMyUGCGamesCmd( const TransactionID &InTransactionID, const char* InCategory )
 	// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
 	Result GameRPCSendAdapter::RequestUGCGameInstanceCmd( const TransactionID &InTransactionID, const Guid &InUGCContentId )
 	{
@@ -2149,16 +2151,16 @@ namespace SF
 		return hr;
 	}; // Result GameSvrRPCSendAdapter::GameMatchingCanceledS2CEvt(  )
 	// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
-	Result GameSvrRPCSendAdapter::GetMyUGCGamesRes( const TransactionID &InTransactionID, const Result &InResult, const Array<UGCGameInfo>& InUGCContents )
+	Result GameSvrRPCSendAdapter::GetMyUGCGamesRes( const TransactionID &InTransactionID, const Result &InResult, const Array<UGCContentInfo>& InContentInfos )
 	{
  		Result hr;
 
 		protocolCheckPtr(m_Endpoint);
 
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
-		auto UGCContentsOffset = SF::Flat::Helper::CreateUGCGameInfoVector(fbb, InUGCContents);
+		auto ContentInfosOffset = SF::Flat::Helper::CreateUGCContentInfoVector(fbb, InContentInfos);
 		SF::Flat::Game::GetMyUGCGamesResBuilder _builder(fbb);
-		_builder.add_ugccontents(UGCContentsOffset);
+		_builder.add_content_infos(ContentInfosOffset);
 		flatbuffers::Offset<SF::Flat::Game::GetMyUGCGamesRes> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
 
@@ -2166,7 +2168,7 @@ namespace SF
 
 
 		return hr;
-	}; // Result GameSvrRPCSendAdapter::GetMyUGCGamesRes( const TransactionID &InTransactionID, const Result &InResult, const Array<UGCGameInfo>& InUGCContents )
+	}; // Result GameSvrRPCSendAdapter::GetMyUGCGamesRes( const TransactionID &InTransactionID, const Result &InResult, const Array<UGCContentInfo>& InContentInfos )
 	// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
 	Result GameSvrRPCSendAdapter::RequestUGCGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InGameInstanceID, const char* InGameInstanceAddress )
 	{

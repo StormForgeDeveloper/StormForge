@@ -312,6 +312,18 @@ namespace SF {
                 return FlatValueHolder<SF::Flat::Guid>(SF::Flat::Guid(low, high));
             }
 
+            inline Offset<Vector<const SF::Flat::Guid*>> CreateGuidVector(FlatBufferBuilder& fbb, const Array<SF::Guid>& value)
+            {
+                std::vector<SF::Flat::Guid> elems;
+                elems.reserve(value.size());
+                for (SF::Guid item : value)
+                {
+                    elems.push_back(*CreateGuid(fbb, item));
+                }
+                auto offset = fbb.CreateVectorOfStructs(elems);
+                return offset;
+            }
+
             inline SF::Guid ParseGuid(const SF::Flat::Guid* value)
             {
                 if (value == nullptr)
@@ -372,40 +384,65 @@ namespace SF {
                 return SF::EPlatform::BR;
             }
 
-            inline Offset<SF::Flat::UGCGameInfo> CreateUGCGameInfo(FlatBufferBuilder& fbb, const SF::UGCGameInfo& value)
+            inline ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::AttributeString>>> CreateAttributeStringVector(FlatBufferBuilder& fbb, const Array<SF::AttributeString>& value)
             {
-                SF::Flat::UGCGameInfoBuilder builder(fbb);
+                std::vector<::flatbuffers::Offset<SF::Flat::AttributeString>> attributesOffset;
+                attributesOffset.reserve(value.size());
+                for (const SF::AttributeString& item : value)
+                {
+                    auto nameOffset = fbb.CreateString(item.Name);
+                    auto valueOffset = fbb.CreateString(item.Value);
+                    auto attrStrOffset = CreateAttributeString(fbb, nameOffset, valueOffset);
+                    attributesOffset.emplace_back(attrStrOffset);
+                }
+                return std::move(fbb.CreateVector(attributesOffset));
+            }
+
+            inline Offset<SF::Flat::UGCContentInfo> CreateUGCContentInfo(FlatBufferBuilder& fbb, const SF::UGCContentInfo& value)
+            {
+                SF::Flat::UGCContentInfoBuilder builder(fbb);
+
+                auto attributesOffset = CreateAttributeStringVector(fbb, value.Attributes);
 
                 builder.add_ugc_content_id(CreateGuid(fbb, value.UGCContentId));
-                builder.add_table_id(value.TableId);
-                builder.add_name(CreateString(fbb, value.Name));
+                builder.add_attributes(attributesOffset);
 
                 return builder.Finish();
             }
 
-            inline SF::UGCGameInfo ParseUGCGameInfo(const SF::Flat::UGCGameInfo* value)
+            inline SF::UGCContentInfo ParseUGCContentInfo(const SF::Flat::UGCContentInfo* value)
             {
-                SF::UGCGameInfo gameInfo;
-                gameInfo.UGCContentId = ParseGuid(value->ugc_content_id());
-                gameInfo.TableId = value->table_id();
-                gameInfo.Name = value->name()->c_str();
-                return gameInfo;
+                SF::UGCContentInfo contentInfo;
+                contentInfo.UGCContentId = ParseGuid(value->ugc_content_id());
+                const ::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::AttributeString>>* attributes = value->attributes();
+                if (attributes)
+                {
+                    for (uint iItem = 0; iItem < attributes->size(); iItem++)
+                    {
+                        const SF::Flat::AttributeString* attr = attributes->Get(iItem); // Get the offset
+                        SF::AttributeString attribute;
+                        attribute.Name = attr->name()->str();
+                        attribute.Value = attr->value()->str();
+                        contentInfo.Attributes.push_back(std::move(attribute));
+                    }
+                }
+                return contentInfo;
+            }
+
+            inline Offset<Vector<Offset<SF::Flat::UGCContentInfo>>> CreateUGCContentInfoVector(FlatBufferBuilder& fbb, const Array<SF::UGCContentInfo>& value)
+            {
+                std::vector<Offset<SF::Flat::UGCContentInfo>> elems;
+                elems.reserve(value.size());
+                for (const SF::UGCContentInfo& item : value)
+                {
+                    elems.push_back(CreateUGCContentInfo(fbb, item));
+                }
+                return fbb.CreateVector(elems.data(), elems.size());
             }
 
             inline FlatValueHolder<SF::Flat::UGCItemInfo> CreateUGCItemInfo(FlatBufferBuilder& fbb, const SF::SUGCItemInfo& value)
             {
                 return FlatValueHolder<SF::Flat::UGCItemInfo>(SF::Flat::UGCItemInfo(value.ItemTableId, value.UTCExpire, value.EffectIds[0], value.EffectIds[1]));
-            }
-
-            inline Offset<Vector<Offset<SF::Flat::UGCGameInfo>>> CreateUGCGameInfoVector(FlatBufferBuilder& fbb, const Array<SF::UGCGameInfo>& value)
-            {
-                std::vector<Offset<SF::Flat::UGCGameInfo>> elems;
-                elems.reserve(value.size());
-                for (const SF::UGCGameInfo& item : value)
-                {
-                    elems.push_back(CreateUGCGameInfo(fbb, item));
-                }
-                return fbb.CreateVector(elems.data(), elems.size());
             }
 
             inline FlatValueHolder<SF::Flat::PlayerPlatformID> CreatePlayerPlatformID(FlatBufferBuilder& fbb, const SF::PlayerPlatformID& value)

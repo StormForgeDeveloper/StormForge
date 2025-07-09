@@ -19,8 +19,23 @@ public struct GetMyUGCGamesCmd : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public GetMyUGCGamesCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
+  public string Category { get { int o = __p.__offset(4); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetCategoryBytes() { return __p.__vector_as_span<byte>(4, 1); }
+#else
+  public ArraySegment<byte>? GetCategoryBytes() { return __p.__vector_as_arraysegment(4); }
+#endif
+  public byte[] GetCategoryArray() { return __p.__vector_as_array<byte>(4); }
 
-  public static void StartGetMyUGCGamesCmd(FlatBufferBuilder builder) { builder.StartTable(0); }
+  public static Offset<SF.Flat.Game.GetMyUGCGamesCmd> CreateGetMyUGCGamesCmd(FlatBufferBuilder builder,
+      StringOffset categoryOffset = default(StringOffset)) {
+    builder.StartTable(1);
+    GetMyUGCGamesCmd.AddCategory(builder, categoryOffset);
+    return GetMyUGCGamesCmd.EndGetMyUGCGamesCmd(builder);
+  }
+
+  public static void StartGetMyUGCGamesCmd(FlatBufferBuilder builder) { builder.StartTable(1); }
+  public static void AddCategory(FlatBufferBuilder builder, StringOffset categoryOffset) { builder.AddOffset(0, categoryOffset.Value, 0); }
   public static Offset<SF.Flat.Game.GetMyUGCGamesCmd> EndGetMyUGCGamesCmd(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.GetMyUGCGamesCmd>(o);
@@ -33,6 +48,7 @@ static public class GetMyUGCGamesCmdVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
+      && verifier.VerifyString(tablePos, 4 /*Category*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }
