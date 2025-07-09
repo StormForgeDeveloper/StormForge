@@ -96,6 +96,7 @@ namespace SF {
         }
 
         constexpr MessageID GetMessageID() const { return MessageId.GetMessageID(); }
+        constexpr MessageID GetMessageIDForClone() const { return MessageId.ID & NET_NO_SEQUENCE_MASK; }
 
         constexpr uint16_t GetSequence() const
         {

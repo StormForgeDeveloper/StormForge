@@ -26,6 +26,7 @@ namespace SF {
     constexpr uint NET_SEQUENCE_BITS = 12;
     constexpr uint NET_SEQUENCE_MASK = (1 << NET_SEQUENCE_BITS) - 1;
     constexpr uint NET_SEQUENCE_MAX_DIFF = NET_SEQUENCE_MASK >> 1;
+    constexpr uint NET_NO_SEQUENCE_MASK = ~NET_SEQUENCE_MASK;
 
     constexpr uint NET_NONID_MASK = (1 << (NET_SEQUENCE_BITS + 1)) - 1; // +1 for InterServer bit
     constexpr uint NET_ID_MASK = ~NET_NONID_MASK;

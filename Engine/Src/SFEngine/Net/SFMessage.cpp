@@ -192,7 +192,7 @@ namespace SF
 
     MessageData* MessageData::NewMessage(IHeap& heap, const MessageHeader* pHeader)
     {
-        return NewMessage(heap, pHeader->GetMessageID(), pHeader->MessageSize, reinterpret_cast<const uint8_t*>(pHeader));
+        return NewMessage(heap, pHeader->GetMessageIDForClone(), pHeader->MessageSize, reinterpret_cast<const uint8_t*>(pHeader));
     }
 
 	// Initialize message buffer
