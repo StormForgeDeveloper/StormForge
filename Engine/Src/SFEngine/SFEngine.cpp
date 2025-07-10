@@ -96,8 +96,7 @@ namespace SF
 		if (AddComponent<Util::LibraryComponentTime>() == nullptr)
 			return ResultCode::FAIL;
 
-		if (!StrUtil::IsNullOrEmpty(m_InitParameter.StringDBBinPath))
-			AddComponent<StringCrcLibraryComponent>(m_InitParameter.StringDBBinPath);
+		AddComponent<StringCrcLibraryComponent>(m_InitParameter.StringDBBinPath);
 
 		if (AddComponent<SF::EngineObjectManager>() == nullptr)
 			return ResultCode::FAIL;
