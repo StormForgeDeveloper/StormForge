@@ -46,7 +46,7 @@ namespace SF
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 4)]
-    public struct MessageID
+    public struct MessageID : IFormattable
     {
         [FieldOffset(0)] public UInt32 MessageIdRaw;
 
@@ -129,7 +129,13 @@ namespace SF
 
         public new string ToString()
         {
-            return $"({MessageType},{ProtocolId},{CodeIndex})";
+            return $"({MessageType},{InterServer},{ProtocolId},{CodeIndex})";
+        }
+
+        // IFormattable
+        string IFormattable.ToString(string? format, IFormatProvider? formatProvider)
+        {
+            return ToString();
         }
 
     }
