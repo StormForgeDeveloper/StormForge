@@ -53,8 +53,11 @@ namespace SF {
 				continue;
 
 			FileInputStream readFrom;
-			if (!readFrom.Open(inputPath))
-				continue;
+            if (!readFrom.Open(inputPath))
+            {
+                SFLog(System, Info, "String crc table file doesn't exist! '{0}'", inputPath);
+                continue;
+            }
 
 			SFLog(System, Info, "Loading string crc table! {0}", inputPath);
 
