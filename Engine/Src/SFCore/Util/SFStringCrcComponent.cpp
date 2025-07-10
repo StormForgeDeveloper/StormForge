@@ -68,6 +68,13 @@ namespace SF {
 			}
 		}
 
+        // Some must have strings
+        Service::StringDB->AddString("static");
+        Service::StringDB->AddString("ugc");
+        Service::StringDB->AddString("dynamic");
+        Service::StringDB->AddString("zone");
+        Service::StringDB->AddString("zoneinstance");
+
 		return ResultCode::SUCCESS;
 	}
 
