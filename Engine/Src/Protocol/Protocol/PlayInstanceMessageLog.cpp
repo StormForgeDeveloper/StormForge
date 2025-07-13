@@ -92,6 +92,7 @@ namespace SF
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_UGCEditAddedS2CEvt,&UGCEditAddedS2CEvt));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_UGCEditRemovedS2CEvt,&UGCEditRemovedS2CEvt));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_UGCEditMovedS2CEvt,&UGCEditMovedS2CEvt));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_UGCContentAddedS2CEvt,&UGCContentAddedS2CEvt));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_CreateStreamCmd,&CreateStreamCmd));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_CreateStreamRes,&CreateStreamRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::MID_FindStreamCmd,&FindStreamCmd));
@@ -1008,6 +1009,21 @@ namespace SF
 
 		return hr;
 	}; // Result PlayInstanceMessageLog::UGCEditMovedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
+	Result PlayInstanceMessageLog::UGCContentAddedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.PlayInstance.UGCContentAddedS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} PlayInstance:UGCContentAddedS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result PlayInstanceMessageLog::UGCContentAddedS2CEvt(const char* prefix, const MessageHeader* messageHeader)
 	Result PlayInstanceMessageLog::CreateStreamCmd(const char* prefix, const MessageHeader* messageHeader)
 	{
  		Result hr;

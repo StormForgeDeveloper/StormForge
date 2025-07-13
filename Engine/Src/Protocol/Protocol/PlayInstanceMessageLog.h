@@ -92,6 +92,7 @@ namespace SF
 		static Result UGCEditAddedS2CEvt(const char* prefix, const MessageHeader* messageHeader);
 		static Result UGCEditRemovedS2CEvt(const char* prefix, const MessageHeader* messageHeader);
 		static Result UGCEditMovedS2CEvt(const char* prefix, const MessageHeader* messageHeader);
+		static Result UGCContentAddedS2CEvt(const char* prefix, const MessageHeader* messageHeader);
 		static Result CreateStreamCmd(const char* prefix, const MessageHeader* messageHeader);
 		static Result CreateStreamRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result FindStreamCmd(const char* prefix, const MessageHeader* messageHeader);

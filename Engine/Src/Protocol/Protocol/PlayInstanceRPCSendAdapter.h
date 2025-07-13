@@ -177,6 +177,8 @@ namespace SF
 		Result UGCEditRemovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID );
 		// S2C: UGC zone edited event
 		Result UGCEditMovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale );
+		// S2C: UGC content added event
+		Result UGCContentAddedS2CEvt( const AccountID &InOwnerAccount, const char* InCategory, const uint64_t &InDataId, const Guid &InContentGuid );
 		// Cmd: Create stream instance
 		Result CreateStreamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName );
 		// Cmd: Open stream instance

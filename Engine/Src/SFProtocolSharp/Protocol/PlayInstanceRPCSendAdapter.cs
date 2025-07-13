@@ -1202,6 +1202,26 @@ namespace SF.Net
 		} // public Result  UGCEditMovedS2CEvt( SF.GameInstanceUID InPlayInstanceUID, SF.AccountID InOperatorPlayerID, System.UInt32 InEntityInstanceId, System.UInt32 InGroupInstanceID, SF.SFVector4 InPosition, SFQuaternion InRotation, SF.SFVector4 InScale )
 
 
+		// S2C: UGC content added event
+		public Result  UGCContentAddedS2CEvt( SF.AccountID InOwnerAccount, System.String InCategory, System.UInt64 InDataId, System.Guid InContentGuid )
+		{
+ 			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
+			Result result = ResultCode.SUCCESS;
+			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
+			var OwnerAccountOffset = builder.CreateAccountID(InOwnerAccount);
+			var CategoryOffset = builder.CreateString(InCategory);
+			var ContentGuidOffset = builder.CreateGuid(InContentGuid);
+			SF.Flat.PlayInstance.UGCContentAddedS2CEvt.StartUGCContentAddedS2CEvt(builder);
+			SF.Flat.PlayInstance.UGCContentAddedS2CEvt.AddOwnerAccount(builder, OwnerAccountOffset);
+			SF.Flat.PlayInstance.UGCContentAddedS2CEvt.AddCategory(builder, CategoryOffset);
+			SF.Flat.PlayInstance.UGCContentAddedS2CEvt.AddDataId(builder, InDataId);
+			SF.Flat.PlayInstance.UGCContentAddedS2CEvt.AddContentGuid(builder, ContentGuidOffset);
+			var packetOffset = SF.Flat.PlayInstance.UGCContentAddedS2CEvt.EndUGCContentAddedS2CEvt(builder);
+			result = SendMessage(MessageIDPlayInstance.UGCContentAddedS2CEvt, builder, packetOffset.Value);
+			return result;
+		} // public Result  UGCContentAddedS2CEvt( SF.AccountID InOwnerAccount, System.String InCategory, System.UInt64 InDataId, System.Guid InContentGuid )
+
+
 		// Cmd: Create stream instance
 		public Result  CreateStreamRes( SF.TransactionID InTransactionID, SF.Result InResult, System.String InStreamName )
 		{

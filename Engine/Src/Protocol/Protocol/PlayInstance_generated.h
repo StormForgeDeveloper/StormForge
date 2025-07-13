@@ -199,6 +199,9 @@ struct UGCEditRemovedS2CEvtBuilder;
 struct UGCEditMovedS2CEvt;
 struct UGCEditMovedS2CEvtBuilder;
 
+struct UGCContentAddedS2CEvt;
+struct UGCContentAddedS2CEvtBuilder;
+
 struct CreateStreamCmd;
 struct CreateStreamCmdBuilder;
 
@@ -5715,6 +5718,118 @@ struct UGCEditMovedS2CEvt::Traits {
   template<size_t Index>
   using FieldType = decltype(std::declval<type>().get_field<Index>());
 };
+
+struct UGCContentAddedS2CEvt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef UGCContentAddedS2CEvtBuilder Builder;
+  struct Traits;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_OWNER_ACCOUNT = 4,
+    VT_CATEGORY = 6,
+    VT_DATA_ID = 8,
+    VT_CONTENT_GUID = 10
+  };
+  const SF::Flat::AccountID *owner_account() const {
+    return GetStruct<const SF::Flat::AccountID *>(VT_OWNER_ACCOUNT);
+  }
+  const ::flatbuffers::String *category() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_CATEGORY);
+  }
+  uint64_t data_id() const {
+    return GetField<uint64_t>(VT_DATA_ID, 0);
+  }
+  const SF::Flat::Guid *content_guid() const {
+    return GetStruct<const SF::Flat::Guid *>(VT_CONTENT_GUID);
+  }
+  template<size_t Index>
+  auto get_field() const {
+         if constexpr (Index == 0) return owner_account();
+    else if constexpr (Index == 1) return category();
+    else if constexpr (Index == 2) return data_id();
+    else if constexpr (Index == 3) return content_guid();
+    else static_assert(Index != Index, "Invalid Field Index");
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<SF::Flat::AccountID>(verifier, VT_OWNER_ACCOUNT, 8) &&
+           VerifyOffset(verifier, VT_CATEGORY) &&
+           verifier.VerifyString(category()) &&
+           VerifyField<uint64_t>(verifier, VT_DATA_ID, 8) &&
+           VerifyField<SF::Flat::Guid>(verifier, VT_CONTENT_GUID, 8) &&
+           verifier.EndTable();
+  }
+};
+
+struct UGCContentAddedS2CEvtBuilder {
+  typedef UGCContentAddedS2CEvt Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_owner_account(const SF::Flat::AccountID *owner_account) {
+    fbb_.AddStruct(UGCContentAddedS2CEvt::VT_OWNER_ACCOUNT, owner_account);
+  }
+  void add_category(::flatbuffers::Offset<::flatbuffers::String> category) {
+    fbb_.AddOffset(UGCContentAddedS2CEvt::VT_CATEGORY, category);
+  }
+  void add_data_id(uint64_t data_id) {
+    fbb_.AddElement<uint64_t>(UGCContentAddedS2CEvt::VT_DATA_ID, data_id, 0);
+  }
+  void add_content_guid(const SF::Flat::Guid *content_guid) {
+    fbb_.AddStruct(UGCContentAddedS2CEvt::VT_CONTENT_GUID, content_guid);
+  }
+  explicit UGCContentAddedS2CEvtBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<UGCContentAddedS2CEvt> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<UGCContentAddedS2CEvt>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<UGCContentAddedS2CEvt> CreateUGCContentAddedS2CEvt(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const SF::Flat::AccountID *owner_account = nullptr,
+    ::flatbuffers::Offset<::flatbuffers::String> category = 0,
+    uint64_t data_id = 0,
+    const SF::Flat::Guid *content_guid = nullptr) {
+  UGCContentAddedS2CEvtBuilder builder_(_fbb);
+  builder_.add_data_id(data_id);
+  builder_.add_content_guid(content_guid);
+  builder_.add_category(category);
+  builder_.add_owner_account(owner_account);
+  return builder_.Finish();
+}
+
+struct UGCContentAddedS2CEvt::Traits {
+  using type = UGCContentAddedS2CEvt;
+  static auto constexpr Create = CreateUGCContentAddedS2CEvt;
+  static constexpr auto name = "UGCContentAddedS2CEvt";
+  static constexpr auto fully_qualified_name = "SF.Flat.PlayInstance.UGCContentAddedS2CEvt";
+  static constexpr size_t fields_number = 4;
+  static constexpr std::array<const char *, fields_number> field_names = {
+    "owner_account",
+    "category",
+    "data_id",
+    "content_guid"
+  };
+  template<size_t Index>
+  using FieldType = decltype(std::declval<type>().get_field<Index>());
+};
+
+inline ::flatbuffers::Offset<UGCContentAddedS2CEvt> CreateUGCContentAddedS2CEvtDirect(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const SF::Flat::AccountID *owner_account = nullptr,
+    const char *category = nullptr,
+    uint64_t data_id = 0,
+    const SF::Flat::Guid *content_guid = nullptr) {
+  auto category__ = category ? _fbb.CreateString(category) : 0;
+  return SF::Flat::PlayInstance::CreateUGCContentAddedS2CEvt(
+      _fbb,
+      owner_account,
+      category__,
+      data_id,
+      content_guid);
+}
 
 struct CreateStreamCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef CreateStreamCmdBuilder Builder;

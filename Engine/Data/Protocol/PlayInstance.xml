@@ -416,6 +416,13 @@
             <Params TypeName="Vector4" Name="Scale" Desc="Scale"/>
         </S2CEvent>
 
+        <S2CEvent Name="UGCContentAdded" Reliable="true" Crypto="No" Trace="Debug1" Desc="UGC content added event">
+            <Params TypeName="AccountID" Name="OwnerAccount" Desc="Owner of the content"/>
+            <Params TypeName="String" Name="Category" Desc="UGC category"/>
+            <Params TypeName="uint64" Name="DataId" Desc="UGC content data id. For example, aquarium id"/>
+            <Params TypeName="Guid" Name="ContentGuid" Desc="UGC content Guid"/>
+        </S2CEvent>
+
         <!-- ============================  Streaming ============================================ -->
 
         <Command Name="CreateStream" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create stream instance">

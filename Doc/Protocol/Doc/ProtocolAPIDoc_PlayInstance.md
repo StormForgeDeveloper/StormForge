@@ -830,6 +830,20 @@ UGC zone edited event
 		- OutInScale: Vector4 type. Scale
 
 
+## UGCContentAddedS2CEvt
+UGC content added event
+
+        Result UGCContentAddedS2CEvt(const AccountID &InOwnerAccount, const char* InCategory, const uint64_t &InDataId, const Guid &InContentGuid)
+
+		- OutInOwnerAccount: AccountID type. Owner of the content
+
+		- OutInCategory: String type. UGC category
+
+		- OutInDataId: uint64 type. UGC content data id. For example, aquarium id
+
+		- OutInContentGuid: Guid type. UGC content Guid
+
+
 ## CreateStream Request
 Create stream instance
 

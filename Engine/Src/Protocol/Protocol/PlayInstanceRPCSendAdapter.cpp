@@ -1457,6 +1457,30 @@ namespace SF
 
 		return hr;
 	}; // Result PlayInstanceSvrRPCSendAdapter::UGCEditMovedS2CEvt( const GameInstanceUID &InPlayInstanceUID, const PlayerID &InOperatorPlayerID, const uint32_t &InEntityInstanceId, const uint32_t &InGroupInstanceID, const Vector4 &InPosition, const Quaternion &InRotation, const Vector4 &InScale )
+	// S2C: UGC content added event
+	Result PlayInstanceSvrRPCSendAdapter::UGCContentAddedS2CEvt( const AccountID &InOwnerAccount, const char* InCategory, const uint64_t &InDataId, const Guid &InContentGuid )
+	{
+ 		Result hr;
+
+		protocolCheckPtr(m_Endpoint);
+
+		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
+		auto OwnerAccountOffset = SF::Flat::Helper::CreateAccountID(fbb, InOwnerAccount);
+		auto CategoryOffset = SF::Flat::Helper::CreateString(fbb, InCategory);
+		auto ContentGuidOffset = SF::Flat::Helper::CreateGuid(fbb, InContentGuid);
+		SF::Flat::PlayInstance::UGCContentAddedS2CEvtBuilder _builder(fbb);
+		_builder.add_owner_account(OwnerAccountOffset);
+		_builder.add_category(CategoryOffset);
+		_builder.add_data_id(InDataId);
+		_builder.add_content_guid(ContentGuidOffset);
+		flatbuffers::Offset<SF::Flat::PlayInstance::UGCContentAddedS2CEvt> packetOffset = _builder.Finish();
+		fbb.Finish(packetOffset);
+
+		protocolCheck(Send(TransactionID(), ResultCode::SUCCESS, Message::PlayInstance::MID_UGCContentAddedS2CEvt, fbb));
+
+
+		return hr;
+	}; // Result PlayInstanceSvrRPCSendAdapter::UGCContentAddedS2CEvt( const AccountID &InOwnerAccount, const char* InCategory, const uint64_t &InDataId, const Guid &InContentGuid )
 	// Cmd: Create stream instance
 	Result PlayInstanceSvrRPCSendAdapter::CreateStreamRes( const TransactionID &InTransactionID, const Result &InResult, const char* InStreamName )
 	{

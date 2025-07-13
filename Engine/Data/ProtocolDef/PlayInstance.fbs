@@ -430,6 +430,14 @@ table UGCEditMovedS2CEvt
 	scale:Vector4;
 } // table UGCEditMovedS2CEvt
 
+table UGCContentAddedS2CEvt
+{
+ 	owner_account:AccountID;
+	category:string;
+	data_id:uint64;
+	content_guid:Guid;
+} // table UGCContentAddedS2CEvt
+
 table CreateStreamCmd
 {
  	ticket:uint64;

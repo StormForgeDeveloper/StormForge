@@ -141,21 +141,23 @@ namespace SF
 			constexpr MessageID MID_UGCEditRemovedS2CEvt(EMessageType::Event,1,MessageProtocol::PlayInstance,41);
 			// S2C: UGC zone edited event
 			constexpr MessageID MID_UGCEditMovedS2CEvt(EMessageType::Event,1,MessageProtocol::PlayInstance,42);
+			// S2C: UGC content added event
+			constexpr MessageID MID_UGCContentAddedS2CEvt(EMessageType::Event,1,MessageProtocol::PlayInstance,43);
 			// Cmd: Create stream instance
-			constexpr MessageID MID_CreateStreamCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,43);
-			constexpr MessageID MID_CreateStreamRes(EMessageType::Result,1,MessageProtocol::PlayInstance,43);
+			constexpr MessageID MID_CreateStreamCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,44);
+			constexpr MessageID MID_CreateStreamRes(EMessageType::Result,1,MessageProtocol::PlayInstance,44);
 
 			// Cmd: Open stream instance
-			constexpr MessageID MID_FindStreamCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,44);
-			constexpr MessageID MID_FindStreamRes(EMessageType::Result,1,MessageProtocol::PlayInstance,44);
+			constexpr MessageID MID_FindStreamCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,45);
+			constexpr MessageID MID_FindStreamRes(EMessageType::Result,1,MessageProtocol::PlayInstance,45);
 
 			// Cmd: Delete stream instance
-			constexpr MessageID MID_DeleteStreamCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,45);
-			constexpr MessageID MID_DeleteStreamRes(EMessageType::Result,1,MessageProtocol::PlayInstance,45);
+			constexpr MessageID MID_DeleteStreamCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,46);
+			constexpr MessageID MID_DeleteStreamRes(EMessageType::Result,1,MessageProtocol::PlayInstance,46);
 
 			// Cmd: Get stream list
-			constexpr MessageID MID_GetStreamListCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,46);
-			constexpr MessageID MID_GetStreamListRes(EMessageType::Result,1,MessageProtocol::PlayInstance,46);
+			constexpr MessageID MID_GetStreamListCmd(EMessageType::Command,1,MessageProtocol::PlayInstance,47);
+			constexpr MessageID MID_GetStreamListRes(EMessageType::Result,1,MessageProtocol::PlayInstance,47);
 
 
 
