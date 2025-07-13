@@ -92,7 +92,9 @@ table GenericError {
 table UGCContentInfo {
 
 	ugc_content_id:Guid;
-	attributes:[AttributeString];
+    data_id:uint64;
+    category:string;
+    data_path:string;
 }
 
 struct UGCItemInfo

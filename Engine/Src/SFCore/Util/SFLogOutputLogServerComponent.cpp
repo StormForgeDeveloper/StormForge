@@ -66,7 +66,8 @@ namespace SF {
 
         m_Client.Initialize(logServer, "SFGateway");
 
-        m_ChannelName.Format("{0}-{1}", Util::GetTitleEnv(), Util::GetServiceName());
+        // Service name has titleenv
+        m_ChannelName = Util::GetServiceName();
 	}
 
 	void LogOutputLogServerComponent::MyOutputHandler::Deinit()

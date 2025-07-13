@@ -896,13 +896,15 @@ namespace SF
 
         public static Offset<SF.Flat.UGCContentInfo> CreateUGCContentInfo(this Google.FlatBuffers.FlatBufferBuilder builder, SF.UGCContentInfo data)
         {
-            var attributesOffset = CreateAttributeStringVector(builder, data.Attributes.ToArray());
-
+            var categoryOffset = builder.CreateString(data.Category);
+            var dataPathOffset = builder.CreateString(data.DataPath);
 
             SF.Flat.UGCContentInfo.StartUGCContentInfo(builder);
 
-            SF.Flat.UGCContentInfo.AddUgcContentId(builder, builder.CreateGuid(data.UGCContentId));
-            SF.Flat.UGCContentInfo.AddAttributes(builder, attributesOffset);
+            SF.Flat.UGCContentInfo.AddUgcContentId(builder, builder.CreateGuid(data.ContentId));
+            SF.Flat.UGCContentInfo.AddDataId(builder, data.DataId);
+            SF.Flat.UGCContentInfo.AddCategory(builder, categoryOffset);
+            SF.Flat.UGCContentInfo.AddDataPath(builder, dataPathOffset);
 
             return SF.Flat.UGCContentInfo.EndUGCContentInfo(builder);
         }

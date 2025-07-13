@@ -203,99 +203,101 @@ namespace SF.Net
 		public static readonly MessageID RequestUGCGameInstanceCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 53);
 		public static readonly MessageID RequestUGCGameInstanceRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 53);
 
+		// S2C: Requested instance is ready and can join
+		public static readonly MessageID InstanceIsReadyS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.Game, 54);
 		// Cmd: Request UGC template list
-		public static readonly MessageID GetUGCTemplatesCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 54);
-		public static readonly MessageID GetUGCTemplatesRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 54);
+		public static readonly MessageID GetUGCTemplatesCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 55);
+		public static readonly MessageID GetUGCTemplatesRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 55);
 
 		// Cmd: Upload UGC content data
-		public static readonly MessageID UploadUGCCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 55);
-		public static readonly MessageID UploadUGCRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 55);
+		public static readonly MessageID UploadUGCCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 56);
+		public static readonly MessageID UploadUGCRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 56);
 
 		// Cmd: Request WhiteboardSharing
-		public static readonly MessageID SearchUGCCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 56);
-		public static readonly MessageID SearchUGCRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 56);
+		public static readonly MessageID SearchUGCCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 57);
+		public static readonly MessageID SearchUGCRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 57);
 
 		// Cmd: Get UGC content info, name, thumb image and so on
-		public static readonly MessageID GetUGCContentInfoCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 57);
-		public static readonly MessageID GetUGCContentInfoRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 57);
+		public static readonly MessageID GetUGCContentInfoCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 58);
+		public static readonly MessageID GetUGCContentInfoRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 58);
 
 		// Cmd: Request WhiteboardSharing
-		public static readonly MessageID DownloadUGCContentCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 58);
-		public static readonly MessageID DownloadUGCContentRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 58);
+		public static readonly MessageID DownloadUGCContentCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 59);
+		public static readonly MessageID DownloadUGCContentRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 59);
 
 		// Cmd: Buy shop item prepare
-		public static readonly MessageID BuyShopItemPrepareCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 59);
-		public static readonly MessageID BuyShopItemPrepareRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 59);
+		public static readonly MessageID BuyShopItemPrepareCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 60);
+		public static readonly MessageID BuyShopItemPrepareRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 60);
 
 		// Cmd: Buy shop item
-		public static readonly MessageID BuyShopItemCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 60);
-		public static readonly MessageID BuyShopItemRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 60);
+		public static readonly MessageID BuyShopItemCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 61);
+		public static readonly MessageID BuyShopItemRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 61);
 
 		// Cmd: Create or Join Chat channel
-		public static readonly MessageID CreateOrJoinChatChannelCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 61);
-		public static readonly MessageID CreateOrJoinChatChannelRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 61);
+		public static readonly MessageID CreateOrJoinChatChannelCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 62);
+		public static readonly MessageID CreateOrJoinChatChannelRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 62);
 
 		// Cmd: Join
-		public static readonly MessageID JoinChatChannelCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 62);
-		public static readonly MessageID JoinChatChannelRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 62);
+		public static readonly MessageID JoinChatChannelCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 63);
+		public static readonly MessageID JoinChatChannelRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 63);
 
 		// S2C: Player Joined event
-		public static readonly MessageID ChatChannelPlayerJoinedS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.Game, 63);
+		public static readonly MessageID ChatChannelPlayerJoinedS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.Game, 64);
 		// S2C: ChatChannel leader changed event
-		public static readonly MessageID ChatChannelLeaderChangedS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.Game, 64);
+		public static readonly MessageID ChatChannelLeaderChangedS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.Game, 65);
 		// Cmd: Leave ChatChannel command
-		public static readonly MessageID LeaveChatChannelCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 65);
-		public static readonly MessageID LeaveChatChannelRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 65);
+		public static readonly MessageID LeaveChatChannelCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 66);
+		public static readonly MessageID LeaveChatChannelRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 66);
 
 		// S2C: ChatChannel Player left event
-		public static readonly MessageID ChatChannelPlayerLeftS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.Game, 66);
+		public static readonly MessageID ChatChannelPlayerLeftS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.Game, 67);
 		// Cmd: Kick player from the ChatChannel
-		public static readonly MessageID ChatChannelKickPlayerCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 67);
-		public static readonly MessageID ChatChannelKickPlayerRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 67);
+		public static readonly MessageID ChatChannelKickPlayerCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 68);
+		public static readonly MessageID ChatChannelKickPlayerRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 68);
 
 		// S2C: ChatChannel Player kicked message
-		public static readonly MessageID ChatChannelPlayerKickedS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.Game, 68);
+		public static readonly MessageID ChatChannelPlayerKickedS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.Game, 69);
 		// Cmd: Chat channel sending chatting message
-		public static readonly MessageID ChatChannelChatMessageCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 69);
-		public static readonly MessageID ChatChannelChatMessageRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 69);
+		public static readonly MessageID ChatChannelChatMessageCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 70);
+		public static readonly MessageID ChatChannelChatMessageRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 70);
 
 		// S2C: ChatChannel Chatting message event
-		public static readonly MessageID ChatChannelChatMessageS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.Game, 70);
+		public static readonly MessageID ChatChannelChatMessageS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.Game, 71);
 		// Cmd: Whisper(tell) other player chatting
-		public static readonly MessageID WhisperMessageCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 71);
-		public static readonly MessageID WhisperMessageRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 71);
+		public static readonly MessageID WhisperMessageCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 72);
+		public static readonly MessageID WhisperMessageRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 72);
 
 		// S2C: Other player whispered(tell) to me message event
-		public static readonly MessageID WhisperMessageS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.Game, 72);
+		public static readonly MessageID WhisperMessageS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.Game, 73);
 		// Cmd: Create character
-		public static readonly MessageID CreateCharacterCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 73);
-		public static readonly MessageID CreateCharacterRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 73);
+		public static readonly MessageID CreateCharacterCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 74);
+		public static readonly MessageID CreateCharacterRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 74);
 
 		// Cmd: Delete character
-		public static readonly MessageID DeleteCharacterCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 74);
-		public static readonly MessageID DeleteCharacterRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 74);
+		public static readonly MessageID DeleteCharacterCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 75);
+		public static readonly MessageID DeleteCharacterRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 75);
 
 		// Cmd: Get character list
-		public static readonly MessageID GetCharacterListCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 75);
-		public static readonly MessageID GetCharacterListRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 75);
+		public static readonly MessageID GetCharacterListCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 76);
+		public static readonly MessageID GetCharacterListRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 76);
 
 		// Cmd: 
-		public static readonly MessageID GetCharacterDataCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 76);
-		public static readonly MessageID GetCharacterDataRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 76);
+		public static readonly MessageID GetCharacterDataCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 77);
+		public static readonly MessageID GetCharacterDataRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 77);
 
 		// Cmd: Select character
-		public static readonly MessageID SelectCharacterCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 77);
-		public static readonly MessageID SelectCharacterRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 77);
+		public static readonly MessageID SelectCharacterCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 78);
+		public static readonly MessageID SelectCharacterRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 78);
 
 		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
-		public static readonly MessageID RequestServerNoticeUpdateCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 78);
-		public static readonly MessageID RequestServerNoticeUpdateRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 78);
+		public static readonly MessageID RequestServerNoticeUpdateCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 79);
+		public static readonly MessageID RequestServerNoticeUpdateRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 79);
 
 		// S2C: Server Notice updated event
-		public static readonly MessageID ServerNoticeS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.Game, 79);
+		public static readonly MessageID ServerNoticeS2CEvt = MessageID.MakeMessageID(EMessageType.Event, 1, SF.MessageProtocol.Game, 80);
 		// Cmd: To call general functionality
-		public static readonly MessageID CallFunctionCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 80);
-		public static readonly MessageID CallFunctionRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 80);
+		public static readonly MessageID CallFunctionCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 81);
+		public static readonly MessageID CallFunctionRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 81);
 
 	}; // public static class MessageIDGame
 

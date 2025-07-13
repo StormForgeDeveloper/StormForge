@@ -123,6 +123,7 @@ namespace SF
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_GetMyUGCGamesRes,&GetMyUGCGamesRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_RequestUGCGameInstanceCmd,&RequestUGCGameInstanceCmd));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_RequestUGCGameInstanceRes,&RequestUGCGameInstanceRes));
+		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_InstanceIsReadyS2CEvt,&InstanceIsReadyS2CEvt));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_GetUGCTemplatesCmd,&GetUGCTemplatesCmd));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_GetUGCTemplatesRes,&GetUGCTemplatesRes));
 		Protocol::MessageDebugTraceMap.insert(std::make_pair(Message::Game::MID_UploadUGCCmd,&UploadUGCCmd));
@@ -1543,6 +1544,21 @@ namespace SF
 
 		return hr;
 	}; // Result GameMessageLog::RequestUGCGameInstanceRes(const char* prefix, const MessageHeader* messageHeader)
+	Result GameMessageLog::InstanceIsReadyS2CEvt(const char* prefix, const MessageHeader* messageHeader)
+	{
+ 		Result hr;
+
+		protocolCheckPtr(messageHeader);
+
+		std::string packetString;
+		static const std::string tableName = "SF.Flat.Game.InstanceIsReadyS2CEvt";
+		if (stm_Parser.LookupStruct(tableName)) {
+		    flatbuffers::GenTextFromTable(stm_Parser, flatbuffers::GetRoot<flatbuffers::Table>(messageHeader->GetPayloadPtr()), tableName, &packetString);
+		}
+		SFLog(Net, Debug1, "{0} Game:InstanceIsReadyS2CEvt: sz:{1}: {2}", prefix, messageHeader->MessageSize, packetString.length() > 0 ? packetString.c_str() : "");
+
+		return hr;
+	}; // Result GameMessageLog::InstanceIsReadyS2CEvt(const char* prefix, const MessageHeader* messageHeader)
 	Result GameMessageLog::GetUGCTemplatesCmd(const char* prefix, const MessageHeader* messageHeader)
 	{
  		Result hr;

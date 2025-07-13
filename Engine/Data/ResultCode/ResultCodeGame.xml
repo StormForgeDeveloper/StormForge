@@ -62,5 +62,7 @@
 
     <ResultCodeItem Severity="Error" CodeName="LOW_PLAYER_LEVEL" Desc="The player's level is too low"/>
 
+    <ResultCodeItem Severity="Error" CodeName="NO_OWNERSHIP" Desc="The player needs ownership to access the content"/>
+
 </ResultCodes>
 

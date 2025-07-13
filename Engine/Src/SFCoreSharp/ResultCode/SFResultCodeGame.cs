@@ -182,6 +182,10 @@ namespace SF {
 		 public const int _GAME_LOW_PLAYER_LEVEL = (unchecked((int)0xE7040029)); 
 		public static readonly Result GAME_LOW_PLAYER_LEVEL = new Result(_GAME_LOW_PLAYER_LEVEL); 
 
+		// The player needs ownership to access the content 
+		 public const int _GAME_NO_OWNERSHIP = (unchecked((int)0xE704002A)); 
+		public static readonly Result GAME_NO_OWNERSHIP = new Result(_GAME_NO_OWNERSHIP); 
+
 	}
 }
 

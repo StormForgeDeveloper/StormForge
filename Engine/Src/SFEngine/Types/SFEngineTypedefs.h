@@ -410,8 +410,10 @@ namespace SF {
     // UGC contnet information
     struct UGCContentInfo
     {
-        Guid	    UGCContentId;
-        DynamicArray<AttributeString> Attributes; // attributes of the content
+        Guid UGCContentId;
+        String Category;
+        String DataPath;
+        int64_t DataId;
     };
 
     // deprecated

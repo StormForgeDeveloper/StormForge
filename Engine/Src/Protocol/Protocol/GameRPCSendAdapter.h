@@ -109,9 +109,9 @@ namespace SF
 		// Cmd: Cancel Game match
 		Result CancelGameMatchCmd( const TransactionID &InTransactionID );
 		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
-		Result GetMyUGCGamesCmd( const TransactionID &InTransactionID, const char* InCategory );
+		Result GetMyUGCGamesCmd( const TransactionID &InTransactionID, const char* InUGCCategory );
 		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
-		Result RequestUGCGameInstanceCmd( const TransactionID &InTransactionID, const Guid &InUGCContentId );
+		Result RequestUGCGameInstanceCmd( const TransactionID &InTransactionID, const char* InUGCCategory, const Guid &InUGCContentId );
 		// Cmd: Request UGC template list
 		Result GetUGCTemplatesCmd( const TransactionID &InTransactionID, const Array<const char*>& InTags );
 		// Cmd: Upload UGC content data
@@ -270,7 +270,9 @@ namespace SF
 		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
 		Result GetMyUGCGamesRes( const TransactionID &InTransactionID, const Result &InResult, const Array<UGCContentInfo>& InContentInfos );
 		// Cmd: Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.
-		Result RequestUGCGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InGameInstanceID, const char* InGameInstanceAddress );
+		Result RequestUGCGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const char* InInstanceName );
+		// S2C: Requested instance is ready and can join
+		Result InstanceIsReadyS2CEvt( const char* InInstanceName, const GameInstanceUID &InGameInstanceID );
 		// Cmd: Request UGC template list
 		Result GetUGCTemplatesRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InUGCIDs );
 		// Cmd: Upload UGC content data

@@ -1481,26 +1481,38 @@ struct UGCContentInfo FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   struct Traits;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_UGC_CONTENT_ID = 4,
-    VT_ATTRIBUTES = 6
+    VT_DATA_ID = 6,
+    VT_CATEGORY = 8,
+    VT_DATA_PATH = 10
   };
   const SF::Flat::Guid *ugc_content_id() const {
     return GetStruct<const SF::Flat::Guid *>(VT_UGC_CONTENT_ID);
   }
-  const ::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::AttributeString>> *attributes() const {
-    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::AttributeString>> *>(VT_ATTRIBUTES);
+  uint64_t data_id() const {
+    return GetField<uint64_t>(VT_DATA_ID, 0);
+  }
+  const ::flatbuffers::String *category() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_CATEGORY);
+  }
+  const ::flatbuffers::String *data_path() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_DATA_PATH);
   }
   template<size_t Index>
   auto get_field() const {
          if constexpr (Index == 0) return ugc_content_id();
-    else if constexpr (Index == 1) return attributes();
+    else if constexpr (Index == 1) return data_id();
+    else if constexpr (Index == 2) return category();
+    else if constexpr (Index == 3) return data_path();
     else static_assert(Index != Index, "Invalid Field Index");
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<SF::Flat::Guid>(verifier, VT_UGC_CONTENT_ID, 8) &&
-           VerifyOffset(verifier, VT_ATTRIBUTES) &&
-           verifier.VerifyVector(attributes()) &&
-           verifier.VerifyVectorOfTables(attributes()) &&
+           VerifyField<uint64_t>(verifier, VT_DATA_ID, 8) &&
+           VerifyOffset(verifier, VT_CATEGORY) &&
+           verifier.VerifyString(category()) &&
+           VerifyOffset(verifier, VT_DATA_PATH) &&
+           verifier.VerifyString(data_path()) &&
            verifier.EndTable();
   }
 };
@@ -1512,8 +1524,14 @@ struct UGCContentInfoBuilder {
   void add_ugc_content_id(const SF::Flat::Guid *ugc_content_id) {
     fbb_.AddStruct(UGCContentInfo::VT_UGC_CONTENT_ID, ugc_content_id);
   }
-  void add_attributes(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::AttributeString>>> attributes) {
-    fbb_.AddOffset(UGCContentInfo::VT_ATTRIBUTES, attributes);
+  void add_data_id(uint64_t data_id) {
+    fbb_.AddElement<uint64_t>(UGCContentInfo::VT_DATA_ID, data_id, 0);
+  }
+  void add_category(::flatbuffers::Offset<::flatbuffers::String> category) {
+    fbb_.AddOffset(UGCContentInfo::VT_CATEGORY, category);
+  }
+  void add_data_path(::flatbuffers::Offset<::flatbuffers::String> data_path) {
+    fbb_.AddOffset(UGCContentInfo::VT_DATA_PATH, data_path);
   }
   explicit UGCContentInfoBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
@@ -1529,9 +1547,13 @@ struct UGCContentInfoBuilder {
 inline ::flatbuffers::Offset<UGCContentInfo> CreateUGCContentInfo(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const SF::Flat::Guid *ugc_content_id = nullptr,
-    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::AttributeString>>> attributes = 0) {
+    uint64_t data_id = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> category = 0,
+    ::flatbuffers::Offset<::flatbuffers::String> data_path = 0) {
   UGCContentInfoBuilder builder_(_fbb);
-  builder_.add_attributes(attributes);
+  builder_.add_data_id(data_id);
+  builder_.add_data_path(data_path);
+  builder_.add_category(category);
   builder_.add_ugc_content_id(ugc_content_id);
   return builder_.Finish();
 }
@@ -1541,10 +1563,12 @@ struct UGCContentInfo::Traits {
   static auto constexpr Create = CreateUGCContentInfo;
   static constexpr auto name = "UGCContentInfo";
   static constexpr auto fully_qualified_name = "SF.Flat.UGCContentInfo";
-  static constexpr size_t fields_number = 2;
+  static constexpr size_t fields_number = 4;
   static constexpr std::array<const char *, fields_number> field_names = {
     "ugc_content_id",
-    "attributes"
+    "data_id",
+    "category",
+    "data_path"
   };
   template<size_t Index>
   using FieldType = decltype(std::declval<type>().get_field<Index>());
@@ -1553,12 +1577,17 @@ struct UGCContentInfo::Traits {
 inline ::flatbuffers::Offset<UGCContentInfo> CreateUGCContentInfoDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const SF::Flat::Guid *ugc_content_id = nullptr,
-    const std::vector<::flatbuffers::Offset<SF::Flat::AttributeString>> *attributes = nullptr) {
-  auto attributes__ = attributes ? _fbb.CreateVector<::flatbuffers::Offset<SF::Flat::AttributeString>>(*attributes) : 0;
+    uint64_t data_id = 0,
+    const char *category = nullptr,
+    const char *data_path = nullptr) {
+  auto category__ = category ? _fbb.CreateString(category) : 0;
+  auto data_path__ = data_path ? _fbb.CreateString(data_path) : 0;
   return SF::Flat::CreateUGCContentInfo(
       _fbb,
       ugc_content_id,
-      attributes__);
+      data_id,
+      category__,
+      data_path__);
 }
 
 struct PlayerInformation FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {

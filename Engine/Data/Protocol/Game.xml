@@ -466,7 +466,7 @@
 
         <Command Name="GetMyUGCGames" Reliable="true" Crypto="No" Trace="Debug1" Desc="Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.">
             <Cmd>
-                <Params TypeName="String" Name="Category" Desc="UGC category"/>
+                <Params TypeName="String" Name="UGCCategory" Desc="UGC category"/>
             </Cmd>
             <Res>
                 <Params TypeName="UGCContentInfo" IsArray="true" Name="ContentInfos" Desc="UGC Game infos"/>
@@ -475,13 +475,18 @@
 
         <Command Name="RequestUGCGameInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Request ugc zone instance. It will provision new zone instance if there is none for the player. Use SearchGameInstance to find friend's zone instance.">
             <Cmd>
-				<Params TypeName="Guid" Name="UGCContentId" Desc="UGC ContentId"/>
+                <Params TypeName="String" Name="UGCCategory" Desc="UGC category"/>
+                <Params TypeName="Guid" Name="UGCContentId" Desc="UGC ContentId"/>
             </Cmd>
             <Res>
-				<Params TypeName="GameInstanceUID" Name="GameInstanceID" Desc="Privisoned UGC zone instance id"/>
-                <Params TypeName="String" Name="GameInstanceAddress" Desc="Privisoned UGC zone instance address"/>
+                <Params TypeName="String" Name="InstanceName" Desc="Privisoned game instance name"/>
             </Res>
         </Command>
+
+        <S2CEvent Name="InstanceIsReady" Reliable="true" Crypto="No" Trace="Debug1" Desc="Requested instance is ready and can join">
+            <Params TypeName="String" Name="InstanceName" Desc="Privisoned game instance name"/>
+            <Params TypeName="GameInstanceUID" Name="GameInstanceID" Desc="Privisoned zone instance id. Use this to JoinGameInstance call"/>
+        </S2CEvent>
 
         <Command Name="GetUGCTemplates" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Request UGC template list">
             <Cmd>

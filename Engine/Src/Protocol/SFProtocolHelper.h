@@ -402,10 +402,13 @@ namespace SF {
             {
                 SF::Flat::UGCContentInfoBuilder builder(fbb);
 
-                auto attributesOffset = CreateAttributeStringVector(fbb, value.Attributes);
+                auto categoryOffset = fbb.CreateString(value.Category);
+                auto dataPathOffset = fbb.CreateString(value.DataPath);
 
                 builder.add_ugc_content_id(CreateGuid(fbb, value.UGCContentId));
-                builder.add_attributes(attributesOffset);
+                builder.add_category(categoryOffset);
+                builder.add_data_path(dataPathOffset);
+                builder.add_data_id(value.DataId);
 
                 return builder.Finish();
             }
@@ -414,18 +417,10 @@ namespace SF {
             {
                 SF::UGCContentInfo contentInfo;
                 contentInfo.UGCContentId = ParseGuid(value->ugc_content_id());
-                const ::flatbuffers::Vector<::flatbuffers::Offset<SF::Flat::AttributeString>>* attributes = value->attributes();
-                if (attributes)
-                {
-                    for (uint iItem = 0; iItem < attributes->size(); iItem++)
-                    {
-                        const SF::Flat::AttributeString* attr = attributes->Get(iItem); // Get the offset
-                        SF::AttributeString attribute;
-                        attribute.Name = attr->name()->str();
-                        attribute.Value = attr->value()->str();
-                        contentInfo.Attributes.push_back(std::move(attribute));
-                    }
-                }
+                contentInfo.Category = value->category()->c_str();
+                contentInfo.DataPath = value->data_path()->c_str();
+                contentInfo.DataId = value->data_id();
+                
                 return contentInfo;
             }
 

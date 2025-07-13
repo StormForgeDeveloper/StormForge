@@ -203,99 +203,101 @@ namespace SF
 			constexpr MessageID MID_RequestUGCGameInstanceCmd(EMessageType::Command,1,MessageProtocol::Game,53);
 			constexpr MessageID MID_RequestUGCGameInstanceRes(EMessageType::Result,1,MessageProtocol::Game,53);
 
+			// S2C: Requested instance is ready and can join
+			constexpr MessageID MID_InstanceIsReadyS2CEvt(EMessageType::Event,1,MessageProtocol::Game,54);
 			// Cmd: Request UGC template list
-			constexpr MessageID MID_GetUGCTemplatesCmd(EMessageType::Command,1,MessageProtocol::Game,54);
-			constexpr MessageID MID_GetUGCTemplatesRes(EMessageType::Result,1,MessageProtocol::Game,54);
+			constexpr MessageID MID_GetUGCTemplatesCmd(EMessageType::Command,1,MessageProtocol::Game,55);
+			constexpr MessageID MID_GetUGCTemplatesRes(EMessageType::Result,1,MessageProtocol::Game,55);
 
 			// Cmd: Upload UGC content data
-			constexpr MessageID MID_UploadUGCCmd(EMessageType::Command,1,MessageProtocol::Game,55);
-			constexpr MessageID MID_UploadUGCRes(EMessageType::Result,1,MessageProtocol::Game,55);
+			constexpr MessageID MID_UploadUGCCmd(EMessageType::Command,1,MessageProtocol::Game,56);
+			constexpr MessageID MID_UploadUGCRes(EMessageType::Result,1,MessageProtocol::Game,56);
 
 			// Cmd: Request WhiteboardSharing
-			constexpr MessageID MID_SearchUGCCmd(EMessageType::Command,1,MessageProtocol::Game,56);
-			constexpr MessageID MID_SearchUGCRes(EMessageType::Result,1,MessageProtocol::Game,56);
+			constexpr MessageID MID_SearchUGCCmd(EMessageType::Command,1,MessageProtocol::Game,57);
+			constexpr MessageID MID_SearchUGCRes(EMessageType::Result,1,MessageProtocol::Game,57);
 
 			// Cmd: Get UGC content info, name, thumb image and so on
-			constexpr MessageID MID_GetUGCContentInfoCmd(EMessageType::Command,1,MessageProtocol::Game,57);
-			constexpr MessageID MID_GetUGCContentInfoRes(EMessageType::Result,1,MessageProtocol::Game,57);
+			constexpr MessageID MID_GetUGCContentInfoCmd(EMessageType::Command,1,MessageProtocol::Game,58);
+			constexpr MessageID MID_GetUGCContentInfoRes(EMessageType::Result,1,MessageProtocol::Game,58);
 
 			// Cmd: Request WhiteboardSharing
-			constexpr MessageID MID_DownloadUGCContentCmd(EMessageType::Command,1,MessageProtocol::Game,58);
-			constexpr MessageID MID_DownloadUGCContentRes(EMessageType::Result,1,MessageProtocol::Game,58);
+			constexpr MessageID MID_DownloadUGCContentCmd(EMessageType::Command,1,MessageProtocol::Game,59);
+			constexpr MessageID MID_DownloadUGCContentRes(EMessageType::Result,1,MessageProtocol::Game,59);
 
 			// Cmd: Buy shop item prepare
-			constexpr MessageID MID_BuyShopItemPrepareCmd(EMessageType::Command,1,MessageProtocol::Game,59);
-			constexpr MessageID MID_BuyShopItemPrepareRes(EMessageType::Result,1,MessageProtocol::Game,59);
+			constexpr MessageID MID_BuyShopItemPrepareCmd(EMessageType::Command,1,MessageProtocol::Game,60);
+			constexpr MessageID MID_BuyShopItemPrepareRes(EMessageType::Result,1,MessageProtocol::Game,60);
 
 			// Cmd: Buy shop item
-			constexpr MessageID MID_BuyShopItemCmd(EMessageType::Command,1,MessageProtocol::Game,60);
-			constexpr MessageID MID_BuyShopItemRes(EMessageType::Result,1,MessageProtocol::Game,60);
+			constexpr MessageID MID_BuyShopItemCmd(EMessageType::Command,1,MessageProtocol::Game,61);
+			constexpr MessageID MID_BuyShopItemRes(EMessageType::Result,1,MessageProtocol::Game,61);
 
 			// Cmd: Create or Join Chat channel
-			constexpr MessageID MID_CreateOrJoinChatChannelCmd(EMessageType::Command,1,MessageProtocol::Game,61);
-			constexpr MessageID MID_CreateOrJoinChatChannelRes(EMessageType::Result,1,MessageProtocol::Game,61);
+			constexpr MessageID MID_CreateOrJoinChatChannelCmd(EMessageType::Command,1,MessageProtocol::Game,62);
+			constexpr MessageID MID_CreateOrJoinChatChannelRes(EMessageType::Result,1,MessageProtocol::Game,62);
 
 			// Cmd: Join
-			constexpr MessageID MID_JoinChatChannelCmd(EMessageType::Command,1,MessageProtocol::Game,62);
-			constexpr MessageID MID_JoinChatChannelRes(EMessageType::Result,1,MessageProtocol::Game,62);
+			constexpr MessageID MID_JoinChatChannelCmd(EMessageType::Command,1,MessageProtocol::Game,63);
+			constexpr MessageID MID_JoinChatChannelRes(EMessageType::Result,1,MessageProtocol::Game,63);
 
 			// S2C: Player Joined event
-			constexpr MessageID MID_ChatChannelPlayerJoinedS2CEvt(EMessageType::Event,1,MessageProtocol::Game,63);
+			constexpr MessageID MID_ChatChannelPlayerJoinedS2CEvt(EMessageType::Event,1,MessageProtocol::Game,64);
 			// S2C: ChatChannel leader changed event
-			constexpr MessageID MID_ChatChannelLeaderChangedS2CEvt(EMessageType::Event,1,MessageProtocol::Game,64);
+			constexpr MessageID MID_ChatChannelLeaderChangedS2CEvt(EMessageType::Event,1,MessageProtocol::Game,65);
 			// Cmd: Leave ChatChannel command
-			constexpr MessageID MID_LeaveChatChannelCmd(EMessageType::Command,1,MessageProtocol::Game,65);
-			constexpr MessageID MID_LeaveChatChannelRes(EMessageType::Result,1,MessageProtocol::Game,65);
+			constexpr MessageID MID_LeaveChatChannelCmd(EMessageType::Command,1,MessageProtocol::Game,66);
+			constexpr MessageID MID_LeaveChatChannelRes(EMessageType::Result,1,MessageProtocol::Game,66);
 
 			// S2C: ChatChannel Player left event
-			constexpr MessageID MID_ChatChannelPlayerLeftS2CEvt(EMessageType::Event,1,MessageProtocol::Game,66);
+			constexpr MessageID MID_ChatChannelPlayerLeftS2CEvt(EMessageType::Event,1,MessageProtocol::Game,67);
 			// Cmd: Kick player from the ChatChannel
-			constexpr MessageID MID_ChatChannelKickPlayerCmd(EMessageType::Command,1,MessageProtocol::Game,67);
-			constexpr MessageID MID_ChatChannelKickPlayerRes(EMessageType::Result,1,MessageProtocol::Game,67);
+			constexpr MessageID MID_ChatChannelKickPlayerCmd(EMessageType::Command,1,MessageProtocol::Game,68);
+			constexpr MessageID MID_ChatChannelKickPlayerRes(EMessageType::Result,1,MessageProtocol::Game,68);
 
 			// S2C: ChatChannel Player kicked message
-			constexpr MessageID MID_ChatChannelPlayerKickedS2CEvt(EMessageType::Event,1,MessageProtocol::Game,68);
+			constexpr MessageID MID_ChatChannelPlayerKickedS2CEvt(EMessageType::Event,1,MessageProtocol::Game,69);
 			// Cmd: Chat channel sending chatting message
-			constexpr MessageID MID_ChatChannelChatMessageCmd(EMessageType::Command,1,MessageProtocol::Game,69);
-			constexpr MessageID MID_ChatChannelChatMessageRes(EMessageType::Result,1,MessageProtocol::Game,69);
+			constexpr MessageID MID_ChatChannelChatMessageCmd(EMessageType::Command,1,MessageProtocol::Game,70);
+			constexpr MessageID MID_ChatChannelChatMessageRes(EMessageType::Result,1,MessageProtocol::Game,70);
 
 			// S2C: ChatChannel Chatting message event
-			constexpr MessageID MID_ChatChannelChatMessageS2CEvt(EMessageType::Event,1,MessageProtocol::Game,70);
+			constexpr MessageID MID_ChatChannelChatMessageS2CEvt(EMessageType::Event,1,MessageProtocol::Game,71);
 			// Cmd: Whisper(tell) other player chatting
-			constexpr MessageID MID_WhisperMessageCmd(EMessageType::Command,1,MessageProtocol::Game,71);
-			constexpr MessageID MID_WhisperMessageRes(EMessageType::Result,1,MessageProtocol::Game,71);
+			constexpr MessageID MID_WhisperMessageCmd(EMessageType::Command,1,MessageProtocol::Game,72);
+			constexpr MessageID MID_WhisperMessageRes(EMessageType::Result,1,MessageProtocol::Game,72);
 
 			// S2C: Other player whispered(tell) to me message event
-			constexpr MessageID MID_WhisperMessageS2CEvt(EMessageType::Event,1,MessageProtocol::Game,72);
+			constexpr MessageID MID_WhisperMessageS2CEvt(EMessageType::Event,1,MessageProtocol::Game,73);
 			// Cmd: Create character
-			constexpr MessageID MID_CreateCharacterCmd(EMessageType::Command,1,MessageProtocol::Game,73);
-			constexpr MessageID MID_CreateCharacterRes(EMessageType::Result,1,MessageProtocol::Game,73);
+			constexpr MessageID MID_CreateCharacterCmd(EMessageType::Command,1,MessageProtocol::Game,74);
+			constexpr MessageID MID_CreateCharacterRes(EMessageType::Result,1,MessageProtocol::Game,74);
 
 			// Cmd: Delete character
-			constexpr MessageID MID_DeleteCharacterCmd(EMessageType::Command,1,MessageProtocol::Game,74);
-			constexpr MessageID MID_DeleteCharacterRes(EMessageType::Result,1,MessageProtocol::Game,74);
+			constexpr MessageID MID_DeleteCharacterCmd(EMessageType::Command,1,MessageProtocol::Game,75);
+			constexpr MessageID MID_DeleteCharacterRes(EMessageType::Result,1,MessageProtocol::Game,75);
 
 			// Cmd: Get character list
-			constexpr MessageID MID_GetCharacterListCmd(EMessageType::Command,1,MessageProtocol::Game,75);
-			constexpr MessageID MID_GetCharacterListRes(EMessageType::Result,1,MessageProtocol::Game,75);
+			constexpr MessageID MID_GetCharacterListCmd(EMessageType::Command,1,MessageProtocol::Game,76);
+			constexpr MessageID MID_GetCharacterListRes(EMessageType::Result,1,MessageProtocol::Game,76);
 
 			// Cmd: 
-			constexpr MessageID MID_GetCharacterDataCmd(EMessageType::Command,1,MessageProtocol::Game,76);
-			constexpr MessageID MID_GetCharacterDataRes(EMessageType::Result,1,MessageProtocol::Game,76);
+			constexpr MessageID MID_GetCharacterDataCmd(EMessageType::Command,1,MessageProtocol::Game,77);
+			constexpr MessageID MID_GetCharacterDataRes(EMessageType::Result,1,MessageProtocol::Game,77);
 
 			// Cmd: Select character
-			constexpr MessageID MID_SelectCharacterCmd(EMessageType::Command,1,MessageProtocol::Game,77);
-			constexpr MessageID MID_SelectCharacterRes(EMessageType::Result,1,MessageProtocol::Game,77);
+			constexpr MessageID MID_SelectCharacterCmd(EMessageType::Command,1,MessageProtocol::Game,78);
+			constexpr MessageID MID_SelectCharacterRes(EMessageType::Result,1,MessageProtocol::Game,78);
 
 			// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
-			constexpr MessageID MID_RequestServerNoticeUpdateCmd(EMessageType::Command,1,MessageProtocol::Game,78);
-			constexpr MessageID MID_RequestServerNoticeUpdateRes(EMessageType::Result,1,MessageProtocol::Game,78);
+			constexpr MessageID MID_RequestServerNoticeUpdateCmd(EMessageType::Command,1,MessageProtocol::Game,79);
+			constexpr MessageID MID_RequestServerNoticeUpdateRes(EMessageType::Result,1,MessageProtocol::Game,79);
 
 			// S2C: Server Notice updated event
-			constexpr MessageID MID_ServerNoticeS2CEvt(EMessageType::Event,1,MessageProtocol::Game,79);
+			constexpr MessageID MID_ServerNoticeS2CEvt(EMessageType::Event,1,MessageProtocol::Game,80);
 			// Cmd: To call general functionality
-			constexpr MessageID MID_CallFunctionCmd(EMessageType::Command,1,MessageProtocol::Game,80);
-			constexpr MessageID MID_CallFunctionRes(EMessageType::Result,1,MessageProtocol::Game,80);
+			constexpr MessageID MID_CallFunctionCmd(EMessageType::Command,1,MessageProtocol::Game,81);
+			constexpr MessageID MID_CallFunctionRes(EMessageType::Result,1,MessageProtocol::Game,81);
 
 
 

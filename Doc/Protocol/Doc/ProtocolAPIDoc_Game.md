@@ -967,11 +967,11 @@ Request ugc zone instance. It will provision new zone instance if there is none 
 
 1. Command interface
 
-        Result GetMyUGCGamesCmd(const TransactionID &InTransactionID, const char* InCategory)
+        Result GetMyUGCGamesCmd(const TransactionID &InTransactionID, const char* InUGCCategory)
 
 		- TransactionID: type:TransactionID, 
 
-		- Category: type:String, UGC category
+		- UGCCategory: type:String, UGC category
 
 2. Result interface
 
@@ -988,9 +988,11 @@ Request ugc zone instance. It will provision new zone instance if there is none 
 
 1. Command interface
 
-        Result RequestUGCGameInstanceCmd(const TransactionID &InTransactionID, const Guid &InUGCContentId)
+        Result RequestUGCGameInstanceCmd(const TransactionID &InTransactionID, const char* InUGCCategory, const Guid &InUGCContentId)
 
 		- TransactionID: type:TransactionID, 
+
+		- UGCCategory: type:String, UGC category
 
 		- UGCContentId: type:Guid, UGC ContentId
 
@@ -1001,8 +1003,17 @@ C++: Cast message to RequestUGCGameInstanceRes to access values
 
 		- TransactionID: type:TransactionID, 
 		- Result: type:Result, 
-		- GameInstanceID: type:GameInstanceUID, Privisoned UGC zone instance id
-		- GameInstanceAddress: type:String, Privisoned UGC zone instance address
+		- InstanceName: type:String, Privisoned game instance name
+
+
+## InstanceIsReadyS2CEvt
+Requested instance is ready and can join
+
+        Result InstanceIsReadyS2CEvt(const char* InInstanceName, const GameInstanceUID &InGameInstanceID)
+
+		- OutInInstanceName: String type. Privisoned game instance name
+
+		- OutInGameInstanceID: GameInstanceUID type. Privisoned zone instance id. Use this to JoinGameInstance call
 
 
 ## GetUGCTemplates Request

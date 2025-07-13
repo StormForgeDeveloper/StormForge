@@ -26,7 +26,7 @@ namespace SF.Net
 
 		public SF.IEndpoint? Endpoint { get { return m_Endpoint; } set { m_Endpoint = value; } }
 
-        bool TryToRouteResultToSender = false;
+        public bool TryToRouteResultToRequesterEntity { get; set; } = false;
 
         public RPCAdapter()
 		{
@@ -35,7 +35,7 @@ namespace SF.Net
         public RPCAdapter(SF.IEndpoint endpoint, bool tryToRouteResultToSender = false)
         {
             m_Endpoint = endpoint;
-            TryToRouteResultToSender = tryToRouteResultToSender;
+            TryToRouteResultToRequesterEntity = tryToRouteResultToSender;
         }
 
         public TransactionID NewTransactionID()
@@ -43,7 +43,7 @@ namespace SF.Net
             return m_Endpoint?.NewTransactionID() ?? TransactionID.Empty;
         }
 
-        public Result SendMessage(MessageID messageId, Google.FlatBuffers.FlatBufferBuilder builder, int packetOffset,
+        public virtual Result SendMessage(MessageID messageId, Google.FlatBuffers.FlatBufferBuilder builder, int packetOffset,
             TransactionID transactionId = default(TransactionID),
             Result result = default(Result),
             Action<SFMessage>? callback = null)
@@ -65,10 +65,10 @@ namespace SF.Net
             };
 
             // try to returning message to destination target directly
-            if (TryToRouteResultToSender && messageHeader.MessageId.MessageType == EMessageType.Result && messageHeader.TransactionId.EntityUID != 0)
+            if (TryToRouteResultToRequesterEntity && messageHeader.MessageId.MessageType == EMessageType.Result && messageHeader.TransactionId.EntityUID != 0)
             {
                 // Service::ServerConfig->ServerEndpointAddress.Channel
-                string destTopic = $"Ent_{transactionId.EntityUID:X8}";
+                string destTopic = $"ent_{transactionId.EntityUID:X8}";
                 hr = m_Endpoint.SendMessage(destTopic, ref messageHeader, builder);
             }
             else

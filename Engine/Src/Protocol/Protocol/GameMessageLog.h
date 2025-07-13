@@ -123,6 +123,7 @@ namespace SF
 		static Result GetMyUGCGamesRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result RequestUGCGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader);
 		static Result RequestUGCGameInstanceRes(const char* prefix, const MessageHeader* messageHeader);
+		static Result InstanceIsReadyS2CEvt(const char* prefix, const MessageHeader* messageHeader);
 		static Result GetUGCTemplatesCmd(const char* prefix, const MessageHeader* messageHeader);
 		static Result GetUGCTemplatesRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result UploadUGCCmd(const char* prefix, const MessageHeader* messageHeader);

@@ -19,10 +19,18 @@ public struct RequestUGCGameInstanceCmd : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public RequestUGCGameInstanceCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public SF.Flat.Guid? UgccontentId { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.Guid?)(new SF.Flat.Guid()).__assign(o + __p.bb_pos, __p.bb) : null; } }
+  public string Ugccategory { get { int o = __p.__offset(4); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetUgccategoryBytes() { return __p.__vector_as_span<byte>(4, 1); }
+#else
+  public ArraySegment<byte>? GetUgccategoryBytes() { return __p.__vector_as_arraysegment(4); }
+#endif
+  public byte[] GetUgccategoryArray() { return __p.__vector_as_array<byte>(4); }
+  public SF.Flat.Guid? UgccontentId { get { int o = __p.__offset(6); return o != 0 ? (SF.Flat.Guid?)(new SF.Flat.Guid()).__assign(o + __p.bb_pos, __p.bb) : null; } }
 
-  public static void StartRequestUGCGameInstanceCmd(FlatBufferBuilder builder) { builder.StartTable(1); }
-  public static void AddUgccontentId(FlatBufferBuilder builder, Offset<SF.Flat.Guid> ugccontentIdOffset) { builder.AddStruct(0, ugccontentIdOffset.Value, 0); }
+  public static void StartRequestUGCGameInstanceCmd(FlatBufferBuilder builder) { builder.StartTable(2); }
+  public static void AddUgccategory(FlatBufferBuilder builder, StringOffset ugccategoryOffset) { builder.AddOffset(0, ugccategoryOffset.Value, 0); }
+  public static void AddUgccontentId(FlatBufferBuilder builder, Offset<SF.Flat.Guid> ugccontentIdOffset) { builder.AddStruct(1, ugccontentIdOffset.Value, 0); }
   public static Offset<SF.Flat.Game.RequestUGCGameInstanceCmd> EndRequestUGCGameInstanceCmd(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.RequestUGCGameInstanceCmd>(o);
@@ -35,7 +43,8 @@ static public class RequestUGCGameInstanceCmdVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyField(tablePos, 4 /*UgccontentId*/, 16 /*SF.Flat.Guid*/, 8, false)
+      && verifier.VerifyString(tablePos, 4 /*Ugccategory*/, false)
+      && verifier.VerifyField(tablePos, 6 /*UgccontentId*/, 16 /*SF.Flat.Guid*/, 8, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

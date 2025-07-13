@@ -432,10 +432,13 @@ namespace SF
         public string Value;
     };
 
-    public struct UGCContentInfo
+    public class UGCContentInfo
     {
-        public Guid UGCContentId;
-        public List<AttributeString> Attributes; // attributes of the content
+        public Guid ContentId { get; set; } = Guid.Empty;
+        public string Category { get; set; } = string.Empty;
+        public string DataPath { get; set; } = string.Empty;
+        public string[] Tags { get; set; } = new string[0];
+        public UInt64 DataId { get; set; } = 0;
     }
 
     public struct UGCGameInfo

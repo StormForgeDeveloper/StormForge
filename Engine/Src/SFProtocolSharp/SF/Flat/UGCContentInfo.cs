@@ -20,17 +20,27 @@ public struct UGCContentInfo : IFlatbufferObject
   public UGCContentInfo __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
   public SF.Flat.Guid? UgcContentId { get { int o = __p.__offset(4); return o != 0 ? (SF.Flat.Guid?)(new SF.Flat.Guid()).__assign(o + __p.bb_pos, __p.bb) : null; } }
-  public SF.Flat.AttributeString? Attributes(int j) { int o = __p.__offset(6); return o != 0 ? (SF.Flat.AttributeString?)(new SF.Flat.AttributeString()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
-  public int AttributesLength { get { int o = __p.__offset(6); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public ulong DataId { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
+  public string Category { get { int o = __p.__offset(8); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetCategoryBytes() { return __p.__vector_as_span<byte>(8, 1); }
+#else
+  public ArraySegment<byte>? GetCategoryBytes() { return __p.__vector_as_arraysegment(8); }
+#endif
+  public byte[] GetCategoryArray() { return __p.__vector_as_array<byte>(8); }
+  public string DataPath { get { int o = __p.__offset(10); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetDataPathBytes() { return __p.__vector_as_span<byte>(10, 1); }
+#else
+  public ArraySegment<byte>? GetDataPathBytes() { return __p.__vector_as_arraysegment(10); }
+#endif
+  public byte[] GetDataPathArray() { return __p.__vector_as_array<byte>(10); }
 
-  public static void StartUGCContentInfo(FlatBufferBuilder builder) { builder.StartTable(2); }
+  public static void StartUGCContentInfo(FlatBufferBuilder builder) { builder.StartTable(4); }
   public static void AddUgcContentId(FlatBufferBuilder builder, Offset<SF.Flat.Guid> ugcContentIdOffset) { builder.AddStruct(0, ugcContentIdOffset.Value, 0); }
-  public static void AddAttributes(FlatBufferBuilder builder, VectorOffset attributesOffset) { builder.AddOffset(1, attributesOffset.Value, 0); }
-  public static VectorOffset CreateAttributesVector(FlatBufferBuilder builder, Offset<SF.Flat.AttributeString>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
-  public static VectorOffset CreateAttributesVectorBlock(FlatBufferBuilder builder, Offset<SF.Flat.AttributeString>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateAttributesVectorBlock(FlatBufferBuilder builder, ArraySegment<Offset<SF.Flat.AttributeString>> data) { builder.StartVector(4, data.Count, 4); builder.Add(data); return builder.EndVector(); }
-  public static VectorOffset CreateAttributesVectorBlock(FlatBufferBuilder builder, IntPtr dataPtr, int sizeInBytes) { builder.StartVector(1, sizeInBytes, 1); builder.Add<Offset<SF.Flat.AttributeString>>(dataPtr, sizeInBytes); return builder.EndVector(); }
-  public static void StartAttributesVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
+  public static void AddDataId(FlatBufferBuilder builder, ulong dataId) { builder.AddUlong(1, dataId, 0); }
+  public static void AddCategory(FlatBufferBuilder builder, StringOffset categoryOffset) { builder.AddOffset(2, categoryOffset.Value, 0); }
+  public static void AddDataPath(FlatBufferBuilder builder, StringOffset dataPathOffset) { builder.AddOffset(3, dataPathOffset.Value, 0); }
   public static Offset<SF.Flat.UGCContentInfo> EndUGCContentInfo(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.UGCContentInfo>(o);
@@ -44,7 +54,9 @@ static public class UGCContentInfoVerify
   {
     return verifier.VerifyTableStart(tablePos)
       && verifier.VerifyField(tablePos, 4 /*UgcContentId*/, 16 /*SF.Flat.Guid*/, 8, false)
-      && verifier.VerifyVectorOfTables(tablePos, 6 /*Attributes*/, SF.Flat.AttributeStringVerify.Verify, false)
+      && verifier.VerifyField(tablePos, 6 /*DataId*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyString(tablePos, 8 /*Category*/, false)
+      && verifier.VerifyString(tablePos, 10 /*DataPath*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

@@ -144,6 +144,9 @@ namespace SF {
 			// The player's level is too low 
 			constexpr Result 			GAME_LOW_PLAYER_LEVEL                                              ((int32_t)0xE7040029L);
 
+			// The player needs ownership to access the content 
+			constexpr Result 			GAME_NO_OWNERSHIP                                                  ((int32_t)0xE704002AL);
+
 	void InitializeResultCodeGame();
 
 	}//namespace ResultCode 
