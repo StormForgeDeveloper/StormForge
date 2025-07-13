@@ -36,7 +36,6 @@
 
 #include "Net/SFNetConst.h"
 #include "Net/SFNetSystem.h"
-#include "Net/SFConnectionManager.h"
 #include "Component/SFLibraryComponentInitializer.h"
 #include "Online/Websocket/SFWebsocketComponent.h"
 #include "Online/HTTP/SFHTTPClientSystem.h"

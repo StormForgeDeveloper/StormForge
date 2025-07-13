@@ -124,16 +124,6 @@ namespace SF
 		static Result RequestUGCGameInstanceCmd(const char* prefix, const MessageHeader* messageHeader);
 		static Result RequestUGCGameInstanceRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result InstanceIsReadyS2CEvt(const char* prefix, const MessageHeader* messageHeader);
-		static Result GetUGCTemplatesCmd(const char* prefix, const MessageHeader* messageHeader);
-		static Result GetUGCTemplatesRes(const char* prefix, const MessageHeader* messageHeader);
-		static Result UploadUGCCmd(const char* prefix, const MessageHeader* messageHeader);
-		static Result UploadUGCRes(const char* prefix, const MessageHeader* messageHeader);
-		static Result SearchUGCCmd(const char* prefix, const MessageHeader* messageHeader);
-		static Result SearchUGCRes(const char* prefix, const MessageHeader* messageHeader);
-		static Result GetUGCContentInfoCmd(const char* prefix, const MessageHeader* messageHeader);
-		static Result GetUGCContentInfoRes(const char* prefix, const MessageHeader* messageHeader);
-		static Result DownloadUGCContentCmd(const char* prefix, const MessageHeader* messageHeader);
-		static Result DownloadUGCContentRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result BuyShopItemPrepareCmd(const char* prefix, const MessageHeader* messageHeader);
 		static Result BuyShopItemPrepareRes(const char* prefix, const MessageHeader* messageHeader);
 		static Result BuyShopItemCmd(const char* prefix, const MessageHeader* messageHeader);

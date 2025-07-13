@@ -35,7 +35,6 @@
 
 #include "Net/SFNetConst.h"
 #include "Net/SFNetSystem.h"
-#include "Net/SFConnectionManager.h"
 
 #include "Asset/Importer/SFAssetImporterFactory.h"
 #include "Asset/Serializer/SFAssetSerializerFactory.h"

@@ -29,7 +29,6 @@
 #include "EngineObject/SFEngineObjectManager.h"
 #include "EngineObject/SFEngineTaskManager.h"
 #include "Net/SFNetSystem.h"
-#include "Net/SFConnectionManager.h"
 #include "Resource/SFResourceManager.h"
 #include "Graphics/SFGraphicDeviceGLES.h"
 #include "Net/SFNetConst.h"

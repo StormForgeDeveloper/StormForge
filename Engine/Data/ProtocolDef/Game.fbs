@@ -503,57 +503,6 @@ table InstanceIsReadyS2CEvt
 	game_instance_id:GameInstanceUID;
 } // table InstanceIsReadyS2CEvt
 
-table GetUGCTemplatesCmd
-{
- 	tags:[string];
-} // table GetUGCTemplatesCmd
-
-table GetUGCTemplatesRes
-{
- 	ugcids:uint64;
-} // table GetUGCTemplatesRes
-
-table UploadUGCCmd
-{
- 	ugcmeta_data:[ubyte];
-	ugccontents:[ubyte];
-} // table UploadUGCCmd
-
-table UploadUGCRes
-{
- 	ugcid:uint64;
-} // table UploadUGCRes
-
-table SearchUGCCmd
-{
- 	tags:[string];
-} // table SearchUGCCmd
-
-table SearchUGCRes
-{
- } // table SearchUGCRes
-
-table GetUGCContentInfoCmd
-{
- 	ugcid:uint64;
-} // table GetUGCContentInfoCmd
-
-table GetUGCContentInfoRes
-{
- 	ugcmeta_data:[ubyte];
-} // table GetUGCContentInfoRes
-
-table DownloadUGCContentCmd
-{
- 	ugcid:uint64;
-	is_include_meta_data:uint8;
-} // table DownloadUGCContentCmd
-
-table DownloadUGCContentRes
-{
- 	ugcmeta_data:[ubyte];
-} // table DownloadUGCContentRes
-
 table BuyShopItemPrepareCmd
 {
  	shop_item_id:uint32;
