@@ -142,12 +142,20 @@ namespace SF
             NativeDisconnectAll(NativeHandle);
         }
 
-        public AccountID GetPlayerId()
+#if UNITY_EDITOR
+		public delegate AccountID OverrideGetPlayerId();
+		public OverrideGetPlayerId? OverridePlayerID = null;
+#endif
+		public AccountID GetPlayerId()
         {
             IntPtr valuePtr = NativeGetPlayerId(NativeHandle);
-            if (valuePtr == IntPtr.Zero)
-                return new AccountID();
+			if (valuePtr == IntPtr.Zero)
+				return new AccountID();
 
+#if UNITY_EDITOR
+			if (OverridePlayerID != null)
+				return OverridePlayerID.Invoke();
+#endif
             var bytes = new byte[16];
             Marshal.Copy(valuePtr, bytes, 0, bytes.Length);
             return new AccountID(bytes);
