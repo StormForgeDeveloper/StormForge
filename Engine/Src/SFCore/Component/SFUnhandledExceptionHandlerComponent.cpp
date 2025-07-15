@@ -45,14 +45,6 @@ namespace SF {
 #if SF_PLATFORM == SF_PLATFORM_LINUX
     void CrashHandlerLinux(int signal, siginfo_t* info, void* Context)
     {
-        fprintf(stderr, "System Signal %d.\n", signal);
-
-        fprintf(stderr, "System Signal %S.\n", STRSIGNAL(signal));
-        if (signal == SIGSYS)
-        {
-            fprintf(stderr, "si_syscall:%d.\n", info->si_syscall);
-        }
-
         void* caller_address{};
         sig_ucontext_t* uc = (sig_ucontext_t*)ucontext;
 
@@ -66,7 +58,7 @@ namespace SF {
 #endif
 
         fprintf(stderr, "signal %d (%s), address is %p from %p\n",
-            sig_num, strsignal(sig_num), info->si_addr,
+            signal, strsignal(signal), info->si_addr,
             (void*)caller_address);
 
         void* callStackArray[50];
@@ -84,6 +76,9 @@ namespace SF {
         }
 
         // send to log as well
+        SFLog(System, Error, "signal {0} ({1}), address is {2} from {3}",
+            signal, strsignal(signal), info->si_addr, (void*)caller_address);
+
         for (i = 1; i < size && messages != NULL; ++i)
         {
             SFLog(System, Error, "[bt]: (%d) %s\n", i, messages[i]);

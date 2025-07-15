@@ -323,8 +323,8 @@ elseif(ANDROID_PLATFORM)
 	SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3")
 	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
-	SET (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wno-nonportable-include-path -fexceptions -frtti -pthread -fPIC -g")
-	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-nonportable-include-path -fexceptions -frtti -pthread -fPIC -g")
+	SET (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wno-nonportable-include-path -fexceptions -funwind-tables -frtti -pthread -fPIC -g")
+	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-nonportable-include-path -fexceptions -funwind-tables -frtti -pthread -fPIC -g")
 
 	add_definitions(-D__ANDROID__=1)
 
@@ -335,7 +335,7 @@ elseif(IOS)
 
 	message ( "Setup IOS configs" )
 
-	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -frtti -pthread -fPIC")
+	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -funwind-tables -frtti -pthread -fPIC")
 
 	SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 	SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
@@ -354,8 +354,8 @@ elseif(UNIX)
 
 	message ( "Setup UNIX configs" )
 	#-lstdc++exp
-	SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS}   -Wno-nonportable-include-path -Wno-ambiguous-reversed-operator -g -frtti -pthread -march=native -msse4 -m64 -fPIC")
-	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-nonportable-include-path -Wno-ambiguous-reversed-operator -g -fexceptions -frtti -march=native -pthread -msse4 -m64 -fPIC")
+	SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS}   -Wno-nonportable-include-path -Wno-ambiguous-reversed-operator -g -frtti -pthread -funwind-tables -march=native -msse4 -m64 -fPIC")
+	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-nonportable-include-path -Wno-ambiguous-reversed-operator -g -fexceptions -funwind-tables -frtti -march=native -pthread -msse4 -m64 -fPIC")
 
 	SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 	SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
