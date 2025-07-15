@@ -24,6 +24,11 @@
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 #include <stacktrace>
+#else
+#include <execinfo.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <unistd.h>
 #endif
 
 namespace SF {
@@ -35,6 +40,60 @@ namespace SF {
 
 
 	constexpr StringCrc64 UnhandledExceptionHandlerComponent::TypeName;
+
+
+#if SF_PLATFORM == SF_PLATFORM_LINUX
+    void CrashHandlerLinux(int signal, siginfo_t* info, void* Context)
+    {
+        fprintf(stderr, "System Signal %d.\n", signal);
+
+        fprintf(stderr, "System Signal %S.\n", STRSIGNAL(signal));
+        if (signal == SIGSYS)
+        {
+            fprintf(stderr, "si_syscall:%d.\n", info->si_syscall);
+        }
+
+        void* caller_address{};
+        sig_ucontext_t* uc = (sig_ucontext_t*)ucontext;
+
+        /* Get the address at the time the signal was raised */
+#if defined(__i386__) // gcc specific
+        caller_address = (void*)uc->uc_mcontext.eip; // EIP: x86 specific
+#elif defined(__x86_64__) // gcc specific
+        caller_address = (void*)uc->uc_mcontext.rip; // RIP: x86_64 specific
+#else
+#error Unsupported architecture. // TODO: Add support for other arch.
+#endif
+
+        fprintf(stderr, "signal %d (%s), address is %p from %p\n",
+            sig_num, strsignal(sig_num), info->si_addr,
+            (void*)caller_address);
+
+        void* callStackArray[50];
+        int capturedSize = backtrace(array, countof(callStackArray));
+
+        /* overwrite sigaction with caller's address */
+        array[1] = caller_address;
+
+        char** messages = backtrace_symbols(callStackArray, size);
+
+        /* skip first stack frame (points here) */
+        for (i = 1; i < size && messages != NULL; ++i)
+        {
+            fprintf(stderr, "[bt]: (%d) %s\n", i, messages[i]);
+        }
+
+        // send to log as well
+        for (i = 1; i < size && messages != NULL; ++i)
+        {
+            SFLog(System, Error, "[bt]: (%d) %s\n", i, messages[i]);
+        }
+
+        free(messages);
+
+        Service::LogModule->Flush();
+    }
+#endif // SF_PLATFORM != SF_PLATFORM_LINUX
 
 
 	UnhandledExceptionHandlerComponent::UnhandledExceptionHandlerComponent(bool bEnableFullDump)
@@ -122,6 +181,20 @@ namespace SF {
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 		::SetUnhandledExceptionFilter(&CrashHandler);
+#else SF_PLATFORM == SF_PLATFORM_LINUX
+        struct sigaction action;
+        memset(&action, 0, sizeof(action));
+        action.sa_sigaction = CrashHandlerLinux;
+        sigfillset(&action.sa_mask);
+        action.sa_flags = SA_SIGINFO | SA_RESTART | SA_ONSTACK;
+        sigaction(SIGQUIT, &action, nullptr);
+        sigaction(SIGABRT, &action, nullptr);
+        sigaction(SIGILL, &action, nullptr);
+        sigaction(SIGFPE, &action, nullptr);
+        sigaction(SIGBUS, &action, nullptr);
+        sigaction(SIGSEGV, &action, nullptr);
+        sigaction(SIGSYS, &action, nullptr);
+        //sigaction(SIGTRAP, &action, nullptr);
 #endif
 
 		return result;
@@ -224,6 +297,7 @@ namespace SF {
 		return uiRetCode;
 	}
 #endif
+
 
 } // namespace SF
 
