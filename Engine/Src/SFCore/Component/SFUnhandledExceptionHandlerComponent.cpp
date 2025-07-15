@@ -29,6 +29,7 @@
 #include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <ucontext.h>
 #endif
 
 namespace SF {
@@ -43,34 +44,28 @@ namespace SF {
 
 
 #if SF_PLATFORM == SF_PLATFORM_LINUX
-    void CrashHandlerLinux(int signal, siginfo_t* info, void* Context)
+    void CrashHandlerLinux(int signal, siginfo_t* info, void* context)
     {
         void* caller_address{};
-        sig_ucontext_t* uc = (sig_ucontext_t*)ucontext;
+        ucontext_t* uc = reinterpret_cast<ucontext_t*>(context);
 
         /* Get the address at the time the signal was raised */
-#if defined(__i386__) // gcc specific
-        caller_address = (void*)uc->uc_mcontext.eip; // EIP: x86 specific
-#elif defined(__x86_64__) // gcc specific
-        caller_address = (void*)uc->uc_mcontext.rip; // RIP: x86_64 specific
-#else
-#error Unsupported architecture. // TODO: Add support for other arch.
-#endif
+        caller_address = 0;//(void*)uc->uc_mcontext.t; // TODO:
 
-        fprintf(stderr, "signal %d (%s), address is %p from %p\n",
+	fprintf(stderr, "signal %d (%s), address is %p from %p\n",
             signal, strsignal(signal), info->si_addr,
             (void*)caller_address);
 
         void* callStackArray[50];
-        int capturedSize = backtrace(array, countof(callStackArray));
+        int capturedSize = backtrace(callStackArray, countof(callStackArray));
 
         /* overwrite sigaction with caller's address */
-        array[1] = caller_address;
+        //callStackArray[1] = caller_address;
 
-        char** messages = backtrace_symbols(callStackArray, size);
+        char** messages = backtrace_symbols(callStackArray, capturedSize);
 
         /* skip first stack frame (points here) */
-        for (i = 1; i < size && messages != NULL; ++i)
+        for (int i = 1; i < capturedSize && messages != NULL; ++i)
         {
             fprintf(stderr, "[bt]: (%d) %s\n", i, messages[i]);
         }
@@ -79,7 +74,7 @@ namespace SF {
         SFLog(System, Error, "signal {0} ({1}), address is {2} from {3}",
             signal, strsignal(signal), info->si_addr, (void*)caller_address);
 
-        for (i = 1; i < size && messages != NULL; ++i)
+        for (int i = 1; i < capturedSize && messages != NULL; ++i)
         {
             SFLog(System, Error, "[bt]: (%d) %s\n", i, messages[i]);
         }
@@ -176,7 +171,7 @@ namespace SF {
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 		::SetUnhandledExceptionFilter(&CrashHandler);
-#else SF_PLATFORM == SF_PLATFORM_LINUX
+#elif SF_PLATFORM == SF_PLATFORM_LINUX
         struct sigaction action;
         memset(&action, 0, sizeof(action));
         action.sa_sigaction = CrashHandlerLinux;
