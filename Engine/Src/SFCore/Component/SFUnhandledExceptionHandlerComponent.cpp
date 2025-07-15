@@ -46,11 +46,16 @@ namespace SF {
 #if SF_PLATFORM == SF_PLATFORM_LINUX
     void CrashHandlerLinux(int signal, siginfo_t* info, void* context)
     {
+	static bool bHandled = false;
+	if (bHandled)
+		return;
+
+	bHandled = true;
         void* caller_address{};
         ucontext_t* uc = reinterpret_cast<ucontext_t*>(context);
 
         /* Get the address at the time the signal was raised */
-        caller_address = 0;//(void*)uc->uc_mcontext.t; // TODO:
+        caller_address = (void*)uc->uc_mcontext.gregs[REG_RIP];
 
 	fprintf(stderr, "signal %d (%s), address is %p from %p\n",
             signal, strsignal(signal), info->si_addr,
@@ -60,7 +65,7 @@ namespace SF {
         int capturedSize = backtrace(callStackArray, countof(callStackArray));
 
         /* overwrite sigaction with caller's address */
-        //callStackArray[1] = caller_address;
+        callStackArray[1] = caller_address;
 
         char** messages = backtrace_symbols(callStackArray, capturedSize);
 
@@ -76,12 +81,15 @@ namespace SF {
 
         for (int i = 1; i < capturedSize && messages != NULL; ++i)
         {
-            SFLog(System, Error, "[bt]: (%d) %s\n", i, messages[i]);
+            SFLog(System, Error, "[bt]: ({0}) {1}", i, messages[i]);
         }
 
         free(messages);
 
         Service::LogModule->Flush();
+
+	std::this_thread::sleep_for(std::chrono::seconds(5));
+	exit(0);
     }
 #endif // SF_PLATFORM != SF_PLATFORM_LINUX
 
