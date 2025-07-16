@@ -40,7 +40,7 @@ namespace SF {
 
 
     Result _ToString(ToStringContext& context, const EntityUID& Data);
-    DEFINE_BOXING_TEMPLETE(EntityUID, VariableUInt);
+    DECLARE_BOXING_TEMPLETE_BYVALUE(EntityUID);
 
     Result _ToString(ToStringContext& context, const TransactionID& Data);
     DEFINE_BOXING_TEMPLETE(TransactionID, VariableUInt64);

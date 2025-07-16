@@ -31,7 +31,7 @@ namespace SF
         return ResultCode::SUCCESS;
     }
 
-    //IMPLEMENT_BOXING_TEMPLETE_BYVALUE(EntityUID);
+    IMPLEMENT_BOXING_TEMPLETE_BYVALUE(EntityUID);
 
     Result _ToString(ToStringContext& context, const EntityUID& Data)
     {
@@ -121,7 +121,6 @@ namespace SF
     }
 
     IMPLEMENT_BOXING_TEMPLETE_BYVALUE(AchievementStat);
-
 
 
 } // namespace SF

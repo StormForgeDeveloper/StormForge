@@ -150,7 +150,7 @@ SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetGameInstanceUID(intptr_t nativeHan
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
-	return pOnlineClient->GetGameInstanceUID();
+	return pOnlineClient->GetGameInstanceUID().ID;
 }
 
 SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle, 

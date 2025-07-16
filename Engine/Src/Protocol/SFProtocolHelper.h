@@ -538,7 +538,7 @@ namespace SF {
             inline FlatValueHolder<SF::Flat::MatchingQueueTicket> CreateMatchingQueueTicket(FlatBufferBuilder& fbb, const SF::MatchingQueueTicket& value)
             {
                 return FlatValueHolder<SF::Flat::MatchingQueueTicket>(SF::Flat::MatchingQueueTicket(
-                    value.QueueUID, value.QueueItemID
+                    value.QueueUID.ID, value.QueueItemID
                 ));
             }
 

@@ -120,7 +120,7 @@ namespace SF {
 		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "("))
 			return ResultCode::FAIL;
 
-		if (!(_IToA(context, value.QueueUID)))
+		if (!(_IToA(context, value.QueueUID.ID)))
 			return ResultCode::FAIL;
 
 

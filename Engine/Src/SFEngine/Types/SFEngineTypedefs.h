@@ -195,13 +195,15 @@ namespace SF {
             return *this;
         }
 
+        inline bool operator > (const EntityUID& src) const { return ID > src.ID; }
+        inline bool operator >= (const EntityUID& src) const { return ID >= src.ID; }
+        inline bool operator < (const EntityUID& src) const { return ID < src.ID; }
+        inline bool operator <= (const EntityUID& src) const { return ID <= src.ID; }
 
-		//inline bool operator == ( const EntityUID& src ) const;
-		//inline bool operator != ( const EntityUID& src ) const;
-		operator uint32_t() const
-        {
-            return (uint32_t)ID;
-        }
+        inline bool operator == (const EntityUID& src) const { return ID == src.ID; }
+		inline bool operator != ( const EntityUID& src ) const { return ID != src.ID; }
+
+		explicit operator uint32_t() const { return (uint32_t)ID; }
 	};
 
     // We now use same type. will be merged gradually
@@ -657,7 +659,7 @@ namespace SF {
 		inline bool operator == (const MatchingQueueTicket& op) const;
 		inline bool operator != (const MatchingQueueTicket& op) const;
 
-		operator uint128_t() const { uint128_t val = { QueueUID, QueueItemID }; return val; }
+		operator uint128_t() const { uint128_t val = { (uint64_t)QueueUID.ID, QueueItemID }; return val; }
 	};
 
 
