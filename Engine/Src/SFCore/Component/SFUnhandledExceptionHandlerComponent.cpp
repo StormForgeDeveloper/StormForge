@@ -30,6 +30,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <ucontext.h>
+#define _GNU_SOURCE         /* See feature_test_macros(7) */
+#include <dlfcn.h>
 #endif
 
 namespace SF {
@@ -57,22 +59,34 @@ namespace SF {
         /* Get the address at the time the signal was raised */
         caller_address = (void*)uc->uc_mcontext.gregs[REG_RIP];
 
-	fprintf(stderr, "signal %d (%s), address is %p from %p\n",
-            signal, strsignal(signal), info->si_addr,
-            (void*)caller_address);
+	    fprintf(stderr, "signal %d (%s), address is %p from %p\n",
+                signal, strsignal(signal), info->si_addr,
+                (void*)caller_address);
 
-        void* callStackArray[50];
+        constexpr size_t maxStack = 50;
+        void* callStackArray[maxStack];
         int capturedSize = backtrace(callStackArray, countof(callStackArray));
 
         /* overwrite sigaction with caller's address */
-        callStackArray[1] = caller_address;
+        //callStackArray[1] = caller_address;
 
         char** messages = backtrace_symbols(callStackArray, capturedSize);
+
+        Dl_info dlInfos[maxStack];
+        memset(dlInfos, 0, sizeof(dlInfos));
 
         /* skip first stack frame (points here) */
         for (int i = 1; i < capturedSize && messages != NULL; ++i)
         {
-            fprintf(stderr, "[bt]: (%d) %s\n", i, messages[i]);
+            Dl_info& dlInfo = dlInfos[i];
+            if (dladdr(callStackArray[i], &dlInfo) && dlInfo.dli_fname && dlInfo.dli_fbase)
+            {
+                fprintf(stderr, "[bt]: (%d) %s\n", i, messages[i], dlInfo.dli_fname, dlInfo.dli_fbase);
+            }
+            else
+            {
+                fprintf(stderr, "[bt]: (%d) %s\n", i, messages[i]);
+            }
         }
 
         // send to log as well
@@ -81,7 +95,15 @@ namespace SF {
 
         for (int i = 1; i < capturedSize && messages != NULL; ++i)
         {
-            SFLog(System, Error, "[bt]: ({0}) {1}", i, messages[i]);
+            Dl_info& dlInfo = dlInfos[i];
+            if (dlInfo.dli_fname && dlInfo.dli_fbase)
+            {
+                SFLog(System, Error, "[bt]: (%d) %s\n", i, messages[i], dlInfo.dli_fname, dlInfo.dli_fbase);
+            }
+            else
+            {
+                SFLog(System, Error, "[bt]: ({0}) {1}", i, messages[i]);
+            }
         }
 
         free(messages);
