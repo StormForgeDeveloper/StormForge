@@ -151,6 +151,10 @@ namespace SF
 		SF_FORCEINLINE const String& GetLoginAddresses() const { return m_LoginAddresses; }
 
 		SF_FORCEINLINE const String& GetGameServerAddress() const { return m_GameServerAddress; }
+
+        SF_FORCEINLINE const String& GetGameServerAddressOverride() const { return m_GameServerAddressOverride; }
+        SF_FORCEINLINE void SetGameServerAddressOverride(const String& override) { m_GameServerAddressOverride = override; }
+
 		SF_FORCEINLINE const AccountID& GetAccountId() const { return m_AccountId; }
 		SF_FORCEINLINE AuthTicket GetAuthTicket() const { return m_AuthTicket; }
 		SF_FORCEINLINE const PlayerID& GetPlayerID() const { return m_AccountId; }
@@ -222,6 +226,7 @@ namespace SF
 		String m_LoginAddresses;
 
 		String m_GameServerAddress;
+        String m_GameServerAddressOverride;
 		AccountID m_AccountId{};
 		AuthTicket m_AuthTicket{};
         EAccountRole m_AccountRole{};

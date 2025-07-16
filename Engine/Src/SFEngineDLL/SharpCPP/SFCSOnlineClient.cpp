@@ -123,6 +123,36 @@ SFDLL_EXPORT const void* SFOnlineClient_NativeGetCharacterId(intptr_t nativeHand
 	return reinterpret_cast<const void*>(&pOnlineClient->GetCharacterId());
 }
 
+SFDLL_EXPORT const void* SFOnlineClient_NativeGetGameServerAddress(intptr_t nativeHandle)
+{
+    if (nativeHandle == 0)
+        return nullptr;
+
+    auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+
+    return reinterpret_cast<const void*>(pOnlineClient->GetGameServerAddress().c_str());
+}
+
+SFDLL_EXPORT const void* SFOnlineClient_NativeGetGameServerAddressOverride(intptr_t nativeHandle)
+{
+    if (nativeHandle == 0)
+        return nullptr;
+
+    auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+
+    return reinterpret_cast<const void*>(pOnlineClient->GetGameServerAddressOverride().c_str());
+}
+
+SFDLL_EXPORT void SFOnlineClient_NativeSetGameServerAddressOverride(intptr_t nativeHandle, const char* override)
+{
+    if (nativeHandle == 0)
+        return;
+
+    auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+
+    pOnlineClient->SetGameServerAddressOverride(override);
+}
+
 SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetAccountRole(intptr_t nativeHandle)
 {
     if (nativeHandle == 0)

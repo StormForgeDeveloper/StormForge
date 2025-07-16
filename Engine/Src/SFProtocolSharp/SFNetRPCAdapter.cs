@@ -26,16 +26,13 @@ namespace SF.Net
 
 		public SF.IEndpoint? Endpoint { get { return m_Endpoint; } set { m_Endpoint = value; } }
 
-        public bool TryToRouteResultToRequesterEntity { get; set; } = false;
-
         public RPCAdapter()
 		{
 		}
 
-        public RPCAdapter(SF.IEndpoint endpoint, bool tryToRouteResultToSender = false)
+        public RPCAdapter(SF.IEndpoint endpoint)
         {
             m_Endpoint = endpoint;
-            TryToRouteResultToRequesterEntity = tryToRouteResultToSender;
         }
 
         public TransactionID NewTransactionID()
@@ -65,10 +62,11 @@ namespace SF.Net
             };
 
             // try to returning message to destination target directly
-            if (TryToRouteResultToRequesterEntity && messageHeader.MessageId.MessageType == EMessageType.Result && messageHeader.TransactionId.EntityUID != 0)
+            if (messageHeader.MessageId.MessageType == EMessageType.Result && messageHeader.TransactionId.EntityUID != 0)
             {
                 // Service::ServerConfig->ServerEndpointAddress.Channel
-                string destTopic = $"ent_{transactionId.EntityUID:X8}";
+                EntityUID requesterUID = new EntityUID(transactionId.EntityUID);
+                string destTopic = $"ent_{requesterUID.GetServerEntityUID().UID:X8}";
                 hr = m_Endpoint.SendMessage(destTopic, ref messageHeader, builder);
             }
             else

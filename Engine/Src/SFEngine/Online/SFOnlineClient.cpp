@@ -111,7 +111,11 @@ namespace SF
             defCheckPtr(response->game_server_address());
             defCheckPtr(response->account_id());
 
-            m_Owner.m_GameServerAddress = response->game_server_address()->c_str();
+            if (m_Owner.GetGameServerAddressOverride().IsNullOrEmpty())
+                m_Owner.m_GameServerAddress = response->game_server_address()->c_str();
+            else
+                m_Owner.m_GameServerAddress = m_Owner.GetGameServerAddressOverride();
+
             m_Owner.m_AccountId = Flat::Helper::ParseAccountID(response->account_id());
             m_Owner.m_AuthTicket = response->auth_ticket();
             m_Owner.m_AccountRole = Flat::Helper::ParseAccountRole(response->role());

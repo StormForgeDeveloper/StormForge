@@ -16,13 +16,14 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using System.Numerics;
 using System.Runtime.InteropServices;
+using System.Transactions;
 
 #nullable enable
 
 namespace SF
 {
-    using LogEntryID = System.UInt64;
     using BinaryPrimitives = System.Buffers.Binary.BinaryPrimitives;
+    using LogEntryID = System.UInt64;
 
     // structure data type attribute, this is used for message builder
     public class StructAttribute : Attribute
@@ -79,9 +80,23 @@ namespace SF
         }
     }
 
-    [Struct]
-    [StructLayout(LayoutKind.Sequential)]
-    public struct EntityUID
+    enum EEntityFaculty
+    {
+        None,				// Faculty undefined
+		Server,				// Faculty Server
+		Service,			// Faculty Service
+		User,				// Faculty User
+		Game,				// Faculty Game
+		GameInstance,		// Faculty Game Instance
+		Party,				// Faculty Party
+		MatchInstance,		// Faculty Match Instance
+		Manager,			// Faculty Manager Instance
+		ChatChannel,
+		ServiceInstance,		// Faculty generic service Instance
+		Max,
+	};
+
+    public struct EntityUID : IFormattable
     {
         public static readonly EntityUID Empty = new EntityUID();
 
@@ -90,6 +105,11 @@ namespace SF
         public EntityUID(UInt32 uid)
         {
             UID = uid;
+        }
+
+        public EntityUID GetServerEntityUID()
+        {
+            return new EntityUID((UID & 0xFFF00000) | (((uint)EEntityFaculty.Server) << 16));
         }
 
         public bool IsValid => UID != 0;
@@ -114,6 +134,11 @@ namespace SF
         public override int GetHashCode()
         {
             return (int)UID;
+        }
+
+        public string ToString(string? format, IFormatProvider? formatProvider)
+        {
+            return $"{UID:X8}";
         }
 
         public override string ToString()

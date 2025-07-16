@@ -177,6 +177,41 @@ namespace SF
             return new CharacterID(bytes);
         }
 
+        public string GetGameServerAddress()
+        {
+            IntPtr valuePtr = NativeGetGameServerAddress(NativeHandle);
+            if (valuePtr != IntPtr.Zero)
+            {
+                string? value = Marshal.PtrToStringAnsi(valuePtr);
+                if (value != null)
+                {
+                    return value;
+                }
+            }
+
+            return string.Empty;
+        }
+
+        public string GetGameServerAddressOverride()
+        {
+            IntPtr valuePtr = NativeGetGameServerAddressOverride(NativeHandle);
+            if (valuePtr != IntPtr.Zero)
+            {
+                string? value = Marshal.PtrToStringAnsi(valuePtr);
+                if (value != null)
+                {
+                    return value;
+                }
+            }
+
+            return string.Empty;
+        }
+
+        public void SetGameServerAddressOverride(string gameServerAddressOverride)
+        {
+            NativeSetGameServerAddressOverride(NativeHandle, gameServerAddressOverride);
+        }
+
         public EAccountRole GetAccountRole()
         {
             return (EAccountRole)NativeGetAccountRole(NativeHandle);
@@ -405,6 +440,15 @@ namespace SF
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetAccountRole", CharSet = CharSet.Auto)]
         static extern UInt32 NativeGetAccountRole(IntPtr nativeHandle);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetGameServerAddress", CharSet = CharSet.Auto)]
+        static extern IntPtr NativeGetGameServerAddress(IntPtr nativeHandle);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetGameServerAddressOverride", CharSet = CharSet.Auto)]
+        static extern IntPtr NativeGetGameServerAddressOverride(IntPtr nativeHandle);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeSetGameServerAddressOverride", CharSet = CharSet.Auto)]
+        static extern void NativeSetGameServerAddressOverride(IntPtr nativeHandle, [MarshalAs(UnmanagedType.LPStr)] string gameServerAddressOverride);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetActorId", CharSet = CharSet.Auto)]
         static extern UInt32 NativeGetActorId(IntPtr nativeHandle);
