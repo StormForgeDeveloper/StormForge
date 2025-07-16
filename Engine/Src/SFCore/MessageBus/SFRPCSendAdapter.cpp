@@ -27,8 +27,8 @@ namespace SF
 
     RPCSendAdapter::RPCSendAdapter(MessageEndpoint* pEndpoint)
         : m_Endpoint(pEndpoint)
-        , m_Builder(pEndpoint->GetBuilder() ? 0 : 4096)
-        , m_pExternalBuilder(pEndpoint->GetBuilder())
+        , m_Builder((pEndpoint && pEndpoint->GetBuilder()) ? 0 : 4096)
+        , m_pExternalBuilder(pEndpoint ? pEndpoint->GetBuilder() : nullptr)
     {
     }
 
@@ -53,6 +53,8 @@ namespace SF
         MessageHeader messageHeader;
         messageHeader.MessageId = messageId;
         messageHeader.TransactionId = transactionId;
+
+        SFCheckPtr(System,m_Endpoint);
 
         if (m_Endpoint->GetDestinationEntityUID().IsValid())
         {
