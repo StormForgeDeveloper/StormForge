@@ -6,6 +6,7 @@
 
 Triplet=$SF_VCPKG_TRIPLET
 VCPKGDIR=$SF_VCPKGDIR
+VCPKGTAG=2025.06.13
 
 #WSLENV=VULKAN_SDK/p
 
@@ -56,6 +57,7 @@ deps='vcpkg-pkgconfig-get-modules,
         libflac,
 		opus,
         protobuf,
+		grpc,
 		recastnavigation,
 		libwebsockets,
 		msquic[0-rtt],
@@ -63,14 +65,14 @@ deps='vcpkg-pkgconfig-get-modules,
 		mysql-connector-cpp,
 		gtest'
 
-#		grpc,
+
 #		zookeeper,
 #		pipewire
 #		vulkan,
 
 if [ ! -d "$VCPKGDIR" ]
     then 
-        git clone https://github.com/Microsoft/vcpkg.git $VCPKGDIR
+        git clone --branch $VCPKGTAG --single-branch https://github.com/Microsoft/vcpkg.git $VCPKGDIR
 fi
 
 pushd $VCPKGDIR

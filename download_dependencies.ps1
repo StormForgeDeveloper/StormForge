@@ -44,15 +44,10 @@ $deps = "vcpkg-pkgconfig-get-modules",
 		"recastnavigation",
 		"vulkan",
 		"protobuf",
-#		"grpc",
+		"grpc",
 		"openssl",
 		"msquic[0-rtt]"
 
-#Those are complicated and being separated shared lib is better
-$deps_shared =
-	"protobuf",
-	"grpc",
-	"openssl"
 
 
 # Doesn't compile nicely on windows		
@@ -82,6 +77,7 @@ $prevDir=pwd
 try {
 	
 	$vcpkgdir = "../vcpkgWin"
+	$gittag = "2025.06.13"
 	$triplet = "x64-windows-static"
 	$triplet_shared = "x64-windows"
 	
@@ -90,7 +86,7 @@ try {
 	Write-Host "Checking for $vcpkgdir..."
 	
 	if (-not (Test-Path $vcpkgdir)) {
-		git clone https://github.com/Microsoft/vcpkg.git $vcpkgdir
+		git clone --branch $gittag --single-branch https://github.com/Microsoft/vcpkg.git $vcpkgdir
 	}
 
 	cd $vcpkgdir
@@ -101,9 +97,6 @@ try {
 	}
 
 	Write-Host "Beginning package install..."
-
-	# protobuf uses x64-windows tool even though it has one for target triplet
-	#./vcpkg.exe install $deps_shared --triplet $triplet_shared
 
 	./vcpkg.exe install $deps --triplet $triplet --allow-unsupported
 
