@@ -78,9 +78,6 @@ namespace Net {
 		// Connection ID
 		uint64_t	m_CID;
 
-		// User data
-		uint64_t	m_UData;
-
 		// Connection state
 		Atomic<ConnectionState>	m_ConnectionState;
 
@@ -110,7 +107,6 @@ namespace Net {
 		sockaddr_storage	m_sockAddrRemote;
 
 		// For connection management
-		bool		m_IsSocketOwner : 1;
 		bool		m_UseAddressMap : 1;
 		bool		m_UsePeerIDMap : 1;
 
@@ -184,36 +180,33 @@ namespace Net {
 		//
 
 		// Get Connection info
-		const PeerInfo& GetLocalInfo() const;
-		void SetLocalID(uint64_t newID);
-		const PeerInfo& GetRemoteInfo() const;
-		PeerInfo& GetRemoteInfo();
-		void SetRemoteID(uint64_t newID);
-		void SetRemoteInfo(NetClass newClass, uint64_t newID);
+        const PeerInfo& GetLocalInfo() const { return m_LocalInfo; }
+        void SetLocalID(uint64_t newID) { m_LocalInfo.PeerID = newID; }
+        const PeerInfo& GetRemoteInfo() const { return m_RemoteInfo; }
+        PeerInfo& GetRemoteInfo() { return m_RemoteInfo; }
+        void SetRemoteID(uint64_t newID) { m_RemoteInfo.PeerID = newID; }
+        void SetRemoteInfo(NetClass newClass, uint64_t newID) { m_RemoteInfo.SetInfo(newClass, newID); }
 
 		// Get Connection ID
-		uint64_t GetCID() const;
-		void ClearCID();
+        uint64_t GetCID() const { return m_CID; }
+        void ClearCID() { m_CID = 0; }
 		void SetCID(uint64_t cid) { m_CID = cid; }
 
         // Message endpoint
 		const SharedPointerT<MessageEndpoint>& GetMessageEndpoint() const;
 
 		// Get connection state
-		const ConnectionState GetConnectionState() const;
+        const ConnectionState GetConnectionState() const { return m_ConnectionState.load(std::memory_order_acquire); }
 
 		// Set local class
-		inline void SetLocalClass(NetClass uiLocalClass);
-
-		// User data
-		uint64_t GetUData();
-		void SetUData(uint64_t UData);
+		inline void SetLocalClass(NetClass localClass)
+        {
+            m_LocalInfo.PeerClass = localClass;
+            m_LocalInfo.PeerID = (uint)(-1);
+        }
 
 		// Get connection time
-		TimeStampMS GetConnectionTime();
-
-        // Is socket owner
-		bool GetIsSocketOwner() const { return m_IsSocketOwner; }
+		TimeStampMS GetConnectionTime() const { return m_tConnectionTime; }
 
 		// Get socket handle
 		const SF_SOCKET GetSocket() const { return GetNetIOHandler() != nullptr ? GetNetIOHandler()->GetIOSocket() : INVALID_SOCKET; }
@@ -223,8 +216,8 @@ namespace Net {
 		IHeap& GetIOHeap();
 
 		// Get remote address
-		const sockaddr_storage& GetRemoteSockAddr() const;
-		int GetRemoteSockAddrSize() const;
+        const sockaddr_storage& GetRemoteSockAddr() const { return m_sockAddrRemote; }
+        int GetRemoteSockAddrSize() const { return m_sockAddrRemote.ss_family == AF_INET6 ? (int)sizeof(sockaddr_in6) : (int)sizeof(sockaddr_in); }
 
 		// Change remote Address
 		void SetRemoteAddress(const sockaddr_storage& socAddr);
@@ -243,15 +236,15 @@ namespace Net {
 		void SetRunningThreadID(ThreadID threadID) { m_RunningThreadID = threadID; }
 
 		// Get zero recv count
-		inline uint32_t GetZeroRecvCount();
-		inline void IncZeroRecvCount();
-		inline void ResetZeroRecvCount();
+        inline uint32_t GetZeroRecvCount() const { return m_ulZeroLengthRecvCount; }
+        inline void IncZeroRecvCount() { m_ulZeroLengthRecvCount++; }
+        inline void ResetZeroRecvCount() { m_ulZeroLengthRecvCount = 0; }
 
 		// Sequence generation
-		inline uint16_t NewSeqNone();
+        inline uint16_t NewSeqNone() { return (uint16_t)(m_usSeqNone.fetch_add(1, std::memory_order_relaxed) + 1); }
 
-		DurationMS GetConnectingTimeOut();
-		void SetConnectingTimeOut(DurationMS ulConnectingTimeOut);
+        DurationMS GetConnectingTimeOut() const { return m_ulConnectingTimeOut; }
+        void SetConnectingTimeOut(DurationMS ulConnectingTimeOut) { m_ulConnectingTimeOut = ulConnectingTimeOut; }
 
 		TimeStampMS GetNetCtrlTime() { return m_ulNetCtrlTime; }
 		TimeStampMS GetNetCtrlTryTime() { return m_ulNetCtrlTryTime; }
@@ -331,7 +324,7 @@ namespace Net {
 
 
 		// Query connection event
-		CounterType GetConnectionEventCount();
+        inline CounterType GetConnectionEventCount() const { return m_EventQueue.size(); }
 		Result DequeueConnectionEvent(ConnectionEvent& curEvent);
 
 
@@ -371,9 +364,6 @@ namespace Net {
         // Recv message delegate
 		RecvMessageDelegates m_RecvMessageDelegates;
 	};
-
-
-	#include "SFConnection.inl"
 
 	typedef SharedPointerT <Connection> ConnectionPtr;
 

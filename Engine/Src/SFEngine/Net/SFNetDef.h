@@ -126,9 +126,26 @@ namespace Net {
 			: Components(eventType, InState, ResultCode::SUCCESS)
 		{}
 
-		ConnectionEvent& operator =(const ConnectionEvent& src);
-		bool operator == (const ConnectionEvent& src) const;
-		bool operator != (const ConnectionEvent& src) const;
+		ConnectionEvent& operator =(const ConnectionEvent& src)
+        {
+            memcpy(this, &src, sizeof(src));
+            return *this;
+        }
+
+		bool operator == (const ConnectionEvent& src) const
+        {
+            if (src.Components.EventType != Components.EventType)
+                return false;
+
+            assert(Components.EventType != EVT_NONE); // who access this?
+
+            return Components.hr == src.Components.hr;
+        }
+
+        bool operator != (const ConnectionEvent& src) const
+        {
+            return src.Components.EventType != Components.EventType || Components.hr != src.Components.hr;
+        }
 	};
 
 	static_assert(sizeof(ConnectionEvent) <= sizeof(uint64_t), "Connection event should be remained under 8bytes");

@@ -91,7 +91,6 @@ set(SUBNet_FILES
 	Net/SFNetSystem_WinIOCP.h
 	Net/SFNetToString.h
 	Net/SFNetUtil.h
-	Net/SFConnection.inl
 	Net/SFNetDef.inl
 	Net/SFNetSystem_Linux.inl
 	Net/SFNetSystem_WinIOCP.inl
