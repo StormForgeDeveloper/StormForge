@@ -36,7 +36,11 @@ message ( "SF_DIR=${SF_DIR}" )
 
 
 IF(NOT DEFINED ${VCPKG_DIR})
-	set(VCPKG_DIR "${SF_DIR}/../vcpkg")
+	if(WIN32)
+		set(VCPKG_DIR "${SF_DIR}/../vcpkgWin")
+	else()
+		set(VCPKG_DIR "${SF_DIR}/../vcpkg")
+	endif()
 	message ( "Setup default VCPKG_DIR=${VCPKG_DIR}" )
 ENDIF()
 set(CMAKE_TOOLCHAIN_FILE "${VCPKG_DIR}/scripts/buildsystems/vcpkg.cmake")
@@ -153,7 +157,7 @@ list(APPEND THIRDPARTY_LIBS ${PNG_LIBRARY})
 list(APPEND THIRDPARTY_LIBS jasper)
 
 find_package(OpenEXR CONFIG REQUIRED)
-list(APPEND THIRDPARTY_LIBS OpenEXR::Iex OpenEXR::IlmThread OpenEXR::OpenEXR OpenEXR::OpenEXRCore OpenEXR::OpenEXRUtil)
+list(APPEND THIRDPARTY_LIBS OpenEXR::OpenEXR OpenEXR::Iex OpenEXR::IlmThread OpenEXR::OpenEXR OpenEXR::OpenEXRCore OpenEXR::OpenEXRUtil)
 
 find_package(libjpeg-turbo CONFIG REQUIRED)
 list(APPEND THIRDPARTY_LIBS libjpeg-turbo::jpeg-static)

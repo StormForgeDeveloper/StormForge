@@ -44,9 +44,8 @@ $deps = "vcpkg-pkgconfig-get-modules",
 		"recastnavigation",
 		"vulkan",
 		"protobuf",
-		"grpc",
 		"openssl",
-		"msquic[0-rtt]"
+		"grpc"
 
 
 
@@ -56,21 +55,13 @@ $deps = "vcpkg-pkgconfig-get-modules",
 	   #"yaml",
 	   #"libmng",
 
+
+$sharedlib_deps = "msquic[0-rtt]"
+
+
+
 $ErrorActionPreference = 'Stop'
 
-function vcpkg_install {
-	Param(
-		[string[]] $packages,
-
-		[string] $targetTriplet
-	)
-	
-	./vcpkg.exe install $packages --triplet $targetTriplet  --recurse
-
-	if (-not $?) {
-		Write-Error("Failed at installing package $package ($targetTriplet)")
-	}
-}
 
 $prevDir=pwd
 
@@ -99,7 +90,8 @@ try {
 	Write-Host "Beginning package install..."
 
 	./vcpkg.exe install $deps --triplet $triplet --allow-unsupported
-
+	
+	./vcpkg.exe install $sharedlib_deps --triplet $triplet_shared 
 	
 	if ($upgrade = 1)
 	{
