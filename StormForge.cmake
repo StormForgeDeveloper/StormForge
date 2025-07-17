@@ -62,8 +62,8 @@ if(WIN32)
 	set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 	
 	set(ARTECTURE x64)
-	set(VCPKG_TARGET_TRIPLET ${ARTECTURE}-windows-static)
-	#set(VCPKG_SHARED_TRIPLET ${ARTECTURE}-windows)
+	#set(VCPKG_TARGET_TRIPLET ${ARTECTURE}-windows-static)
+	set(VCPKG_SHARED_TRIPLET ${ARTECTURE}-windows)
 
 elseif(ANDROID_PLATFORM)
 

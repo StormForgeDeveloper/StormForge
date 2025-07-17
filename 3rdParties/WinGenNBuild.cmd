@@ -12,8 +12,8 @@ set PATH=%~dp0\Windows\Common\bin;%PATH%
 
 
 rem Build main part
-cmd /c "call WinGenMain.cmd nopause"
-cmd /c "call WinBuildMain.cmd nopause"
+rem cmd /c "call WinGenMain.cmd nopause"
+rem cmd /c "call WinBuildMain.cmd nopause"
 
 cmd /c "cd src\flatbuffer & call download.cmd nopause"
 

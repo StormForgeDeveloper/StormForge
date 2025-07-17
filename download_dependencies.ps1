@@ -45,7 +45,8 @@ $deps = "vcpkg-pkgconfig-get-modules",
 		"vulkan",
 		"protobuf",
 		"openssl",
-		"grpc"
+		"grpc",
+		"msquic[0-rtt]"
 
 
 
@@ -54,9 +55,6 @@ $deps = "vcpkg-pkgconfig-get-modules",
 		#"pipewire"
 	   #"yaml",
 	   #"libmng",
-
-
-$sharedlib_deps = "msquic[0-rtt]"
 
 
 
@@ -89,9 +87,9 @@ try {
 
 	Write-Host "Beginning package install..."
 
-	./vcpkg.exe install $deps --triplet $triplet --allow-unsupported
+	#./vcpkg.exe install $deps --triplet $triplet --allow-unsupported
 	
-	./vcpkg.exe install $sharedlib_deps --triplet $triplet_shared 
+	./vcpkg.exe install $deps --triplet $triplet_shared 
 	
 	if ($upgrade = 1)
 	{
