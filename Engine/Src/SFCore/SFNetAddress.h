@@ -34,6 +34,7 @@ namespace SF
 		None = 0,
 		IPV4,// = AF_INET,
 		IPV6,// = AF_INET6
+        Quic,// = Quic
 	};
 
 	enum class SocketType : uint8_t

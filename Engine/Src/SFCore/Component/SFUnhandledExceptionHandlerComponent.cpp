@@ -30,7 +30,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <ucontext.h>
-#define _GNU_SOURCE         /* See feature_test_macros(7) */
 #include <dlfcn.h>
 #endif
 
@@ -81,7 +80,7 @@ namespace SF {
             Dl_info& dlInfo = dlInfos[i];
             if (dladdr(callStackArray[i], &dlInfo) && dlInfo.dli_fname && dlInfo.dli_fbase)
             {
-                fprintf(stderr, "[bt]: (%d) %s\n", i, messages[i], dlInfo.dli_fname, dlInfo.dli_fbase);
+                fprintf(stderr, "[bt]: (%d) %s, %s, %" PRIu64 "\n", i, messages[i], dlInfo.dli_fname, uint64_t(callStackArray[i]) - uint64_t(dlInfo.dli_fbase));
             }
             else
             {
@@ -98,7 +97,7 @@ namespace SF {
             Dl_info& dlInfo = dlInfos[i];
             if (dlInfo.dli_fname && dlInfo.dli_fbase)
             {
-                SFLog(System, Error, "[bt]: (%d) %s\n", i, messages[i], dlInfo.dli_fname, dlInfo.dli_fbase);
+                SFLog(System, Error, "[bt]: ({0}) {1}, {2}, {3}\n", i, messages[i], dlInfo.dli_fname, dlInfo.dli_fbase);
             }
             else
             {

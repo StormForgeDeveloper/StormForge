@@ -81,15 +81,16 @@ $prevDir=pwd
 
 try {
 	
-	$vcpkgdir = "./vcpkg"
+	$vcpkgdir = "../vcpkgWin"
 	$triplet = "x64-windows-static"
 	$triplet_shared = "x64-windows"
 	
 	Write-Host "Checking for $vcpkgdir..., triplet:$triplet"
 	
 	Write-Host "Checking for $vcpkgdir..."
+	
 	if (-not (Test-Path $vcpkgdir)) {
-		git clone https://github.com/Microsoft/vcpkg.git
+		git clone https://github.com/Microsoft/vcpkg.git $vcpkgdir
 	}
 
 	cd $vcpkgdir
@@ -120,7 +121,7 @@ try {
 		Write-Host "	specify parameter to upgrade example:"download_dependencies.ps1 -upgrade 1""
 	}
 	
-	cd ..\3rdParties
+	cd ..\StormForge\3rdParties
 	
 	.\WinGenNBuild.cmd
 

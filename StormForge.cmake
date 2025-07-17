@@ -36,7 +36,7 @@ message ( "SF_DIR=${SF_DIR}" )
 
 
 IF(NOT DEFINED ${VCPKG_DIR})
-	set(VCPKG_DIR "${SF_DIR}/vcpkg")
+	set(VCPKG_DIR "${SF_DIR}../vcpkg")
 	message ( "Setup default VCPKG_DIR=${VCPKG_DIR}" )
 ENDIF()
 set(CMAKE_TOOLCHAIN_FILE "${VCPKG_DIR}/scripts/buildsystems/vcpkg.cmake")
@@ -162,6 +162,11 @@ find_package(Freetype CONFIG REQUIRED)
 #unlike usage this doesn't work
 #list(APPEND THIRDPARTY_LIBS Freetype::Freetype)
 list(APPEND THIRDPARTY_LIBS freetype)
+
+find_package(msquic CONFIG REQUIRED)
+#unlike usage this doesn't work
+#list(APPEND THIRDPARTY_LIBS Freetype::Freetype)
+list(APPEND THIRDPARTY_LIBS msquic)
 
 #find_package(Iconv CONFIG REQUIRED)
 if(WIN32)

@@ -74,6 +74,8 @@ set(SUBNet_FILES
 	Net/SFConnectionTCP.h
 	Net/SFConnectionUDP.h
 	Net/SFConnectionUDPBase.h
+	Net/SFConnectionQuic.h
+	Net/SFConnectionQuic.cpp
 	Net/SFMessageID.h
 	Net/SFMessage.h
 	Net/SFMessageWindow.h

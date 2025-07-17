@@ -73,7 +73,7 @@ if [ ! -d "$VCPKGDIR" ]
         git clone https://github.com/Microsoft/vcpkg.git $VCPKGDIR
 fi
 
-pushd vcpkg
+pushd $VCPKGDIR
 
 if [ ! -f "vcpkg" ]
 	then

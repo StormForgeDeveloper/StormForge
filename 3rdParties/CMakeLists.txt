@@ -182,7 +182,6 @@ list(APPEND THIRDPARTY_LIBS CURL::libcurl)
 
 
 
-#add_definitions(-DSTATIC_LIBMEMCACHED=1)
 add_definitions(-DHAVE_CONFIG_H=1)
 add_definitions(-DCURL_STATICLIB)
 add_definitions(-DHAVE_STDDEF_H=1)
@@ -197,7 +196,6 @@ set(LIB_INSTALL_DIR lib)
 
 
 add_subdirectory(src/SFWinport)
-add_subdirectory(src/memcached)
 
 
 
