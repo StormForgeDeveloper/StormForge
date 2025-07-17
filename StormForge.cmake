@@ -36,7 +36,7 @@ message ( "SF_DIR=${SF_DIR}" )
 
 
 IF(NOT DEFINED ${VCPKG_DIR})
-	set(VCPKG_DIR "${SF_DIR}../vcpkg")
+	set(VCPKG_DIR "${SF_DIR}/../vcpkg")
 	message ( "Setup default VCPKG_DIR=${VCPKG_DIR}" )
 ENDIF()
 set(CMAKE_TOOLCHAIN_FILE "${VCPKG_DIR}/scripts/buildsystems/vcpkg.cmake")
@@ -127,7 +127,7 @@ set(THIRDPARTY_LIBS )
 
 
 find_package(ZLIB REQUIRED)
-list(APPEND THIRDPARTY_LIBS ${ZLIB_LIBRARY})
+list(APPEND THIRDPARTY_LIBS ZLIB::ZLIB)
 
 find_package(zstd CONFIG REQUIRED)
 list(APPEND THIRDPARTY_LIBS zstd::libzstd)
@@ -238,8 +238,8 @@ list(APPEND THIRDPARTY_LIBS flatbuffers)
 find_package(Protobuf CONFIG REQUIRED)
 list(APPEND THIRDPARTY_LIBS protobuf::libprotoc protobuf::libprotobuf protobuf::libprotobuf-lite)
 
-find_package(gRPC CONFIG REQUIRED)
-list(APPEND THIRDPARTY_LIBS gRPC::gpr gRPC::grpc gRPC::grpc++ gRPC::grpc++_alts)
+#find_package(gRPC CONFIG REQUIRED)
+#list(APPEND THIRDPARTY_LIBS gRPC::gpr gRPC::grpc gRPC::grpc++ gRPC::grpc++_alts)
 
 find_package(recastnavigation CONFIG REQUIRED)
 list(APPEND THIRDPARTY_LIBS RecastNavigation::Detour RecastNavigation::Recast RecastNavigation::DebugUtils RecastNavigation::DetourCrowd)

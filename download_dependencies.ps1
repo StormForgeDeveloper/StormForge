@@ -44,7 +44,7 @@ $deps = "vcpkg-pkgconfig-get-modules",
 		"recastnavigation",
 		"vulkan",
 		"protobuf",
-		"grpc",
+#		"grpc",
 		"openssl",
 		"msquic[0-rtt]"
 

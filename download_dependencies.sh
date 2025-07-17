@@ -56,15 +56,15 @@ deps='vcpkg-pkgconfig-get-modules,
         libflac,
 		opus,
         protobuf,
-		grpc,
 		recastnavigation,
 		libwebsockets,
 		msquic[0-rtt],
 		librdkafka[zlib],
 		mysql-connector-cpp,
-		zookeeper,
 		gtest'
 
+#		grpc,
+#		zookeeper,
 #		pipewire
 #		vulkan,
 
