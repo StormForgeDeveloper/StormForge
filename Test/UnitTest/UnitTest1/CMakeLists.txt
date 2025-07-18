@@ -37,8 +37,6 @@ set(SF_UNIT_TEST_FILES
 	Test/Container/UnitTest_ContainerTest.h
 	Test/FBX/UnitTest_FBX.h
 	Test/FBX/UnitTest_FBX.cpp
-	Test/Online/UnitTest_Kafka.h
-	Test/Online/UnitTest_Kafka.cpp
 	Test/Online/UnitTest_Telemetry.h
 	Test/Online/UnitTest_Telemetry.cpp
 	Test/Online/UnitTest_HTTP.h

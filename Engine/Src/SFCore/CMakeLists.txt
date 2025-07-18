@@ -334,8 +334,6 @@ source_group(Service FILES
 )
 
 set(SUBOnline_FILES
-	Online/StreamDB/SFStreamDB.h
-	Online/StreamDB/SFStreamDB.cpp
 	Online/Telemetry/SFTelemetryClientAvro.h
 	Online/Telemetry/SFTelemetryClientAvro.cpp
 	Online/Telemetry/SFTelemetryAvroComponent.h

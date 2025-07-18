@@ -4,7 +4,7 @@
 param ($upgrade)
 
 
-$deps = "vcpkg-pkgconfig-get-modules",
+$deps = 
         "zlib",
 		"zstd",
 		"liblzma",
@@ -31,7 +31,6 @@ $deps = "vcpkg-pkgconfig-get-modules",
 		"jansson",
 		"libjpeg-turbo",
 		#"openal-soft",
-		"libbson",
 		"libsndfile",
         "libogg",
         "libflac",
@@ -45,10 +44,11 @@ $deps = "vcpkg-pkgconfig-get-modules",
 		"vulkan",
 		"protobuf",
 		"openssl",
-		"grpc",
+		"grpc"
+		
+
+$shared_deps = "vcpkg-pkgconfig-get-modules",
 		"msquic[0-rtt]"
-
-
 
 # Doesn't compile nicely on windows		
 #not supported by VCPKG
@@ -87,9 +87,9 @@ try {
 
 	Write-Host "Beginning package install..."
 
-	#./vcpkg.exe install $deps --triplet $triplet --allow-unsupported
+	./vcpkg.exe install $deps --triplet $triplet
 	
-	./vcpkg.exe install $deps --triplet $triplet_shared 
+	./vcpkg.exe install $shared_deps --triplet $triplet_shared 
 	
 	if ($upgrade = 1)
 	{

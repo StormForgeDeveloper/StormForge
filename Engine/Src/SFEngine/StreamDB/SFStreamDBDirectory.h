@@ -12,7 +12,7 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Online/StreamDB/SFStreamDB.h"
+#include "StreamDB/SFStreamDB.h"
 
 
 #ifdef USE_STREAMDB

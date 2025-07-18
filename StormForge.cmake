@@ -62,7 +62,7 @@ if(WIN32)
 	set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 	
 	set(ARTECTURE x64)
-	#set(VCPKG_TARGET_TRIPLET ${ARTECTURE}-windows-static)
+	set(VCPKG_TARGET_TRIPLET ${ARTECTURE}-windows-static)
 	set(VCPKG_SHARED_TRIPLET ${ARTECTURE}-windows)
 
 elseif(ANDROID_PLATFORM)
@@ -73,7 +73,6 @@ elseif(ANDROID_PLATFORM)
 
 	set(ARTECTURE ${CMAKE_ANDROID_ARCH_ABI})
 	set(VCPKG_TARGET_TRIPLET ${ARTECTURE}-android)
-	#set(VCPKG_SHARED_TRIPLET ${VCPKG_TARGET_TRIPLET})
 
 elseif(IOS)
 
@@ -85,7 +84,6 @@ elseif(IOS)
 
 	set(ARTECTURE ${CMAKE_OSX_ARCHITECTURES})
 	set(VCPKG_TARGET_TRIPLET ${ARTECTURE}-ios)
-	#set(VCPKG_SHARED_TRIPLET ${VCPKG_TARGET_TRIPLET})
 
 elseif(UNIX)
 
@@ -96,7 +94,6 @@ elseif(UNIX)
 
 	set(ARTECTURE x64)
 	set(VCPKG_TARGET_TRIPLET ${ARTECTURE}-linux)
-	#set(VCPKG_SHARED_TRIPLET ${VCPKG_TARGET_TRIPLET})
 
 endif()
 
@@ -111,6 +108,10 @@ set(CMAKE_INSTALL_RPATH $ORIGIN)
 include_directories(AFTER ${VCPKG_INSTALL}/include)
 
 if(WIN32)
+
+	set(VCPKG_INSTALL_SHARED ${VCPKG_DIR}/installed/${VCPKG_SHARED_TRIPLET})
+    include_directories(AFTER ${VCPKG_DIR}/installed/${VCPKG_SHARED_TRIPLET}/include)
+
 	link_directories(AFTER 
 		"${VCPKG_INSTALL}/$(Configuration)/lib"
 		"${VCPKG_INSTALL}/lib"
@@ -149,9 +150,10 @@ list(APPEND THIRDPARTY_LIBS jansson)
 #find_package(avro-c CONFIG REQUIRED)
 list(APPEND THIRDPARTY_LIBS avro)
 
-#find_package(PNG CONFIG REQUIRED)
+find_package(PNG CONFIG REQUIRED)
+list(APPEND THIRDPARTY_LIBS PNG::PNG)
 #list(APPEND THIRDPARTY_LIBS png16)
-list(APPEND THIRDPARTY_LIBS ${PNG_LIBRARY})
+#list(APPEND THIRDPARTY_LIBS ${PNG_LIBRARY})
 
 #find_package(jasper CONFIG REQUIRED)
 list(APPEND THIRDPARTY_LIBS jasper)
@@ -160,17 +162,12 @@ find_package(OpenEXR CONFIG REQUIRED)
 list(APPEND THIRDPARTY_LIBS OpenEXR::OpenEXR OpenEXR::Iex OpenEXR::IlmThread OpenEXR::OpenEXR OpenEXR::OpenEXRCore OpenEXR::OpenEXRUtil)
 
 find_package(libjpeg-turbo CONFIG REQUIRED)
-list(APPEND THIRDPARTY_LIBS libjpeg-turbo::jpeg-static)
+list(APPEND THIRDPARTY_LIBS jpeg $<IF:$<TARGET_EXISTS:libjpeg-turbo::turbojpeg>,libjpeg-turbo::turbojpeg,libjpeg-turbo::turbojpeg-static>)
 
 find_package(Freetype CONFIG REQUIRED)
 #unlike usage this doesn't work
 #list(APPEND THIRDPARTY_LIBS Freetype::Freetype)
 list(APPEND THIRDPARTY_LIBS freetype)
-
-find_package(msquic CONFIG REQUIRED)
-#unlike usage this doesn't work
-#list(APPEND THIRDPARTY_LIBS Freetype::Freetype)
-list(APPEND THIRDPARTY_LIBS msquic)
 
 #find_package(Iconv CONFIG REQUIRED)
 if(WIN32)
@@ -200,9 +197,10 @@ list(APPEND THIRDPARTY_LIBS websockets)
 find_package(libuv CONFIG REQUIRED)
 list(APPEND THIRDPARTY_LIBS $<IF:$<TARGET_EXISTS:libuv::uv_a>,libuv::uv_a,libuv::uv>)
 
-find_package(Libevent CONFIG REQUIRED)
+set(LIBEVENT_STATIC_LINK true)
+find_package(Libevent REQUIRED COMPONENTS core)
 #list(APPEND THIRDPARTY_LIBS libevent::core libevent::extra libevent::pthreads)
-list(APPEND THIRDPARTY_LIBS libevent::core libevent::extra)
+list(APPEND THIRDPARTY_LIBS libevent::core)
 
 find_package(CURL CONFIG REQUIRED)
 list(APPEND THIRDPARTY_LIBS CURL::libcurl)
@@ -212,10 +210,6 @@ else()
 	#list(APPEND THIRDPARTY_LIBS icudt icuin icuio icuuc icudata)
 	list(APPEND THIRDPARTY_LIBS icuio icuuc icudata)
 endif()
-
-
-find_package(RdKafka CONFIG REQUIRED)
-list(APPEND THIRDPARTY_LIBS RdKafka::rdkafka RdKafka::rdkafka++)
 
 
 find_package(Ogg CONFIG REQUIRED)
@@ -248,9 +242,28 @@ list(APPEND THIRDPARTY_LIBS protobuf::libprotoc protobuf::libprotobuf protobuf::
 find_package(recastnavigation CONFIG REQUIRED)
 list(APPEND THIRDPARTY_LIBS RecastNavigation::Detour RecastNavigation::Recast RecastNavigation::DebugUtils RecastNavigation::DetourCrowd)
 
-find_package(bson-1.0 CONFIG REQUIRED)
-list(APPEND THIRDPARTY_LIBS mongo::bson_static)
+#find_package(bson-1.0 CONFIG REQUIRED)
+#list(APPEND THIRDPARTY_LIBS mongo)
 
+find_package(bson-1.0 CONFIG REQUIRED)
+list(APPEND THIRDPARTY_LIBS $<IF:$<TARGET_EXISTS:mongo::bson_static>,mongo::bson_static,mongo::bson_shared>)
+
+
+#---------------------------------------------------------------------------------------
+if(WIN32)
+	set(CMAKE_PREFIX_PATH  "${VCPKG_INSTALL_SHARED}/")
+	
+endif()
+
+find_package(msquic CONFIG REQUIRED)
+list(APPEND THIRDPARTY_LIBS msquic)
+
+
+if(WIN32)
+	set(CMAKE_PREFIX_PATH  "${VCPKG_INSTALL}/")
+endif()
+
+#---------------------------------------------------------------------------------------
 
 add_definitions(-DHAVE_CONFIG_H=1)
 add_definitions(-DCURL_STATICLIB)

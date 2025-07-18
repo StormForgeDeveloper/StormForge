@@ -29,7 +29,6 @@
 #include "Net/SFNetSvrDef.h"
 #include "Net/SFNetCtrl.h"
 #include "Net/SFNetConst.h"
-#include "Net/SFNetCtrl.h"
 
 #include "msquic.h"
 
