@@ -58,7 +58,6 @@ namespace SF {
 	// Constructor/Destructor
 	EngineObjectManager::EngineObjectManager()
 		: LibraryComponent("EngineObjectManager")
-		, m_ObjectReferenceManager(GetEngineHeap())
 		, m_DetainedReleaseQueue0(GetEngineHeap())
 		, m_DetainedReleaseQueue1(GetEngineHeap())
 		, m_DetainedReleaseQueue2(GetEngineHeap())

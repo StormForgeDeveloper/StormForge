@@ -26,7 +26,6 @@ namespace SF {
 
 	ObjectManager::ObjectManager(IHeap& memoryManager, const StringCrc64& name)
 		: LibraryComponent(name)
-		, m_SharedObjectManager(memoryManager)
 	{
 	}
 

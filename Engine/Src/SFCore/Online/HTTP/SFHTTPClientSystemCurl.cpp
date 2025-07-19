@@ -136,7 +136,6 @@ namespace SF
 
 
     HTTPClientSystemCurl::HTTPClientSystemCurl()
-        : m_PendingAdd(GetSystemHeap())
     {
         m_hMulti = curl_multi_init();
         curl_multi_setopt(m_hMulti, CURLMOPT_PIPELINING, CURLPIPE_MULTIPLEX);

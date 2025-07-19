@@ -38,7 +38,6 @@ namespace SF {
 	public:
 
 		Heapmanager()
-			: SharedObjectManager(GetSystemHeap())
 		{
 			// TODO: Still working on this idea
 			//Start();

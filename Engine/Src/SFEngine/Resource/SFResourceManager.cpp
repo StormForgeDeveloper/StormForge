@@ -145,7 +145,6 @@ namespace SF
 	ResourceManager::ResourceManager()
 		: m_Heap("ResourceManager", GetEngineHeap())
 		, m_PackageByName(GetEngineHeap())
-		, m_ReferenceManager(GetEngineHeap())
 	{
 	}
 

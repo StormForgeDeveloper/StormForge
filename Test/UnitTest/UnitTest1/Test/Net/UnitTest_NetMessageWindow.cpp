@@ -831,7 +831,7 @@ TEST_F(NetTest, SendMessageWindowSimple)
 {
 	Heap testHeap("test", GetSystemHeap());
 
-	Net::SendMsgWindow msgWindow(testHeap);
+	Net::SendMsgWindow msgWindow;
 	
 
 	for (uint16_t startSequence = 0; startSequence < Net::MessageWindow::MESSAGE_QUEUE_SIZE * 2; startSequence++)
@@ -864,8 +864,7 @@ TEST_F(NetTest, SendMessageWindowSimple2)
 {
 	Heap testHeap("test", GetSystemHeap());
 
-	Net::SendMsgWindow msgWindow(testHeap);
-
+	Net::SendMsgWindow msgWindow;
 
 	for (uint16_t startSequence = 0; startSequence < Net::MessageWindow::MESSAGE_QUEUE_SIZE * 2; startSequence++)
 	{

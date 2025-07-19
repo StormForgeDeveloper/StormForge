@@ -178,9 +178,6 @@ namespace SF {
 		//TicketLock m_CircularBufferLock;
 		CriticalSection m_CircularBufferLock;
 
-		// heap
-		IHeap& m_Heap;
-
 		// page pool
 		StackPool m_PagePool;
 
@@ -194,13 +191,11 @@ namespace SF {
 		// constructor / destructor
 		// iDataPerPage: Data count per page
 		// initialCircularPageCount: Initial circular page count, iDataPerPage * initialCircularPageCount is the maximum item count for the queue
-		CircularPageQueue(IHeap& heap = GetSystemHeap(), int iDataPerPage = -1, int initialCircularPageCount = 64);
+		CircularPageQueue(int iDataPerPage = -1, int initialCircularPageCount = 64);
 		~CircularPageQueue(void);
 
 		// Dispose, clear all memory, after calling dispose you can't use queue anymore
 		void Dispose();
-
-		IHeap& GetHeap() { return m_Heap; }
 
 		// item enqueue, Thread safe
 		inline Result Enqueue( const DataType& item);
@@ -220,7 +215,6 @@ namespace SF {
 
 		// Clear queue and remove all enqueued items
 		// This operation is not thread safe
-        [[deprecated]]void ClearQueue() { Reset(); }
         void Reset();
 
 	};
@@ -236,8 +230,8 @@ namespace SF {
 	class CircularPageQueueAtomic : public CircularPageQueue<DataType, std::atomic<DataType>, CircularPageQueueStorageAccessorAtomic<DataType>>
 	{
 	public:
-		CircularPageQueueAtomic(IHeap& memoryManager, int iDataPerPage = -1, int initialCircularQueueSize = 64)
-			: CircularPageQueue<DataType,std::atomic<DataType>, CircularPageQueueStorageAccessorAtomic<DataType>>(memoryManager, iDataPerPage, initialCircularQueueSize)
+		CircularPageQueueAtomic(int iDataPerPage = -1, int initialCircularQueueSize = 64)
+			: CircularPageQueue<DataType,std::atomic<DataType>, CircularPageQueueStorageAccessorAtomic<DataType>>(iDataPerPage, initialCircularQueueSize)
 		{}
 
 

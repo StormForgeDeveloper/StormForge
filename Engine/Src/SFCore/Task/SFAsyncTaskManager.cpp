@@ -98,9 +98,7 @@ namespace SF {
 	//
 
 	AsyncTaskManager::AsyncTaskManager(int numThread)
-		: m_PendingTasks(GetEngineHeap())
-		, m_TaskWorkers(GetEngineHeap())
-		, m_NumThread(numThread)
+		: m_NumThread(numThread)
 	{
 	}
 

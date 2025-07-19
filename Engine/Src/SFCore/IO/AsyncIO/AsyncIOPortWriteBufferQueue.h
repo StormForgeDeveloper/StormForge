@@ -36,7 +36,7 @@ namespace SF {
 			typedef CircularPageQueueAtomic<IOBUFFER_WRITE*> super;
 
 		public:
-			WriteBufferQueue(IHeap& heap, uint uiNumElePerPage = 512);
+			WriteBufferQueue(uint uiNumElePerPage = 512);
 			virtual ~WriteBufferQueue();
 
 			// Clear queue element

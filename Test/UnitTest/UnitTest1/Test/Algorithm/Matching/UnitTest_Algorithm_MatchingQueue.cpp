@@ -118,7 +118,7 @@ public:
 		//m_QueueByPlayerCount.reserve(MAX_MATCHING_PLAYER - 1);
 		for (int iQueue = 0; iQueue < (MAX_MATCHING_PLAYER - 1); iQueue++)
 		{
-			m_QueueByPlayerCount[iQueue] = new(GetHeap()) CircularPageQueueAtomic<QueueItem*>(GetHeap(), 2048, 1024);
+			m_QueueByPlayerCount[iQueue] = new CircularPageQueueAtomic<QueueItem*>(2048, 1024);
 		}
 	}
 
@@ -133,10 +133,10 @@ public:
 			QueueItem* pItem = nullptr;
 			while (itQueue->Dequeue(pItem))
 			{
-				IHeap::Delete(pItem);
+				delete pItem;
 			}
 
-			IHeap::Delete(itQueue);
+			delete itQueue;
 		}
 		memset(m_QueueByPlayerCount, 0, sizeof(m_QueueByPlayerCount));
 		//m_QueueByPlayerCount.Clear();

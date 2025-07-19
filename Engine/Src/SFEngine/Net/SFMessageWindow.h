@@ -239,7 +239,7 @@ namespace Net {
 
 	public:
 		// Constructor
-		SendMsgWindow(IHeap& heap);
+		SendMsgWindow();
 		~SendMsgWindow();
 
 		//CriticalSection& GetLock()				{ return m_Lock; }

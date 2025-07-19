@@ -29,7 +29,7 @@ namespace SF
         , m_DataFormat(dataFormat)
         , m_BytesPerSample(Audio::GetBytesPerSample(numChannels, dataFormat))
         , m_SamplesPerSec(samplesPerSec)
-        , m_DataQueue(GetSystemHeap(), 8)
+        , m_DataQueue(8)
     {
         m_HeapPtr = new(GetSystemHeap()) CircularHeap(GetSystemHeap(), streamingBufferSize);
     }

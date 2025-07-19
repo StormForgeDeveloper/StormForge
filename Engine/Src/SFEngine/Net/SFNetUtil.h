@@ -113,7 +113,7 @@ namespace Net {
 		typedef CircularPageQueue<SharedPointerT<MessageData>>super;
 
 	public:
-		MsgQueue(IHeap& memoryManager, uint uiNumElePerPage = 512);
+		MsgQueue(uint uiNumElePerPage = 512);
 		virtual ~MsgQueue();
 
 		// Clear queue element
@@ -127,7 +127,7 @@ namespace Net {
 		typedef CircularPageQueueAtomic<IOBUFFER_WRITE*> super;
 
 	public:
-		WriteBufferQueue(IHeap& memoryManager, uint uiNumElePerPage = 512);
+		WriteBufferQueue(uint uiNumElePerPage = 512);
 		virtual ~WriteBufferQueue();
 
 		// Clear queue element

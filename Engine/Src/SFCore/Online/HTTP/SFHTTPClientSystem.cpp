@@ -37,8 +37,6 @@ namespace SF
 
 
     HTTPClientSystem::HTTPClientSystem()
-        : m_HTTPClientManager(GetSystemHeap())
-        , m_PendingEvent(GetSystemHeap())
     {
     }
 

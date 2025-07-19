@@ -26,8 +26,8 @@ namespace SF {
 	//	Internal implementation
 	//
 
-	SharedObjectManager::SharedObjectManager(IHeap& heap)
-		: m_FreeQueue(heap, 2048, 1024)
+	SharedObjectManager::SharedObjectManager()
+		: m_FreeQueue(2048, 1024)
 		, m_ObjectCount(0)
 #ifdef REFERENCE_DEBUG_TRACKING
 		, DeletedObjects(0);

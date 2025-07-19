@@ -32,9 +32,6 @@ namespace SF {
 		: m_FailSafeTimerTickInterval(500)
 		, m_AssertOnInvalidTickTime(false)
 		, m_TimerMap(heap)
-		//, m_WorkingThreadID(0)
-		//, m_IsWriteLocked(0)
-		, m_RescheduleQueue(heap)
 	{
 	}
 

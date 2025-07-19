@@ -61,7 +61,7 @@ namespace SF {
 
 	public:
 
-		SharedObjectManager(IHeap& heap);
+		SharedObjectManager();
 		virtual ~SharedObjectManager();
 
 		// GetPending free item count

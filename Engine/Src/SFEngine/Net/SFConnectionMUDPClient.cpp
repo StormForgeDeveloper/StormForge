@@ -138,7 +138,6 @@ namespace Net {
 
 	ConnectionMUDPClient::MyNetSocketIOManager::MyNetSocketIOManager(ConnectionMUDPClient& owner)
 		: m_Owner(owner)
-		, m_PendingFree(owner.GetHeap())
 	{
 	}
 

@@ -31,8 +31,8 @@ namespace SF {
 	namespace AsyncIO {
 
 
-		WriteBufferQueue::WriteBufferQueue(IHeap& heap, uint uiNumElePerPage)
-			: CircularPageQueueAtomic<IOBUFFER_WRITE*>(heap, uiNumElePerPage)
+		WriteBufferQueue::WriteBufferQueue(uint uiNumElePerPage)
+			: CircularPageQueueAtomic<IOBUFFER_WRITE*>(uiNumElePerPage)
 		{
 		}
 

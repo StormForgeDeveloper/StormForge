@@ -93,7 +93,6 @@ namespace SF {
 			, m_ConnectionEventDelegates(GetHeap())
 			, m_RecvMessageDelegates(GetHeap())
 			, m_IOHandler(ioHandler)
-			, m_EventQueue(GetHeap())
 			, m_ulConnectingTimeOut(Const::CONNECTION_TIMEOUT)
 			, m_usSeqNone(0)
 			, m_ulZeroLengthRecvCount(0)

@@ -13,9 +13,8 @@ namespace SF {
 
 
 		template <class DataType, class DataStorageType, class StorageAccessor>
-		CircularPageQueue<DataType,DataStorageType, StorageAccessor>::CircularPageQueue(IHeap& heap, int iDataPerPage, int initialCircularPageCount)
+		CircularPageQueue<DataType,DataStorageType, StorageAccessor>::CircularPageQueue(int iDataPerPage, int initialCircularPageCount)
 			: m_TotalPageCount(initialCircularPageCount)
-			, m_Heap(heap)
 		{
 			// get page item count
 			if (iDataPerPage <= 0)
@@ -30,7 +29,7 @@ namespace SF {
 			m_NumberOfItemsPerPage = iDataPerPage;
 
 #if defined(CIRCULARPAGEQUEUE_TRACE_PAGE)
-			m_PageDebug = new(GetHeap()) PageDebug[m_TotalPageCount];
+			m_PageDebug = new PageDebug[m_TotalPageCount];
 			memset(m_PageDebug, 0, sizeof(PageDebug) * m_TotalPageCount);
 #endif
 
@@ -54,12 +53,15 @@ namespace SF {
 		CircularPageQueue<DataType,DataStorageType, StorageAccessor>::~CircularPageQueue(void)
 		{
 			Reset();
-			IHeap::Delete(m_CircularPages);
-			m_CircularPages = nullptr;
+            if (m_CircularPages != nullptr)
+            {
+                delete[] m_CircularPages;
+                m_CircularPages = nullptr;
+            }
 
 			for (auto pPoolItem = m_PagePool.Pop(); pPoolItem != nullptr; pPoolItem = m_PagePool.Pop())
 			{
-				IHeap::Delete((Page*)pPoolItem);
+                GetSystemHeap().Free(pPoolItem);
 			}
 		}
 
@@ -68,17 +70,20 @@ namespace SF {
 		{
 			Reset();
 
-			IHeap::Delete(m_CircularPages);
-			m_CircularPages = nullptr;
+            if (m_CircularPages != nullptr)
+            {
+                delete[] m_CircularPages;
+                m_CircularPages = nullptr;
+            }
 
 			for (auto pPoolItem = m_PagePool.Pop(); pPoolItem != nullptr; pPoolItem = m_PagePool.Pop())
 			{
-				IHeap::Delete((Page*)pPoolItem);
+				GetSystemHeap().Free(pPoolItem);
 			}
 
 #if defined(CIRCULARPAGEQUEUE_TRACE_PAGE)
 			if(m_PageDebug != nullptr)
-				IHeap::Delete(m_PageDebug);
+				delete[] m_PageDebug;
 #endif
 		}
 
@@ -91,12 +96,12 @@ namespace SF {
 			auto pPoolItem = m_PagePool.Pop();
 			if (pPoolItem != nullptr)
 			{
-				pNewPage = (Page*)pPoolItem;
+				pNewPage = static_cast<Page*>(pPoolItem);
 				pNewPage->Header.Init();
 			}
 			else
 			{
-				auto pNewPageBuff = new(GetHeap()) uint8_t[GetPageMemorySize()];
+				auto pNewPageBuff = GetSystemHeap().Alloc(GetPageMemorySize());
 				pNewPage = new(pNewPageBuff) Page(m_NumberOfItemsPerPage);
 			}
 
@@ -124,7 +129,7 @@ namespace SF {
 			pPage->DeleteElements(m_NumberOfItemsPerPage);
 
 			if (m_PagePool.size() > 2)
-				IHeap::Free((uint8_t*)pPage);
+				delete (uint8_t*)pPage;
 			else
 				m_PagePool.Push(pPage);
 		}

@@ -39,10 +39,6 @@ namespace SF {
 	// Constructor/Destructor
 	EngineTaskManager::EngineTaskManager()
 		: LibraryComponent("EngineTaskManager")
-		, m_EngineNewTask(GetEngineHeap())
-		, m_RenderingNewTask(GetEngineHeap())
-		, m_EngineTickAction(GetEngineHeap())
-
 	{
 		m_AsyncTaskHandler = TaskFinishedEventDelegate{ 
 			uintptr_t(this), 

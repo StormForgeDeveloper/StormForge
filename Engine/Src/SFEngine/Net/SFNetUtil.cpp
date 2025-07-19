@@ -867,8 +867,8 @@ namespace Net {
 	//	Packet message queue class
 	//
 
-	MsgQueue::MsgQueue(IHeap& memoryManager, uint uiNumElePerPage)
-		: CircularPageQueue<MessageDataPtr>(memoryManager, uiNumElePerPage)
+	MsgQueue::MsgQueue(uint uiNumElePerPage)
+		: CircularPageQueue<MessageDataPtr>(uiNumElePerPage)
 	{
 	}
 
@@ -890,8 +890,8 @@ namespace Net {
 	}
 
 
-	WriteBufferQueue::WriteBufferQueue(IHeap& memoryManager, uint uiNumElePerPage)
-		: CircularPageQueueAtomic<IOBUFFER_WRITE*>(memoryManager, uiNumElePerPage)
+	WriteBufferQueue::WriteBufferQueue(uint uiNumElePerPage)
+		: CircularPageQueueAtomic<IOBUFFER_WRITE*>(uiNumElePerPage)
 	{
 	}
 

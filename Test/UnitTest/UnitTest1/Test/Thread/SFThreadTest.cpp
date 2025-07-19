@@ -95,10 +95,9 @@ public:
 	static SyncCounter WorkedItems;
 	static SyncCounter SkippedWorkedItems;
 
-	TaskWorkerThread(IHeap& heap)
+	TaskWorkerThread()
 		: Thread("TaskWorkerThread")
 		, m_TaskWorkerInterval(DurationMS(1))
-		, m_WorkItemQueue(heap)
 	{
 	}
 
@@ -198,16 +197,12 @@ private:
 	SharedObjectManager m_ReferenceManager;
 	std::unordered_map<uint, SharedPointerT<WorkingEntity>> m_EntityManager;
 
-	IHeap& m_Heap;
-
 public:
 
-	EntityTaskManager(IHeap& heap)
+	EntityTaskManager()
 		: m_NumberOfWorker(5)
 		, m_NumberOfTestEntity(100)
 		, m_LatestAssignedWorkerID(0)
-		, m_ReferenceManager(heap)
-		, m_Heap(heap)
 	{
 
 	}
@@ -217,13 +212,11 @@ public:
 
 	}
 
-	IHeap& GetHeap() { return m_Heap; }
-
 	Result InitializeTaskManager()
 	{
 		for (uint worker = 0; worker < m_NumberOfWorker; worker++)
 		{
-			auto pWorker = new TaskWorkerThread(m_Heap);
+			auto pWorker = new TaskWorkerThread;
 
 			m_Workers.push_back(pWorker);
 
@@ -234,7 +227,7 @@ public:
 		for (uint entity = 0; entity < m_NumberOfTestEntity; entity++)
 		{
 			uint entityID = entity + 1;
-			auto entityPtr = new(GetHeap()) WorkingEntity(entityID);
+			auto entityPtr = new WorkingEntity(entityID);
 			m_ReferenceManager.RegisterSharedObject(entityPtr);
 			m_EntityManager.insert(std::make_pair(entityID, entityPtr));
 		}
@@ -263,7 +256,7 @@ public:
 		SharedPointerT<WorkingEntity> entity;
 		if (itEntity == m_EntityManager.end())
 		{
-			auto newObject = new(GetHeap()) WorkingEntity(entityID);
+			auto newObject = new WorkingEntity(entityID);
 			newObject->TestID = entityID;
 			m_ReferenceManager.RegisterSharedObject(newObject);
 
@@ -319,7 +312,7 @@ TEST_F(ThreadTest, EntityTaskManager)
 	//const int64_t TEST_LENGTH = 999999;
 	const int64_t TEST_LENGTH = TestScale * 9999999;
 
-	entityManager = new EntityTaskManager(GetHeap());
+	entityManager = new EntityTaskManager;
 	entityManager->InitializeTaskManager();
 
 	for (int64_t ID = 0; ID < TEST_LENGTH; ID++)

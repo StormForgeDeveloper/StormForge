@@ -387,17 +387,17 @@ namespace Net {
 	//
 
 
-	SendMsgWindow::SendMsgWindow(IHeap& heap)
-        : m_ReleasedMessageSequences(heap, 64, 4)
+	SendMsgWindow::SendMsgWindow()
+        : m_ReleasedMessageSequences(64, 4)
 	{
-		m_pMsgWnd = new(heap) WindowMessageData[MessageWindow::MESSAGE_QUEUE_SIZE];
+		m_pMsgWnd = new WindowMessageData[MessageWindow::MESSAGE_QUEUE_SIZE];
 	}
 
 	SendMsgWindow::~SendMsgWindow()
 	{
 		ClearWindow();
 		if (m_pMsgWnd != nullptr)
-			IHeap::Delete(m_pMsgWnd);
+			delete[] m_pMsgWnd;
 		m_pMsgWnd = nullptr;
 	}
 
