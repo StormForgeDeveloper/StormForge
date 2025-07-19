@@ -59,10 +59,9 @@ namespace SF {
 
 	private:
 
-		MemoryPool* m_MemoryPool;
-
 		// Free UID list
-		StackPool			m_FreeIDs;
+		StackPool	m_FreeIDs;
+        StackPool	m_FreeIDItems;
 
 		// Counter for new ID
 		SyncCounter			m_CounterForID;

@@ -39,14 +39,14 @@ using namespace SF;
 
 SFDLL_EXPORT intptr_t SFConnection_NativeCreateConnection()
 {
-	auto pConnection = new(Service::NetSystem->GetHeap()) Net::ConnectionMUDPClient(Service::NetSystem->GetHeap());
+	auto pConnection = new Net::ConnectionMUDPClient();
 	SharedReferenceInc inc(pConnection);
 	return NativeObjectToIntptr(pConnection);
 }
 
 SFDLL_EXPORT intptr_t SFConnection_NativeCreateConnectionTCP()
 {
-	auto pConnection = new(Service::NetSystem->GetHeap()) Net::ConnectionTCPClient(Service::NetSystem->GetHeap());
+	auto pConnection = new Net::ConnectionTCPClient();
 	SharedReferenceInc inc(pConnection);
 
 	return NativeObjectToIntptr(pConnection);

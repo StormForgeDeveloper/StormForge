@@ -39,7 +39,7 @@ namespace SF
 
 SFDLL_EXPORT intptr_t SFOnlineNotificationClient_NativeCreate()
 {
-	auto pOnlineNotificationClient = NewObject<OnlineNotificationClient>(GetEngineHeap());
+	auto pOnlineNotificationClient = NewObject<OnlineNotificationClient>();
 	Service::EngineObjectManager->AddToDetainedRelease(pOnlineNotificationClient.StaticCast<SharedObject>());
 
 	return NativeObjectToIntptr(pOnlineNotificationClient.get());

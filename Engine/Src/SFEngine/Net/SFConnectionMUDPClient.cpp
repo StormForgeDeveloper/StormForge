@@ -301,8 +301,8 @@ namespace Net {
 	}
 
 	// Constructor
-	ConnectionMUDPClient::ConnectionMUDPClient(IHeap& heap)
-		: ConnectionMUDP(heap, nullptr)
+	ConnectionMUDPClient::ConnectionMUDPClient()
+		: ConnectionMUDP(nullptr)
 		, m_NetIOAdapterManager(*this)
 		, m_ReliableSyncTime()
 	{

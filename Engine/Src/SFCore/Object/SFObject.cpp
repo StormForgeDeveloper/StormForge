@@ -29,14 +29,9 @@ namespace SF {
 	// base object
 	//
 
-	Object::Object(IHeap* heap, const StringCrc64& name)
+	Object::Object(const StringCrc64& name)
 		: m_Name(name)
-		, m_Heap(heap)
 	{
-		if (m_Heap == nullptr)
-		{
-			m_Heap = GetEngineHeapPtr();
-		}
 	}
 
 	Object::~Object()

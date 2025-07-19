@@ -58,7 +58,7 @@ namespace SF
 
 	public:
 
-        StreamDBDirectory(IHeap& heap, const StringCrc32& directoryType, const StringCrc64& name);
+        StreamDBDirectory(const StringCrc32& directoryType, const StringCrc64& name);
 		virtual ~StreamDBDirectory();
 
 		StringCrc32 GetDirectoryType() const { return m_DirectoryType; }
@@ -93,7 +93,7 @@ namespace SF
 
 	public:
 
-        StreamDBDirectoryBroker(IHeap& heap);
+        StreamDBDirectoryBroker();
         virtual ~StreamDBDirectoryBroker();
 
 		virtual Result Initialize(const String& serverAddress) override;
@@ -136,7 +136,7 @@ namespace SF
 
 	public:
 
-        StreamDBDirectoryClient(IHeap& heap);
+        StreamDBDirectoryClient();
 		virtual ~StreamDBDirectoryClient();
 
 		virtual Result Initialize(const String& serverAddress) override;

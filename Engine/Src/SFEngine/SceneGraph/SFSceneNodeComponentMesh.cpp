@@ -35,10 +35,8 @@ namespace SF {
 
 
 	// Constructor
-	SceneNodeComponentMesh::SceneNodeComponentMesh(IHeap& heap, const StringCrc64& name)
-		: SceneNodeComponent(heap, name)
-		, m_MergedMaterials(heap)
-		, m_SubMeshes(heap)
+	SceneNodeComponentMesh::SceneNodeComponentMesh(const StringCrc64& name)
+		: SceneNodeComponent(name)
 	{
 		memset(&m_CloneFlags, 0, sizeof(m_CloneFlags));
 
@@ -108,7 +106,7 @@ namespace SF {
 	// child component should overrride this for clone
 	SceneNodeComponent* SceneNodeComponentMesh::Clone(const SceneCloneContext& cloneFlags, SceneNode* newOwner)
 	{
-		auto newComponent = new(cloneFlags.Heap) SceneNodeComponentMesh(cloneFlags.Heap);
+		auto newComponent = new SceneNodeComponentMesh();
 		if (newComponent == nullptr)
 			return nullptr;
 

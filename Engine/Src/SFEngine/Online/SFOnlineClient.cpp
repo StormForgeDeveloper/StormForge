@@ -360,7 +360,7 @@ namespace SF
 
 			Disconnect();
 
-			m_Owner.m_Game = new(GetHeap()) Net::ConnectionTCPClient(GetHeap());
+			m_Owner.m_Game = new(GetHeap()) Net::ConnectionTCPClient();
 			GetConnection()->SetEventFireMode(Net::Connection::EventFireMode::OnGameTick);
 
             WeakPointerT<ClientTask_JoinGameServer> WeakThis = AsSharedPtr<ClientTask_JoinGameServer>();
@@ -604,7 +604,7 @@ namespace SF
 
 			Disconnect();
 
-			m_Owner.m_GameInstance = new(GetHeap()) Net::ConnectionUDPClient(GetHeap());
+			m_Owner.m_GameInstance = new(GetHeap()) Net::ConnectionUDPClient();
 			GetConnection()->SetEventFireMode(Net::Connection::EventFireMode::OnGameTick);
 
             WeakPointerT<ClientTask_JoinGameInstanceServer> WeakThis = AsSharedPtr<ClientTask_JoinGameInstanceServer>();
@@ -820,11 +820,11 @@ namespace SF
 	//	OnlineClient class
 	// 
 
-	OnlineClient::OnlineClient(IHeap& heap)
-		: EngineObject(new(heap) IHeap("OnlineClient", &heap), "OnlineClient")
-		, m_OnlineStateChangedQueue(GetHeap())
-        , m_OnlineActorByActorId(GetHeap())
-        , m_ComponentManager(GetHeap())
+	OnlineClient::OnlineClient()
+		: EngineObject("OnlineClient")
+		, m_OnlineStateChangedQueue()
+        , m_OnlineActorByActorId()
+        , m_ComponentManager()
 	{
 	}
 

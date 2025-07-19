@@ -37,7 +37,7 @@ namespace SF
 
 	public:
 
-        OnlineSessionGame(IHeap& heap, StringCrc32 gameId);
+        OnlineSessionGame(StringCrc32 gameId);
 		virtual ~OnlineSessionGame();
 
 	private:

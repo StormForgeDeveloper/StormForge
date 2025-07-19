@@ -49,7 +49,7 @@ namespace SF
 
     public:
 
-        OnlineNotificationClient(IHeap& heap);
+        OnlineNotificationClient();
         virtual ~OnlineNotificationClient();
 
 		SF_FORCEINLINE IHeap& GetHeap() const { return GetSystemHeap(); }

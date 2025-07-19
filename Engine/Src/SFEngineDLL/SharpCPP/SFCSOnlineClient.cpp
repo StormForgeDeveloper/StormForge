@@ -45,7 +45,7 @@ using namespace SF;
 
 SFDLL_EXPORT intptr_t SFOnlineClient_NativeCreateOnlineClient()
 {
-	auto pOnlineClient = NewObject<OnlineClient>(GetEngineHeap());
+	auto pOnlineClient = NewObject<OnlineClient>();
 	Service::EngineObjectManager->AddToDetainedRelease(pOnlineClient.StaticCast<SharedObject>());
 
 	return NativeObjectToIntptr(pOnlineClient.get());

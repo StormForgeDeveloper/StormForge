@@ -24,7 +24,7 @@ namespace SF {
 			if (m_TotalPageCount < 4) m_TotalPageCount = 4;
 			m_TotalPageCount = Util::NearPowerOf2(m_TotalPageCount);
 
-			m_CircularPages = new(GetHeap()) std::atomic<Page*>[m_TotalPageCount];
+			m_CircularPages = new std::atomic<Page*>[m_TotalPageCount];
 			// This is dangerous, but fast
 			memset(m_CircularPages, 0, sizeof(std::atomic<Page*>) * m_TotalPageCount);
 			m_NumberOfItemsPerPage = iDataPerPage;

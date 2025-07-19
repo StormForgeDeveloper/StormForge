@@ -68,7 +68,7 @@ namespace SF {
 
 		public:
 			// Constructor
-			ConnectionQuic(IHeap& heap);
+			ConnectionQuic();
 			virtual ~ConnectionQuic();
 
 
@@ -141,7 +141,7 @@ namespace SF {
 
 		public:
 			// Constructor
-			ConnectionQuicClient(IHeap& heap);
+			ConnectionQuicClient();
 			~ConnectionQuicClient();
 
 			// Initialize connection
@@ -168,7 +168,7 @@ namespace SF {
 
 		public:
 			// Constructor
-			ConnectionQuicServer(IHeap& heap);
+			ConnectionQuicServer();
 			~ConnectionQuicServer();
 
 		};

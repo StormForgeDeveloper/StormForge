@@ -57,8 +57,8 @@ namespace Net {
 	//
 
 	// Constructor
-	ConnectionPeerTCP::ConnectionPeerTCP(IHeap& heap)
-		: ConnectionTCP(heap)
+	ConnectionPeerTCP::ConnectionPeerTCP()
+		: ConnectionTCP()
 	{
 		//GetRecvBuffer()->SetupRecvTCP( GetCID() );
 		SetConnectingTimeOut(Const::SVR_CONNECTION_TIMEOUT);

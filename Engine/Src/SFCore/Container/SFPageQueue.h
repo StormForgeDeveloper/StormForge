@@ -126,8 +126,6 @@ namespace SF
 
 	private:
 
-		IHeap& m_Heap;
-
 		// page header pointer
 		Atomic<Page*> m_EnqueuePage;
 		Atomic<Page*> m_EnqueueNextPage;
@@ -153,10 +151,8 @@ namespace SF
 
 	public:
 		// constructor / destructor
-		PageQueue(IHeap& heap, int iDataPerPage = -1 );
+		PageQueue(IHeap& heap = GetSystemHeap(), int iDataPerPage = -1);
 		~PageQueue(void);
-
-		SF_FORCEINLINE IHeap& GetHeap() { return m_Heap; }
 
 		// item enqueue
 		inline Result Enqueue(const DataType& item);

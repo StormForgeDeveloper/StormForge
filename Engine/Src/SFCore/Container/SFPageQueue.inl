@@ -40,8 +40,7 @@ namespace SF
 
 	template <class DataType>
 	PageQueue<DataType>::PageQueue(IHeap& heap, int iDataPerPage)
-		: m_Heap(heap)
-		, m_NumberOfItemsPerPage(0)
+		: m_NumberOfItemsPerPage(0)
 		, m_PageIndex(0)
 	{
 		// get page item count
@@ -102,7 +101,7 @@ namespace SF
 	{
 		void *pNewPageBuff = nullptr;
 
-		pNewPageBuff = GetHeap().Alloc(GetPageMemorySize());
+		pNewPageBuff = GetSystemHeap().Alloc(GetPageMemorySize());
 
 		Page *pNewPage = new(pNewPageBuff) Page(m_NumberOfItemsPerPage);
 		pNewPage->Header.PageID = m_PageIndex++;
@@ -117,7 +116,7 @@ namespace SF
 
 		pPage->DeleteElements(m_NumberOfItemsPerPage);
 
-		GetHeap().Free(pPage);
+        GetSystemHeap().Free(pPage);
 	}
 
 	template <class DataType>

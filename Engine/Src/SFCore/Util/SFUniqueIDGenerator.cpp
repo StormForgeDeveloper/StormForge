@@ -17,10 +17,8 @@
 namespace SF {
 
 	UniqueIDGenerator::UniqueIDGenerator(IHeap& heap)
-		: m_MemoryPool(nullptr)
-		, m_CounterForID(1)
+		: m_CounterForID(1)
 	{
-		m_MemoryPool = MemoryPoolManager::GetMemoryPoolBySize(sizeof(Item));
 	}
 
 	UniqueIDGenerator::~UniqueIDGenerator()
@@ -31,12 +29,13 @@ namespace SF {
 	uint UniqueIDGenerator::NewID()
 	{
 		uint uiNewID = 0;
-		Item *pItem = (Item*)m_FreeIDs.Pop();
+		Item *pItem = static_cast<Item*>(m_FreeIDs.Pop());
 
 		if( pItem )
 		{
 			uiNewID = pItem->UID;
-			m_MemoryPool->Free(pItem);
+            pItem->UID = 0;
+            m_FreeIDItems.Push(pItem);
 		}
 		else
 		{
@@ -51,8 +50,11 @@ namespace SF {
 	// Free Generated ID
 	bool UniqueIDGenerator::FreeID( uint uiID )
 	{
-		void* pPtr = m_MemoryPool->Alloc(m_MemoryPool->GetAllocSize());
-		Item *pItem = new(pPtr) Item;
+        Item* pItem = static_cast<Item*>(m_FreeIDItems.Pop());
+        if (pItem == nullptr)
+        {
+            pItem = new Item;
+        }
 
 		pItem->UID = uiID;
 
@@ -71,6 +73,13 @@ namespace SF {
 			IHeap::Delete(pMyItem);
 		});
 		m_FreeIDs.Clear();
+
+        m_FreeIDItems.for_each([](StackPool::Item* pItem)
+            {
+                Item* pMyItem = (Item*)pItem;
+                IHeap::Delete(pMyItem);
+            });
+        m_FreeIDItems.Clear();
 		m_CounterForID = 0;
 	}
 

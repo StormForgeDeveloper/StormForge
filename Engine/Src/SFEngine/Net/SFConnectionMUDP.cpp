@@ -56,8 +56,8 @@ namespace SF {
 
 
 		// Constructor
-		ConnectionMUDP::ConnectionMUDP(IHeap& heap, SocketIO* ioHandler)
-			: ConnectionUDPBase(heap, ioHandler)
+		ConnectionMUDP::ConnectionMUDP(SocketIO* ioHandler)
+			: ConnectionUDPBase(ioHandler)
 		{
 			// limit server net retry maximum
 			SetMaxGuarantedRetry(Const::UDP_CLI_RETRY_ONETIME_MAX);

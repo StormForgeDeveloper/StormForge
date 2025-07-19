@@ -40,8 +40,8 @@ namespace Net {
 
 	public:
 		
-		ConnectionUDP(IHeap& heap, SocketIO* ioHandler)
-			: ConnectionUDPBase(heap, ioHandler)
+		ConnectionUDP(SocketIO* ioHandler)
+			: ConnectionUDPBase(ioHandler)
 		{}
 
 
@@ -98,7 +98,7 @@ namespace Net {
 
 	public:
 		// Constructor
-		ConnectionUDPClient(IHeap& memoryManager);
+		ConnectionUDPClient();
 		~ConnectionUDPClient();
 
 		virtual void Dispose() override;

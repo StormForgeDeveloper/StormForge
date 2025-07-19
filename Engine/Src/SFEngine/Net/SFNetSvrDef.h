@@ -68,7 +68,7 @@ namespace SF {
 
 		public:
 
-			ServerNet(IHeap& heap, ServerID InServerID, NetClass localClass);
+			ServerNet(ServerID InServerID, NetClass localClass);
 			virtual ~ServerNet();
 
 			ServerID GetServerID() const { return m_ServerID; }

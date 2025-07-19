@@ -45,7 +45,7 @@ namespace Net {
 
 	public:
 		// Constructor
-		ConnectionMUDP(IHeap& heap, SocketIO* ioHandler);
+		ConnectionMUDP(SocketIO* ioHandler);
 		virtual ~ConnectionMUDP();
 	protected:
 
@@ -161,7 +161,7 @@ namespace Net {
 
 	public:
 		// Constructor
-		ConnectionMUDPClient(IHeap& heap);
+		ConnectionMUDPClient();
 		virtual ~ConnectionMUDPClient();
 
         SF_FORCEINLINE MyNetSocketIOManager& GetNetIOAdapterManager() { return m_NetIOAdapterManager; }

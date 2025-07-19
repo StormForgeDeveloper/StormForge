@@ -26,11 +26,10 @@ namespace SF
 	//	OnlineSession class
 	// 
 
-    OnlineSession::OnlineSession(IHeap& heap, StringCrc32 sessionTypeName, StringCrc32 gameId)
-        : EngineObject(new(heap) IHeap("OnlineSession", &heap), "OnlineSession")
+    OnlineSession::OnlineSession(StringCrc32 sessionTypeName, StringCrc32 gameId)
+        : EngineObject("OnlineSession")
         , m_SessionTypeName(sessionTypeName)
         , m_GameId(gameId)
-        , m_ComponentManager(GetHeap())
 	{
 	}
 

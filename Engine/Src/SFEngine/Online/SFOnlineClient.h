@@ -114,7 +114,7 @@ namespace SF
 
 	public:
 
-		OnlineClient(IHeap& heap);
+		OnlineClient();
 		virtual ~OnlineClient();
 
         virtual Result InitializeObject() override;

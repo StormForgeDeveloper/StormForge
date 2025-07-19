@@ -50,9 +50,9 @@ namespace Net {
 	//
 
 	// Constructor
-	ConnectionQuic::ConnectionQuic(IHeap& heap)
-		: Connection(heap, nullptr)
-        , m_SendBufferQueue(heap, Const::TCP_CONNECTION_SENDBUFFER_SIZE)
+	ConnectionQuic::ConnectionQuic()
+		: Connection(nullptr)
+        , m_SendBufferQueue(/*Const::TCP_CONNECTION_SENDBUFFER_SIZE*/)
 		, m_ReceivedDataSize(0)
 		, m_IsClientConnection(false)
 	{
@@ -392,8 +392,8 @@ namespace Net {
 	//
 
 	// Constructor
-	ConnectionQuicClient::ConnectionQuicClient(IHeap& heap)
-		: ConnectionQuic(heap)
+	ConnectionQuicClient::ConnectionQuicClient()
+		: ConnectionQuic()
 	{
 		// We can't set tick here. There is a small chance that tick update finished before this object's reference count got increased
 		//SetTickGroup(EngineTaskTick::AsyncTick);
@@ -430,8 +430,8 @@ namespace Net {
 	//
 
 	// Constructor
-	ConnectionQuicServer::ConnectionQuicServer(IHeap& heap)
-		: ConnectionQuic(heap)
+	ConnectionQuicServer::ConnectionQuicServer()
+		: ConnectionQuic()
 	{
 		//Assert(GetMyNetIOAdapter().GetWriteQueue() != nullptr);
 

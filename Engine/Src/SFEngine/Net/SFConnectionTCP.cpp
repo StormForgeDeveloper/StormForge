@@ -255,10 +255,10 @@ namespace Net {
 	//
 
 	// Constructor
-	ConnectionTCP::ConnectionTCP(IHeap& heap)
-		: Connection(heap, &m_NetIOAdapter)
+	ConnectionTCP::ConnectionTCP()
+		: Connection(&m_NetIOAdapter)
 		, m_NetIOAdapter(*this)
-        , m_SendBufferQueue(heap, Const::TCP_CONNECTION_SENDBUFFER_SIZE)
+        , m_SendBufferQueue(GetSystemHeap(), Const::TCP_CONNECTION_SENDBUFFER_SIZE)
 		, m_ReceivedDataSize(0)
 		, m_uiSendNetCtrlCount(0)
 		, m_IsClientConnection(false)
@@ -791,8 +791,8 @@ namespace Net {
 	//
 
 	// Constructor
-	ConnectionTCPClient::ConnectionTCPClient(IHeap& heap)
-		: ConnectionTCP(heap)
+	ConnectionTCPClient::ConnectionTCPClient()
+		: ConnectionTCP()
 	{
 		// We can't set tick here. There is a small chance that tick update finished before this object's reference count got increased
 		//SetTickGroup(EngineTaskTick::AsyncTick);
@@ -829,8 +829,8 @@ namespace Net {
 	//
 
 	// Constructor
-	ConnectionTCPServer::ConnectionTCPServer(IHeap& heap)
-		: ConnectionTCP(heap)
+	ConnectionTCPServer::ConnectionTCPServer()
+		: ConnectionTCP()
 	{
 		//Assert(GetMyNetIOAdapter().GetWriteQueue() != nullptr);
 

@@ -72,12 +72,11 @@ namespace SF {
 
 
 	// Constructor
-	EngineObject::EngineObject(IHeap* heap, const StringCrc64& name)
-		: Object(heap, name)
+	EngineObject::EngineObject(const StringCrc64& name)
+		: Object(name)
 		, m_TickFlags(0)
 		, m_ActuallyRegistered(false)
 		, m_ManagerListNodes(this)
-		, m_ComponentManager(GetHeap())
 	{
 		for (int iNode = 0; iNode < (int)EngineTaskTick::Max; iNode++)
 		{

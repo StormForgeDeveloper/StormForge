@@ -26,11 +26,9 @@ namespace SF
 	//	class OnlineNotificationClient
 	//
 
-	OnlineNotificationClient::OnlineNotificationClient(IHeap& heap)
-		: EngineObject(&heap,"OnlineNotificationClient"_crc64)
-        , m_Client(heap)
-        , m_ReceivedResultQueue(heap)
-        , m_ListeningAPINames(heap)
+	OnlineNotificationClient::OnlineNotificationClient()
+		: EngineObject("OnlineNotificationClient"_crc64)
+        , m_Client("OnlineNotificationClient")
 	{
 	}
 

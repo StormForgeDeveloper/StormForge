@@ -35,7 +35,7 @@ namespace SF {
 
 	// Constructor
 	SceneNode::SceneNode(IHeap& heap, const StringCrc64& name)
-		: Object(&heap, name)
+		: Object(name)
 		, m_Children(heap)
 		, m_ChildrenToRemove(heap)
 		, m_NodeComponents(heap)

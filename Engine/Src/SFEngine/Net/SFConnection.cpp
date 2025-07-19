@@ -85,8 +85,8 @@ namespace SF {
 		//
 
 
-		Connection::Connection(IHeap& heap, SocketIO* ioHandler)
-			: EngineObject(new(heap) IHeap("Connection", &heap), "Connection")
+		Connection::Connection(SocketIO* ioHandler)
+			: EngineObject("Connection")
 			, m_CID(0)
 			, m_ConnectionState(ConnectionState::DISCONNECTED)
 			, m_tConnectionTime(DurationMS(0))

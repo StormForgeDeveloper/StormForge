@@ -143,8 +143,8 @@ namespace Net {
 	//
 
 	// Constructor
-	ConnectionUDPClient::ConnectionUDPClient(IHeap& heap)
-		: ConnectionUDP(heap, &m_NetIOAdapter)
+	ConnectionUDPClient::ConnectionUDPClient()
+		: ConnectionUDP(&m_NetIOAdapter)
 		, m_NetIOAdapter(*this)
 	{
 		// limit client net retry maximum

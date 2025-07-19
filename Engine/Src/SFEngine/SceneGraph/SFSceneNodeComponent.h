@@ -71,7 +71,7 @@ namespace SF {
 
 	public:
 		// Constructor
-		SceneNodeComponent(IHeap& heap, const StringCrc64& name = "");
+		SceneNodeComponent(const StringCrc64& name = "");
 		virtual ~SceneNodeComponent();
 
 		// Component signature

@@ -158,7 +158,7 @@ namespace SF {
 
 	public:
 		// Constructor
-		SceneNodeComponentMesh(IHeap& heap, const StringCrc64& name = "");
+		SceneNodeComponentMesh(const StringCrc64& name = "");
 		virtual ~SceneNodeComponentMesh();
 
 		// Dispose

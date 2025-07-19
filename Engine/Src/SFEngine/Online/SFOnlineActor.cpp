@@ -77,7 +77,6 @@ namespace SF
 
 
     OnlineActor::OnlineActor(ActorID actorId)
-        : m_ComponentManager(GetEngineHeap())
     {
 
         OnlineActorComponentInitializer::CreateComponentsFor(this);

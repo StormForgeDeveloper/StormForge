@@ -124,7 +124,7 @@ namespace Net {
 
 	public:
 		// Constructor
-		ConnectionUDPBase(IHeap& heap, SocketIO* ioHandler);
+		ConnectionUDPBase(SocketIO* ioHandler);
 		virtual ~ConnectionUDPBase();
 
         virtual void Dispose() override;

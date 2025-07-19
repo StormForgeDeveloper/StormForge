@@ -87,7 +87,7 @@ namespace SF {
 
 	public:
 		// Constructor
-		EngineObject(IHeap* heap, const StringCrc64& name);
+		EngineObject(const StringCrc64& name);
 		virtual ~EngineObject();
 
 		// Initialize engine object
@@ -179,24 +179,12 @@ namespace SF {
 	template<class ObjectType, class ...ArgTypes,
 		typename = std::enable_if_t<std::is_base_of<EngineObject, ObjectType>::value>
 	>
-	inline SharedPointerT<ObjectType> NewObject(IHeap& heap, ArgTypes... args)
+	inline SharedPointerT<ObjectType> NewObject(ArgTypes... args)
 	{
-		SharedPointerT<ObjectType> ObjectPtr = new(heap) ObjectType(heap, args...);
+		SharedPointerT<ObjectType> ObjectPtr = new ObjectType(args...);
 		ObjectPtr->InitializeObject();
 		return std::forward<SharedPointerT<ObjectType>>(ObjectPtr);
 	}
-
-
-	//// for regular object type
-	//template<class ObjectType, class ...ArgTypes,
-	//	typename = std::enable_if_t<!std::is_base_of<EngineObject, ObjectType>::value && std::is_base_of<Object, ObjectType>::value>
-	//>
-	//	inline SharedPointerT<ObjectType> NewObject(IHeap& heap, const ArgTypes&... args)
-	//{
-	//	SharedPointerT<ObjectType> ObjectPtr = new(heap) ObjectType(&heap, args...);
-	//	return std::forward<SharedPointerT<ObjectType>>(ObjectPtr);
-	//}
-
 
 } // namespace SF
 

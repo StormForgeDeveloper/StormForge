@@ -118,7 +118,7 @@ namespace SF {
 
 		public:
 			// Constructor
-			ConnectionTCP(IHeap& heap);
+			ConnectionTCP();
 			virtual ~ConnectionTCP();
 
 
@@ -203,7 +203,7 @@ namespace SF {
 
 		public:
 			// Constructor
-			ConnectionTCPClient(IHeap& heap);
+			ConnectionTCPClient();
 			~ConnectionTCPClient();
 
 			// Initialize connection
@@ -230,7 +230,7 @@ namespace SF {
 
 		public:
 			// Constructor
-			ConnectionTCPServer(IHeap& heap);
+			ConnectionTCPServer();
 			~ConnectionTCPServer();
 
 		};
@@ -256,7 +256,7 @@ namespace SF {
 
 		public:
 			// Constructor
-			ConnectionPeerTCP(IHeap& heap);
+			ConnectionPeerTCP();
 			~ConnectionPeerTCP();
 
 			virtual void OnConnectionResult(Result hrConnect) override;

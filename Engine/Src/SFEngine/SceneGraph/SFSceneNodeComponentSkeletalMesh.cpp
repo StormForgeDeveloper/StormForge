@@ -35,10 +35,10 @@ namespace SF {
 
 
 	// Constructor
-	SceneNodeComponentSkeletalMesh::SceneNodeComponentSkeletalMesh(IHeap& heap, const StringCrc64& name)
-		: SceneNodeComponentMesh(heap, name)
-		, m_Joints(heap)
-		, m_Skeletons(heap)
+	SceneNodeComponentSkeletalMesh::SceneNodeComponentSkeletalMesh(const StringCrc64& name)
+		: SceneNodeComponentMesh(name)
+		, m_Joints()
+		, m_Skeletons()
 	{
 
 	}
@@ -76,7 +76,7 @@ namespace SF {
 	// child component should overrride this for clone
 	SceneNodeComponent* SceneNodeComponentSkeletalMesh::Clone(const SceneCloneContext& cloneFlags, SceneNode* newOwner)
 	{
-		auto newComponent = new(cloneFlags.Heap) SceneNodeComponentSkeletalMesh(cloneFlags.Heap);
+		auto newComponent = new SceneNodeComponentSkeletalMesh();
 		if (newComponent == nullptr)
 			return nullptr;
 

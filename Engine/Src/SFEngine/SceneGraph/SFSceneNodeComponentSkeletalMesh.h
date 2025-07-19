@@ -54,7 +54,7 @@ namespace SF {
 
 	public:
 		// Constructor
-		SceneNodeComponentSkeletalMesh(IHeap& heap, const StringCrc64& name = "");
+		SceneNodeComponentSkeletalMesh(const StringCrc64& name = "");
 		virtual ~SceneNodeComponentSkeletalMesh();
 
 

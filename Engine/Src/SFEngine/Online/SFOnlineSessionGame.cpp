@@ -24,9 +24,9 @@ namespace SF
 	//	OnlineSessionGameplay class
 	// 
 
-    OnlineSessionGameplay::OnlineSessionGameplay(IHeap& heap, StringCrc32 gameId)
-        : OnlineSession(heap, "OnlineSessionGameplay", gameId)
-        , m_OnlineActorByActorId(heap)
+    OnlineSessionGameplay::OnlineSessionGameplay(StringCrc32 gameId)
+        : OnlineSession("OnlineSessionGameplay", gameId)
+        , m_OnlineActorByActorId()
 	{
 	}
 

@@ -65,17 +65,13 @@ namespace SF
 
 	private:
 
-		IHeap& m_Heap;
-
 		bool m_IsInitialized = false;
 
 		// component array
 		SortedArray<StringCrc32,Component*> m_Components;
 
 	public:
-		ComponentManager(IHeap& heap)
-			: m_Heap(heap)
-			, m_Components(m_Heap)
+		ComponentManager()
 		{
 		}
 
@@ -90,7 +86,7 @@ namespace SF
 			m_Components.Clear();
 		}
 
-		IHeap& GetHeap() { return m_Heap; }
+		IHeap& GetHeap() { return GetSystemHeap(); }
 
 		// Clear components
 		virtual void ClearComponents()
@@ -181,7 +177,7 @@ namespace SF
 				return ResultCode::SUCCESS_FALSE;
 			}
 
-			ComponentType* newComponent = new(m_Heap) ComponentType;
+			ComponentType* newComponent = new ComponentType;
 			if (newComponent == nullptr)
 				return ResultCode::OUT_OF_MEMORY;
 
@@ -204,7 +200,7 @@ namespace SF
 				return ResultCode::SUCCESS_FALSE;
 			}
 
-			ComponentType* newComponent = new(m_Heap) ComponentType(args...);
+			ComponentType* newComponent = new ComponentType(args...);
 			if (newComponent == nullptr)
 				return ResultCode::OUT_OF_MEMORY;
 

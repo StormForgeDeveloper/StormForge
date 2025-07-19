@@ -28,8 +28,8 @@ namespace SF {
 		//	Server network base interface
 		//
 
-		ServerNet::ServerNet(IHeap& heap, ServerID InServerID, NetClass localClass)
-			: EngineObject(new(heap) IHeap("ServerNet", &heap), "ServerNet")
+		ServerNet::ServerNet(ServerID InServerID, NetClass localClass)
+			: EngineObject("ServerNet")
 			, m_LocalClass(localClass)
 			, m_ServerID(InServerID)
 			, m_IsEnableAccept(false)

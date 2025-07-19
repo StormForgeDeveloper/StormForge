@@ -167,7 +167,7 @@ namespace Net {
 	public:
 
 		// Constructor
-		Connection(IHeap& heap, SocketIO *ioHandler = nullptr);
+		Connection(SocketIO *ioHandler = nullptr);
 		virtual ~Connection();
 
 		virtual bool CanDelete() override;

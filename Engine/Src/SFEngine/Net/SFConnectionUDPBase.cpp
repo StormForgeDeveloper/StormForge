@@ -54,8 +54,8 @@ namespace Net {
 
 
 	// Constructor
-	ConnectionUDPBase::ConnectionUDPBase(IHeap& heap, SocketIO* ioHandler)
-		: Connection(heap, ioHandler)
+	ConnectionUDPBase::ConnectionUDPBase(SocketIO* ioHandler)
+		: Connection(ioHandler)
 		, m_SendReliableWindow(GetHeap())
 		, m_uiMaxGuarantedRetryAtOnce(Const::UDP_SVR_RETRY_ONETIME_MAX)
         , m_SendGuaQueue(GetHeap())

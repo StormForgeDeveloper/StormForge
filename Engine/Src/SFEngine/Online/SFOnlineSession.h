@@ -37,7 +37,7 @@ namespace SF
 
 	public:
 
-		OnlineSession(IHeap& heap, StringCrc32 sessionTypeName, StringCrc32 gameId);
+		OnlineSession(StringCrc32 sessionTypeName, StringCrc32 gameId);
 		virtual ~OnlineSession();
 
         virtual Result InitializeObject() override;
