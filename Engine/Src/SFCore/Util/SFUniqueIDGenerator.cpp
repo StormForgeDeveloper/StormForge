@@ -16,7 +16,7 @@
 
 namespace SF {
 
-	UniqueIDGenerator::UniqueIDGenerator(IHeap& heap)
+	UniqueIDGenerator::UniqueIDGenerator()
 		: m_CounterForID(1)
 	{
 	}
@@ -76,8 +76,8 @@ namespace SF {
 
         m_FreeIDItems.for_each([](StackPool::Item* pItem)
             {
-                Item* pMyItem = (Item*)pItem;
-                IHeap::Delete(pMyItem);
+                Item* pMyItem = static_cast<Item*>(pItem);
+                delete pMyItem;
             });
         m_FreeIDItems.Clear();
 		m_CounterForID = 0;

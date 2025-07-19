@@ -45,7 +45,7 @@ namespace SF {
 
 	public:
 
-		UniqueIDGenerator(IHeap& heap);
+		UniqueIDGenerator();
 		~UniqueIDGenerator();
 
 		// Generate New ID
