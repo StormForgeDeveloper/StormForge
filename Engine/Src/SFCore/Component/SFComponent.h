@@ -81,12 +81,10 @@ namespace SF
 			{
 				if (itComponent.GetValue())
 					itComponent.GetValue()->TerminateComponent();
-				IHeap::Delete(itComponent.GetValue());
+				delete itComponent.GetValue();
 			}
 			m_Components.Clear();
 		}
-
-		IHeap& GetHeap() { return GetSystemHeap(); }
 
 		// Clear components
 		virtual void ClearComponents()
@@ -95,7 +93,7 @@ namespace SF
 			{
 				if (itComponent.GetValue())
 					itComponent.GetValue()->TerminateComponent();
-				IHeap::Delete(itComponent.GetValue());
+				delete itComponent.GetValue();
 			}
 			m_Components.Clear();
 		}
@@ -184,7 +182,7 @@ namespace SF
 			Result hr = AddComponent(newComponent);
 			if (hr.IsFailure())
 			{
-				IHeap::Delete(newComponent);
+				delete newComponent;
 			}
 
 			return hr;
@@ -207,58 +205,11 @@ namespace SF
 			Result hr = AddComponent(newComponent);
 			if (!hr.IsSuccess())
 			{
-				IHeap::Delete(newComponent);
+				delete newComponent;
 			}
 
 			return hr;
 		}
-
-		//template< class ComponentType, class ParamType0, class ParamType1,
-		//	typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>>>
-		//Result AddComponent(ParamType0&& p0, ParamType1&& p1)
-		//{
-		//	if (GetComponent<ComponentType>() != nullptr)
-		//	{
-		//		// already inserted
-		//		return ResultCode::SUCCESS_FALSE;
-		//	}
-
-		//	ComponentType* newComponent = new(m_Heap) ComponentType(p0, p1);
-		//	if (newComponent == nullptr)
-		//		return ResultCode::OUT_OF_MEMORY;
-
-		//	Result hr = AddComponent(newComponent);
-		//	if (!hr.IsSuccess())
-		//	{
-		//		IHeap::Delete(newComponent);
-		//	}
-
-		//	return hr;
-		//}
-
-		//template< class ComponentType, class ParamType0, class ParamType1, class ParamType2,
-		//	typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>> >
-		//Result AddComponent(ParamType0 p0, ParamType1 p1, ParamType2 p2)
-		//{
-		//	if (GetComponent<ComponentType>() != nullptr)
-		//	{
-		//		// already inserted
-		//		return ResultCode::SUCCESS_FALSE;
-		//	}
-
-		//	ComponentType* newComponent = new(m_Heap) ComponentType(p0, p1, p2);
-		//	if (newComponent == nullptr)
-		//		return ResultCode::OUT_OF_MEMORY;
-
-		//	Result hr = AddComponent(newComponent);
-		//	if (!hr.IsSuccess())
-		//	{
-		//		IHeap::Delete(newComponent);
-		//	}
-
-		//	return hr;
-		//}
-
 
 		template< class ComponentType,
 			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>>>

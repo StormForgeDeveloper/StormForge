@@ -80,7 +80,8 @@ namespace SF {
             Dl_info& dlInfo = dlInfos[i];
             if (dladdr(callStackArray[i], &dlInfo) && dlInfo.dli_fname && dlInfo.dli_fbase)
             {
-                fprintf(stderr, "[bt]: (%d) %s, %s, %" PRIu64 "\n", i, messages[i], dlInfo.dli_fname, uint64_t(callStackArray[i]) - uint64_t(dlInfo.dli_fbase));
+                void* pOffset = reinterpret_cast<void*>(uintptr_t(callStackArray[i]) - uintptr_t(dlInfo.dli_fbase));
+                fprintf(stderr, "[bt]: (%d) %s, %s, %" PRIu64 "\n", i, messages[i], dlInfo.dli_fname, pOffset);
             }
             else
             {
@@ -89,7 +90,7 @@ namespace SF {
         }
 
         // send to log as well
-        SFLog(System, Error, "signal {0} ({1}), address is {2} from {3}",
+        SFLog(System, Error, "signal {0} ({1}), address is 0x{2:X} from 0x{3:X}",
             signal, strsignal(signal), info->si_addr, (void*)caller_address);
 
         for (int i = 1; i < capturedSize && messages != NULL; ++i)
@@ -97,7 +98,8 @@ namespace SF {
             Dl_info& dlInfo = dlInfos[i];
             if (dlInfo.dli_fname && dlInfo.dli_fbase)
             {
-                SFLog(System, Error, "[bt]: ({0}) {1}, {2}, {3}\n", i, messages[i], dlInfo.dli_fname, dlInfo.dli_fbase);
+                void* pOffset = reinterpret_cast<void*>(uintptr_t(callStackArray[i]) - uintptr_t(dlInfo.dli_fbase));
+                SFLog(System, Error, "[bt]: ({0}) {1}, {2}, offset:{3:X}\n", i, messages[i], dlInfo.dli_fname, pOffset);
             }
             else
             {
