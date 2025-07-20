@@ -81,7 +81,7 @@ namespace SF {
             if (dladdr(callStackArray[i], &dlInfo) && dlInfo.dli_fname && dlInfo.dli_fbase)
             {
                 void* pOffset = reinterpret_cast<void*>(uintptr_t(callStackArray[i]) - uintptr_t(dlInfo.dli_fbase));
-                fprintf(stderr, "[bt]: (%d) %s, %s, %" PRIu64 "\n", i, messages[i], dlInfo.dli_fname, pOffset);
+                fprintf(stderr, "[bt]: (%d) %s, %s, %p\n", i, messages[i], dlInfo.dli_fname, pOffset);
             }
             else
             {
