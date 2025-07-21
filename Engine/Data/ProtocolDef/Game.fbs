@@ -417,12 +417,15 @@ table RequestLeaveGameInstanceRes
 
 table SearchGameInstanceCmd
 {
- 	search_keyword:string;
+ 	search_class:string;
+	search_data_id:uint64;
 } // table SearchGameInstanceCmd
 
 table SearchGameInstanceRes
 {
- 	game_instances:[ubyte];
+ 	search_class:string;
+	search_data_id:uint64;
+	game_instances:[ubyte];
 } // table SearchGameInstanceRes
 
 table RequestGameMatchCmd

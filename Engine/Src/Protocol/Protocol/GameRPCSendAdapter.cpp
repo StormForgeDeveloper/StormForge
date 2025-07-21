@@ -653,17 +653,18 @@ namespace SF
 
 		return hr;
 	}; // Result GameRPCSendAdapter::RequestLeaveGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID )
-	// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
-	Result GameRPCSendAdapter::SearchGameInstanceCmd( const TransactionID &InTransactionID, const char* InSearchKeyword )
+	// Cmd: Search game instance. directory based search schema.    @SearchClass: static/ugc and so on         @SearchDataID: data identification id. could be data table id   
+	Result GameRPCSendAdapter::SearchGameInstanceCmd( const TransactionID &InTransactionID, const char* InSearchClass, const uint64_t &InSearchDataID )
 	{
  		Result hr;
 
 		protocolCheckPtr(m_Endpoint);
 
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
-		auto SearchKeywordOffset = SF::Flat::Helper::CreateString(fbb, InSearchKeyword);
+		auto SearchClassOffset = SF::Flat::Helper::CreateString(fbb, InSearchClass);
 		SF::Flat::Game::SearchGameInstanceCmdBuilder _builder(fbb);
-		_builder.add_search_keyword(SearchKeywordOffset);
+		_builder.add_search_class(SearchClassOffset);
+		_builder.add_search_data_id(InSearchDataID);
 		flatbuffers::Offset<SF::Flat::Game::SearchGameInstanceCmd> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
 
@@ -671,7 +672,7 @@ namespace SF
 
 
 		return hr;
-	}; // Result GameRPCSendAdapter::SearchGameInstanceCmd( const TransactionID &InTransactionID, const char* InSearchKeyword )
+	}; // Result GameRPCSendAdapter::SearchGameInstanceCmd( const TransactionID &InTransactionID, const char* InSearchClass, const uint64_t &InSearchDataID )
 	// Cmd: Request Game match
 	Result GameRPCSendAdapter::RequestGameMatchCmd( const TransactionID &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole )
 	{
@@ -1913,16 +1914,19 @@ namespace SF
 
 		return hr;
 	}; // Result GameSvrRPCSendAdapter::RequestLeaveGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult )
-	// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
-	Result GameSvrRPCSendAdapter::SearchGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances )
+	// Cmd: Search game instance. directory based search schema.    @SearchClass: static/ugc and so on         @SearchDataID: data identification id. could be data table id   
+	Result GameSvrRPCSendAdapter::SearchGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const char* InSearchClass, const uint64_t &InSearchDataID, const Array<VariableTable>& InGameInstances )
 	{
  		Result hr;
 
 		protocolCheckPtr(m_Endpoint);
 
 		flatbuffers::FlatBufferBuilder& fbb = GetBuilderForNew();
+		auto SearchClassOffset = SF::Flat::Helper::CreateString(fbb, InSearchClass);
 		auto GameInstancesOffset = SF::Flat::Helper::CreateVariableTableVector(fbb, InGameInstances);
 		SF::Flat::Game::SearchGameInstanceResBuilder _builder(fbb);
+		_builder.add_search_class(SearchClassOffset);
+		_builder.add_search_data_id(InSearchDataID);
 		_builder.add_game_instances(GameInstancesOffset);
 		flatbuffers::Offset<SF::Flat::Game::SearchGameInstanceRes> packetOffset = _builder.Finish();
 		fbb.Finish(packetOffset);
@@ -1931,7 +1935,7 @@ namespace SF
 
 
 		return hr;
-	}; // Result GameSvrRPCSendAdapter::SearchGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances )
+	}; // Result GameSvrRPCSendAdapter::SearchGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const char* InSearchClass, const uint64_t &InSearchDataID, const Array<VariableTable>& InGameInstances )
 	// Cmd: Request Game match
 	Result GameSvrRPCSendAdapter::RequestGameMatchRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 	{

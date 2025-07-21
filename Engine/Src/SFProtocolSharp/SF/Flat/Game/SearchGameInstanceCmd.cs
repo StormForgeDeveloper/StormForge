@@ -19,23 +19,27 @@ public struct SearchGameInstanceCmd : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public SearchGameInstanceCmd __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public string SearchKeyword { get { int o = __p.__offset(4); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
+  public string SearchClass { get { int o = __p.__offset(4); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
-  public Span<byte> GetSearchKeywordBytes() { return __p.__vector_as_span<byte>(4, 1); }
+  public Span<byte> GetSearchClassBytes() { return __p.__vector_as_span<byte>(4, 1); }
 #else
-  public ArraySegment<byte>? GetSearchKeywordBytes() { return __p.__vector_as_arraysegment(4); }
+  public ArraySegment<byte>? GetSearchClassBytes() { return __p.__vector_as_arraysegment(4); }
 #endif
-  public byte[] GetSearchKeywordArray() { return __p.__vector_as_array<byte>(4); }
+  public byte[] GetSearchClassArray() { return __p.__vector_as_array<byte>(4); }
+  public ulong SearchDataId { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
 
   public static Offset<SF.Flat.Game.SearchGameInstanceCmd> CreateSearchGameInstanceCmd(FlatBufferBuilder builder,
-      StringOffset search_keywordOffset = default(StringOffset)) {
-    builder.StartTable(1);
-    SearchGameInstanceCmd.AddSearchKeyword(builder, search_keywordOffset);
+      StringOffset search_classOffset = default(StringOffset),
+      ulong search_data_id = 0) {
+    builder.StartTable(2);
+    SearchGameInstanceCmd.AddSearchDataId(builder, search_data_id);
+    SearchGameInstanceCmd.AddSearchClass(builder, search_classOffset);
     return SearchGameInstanceCmd.EndSearchGameInstanceCmd(builder);
   }
 
-  public static void StartSearchGameInstanceCmd(FlatBufferBuilder builder) { builder.StartTable(1); }
-  public static void AddSearchKeyword(FlatBufferBuilder builder, StringOffset searchKeywordOffset) { builder.AddOffset(0, searchKeywordOffset.Value, 0); }
+  public static void StartSearchGameInstanceCmd(FlatBufferBuilder builder) { builder.StartTable(2); }
+  public static void AddSearchClass(FlatBufferBuilder builder, StringOffset searchClassOffset) { builder.AddOffset(0, searchClassOffset.Value, 0); }
+  public static void AddSearchDataId(FlatBufferBuilder builder, ulong searchDataId) { builder.AddUlong(1, searchDataId, 0); }
   public static Offset<SF.Flat.Game.SearchGameInstanceCmd> EndSearchGameInstanceCmd(FlatBufferBuilder builder) {
     int o = builder.EndTable();
     return new Offset<SF.Flat.Game.SearchGameInstanceCmd>(o);
@@ -48,7 +52,8 @@ static public class SearchGameInstanceCmdVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyString(tablePos, 4 /*SearchKeyword*/, false)
+      && verifier.VerifyString(tablePos, 4 /*SearchClass*/, false)
+      && verifier.VerifyField(tablePos, 6 /*SearchDataId*/, 8 /*ulong*/, 8, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

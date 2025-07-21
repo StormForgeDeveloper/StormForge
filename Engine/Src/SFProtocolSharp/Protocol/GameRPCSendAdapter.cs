@@ -500,19 +500,20 @@ namespace SF.Net
 			return result;
 		} // public Result  RequestLeaveGameInstanceCmd( SF.TransactionID InTransactionID, SF.GameInstanceUID InInsUID, Action<SFMessage>? callback = null )
 
-		// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
-		public Result  SearchGameInstanceCmd( SF.TransactionID InTransactionID, System.String InSearchKeyword, Action<SFMessage>? callback = null )
+		// Cmd: Search game instance. directory based search schema.    @SearchClass: static/ugc and so on         @SearchDataID: data identification id. could be data table id   
+		public Result  SearchGameInstanceCmd( SF.TransactionID InTransactionID, System.String InSearchClass, System.UInt64 InSearchDataID, Action<SFMessage>? callback = null )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
-			var SearchKeywordOffset = builder.CreateString(InSearchKeyword);
+			var SearchClassOffset = builder.CreateString(InSearchClass);
 			SF.Flat.Game.SearchGameInstanceCmd.StartSearchGameInstanceCmd(builder);
-			SF.Flat.Game.SearchGameInstanceCmd.AddSearchKeyword(builder, SearchKeywordOffset);
+			SF.Flat.Game.SearchGameInstanceCmd.AddSearchClass(builder, SearchClassOffset);
+			SF.Flat.Game.SearchGameInstanceCmd.AddSearchDataId(builder, InSearchDataID);
 			var packetOffset = SF.Flat.Game.SearchGameInstanceCmd.EndSearchGameInstanceCmd(builder);
 			result = SendMessage(MessageIDGame.SearchGameInstanceCmd, builder, packetOffset.Value, transactionId:InTransactionID , callback:callback);
 			return result;
-		} // public Result  SearchGameInstanceCmd( SF.TransactionID InTransactionID, System.String InSearchKeyword, Action<SFMessage>? callback = null )
+		} // public Result  SearchGameInstanceCmd( SF.TransactionID InTransactionID, System.String InSearchClass, System.UInt64 InSearchDataID, Action<SFMessage>? callback = null )
 
 		// Cmd: Request Game match
 		public Result  RequestGameMatchCmd( SF.TransactionID InTransactionID, System.Byte InNumPlayer, System.Byte InRequestRole, Action<SFMessage>? callback = null )
@@ -1495,19 +1496,22 @@ namespace SF.Net
 		} // public Result  RequestLeaveGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult )
 
 
-		// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
-		public Result  SearchGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.VariableTable[] InGameInstances )
+		// Cmd: Search game instance. directory based search schema.    @SearchClass: static/ugc and so on         @SearchDataID: data identification id. could be data table id   
+		public Result  SearchGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, System.String InSearchClass, System.UInt64 InSearchDataID, SF.VariableTable[] InGameInstances )
 		{
  			if (Endpoint == null) return ResultCode.IO_NOT_CONNECTED;
 			Result result = ResultCode.SUCCESS;
 			var builder = new Google.FlatBuffers.FlatBufferBuilder(1024);
+			var SearchClassOffset = builder.CreateString(InSearchClass);
 			var GameInstancesOffset = builder.CreateVariableTableVector(InGameInstances);
 			SF.Flat.Game.SearchGameInstanceRes.StartSearchGameInstanceRes(builder);
+			SF.Flat.Game.SearchGameInstanceRes.AddSearchClass(builder, SearchClassOffset);
+			SF.Flat.Game.SearchGameInstanceRes.AddSearchDataId(builder, InSearchDataID);
 			SF.Flat.Game.SearchGameInstanceRes.AddGameInstances(builder, GameInstancesOffset);
 			var packetOffset = SF.Flat.Game.SearchGameInstanceRes.EndSearchGameInstanceRes(builder);
 			result = SendMessage(MessageIDGame.SearchGameInstanceRes, builder, packetOffset.Value, transactionId:InTransactionID, result:InResult);
 			return result;
-		} // public Result  SearchGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, SF.VariableTable[] InGameInstances )
+		} // public Result  SearchGameInstanceRes( SF.TransactionID InTransactionID, SF.Result InResult, System.String InSearchClass, System.UInt64 InSearchDataID, SF.VariableTable[] InGameInstances )
 
 
 		// Cmd: Request Game match

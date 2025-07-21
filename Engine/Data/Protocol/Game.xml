@@ -401,15 +401,17 @@
 		</Command>
 
 		<Command Name="SearchGameInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Search game instance. directory based search schema. 
-		@SearchKeyword
-		 - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*
-		 - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*
+		@SearchClass: static/ugc and so on
+        @SearchDataID: data identification id. could be data table id
 		">
 			<Cmd>
-				<Params TypeName="String" Name="SearchKeyword" Desc="Search keyword"/>
+				<Params TypeName="String" Name="SearchClass" Desc="Search class"/>
+                <Params TypeName="uint64" Name="SearchDataID" Desc="Search data id"/>
 			</Cmd>
 			<Res>
-				<Params TypeName="VariableTable" IsArray="true" Name="GameInstances" Desc="Game instance informations"/>
+                <Params TypeName="String" Name="SearchClass" Desc="Search class"/>
+                <Params TypeName="uint64" Name="SearchDataID" Desc="Search data id"/>
+                <Params TypeName="VariableTable" IsArray="true" Name="GameInstances" Desc="Game instance informations"/>
 			</Res>
 		</Command>
 

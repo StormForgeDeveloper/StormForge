@@ -846,15 +846,17 @@ C++: Cast message to RequestLeaveGameInstanceRes to access values
 
 
 ## SearchGameInstance Request
-Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
+Search game instance. directory based search schema.    @SearchClass: static/ugc and so on         @SearchDataID: data identification id. could be data table id   
 
 1. Command interface
 
-        Result SearchGameInstanceCmd(const TransactionID &InTransactionID, const char* InSearchKeyword)
+        Result SearchGameInstanceCmd(const TransactionID &InTransactionID, const char* InSearchClass, const uint64_t &InSearchDataID)
 
 		- TransactionID: type:TransactionID, 
 
-		- SearchKeyword: type:String, Search keyword
+		- SearchClass: type:String, Search class
+
+		- SearchDataID: type:uint64, Search data id
 
 2. Result interface
 
@@ -863,6 +865,8 @@ C++: Cast message to SearchGameInstanceRes to access values
 
 		- TransactionID: type:TransactionID, 
 		- Result: type:Result, 
+		- SearchClass: type:String, Search class
+		- SearchDataID: type:uint64, Search data id
 		- GameInstances: type:VariableTable, Game instance informations
 
 

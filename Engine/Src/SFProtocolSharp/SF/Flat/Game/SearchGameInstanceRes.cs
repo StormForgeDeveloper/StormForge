@@ -19,24 +19,38 @@ public struct SearchGameInstanceRes : IFlatbufferObject
   public void __init(int _i, ByteBuffer _bb) { __p = new Table(_i, _bb); }
   public SearchGameInstanceRes __assign(int _i, ByteBuffer _bb) { __init(_i, _bb); return this; }
 
-  public byte GameInstances(int j) { int o = __p.__offset(4); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
-  public int GameInstancesLength { get { int o = __p.__offset(4); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public string SearchClass { get { int o = __p.__offset(4); return o != 0 ? __p.__string(o + __p.bb_pos) : null; } }
 #if ENABLE_SPAN_T
-  public Span<byte> GetGameInstancesBytes() { return __p.__vector_as_span<byte>(4, 1); }
+  public Span<byte> GetSearchClassBytes() { return __p.__vector_as_span<byte>(4, 1); }
 #else
-  public ArraySegment<byte>? GetGameInstancesBytes() { return __p.__vector_as_arraysegment(4); }
+  public ArraySegment<byte>? GetSearchClassBytes() { return __p.__vector_as_arraysegment(4); }
 #endif
-  public byte[] GetGameInstancesArray() { return __p.__vector_as_array<byte>(4); }
+  public byte[] GetSearchClassArray() { return __p.__vector_as_array<byte>(4); }
+  public ulong SearchDataId { get { int o = __p.__offset(6); return o != 0 ? __p.bb.GetUlong(o + __p.bb_pos) : (ulong)0; } }
+  public byte GameInstances(int j) { int o = __p.__offset(8); return o != 0 ? __p.bb.Get(__p.__vector(o) + j * 1) : (byte)0; }
+  public int GameInstancesLength { get { int o = __p.__offset(8); return o != 0 ? __p.__vector_len(o) : 0; } }
+#if ENABLE_SPAN_T
+  public Span<byte> GetGameInstancesBytes() { return __p.__vector_as_span<byte>(8, 1); }
+#else
+  public ArraySegment<byte>? GetGameInstancesBytes() { return __p.__vector_as_arraysegment(8); }
+#endif
+  public byte[] GetGameInstancesArray() { return __p.__vector_as_array<byte>(8); }
 
   public static Offset<SF.Flat.Game.SearchGameInstanceRes> CreateSearchGameInstanceRes(FlatBufferBuilder builder,
+      StringOffset search_classOffset = default(StringOffset),
+      ulong search_data_id = 0,
       VectorOffset game_instancesOffset = default(VectorOffset)) {
-    builder.StartTable(1);
+    builder.StartTable(3);
+    SearchGameInstanceRes.AddSearchDataId(builder, search_data_id);
     SearchGameInstanceRes.AddGameInstances(builder, game_instancesOffset);
+    SearchGameInstanceRes.AddSearchClass(builder, search_classOffset);
     return SearchGameInstanceRes.EndSearchGameInstanceRes(builder);
   }
 
-  public static void StartSearchGameInstanceRes(FlatBufferBuilder builder) { builder.StartTable(1); }
-  public static void AddGameInstances(FlatBufferBuilder builder, VectorOffset gameInstancesOffset) { builder.AddOffset(0, gameInstancesOffset.Value, 0); }
+  public static void StartSearchGameInstanceRes(FlatBufferBuilder builder) { builder.StartTable(3); }
+  public static void AddSearchClass(FlatBufferBuilder builder, StringOffset searchClassOffset) { builder.AddOffset(0, searchClassOffset.Value, 0); }
+  public static void AddSearchDataId(FlatBufferBuilder builder, ulong searchDataId) { builder.AddUlong(1, searchDataId, 0); }
+  public static void AddGameInstances(FlatBufferBuilder builder, VectorOffset gameInstancesOffset) { builder.AddOffset(2, gameInstancesOffset.Value, 0); }
   public static VectorOffset CreateGameInstancesVector(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); for (int i = data.Length - 1; i >= 0; i--) builder.AddByte(data[i]); return builder.EndVector(); }
   public static VectorOffset CreateGameInstancesVectorBlock(FlatBufferBuilder builder, byte[] data) { builder.StartVector(1, data.Length, 1); builder.Add(data); return builder.EndVector(); }
   public static VectorOffset CreateGameInstancesVectorBlock(FlatBufferBuilder builder, ArraySegment<byte> data) { builder.StartVector(1, data.Count, 1); builder.Add(data); return builder.EndVector(); }
@@ -54,7 +68,9 @@ static public class SearchGameInstanceResVerify
   static public bool Verify(Google.FlatBuffers.Verifier verifier, uint tablePos)
   {
     return verifier.VerifyTableStart(tablePos)
-      && verifier.VerifyVectorOfData(tablePos, 4 /*GameInstances*/, 1 /*byte*/, false)
+      && verifier.VerifyString(tablePos, 4 /*SearchClass*/, false)
+      && verifier.VerifyField(tablePos, 6 /*SearchDataId*/, 8 /*ulong*/, 8, false)
+      && verifier.VerifyVectorOfData(tablePos, 8 /*GameInstances*/, 1 /*byte*/, false)
       && verifier.VerifyTableEnd(tablePos);
   }
 }

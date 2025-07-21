@@ -102,8 +102,8 @@ namespace SF
 		Result RequestJoinGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID );
 		// Cmd: Leave game instance
 		Result RequestLeaveGameInstanceCmd( const TransactionID &InTransactionID, const GameInstanceUID &InInsUID );
-		// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
-		Result SearchGameInstanceCmd( const TransactionID &InTransactionID, const char* InSearchKeyword );
+		// Cmd: Search game instance. directory based search schema.    @SearchClass: static/ugc and so on         @SearchDataID: data identification id. could be data table id   
+		Result SearchGameInstanceCmd( const TransactionID &InTransactionID, const char* InSearchClass, const uint64_t &InSearchDataID );
 		// Cmd: Request Game match
 		Result RequestGameMatchCmd( const TransactionID &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole );
 		// Cmd: Cancel Game match
@@ -243,8 +243,8 @@ namespace SF
 		Result RequestJoinGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const GameInstanceUID &InInsUID, const Array<uint8_t>& InZoneCustomData, const char* InServerPublicAddress );
 		// Cmd: Leave game instance
 		Result RequestLeaveGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult );
-		// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
-		Result SearchGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances );
+		// Cmd: Search game instance. directory based search schema.    @SearchClass: static/ugc and so on         @SearchDataID: data identification id. could be data table id   
+		Result SearchGameInstanceRes( const TransactionID &InTransactionID, const Result &InResult, const char* InSearchClass, const uint64_t &InSearchDataID, const Array<VariableTable>& InGameInstances );
 		// Cmd: Request Game match
 		Result RequestGameMatchRes( const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 		// S2C: Game matched

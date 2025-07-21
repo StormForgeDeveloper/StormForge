@@ -5489,20 +5489,26 @@ struct SearchGameInstanceCmd FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Ta
   typedef SearchGameInstanceCmdBuilder Builder;
   struct Traits;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_SEARCH_KEYWORD = 4
+    VT_SEARCH_CLASS = 4,
+    VT_SEARCH_DATA_ID = 6
   };
-  const ::flatbuffers::String *search_keyword() const {
-    return GetPointer<const ::flatbuffers::String *>(VT_SEARCH_KEYWORD);
+  const ::flatbuffers::String *search_class() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_SEARCH_CLASS);
+  }
+  uint64_t search_data_id() const {
+    return GetField<uint64_t>(VT_SEARCH_DATA_ID, 0);
   }
   template<size_t Index>
   auto get_field() const {
-         if constexpr (Index == 0) return search_keyword();
+         if constexpr (Index == 0) return search_class();
+    else if constexpr (Index == 1) return search_data_id();
     else static_assert(Index != Index, "Invalid Field Index");
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffset(verifier, VT_SEARCH_KEYWORD) &&
-           verifier.VerifyString(search_keyword()) &&
+           VerifyOffset(verifier, VT_SEARCH_CLASS) &&
+           verifier.VerifyString(search_class()) &&
+           VerifyField<uint64_t>(verifier, VT_SEARCH_DATA_ID, 8) &&
            verifier.EndTable();
   }
 };
@@ -5511,8 +5517,11 @@ struct SearchGameInstanceCmdBuilder {
   typedef SearchGameInstanceCmd Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
-  void add_search_keyword(::flatbuffers::Offset<::flatbuffers::String> search_keyword) {
-    fbb_.AddOffset(SearchGameInstanceCmd::VT_SEARCH_KEYWORD, search_keyword);
+  void add_search_class(::flatbuffers::Offset<::flatbuffers::String> search_class) {
+    fbb_.AddOffset(SearchGameInstanceCmd::VT_SEARCH_CLASS, search_class);
+  }
+  void add_search_data_id(uint64_t search_data_id) {
+    fbb_.AddElement<uint64_t>(SearchGameInstanceCmd::VT_SEARCH_DATA_ID, search_data_id, 0);
   }
   explicit SearchGameInstanceCmdBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
@@ -5527,9 +5536,11 @@ struct SearchGameInstanceCmdBuilder {
 
 inline ::flatbuffers::Offset<SearchGameInstanceCmd> CreateSearchGameInstanceCmd(
     ::flatbuffers::FlatBufferBuilder &_fbb,
-    ::flatbuffers::Offset<::flatbuffers::String> search_keyword = 0) {
+    ::flatbuffers::Offset<::flatbuffers::String> search_class = 0,
+    uint64_t search_data_id = 0) {
   SearchGameInstanceCmdBuilder builder_(_fbb);
-  builder_.add_search_keyword(search_keyword);
+  builder_.add_search_data_id(search_data_id);
+  builder_.add_search_class(search_class);
   return builder_.Finish();
 }
 
@@ -5538,9 +5549,10 @@ struct SearchGameInstanceCmd::Traits {
   static auto constexpr Create = CreateSearchGameInstanceCmd;
   static constexpr auto name = "SearchGameInstanceCmd";
   static constexpr auto fully_qualified_name = "SF.Flat.Game.SearchGameInstanceCmd";
-  static constexpr size_t fields_number = 1;
+  static constexpr size_t fields_number = 2;
   static constexpr std::array<const char *, fields_number> field_names = {
-    "search_keyword"
+    "search_class",
+    "search_data_id"
   };
   template<size_t Index>
   using FieldType = decltype(std::declval<type>().get_field<Index>());
@@ -5548,29 +5560,44 @@ struct SearchGameInstanceCmd::Traits {
 
 inline ::flatbuffers::Offset<SearchGameInstanceCmd> CreateSearchGameInstanceCmdDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
-    const char *search_keyword = nullptr) {
-  auto search_keyword__ = search_keyword ? _fbb.CreateString(search_keyword) : 0;
+    const char *search_class = nullptr,
+    uint64_t search_data_id = 0) {
+  auto search_class__ = search_class ? _fbb.CreateString(search_class) : 0;
   return SF::Flat::Game::CreateSearchGameInstanceCmd(
       _fbb,
-      search_keyword__);
+      search_class__,
+      search_data_id);
 }
 
 struct SearchGameInstanceRes FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef SearchGameInstanceResBuilder Builder;
   struct Traits;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_GAME_INSTANCES = 4
+    VT_SEARCH_CLASS = 4,
+    VT_SEARCH_DATA_ID = 6,
+    VT_GAME_INSTANCES = 8
   };
+  const ::flatbuffers::String *search_class() const {
+    return GetPointer<const ::flatbuffers::String *>(VT_SEARCH_CLASS);
+  }
+  uint64_t search_data_id() const {
+    return GetField<uint64_t>(VT_SEARCH_DATA_ID, 0);
+  }
   const ::flatbuffers::Vector<uint8_t> *game_instances() const {
     return GetPointer<const ::flatbuffers::Vector<uint8_t> *>(VT_GAME_INSTANCES);
   }
   template<size_t Index>
   auto get_field() const {
-         if constexpr (Index == 0) return game_instances();
+         if constexpr (Index == 0) return search_class();
+    else if constexpr (Index == 1) return search_data_id();
+    else if constexpr (Index == 2) return game_instances();
     else static_assert(Index != Index, "Invalid Field Index");
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_SEARCH_CLASS) &&
+           verifier.VerifyString(search_class()) &&
+           VerifyField<uint64_t>(verifier, VT_SEARCH_DATA_ID, 8) &&
            VerifyOffset(verifier, VT_GAME_INSTANCES) &&
            verifier.VerifyVector(game_instances()) &&
            verifier.EndTable();
@@ -5581,6 +5608,12 @@ struct SearchGameInstanceResBuilder {
   typedef SearchGameInstanceRes Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
+  void add_search_class(::flatbuffers::Offset<::flatbuffers::String> search_class) {
+    fbb_.AddOffset(SearchGameInstanceRes::VT_SEARCH_CLASS, search_class);
+  }
+  void add_search_data_id(uint64_t search_data_id) {
+    fbb_.AddElement<uint64_t>(SearchGameInstanceRes::VT_SEARCH_DATA_ID, search_data_id, 0);
+  }
   void add_game_instances(::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> game_instances) {
     fbb_.AddOffset(SearchGameInstanceRes::VT_GAME_INSTANCES, game_instances);
   }
@@ -5597,9 +5630,13 @@ struct SearchGameInstanceResBuilder {
 
 inline ::flatbuffers::Offset<SearchGameInstanceRes> CreateSearchGameInstanceRes(
     ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::String> search_class = 0,
+    uint64_t search_data_id = 0,
     ::flatbuffers::Offset<::flatbuffers::Vector<uint8_t>> game_instances = 0) {
   SearchGameInstanceResBuilder builder_(_fbb);
+  builder_.add_search_data_id(search_data_id);
   builder_.add_game_instances(game_instances);
+  builder_.add_search_class(search_class);
   return builder_.Finish();
 }
 
@@ -5608,8 +5645,10 @@ struct SearchGameInstanceRes::Traits {
   static auto constexpr Create = CreateSearchGameInstanceRes;
   static constexpr auto name = "SearchGameInstanceRes";
   static constexpr auto fully_qualified_name = "SF.Flat.Game.SearchGameInstanceRes";
-  static constexpr size_t fields_number = 1;
+  static constexpr size_t fields_number = 3;
   static constexpr std::array<const char *, fields_number> field_names = {
+    "search_class",
+    "search_data_id",
     "game_instances"
   };
   template<size_t Index>
@@ -5618,10 +5657,15 @@ struct SearchGameInstanceRes::Traits {
 
 inline ::flatbuffers::Offset<SearchGameInstanceRes> CreateSearchGameInstanceResDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
+    const char *search_class = nullptr,
+    uint64_t search_data_id = 0,
     const std::vector<uint8_t> *game_instances = nullptr) {
+  auto search_class__ = search_class ? _fbb.CreateString(search_class) : 0;
   auto game_instances__ = game_instances ? _fbb.CreateVector<uint8_t>(*game_instances) : 0;
   return SF::Flat::Game::CreateSearchGameInstanceRes(
       _fbb,
+      search_class__,
+      search_data_id,
       game_instances__);
 }
 

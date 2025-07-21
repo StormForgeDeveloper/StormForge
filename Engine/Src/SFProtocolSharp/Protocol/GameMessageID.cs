@@ -175,7 +175,7 @@ namespace SF.Net
 		public static readonly MessageID RequestLeaveGameInstanceCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 44);
 		public static readonly MessageID RequestLeaveGameInstanceRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 44);
 
-		// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
+		// Cmd: Search game instance. directory based search schema.    @SearchClass: static/ugc and so on         @SearchDataID: data identification id. could be data table id   
 		public static readonly MessageID SearchGameInstanceCmd = MessageID.MakeMessageID(EMessageType.Command, 1, SF.MessageProtocol.Game, 45);
 		public static readonly MessageID SearchGameInstanceRes = MessageID.MakeMessageID(EMessageType.Result, 1, SF.MessageProtocol.Game, 45);
 

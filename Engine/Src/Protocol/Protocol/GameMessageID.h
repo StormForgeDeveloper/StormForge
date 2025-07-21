@@ -175,7 +175,7 @@ namespace SF
 			constexpr MessageID MID_RequestLeaveGameInstanceCmd(EMessageType::Command,1,MessageProtocol::Game,44);
 			constexpr MessageID MID_RequestLeaveGameInstanceRes(EMessageType::Result,1,MessageProtocol::Game,44);
 
-			// Cmd: Search game instance. directory based search schema.    @SearchKeyword    - Static zone search with zone id: /ZoneInstance/Static/{ZoneTableID}/*    - Public UGC zone search for a player: /ZoneInstance/UGC/{PlayerID}/*   
+			// Cmd: Search game instance. directory based search schema.    @SearchClass: static/ugc and so on         @SearchDataID: data identification id. could be data table id   
 			constexpr MessageID MID_SearchGameInstanceCmd(EMessageType::Command,1,MessageProtocol::Game,45);
 			constexpr MessageID MID_SearchGameInstanceRes(EMessageType::Result,1,MessageProtocol::Game,45);
 
