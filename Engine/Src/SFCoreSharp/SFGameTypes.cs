@@ -411,7 +411,7 @@ namespace SF
     public struct GameInstanceInfo
     {
         public string InstanceName;
-        public string Status;
+        public string State;
         public EntityUID InstanceUID;
         public uint PlayerCount;
     };
