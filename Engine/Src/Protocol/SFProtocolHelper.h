@@ -400,10 +400,10 @@ namespace SF {
 
             inline Offset<SF::Flat::UGCContentInfo> CreateUGCContentInfo(FlatBufferBuilder& fbb, const SF::UGCContentInfo& value)
             {
-                SF::Flat::UGCContentInfoBuilder builder(fbb);
-
                 auto categoryOffset = fbb.CreateString(value.Category);
                 auto dataPathOffset = fbb.CreateString(value.DataPath);
+
+                SF::Flat::UGCContentInfoBuilder builder(fbb);
 
                 builder.add_ugc_content_id(CreateGuid(fbb, value.UGCContentId));
                 builder.add_category(categoryOffset);
@@ -577,11 +577,13 @@ namespace SF {
 
             inline Offset<SF::Flat::PlayerInformation> CreatePlayerInformation(FlatBufferBuilder& fbb, const SF::PlayerInformation& value)
             {
+                auto nickNameOffset = CreateString(fbb, value.NickName);
+
                 SF::Flat::PlayerInformationBuilder builder(fbb);
 
                 builder.add_player_id(CreatePlayerID(fbb, value.PlayerID));
                 builder.add_player_platform_id(CreatePlayerPlatformID(fbb, value.PlayerPlatformId));
-                builder.add_profile_name(CreateString(fbb, value.NickName));
+                builder.add_profile_name(nickNameOffset);
                 builder.add_last_active_time(value.LastActiveTime);
 
                 return builder.Finish();
@@ -614,6 +616,8 @@ namespace SF {
 
             inline Offset<SF::Flat::TotalRankingPlayerInformation> CreateTotalRankingPlayerInformation(FlatBufferBuilder& fbb, const SF::TotalRankingPlayerInformation& value)
             {
+                auto nickNameOffset = CreateString(fbb, value.NickName);
+
                 SF::Flat::TotalRankingPlayerInformationBuilder builder(fbb);
 
                 builder.add_ranking_id(value.RankingID);
@@ -623,7 +627,7 @@ namespace SF {
                 builder.add_score_low(value.ScoreLow);
                 builder.add_player_id(CreatePlayerID(fbb, value.PlayerID));
                 builder.add_player_platform_id(CreatePlayerPlatformID(fbb, value.PlayerPlatformId));
-                builder.add_profile_name(CreateString(fbb, value.NickName));
+                builder.add_profile_name(nickNameOffset);
 
                 return builder.Finish();
             }
