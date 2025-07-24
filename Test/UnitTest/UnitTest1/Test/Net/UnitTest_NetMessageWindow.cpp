@@ -38,10 +38,11 @@ TEST_F(NetTest, RecvMessageWindowSimple)
 
 	Net::RecvMsgWindow recvMessage(testHeap);
 	uint16_t uiSequence = 0;
+    UniquePtr<SF::MemoryEndpoint> memoryEndpoint(new SF::MemoryEndpoint());
 
 	for (int iTest = 0; iTest < 2048; iTest++)
 	{
-		auto NewMsg = NewMessage(testHeap, uiSequence++);
+		auto NewMsg = NewMessage(memoryEndpoint, uiSequence++);
 		auto hr = recvMessage.AddMsg(NewMsg);
 		if (iTest < recvMessage.GetAcceptableSequenceRange())
 		{
@@ -81,6 +82,7 @@ TEST_F(NetTest, RecvMessageWindowSimple2)
 	uint16_t releaseSequence = 0;
 	MessageDataPtr pResult, pNewMsg;
 	Result hr;
+    UniquePtr<SF::MemoryEndpoint> memoryEndpoint(new SF::MemoryEndpoint());
 
 	for (unsigned iTest = 0; iTest < TEST_COUNT; iTest++)
 	{
@@ -88,7 +90,7 @@ TEST_F(NetTest, RecvMessageWindowSimple2)
 		switch (random)
 		{
 		case 0: // add
-			pNewMsg = NewMessage(testHeap, uiSequence);
+			pNewMsg = NewMessage(memoryEndpoint, uiSequence);
 			hr = recvMessage.AddMsg(pNewMsg);
 			if (MessageSequence::Difference(uiSequence, recvMessage.GetBaseSequence()) < recvMessage.GetAcceptableSequenceRange())
 			{
@@ -131,6 +133,7 @@ TEST_F(NetTest, RecvMessageWindowSimple3)
 	uint16_t releaseSequence = 0;
 	MessageDataPtr pResult;
 	Result hr;
+    UniquePtr<SF::MemoryEndpoint> memoryEndpoint(new SF::MemoryEndpoint());
 
 	for (unsigned iTest = 0; iTest < TEST_COUNT; iTest++)
 	{
@@ -144,7 +147,7 @@ TEST_F(NetTest, RecvMessageWindowSimple3)
 			{
 				testSequence = (uint16_t)std::abs(rand());
 			}
-			auto pNewMsg = NewMessage(testHeap, testSequence);
+			auto pNewMsg = NewMessage(memoryEndpoint, testSequence);
 			hr = recvMessage.AddMsg(pNewMsg);
 			auto seqOffset = MessageSequence::Difference(testSequence, recvMessage.GetBaseSequence());
 			if (seqOffset < recvMessage.GetAcceptableSequenceRange() && seqOffset >= 0)
@@ -204,6 +207,7 @@ TEST_F(NetTest, RecvMessageWindowOutOfRange)
 		}
 	}
 
+    UniquePtr<SF::MemoryEndpoint> memoryEndpoint(new SF::MemoryEndpoint());
 
 	uiSequence = 0;
 	for (int iTest = 0; iTest < TEST_COUNT; iTest++, uiSequence++)
@@ -211,7 +215,7 @@ TEST_F(NetTest, RecvMessageWindowOutOfRange)
 		for (int testSequenceOffset = -MaxSequenceOffset; testSequenceOffset < MaxSequenceOffset; testSequenceOffset++)
 		{
 			auto testSequence = (int)uiSequence + testSequenceOffset;
-			auto pNewMsg = NewMessage(testHeap, testSequence);
+			auto pNewMsg = NewMessage(memoryEndpoint, testSequence);
 			auto hr = recvMessage.AddMsg(pNewMsg);
 			if (testSequenceOffset < 0)
 			{
@@ -268,11 +272,17 @@ TEST_F(NetTest, RecvMessageWindowMT)
 			MessageDataPtr pMsg;
 			Result hr;
 
+            UniquePtr<SF::MemoryEndpoint> memoryEndpoint(new SF::MemoryEndpoint());
+
 			while (!pThread->CheckKillEvent(DurationMS(0)))
 			{
 				for (int iTry = 0; iTry < NumTry; iTry++)
 				{
-					pMsg = NewMessage(testHeap, sequence);
+                    SF::PlayInstanceSvrRPCSendAdapter(memoryEndpoint.get()).ZoneChatS2CEvt(0, m_GuidGen.NewGuid(), 2, SF::VariableTable(), "11");
+                    MessageHeader* pResult = (MessageHeader*)memoryEndpoint->GetLastMessage();
+                    pMsg = MessageData::NewMessage(pResult);
+                    pMsg->GetMessageHeader()->SetSequence(sequence);
+
 					hr = recvMessage.AddMsg(pMsg);
 					if (!hr.IsSuccess())
 					{
@@ -351,6 +361,7 @@ TEST_F(NetTest, RecvMessageWindowMT2)
 		{
 			MessageDataPtr pMsg;
 			Result hr;
+            UniquePtr<SF::MemoryEndpoint> memoryEndpoint(new SF::MemoryEndpoint());
 
 			while (!pThread->CheckKillEvent(DurationMS(0)))
 			{
@@ -363,7 +374,7 @@ TEST_F(NetTest, RecvMessageWindowMT2)
 				// Randomly pick test sequence
 				testSequence = (uint16_t)(recvMessage.GetBaseSequence() - multiplyer * (std::abs(randValue) % MaxRandomizeSequence));
 
-				pMsg = NewMessage(testHeap, testSequence);
+				pMsg = NewMessage(memoryEndpoint, testSequence);
 				hr = recvMessage.AddMsg(pMsg);
 				if (hr == ResultCode::IO_SEQUENCE_OVERFLOW || ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE)
 				{
@@ -435,10 +446,11 @@ TEST_F(NetTest, RecvMessageWindow2Simple)
 
     Net::RecvMsgWindow2 recvMessage;
     uint16_t uiSequence = 0;
+    UniquePtr<SF::MemoryEndpoint> memoryEndpoint(new SF::MemoryEndpoint());
 
     for (int iTest = 0; iTest < 2048; iTest++)
     {
-        auto NewMsg = NewMessage(testHeap, uiSequence++);
+        auto NewMsg = NewMessage(memoryEndpoint, uiSequence++);
         auto hr = recvMessage.AddMsg(NewMsg->GetMessageHeader());
         if (iTest < recvMessage.GetAcceptableSequenceRange())
         {
@@ -478,6 +490,7 @@ TEST_F(NetTest, RecvMessageWindow2Simple2)
     uint16_t releaseSequence = 0;
     MessageDataPtr pResult, pNewMsg;
     Result hr;
+    UniquePtr<SF::MemoryEndpoint> memoryEndpoint(new SF::MemoryEndpoint());
 
     for (unsigned iTest = 0; iTest < TEST_COUNT; iTest++)
     {
@@ -485,7 +498,7 @@ TEST_F(NetTest, RecvMessageWindow2Simple2)
         switch (random)
         {
         case 0: // add
-            pNewMsg = NewMessage(testHeap, uiSequence);
+            pNewMsg = NewMessage(memoryEndpoint, uiSequence);
             hr = recvMessage.AddMsg(pNewMsg->GetMessageHeader());
             if (MessageSequence::Difference(uiSequence, recvMessage.GetBaseSequence()) < recvMessage.GetAcceptableSequenceRange())
             {
@@ -528,6 +541,7 @@ TEST_F(NetTest, RecvMessageWindow2Simple3)
     uint16_t releaseSequence = 0;
     MessageDataPtr pResult;
     Result hr;
+    UniquePtr<SF::MemoryEndpoint> memoryEndpoint(new SF::MemoryEndpoint());
 
     for (unsigned iTest = 0; iTest < TEST_COUNT; iTest++)
     {
@@ -541,7 +555,7 @@ TEST_F(NetTest, RecvMessageWindow2Simple3)
             {
                 testSequence = (uint16_t)std::abs(rand());
             }
-            auto pNewMsg = NewMessage(testHeap, testSequence);
+            auto pNewMsg = NewMessage(memoryEndpoint, testSequence);
             hr = recvMessage.AddMsg(pNewMsg->GetMessageHeader());
             auto seqOffset = MessageSequence::Difference(testSequence, recvMessage.GetBaseSequence());
             if (seqOffset < recvMessage.GetAcceptableSequenceRange() && seqOffset >= 0)
@@ -601,6 +615,7 @@ TEST_F(NetTest, RecvMessageWindow2OutOfRange)
         }
     }
 
+    UniquePtr<SF::MemoryEndpoint> memoryEndpoint(new SF::MemoryEndpoint());
 
     uiSequence = 0;
     for (int iTest = 0; iTest < TEST_COUNT; iTest++, uiSequence++)
@@ -608,7 +623,7 @@ TEST_F(NetTest, RecvMessageWindow2OutOfRange)
         for (int testSequenceOffset = -MaxSequenceOffset; testSequenceOffset < MaxSequenceOffset; testSequenceOffset++)
         {
             int testSequence = (int)uiSequence + testSequenceOffset;
-            MessageDataPtr pNewMsg = NewMessage(testHeap, testSequence);
+            MessageDataPtr pNewMsg = NewMessage(memoryEndpoint, testSequence);
             Result hr = recvMessage.AddMsg(pNewMsg->GetMessageHeader());
             if (testSequenceOffset < 0)
             {
@@ -665,12 +680,13 @@ TEST_F(NetTest, RecvMessageWindow2MT)
                 uint16_t sequence = uiSequence.fetch_add(1, std::memory_order_relaxed);
                 MessageDataPtr pMsg;
                 Result hr;
+                UniquePtr<SF::MemoryEndpoint> memoryEndpoint(new SF::MemoryEndpoint());
 
                 while (!pThread->CheckKillEvent(DurationMS(0)))
                 {
                     for (int iTry = 0; iTry < NumTry; iTry++)
                     {
-                        pMsg = NewMessage(testHeap, sequence);
+                        pMsg = NewMessage(memoryEndpoint, sequence);
                         hr = recvMessage.AddMsg(pMsg->GetMessageHeader());
                         if (!hr.IsSuccess())
                         {
@@ -749,6 +765,7 @@ TEST_F(NetTest, RecvMessageWindow2MT2)
             {
                 MessageDataPtr pMsg;
                 Result hr;
+                UniquePtr<SF::MemoryEndpoint> memoryEndpoint(new SF::MemoryEndpoint());
 
                 while (!pThread->CheckKillEvent(DurationMS(0)))
                 {
@@ -761,7 +778,7 @@ TEST_F(NetTest, RecvMessageWindow2MT2)
                     // Randomly pick test sequence
                     testSequence = (uint16_t)(recvMessage.GetBaseSequence() - multiplyer * (std::abs(randValue) % MaxRandomizeSequence));
 
-                    pMsg = NewMessage(testHeap, testSequence);
+                    pMsg = NewMessage(memoryEndpoint, testSequence);
                     hr = recvMessage.AddMsg(pMsg->GetMessageHeader());
                     if (hr == ResultCode::IO_SEQUENCE_OVERFLOW || ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE)
                     {
@@ -832,14 +849,14 @@ TEST_F(NetTest, SendMessageWindowSimple)
 	Heap testHeap("test", GetSystemHeap());
 
 	Net::SendMsgWindow msgWindow;
-	
+    UniquePtr<SF::MemoryEndpoint> memoryEndpoint(new SF::MemoryEndpoint());
 
 	for (uint16_t startSequence = 0; startSequence < Net::MessageWindow::MESSAGE_QUEUE_SIZE * 2; startSequence++)
 	{
 
 		for (int iTest = 0; iTest < Net::MessageWindow::MESSAGE_QUEUE_SIZE; iTest++)
 		{
-			auto pNewMsg = NewMessage(testHeap);
+			auto pNewMsg = NewMessage(memoryEndpoint);
 			auto hr = msgWindow.EnqueueMessage(Util::Time.GetTimeMs(), pNewMsg);
 			if (iTest < msgWindow.GetAcceptableSequenceRange())
 			{
@@ -865,13 +882,14 @@ TEST_F(NetTest, SendMessageWindowSimple2)
 	Heap testHeap("test", GetSystemHeap());
 
 	Net::SendMsgWindow msgWindow;
+    UniquePtr<SF::MemoryEndpoint> memoryEndpoint(new SF::MemoryEndpoint());
 
 	for (uint16_t startSequence = 0; startSequence < Net::MessageWindow::MESSAGE_QUEUE_SIZE * 2; startSequence++)
 	{
 		auto randNum = Util::Random.Rand(Net::MessageWindow::MESSAGE_QUEUE_SIZE);
 		for (int iTest = 0; (uint)iTest < randNum; iTest++)
 		{
-			auto pNewMsg = NewMessage(testHeap);
+			auto pNewMsg = NewMessage(memoryEndpoint);
 			auto hr = msgWindow.EnqueueMessage(Util::Time.GetTimeMs(), pNewMsg);
 			if (iTest < msgWindow.GetAcceptableSequenceRange())
 			{

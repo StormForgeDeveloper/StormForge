@@ -43,20 +43,20 @@ using ::testing::UnitTest;
 using namespace SF;
 
 
-MessageDataPtr NetTest::NewMessage(IHeap& memoryManager, uint32_t sequenceID)
+MessageDataPtr NetTest::NewMessage(UniquePtr<SF::MemoryEndpoint>& memoryEndpoint, uint32_t sequenceID)
 {
-    SF::PlayInstanceSvrRPCSendAdapter(m_MemoryEndpoint.get()).ZoneChatS2CEvt(0, m_GuidGen.NewGuid(), 2, SF::VariableTable(), "11");
-    MessageHeader* pResult = (MessageHeader*)m_MemoryEndpoint->GetLastMessage();
+    SF::PlayInstanceSvrRPCSendAdapter(memoryEndpoint.get()).ZoneChatS2CEvt(0, m_GuidGen.NewGuid(), 2, SF::VariableTable(), "11");
+    MessageHeader* pResult = (MessageHeader*)memoryEndpoint->GetLastMessage();
     MessageData* newMsgData = MessageData::NewMessage(pResult);
     newMsgData->GetMessageHeader()->SetSequence(sequenceID);
 
     return newMsgData;
 }
 
-MessageDataPtr NetTest::NewMessage(IHeap& memoryManager)
+MessageDataPtr NetTest::NewMessage(UniquePtr<SF::MemoryEndpoint>& memoryEndpoint)
 {
-    SF::PlayInstanceSvrRPCSendAdapter(m_MemoryEndpoint.get()).ZoneChatS2CEvt(0, m_GuidGen.NewGuid(), 2, SF::VariableTable(), "11");
-    MessageHeader* pResult = (MessageHeader*)m_MemoryEndpoint->GetLastMessage();
+    SF::PlayInstanceSvrRPCSendAdapter(memoryEndpoint.get()).ZoneChatS2CEvt(0, m_GuidGen.NewGuid(), 2, SF::VariableTable(), "11");
+    MessageHeader* pResult = (MessageHeader*)memoryEndpoint->GetLastMessage();
 
     return MessageData::NewMessage(pResult);
 }

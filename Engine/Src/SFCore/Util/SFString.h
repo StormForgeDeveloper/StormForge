@@ -379,24 +379,43 @@ namespace SF {
             return super::substr(starIndex, count);
         }
 
-        using FormatContext = std::basic_format_context<std::_Basic_fmt_it<CharType>, CharType>;
-
         // Format string
-        template< class ...ArgTypes >
-        StringType& Format(const CharType* strFormat, ArgTypes... args)
+        template<class ...ArgTypes,
+            typename = std::enable_if_t<std::is_same_v<CharType, char>>>
+        StringType& Format(const std::string_view& strFormat, ArgTypes... args)
         {
             super::clear();
 
-            *this = std::move(std::vformat(std::basic_string_view<CharType>(strFormat), std::make_format_args<FormatContext>(args...)));
+            *this = std::move(std::vformat(strFormat, std::make_format_args(args...)));
+
+            return *this;
+        }
+
+        template< class ...ArgTypes,
+            typename = std::enable_if_t<std::is_same_v<CharType, wchar_t>>>
+        StringType& Format(const std::wstring_view& strFormat, ArgTypes... args)
+        {
+            super::clear();
+
+            *this = std::move(std::vformat(strFormat, std::make_format_args<std::wformat_context>(args...)));
 
             return *this;
         }
 
         // Format string
-        template< class ...ArgTypes >
-        StringType& AppendFormat(const CharType* strFormat, ArgTypes... args)
+        template< class ...ArgTypes,
+            typename = std::enable_if_t<std::is_same_v<CharType, char>>>
+        StringType& AppendFormat(const std::string_view& strFormat, ArgTypes... args)
         {
-            super::append(std::move(std::vformat(std::basic_string_view<CharType>(strFormat), std::make_format_args<FormatContext>(args...))));
+            super::append(std::move(std::vformat(strFormat, std::make_format_args(args...))));
+            return *this;
+        }
+
+        template< class ...ArgTypes,
+            typename = std::enable_if_t<std::is_same_v<CharType, wchar_t>>>
+        StringType& AppendFormat(const std::wstring_view& strFormat, ArgTypes... args)
+        {
+            super::append(std::move(std::vformat(strFormat, std::make_format_args<std::wformat_context>(args...))));
             return *this;
         }
 

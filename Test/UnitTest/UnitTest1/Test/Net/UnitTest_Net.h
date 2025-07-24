@@ -35,8 +35,8 @@ protected:
 
 public:
 
-    SF::MessageDataPtr NewMessage(SF::IHeap& memoryManager, uint32_t sequenceID);
-    SF::MessageDataPtr NewMessage(SF::IHeap& memoryManager);
+    SF::MessageDataPtr NewMessage(SF::UniquePtr<SF::MemoryEndpoint>& memoryEndpoint, uint32_t sequenceID);
+    SF::MessageDataPtr NewMessage(SF::UniquePtr<SF::MemoryEndpoint>& memoryEndpoint);
 
 	// Remember that SetUp() is run immediately before a test starts.
 	virtual void SetUp()
