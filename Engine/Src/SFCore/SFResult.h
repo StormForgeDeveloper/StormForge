@@ -13,7 +13,7 @@
 #pragma once
 
 #include <stdint.h>
-
+#include <format>
 
 namespace SF
 {
@@ -102,27 +102,30 @@ namespace SF
 	};
 }
 
-
-template <>
-struct std::formatter<SF::Result>
+namespace std
 {
-    // Specify the default format (e.g., "{}")
-    constexpr auto parse(std::format_parse_context& ctx) {
-        return ctx.begin();
-    }
-
-    // Define how the object is formatted
-    template <typename FormatContext>
-    auto format(const SF::Result& value, FormatContext& ctx) const
+    template <>
+    struct formatter<SF::Result>
     {
-        const char* name = value.GetNameString();
-        if (name)
-        {
-            return std::format_to(ctx.out(), "{}", name);
+        // Specify the default format (e.g., "{}")
+        constexpr auto parse(std::format_parse_context& ctx) {
+            return ctx.begin();
         }
-        else
+
+        // Define how the object is formatted
+        template <typename FormatContext>
+        auto format(const SF::Result& value, FormatContext& ctx) const
         {
-            return std::format_to(ctx.out(), "{0:#08x}", value.GetHResultCode());
+            const char* name = value.GetNameString();
+            if (name)
+            {
+                return std::format_to(ctx.out(), "{}", name);
+            }
+            else
+            {
+                return std::format_to(ctx.out(), "{0:#08x}", value.GetHResultCode());
+            }
         }
-    }
-};
+    };
+
+}

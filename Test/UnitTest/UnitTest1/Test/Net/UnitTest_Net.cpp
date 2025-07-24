@@ -98,6 +98,7 @@ public:
     virtual Result SendMsg(const MessageHeader* messageData) override
     {
         MessageHeader* newMessage = (MessageHeader*)GetSystemHeap().Alloc(messageData->MessageSize);
+        memcpy(newMessage, messageData, messageData->MessageSize);
         MessageQueue.Enqueue(newMessage);
         return ResultCode::SUCCESS;
     }

@@ -101,7 +101,7 @@ TEST_F(MemoryTest, NewDelete)
 
 
 	auto arrayValue = new TestAllocationObject[204800];
-	delete (arrayValue);
+	delete[] arrayValue;
 }
 
 TEST_F(MemoryTest, HeapMemory)

@@ -82,7 +82,7 @@ TEST_F(MemoryTest, StackHeap)
 		if ((allocatedList.size() > 0 && randVal > 50) || stackHeap->GetFreeMemorySize() < minAllocationSize)
 		{
 			auto pDeletePtr = allocatedList.pop_back();
-			delete (pDeletePtr);
+            stackHeap->Free(pDeletePtr);
 		}
 		else
 		{
@@ -138,7 +138,7 @@ TEST_F(MemoryTest, StackHeap_RandomDelete)
 			Assert(refCount >= 2);
 			unused(refCount);
 			auto pPtr = allocatedList.GetKeyAt(randVal);
-			delete (pPtr);
+            stackHeap->Free(pPtr);
 			allocatedList.Remove(pPtr);
 			auto refCount2 = stackHeap->GetReferenceCount();
 			if (allocatedList.size() > 0)

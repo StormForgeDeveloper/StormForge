@@ -83,10 +83,6 @@
 #endif
 
 
-#if !defined(_WIN32) && !defined(_WIN64)
-#include <libmemcached/mem_config.h>
-#endif
-
 //////////////////////////////////////////////////
 //
 //  Common headers

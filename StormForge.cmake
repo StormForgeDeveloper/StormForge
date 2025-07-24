@@ -5,7 +5,7 @@ message ( "Platform=${CMAKE_SYSTEM_NAME}, Config=${CMAKE_BUILD_TYPE}" )
 
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON) #...is required...
-set(CMAKE_CXX_EXTENSIONS OFF) #...without compiler extensions like gnu++11
+set(CMAKE_CXX_EXTENSIONS ON) #...without compiler extensions like gnu++11
 
 
 if(WIN32) # MSVC isn't consistent. let's use WIN32 for windows
@@ -16,6 +16,7 @@ else()
 	#set(ENABLE_CLANG ON)
     set(CMAKE_CXX_STANDARD 20)
     set(ENABLE_CLANG ON)
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++23")
 endif()
 
 
@@ -105,10 +106,12 @@ set(Protobuf_PROTOC_EXECUTABLE "${VCPKG_INSTALL}/tools/protobuf/protoc")
 #for shared library search path on linux
 set(CMAKE_INSTALL_RPATH $ORIGIN)
 
+set(VCPKG_INCLUDE ${VCPKG_INSTALL}/include)
 include_directories(AFTER ${VCPKG_INSTALL}/include)
 
 if(WIN32)
 
+    set(VCPKG_LIB ${VCPKG_INSTALL}/lib)
 	set(VCPKG_INSTALL_SHARED ${VCPKG_DIR}/installed/${VCPKG_SHARED_TRIPLET})
     include_directories(AFTER ${VCPKG_DIR}/installed/${VCPKG_SHARED_TRIPLET}/include)
 
@@ -118,10 +121,12 @@ if(WIN32)
 	)
 else()
 	if("${CMAKE_BUILD_TYPE}" EQUAL "Debug")
-		link_directories(AFTER "${VCPKG_INSTALL}/${CMAKE_BUILD_TYPE}/lib")
+        set(VCPKG_LIB "${VCPKG_INSTALL}/${CMAKE_BUILD_TYPE}/lib")
 	else()
-		link_directories(AFTER "${VCPKG_INSTALL}/lib")
+        set(VCPKG_LIB ${VCPKG_INSTALL}/lib)
 	endif()
+
+	link_directories(AFTER "${VCPKG_LIB}")
 endif()
 
 message ( "Toolchain=${CMAKE_TOOLCHAIN_FILE}, CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}, VCPKG_INSTALL=${VCPKG_INSTALL}, VCPKG_INCLUDE=${VCPKG_INSTALL}/include" )
@@ -174,6 +179,11 @@ else()
 	list(APPEND THIRDPARTY_LIBS ${Iconv_LIBRARIES})
 endif()
 
+
+#set(OPENSSL_ROOT_DIR "/path/to/openssl")
+set(OPENSSL_LIBRARIES "$VCPKG_LIB")
+set(OPENSSL_INCLUDE_DIR "$VCPKG_INCLUDE")
+set(OPENSSL_USE_STATIC_LIBS TRUE)
 find_package(OpenSSL REQUIRED)
 if(MSVC)
     #list(APPEND THIRDPARTY_LIBS OpenSSL::SSL OpenSSL::Crypto)
@@ -375,7 +385,7 @@ elseif(UNIX)
 	message ( "Setup UNIX configs" )
 	#-lstdc++exp
 	SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS}   -Wno-nonportable-include-path -Wno-ambiguous-reversed-operator -g -frtti -pthread -funwind-tables -march=native -msse4 -m64 -fPIC")
-	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-nonportable-include-path -Wno-ambiguous-reversed-operator -g -fexceptions -funwind-tables -frtti -march=native -pthread -msse4 -m64 -fPIC")
+	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-nonportable-include-path -Wno-ambiguous-reversed-operator -g -fexceptions -funwind-tables -frtti -march=native -pthread -msse4 -m64 -fPIC -stdlib=libc++")
 
 	SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 	SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
@@ -385,6 +395,7 @@ elseif(UNIX)
 
 	add_definitions(-D_LINUX_=1)
 	add_definitions(-DEPOLL)
+	#add_definitions(-DLIBCXX_ENABLE_INCOMPLETE_FEATURES=ON)
 
 
 	set(PLATFORM_LIBS rt m atomic resolv)
@@ -408,7 +419,7 @@ endif()
 
 include_directories(AFTER 
 	${SF_DIR}/3rdParties/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE}/include
-	${SF_DIR}/3rdParties/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE}/include/libmemcached
+	#${SF_DIR}/3rdParties/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE}/include/libmemcached
 )
 
 link_directories(
