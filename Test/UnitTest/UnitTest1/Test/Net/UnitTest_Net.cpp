@@ -47,9 +47,10 @@ MessageDataPtr NetTest::NewMessage(IHeap& memoryManager, uint32_t sequenceID)
 {
     SF::PlayInstanceSvrRPCSendAdapter(m_MemoryEndpoint.get()).ZoneChatS2CEvt(0, m_GuidGen.NewGuid(), 2, SF::VariableTable(), "11");
     MessageHeader* pResult = (MessageHeader*)m_MemoryEndpoint->GetLastMessage();
-    pResult->SetSequence(sequenceID);
+    MessageData* newMsgData = MessageData::NewMessage(pResult);
+    newMsgData->GetMessageHeader()->SetSequence(sequenceID);
 
-    return MessageData::NewMessage(pResult);
+    return newMsgData;
 }
 
 MessageDataPtr NetTest::NewMessage(IHeap& memoryManager)

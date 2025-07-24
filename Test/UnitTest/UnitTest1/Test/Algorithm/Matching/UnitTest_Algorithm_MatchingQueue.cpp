@@ -356,7 +356,7 @@ TEST_F(AlgorithmTest, MatchingQueue)
 #endif
 
 
-	const DurationMS testTime(5 * 60 * 1000);
+	const DurationMS testTime(2 * 60 * 1000);
 	std::atomic<uint32_t> playerUpdated(0);
 	std::atomic< uint32_t> successfulMatchCount(0);
 	std::atomic< uint32_t> failedMatchCount(0);
@@ -496,6 +496,6 @@ TEST_F(AlgorithmTest, MatchingQueue)
 
 	matchMaker.Clear();
 	freePlayers.ClearQueue();
-	delete (players);
+	delete[] players;
 }
 

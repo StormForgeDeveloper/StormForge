@@ -180,7 +180,7 @@ else()
 endif()
 
 
-#set(OPENSSL_ROOT_DIR "/path/to/openssl")
+set(OPENSSL_ROOT_DIR "$VCPKG_INSTALL")
 set(OPENSSL_LIBRARIES "$VCPKG_LIB")
 set(OPENSSL_INCLUDE_DIR "$VCPKG_INCLUDE")
 set(OPENSSL_USE_STATIC_LIBS TRUE)
@@ -395,14 +395,13 @@ elseif(UNIX)
 
 	add_definitions(-D_LINUX_=1)
 	add_definitions(-DEPOLL)
-	#add_definitions(-DLIBCXX_ENABLE_INCOMPLETE_FEATURES=ON)
 
 
 	set(PLATFORM_LIBS rt m atomic resolv)
 
 	include_directories(AFTER 
 		/usr/include
-		/usr/include/vulkan
+		#/usr/include/vulkan
 		${SF_DIR}/3rdParties/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE}/include
 		#${SF_DIR}/3rdParties/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE}/include/libmemcached
 	)
