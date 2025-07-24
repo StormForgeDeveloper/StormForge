@@ -302,7 +302,7 @@ namespace Net {
 			//break;
 		default:
 			// Unknown error
-			SFLog(Net, Debug3, "UDP Read Pending failed err={0:X8}", hrErr);
+			SFLog(Net, Debug3, "UDP Read Pending failed err={0}", hrErr);
 			//netErr( HRESULT_FROM_WIN32(iErr2) );
 			break;
 		};
@@ -366,12 +366,12 @@ namespace Net {
 			if (hr != ResultCode::IO_IO_SEND_FAIL)
 			{
 				// abnormal error, return error
-				SFLog(Net, Debug1, "UDP Send Failed, CID:{0}, err:{1:X8}, hr:{2:X8}", GetUserSocketID(), hrErr, hr);
+				SFLog(Net, Debug1, "UDP Send Failed, CID:{0}, err:{1}, hr:{2}", GetUserSocketID(), hrErr, hr);
 			}
 			else
 			{
 				// regular error
-				//SFLog(Net, Debug1, "UDP Send Failed, CID:{0}, err:{1:X8}, hr:{2:X8}", GetUserSocketID(), hrErr, hr);
+				//SFLog(Net, Debug1, "UDP Send Failed, CID:{0}, err:{1}, hr:{2}", GetUserSocketID(), hrErr, hr);
 
 				// return success and ignore further error handling
 				return ResultCode::SUCCESS;
@@ -411,7 +411,7 @@ namespace Net {
 		sockAccept = Service::NetSystem->Socket(GetSocketFamily(), SocketType::Stream);
 		if (sockAccept == INVALID_SOCKET)
 		{
-			SFLog(Net, Error, "Failed to Open Accept Socket {0:X8}", GetLastNetSystemResult());
+			SFLog(Net, Error, "Failed to Open Accept Socket {0}", GetLastNetSystemResult());
 			netErr(ResultCode::UNEXPECTED);
 		}
 
@@ -422,14 +422,14 @@ namespace Net {
 		iOptValue = Net::Const::SVR_RECV_BUFFER_SIZE;
 		if (setsockopt(sockAccept, SOL_SOCKET, SO_RCVBUF, (char *)&iOptValue, sizeof(iOptValue)) == SOCKET_ERROR)
 		{
-			SFLog(Net, Error, "Failed to change socket option SO_RCVBUF = {0}, err = {1:X8}", iOptValue, GetLastNetSystemResult());
+			SFLog(Net, Error, "Failed to change socket option SO_RCVBUF = {0}, err = {1}", iOptValue, GetLastNetSystemResult());
 			netErr(ResultCode::UNEXPECTED);
 		}
 
 		iOptValue = Net::Const::SVR_SEND_BUFFER_SIZE;
 		if (setsockopt(sockAccept, SOL_SOCKET, SO_SNDBUF, (char *)&iOptValue, sizeof(iOptValue)) == SOCKET_ERROR)
 		{
-			SFLog(Net, Error, "Failed to change socket option SO_SNDBUF = {0}, err = {1:X8}", iOptValue, GetLastNetSystemResult());
+			SFLog(Net, Error, "Failed to change socket option SO_SNDBUF = {0}, err = {1}", iOptValue, GetLastNetSystemResult());
 			netErr(ResultCode::UNEXPECTED);
 		}
 
@@ -503,7 +503,7 @@ namespace Net {
 		}
 		else
 		{
-			SFLog(Net, Debug5, "Pending Recv CID:{0}, pending:{1}, hr:{2:X8}", GetUserSocketID(), GetPendingRecvCount(), hr);
+			SFLog(Net, Debug5, "Pending Recv CID:{0}, pending:{1}, hr:{2}", GetUserSocketID(), GetPendingRecvCount(), hr);
 		}
 
 		return hr;
@@ -528,10 +528,10 @@ namespace Net {
 		case (uint32_t)ResultCode::IO_NOTSOCK:
 		case (uint32_t)ResultCode::IO_SHUTDOWN:
 		case (uint32_t)ResultCode::INVALID_PIPE:
-			SFLog(Net, Warning, "TCP Read failed, Connection Reset CID:{0}, err:{1:X8}, pending:{2}", GetUserSocketID(), hrErr, GetPendingRecvCount());
+			SFLog(Net, Warning, "TCP Read failed, Connection Reset CID:{0}, err:{1}, pending:{2}", GetUserSocketID(), hrErr, GetPendingRecvCount());
 			break;
 		default:
-			//SFLog(Net, Error, "TCP Recv failed with CID {0}, err:{1:X8}", GetCID(), hrErr);
+			//SFLog(Net, Error, "TCP Recv failed with CID {0}, err:{1}", GetCID(), hrErr);
 			goto Proc_End;
 			break;
 		case (uint32_t)ResultCode::IO_IO_PENDING:
@@ -606,7 +606,7 @@ namespace Net {
 		case (uint32_t)ResultCode::IO_TRY_AGAIN:
 			break;
 		default:
-			SFLog(Net, Error, "TCP Send Failed, CID:{0}, sock:{3},  err:{1:X8}, hr:{2:X8}", GetUserSocketID(), hrErr, hr, GetIOSocket());
+			SFLog(Net, Error, "TCP Send Failed, CID:{0}, sock:{3},  err:{1}, hr:{2}", GetUserSocketID(), hrErr, hr, GetIOSocket());
 			break;
 		}
 

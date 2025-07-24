@@ -367,7 +367,7 @@ namespace Net {
 				goto Proc_End;
 			}
 
-			SFLog(Net, Error, "TCP accept failed err={0:X8}", err);
+			SFLog(Net, Error, "TCP accept failed err={0}", err);
 		}
 
 

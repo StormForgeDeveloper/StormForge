@@ -79,7 +79,7 @@ namespace Net {
 				netChkPtr(pIOBuffer);
 
 				if (!(hr = m_Owner.OnRecv(pIOBuffer->TransferredSize, pIOBuffer->GetPayloadPtr())))
-					SFLog(Net, Debug3, "Read IO failed with CID {0}, hr={1:X8}", m_Owner.GetCID(), hr);
+					SFLog(Net, Debug3, "Read IO failed with CID {0}, hr={1}", m_Owner.GetCID(), hr);
 
 				m_Owner.PendingRecv();
 			}
@@ -244,7 +244,7 @@ namespace Net {
 		socket = Service::NetSystem->Socket(local.PeerAddress.SocketFamily, SocketType::DataGram);
 		if (socket == INVALID_SOCKET)
 		{
-			SFLog(Net, Error, "Failed to Open Client Socket {0:X8}", GetLastNetSystemResult());
+			SFLog(Net, Error, "Failed to Open Client Socket {0}", GetLastNetSystemResult());
 			netCheck(ResultCode::UNEXPECTED);
 		}
 
@@ -253,7 +253,7 @@ namespace Net {
 		bindAddr = (sockaddr_storage)local.PeerAddress;
 		if (bind(socket, (sockaddr*)&bindAddr, sizeof(bindAddr)) == SOCKET_ERROR)
 		{
-			SFLog(Net, Error, "Socket bind failed, UDP err={0:X8}", GetLastNetSystemResult());
+			SFLog(Net, Error, "Socket bind failed, UDP err={0}", GetLastNetSystemResult());
 			netCheck(ResultCode::UNEXPECTED);
 		}
 		local.PeerAddress = bindAddr;

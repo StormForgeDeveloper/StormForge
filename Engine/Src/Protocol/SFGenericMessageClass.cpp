@@ -49,7 +49,7 @@ namespace SF {
 		void FailResultS2CEvt::OutputMessage(const char* Prefix)
 		{
 			unused(Prefix);
-			SFLog(Net, Debug1, "{0}:FailResultS2CEvt: , Context:{1}, hrRes:{2:X8}",
+			SFLog(Net, Debug1, "{0}:FailResultS2CEvt: , Context:{1}, hrRes:{2}",
 				Prefix, m_Context, m_hrRes);
 		}; // VOID MsgFailResultS2CEvt::OutputMessage(const char* Prefix)
 

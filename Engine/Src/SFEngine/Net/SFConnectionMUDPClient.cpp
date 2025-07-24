@@ -68,7 +68,7 @@ namespace Net {
                 MessageHeader* pHeader = reinterpret_cast<MessageHeader*>(pPacketHeader + 1);
 
 				if (!(hr = m_Owner.OnRecv(pIOBuffer->TransferredSize - sizeof(PacketHeader), reinterpret_cast<uint8_t*>(pHeader))))
-					SFLog(Net, Debug3, "Read IO failed with CID {0}, hr={1:X8}", m_Owner.GetCID(), hr);
+					SFLog(Net, Debug3, "Read IO failed with CID {0}, hr={1}", m_Owner.GetCID(), hr);
 
 				m_Owner.PendingRecv();
 			}
@@ -156,7 +156,7 @@ namespace Net {
 		auto socket = Service::NetSystem->Socket(socketFamily, socketType);
 		if (socket == INVALID_SOCKET)
 		{
-			SFLog(Net, Error, "Failed to Open Client Socket {0:X8}", GetLastNetSystemResult());
+			SFLog(Net, Error, "Failed to Open Client Socket {0}", GetLastNetSystemResult());
 			netErr(ResultCode::UNEXPECTED);
 		}
 
@@ -165,7 +165,7 @@ namespace Net {
 		bindAddr = (sockaddr_storage)m_Owner.GetLocalInfo().PeerAddress;
 		if (bind(socket, (sockaddr*)&bindAddr, (unsigned)Net::GetSockAddrSize(bindAddr)) == SOCKET_ERROR)
 		{
-			SFLog(Net, Error, "Socket bind failed, UDP err={0:X8}", GetLastNetSystemResult());
+			SFLog(Net, Error, "Socket bind failed, UDP err={0}", GetLastNetSystemResult());
 			netErr(ResultCode::UNEXPECTED);
 		}
 

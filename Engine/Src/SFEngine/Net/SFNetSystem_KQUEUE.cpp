@@ -170,7 +170,7 @@ namespace Net {
 				default:
 					if (hr.IsFailure())
 					{
-						SFLog(Net, Info, "ERROR KQUEUE Recv fail events:{0:X8} hr:{1:X8}", events, hrErr);
+						SFLog(Net, Info, "ERROR KQUEUE Recv fail events:{0} hr:{1}", events, hrErr);
 					}
 					// fallthru
 				case (uint32_t)ResultCode::SUCCESS:
@@ -205,7 +205,7 @@ namespace Net {
 
 		if (hr.IsFailure())
 		{
-			SFLog(Net, Info, "ERROR KQUEUE RW fail events:{0:X8} hr:{1:X8}", events, hr);
+			SFLog(Net, Info, "ERROR KQUEUE RW fail events:{0} hr:{1}", events, hr);
 		}
 
 		Util::SafeDelete(pReadBuffer);
@@ -236,7 +236,7 @@ namespace Net {
 				case (uint32_t)ResultCode::INVALID_POINTER:
 				case (uint32_t)ResultCode::INVALID_ARG:
 				default:
-					SFLog(Net, Info, "ERROR KQUEUE wait failed hr={0:X8}", hr);
+					SFLog(Net, Info, "ERROR KQUEUE wait failed hr={0}", hr);
 					break;
 				}
 			}
@@ -358,7 +358,7 @@ namespace Net {
 	//			case (uint32_t)ResultCode::SUCCESS:
 	//				break;
 	//			default:
-	//				SFLog(Net, Info, "ERROR UDP send failed {0:X8}", hr);
+	//				SFLog(Net, Info, "ERROR UDP send failed {0}", hr);
 	//				// send fail
 	//				break;
 	//			}

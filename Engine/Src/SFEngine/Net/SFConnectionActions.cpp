@@ -97,7 +97,7 @@ namespace Net {
 			{
 				auto* pConUDP = static_cast<ConnectionUDPBase*>(GetConnection());
 				auto hrTem = pConUDP->GetSendReliableWindow().QueueReleasedSequence(pHeader->GetSequence());
-				SFLog(Net, Debug5, "NetCtrl Recv GuaAck : CID:{0}:{1}, seq:{2}, rtnmsg:{3}, hr={4:X8}, windows status, baseSeq:{5}, headSeq:{6}, remain:{7}, msgCount:{8}",
+				SFLog(Net, Debug5, "NetCtrl Recv GuaAck : CID:{0}:{1}, seq:{2}, rtnmsg:{3}, hr={4}, windows status, baseSeq:{5}, headSeq:{6}, remain:{7}, msgCount:{8}",
 					GetCID(), pHeader->GetSequence(), pHeader->GetSequence(), pNetCtrl->rtnMsgID, hrTem,
 					pConUDP->GetSendReliableWindow().GetBaseSequence(), pConUDP->GetSendReliableWindow().GetHeadSequence(), 
 					pConUDP->GetSendReliableWindow().GetRemainSequenceCount(), pConUDP->GetSendReliableWindow().GetMsgCount());
@@ -285,12 +285,12 @@ namespace Net {
 		hrTem = sendWindow.QueueReleasedSequence(pHeader->GetSequence(), pSyncCtrl->MessageMask);
 		if (hrTem)
 		{
-			SFLog(Net, Debug2, "NetCtrl Recv SendMask : CID:{0}: mySeq:{1}, seq:{2}, mask:{3:X8}",
+			SFLog(Net, Debug2, "NetCtrl Recv SendMask : CID:{0}: mySeq:{1}, seq:{2}, mask:{3}",
 				GetCID(), sendWindow.GetBaseSequence(), pHeader->GetSequence(), pSyncCtrl->MessageMask);
 		}
 		else
 		{
-			SFLog(Net, Debug2, "NetCtrl Recv SendMask Failed : CID:{0} mySeq:{1}, seq:{2}, mask:{3:X8}, hr={4:X8}",
+			SFLog(Net, Debug2, "NetCtrl Recv SendMask Failed : CID:{0} mySeq:{1}, seq:{2}, mask:{3}, hr={4}",
 				GetCID(), sendWindow.GetBaseSequence(), pHeader->GetSequence(), pSyncCtrl->MessageMask, hrTem);
 		}
 
@@ -321,7 +321,7 @@ namespace Net {
 			netCheck(ResultCode::IO_BADPACKET_SIZE);
 
 		hrTem = sendReliableWindow.QueueReleasedSequence(pHeader->GetSequence(), pSyncCtrl->MessageMask);
-		SFLog(Net, Custom10, "NetCtrl Recv SendReliableMask : CID:{0}:{1}, seq:{2}, mask:{3:X8}, hr={4:X8}",
+		SFLog(Net, Custom10, "NetCtrl Recv SendReliableMask : CID:{0}:{1}, seq:{2}, mask:{3}, hr={4}",
 			GetCID(), sendReliableWindow.GetBaseSequence(), pHeader->GetSequence(), pSyncCtrl->MessageMask, hrTem);
 
 		if (hrTem == ResultCode::UNEXPECTED)
