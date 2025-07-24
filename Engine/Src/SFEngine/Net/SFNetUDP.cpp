@@ -65,7 +65,7 @@ namespace Net {
 				netChkPtr(pIOBuffer);
 
 				if (!(hr = m_Owner.OnRecv(pIOBuffer->NetAddr.From, pIOBuffer->TransferredSize, (uint8_t*)pIOBuffer->GetPayloadPtr())))
-					SFLog(Net, Debug3, "Read IO failed with hr={0:X8}", hr);
+					SFLog(Net, Debug3, "Read IO failed with hr={0}", hr);
 
 				PendingRecv(pIOBuffer);
 				pIOBuffer = nullptr;
@@ -161,7 +161,7 @@ namespace Net {
                 if (socket != INVALID_SOCKET)
                     Service::NetSystem->CloseSocket(socket);
 
-                SFLog(Net, Info, "NetUDP: Opened {0}, hr={1:X8}", m_LocalAddress, hr);
+                SFLog(Net, Info, "NetUDP: Opened {0}, hr={1}", m_LocalAddress, hr);
 
             });
 		INT iOptValue;
@@ -217,7 +217,7 @@ namespace Net {
 		GetAnyBindAddr(m_LocalSockAddress, bindAddr);
 		if (bind(socket, (sockaddr*)&bindAddr, sizeof(bindAddr)) == SOCKET_ERROR)
 		{
-			SFLog(Net, Error, "NetUDP: Socket bind failed, UDP err={0:X8}", GetLastNetSystemResult());
+			SFLog(Net, Error, "NetUDP: Socket bind failed, UDP err={0}", GetLastNetSystemResult());
             netCheck(ResultCode::UNEXPECTED);
 		}
 		m_LocalSockAddress = bindAddr;
@@ -285,11 +285,11 @@ namespace Net {
 
 			if (hr != Result(ResultCode::IO_IO_SEND_FAIL))
 			{
-				SFLog(Net, Error, "NetUDP Send Failed, err:{1:X8}, hr:{2:X8}", hrErr, hr);
+				SFLog(Net, Error, "NetUDP Send Failed, err:{1}, hr:{2}", hrErr, hr);
 			}
 			else
 			{
-				SFLog(Net, Debug3, "NetUDP Send Failed, err:{1:X8}, hr:{2:X8}", hrErr, hr);
+				SFLog(Net, Debug3, "NetUDP Send Failed, err:{1}, hr:{2}", hrErr, hr);
 				return ResultCode::SUCCESS;
 			}
 		}

@@ -159,7 +159,7 @@ namespace AsyncIO {
 
 		if (hr.IsFailure())
 		{
-			SFLog(System, Info, "ERROR KQUEUE RW fail events:{0:X8} hr:{1:X8}", events, hr);
+			SFLog(System, Info, "ERROR KQUEUE RW fail events:{0:#X} hr:{1}", events, hr);
 		}
 
 
@@ -190,7 +190,7 @@ namespace AsyncIO {
 				case (uint32_t)ResultCode::IO_NOTSOCK:
 				case (uint32_t)ResultCode::INVALID_ARG:
 				default:
-					SFLog(Net, Info, "ERROR KQUEUE wait failed hr={0:X8}", hr);
+					SFLog(Net, Info, "ERROR KQUEUE wait failed hr={0}", hr);
 					break;
 				}
 			}

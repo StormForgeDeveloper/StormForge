@@ -180,7 +180,7 @@ namespace Net {
 	// called when send completed
 	Result SocketIO::OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE *pIOBuffer)
 	{
-		delete (pIOBuffer);
+		delete pIOBuffer;
 		DecPendingSendCount();
 		return ResultCode::SUCCESS;
 	}

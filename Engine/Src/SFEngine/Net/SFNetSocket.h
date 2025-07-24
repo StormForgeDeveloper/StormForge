@@ -86,9 +86,6 @@ namespace Net {
 		// Is registered to IO sub system
 		std::atomic<IOStatus> m_IOStatus;
 
-
-		//WriteBufferQueue* m_pWriteQueues{};
-
 		// Assigned IO worker thread index
 		int m_AssignedIOWorker = -1;
 

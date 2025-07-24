@@ -279,7 +279,7 @@ namespace Net {
 						hr = ResultCode::IO_IO_ABORTED;
 						break;
 					default:
-						SFLog(Net, Error, "IOCP Operation failed iErr={0}, hr={1:X8}", iLastError, hr );
+						SFLog(Net, Error, "IOCP Operation failed iErr={0}, hr={1}", iLastError, hr );
 						break;
 					};
 				}
@@ -546,7 +546,7 @@ namespace Net {
 		if (!CreateIoCompletionPort((HANDLE)cbInstance->GetIOSocket(), GetNetIOSystem().GetNativeIOSystemHandle(), (ULONG_PTR)cbInstance, 0))
 		{
 			hr = GetLastResultCode();
-			SFLog(Net, Error, "Registering socket to IOCP is Failed, hr = {0:X8}", hr);
+			SFLog(Net, Error, "Registering socket to IOCP is Failed, hr = {0}", hr);
 			netErr(ResultCode::UNEXPECTED);
 		}
 
@@ -564,7 +564,7 @@ namespace Net {
 		//if (!PostQueuedCompletionStatus(GetNetIOSystem().GetNativeIOSystemHandle(), 0, (ULONG_PTR)cbInstance, 0))
 		//{
 		//	hr = GetLastResultCode();
-		//	SFLog(Net, Error, "Registering socket to IOCP is Failed, hr = {0:X8}", hr);
+		//	SFLog(Net, Error, "Registering socket to IOCP is Failed, hr = {0}", hr);
 		//	netErr(ResultCode::UNEXPECTED);
 		//}
 
@@ -612,21 +612,21 @@ namespace Net {
 			switch ((int32_t)iErr)
 			{
 			case (uint32_t)ResultCode::IO_NOTSOCK:// server closing or not initialized
-				SFLog(Net, Error, "TCP Abnormal accept, Not socked {0:X8}", iErr);
+				SFLog(Net, Error, "TCP Abnormal accept, Not socked {0}", iErr);
 				netErr(iErr);
 				break;
 			case (uint32_t)ResultCode::IO_IO_PENDING:
 				//SFLog(Net, Info, "TCP accept pending {0} queued", m_pAcceptBuffer->GetUsedBufferCount());
 				break;
 			default:
-				SFLog(Net, Error, "TCP Abnormal accept, err:{0:X8}", iErr);
+				SFLog(Net, Error, "TCP Abnormal accept, err:{0}", iErr);
 				netErr(iErr);
 				break;
 			};
 		}
 		else
 		{
-			SFLog(Net, Error, "TCP Abnormal accept err={0:X8}", GetLastNetSystemResult());
+			SFLog(Net, Error, "TCP Abnormal accept err={0}", GetLastNetSystemResult());
 			netErr(ResultCode::UNEXPECTED);
 		}
 
@@ -643,7 +643,7 @@ namespace Net {
 
 		if (setsockopt(pAccept->sockAccept, SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, (char *)&sockListen, sizeof(SF_SOCKET)) == SOCKET_ERROR)
 		{
-			SFLog(Net, Info, "Failed set socket option SO_UPDATE_ACCEPT_CONTEXT err:{0:X8}", GetLastNetSystemResult());
+			SFLog(Net, Info, "Failed set socket option SO_UPDATE_ACCEPT_CONTEXT err:{0}", GetLastNetSystemResult());
 			return ResultCode::FAIL;
 		}
 

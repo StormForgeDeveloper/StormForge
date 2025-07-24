@@ -144,7 +144,7 @@ namespace Net {
 		socket = Service::NetSystem->Socket(local.PeerAddress.SocketFamily, SocketType::Stream);
 		if (socket == INVALID_SOCKET)
 		{
-			SFLog(Net, Error, "Failed to Open a Socket {0:X8}", GetLastNetSystemResult());
+			SFLog(Net, Error, "Failed to Open a Socket {0}", GetLastNetSystemResult());
 			netCheck(ResultCode::UNEXPECTED);
 		}
 
@@ -229,7 +229,7 @@ namespace Net {
         hrTem = SendRaw(pHeader);
         if (!hrTem.IsSuccess())
         {
-            SFLog(Net, Debug4, "NetCtrl Send failed : CID:{0}, msg:{1:X8}, seq:{2}, hr={3:X8}",
+            SFLog(Net, Debug4, "NetCtrl Send failed : CID:{0}, msg:{1}, seq:{2}, hr={3}",
                 GetCID(),
                 returnMsgID.ID,
                 uiSequence,

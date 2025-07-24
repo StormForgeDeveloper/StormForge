@@ -644,7 +644,7 @@ namespace SF {
 			hr = ProcConnectionStateAction();
 			if (!hr.IsSuccess())
 			{
-				SFLog(Net, Info, "Process Connection state failed {0:X8}", hr);
+				SFLog(Net, Info, "Process Connection state failed {0}", hr);
 			}
 
 			return hr;

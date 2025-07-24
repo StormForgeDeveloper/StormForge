@@ -67,7 +67,7 @@ namespace Net {
 				netChkPtr(pIOBuffer);
 
 				if (!(hr = m_Owner.OnRecv(pIOBuffer->NetAddr.From, pIOBuffer->TransferredSize, pIOBuffer->GetPayloadPtr())))
-					SFLog(Net, Debug3, "Read IO failed with hr={0:X8}", hr);
+					SFLog(Net, Debug3, "Read IO failed with hr={0}", hr);
 
                 // turn off flag before reuse
                 pIOBuffer->SetPendingFalse();
@@ -98,6 +98,14 @@ namespace Net {
 		return hr;
 
 	}
+
+    Result RawUDP::MyNetSocketIOAdapter::OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE* pIOBuffer)
+    {
+        // We are using new/delete override for PacketData. The pointer need to be casted to matched type
+        delete static_cast<PacketData*>(pIOBuffer);
+        DecPendingSendCount();
+        return ResultCode::SUCCESS;
+    }
 
 	Result RawUDP::MyNetSocketIOAdapter::OnWriteReady()
 	{
@@ -156,7 +164,7 @@ namespace Net {
                 if (socket != INVALID_SOCKET)
                     Service::NetSystem->CloseSocket(socket);
 
-                SFLog(Net, Info, "RawUDP: Open {0}, hr={1:X8}", m_LocalAddress, hr);
+                SFLog(Net, Info, "RawUDP: Open {0}, hr={1}", m_LocalAddress, hr);
 
             });
 		INT iOptValue;
@@ -213,7 +221,7 @@ namespace Net {
 		GetAnyBindAddr(m_LocalSockAddress, bindAddr);
 		if (bind(socket, (sockaddr*)&bindAddr, sizeof(bindAddr)) == SOCKET_ERROR)
 		{
-			SFLog(Net, Error, "RawUDP: Socket bind failed, UDP err={0:X8}", GetLastNetSystemResult());
+			SFLog(Net, Error, "RawUDP: Socket bind failed, UDP err={0}", GetLastNetSystemResult());
             netCheck(ResultCode::UNEXPECTED);
 		}
 		m_LocalSockAddress = bindAddr;

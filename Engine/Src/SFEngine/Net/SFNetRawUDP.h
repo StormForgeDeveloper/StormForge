@@ -50,6 +50,7 @@ namespace Net {
 
 			// called when receiving TCP message
 			virtual Result OnIORecvCompleted(Result hrRes, IOBUFFER_READ* &pIOBuffer) override;
+            virtual Result OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE* pIOBuffer) override;
 
 			virtual Result OnWriteReady() override;
 		};

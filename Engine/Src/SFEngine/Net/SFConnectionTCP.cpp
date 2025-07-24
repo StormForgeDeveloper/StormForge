@@ -130,7 +130,7 @@ namespace Net {
                     Util::SafeDelete(pIOBuffer);
                 }
 
-                SFLog(Net, Debug5, "TCP Recv CID:{0}, pending:{1}, hr:{2:X8}", GetCID(), GetPendingRecvCount(), hr);
+                SFLog(Net, Debug5, "TCP Recv CID:{0}, pending:{1}, hr:{2}", GetCID(), GetPendingRecvCount(), hr);
 
             });
 
@@ -167,7 +167,7 @@ namespace Net {
                 hr = m_Owner.OnRecv(pIOBuffer->TransferredSize, (uint8_t*)pIOBuffer->GetPayloadPtr());
                 if (hr.IsFailure())
                 {
-                    SFLog(Net, Debug3, "Read IO failed with CID {0}, hr={1:X8}", m_Owner.GetCID(), hr);
+                    SFLog(Net, Debug3, "Read IO failed with CID {0}, hr={1}", m_Owner.GetCID(), hr);
                 }
 			}
 			else
@@ -181,7 +181,7 @@ namespace Net {
 					m_Owner.Disconnect("Recv fail, IO_IO_ABORTED");
 					break;
 				default:
-					SFLog(Net, Debug3, "Recv Msg Failed, SvrTCP, CID {0}, hr={1:X8}", GetCID(), hrRes);
+					SFLog(Net, Debug3, "Recv Msg Failed, SvrTCP, CID {0}, hr={1}", GetCID(), hrRes);
 					break;
 				};
 			}
@@ -370,7 +370,7 @@ namespace Net {
 		socket = Service::NetSystem->Socket(local.PeerAddress.SocketFamily, SocketType::Stream);
 		if (socket == INVALID_SOCKET)
 		{
-			SFLog(Net, Error, "Failed to Open a Socket {0:X8}", GetLastNetSystemResult());
+			SFLog(Net, Error, "Failed to Open a Socket {0}", GetLastNetSystemResult());
 			netErr(ResultCode::UNEXPECTED);
 		}
 
@@ -449,7 +449,7 @@ namespace Net {
 				hr = ResultCode::SUCCESS;
 				break;
 			default:
-				SFLog(Net, Warning, "Connection try is failed, RemoteAddr:{0}, RemoteID:{1}, hr:{2:X8}", GetRemoteInfo().PeerAddress, GetRemoteInfo().PeerID, hrConResult);
+				SFLog(Net, Warning, "Connection try is failed, RemoteAddr:{0}, RemoteID:{1}, hr:{2}", GetRemoteInfo().PeerAddress, GetRemoteInfo().PeerID, hrConResult);
 				hr = hrConResult;
 			}
 		}
@@ -600,7 +600,7 @@ namespace Net {
         hrTem = SendRaw(pHeader);
         if (!hrTem.IsSuccess())
         {
-            SFLog(Net, Debug4, "NetCtrl Send failed : CID:{0}, msg:{1:X8}, seq:{2}, hr={3:X8}",
+            SFLog(Net, Debug4, "NetCtrl Send failed : CID:{0}, msg:{1}, seq:{2}, hr={3}",
                 GetCID(),
                 returnMsgID.ID,
                 uiSequence,

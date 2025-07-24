@@ -147,7 +147,7 @@ namespace AsyncIO {
 				case (uint32_t)ResultCode::IO_NOTSOCK:
 				case (uint32_t)ResultCode::INVALID_ARG:
 				default:
-					SFLog(System, Info, "ERROR EPOLL wait failed hr={0:X8}", hr);
+					SFLog(System, Info, "ERROR EPOLL wait failed hr={0}", hr);
 					break;
 				}
 			}

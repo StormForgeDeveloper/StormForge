@@ -129,7 +129,7 @@ namespace AsyncIO {
 					hr = ResultCode::IO_IO_ABORTED;
 					break;
 				default:
-					SFLog(System, Error, "IOCP Operation failed iErr={0}, hr={1:X8}", iLastError, hr);
+					SFLog(System, Error, "IOCP Operation failed iErr={0}, hr={1}", iLastError, hr);
 					break;
 				};
 			}
@@ -307,7 +307,7 @@ namespace AsyncIO {
 		if (!CreateIoCompletionPort((HANDLE)cbInstance->GetIOHandle(), m_Impl->GetNativeIOSystemHandle(), (ULONG_PTR)cbInstance, 0))
 		{
 			hr = GetLastResultCode();
-			SFLog(Net, Error, "Registering socket to IOCP is Failed, hr = {0:X8}", hr);
+			SFLog(Net, Error, "Registering socket to IOCP is Failed, hr = {0}", hr);
 			return ResultCode::UNEXPECTED;
 		}
 
@@ -325,7 +325,7 @@ namespace AsyncIO {
 		//if (!PostQueuedCompletionStatus(GetNetIOSystem().GetNativeIOSystemHandle(), 0, (ULONG_PTR)cbInstance, 0))
 		//{
 		//	hr = GetLastResultCode();
-		//	SFLog(Net, Error, "Registering socket to IOCP is Failed, hr = {0:X8}", hr);
+		//	SFLog(Net, Error, "Registering socket to IOCP is Failed, hr = {0}", hr);
 		//	netErr(ResultCode::UNEXPECTED);
 		//}
 
