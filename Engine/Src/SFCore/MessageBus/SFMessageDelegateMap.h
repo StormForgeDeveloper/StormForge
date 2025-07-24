@@ -27,7 +27,6 @@ namespace SF {
         using RecvMessageDelegates = EventDelegateList<const MessageHeader*>;
 
         MessageDelegateMap()
-            : m_RecvMessageDelegatesByMsgId(GetSystemHeap())
         {
         }
 
@@ -36,7 +35,7 @@ namespace SF {
             m_RecvMessageDelegatesByMsgId.CommitChanges();
             m_RecvMessageDelegatesByMsgId.ForeachOrder(0, (uint32_t)m_RecvMessageDelegatesByMsgId.size(), [](uint32_t, RecvMessageDelegates* pDelegate)
                 {
-                    IHeap::Delete(pDelegate);
+                    delete (pDelegate);
                     return true;
                 });
             m_RecvMessageDelegatesByMsgId.clear();
@@ -47,7 +46,7 @@ namespace SF {
             RecvMessageDelegates* pDelegateList = nullptr;
             if (!m_RecvMessageDelegatesByMsgId.Find(msgId, pDelegateList))
             {
-                pDelegateList = new(GetSystemHeap()) RecvMessageDelegates(GetSystemHeap());
+                pDelegateList = new RecvMessageDelegates;
                 m_RecvMessageDelegatesByMsgId.Insert(msgId, pDelegateList);
                 m_RecvMessageDelegatesByMsgId.CommitChanges();
             }
@@ -88,7 +87,7 @@ namespace SF {
             RecvMessageDelegates* pDelegateList = nullptr;
             if (!m_RecvMessageDelegatesByMsgId.Find(msgId, pDelegateList))
             {
-                pDelegateList = new(GetSystemHeap()) RecvMessageDelegates(GetSystemHeap());
+                pDelegateList = new RecvMessageDelegates;
                 m_RecvMessageDelegatesByMsgId.Insert(msgId, pDelegateList);
                 m_RecvMessageDelegatesByMsgId.CommitChanges();
             }

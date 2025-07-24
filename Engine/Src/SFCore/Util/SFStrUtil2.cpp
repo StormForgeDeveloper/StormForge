@@ -357,18 +357,18 @@ namespace StrUtil {
 	}
 
 	// String duplication, szDest will destroyed if exist, and new memory will be allocated
-	Result StringDup(IHeap& memoryManager, char* &szDest, const char* szSrc)
+	Result StringDup(char* &szDest, const char* szSrc)
 	{
-		if (szDest != NULL)
+		if (szDest != nullptr)
 		{
-			memoryManager.Free(szDest);
+            delete[] szDest;
 			szDest = NULL;
 		}
 
 		if (szSrc)
 		{
 			INT iLen = (INT)strlen(szSrc) + 1;
-			szDest = new(memoryManager) char[iLen];
+			szDest = new char[iLen];
 			if (szDest == NULL)
 				return ResultCode::OUT_OF_MEMORY;
 
@@ -378,18 +378,18 @@ namespace StrUtil {
 		return ResultCode::SUCCESS;
 	}
 
-	Result StringDup(IHeap& memoryManager, wchar_t* &szDest, const wchar_t* szSrc)
+	Result StringDup(wchar_t* &szDest, const wchar_t* szSrc)
 	{
 		if (szDest != NULL)
 		{
-			memoryManager.Free(szDest);
+            delete[] szDest;
 			szDest = NULL;
 		}
 
 		if (szSrc)
 		{
 			INT iLen = (INT)wcslen(szSrc) + 1;
-			szDest = new(memoryManager) wchar_t[iLen];
+			szDest = new wchar_t[iLen];
 			if (szDest == NULL)
 				return ResultCode::OUT_OF_MEMORY;
 

@@ -17,8 +17,8 @@ namespace SF
 {
 	template class SharedPointerT<RawBinary>;
 
-	RawBinary::RawBinary(IHeap& heap, const CallTrack& callTrack)
-		: Resource(heap, "bin", callTrack)
+	RawBinary::RawBinary(const CallTrack& callTrack)
+		: Resource("bin", callTrack)
 	{
 
 	}
@@ -26,7 +26,7 @@ namespace SF
 	RawBinary::~RawBinary()
 	{
 		if (m_Data != nullptr)
-			IHeap::Delete(m_Data);
+			delete (m_Data);
 
 		m_Data = nullptr;
 	}
@@ -34,7 +34,7 @@ namespace SF
 	void RawBinary::Dispose()
 	{
 		if (m_Data != nullptr)
-			IHeap::Delete(m_Data);
+			delete (m_Data);
 
 		m_DataSize = 0;
 		m_Data = nullptr;
@@ -44,7 +44,7 @@ namespace SF
 	void RawBinary::SetBinaryData(size_t dataSize, uint8_t* &pData)
 	{
 		if (m_Data != nullptr)
-			IHeap::Delete(m_Data);
+			delete (m_Data);
 
 		m_DataSize = dataSize;
 		m_Data = pData;

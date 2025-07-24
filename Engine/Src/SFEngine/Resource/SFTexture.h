@@ -110,7 +110,7 @@ namespace SF
 		Result CreateDeviceTexture(const TextureInitParameter& initParameters);
 
 	public:
-		Texture(IHeap& heap, const CallTrack& callTrack = CallTrack());
+		Texture(const CallTrack& callTrack = CallTrack());
 		virtual ~Texture();
 
 		// Clear resource

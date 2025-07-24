@@ -98,9 +98,9 @@ TEST_F(AlgorithmTest, MatchingRanking)
 	std::atomic< uint32_t> successfulMatchCount(0);
 	std::atomic< uint32_t> failedMatchCount(0);
 
-	auto players = new(GetHeap()) RankingPlayer[NUM_PLAYER];
+	auto players = new RankingPlayer[NUM_PLAYER];
 
-	DualSortedMap<uint64_t, RankingPlayer*> rankingMap(GetHeap());
+	DualSortedMap<uint64_t, RankingPlayer*> rankingMap;
 	CriticalSection m_UpdateLock;
 	TimeStampMS start, end;
 
@@ -122,7 +122,7 @@ TEST_F(AlgorithmTest, MatchingRanking)
 	// Start update threads
 	for (int iThread = 0; iThread < NUM_UPDATE_THREAD; iThread++)
 	{
-		auto newThread = new(GetHeap()) FunctorTickThread([&](Thread* pThread)
+		auto newThread = new FunctorTickThread([&](Thread* pThread)
 		{
 			MutexScopeLock lock(m_UpdateLock);
 			auto iPlayer = Util::Random.Rand() % NUM_PLAYER;
@@ -151,14 +151,14 @@ TEST_F(AlgorithmTest, MatchingRanking)
 	// Start match threads
 	for (int iThread = 0; iThread < NUM_MATCH_THREAD; iThread++)
 	{
-		auto newThread = new(GetHeap()) FunctorTickThread([&](Thread* pThread)
+		auto newThread = new FunctorTickThread([&](Thread* pThread)
 		{
 			auto iPlayer = Util::Random.Rand() % NUM_PLAYER;
 			RankingPlayer *pPlayer = &players[iPlayer];
 			RankingPlayer *pRankingPlayer = nullptr;
 			int64_t ranking = 0;
 			auto rankingKey = pPlayer->GetRankingKey();
-			StaticArray<RankingPlayer*, 8> selectedPlayers(GetHeap());
+			StaticArray<RankingPlayer*, 8> selectedPlayers;
 			auto matchingPlayerCount = selectedPlayers.GetAllocatedSize();
 
 			if (!rankingMap.Find(rankingKey, pRankingPlayer, &ranking))
@@ -211,6 +211,6 @@ TEST_F(AlgorithmTest, MatchingRanking)
 
 	rankingMap.clear();
 
-	IHeap::Delete(players);
+	delete (players);
 }
 

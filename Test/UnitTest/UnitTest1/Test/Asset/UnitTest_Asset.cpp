@@ -35,8 +35,6 @@ using namespace ::SF;
 
 GTEST_TEST(Asset, ResourceManagerLoadTexture)
 {
-	Heap testHeap("test", GetSystemHeap());
-
 	auto dirPath = Util::Path::GetFileDirectory(__FILE__);
 	auto filePath = Util::Path::Combine(dirPath, "../../data/testImage.jpg");
 

@@ -141,9 +141,9 @@ set(SUBService_FILES
 	Service/SFEngineService.h
 	Service/SFEngineServices.h
 	Service/SFEngineServices.cpp
-	Service/SFIAssetImporterFactory.h
-	Service/SFIAssetSerializerFactory.h
-	Service/SFIGraphicDevice.h
+	#Service/SFIAssetImporterFactory.h
+	#Service/SFIAssetSerializerFactory.h
+	#Service/SFIGraphicDevice.h
 	Service/SFNetSystemService.h
 	Service/SFResourceManagerService.h
   )
@@ -152,127 +152,127 @@ source_group(Service FILES
 	${SUBService_FILES} 
 )
 
-set(SUBAsset_FILES
-	Asset/Exporter/SFAssetExporter.h
-	Asset/Importer/SFAssetImportContext.h
-	Asset/Importer/SFAssetImporter.h
-	Asset/Importer/SFAssetImporter3DAsset.h
-	Asset/Importer/SFAssetImporter3DAssetFBX.h
-	Asset/Importer/SFAssetImporterBinary.h
-	Asset/Importer/SFAssetImporterFactory.h
-	Asset/Importer/SFAssetImporterTexture.h
-	Asset/Importer/SFAssetImporterTextureJPG.h
-	Asset/Importer/SFAssetImporterTexturePNG.h
-	Asset/Importer/SFAssetImporterTextureTGA.h
-	Asset/Package/SFAssetPackage.h
-	Asset/Package/SFAssetPackageSerializer.h
-	Asset/Serializer/SFAssetSerializer.h
-	Asset/Serializer/SFAssetSerializerFactory.h
-	Asset/Serializer/SFAssetSerializerTexture.h
-	Asset/Exporter/SFAssetExporter.cpp
-	Asset/Importer/SFAssetImportContext.cpp
-	Asset/Importer/SFAssetImporter.cpp
-	Asset/Importer/SFAssetImporter3DAsset.cpp
-	Asset/Importer/SFAssetImporter3DAssetFBX.cpp
-	Asset/Importer/SFAssetImporterBinary.cpp
-	Asset/Importer/SFAssetImporterFactory.cpp
-	Asset/Importer/SFAssetImporterTexture.cpp
-	Asset/Importer/SFAssetImporterTextureJPG.cpp
-	Asset/Importer/SFAssetImporterTexturePNG.cpp
-	Asset/Importer/SFAssetImporterTextureTGA.cpp
-	Asset/Package/SFAssetPackage.cpp
-	Asset/Package/SFAssetPackageSerializer.cpp
-	Asset/Serializer/SFAssetSerializer.cpp
-	Asset/Serializer/SFAssetSerializerFactory.cpp
-	Asset/Serializer/SFAssetSerializerTexture.cpp
-  )
+# set(SUBAsset_FILES
+	# Asset/Exporter/SFAssetExporter.h
+	# Asset/Importer/SFAssetImportContext.h
+	# Asset/Importer/SFAssetImporter.h
+	# Asset/Importer/SFAssetImporter3DAsset.h
+	# Asset/Importer/SFAssetImporter3DAssetFBX.h
+	# Asset/Importer/SFAssetImporterBinary.h
+	# Asset/Importer/SFAssetImporterFactory.h
+	# Asset/Importer/SFAssetImporterTexture.h
+	# Asset/Importer/SFAssetImporterTextureJPG.h
+	# Asset/Importer/SFAssetImporterTexturePNG.h
+	# Asset/Importer/SFAssetImporterTextureTGA.h
+	# Asset/Package/SFAssetPackage.h
+	# Asset/Package/SFAssetPackageSerializer.h
+	# Asset/Serializer/SFAssetSerializer.h
+	# Asset/Serializer/SFAssetSerializerFactory.h
+	# Asset/Serializer/SFAssetSerializerTexture.h
+	# Asset/Exporter/SFAssetExporter.cpp
+	# Asset/Importer/SFAssetImportContext.cpp
+	# Asset/Importer/SFAssetImporter.cpp
+	# Asset/Importer/SFAssetImporter3DAsset.cpp
+	# Asset/Importer/SFAssetImporter3DAssetFBX.cpp
+	# Asset/Importer/SFAssetImporterBinary.cpp
+	# Asset/Importer/SFAssetImporterFactory.cpp
+	# Asset/Importer/SFAssetImporterTexture.cpp
+	# Asset/Importer/SFAssetImporterTextureJPG.cpp
+	# Asset/Importer/SFAssetImporterTexturePNG.cpp
+	# Asset/Importer/SFAssetImporterTextureTGA.cpp
+	# Asset/Package/SFAssetPackage.cpp
+	# Asset/Package/SFAssetPackageSerializer.cpp
+	# Asset/Serializer/SFAssetSerializer.cpp
+	# Asset/Serializer/SFAssetSerializerFactory.cpp
+	# Asset/Serializer/SFAssetSerializerTexture.cpp
+  # )
 
-source_group(Asset FILES
-	${SUBAsset_FILES} 
-)
+# source_group(Asset FILES
+	# ${SUBAsset_FILES} 
+# )
 
-set(SUBResource_FILES
-	Resource/SFAnimation.h
-	Resource/SFDeviceMesh.h
-	Resource/SFDeviceResource.h
-	Resource/SFDeviceTexture.h
-	Resource/SFGraphicBuffer.h
-	Resource/SFIndexBuffer.h
-	Resource/SFMesh.h
-	Resource/SFRawBinary.h
-	Resource/SFResource.h
-	Resource/SFResourceFactory.h
-	Resource/SFResourceManager.h
-	Resource/SFSparseResourceFactory.h
-	Resource/SFTexture.h
-	Resource/SFTextureFormat.h
-	Resource/SFTextureFormatDescription.h
-	Resource/SFVertexBuffer.h
-	Resource/SFAnimation.cpp
-	Resource/SFDeviceMesh.cpp
-	Resource/SFDeviceResource.cpp
-	Resource/SFDeviceTexture.cpp
-	Resource/SFGraphicBuffer.cpp
-	Resource/SFIndexBuffer.cpp
-	Resource/SFMesh.cpp
-	Resource/SFRawBinary.cpp
-	Resource/SFResource.cpp
-	Resource/SFResourceFactory.cpp
-	Resource/SFResourceManager.cpp
-	Resource/SFSparseResourceFactory.cpp
-	Resource/SFTexture.cpp
-	Resource/SFTextureFormatDescription.cpp
-	Resource/SFVertexBuffer.cpp
-  )
+# set(SUBResource_FILES
+	# Resource/SFAnimation.h
+	# Resource/SFDeviceMesh.h
+	# Resource/SFDeviceResource.h
+	# Resource/SFDeviceTexture.h
+	# Resource/SFGraphicBuffer.h
+	# Resource/SFIndexBuffer.h
+	# Resource/SFMesh.h
+	# Resource/SFRawBinary.h
+	# Resource/SFResource.h
+	# Resource/SFResourceFactory.h
+	# Resource/SFResourceManager.h
+	# Resource/SFSparseResourceFactory.h
+	# Resource/SFTexture.h
+	# Resource/SFTextureFormat.h
+	# Resource/SFTextureFormatDescription.h
+	# Resource/SFVertexBuffer.h
+	# Resource/SFAnimation.cpp
+	# Resource/SFDeviceMesh.cpp
+	# Resource/SFDeviceResource.cpp
+	# Resource/SFDeviceTexture.cpp
+	# Resource/SFGraphicBuffer.cpp
+	# Resource/SFIndexBuffer.cpp
+	# Resource/SFMesh.cpp
+	# Resource/SFRawBinary.cpp
+	# Resource/SFResource.cpp
+	# Resource/SFResourceFactory.cpp
+	# Resource/SFResourceManager.cpp
+	# Resource/SFSparseResourceFactory.cpp
+	# Resource/SFTexture.cpp
+	# Resource/SFTextureFormatDescription.cpp
+	# Resource/SFVertexBuffer.cpp
+  # )
 
-source_group(Resource FILES
-	${SUBResource_FILES} 
-)
+# source_group(Resource FILES
+	# ${SUBResource_FILES} 
+# )
 
-set(SUBGraphics_FILES
-	Graphics/SFGraphicDevice.cpp
-	Graphics/SFGraphicDeviceGLES.cpp
-	Graphics/SFGraphicDeviceGLES_EGL.cpp
-	Graphics/SFGraphicDeviceVulkan.cpp
-	Graphics/SFRenderCommand.cpp
-	Graphics/SFRenderCommands.cpp
-	Graphics/SFRenderItem.cpp
-	Graphics/SFRenderPipeline.cpp
-	Graphics/SFRenderPipelineStage.cpp
-	Graphics/SFRenderTargetChain.cpp
-	Graphics/SFRenderThread.cpp
-	Graphics/Vulkan/SFRenderTargetChainVulkan.cpp
-	Graphics/Vulkan/SFVulkanRenderPass.cpp
-	Graphics/Vulkan/SFVulkanTexture.cpp
-	Graphics/Vulkan/SFVulkanDebug.cpp
-	Graphics/Vulkan/SFVulkanLibrary.cpp
-	Graphics/Vulkan/SFVulkanLogicalDevice.cpp
-	Graphics/Vulkan/SFVulkanPhysicalDevice.cpp
-	Graphics/Vulkan/SFVulkanSystem.cpp
-	Graphics/SFGraphicDevice.h
-	Graphics/SFGraphicDeviceGLES.h
-	Graphics/SFGraphicDeviceGLES_EGL.h
-	Graphics/SFGraphicDeviceVulkan.h
-	Graphics/SFRenderCommand.h
-	Graphics/SFRenderCommands.h
-	Graphics/SFRenderItem.h
-	Graphics/SFRenderPipeline.h
-	Graphics/SFRenderPipelineStage.h
-	Graphics/SFRenderTargetChain.h
-	Graphics/SFRenderThread.h
-	Graphics/Vulkan/SFRenderTargetChainVulkan.h
-	Graphics/Vulkan/SFVulkanRenderPass.h
-	Graphics/Vulkan/SFVulkanTexture.h
-	Graphics/Vulkan/SFVulkanDebug.h
-	Graphics/Vulkan/SFVulkanLibrary.h
-	Graphics/Vulkan/SFVulkanLogicalDevice.h
-	Graphics/Vulkan/SFVulkanPhysicalDevice.h
-	Graphics/Vulkan/SFVulkanSystem.h
-  )
+# set(SUBGraphics_FILES
+	# Graphics/SFGraphicDevice.cpp
+	# Graphics/SFGraphicDeviceGLES.cpp
+	# Graphics/SFGraphicDeviceGLES_EGL.cpp
+	# Graphics/SFGraphicDeviceVulkan.cpp
+	# Graphics/SFRenderCommand.cpp
+	# Graphics/SFRenderCommands.cpp
+	# Graphics/SFRenderItem.cpp
+	# Graphics/SFRenderPipeline.cpp
+	# Graphics/SFRenderPipelineStage.cpp
+	# Graphics/SFRenderTargetChain.cpp
+	# Graphics/SFRenderThread.cpp
+	# Graphics/Vulkan/SFRenderTargetChainVulkan.cpp
+	# Graphics/Vulkan/SFVulkanRenderPass.cpp
+	# Graphics/Vulkan/SFVulkanTexture.cpp
+	# Graphics/Vulkan/SFVulkanDebug.cpp
+	# Graphics/Vulkan/SFVulkanLibrary.cpp
+	# Graphics/Vulkan/SFVulkanLogicalDevice.cpp
+	# Graphics/Vulkan/SFVulkanPhysicalDevice.cpp
+	# Graphics/Vulkan/SFVulkanSystem.cpp
+	# Graphics/SFGraphicDevice.h
+	# Graphics/SFGraphicDeviceGLES.h
+	# Graphics/SFGraphicDeviceGLES_EGL.h
+	# Graphics/SFGraphicDeviceVulkan.h
+	# Graphics/SFRenderCommand.h
+	# Graphics/SFRenderCommands.h
+	# Graphics/SFRenderItem.h
+	# Graphics/SFRenderPipeline.h
+	# Graphics/SFRenderPipelineStage.h
+	# Graphics/SFRenderTargetChain.h
+	# Graphics/SFRenderThread.h
+	# Graphics/Vulkan/SFRenderTargetChainVulkan.h
+	# Graphics/Vulkan/SFVulkanRenderPass.h
+	# Graphics/Vulkan/SFVulkanTexture.h
+	# Graphics/Vulkan/SFVulkanDebug.h
+	# Graphics/Vulkan/SFVulkanLibrary.h
+	# Graphics/Vulkan/SFVulkanLogicalDevice.h
+	# Graphics/Vulkan/SFVulkanPhysicalDevice.h
+	# Graphics/Vulkan/SFVulkanSystem.h
+  # )
 
-source_group(Graphics FILES
-	${SUBGraphics_FILES} 
-)
+# source_group(Graphics FILES
+	# ${SUBGraphics_FILES} 
+# )
 
 set(SUBEngine_FILES
 	SFEngine.h
@@ -367,11 +367,11 @@ source_group(Online FILES
 set(SFENGINE_LIB_FILES
 	StreamDB/SFStreamDBDirectory.h
 	StreamDB/SFStreamDBDirectory.cpp
-	SceneGraph/SFScene.cpp
-	SceneGraph/SFSceneNode.cpp
-	SceneGraph/SFSceneNodeComponent.cpp
-	SceneGraph/SFSceneNodeComponentMesh.cpp
-	SceneGraph/SFSceneNodeComponentSkeletalMesh.cpp
+	# SceneGraph/SFScene.cpp
+	# SceneGraph/SFSceneNode.cpp
+	# SceneGraph/SFSceneNodeComponent.cpp
+	# SceneGraph/SFSceneNodeComponentMesh.cpp
+	# SceneGraph/SFSceneNodeComponentSkeletalMesh.cpp
 	Service/SFEngineService.cpp
 	
 	Actor/Movement/SFActorMovement.h
@@ -389,21 +389,21 @@ set(SFENGINE_LIB_FILES
 	ResultCode/SFResultCodeLogin.cpp
 	ResultCode/SFResultCodeNet.h
 	ResultCode/SFResultCodeNet.cpp
-	SceneGraph/SFScene.h
-	SceneGraph/SFSceneNode.h
-	SceneGraph/SFSceneNodeComponent.h
-	SceneGraph/SFSceneNodeComponentMesh.h
-	SceneGraph/SFSceneNodeComponentSkeletalMesh.h
+	# SceneGraph/SFScene.h
+	# SceneGraph/SFSceneNode.h
+	# SceneGraph/SFSceneNodeComponent.h
+	# SceneGraph/SFSceneNodeComponentMesh.h
+	# SceneGraph/SFSceneNodeComponentSkeletalMesh.h
 
 	Service/SFConnectionManagerService.h
 	Service/SFEngineServices.h
 	Service/SFEngineService.cpp
 	Service/SFEngineService.h
-	Service/SFIAssetImporterFactory.h
-	Service/SFIAssetSerializerFactory.h
-	Service/SFIGraphicDevice.h
+	#Service/SFIAssetImporterFactory.h
+	#Service/SFIAssetSerializerFactory.h
+	# Service/SFIGraphicDevice.h
 	Service/SFNetSystemService.h
-	Service/SFResourceManagerService.h
+	# Service/SFResourceManagerService.h
 
     SFEnginePCH.h
 
@@ -411,8 +411,9 @@ set(SFENGINE_LIB_FILES
   )
 
 
+#${SUBAsset_FILES} ${SUBResource_FILES} 
 
-add_library(SFEngine STATIC ${SFENGINE_LIB_FILES} ${SUBAudio_FILES} ${SUBNet_FILES} ${SUBAsset_FILES} ${SUBResource_FILES} ${SUBService_FILES} ${SUBGraphics_FILES} ${SUBEngine_FILES} ${SUBApplication_FILES} ${SUBOnline_FILES})
+add_library(SFEngine STATIC ${SFENGINE_LIB_FILES} ${SUBAudio_FILES} ${SUBNet_FILES}  ${SUBService_FILES} ${SUBGraphics_FILES} ${SUBEngine_FILES} ${SUBApplication_FILES} ${SUBOnline_FILES})
 
 target_precompile_headers(SFEngine PRIVATE SFEnginePCH.h)
 

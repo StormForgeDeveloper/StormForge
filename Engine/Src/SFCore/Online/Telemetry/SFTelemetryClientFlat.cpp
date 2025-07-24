@@ -273,7 +273,7 @@ namespace SF
 		}
 
 		// 
-		m_Thread.reset(new(GetHeap()) FunctorTickThread([this](Thread* pThread)
+		m_Thread.reset(new FunctorTickThread([this](Thread* pThread)
 			{
 				if (!m_Client.IsInitialized())
 				{
@@ -359,7 +359,7 @@ namespace SF
 		if (eventId == 0)
 			eventId = m_EventId.fetch_add(1, MemoryOrder::release) + 1;
 
-		auto newEvent = new(GetSystemHeap()) TelemetryEventFlat(GetSystemHeap(), this, eventId, eventName);
+		auto newEvent = new TelemetryEventFlat(GetSystemHeap(), this, eventId, eventName);
 
         newEvent->SetAccountID(GetAccountID());
 

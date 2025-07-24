@@ -175,7 +175,7 @@ namespace Net {
 
 		if (m_ActiveAdapter == nullptr)
 		{
-			netMem(m_ActiveAdapter = new(m_Owner.GetHeap()) MyNetSocketIOAdapter(m_Owner));
+			netMem(m_ActiveAdapter = new MyNetSocketIOAdapter(m_Owner));
 			m_ActiveAdapter->SetSocket(socketFamily, socketType, socket);
 			socket = INVALID_SOCKET;
 			netChk(Service::NetSystem->RegisterSocket(m_ActiveAdapter));
@@ -221,7 +221,7 @@ namespace Net {
 		{
 			if (m_PendingFreeCache->CanDelete())
 			{
-				IHeap::Delete(m_PendingFreeCache);
+				delete (m_PendingFreeCache);
 				m_PendingFreeCache = nullptr;
 			}
 			else
@@ -241,7 +241,7 @@ namespace Net {
 			{
 				if (pPendingItem->CanDelete())
 				{
-					IHeap::Delete(pPendingItem);
+					delete (pPendingItem);
 					pPendingItem = nullptr;
 				}
 				else

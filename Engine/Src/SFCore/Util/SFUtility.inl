@@ -40,7 +40,7 @@ Result ArrayDup(IHeap& memoryManager, DupType* &pDest, INT iSrcCount, const DupT
 {
 	if( pDest != NULL )
 	{
-		IHeap::Delete(pDest);
+		delete (pDest);
 		pDest = NULL;
 	}
 
@@ -87,7 +87,7 @@ Result SafeDeleteArray( ArrayType* &pArray )
 {
 	if( pArray != nullptr )
 	{
-		IHeap::Delete(pArray);
+		delete[] (pArray);
 		pArray = nullptr;
 	}
 
@@ -99,7 +99,7 @@ Result SafeDelete( ValueType* &pObj )
 {
 	if( pObj != nullptr )
 	{
-		IHeap::Delete(pObj);
+		delete (pObj);
 		pObj = nullptr;
 	}
 

@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2017 Kyungkun Ko
 // 
@@ -100,11 +100,11 @@ namespace SF {
 	//	OutputMemoryStream
 	//
 
-	OutputMemoryStream::OutputMemoryStream(IHeap& heap)
+	OutputMemoryStream::OutputMemoryStream()
 		: m_IsBufferOwner(true)
 		, m_IsBufferResizeAllowed(true)
 	{
-		m_Buffer = new(heap) DynamicArray<uint8_t>(heap);
+		m_Buffer = new DynamicArray<uint8_t>;
 	}
 
 	OutputMemoryStream::OutputMemoryStream(Array<uint8_t>& memorySource, bool bAllowResize)
@@ -117,7 +117,7 @@ namespace SF {
 	OutputMemoryStream::~OutputMemoryStream()
 	{
 		if (m_IsBufferOwner)
-			IHeap::Delete(m_Buffer);
+			delete (m_Buffer);
 		m_Buffer = nullptr;
 	}
 

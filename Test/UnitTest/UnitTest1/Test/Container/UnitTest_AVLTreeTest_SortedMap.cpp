@@ -35,7 +35,7 @@ TEST_F(AVLTreeTest, SortedMapSimple)
 		TestValues[iTest] = MAX_TEST_VALUE - iTest;
 	}
 
-	SortedMap<uint,uint> sortedMap(GetHeap());
+	SortedMap<uint,uint> sortedMap;
 
 	int64_t order = -1;
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
@@ -111,7 +111,7 @@ TEST_F(AVLTreeTest, SortedMapSimple)
 
 TEST_F(AVLTreeTest, SortedMapOrderSequential)
 {
-	SortedMap<uint,uint> sortedMap(GetHeap());
+	SortedMap<uint,uint> sortedMap;
 
 	for (int iTest = 0; iTest < MAX_TEST_VALUE; iTest++)
 	{
@@ -205,7 +205,7 @@ TEST_F(AVLTreeTest, SortedMapOrderSequential)
 
 TEST_F(AVLTreeTest, SortedMapOrderRandom)
 {
-	SortedMap<uint,uint> sortedMap(GetHeap());
+	SortedMap<uint,uint> sortedMap;
 
 	// test foreach
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)

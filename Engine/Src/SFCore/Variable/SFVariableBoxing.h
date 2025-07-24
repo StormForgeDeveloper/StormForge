@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -29,21 +29,15 @@ namespace SF {
 	class SF_DECLARE_ALIGN_DOUBLE VariableBox
 	{
 	private:
-		IHeap& m_Heap;
-
 		Variable* m_pVariable = nullptr;
 
 	public:
 
-		VariableBox(IHeap& heap = GetSystemHeap());
-		VariableBox(IHeap& heap, const VariableBox& src);
-		VariableBox(IHeap& heap, const Variable& src);
+		VariableBox();
 		VariableBox(const VariableBox& src);
 		VariableBox(const Variable& src);
 
 		~VariableBox();
-
-		SF_FORCEINLINE IHeap& GetHeap() const { return m_Heap; }
 
 		// Set variable type. It will destroy previous variable
 		bool SetVariableType(StringCrc32 TypeName);
@@ -65,10 +59,10 @@ namespace SF {
 
 	// always boxing by binary value
 	template<class ValueType>
-	VariableBox BoxingByValue(IHeap& heap, ValueType value)
+	VariableBox BoxingByValue(ValueType value)
 	{
 		VariableByBinaryValue<ValueType> variable(value);
-		return VariableBox(heap, variable);
+		return VariableBox(variable);
 	}
 
 
@@ -100,13 +94,13 @@ namespace SF {
 	//
 
 #define DEFINE_BOXING_TEMPLETE(varType, varClassType)	\
-	inline VariableBox BoxingByValue(IHeap& heap, const std::decay_t<varType>& src) { varClassType variable(src); return VariableBox(heap, variable); } \
-	inline VariableBox BoxingByValue(IHeap& heap, std::decay_t<varType>&& src) { varClassType variable(src); return VariableBox(heap, variable); } \
-	inline VariableBox BoxingByReference(IHeap& heap, const std::decay_t<varType>& src) { VariableValueReference<std::decay_t<varType>> variable(src); return VariableBox(heap, variable); }\
-	inline VariableBox BoxingByReference(IHeap& heap, const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(heap, variable); }\
-	inline VariableBox Boxing(IHeap& heap, const std::decay_t<varType>& src) { varClassType variable(src); return VariableBox(heap, variable); } \
-	inline VariableBox Boxing(IHeap& heap, std::decay_t<varType>&& src) { varClassType variable(src); return VariableBox(heap, variable); } \
-	inline VariableBox Boxing(IHeap& heap, const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(heap, variable); }\
+	inline VariableBox BoxingByValue(const std::decay_t<varType>& src) { varClassType variable(src); return VariableBox(variable); } \
+	inline VariableBox BoxingByValue(std::decay_t<varType>&& src) { varClassType variable(src); return VariableBox(variable); } \
+	inline VariableBox BoxingByReference(const std::decay_t<varType>& src) { VariableValueReference<std::decay_t<varType>> variable(src); return VariableBox(variable); }\
+	inline VariableBox BoxingByReference(const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
+	inline VariableBox Boxing(const std::decay_t<varType>& src) { varClassType variable(src); return VariableBox(variable); } \
+	inline VariableBox Boxing(std::decay_t<varType>&& src) { varClassType variable(src); return VariableBox(variable); } \
+	inline VariableBox Boxing(const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
 	template<> inline StringCrc32 VariableByBinaryValue<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
 	template<> inline StringCrc32 VariableValueReference<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
 	template<> inline StringCrc32 VariableValueReference<Array<std::decay_t<varType>>>::GetTypeName() const { return "Array<"#varType">"; }\
@@ -148,50 +142,50 @@ namespace SF {
 
 
 #define DECLARE_BOXING_TEMPLETE_BYVALUE(varType)	\
-	VariableBox BoxingByValue(IHeap& heap, const std::decay_t<varType>& src);\
-	VariableBox BoxingByValue(IHeap& heap, std::decay_t<varType>&& src);\
-	VariableBox BoxingByReference(IHeap& heap, const std::decay_t<varType>& src);\
-	VariableBox BoxingByReference(IHeap& heap, const Array<std::decay_t<varType>>& src);\
-	VariableBox Boxing(IHeap& heap, const std::decay_t<varType>& src); \
-	VariableBox Boxing(IHeap& heap, std::decay_t<varType>&& src); \
-	VariableBox Boxing(IHeap& heap, Array<std::decay_t<varType>>& src);\
-	VariableBox Boxing(IHeap& heap, const Array<std::decay_t<varType>>& src);\
+	VariableBox BoxingByValue(const std::decay_t<varType>& src);\
+	VariableBox BoxingByValue(std::decay_t<varType>&& src);\
+	VariableBox BoxingByReference(const std::decay_t<varType>& src);\
+	VariableBox BoxingByReference(const Array<std::decay_t<varType>>& src);\
+	VariableBox Boxing(const std::decay_t<varType>& src); \
+	VariableBox Boxing(std::decay_t<varType>&& src); \
+	VariableBox Boxing(Array<std::decay_t<varType>>& src);\
+	VariableBox Boxing(const Array<std::decay_t<varType>>& src);\
 	IMPLEMENT_BOXING_TEMPLATE_INTERNAL(varType, VariableByBinaryValue<varType>)
 
 
 
 #define IMPLEMENT_BOXING_TEMPLETE_BYVALUE(varType) \
-	VariableBox BoxingByValue(IHeap& heap, const std::decay_t<varType>& src) { VariableByBinaryValue<std::decay_t<varType>> variable(src); return VariableBox(heap,variable); } \
-	VariableBox BoxingByValue(IHeap& heap, std::decay_t<varType>&& src) { VariableByBinaryValue<std::decay_t<varType>> variable(src); return VariableBox(heap,variable); } \
-	VariableBox BoxingByReference(IHeap& heap, const std::decay_t<varType>& src) { VariableValueReference<varType> variable(src); return VariableBox(heap,variable); }\
-	VariableBox BoxingByReference(IHeap& heap, const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(heap,variable); }\
-	VariableBox Boxing(IHeap& heap, const std::decay_t<varType>& src) { VariableByBinaryValue<varType> variable(src); return VariableBox(heap,variable); } \
-	VariableBox Boxing(IHeap& heap, std::decay_t<varType>&& src) { VariableByBinaryValue<varType> variable(src); return VariableBox(heap,variable); } \
-	VariableBox Boxing(IHeap& heap, Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(heap,variable); }\
-	VariableBox Boxing(IHeap& heap, const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(heap,variable); }\
+	VariableBox BoxingByValue(const std::decay_t<varType>& src) { VariableByBinaryValue<std::decay_t<varType>> variable(src); return VariableBox(variable); } \
+	VariableBox BoxingByValue(std::decay_t<varType>&& src) { VariableByBinaryValue<std::decay_t<varType>> variable(src); return VariableBox(variable); } \
+	VariableBox BoxingByReference(const std::decay_t<varType>& src) { VariableValueReference<varType> variable(src); return VariableBox(variable); }\
+	VariableBox BoxingByReference(const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
+	VariableBox Boxing(const std::decay_t<varType>& src) { VariableByBinaryValue<varType> variable(src); return VariableBox(variable); } \
+	VariableBox Boxing(std::decay_t<varType>&& src) { VariableByBinaryValue<varType> variable(src); return VariableBox(variable); } \
+	VariableBox Boxing(Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
+	VariableBox Boxing(const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
 
 
 
 #define DECLARE_BOXING_TEMPLETE_BYREFERENCE(varType)					\
-	VariableBox BoxingByValue(IHeap& heap, const std::decay_t<varType>& src); \
-	VariableBox BoxingByValue(IHeap& heap, std::decay_t<varType>&& src); \
-	VariableBox BoxingByReference(IHeap& heap, const std::decay_t<varType>& src);\
-	VariableBox BoxingByReference(IHeap& heap, const Array<std::decay_t<varType>>& src);\
-	VariableBox Boxing(IHeap& heap, const std::decay_t<varType>& src);\
-	VariableBox Boxing(IHeap& heap, std::decay_t<varType>&& src);\
-	VariableBox Boxing(IHeap& heap, const Array<std::decay_t<varType>>& src);\
+	VariableBox BoxingByValue(const std::decay_t<varType>& src); \
+	VariableBox BoxingByValue(std::decay_t<varType>&& src); \
+	VariableBox BoxingByReference(const std::decay_t<varType>& src);\
+	VariableBox BoxingByReference(const Array<std::decay_t<varType>>& src);\
+	VariableBox Boxing(const std::decay_t<varType>& src);\
+	VariableBox Boxing(std::decay_t<varType>&& src);\
+	VariableBox Boxing(const Array<std::decay_t<varType>>& src);\
 	IMPLEMENT_BOXING_TEMPLATE_INTERNAL(varType, VariableValueReference<varType>)
 
 
 
 #define IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(varType)					\
-	VariableBox BoxingByValue(IHeap& heap, const std::decay_t<varType>& src) { VariableByBinaryValue<std::decay_t<varType>> variable(src); return VariableBox(heap, variable); } \
-	VariableBox BoxingByValue(IHeap& heap, std::decay_t<varType>&& src) { VariableByBinaryValue<std::decay_t<varType>> variable(src); return VariableBox(heap, variable); } \
-	VariableBox BoxingByReference(IHeap& heap, const std::decay_t<varType>& src) { VariableValueReference<std::decay_t<varType>> variable(src); return VariableBox(heap, variable); }\
-	VariableBox BoxingByReference(IHeap& heap, const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(heap, variable); }\
-	VariableBox Boxing(IHeap& heap, const std::decay_t<varType>& src) { VariableValueReference<std::decay_t<varType>> variable(src); return VariableBox(heap, variable); }\
-	VariableBox Boxing(IHeap& heap, std::decay_t<varType>&& src) { VariableValueReference<std::decay_t<varType>> variable(src); return VariableBox(heap, variable); }\
-	VariableBox Boxing(IHeap& heap, const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(heap, variable); }\
+	VariableBox BoxingByValue(const std::decay_t<varType>& src) { VariableByBinaryValue<std::decay_t<varType>> variable(src); return VariableBox(variable); } \
+	VariableBox BoxingByValue(std::decay_t<varType>&& src) { VariableByBinaryValue<std::decay_t<varType>> variable(src); return VariableBox(variable); } \
+	VariableBox BoxingByReference(const std::decay_t<varType>& src) { VariableValueReference<std::decay_t<varType>> variable(src); return VariableBox(variable); }\
+	VariableBox BoxingByReference(const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
+	VariableBox Boxing(const std::decay_t<varType>& src) { VariableValueReference<std::decay_t<varType>> variable(src); return VariableBox(variable); }\
+	VariableBox Boxing(std::decay_t<varType>&& src) { VariableValueReference<std::decay_t<varType>> variable(src); return VariableBox(variable); }\
+	VariableBox Boxing(const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
 
 
 
@@ -329,19 +323,19 @@ namespace SF {
 	DECLARE_BOXING_TEMPLETE_BYREFERENCE(std::string);
 
 	//DECLARE_BOXING_TEMPLETE_BYVALUE(const char*);
-	VariableBox BoxingByValue(IHeap& heap, const char* src);
-	VariableBox BoxingByReference(IHeap& heap, const char* src);
-	VariableBox Boxing(IHeap& heap, const char* src);
-	VariableBox Boxing(IHeap& heap, Array<const char*>& src);
-	VariableBox Boxing(IHeap& heap, const Array<const char*>& src);
+	VariableBox BoxingByValue(const char* src);
+	VariableBox BoxingByReference(const char* src);
+	VariableBox Boxing(const char* src);
+	VariableBox Boxing(Array<const char*>& src);
+	VariableBox Boxing(const Array<const char*>& src);
 	IMPLEMENT_BOXING_TEMPLATE_INTERNAL(const char*, VariableString);
 
 	//DECLARE_BOXING_TEMPLETE_BYVALUE(const wchar_t*);
-	VariableBox BoxingByValue(IHeap& heap, const wchar_t* src);
-	VariableBox BoxingByReference(IHeap& heap, const wchar_t* src);
-	VariableBox Boxing(IHeap& heap, const wchar_t* src);
-	VariableBox Boxing(IHeap& heap, Array<const wchar_t*>& src);
-	VariableBox Boxing(IHeap& heap, const Array<const wchar_t*>& src);
+	VariableBox BoxingByValue(const wchar_t* src);
+	VariableBox BoxingByReference(const wchar_t* src);
+	VariableBox Boxing(const wchar_t* src);
+	VariableBox Boxing(Array<const wchar_t*>& src);
+	VariableBox Boxing(const Array<const wchar_t*>& src);
 	IMPLEMENT_BOXING_TEMPLATE_INTERNAL(const wchar_t*, VariableWString);
 
 	// They comes from OS system types, but not referenced by std types on windows(VC compiler)

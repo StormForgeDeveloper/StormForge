@@ -241,7 +241,7 @@ namespace AsyncIO {
 
 			for( uint iThread = 0; iThread < uiNumIOCPThread; iThread++ )
 			{
-				auto pWorker = new(GetHeap()) IOCPWorker(this, iThread);
+				auto pWorker = new IOCPWorker(this, iThread);
 				pWorker->Start();
 				AddIOWorker(pWorker);
 			}

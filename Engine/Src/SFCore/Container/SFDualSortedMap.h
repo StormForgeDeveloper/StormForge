@@ -268,8 +268,6 @@ namespace SF {
 
 		private:
 
-			IHeap& m_Heap;
-
 			// read Root
 			// ping pong counter
 			mutable SyncCounter m_ReadCount[3];
@@ -298,10 +296,8 @@ namespace SF {
 
 		public:
 
-			DualSortedMap(IHeap& memoryManager);
+			DualSortedMap();
 			~DualSortedMap();
-
-			IHeap& GetHeap() { return m_Heap; }
 
 			void clear() { Reset(); }
 			void ClearMap() { Reset(); }

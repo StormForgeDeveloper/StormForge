@@ -336,7 +336,7 @@ TEST_F(ThreadTest, PagedQueue)
 {
 	const int64_t TEST_LENGTH = TestScale * 514;
 
-	PageQueue<int64_t> queue(GetHeap());
+	PageQueue<int64_t> queue;
 
 	for (int64_t ID = 1; ID < TEST_LENGTH; ID++)
 	{
@@ -360,14 +360,14 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueue)
 	const uint64_t TEST_LENGTH = TestScale * 9999999;
 	const int NUM_THREAD = 10;
 
-	PageQueue<int64_t> queue(GetHeap(), 128);
+	PageQueue<int64_t> queue(128);
 	SyncCounter itemCounter;
 	CounterType *testArray = new CounterType[TEST_LENGTH];
 	memset(testArray, 0, sizeof(CounterType)*TEST_LENGTH);
 
 	for (uint worker = 0; worker < NUM_THREAD; worker++)
 	{
-		auto pWorker = new(GetHeap()) FunctorThread([&](Thread* pThread)
+		auto pWorker = new FunctorThread([&](Thread* pThread)
 		{
 			do
 			{
@@ -384,7 +384,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueue)
 	std::for_each(m_Threads.begin(), m_Threads.end(), [](Thread* pThread)
 	{
 		if (pThread) pThread->Stop(false);
-		IHeap::Delete(pThread);
+		delete (pThread);
 	});
 	m_Threads.clear();
 
@@ -410,7 +410,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueueDequeue)
 	const uint64_t TEST_LENGTH = TestScale * 999999;
 	const int NUM_THREAD = 20;
 
-	PageQueue<int64_t> queue(GetHeap(), 4);
+	PageQueue<int64_t> queue(4);
 	SyncCounter itemCounter;
 	SyncCounter workDone;
 	CounterType *testArray = new CounterType[TEST_LENGTH];
@@ -418,7 +418,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueueDequeue)
 
 	for (uint worker = 0; worker < NUM_THREAD; worker++)
 	{
-		auto pWorker = new(GetHeap()) FunctorThread([&](Thread* pThread)
+		auto pWorker = new FunctorThread([&](Thread* pThread)
 		{
 			do
 			{
@@ -453,7 +453,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueueDequeue)
 	std::for_each(m_Threads.begin(), m_Threads.end(), [](Thread* pThread)
 	{
 		if (pThread) pThread->Stop(false);
-		IHeap::Delete(pThread);
+		delete (pThread);
 	});
 	m_Threads.clear();
 
@@ -471,14 +471,14 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueueDequeue)
 //	const uint64_t TEST_LENGTH = TestScale * 99999;
 //	const int NUM_THREAD = 20;
 //
-//	PageQueue<int64_t> queue(GetHeap(), 4);
+//	PageQueue<int64_t> queue(4);
 //	SyncCounter itemCounter;
 //	SyncCounter workDone;
 //	auto *testArray = new Atomic<int32_t>[TEST_LENGTH];
 //
 //	for (uint worker = 0; worker < NUM_THREAD; worker++)
 //	{
-//		auto pWorker = new(GetHeap()) FunctorThread([&](Thread* pThread)
+//		auto pWorker = new FunctorThread([&](Thread* pThread)
 //		{
 //			do
 //			{
@@ -497,7 +497,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueueDequeue)
 //	SyncCounter readCount(0);
 //	for (uint worker = 0; worker < NUM_THREAD; worker++)
 //	{
-//		auto pWorker = new(GetHeap()) FunctorThread([&](Thread* pThread)
+//		auto pWorker = new FunctorThread([&](Thread* pThread)
 //		{
 //			int64_t item;
 //			int64_t prevItem = -1;
@@ -545,7 +545,7 @@ TEST_F(ThreadTest, PagedQueue_PerformanceCompare_PageQueue)
 	const int NUM_THREAD = 10;
 
 	std::vector<Thread*> threads;
-	PageQueue<int64_t> queue(GetHeap(), 1024);
+	PageQueue<int64_t> queue(1024);
 	SyncCounter itemCounter;
 	SyncCounter workDone;
 	CounterType *testArray = new CounterType[TEST_LENGTH];
@@ -557,7 +557,7 @@ TEST_F(ThreadTest, PagedQueue_PerformanceCompare_PageQueue)
 
 	for (uint worker = 0; worker < NUM_THREAD; worker++)
 	{
-		auto pWorker = new(GetHeap()) FunctorThread([&](Thread* pThread)
+		auto pWorker = new FunctorThread([&](Thread* pThread)
 		{
 			do
 			{
@@ -607,7 +607,7 @@ TEST_F(ThreadTest, PagedQueue_PerformanceCompare_Concurrent)
 	Concurrency::concurrent_queue<int64_t> queue;
 	SyncCounter itemCounter;
 	SyncCounter workDone;
-	CounterType *testArray = new(GetHeap()) CounterType[TEST_LENGTH];
+	CounterType *testArray = new  CounterType[TEST_LENGTH];
 	memset(testArray, 0, sizeof(CounterType)*TEST_LENGTH);
 
 
@@ -616,7 +616,7 @@ TEST_F(ThreadTest, PagedQueue_PerformanceCompare_Concurrent)
 
 	for (uint worker = 0; worker < NUM_THREAD; worker++)
 	{
-		auto pWorker = new(GetHeap()) FunctorThread([&](Thread* pThread)
+		auto pWorker = new  FunctorThread([&](Thread* pThread)
 		{
 			do
 			{
@@ -651,11 +651,7 @@ TEST_F(ThreadTest, PagedQueue_PerformanceCompare_Concurrent)
 	auto end = Util::Time.GetRawTimeMs();
 	printf("concurrent_queue Execution Time: %15d\n", (end - start).count());
 
-	IHeap::Delete(testArray);
+	delete[] testArray;
 }
 #endif
-
-
-
-
 

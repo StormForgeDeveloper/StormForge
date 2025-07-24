@@ -39,7 +39,7 @@ using namespace ::SF;
 
 TEST_F(MemoryTest, Heap)
 {
-	auto pPtr = (uint8_t*)GetHeap().Alloc(100);
+	auto pPtr = (uint8_t*)GetSystemHeap().Alloc(100);
 	EXPECT_NE(nullptr, pPtr);
 
 	for (int i = 0; i < 100; i++)
@@ -47,7 +47,7 @@ TEST_F(MemoryTest, Heap)
 		pPtr[i] = (uint8_t)(i + 1);
 	}
 
-	SF::SortedArray<StringCrc64, intptr_t> testArray(GetHeap());
+	SF::SortedArray<StringCrc64, intptr_t> testArray(GetSystemHeap());
 	testArray.Set("a", 1);
 	testArray.Set("b", 2);
 	testArray.Set("c", 3);
@@ -62,7 +62,7 @@ TEST_F(MemoryTest, Heap)
 	testArray.Set("l", 12);
 	testArray.Set("m", 13);
 
-	GetHeap().Free(pPtr);
+    GetSystemHeap().Free(pPtr);
 }
 
 
@@ -100,8 +100,8 @@ TEST_F(MemoryTest, NewDelete)
 	};
 
 
-	auto arrayValue = new(GetHeap()) TestAllocationObject[204800];
-	IHeap::Delete(arrayValue);
+	auto arrayValue = new TestAllocationObject[204800];
+	delete (arrayValue);
 }
 
 TEST_F(MemoryTest, HeapMemory)
@@ -116,7 +116,7 @@ TEST_F(MemoryTest, HeapMemory)
 	};
 
 
-	SF::StaticMemoryAllocatorT<256> localHeap("localHeap", GetHeap());
+	SF::StaticMemoryAllocatorT<256> localHeap("localHeap", GetSystemHeap());
 	SF::DynamicArray<TestItem> OutUpdated(localHeap);
 	std::vector<void*> allocated;
 	for (int iTest = 0; iTest < 10; iTest++)
@@ -133,7 +133,7 @@ TEST_F(MemoryTest, HeapMemory)
 	}
 	allocated.clear();
 
-	SF::StaticMemoryAllocatorT<4096> categoryHeap("testHeap", GetHeap());
+	SF::StaticMemoryAllocatorT<4096> categoryHeap("testHeap", GetSystemHeap());
 	{
 		SF::DynamicArray<TestItem> Items(categoryHeap);
 		Items.push_back(TestItem{});
@@ -153,7 +153,7 @@ TEST_F(MemoryTest, HeapMemoryRandom)
 	};
 
 
-	SF::StaticMemoryAllocatorT<1024> localHeap("localHeap", GetHeap());
+	SF::StaticMemoryAllocatorT<1024> localHeap("localHeap", GetSystemHeap());
 	std::vector<void*> allocated;
 
 	for (int iTest = 0; iTest < 100; iTest++)
@@ -183,7 +183,7 @@ TEST_F(MemoryTest, HeapMemoryRandomSameSize)
 {
 	constexpr size_t TestDataSize = 0x20;
 
-	SF::StaticMemoryAllocatorT<8*1024> localHeap("localHeap", GetHeap());
+	SF::StaticMemoryAllocatorT<8*1024> localHeap("localHeap", GetSystemHeap());
 	std::vector<void*> allocated;
 
 	for (int iTest = 0; iTest < 100; iTest++)
@@ -523,7 +523,7 @@ TEST_F(MemoryTest, HeapMemoryTestPattern1)
 {
 	using TestHeapType = SF::StaticMemoryAllocatorT<2 * 1024 * 1024>;
 
-	SFUniquePtr<TestHeapType> localHeap(new(GetHeap()) TestHeapType("localHeap", GetHeap()));
+	SFUniquePtr<TestHeapType> localHeap(new TestHeapType("localHeap", GetSystemHeap()));
 
 	// This is not memory leak test. just memory break things test
 	localHeap->SetIgnoreMemmoryLeak(true);

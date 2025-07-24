@@ -81,7 +81,7 @@ namespace SF
 		// initialize with schema string data
         Result Init(const avro_schema_t& schema);
         Result Init(const Array<char>& schemaData);
-        Result Init(const String& schemaData)        { return Init(ArrayView<const char>(schemaData.GetBufferLength(), schemaData.data())); }
+        Result Init(const String& schemaData)        { return Init(ArrayView<const char>(schemaData.length(), schemaData.data())); }
         Result Init(const Array<const char>& schemaData);
 
         bool HasField(const char* fieldName) const;

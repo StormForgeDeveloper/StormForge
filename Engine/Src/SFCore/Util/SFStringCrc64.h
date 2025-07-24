@@ -111,3 +111,18 @@ namespace std
     };
 
 }
+
+template <>
+struct std::formatter<SF::StringCrc64>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::StringCrc64& value, FormatContext& ctx) const {
+        return std::format_to(ctx.out(), "{}", value.ToString());
+    }
+};

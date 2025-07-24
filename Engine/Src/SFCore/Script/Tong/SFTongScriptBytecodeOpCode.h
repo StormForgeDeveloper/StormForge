@@ -116,24 +116,24 @@ namespace SF
 					case VariableBool::TYPE_NAME:
 					case VariableResult::TYPE_NAME:
 					case VariableInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int>() + pVarB->GetValue<int>());
+						result = Boxing(pVarA->GetValue<int>() + pVarB->GetValue<int>());
 						break;
 					case VariableUInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint32_t>() + pVarB->GetValue<uint32_t>());
+						result = Boxing(pVarA->GetValue<uint32_t>() + pVarB->GetValue<uint32_t>());
 						break;
 					case VariableInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() + pVarB->GetValue<int64_t>());
+						result = Boxing(pVarA->GetValue<int64_t>() + pVarB->GetValue<int64_t>());
 						break;
 					case VariableVoidP::TYPE_NAME:
 					case VariableUInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint64_t>() + pVarB->GetValue<uint64_t>());
+						result = Boxing(pVarA->GetValue<uint64_t>() + pVarB->GetValue<uint64_t>());
 						break;
 					case VariableFloat::TYPE_NAME:
 					case VariableDouble::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<double>() + pVarB->GetValue<double>());
+						result = Boxing(pVarA->GetValue<double>() + pVarB->GetValue<double>());
 						break;
 					default:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() + pVarB->GetValue<int64_t>());
+						result = Boxing(pVarA->GetValue<int64_t>() + pVarB->GetValue<int64_t>());
 						break;
 					}
 
@@ -182,24 +182,24 @@ namespace SF
 					case VariableBool::TYPE_NAME:
 					case VariableResult::TYPE_NAME:
 					case VariableInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int>() - pVarB->GetValue<int>());
+						result = Boxing(pVarA->GetValue<int>() - pVarB->GetValue<int>());
 						break;
 					case VariableUInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint32_t>() - pVarB->GetValue<uint32_t>());
+						result = Boxing(pVarA->GetValue<uint32_t>() - pVarB->GetValue<uint32_t>());
 						break;
 					case VariableInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() - pVarB->GetValue<int64_t>());
+						result = Boxing(pVarA->GetValue<int64_t>() - pVarB->GetValue<int64_t>());
 						break;
 					case VariableVoidP::TYPE_NAME:
 					case VariableUInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint64_t>() - pVarB->GetValue<uint64_t>());
+						result = Boxing(pVarA->GetValue<uint64_t>() - pVarB->GetValue<uint64_t>());
 						break;
 					case VariableFloat::TYPE_NAME:
 					case VariableDouble::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<double>() - pVarB->GetValue<double>());
+						result = Boxing(pVarA->GetValue<double>() - pVarB->GetValue<double>());
 						break;
 					default:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() - pVarB->GetValue<int64_t>());
+						result = Boxing(pVarA->GetValue<int64_t>() - pVarB->GetValue<int64_t>());
 						break;
 					}
 
@@ -248,24 +248,24 @@ namespace SF
 					case VariableBool::TYPE_NAME:
 					case VariableResult::TYPE_NAME:
 					case VariableInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int>() * pVarB->GetValue<int>());
+						result = Boxing(pVarA->GetValue<int>() * pVarB->GetValue<int>());
 						break;
 					case VariableUInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint32_t>() * pVarB->GetValue<uint32_t>());
+						result = Boxing(pVarA->GetValue<uint32_t>() * pVarB->GetValue<uint32_t>());
 						break;
 					case VariableInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() * pVarB->GetValue<int64_t>());
+						result = Boxing(pVarA->GetValue<int64_t>() * pVarB->GetValue<int64_t>());
 						break;
 					case VariableVoidP::TYPE_NAME:
 					case VariableUInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint64_t>() * pVarB->GetValue<uint64_t>());
+						result = Boxing(pVarA->GetValue<uint64_t>() * pVarB->GetValue<uint64_t>());
 						break;
 					case VariableFloat::TYPE_NAME:
 					case VariableDouble::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<double>() * pVarB->GetValue<double>());
+						result = Boxing(pVarA->GetValue<double>() * pVarB->GetValue<double>());
 						break;
 					default:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() * pVarB->GetValue<int64_t>());
+						result = Boxing(pVarA->GetValue<int64_t>() * pVarB->GetValue<int64_t>());
 						break;
 					}
 
@@ -315,24 +315,24 @@ namespace SF
 					case VariableBool::TYPE_NAME:
 					case VariableResult::TYPE_NAME:
 					case VariableInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int>() / pVarB->GetValue<int>());
+						result = Boxing(pVarA->GetValue<int>() / pVarB->GetValue<int>());
 						break;
 					case VariableUInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint32_t>() / pVarB->GetValue<uint32_t>());
+						result = Boxing(pVarA->GetValue<uint32_t>() / pVarB->GetValue<uint32_t>());
 						break;
 					case VariableInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() / pVarB->GetValue<int64_t>());
+						result = Boxing(pVarA->GetValue<int64_t>() / pVarB->GetValue<int64_t>());
 						break;
 					case VariableVoidP::TYPE_NAME:
 					case VariableUInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint64_t>() / pVarB->GetValue<uint64_t>());
+						result = Boxing(pVarA->GetValue<uint64_t>() / pVarB->GetValue<uint64_t>());
 						break;
 					case VariableFloat::TYPE_NAME:
 					case VariableDouble::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<double>() / pVarB->GetValue<double>());
+						result = Boxing(pVarA->GetValue<double>() / pVarB->GetValue<double>());
 						break;
 					default:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() / pVarB->GetValue<int64_t>());
+						result = Boxing(pVarA->GetValue<int64_t>() / pVarB->GetValue<int64_t>());
 						break;
 					}
 
@@ -381,24 +381,24 @@ namespace SF
 					case VariableBool::TYPE_NAME:
 					case VariableResult::TYPE_NAME:
 					case VariableInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int>() + opB);
+						result = Boxing(pVarA->GetValue<int>() + opB);
 						break;
 					case VariableUInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint32_t>() + opB);
+						result = Boxing(pVarA->GetValue<uint32_t>() + opB);
 						break;
 					case VariableInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() + opB);
+						result = Boxing(pVarA->GetValue<int64_t>() + opB);
 						break;
 					case VariableVoidP::TYPE_NAME:
 					case VariableUInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint64_t>() + opB);
+						result = Boxing(pVarA->GetValue<uint64_t>() + opB);
 						break;
 					case VariableFloat::TYPE_NAME:
 					case VariableDouble::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<double>() + opB);
+						result = Boxing(pVarA->GetValue<double>() + opB);
 						break;
 					default:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() + opB);
+						result = Boxing(pVarA->GetValue<int64_t>() + opB);
 						break;
 					}
 
@@ -447,24 +447,24 @@ namespace SF
 					case VariableBool::TYPE_NAME:
 					case VariableResult::TYPE_NAME:
 					case VariableInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int>() - opB);
+						result = Boxing(pVarA->GetValue<int>() - opB);
 						break;
 					case VariableUInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint32_t>() - opB);
+						result = Boxing(pVarA->GetValue<uint32_t>() - opB);
 						break;
 					case VariableInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() - opB);
+						result = Boxing(pVarA->GetValue<int64_t>() - opB);
 						break;
 					case VariableVoidP::TYPE_NAME:
 					case VariableUInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint64_t>() - opB);
+						result = Boxing(pVarA->GetValue<uint64_t>() - opB);
 						break;
 					case VariableFloat::TYPE_NAME:
 					case VariableDouble::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<double>() - opB);
+						result = Boxing(pVarA->GetValue<double>() - opB);
 						break;
 					default:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() - opB);
+						result = Boxing(pVarA->GetValue<int64_t>() - opB);
 						break;
 					}
 
@@ -513,24 +513,24 @@ namespace SF
 					case VariableBool::TYPE_NAME:
 					case VariableResult::TYPE_NAME:
 					case VariableInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int>() * opB);
+						result = Boxing(pVarA->GetValue<int>() * opB);
 						break;
 					case VariableUInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint32_t>() * opB);
+						result = Boxing(pVarA->GetValue<uint32_t>() * opB);
 						break;
 					case VariableInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() * opB);
+						result = Boxing(pVarA->GetValue<int64_t>() * opB);
 						break;
 					case VariableVoidP::TYPE_NAME:
 					case VariableUInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint64_t>() * opB);
+						result = Boxing(pVarA->GetValue<uint64_t>() * opB);
 						break;
 					case VariableFloat::TYPE_NAME:
 					case VariableDouble::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<double>() * opB);
+						result = Boxing(pVarA->GetValue<double>() * opB);
 						break;
 					default:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() * opB);
+						result = Boxing(pVarA->GetValue<int64_t>() * opB);
 						break;
 					}
 
@@ -580,24 +580,24 @@ namespace SF
 					case VariableBool::TYPE_NAME:
 					case VariableResult::TYPE_NAME:
 					case VariableInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int>() / opB);
+						result = Boxing(pVarA->GetValue<int>() / opB);
 						break;
 					case VariableUInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint32_t>() / opB);
+						result = Boxing(pVarA->GetValue<uint32_t>() / opB);
 						break;
 					case VariableInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() / opB);
+						result = Boxing(pVarA->GetValue<int64_t>() / opB);
 						break;
 					case VariableVoidP::TYPE_NAME:
 					case VariableUInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint64_t>() / opB);
+						result = Boxing(pVarA->GetValue<uint64_t>() / opB);
 						break;
 					case VariableFloat::TYPE_NAME:
 					case VariableDouble::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<double>() / opB);
+						result = Boxing(pVarA->GetValue<double>() / opB);
 						break;
 					default:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() / opB);
+						result = Boxing(pVarA->GetValue<int64_t>() / opB);
 						break;
 					}
 
@@ -647,24 +647,24 @@ namespace SF
 					case VariableBool::TYPE_NAME:
 					case VariableResult::TYPE_NAME:
 					case VariableInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int>() + opB);
+						result = Boxing(pVarA->GetValue<int>() + opB);
 						break;
 					case VariableUInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint32_t>() + opB);
+						result = Boxing(pVarA->GetValue<uint32_t>() + opB);
 						break;
 					case VariableInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() + opB);
+						result = Boxing(pVarA->GetValue<int64_t>() + opB);
 						break;
 					case VariableVoidP::TYPE_NAME:
 					case VariableUInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint64_t>() + opB);
+						result = Boxing(pVarA->GetValue<uint64_t>() + opB);
 						break;
 					case VariableFloat::TYPE_NAME:
 					case VariableDouble::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<double>() + opB);
+						result = Boxing(pVarA->GetValue<double>() + opB);
 						break;
 					default:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() + opB);
+						result = Boxing(pVarA->GetValue<int64_t>() + opB);
 						break;
 					}
 
@@ -713,24 +713,24 @@ namespace SF
 					case VariableBool::TYPE_NAME:
 					case VariableResult::TYPE_NAME:
 					case VariableInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int>() - opB);
+						result = Boxing(pVarA->GetValue<int>() - opB);
 						break;
 					case VariableUInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint32_t>() - opB);
+						result = Boxing(pVarA->GetValue<uint32_t>() - opB);
 						break;
 					case VariableInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() - opB);
+						result = Boxing(pVarA->GetValue<int64_t>() - opB);
 						break;
 					case VariableVoidP::TYPE_NAME:
 					case VariableUInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint64_t>() - opB);
+						result = Boxing(pVarA->GetValue<uint64_t>() - opB);
 						break;
 					case VariableFloat::TYPE_NAME:
 					case VariableDouble::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<double>() - opB);
+						result = Boxing(pVarA->GetValue<double>() - opB);
 						break;
 					default:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() - opB);
+						result = Boxing(pVarA->GetValue<int64_t>() - opB);
 						break;
 					}
 
@@ -779,24 +779,24 @@ namespace SF
 					case VariableBool::TYPE_NAME:
 					case VariableResult::TYPE_NAME:
 					case VariableInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int>() * opB);
+						result = Boxing(pVarA->GetValue<int>() * opB);
 						break;
 					case VariableUInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint32_t>() * opB);
+						result = Boxing(pVarA->GetValue<uint32_t>() * opB);
 						break;
 					case VariableInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() * opB);
+						result = Boxing(pVarA->GetValue<int64_t>() * opB);
 						break;
 					case VariableVoidP::TYPE_NAME:
 					case VariableUInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint64_t>() * opB);
+						result = Boxing(pVarA->GetValue<uint64_t>() * opB);
 						break;
 					case VariableFloat::TYPE_NAME:
 					case VariableDouble::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<double>() * opB);
+						result = Boxing(pVarA->GetValue<double>() * opB);
 						break;
 					default:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() * opB);
+						result = Boxing(pVarA->GetValue<int64_t>() * opB);
 						break;
 					}
 
@@ -846,24 +846,24 @@ namespace SF
 					case VariableBool::TYPE_NAME:
 					case VariableResult::TYPE_NAME:
 					case VariableInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int>() / opB);
+						result = Boxing(pVarA->GetValue<int>() / opB);
 						break;
 					case VariableUInt::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint32_t>() / opB);
+						result = Boxing(pVarA->GetValue<uint32_t>() / opB);
 						break;
 					case VariableInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() / opB);
+						result = Boxing(pVarA->GetValue<int64_t>() / opB);
 						break;
 					case VariableVoidP::TYPE_NAME:
 					case VariableUInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint64_t>() / opB);
+						result = Boxing(pVarA->GetValue<uint64_t>() / opB);
 						break;
 					case VariableFloat::TYPE_NAME:
 					case VariableDouble::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<double>() / opB);
+						result = Boxing(pVarA->GetValue<double>() / opB);
 						break;
 					default:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() / opB);
+						result = Boxing(pVarA->GetValue<int64_t>() / opB);
 						break;
 					}
 
@@ -910,17 +910,17 @@ namespace SF
 					{
 					case VariableInt::TYPE_NAME:
 					case VariableInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int>() == pVarB->GetValue<int>());
+						result = Boxing(pVarA->GetValue<int>() == pVarB->GetValue<int>());
 						break;
 					case VariableUInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint64_t>() == pVarB->GetValue<uint64_t>());
+						result = Boxing(pVarA->GetValue<uint64_t>() == pVarB->GetValue<uint64_t>());
 						break;
 					case VariableFloat::TYPE_NAME:
 					case VariableDouble::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<double>() == pVarB->GetValue<double>());
+						result = Boxing(pVarA->GetValue<double>() == pVarB->GetValue<double>());
 						break;
 					default:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() == pVarB->GetValue<int64_t>());
+						result = Boxing(pVarA->GetValue<int64_t>() == pVarB->GetValue<int64_t>());
 						break;
 					}
 
@@ -969,17 +969,17 @@ namespace SF
 					{
 					case VariableInt::TYPE_NAME:
 					case VariableInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int>() > pVarB->GetValue<int>());
+						result = Boxing(pVarA->GetValue<int>() > pVarB->GetValue<int>());
 						break;
 					case VariableUInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint64_t>() > pVarB->GetValue<uint64_t>());
+						result = Boxing(pVarA->GetValue<uint64_t>() > pVarB->GetValue<uint64_t>());
 						break;
 					case VariableFloat::TYPE_NAME:
 					case VariableDouble::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<double>() > pVarB->GetValue<double>());
+						result = Boxing(pVarA->GetValue<double>() > pVarB->GetValue<double>());
 						break;
 					default:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() > pVarB->GetValue<int64_t>());
+						result = Boxing(pVarA->GetValue<int64_t>() > pVarB->GetValue<int64_t>());
 						break;
 					}
 
@@ -1028,17 +1028,17 @@ namespace SF
 					{
 					case VariableInt::TYPE_NAME:
 					case VariableInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int>() < pVarB->GetValue<int>());
+						result = Boxing(pVarA->GetValue<int>() < pVarB->GetValue<int>());
 						break;
 					case VariableUInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint64_t>() < pVarB->GetValue<uint64_t>());
+						result = Boxing(pVarA->GetValue<uint64_t>() < pVarB->GetValue<uint64_t>());
 						break;
 					case VariableFloat::TYPE_NAME:
 					case VariableDouble::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<double>() < pVarB->GetValue<double>());
+						result = Boxing(pVarA->GetValue<double>() < pVarB->GetValue<double>());
 						break;
 					default:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() < pVarB->GetValue<int64_t>());
+						result = Boxing(pVarA->GetValue<int64_t>() < pVarB->GetValue<int64_t>());
 						break;
 					}
 
@@ -1085,17 +1085,17 @@ namespace SF
 					{
 					case VariableInt::TYPE_NAME:
 					case VariableInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int>() >= pVarB->GetValue<int>());
+						result = Boxing(pVarA->GetValue<int>() >= pVarB->GetValue<int>());
 						break;
 					case VariableUInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint64_t>() >= pVarB->GetValue<uint64_t>());
+						result = Boxing(pVarA->GetValue<uint64_t>() >= pVarB->GetValue<uint64_t>());
 						break;
 					case VariableFloat::TYPE_NAME:
 					case VariableDouble::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<double>() >= pVarB->GetValue<double>());
+						result = Boxing(pVarA->GetValue<double>() >= pVarB->GetValue<double>());
 						break;
 					default:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() >= pVarB->GetValue<int64_t>());
+						result = Boxing(pVarA->GetValue<int64_t>() >= pVarB->GetValue<int64_t>());
 						break;
 					}
 
@@ -1142,17 +1142,17 @@ namespace SF
 					{
 					case VariableInt::TYPE_NAME:
 					case VariableInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<int>() <= pVarB->GetValue<int>());
+						result = Boxing(pVarA->GetValue<int>() <= pVarB->GetValue<int>());
 						break;
 					case VariableUInt64::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<uint64_t>() <= pVarB->GetValue<uint64_t>());
+						result = Boxing(pVarA->GetValue<uint64_t>() <= pVarB->GetValue<uint64_t>());
 						break;
 					case VariableFloat::TYPE_NAME:
 					case VariableDouble::TYPE_NAME:
-						result = Boxing(GetHeap(), pVarA->GetValue<double>() <= pVarB->GetValue<double>());
+						result = Boxing(pVarA->GetValue<double>() <= pVarB->GetValue<double>());
 						break;
 					default:
-						result = Boxing(GetHeap(), pVarA->GetValue<int64_t>() <= pVarB->GetValue<int64_t>());
+						result = Boxing(pVarA->GetValue<int64_t>() <= pVarB->GetValue<int64_t>());
 						break;
 					}
 

@@ -76,11 +76,11 @@ namespace SF {
 		inline bool GetIsSequenceAssigned() { return m_bIsSequenceAssigned; }
 
 		// Initialize message buffer
-		static MessageData* NewMessage(IHeap& heap, uint32_t uiMsgID, uint uiMsgBufSize, const uint8_t* pData = nullptr);
-        static MessageData* NewMessage(IHeap& heap, const MessageHeader* pHeader);
+		static MessageData* NewMessage(uint32_t uiMsgID, uint uiMsgBufSize, const uint8_t* pData = nullptr);
+        static MessageData* NewMessage(const MessageHeader* pHeader);
 
         // Make a clone this message
-		MessageData* Clone(IHeap& heap);
+		MessageData* Clone();
 
 
 		// Update checksum and encrypt

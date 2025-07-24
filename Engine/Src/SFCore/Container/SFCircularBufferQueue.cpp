@@ -60,14 +60,14 @@ namespace SF
 	CircularBufferQueue::~CircularBufferQueue()
 	{
 		if (!m_ExternalBuffer && m_Buffer != nullptr)
-			IHeap::Delete(m_Buffer);
+            m_Heap.Free(m_Buffer);
 		m_Buffer = nullptr;
 	}
 
 	void CircularBufferQueue::Initialize(size_t bufferSize /* = 2048 */, uint8_t* externalBuffer /* = nullptr */)
 	{
 		if (!m_ExternalBuffer && m_Buffer != nullptr)
-			IHeap::Delete(m_Buffer);
+            m_Heap.Free(m_Buffer);
 
 		m_BufferSize = bufferSize;
 		m_Buffer = externalBuffer;
@@ -75,7 +75,7 @@ namespace SF
 		m_ExternalBuffer = externalBuffer != nullptr;
 		if (!m_ExternalBuffer)
 		{
-			m_Buffer = new(m_Heap) uint8_t[m_BufferSize];
+			m_Buffer = reinterpret_cast<uint8_t*>(m_Heap.Alloc(m_BufferSize));
 		}
 
         static_assert(sizeof(std::atomic<uint64_t>) == sizeof(uint64_t), "My assumption has broken!");

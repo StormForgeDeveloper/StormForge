@@ -39,7 +39,7 @@ namespace SF
 	}
 
 	template <class DataType>
-	PageQueue<DataType>::PageQueue(IHeap& heap, int iDataPerPage)
+	PageQueue<DataType>::PageQueue(int iDataPerPage)
 		: m_NumberOfItemsPerPage(0)
 		, m_PageIndex(0)
 	{
@@ -57,7 +57,6 @@ namespace SF
 		iDataPerPage = Math::Max(4, iDataPerPage);
 
 		m_NumberOfItemsPerPage = iDataPerPage;
-
 
 		m_EnqueueTicket = 0;
 		m_DequeueTicket = 0;

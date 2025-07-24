@@ -52,5 +52,5 @@ SFDLL_EXPORT void SFTongScript_NativeDeleteScriptEnvironment(intptr_t nativeHand
 
 	auto pScriptEnv = reinterpret_cast<ScriptEnvironment*>(nativeHandler);
 
-	IHeap::Delete(pScriptEnv);
+	delete (pScriptEnv);
 }

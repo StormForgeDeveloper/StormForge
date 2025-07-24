@@ -55,17 +55,17 @@ namespace Net {
 		, m_NetIOSystem(nullptr)
 	{
 #if KQUEUE
-		m_NetIOSystem = new(GetHeap())  KQUEUESystem;
+		m_NetIOSystem = new  KQUEUESystem;
 #elif EPOLL
-		m_NetIOSystem = new(GetHeap())  EPOLLSystem;
+		m_NetIOSystem = new  EPOLLSystem;
 #else
-		m_NetIOSystem = new(GetHeap())  IOCPSystem::IOCPSystem(GetHeap());
+		m_NetIOSystem = new  IOCPSystem::IOCPSystem(GetHeap());
 #endif
 	}
 
 	NetSystem::~NetSystem()
 	{
-		if (m_NetIOSystem != nullptr) IHeap::Delete(m_NetIOSystem);
+		if (m_NetIOSystem != nullptr) delete (m_NetIOSystem);
 		m_NetIOSystem = nullptr;
 	}
 
@@ -75,7 +75,7 @@ namespace Net {
 		LibraryComponent::InitializeComponent();
 		
 		Service::NetSystem = this;
-        m_pGatheringBufferPool = new(GetSystemHeap()) MemoryPool(GetSystemHeap(), m_GatheringBufferSize);
+        m_pGatheringBufferPool = new MemoryPool(GetSystemHeap(), m_GatheringBufferSize);
 
 		if (m_NetIOSystem != nullptr) 
 			m_NetIOSystem->Initialize(m_NumThread);
@@ -98,7 +98,7 @@ namespace Net {
 
     Net::IOBUFFER_WRITE* NetSystem::AllocateWriteBuffer()
     {
-        IOBUFFER_WRITE* pWriteBuffer = new(*(IHeap*)m_pGatheringBufferPool.get()) IOBUFFER_WRITE;
+        IOBUFFER_WRITE* pWriteBuffer = new IOBUFFER_WRITE;
         return pWriteBuffer;
     }
 

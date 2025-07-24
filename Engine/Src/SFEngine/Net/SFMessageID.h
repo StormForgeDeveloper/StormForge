@@ -124,6 +124,8 @@ namespace SF {
 
         constexpr operator uint32_t() const { return ID; }
 
+        // Get message id name string if exist
+        const char* GetNameString() const;
     };
 
     static_assert(sizeof(uint32_t) == sizeof(MessageID), "Message ID should fit in 4 bytes");
@@ -140,5 +142,21 @@ public:
     size_t operator()(const SF::MessageID& messageId) const
     {
         return messageId.ID;
+    }
+};
+
+template <>
+struct std::formatter<SF::MessageID>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::MessageID& value, FormatContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "({}:{},{},{:#08X})", value.IDs.Type, value.IDs.Protocol, value.IDs.MsgCode, value.ID);
     }
 };

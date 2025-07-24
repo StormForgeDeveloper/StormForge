@@ -68,10 +68,10 @@ namespace Util {
 	String Path::GetFileName(const String& strFilePath)
 	{
 		if (strFilePath.GetLength() == 0)
-			return String(strFilePath.GetHeap());
+			return String();
 
 		auto pStr = GetFileName(strFilePath.data());
-		return String(strFilePath.GetHeap(), pStr);
+		return String(pStr);
 	}
 
 	const char* Path::GetFileName(const char* strFilePath)
@@ -90,44 +90,44 @@ namespace Util {
 	String Path::GetFileNameWithoutExt(const String& strFilePath)
 	{
 		if (strFilePath.GetLength() == 0)
-			return String(strFilePath.GetHeap());
+			return String();
 
-		return GetFileNameWithoutExt(strFilePath.GetHeap(), strFilePath.data());
+		return GetFileNameWithoutExt(strFilePath.data());
 	}
 
-	String Path::GetFileNameWithoutExt(IHeap& heap, const char* strFilePath)
+	String Path::GetFileNameWithoutExt(const char* strFilePath)
 	{
 		if (strFilePath == nullptr)
-			return String(heap);
+			return String();
 
 		auto pExt = GetExt(strFilePath);
 		auto pFileName = GetFileName(strFilePath);
 		if(pFileName == nullptr)
-			return String(heap);
+			return String();
 
 		if (pExt != nullptr)
 		{
-			return String(heap, pFileName, 0, (int)((intptr_t)pExt - (intptr_t)pFileName));
+			return String(pFileName, 0, (int)((intptr_t)pExt - (intptr_t)pFileName));
 		}
 		else
 		{
-			return String(heap, pFileName);
+			return String(pFileName);
 		}
 	}
 
     String Path::WithoutExt(const char* strFilePath)
     {
         if (strFilePath == nullptr)
-            return String(GetSystemHeap());
+            return String();
 
         auto pExt = GetExt(strFilePath);
         if (pExt != nullptr)
         {
-            return String(GetSystemHeap(), strFilePath, 0, (int)((intptr_t)pExt - (intptr_t)strFilePath));
+            return String(strFilePath, 0, (int)((intptr_t)pExt - (intptr_t)strFilePath));
         }
         else
         {
-            return String(GetSystemHeap(), strFilePath);
+            return String(strFilePath);
         }
     }
 
@@ -142,7 +142,7 @@ namespace Util {
 		if (iSeperator < 0)
 			return strFilePath;
 
-		return String(strFilePath.GetHeap(), strFilePath, 0, iSeperator);
+		return String(strFilePath, 0, iSeperator);
 	}
 
     String Path::GetParentFileDirectory(const String& strFilePath)
@@ -175,12 +175,12 @@ namespace Util {
 	String Path::Combine(const String& strFilePath1, const char* strFilePath2)
 	{
 		if (strFilePath1.GetLength() == 0)
-			return String(strFilePath1.GetHeap(), strFilePath2);
+			return String(strFilePath2);
 
 		if (strFilePath2 == nullptr)
 			return strFilePath1;
 
-		String result(strFilePath1.GetHeap());
+		String result;
 		result.Append(strFilePath1);
 		if(strFilePath1.GetLength() > 0
 			&& result[strFilePath1.GetLength() - 1] != DirectorySeparatorChar

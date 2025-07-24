@@ -122,7 +122,7 @@ namespace SF
 			SFUniquePtr<Variable> pVariable;
 			if (TypeName != nullptr)
 			{
-				pVariable.reset(Service::VariableFactory->CreateVariable(data.GetHeap(), TypeName));
+				pVariable.reset(Service::VariableFactory->CreateVariable(TypeName));
 				pVariable->Deserialize(input);
 			}
 
@@ -271,7 +271,7 @@ namespace SF
 			SFUniquePtr<Variable> pVariable;
 			if (TypeName != nullptr)
 			{
-				pVariable.reset(Service::VariableFactory->CreateVariable(data.GetHeap(), TypeName));
+				pVariable.reset(Service::VariableFactory->CreateVariable(TypeName));
 				pVariable->Deserialize(input);
 			}
 

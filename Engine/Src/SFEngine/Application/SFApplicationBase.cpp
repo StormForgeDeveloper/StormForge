@@ -21,7 +21,6 @@ namespace SF
 {
 	ApplicationBase::ApplicationBase()
 		: LibraryComponent("Application")
-		, m_Heap("AppHeap", GetSystemHeap())
 	{
 	}
 
@@ -45,9 +44,6 @@ namespace SF
 
 		LibraryComponent::DeinitializeComponent();
 	}
-
-
-
 
 	AppTask::AppTask()
 		: EngineTask(EngineTaskTick::SyncSystemTick)

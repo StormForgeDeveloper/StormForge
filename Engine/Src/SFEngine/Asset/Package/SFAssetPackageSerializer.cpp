@@ -41,8 +41,7 @@ namespace SF
 
 
 
-	AssetPackageSerializer::AssetPackageSerializer(IHeap& heap)
-		: m_Heap(heap)
+	AssetPackageSerializer::AssetPackageSerializer()
 	{
 	}
 
@@ -86,8 +85,8 @@ namespace SF
 			objHeader.Version = 1;
 			objHeader.Encoding = 1; // compressed
 
-			OutputMemoryStream memoryStream(GetHeap());
-			CompressedOutputStream objectStream(GetHeap(), memoryStream);
+			OutputMemoryStream memoryStream;
+			CompressedOutputStream objectStream(memoryStream);
 
 			AssetSerializer *pSerializer = nullptr;
 			result = Service::AssetSerializerFactory->FindSerializer(assetPtr->GetResourceType(), pSerializer);
@@ -117,7 +116,7 @@ namespace SF
 
 
 	// Deserialize stream
-	Result AssetPackageSerializer::Deserialize(IHeap& heap, IInputStream& stream, AssetPackage& package)
+	Result AssetPackageSerializer::Deserialize(IInputStream& stream, AssetPackage& package)
 	{
 		PackageHeader header;
 
@@ -180,23 +179,23 @@ namespace SF
 
 			if (objHeader.Encoding != 0)
 			{
-				DynamicArray<uint8_t> memBuffer(GetHeap());
+				DynamicArray<uint8_t> memBuffer;
 				memBuffer.resize(objHeader.DataSize);
 				result = stream.Read(memBuffer.data(), memBuffer.size());
 				if (!result)
 					return result;
 
 				InputMemoryStream memStream(memBuffer);
-				CompressedInputStream objStream(GetHeap(), memStream, objHeader.DataSize, objHeader.UncompressedDataSize);
+				CompressedInputStream objStream(memStream, objHeader.DataSize, objHeader.UncompressedDataSize);
 
-				result = pSerializer->Deserialize(heap, objStream, resultRes);
+				result = pSerializer->Deserialize(objStream, resultRes);
 				if (!result)
 					return result;
 			}
 			else
 			{
 
-				result = pSerializer->Deserialize(heap, stream, resultRes);
+				result = pSerializer->Deserialize(stream, resultRes);
 				if (!result)
 					return result;
 			}

@@ -232,7 +232,7 @@ namespace SF
 		auto valueArray = m_Env->NewStringArray(value.size());
 		m_Env->SetStringArrayRegion(valueArray, 0, value.size(), pValues);
 
-		IHeap::Delete(pValues);
+		delete (pValues);
 
 		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, valueArray);
 	}
@@ -248,7 +248,7 @@ namespace SF
 		auto valueArray = m_Env->NewBooleanArray(value.size());
 		m_Env->SetBooleanArrayRegion(valueArray, 0, value.size(), pJBooleanValues);
 
-		IHeap::Delete(pJBooleanValues);
+		delete (pJBooleanValues);
 
 		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, valueArray);
 	}

@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -28,10 +28,9 @@ namespace SF {
 		memset(m_IOBuffers, 0, sizeof(m_IOBuffers));
 		if (IsAIOEnabled())
 		{
-			auto& memoryManager = GetSystemHeap();
 			for (auto& ioBuffer : m_IOBuffers)
 			{
-				ioBuffer = new(memoryManager) IO_BUFFER(memoryManager, m_FileHandle, m_OpenMode);
+				ioBuffer = new IO_BUFFER(m_FileHandle, m_OpenMode);
 			}
 		}
 	}
@@ -42,7 +41,7 @@ namespace SF {
 
 		for (auto& ioBuffer : m_IOBuffers)
 		{
-			IHeap::Delete(ioBuffer);
+			delete (ioBuffer);
 		}
 
 	}

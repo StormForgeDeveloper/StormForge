@@ -158,7 +158,7 @@ namespace SF
 
     HTTPClient* HTTPClientSystemCurl::CreateHTTPClientInternal()
     {
-        return new(GetSystemHeap()) HTTPClientCurl(this);
+        return new HTTPClientCurl(this);
     }
 
     void HTTPClientSystemCurl::AddRequest(HTTPClientCurl* httpClient)

@@ -47,20 +47,14 @@ namespace SF {
 
 		// TODO: memory optimization, use heap
 
-		// heap for variables
-		IHeap& m_Heap;
-
 		// Variable 
 		SortedArray<KeyType, Variable*, true, false> m_VariableTable;
 
 	public:
 
-		VariableTable(IHeap& heap = GetEngineHeap());
-		VariableTable(IHeap& heap, const VariableTable& src);
+		VariableTable();
 		VariableTable(const VariableTable& src);
 		virtual ~VariableTable();
-
-		IHeap& GetHeap() { return m_Heap; }
 
 		void Clear();
 		void Reset() { Clear(); }
@@ -96,7 +90,7 @@ namespace SF {
 		template<class ValueType>
 		Result SetValue(KeyType name, const ValueType& value)
 		{
-			auto boxedValue = BoxingByValue(GetHeap(), value);
+			auto boxedValue = BoxingByValue(value);
 			if (boxedValue.GetVariable() == nullptr)
 				return ResultCode::NOT_SUPPORTED;
 
@@ -168,19 +162,14 @@ namespace SF {
 
 		// TODO: memory optimize
 
-		// heap for variables
-		IHeap& m_Heap;
-
 		// Variable 
 		DualSortedMap<KeyType, Variable*> m_VariableTable;
 
 	public:
 
-		VariableTableMT(IHeap& heap);
+		VariableTableMT();
 
 		virtual ~VariableTableMT();
-
-		IHeap& GetHeap() { return m_Heap; }
 
 		virtual Result SetVariable(KeyType name, const Variable& variable);
 
@@ -188,7 +177,7 @@ namespace SF {
 		template<class ValueType>
 		Result SetValue(KeyType name, ValueType value)
 		{
-			auto boxedValue = Boxing(GetHeap(), value);
+			auto boxedValue = Boxing(value);
 			if (boxedValue.GetVariable() == nullptr)
 				return ResultCode::NOT_SUPPORTED;
 
@@ -210,4 +199,39 @@ namespace SF {
 	};
 
 } // namespace SF
+
+
+template <>
+struct std::formatter<SF::VariableTable>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::VariableTable& value, FormatContext& ctx) const
+    {
+        std::stringstream ss;
+
+        ss << std::format("(sz:{}:", value.size());
+
+        for (auto itValue : value)
+        {
+            char temp[128]="";
+            SF::ToStringContext context;
+            context.OutStream.pBuffer = temp;
+            context.OutStream.BuffLen = sizeof(temp);
+
+            itValue.GetValue()->ToString(context);
+
+            ss << std::format("{}={},", itValue.GetKey(), temp);
+        }
+
+        ss << ")";
+
+        return std::format_to(ctx.out(), "{}", ss.str());
+    }
+};
 

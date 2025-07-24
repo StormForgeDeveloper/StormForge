@@ -495,7 +495,7 @@ namespace SF {
 
             inline Offset<::flatbuffers::Vector<uint8_t>> CreateVariableTable(FlatBufferBuilder& fbb, const SF::VariableTable& value)
             {
-                SF::OutputMemoryStream out(GetSystemHeap());
+                SF::OutputMemoryStream out;
 
                 out << value;
 
@@ -504,7 +504,7 @@ namespace SF {
 
             inline Offset<::flatbuffers::Vector<uint8_t>> CreateVariableTableVector(FlatBufferBuilder& fbb, const Array<SF::VariableTable>& value)
             {
-                SF::OutputMemoryStream out(GetSystemHeap());
+                SF::OutputMemoryStream out;
 
                 out << value;
 

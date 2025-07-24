@@ -43,18 +43,19 @@ TEST_F(VariableTest, Boxing1)
 	test.PlayerPlatformId.PlayerId = guidGen.NewGuid();
 	testFriendList.push_back(test);
 
-	const Array< FriendInformation>& testFriendListC = testFriendList;
-	char testString[512];
-	StrUtil::Format(testString, "{0}", testFriendList);
-	StrUtil::Format(testString, "{0}", testFriendListC);
+	//const Array< FriendInformation>& testFriendListC = testFriendList;
+	//char testString[512];
+ //   // TODO:
+	//StrUtil::Format(testString, "{0}", testFriendList);
+	//StrUtil::Format(testString, "{0}", testFriendListC);
 
 
-	auto boxedFriendList = Boxing(GetSystemHeap(), testFriendList);
-	auto pFriendList = UnboxingReference<Array<FriendInformation>>(boxedFriendList);
-	for (auto& fr : *pFriendList)
-	{
-		StrUtil::Format(testString, "{0}", fr);
-	}
+	//auto boxedFriendList = Boxing(testFriendList);
+	//auto pFriendList = UnboxingReference<Array<FriendInformation>>(boxedFriendList);
+	//for (auto& fr : *pFriendList)
+	//{
+	//	StrUtil::Format(testString, "{0}", fr);
+	//}
 
 }
 

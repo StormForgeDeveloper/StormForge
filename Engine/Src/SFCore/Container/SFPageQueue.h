@@ -151,7 +151,7 @@ namespace SF
 
 	public:
 		// constructor / destructor
-		PageQueue(IHeap& heap = GetSystemHeap(), int iDataPerPage = -1);
+		PageQueue(int iDataPerPage = -1);
 		~PageQueue(void);
 
 		// item enqueue

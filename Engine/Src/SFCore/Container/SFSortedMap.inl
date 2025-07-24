@@ -59,7 +59,7 @@ namespace SF {
 			if (m_pNodePool == nullptr)
 			{
 				m_DeleteNodePool = true;
-				m_pNodePool = new(heap) ObjectPoolT<MapNode>(heap);
+				m_pNodePool = new ObjectPoolT<MapNode>(heap);
 			}
 		}
 
@@ -70,7 +70,7 @@ namespace SF {
 
 			if (m_pNodePool != nullptr && m_DeleteNodePool)
 			{
-				GetHeap().Delete(m_pNodePool);
+				delete m_pNodePool;
 				m_pNodePool = nullptr;
 			}
 		}
@@ -105,7 +105,7 @@ namespace SF {
 			//while (m_FreeNodes != nullptr)
 			//{
 			//	auto next = m_FreeNodes->Next;
-			//	IHeap::Delete(m_FreeNodes);
+			//	delete (m_FreeNodes);
 			//	m_FreeNodes = next;
 			//}
 		}

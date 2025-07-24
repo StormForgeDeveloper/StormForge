@@ -89,7 +89,7 @@ SFDLL_EXPORT int32_t SFOnlineNotificationClient_NativeTickUpdate(intptr_t native
         if (result)
         {
             onOnlineEventData(result->APIName, result->ResultPayload);
-            IHeap::Delete(result);
+            delete (result);
         }
     }
 

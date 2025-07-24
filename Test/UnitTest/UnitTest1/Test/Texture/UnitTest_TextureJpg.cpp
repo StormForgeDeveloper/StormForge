@@ -57,7 +57,7 @@ GTEST_TEST(Texture, JpgSimple)
 	GTEST_ASSERT_EQ(ResultCode::SUCCESS, result);
 
 	// Release before return
-	IHeap::Delete(imageImporter);
+	delete (imageImporter);
 
 	for (auto itRes : resources)
 	{

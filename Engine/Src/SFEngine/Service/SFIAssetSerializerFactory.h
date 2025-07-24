@@ -40,7 +40,7 @@ namespace SF
 		template<class AssetSerializerType>
 		Result RegisterSerializer()
 		{
-			AssetSerializerType *pSerializer = new(GetHeap()) AssetSerializerType(GetHeap());
+			AssetSerializerType *pSerializer = new AssetSerializerType(GetHeap());
 			return RegisterSerializer(pSerializer);
 		}
 

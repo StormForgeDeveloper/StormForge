@@ -87,16 +87,14 @@ namespace SF {
 		virtual uint NewCID() { return 0; }
 		virtual void FreeCID(uint uiCID) { unused(uiCID); }
 
-		virtual IHeap& GetHeap() { return GetSystemHeap(); }
-
 		// Active connection
 		virtual CounterType GetNumActiveConnection() { return 0; }
 
 
 		virtual void AddConnection(SharedPointerT<Net::Connection>& pConn) { }
 
-		virtual void NewMUDPAddress(IHeap& memMgr, Net::ServerNet* pNet, SF_SOCKET socket, const Net::PeerInfo& local, const Net::PeerInfo& remote) {};
-		virtual void NewUDPAddress(IHeap& memMgr, Net::ServerNet* pNet, SF_SOCKET socket, const Net::PeerInfo& local, const Net::PeerInfo& remote) {};
+		virtual void NewMUDPAddress(Net::ServerNet* pNet, SF_SOCKET socket, const Net::PeerInfo& local, const Net::PeerInfo& remote) {};
+		virtual void NewUDPAddress(Net::ServerNet* pNet, SF_SOCKET socket, const Net::PeerInfo& local, const Net::PeerInfo& remote) {};
 
 		// Free connection directly
 		virtual EngineTaskPtr RemoveConnection(SharedPointerT<Net::Connection>& pConn) { return EngineTaskPtr(); }

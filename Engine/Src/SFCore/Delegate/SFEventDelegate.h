@@ -41,14 +41,8 @@ namespace SF
 
 
         EventDelegateList()
-            : m_DelegateArray(GetSystemHeap())
         {
         }
-
-		EventDelegateList(IHeap& heap)
-			: m_DelegateArray(heap)
-		{
-		}
 
 		void AddDelegate(const EventDelegate& dele)
 		{

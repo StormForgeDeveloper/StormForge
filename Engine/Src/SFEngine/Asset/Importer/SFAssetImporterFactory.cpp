@@ -41,7 +41,7 @@ namespace SF
 		m_AssetImporterByType.Clear();
 		for (auto itAssetImporter : m_AssetImporters)
 		{
-			IHeap::Delete(itAssetImporter);
+			delete (itAssetImporter);
 		}
 		m_AssetImporters.Clear();
 	}

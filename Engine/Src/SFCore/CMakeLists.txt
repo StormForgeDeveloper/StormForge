@@ -264,25 +264,25 @@ source_group(Math FILES
 	${SUBMath_FILES} 
 )
 
-set(SUBScript_FILES
-	Script/Tong/SFTongScriptBytecode.cpp
-	Script/Tong/SFTongScriptContext.cpp
-	Script/Tong/SFTongScriptEnvironment.cpp
-	Script/Tong/SFTongScriptEngine.cpp
-	Script/Tong/SFTongScriptFunction.cpp
-	Script/Tong/SFTongScriptVariable.cpp
-	Script/Tong/SFTongScriptBytecode.h
-	Script/Tong/SFTongScriptContext.h
-	Script/Tong/SFTongScriptBytecodeOpCode.h
-	Script/Tong/SFTongScriptEnvironment.h
-	Script/Tong/SFTongScriptEngine.h
-	Script/Tong/SFTongScriptFunction.h
-	Script/Tong/SFTongScriptVariable.h
-  )
+# set(SUBScript_FILES
+	# Script/Tong/SFTongScriptBytecode.cpp
+	# Script/Tong/SFTongScriptContext.cpp
+	# Script/Tong/SFTongScriptEnvironment.cpp
+	# Script/Tong/SFTongScriptEngine.cpp
+	# Script/Tong/SFTongScriptFunction.cpp
+	# Script/Tong/SFTongScriptVariable.cpp
+	# Script/Tong/SFTongScriptBytecode.h
+	# Script/Tong/SFTongScriptContext.h
+	# Script/Tong/SFTongScriptBytecodeOpCode.h
+	# Script/Tong/SFTongScriptEnvironment.h
+	# Script/Tong/SFTongScriptEngine.h
+	# Script/Tong/SFTongScriptFunction.h
+	# Script/Tong/SFTongScriptVariable.h
+  # )
 
-source_group(Script FILES
-	${SUBScript_FILES} 
-)
+# source_group(Script FILES
+	# ${SUBScript_FILES} 
+# )
 
 
 set(SUBObject_FILES
@@ -322,10 +322,10 @@ set(SUBService_FILES
 	Service/SFAsyncIOPortService.h
 	Service/SFLogService.h
 	Service/SFLogService.cpp
-	Service/SFScriptService.h
+	#Service/SFScriptService.h
 	Service/SFService.h
 	Service/SFServices.h
-	Service/SFScriptService.cpp
+	#Service/SFScriptService.cpp
 	Service/SFService.cpp
   )
 
@@ -430,8 +430,8 @@ set(SFCORE_LIB_FILES
 
 include_directories(./)
 
-
-add_library(SFCore STATIC ${SUBCOMPONENT_FILES} ${OPENSSL_FILES} ${SUBCONTAINER_FILES} ${SUBIO_FILES} ${SUBResult_FILES} ${SUBService_FILES} ${SUBMemoryManager_FILES} ${SUBUtil_FILES} ${SUBVariable_FILES} ${SUBMath_FILES} ${SUBObject_FILES} ${SUBOnline_FILES} ${SUBScript_FILES} ${SFCORE_LIB_FILES})
+# ${SUBScript_FILES}
+add_library(SFCore STATIC ${SUBCOMPONENT_FILES} ${OPENSSL_FILES} ${SUBCONTAINER_FILES} ${SUBIO_FILES} ${SUBResult_FILES} ${SUBService_FILES} ${SUBMemoryManager_FILES} ${SUBUtil_FILES} ${SUBVariable_FILES} ${SUBMath_FILES} ${SUBObject_FILES} ${SUBOnline_FILES}  ${SFCORE_LIB_FILES})
 
 target_precompile_headers(SFCore PUBLIC SFCorePCH.h)
 target_include_directories (SFCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

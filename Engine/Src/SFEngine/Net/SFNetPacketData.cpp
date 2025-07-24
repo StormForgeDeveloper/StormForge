@@ -30,17 +30,10 @@ namespace SF
         {
             if (!g_PacketDataPool.IsValid())
             {
-                g_PacketDataPool = new(GetSystemHeap()) MemoryPool(GetSystemHeap(), sizeof(PacketData));
+                g_PacketDataPool = new MemoryPool(GetSystemHeap(), sizeof(PacketData));
             }
 
             return g_PacketDataPool;
-        }
-
-        PacketData* PacketData::NewPacketData()
-        {
-            // We have new operator overriding on IOBUFFER_WRITE. only regular new or buffer
-            //PacketData::GetAllocationPool()->Alloc(sizeof(PacketData));
-            return new(*(IHeap*)PacketData::GetAllocationPool().get()) PacketData;
         }
 
     } // namespace Net

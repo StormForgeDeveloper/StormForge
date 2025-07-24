@@ -127,7 +127,7 @@ namespace SF
             return;
         }
 
-        APIResult* Result = new(GetHeap()) APIResult;
+        APIResult* Result = new APIResult;
         auto objectRequestFunc = rootObject.get("APIName", Json::Value(""));
         Result->APIName = objectRequestFunc.asCString();
 

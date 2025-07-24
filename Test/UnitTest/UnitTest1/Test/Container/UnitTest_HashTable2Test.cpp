@@ -55,7 +55,7 @@ TEST_F(HashTableTest, HashTable2_NonUnique)
 		NonUniqueKeyTrait, ThreadSyncTraitNoneT<int64_t, TestMapNode2*>
 	> TestTableType;
 
-	TestTableType TestMap(GetHeap());
+	TestTableType TestMap;
 	std::unordered_map<int, int> checkSet;
 
 
@@ -128,7 +128,7 @@ TEST_F(HashTableTest, HashTable2_Unique)
 		UniqueKeyTrait, ThreadSyncTraitNoneT<int64_t, TestMapNode2*>
 	> TestTableType;
 
-	TestTableType TestMap(GetHeap());
+	TestTableType TestMap;
 	std::unordered_set<int> checkSet;
 	TestMapNode2* pNode = nullptr;
 
@@ -187,7 +187,7 @@ TEST_F(HashTableTest, HashTable2_UniqueMT)
 	> TestTableType;
 
 	Concurrency::concurrent_unordered_map<int64_t, SharedPointerT<TestMapNodeShared>> m_TestMap;
-	TestTableType TestMap(GetHeap());
+	TestTableType TestMap;
 	//TestMapNodeShared* pNode = nullptr;
 
 
@@ -220,7 +220,7 @@ TEST_F(HashTableTest, HashTable2_UniqueMT)
 	for (int64_t i = 0; i < (TEST_COUNT); i++)
 	{
 		int64_t value = (rand() % MAX_NUMBER) + 1;
-		TestMapNodeShared *pNewNode = new(GetHeap()) TestMapNodeShared;
+		TestMapNodeShared *pNewNode = new TestMapNodeShared;
 		pNewNode->Value = value;
 		if ((TestMap.Insert(value, pNewNode)))
 		{
@@ -229,7 +229,7 @@ TEST_F(HashTableTest, HashTable2_UniqueMT)
 		}
 		else
 		{
-			//IHeap::Delete(pNewNode);
+			//delete (pNewNode);
 		}
 	}
 
@@ -274,7 +274,7 @@ TEST_F(HashTableTest, HashTable2_UniqueMT)
 		}
 		else
 		{
-			TestMapNodeShared *pNewNode = new(GetHeap()) TestMapNodeShared;
+			TestMapNodeShared *pNewNode = new TestMapNodeShared;
 			pNewNode->Value = value;
 			if ((TestMap.Insert(value, pNewNode)))
 			{
@@ -283,7 +283,7 @@ TEST_F(HashTableTest, HashTable2_UniqueMT)
 			}
 			else
 			{
-				//IHeap::Delete(pNewNode);
+				//delete (pNewNode);
 			}
 		}
 
@@ -316,7 +316,7 @@ TEST_F(HashTableTest, HashTable2_UniqueWriteMT)
 	> TestTableType;
 
 
-	TestTableType TestMap(GetHeap(), 1);
+	TestTableType TestMap(1);
 	//TestMapNodeShared* pNode = nullptr;
 
 
@@ -353,7 +353,7 @@ TEST_F(HashTableTest, HashTable2_UniqueWriteMT)
 	for (int64_t i = 0; i < (TEST_COUNT); i++)
 	{
 		int64_t value = (rand() % MAX_NUMBER) + 1;
-		TestMapNodeShared *pNewNode = new(GetHeap()) TestMapNodeShared;
+		TestMapNodeShared *pNewNode = new TestMapNodeShared;
 		pNewNode->Value = value;
 		if ((TestMap.Insert(value, pNewNode)))
 		{
@@ -361,7 +361,7 @@ TEST_F(HashTableTest, HashTable2_UniqueWriteMT)
 		}
 		else
 		{
-			//IHeap::Delete(pNewNode);
+			//delete (pNewNode);
 		}
 	}
 
@@ -408,7 +408,7 @@ TEST_F(HashTableTest, HashTable2_UniqueWriteMT)
 				}
 				else
 				{
-					TestMapNodeShared *pNewNode = new(GetHeap()) TestMapNodeShared;
+					TestMapNodeShared *pNewNode = new TestMapNodeShared;
 					pNewNode->Value = value;
 					if ((TestMap.Insert(value, pNewNode)))
 					{
@@ -449,7 +449,7 @@ TEST_F(HashTableTest, HashTable2_PerfRead)
 	> TestTableType;
 
 	Concurrency::concurrent_unordered_map<int64_t, SharedPointerT<TestMapNodeShared>> m_TestMap;
-	TestTableType TestMap(GetHeap(), 1024);
+	TestTableType TestMap(1024);
 	//TestMapNodeShared* pNode = nullptr;
 
 
@@ -482,7 +482,7 @@ TEST_F(HashTableTest, HashTable2_PerfRead)
 	for (int64_t i = 0; i < (TEST_COUNT); i++)
 	{
 		int value = rand() % MAX_NUMBER;
-		TestMapNodeShared *pNewNode = new(GetHeap()) TestMapNodeShared;
+		TestMapNodeShared *pNewNode = new TestMapNodeShared;
 		pNewNode->Value = value;
 		if ((TestMap.Insert(value, pNewNode)))
 		{
@@ -491,7 +491,7 @@ TEST_F(HashTableTest, HashTable2_PerfRead)
 		}
 		else
 		{
-			//IHeap::Delete(pNewNode);
+			//delete (pNewNode);
 		}
 		writeCount.fetch_add(1, std::memory_order_relaxed);
 	}
@@ -538,7 +538,7 @@ TEST_F(HashTableTest, HashTable2_PerfRead)
 		}
 		else
 		{
-			TestMapNodeShared *pNewNode = new(GetHeap()) TestMapNodeShared;
+			TestMapNodeShared *pNewNode = new TestMapNodeShared;
 			pNewNode->Value = value;
 			if ((TestMap.Insert(value, pNewNode)))
 			{
@@ -547,7 +547,7 @@ TEST_F(HashTableTest, HashTable2_PerfRead)
 			}
 			else
 			{
-				//IHeap::Delete(pNewNode);
+				//delete (pNewNode);
 			}
 		}
 
@@ -584,7 +584,7 @@ TEST_F(HashTableTest, HashTable2_PerfReadWriteMT)
 	> TestTableType;
 
 
-	TestTableType TestMap(GetHeap(), 3);
+	TestTableType TestMap(3);
 	//TestMapNodeShared* pNode = nullptr;
 
 
@@ -616,7 +616,7 @@ TEST_F(HashTableTest, HashTable2_PerfReadWriteMT)
 	for (int64_t i = 0; i < (TEST_COUNT); i++)
 	{
 		int value = rand() % MAX_NUMBER;
-		TestMapNodeShared *pNewNode = new(GetHeap()) TestMapNodeShared;
+		TestMapNodeShared *pNewNode = new TestMapNodeShared;
 		pNewNode->Value = value;
 		if ((TestMap.Insert(value, pNewNode)))
 		{
@@ -624,7 +624,7 @@ TEST_F(HashTableTest, HashTable2_PerfReadWriteMT)
 		}
 		else
 		{
-			//IHeap::Delete(pNewNode);
+			//delete (pNewNode);
 		}
 		writeCount.fetch_add(1, std::memory_order_relaxed);
 	}
@@ -668,7 +668,7 @@ TEST_F(HashTableTest, HashTable2_PerfReadWriteMT)
 				}
 				else
 				{
-					TestMapNodeShared *pNewNode = new(GetHeap()) TestMapNodeShared;
+					TestMapNodeShared *pNewNode = new TestMapNodeShared;
 					pNewNode->Value = value;
 					if ((TestMap.Insert(value, pNewNode)))
 					{

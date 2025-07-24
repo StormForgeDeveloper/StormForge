@@ -34,7 +34,6 @@ namespace SF {
 		virtual ~VariableFactoryService() = default;
 
 		virtual Variable* CreateVariable(StringCrc32 TypeName);
-		virtual Variable* CreateVariable(IHeap& heap, StringCrc32 TypeName);
 	};
 
 } // namespace SF

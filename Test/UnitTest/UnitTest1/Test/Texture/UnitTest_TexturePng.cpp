@@ -55,7 +55,7 @@ GTEST_TEST(Texture, PngSimple)
 	GTEST_ASSERT_EQ(ResultCode::SUCCESS, result);
 
 	// Release before return
-	IHeap::Delete(png);
+	delete (png);
 
 	for (auto itRes : resources)
 	{

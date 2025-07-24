@@ -28,8 +28,7 @@ namespace SF {
 	//
 
 	VariableStack::VariableStack(IHeap& heap)
-		: m_Heap(new(heap) StackHeapT<2048>("VariableStack", heap))
-		, m_Vairables(heap)
+		: m_Vairables(heap)
 	{
 	}
 
@@ -39,7 +38,7 @@ namespace SF {
 		while (m_Vairables.size() > 0)
 		{
 			auto pVar = m_Vairables.pop_back();
-			IHeap::Delete(pVar);
+			delete (pVar);
 		}
 	}
 
@@ -47,7 +46,7 @@ namespace SF {
 	Result VariableStack::Push(const Variable& variable)
 	{
 		//auto varSize = variable.GetVariableSize();
-		auto pVar = variable.Clone(**m_Heap);
+		auto pVar = variable.Clone();
 		return m_Vairables.push_back(pVar);
 	}
 
@@ -68,7 +67,7 @@ namespace SF {
 		for (; static_cast<int>(m_Vairables.size()) >= iCount && iCount > 0; iCount--)
 		{
 			auto pVar = m_Vairables.pop_back();
-			IHeap::Delete(pVar);
+			delete (pVar);
 		}
 
 		if (iCount > 0)

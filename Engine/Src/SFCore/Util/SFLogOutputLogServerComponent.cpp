@@ -114,7 +114,7 @@ namespace SF {
 		memoryStream.Write(&uncompressedSize, sizeof(uncompressedSize));
 
 		// Compress data
-		CompressedOutputStream compressedStream(GetSystemHeap(), memoryStream);
+		CompressedOutputStream compressedStream(memoryStream);
 		compressedStream.Write(m_Buffer.data(), m_Buffer.size());
 
 		compressedStream.Flush();

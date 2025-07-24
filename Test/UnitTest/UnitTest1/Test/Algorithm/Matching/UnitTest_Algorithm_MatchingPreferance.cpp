@@ -49,9 +49,9 @@ TEST_F(AlgorithmTest, MatchingPreference)
 	Atomic< uint32_t> failedMatchCount(0);
 
 
-	auto players = new(GetHeap()) PreferencePlayer[NUM_PLAYER + NUM_PLAYER_VARIATION];
-	IHeap::Delete(players);
-	players = new(GetHeap()) PreferencePlayer[NUM_PLAYER + NUM_PLAYER_VARIATION];
+	auto players = new PreferencePlayer[NUM_PLAYER + NUM_PLAYER_VARIATION];
+	delete[] players;
+	players = new PreferencePlayer[NUM_PLAYER + NUM_PLAYER_VARIATION];
 
 	SFLog(Game, Info, "Initializing matching system");
 	Result initResult = matchManager.Initialize(NUM_SHELL);
@@ -76,7 +76,7 @@ TEST_F(AlgorithmTest, MatchingPreference)
 
 	for (int iThread = 0; iThread < NUM_UPDATE_THREAD; iThread++)
 	{
-		auto pThread = new(GetHeap()) FunctorTickThread([&](Thread* pThread)
+		auto pThread = new FunctorTickThread([&](Thread* pThread)
 		{
 			uint playerID = Util::Random.Rand() % (NUM_PLAYER + NUM_PLAYER_VARIATION);
 			UserPreference preference;
@@ -97,7 +97,7 @@ TEST_F(AlgorithmTest, MatchingPreference)
 
 	for (int iThread = 0; iThread < NUM_MATCH_THREAD; iThread++)
 	{
-		auto pThread = new(GetHeap()) FunctorTickThread([&](Thread* pThread)
+		auto pThread = new FunctorTickThread([&](Thread* pThread)
 		{
 			StaticArray<PreferencePlayer*, 5> matchedPlayer(GetHeap());
 			// match make a player
@@ -140,6 +140,6 @@ TEST_F(AlgorithmTest, MatchingPreference)
 
 	matchManager.Clear();
 
-	IHeap::Delete(players);
+	delete[] players;
 }
 

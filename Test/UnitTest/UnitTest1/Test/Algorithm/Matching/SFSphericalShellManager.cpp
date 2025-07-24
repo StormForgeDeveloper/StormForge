@@ -74,15 +74,14 @@ namespace SF
 
 
 	// Constructor
-	SphericalShell::SphericalShell(IHeap& heap, uint shellID, uint preferenceDimension)
+	SphericalShell::SphericalShell(uint shellID, uint preferenceDimension)
 		: m_ShellID(shellID)
-		, m_DirectionalCells(heap)
 	{
 		uint numCell = 1 << preferenceDimension;
 		m_DirectionalCells.reserve(numCell);
 		for (uint iCell = 0; iCell < numCell; iCell++)
 		{
-			m_DirectionalCells.push_back(new(heap) Cell);
+			m_DirectionalCells.push_back(new Cell);
 		}
 	}
 
@@ -91,7 +90,7 @@ namespace SF
 		Cell* pCell = m_DirectionalCells.pop_back();
 		for (; pCell; pCell = m_DirectionalCells.pop_back())
 		{
-			IHeap::Delete(pCell);
+			delete (pCell);
 		}
 		m_DirectionalCells.Clear();
 	}
@@ -230,7 +229,7 @@ namespace SF
 
 		for (uint iShell = 0; iShell < numberOfShell; iShell++)
 		{
-			m_Shells.push_back(new(GetHeap()) SphericalShell(GetHeap(), iShell + 1, UserPreference::MAX_PREFERENCE_DIMENSION));
+			m_Shells.push_back(new SphericalShell(iShell + 1, UserPreference::MAX_PREFERENCE_DIMENSION));
 		}
 
 		m_ShellThickness = UserPreference::MAX_PREFERENCE_LENGTH / (float)m_Shells.size();
@@ -243,7 +242,7 @@ namespace SF
 	{
 		for (auto itShell : m_Shells)
 		{
-			IHeap::Delete(itShell);
+			delete (itShell);
 		}
 
 		m_Shells.Clear();

@@ -32,7 +32,7 @@
 #include "Avro/SFAvro.h"
 #include "Protocol/GameMessageID.h"
 #include "Protocol/PlayInstanceMessageID.h"
-
+#include <cctype>
 namespace SF
 {
 
@@ -360,7 +360,7 @@ namespace SF
 
 			Disconnect();
 
-			m_Owner.m_Game = new(GetHeap()) Net::ConnectionTCPClient();
+			m_Owner.m_Game = new Net::ConnectionTCPClient();
 			GetConnection()->SetEventFireMode(Net::Connection::EventFireMode::OnGameTick);
 
             WeakPointerT<ClientTask_JoinGameServer> WeakThis = AsSharedPtr<ClientTask_JoinGameServer>();
@@ -604,7 +604,7 @@ namespace SF
 
 			Disconnect();
 
-			m_Owner.m_GameInstance = new(GetHeap()) Net::ConnectionUDPClient();
+			m_Owner.m_GameInstance = new Net::ConnectionUDPClient();
 			GetConnection()->SetEventFireMode(Net::Connection::EventFireMode::OnGameTick);
 
             WeakPointerT<ClientTask_JoinGameInstanceServer> WeakThis = AsSharedPtr<ClientTask_JoinGameInstanceServer>();
@@ -948,7 +948,7 @@ namespace SF
 
 	void OnlineClient::SetupInstanceInfo()
 	{
-		m_OutgoingMovement = new(GetHeap()) SendingActorMovementManager;
+		m_OutgoingMovement = new SendingActorMovementManager;
 	}
 
 	void OnlineClient::ClearInstanceInfo()
@@ -1038,13 +1038,13 @@ namespace SF
 
         if (m_SteamUserId != 0)
         {
-            m_PendingTasks.push_back(new(GetHeap()) ClientTask_HttpLoginSteam(*this, transactionId));
+            m_PendingTasks.push_back(new ClientTask_HttpLoginSteam(*this, transactionId));
         }
         else
         {
-            m_PendingTasks.push_back(new(GetHeap()) ClientTask_HttpLoginBR(*this, transactionId));
+            m_PendingTasks.push_back(new ClientTask_HttpLoginBR(*this, transactionId));
         }
-		m_PendingTasks.push_back(new(GetHeap()) ClientTask_JoinGameServer(*this, transactionId));
+		m_PendingTasks.push_back(new ClientTask_JoinGameServer(*this, transactionId));
 
 		m_TickTime = Util::Time.GetRawTimeMs();
 
@@ -1070,7 +1070,7 @@ namespace SF
 		m_GameInstanceUID = gameInstanceId;
 
 		if (m_GameInstanceUID != 0)
-			m_PendingTasks.push_back(new(GetHeap()) ClientTask_JoinGameInstanceServer(*this, transactionId));
+			m_PendingTasks.push_back(new ClientTask_JoinGameInstanceServer(*this, transactionId));
 
 		return ResultCode::SUCCESS;
 	}
@@ -1294,7 +1294,7 @@ namespace SF
         OnlineActor* onlineActor{};
         if (!m_OnlineActorByActorId.Find(actorId, onlineActor))
         {
-            onlineActor = new(GetHeap()) OnlineActor(actorId);
+            onlineActor = new OnlineActor(actorId);
             m_OnlineActorByActorId.Emplace(actorId, onlineActor);
         }
 
@@ -1320,7 +1320,7 @@ namespace SF
         m_OnlineActorByActorId.Remove(responseData->actor_id(), onlineActor);
         if (onlineActor)
         {
-            IHeap::Delete(onlineActor);
+            delete (onlineActor);
         }
     }
 

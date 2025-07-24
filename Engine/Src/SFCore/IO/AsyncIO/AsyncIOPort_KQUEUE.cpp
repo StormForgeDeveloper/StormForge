@@ -266,7 +266,7 @@ namespace AsyncIO {
 		// client will use only 1 thread
 		for (uint iThread = 0; iThread < netThreadCount; iThread++)
 		{
-			auto pNewWorker = new(GetHeap()) IOWorkerKQUEUE(this, iThread, hKQUEUE);
+			auto pNewWorker = new IOWorkerKQUEUE(this, iThread, hKQUEUE);
 			pNewWorker->Start();
 			AddIOWorker(pNewWorker);
 		}

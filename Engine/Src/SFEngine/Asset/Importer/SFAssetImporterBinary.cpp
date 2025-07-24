@@ -35,7 +35,7 @@ namespace SF
 
 	Result AssetImporterBinary::Import(AssetImportContext& context, Array<ResourcePtr>& resources)
 	{
-		SharedPointerT<RawBinary> pNewAsset = new(context.GetHeap()) RawBinary(context.GetHeap());
+		SharedPointerT<RawBinary> pNewAsset = new RawBinary;
 		if (pNewAsset == nullptr)
 			return ResultCode::OUT_OF_MEMORY;
 

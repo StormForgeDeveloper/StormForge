@@ -165,7 +165,7 @@ namespace SF {
 		// Start worker threads
 		for (int iThread = 0; iThread < m_NumThread; iThread++)
 		{
-			auto pWorker = new(GetEngineHeap()) AsyncTaskWorker(this);
+			auto pWorker = new AsyncTaskWorker(this);
 			m_TaskWorkers.push_back(pWorker);
 			pWorker->Start();
 		}
@@ -192,7 +192,7 @@ namespace SF {
 		for (auto itWorker = m_TaskWorkers.begin(); itWorker.IsValid(); ++itWorker)
 		{
 			(*itWorker)->Stop(true);
-			IHeap::Delete(*itWorker);
+			delete (*itWorker);
 		}
         m_TaskWorkers.Reset();
 

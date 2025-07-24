@@ -55,7 +55,7 @@ namespace SF {
 		void UpdateRescheduleQueue();
 	public:
 
-		TimerScheduler(IHeap& heap);
+		TimerScheduler();
 
 		void Clear();
 

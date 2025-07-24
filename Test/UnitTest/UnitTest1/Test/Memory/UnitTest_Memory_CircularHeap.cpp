@@ -35,13 +35,9 @@ using namespace ::SF;
 
 //
 // This is implementation of spherical shell matching
-
-
-
-
 TEST_F(MemoryTest, CircularHeap)
 {
-	SharedPointerT<CircularHeapT<1024 * 512>> circularHeap = new(GetHeap()) CircularHeapT<1024 * 512>(GetHeap());
+	SharedPointerT<CircularHeapT<1024 * 512>> circularHeap = new CircularHeapT<1024 * 512>(GetHeap());
 	StaticArray<int*, 512> allocatedList(GetHeap());
 
 	// out of stack allocation
@@ -84,11 +80,11 @@ TEST_F(MemoryTest, CircularHeap)
 		if ((allocatedList.size() > 0 && randVal > 50) || circularHeap->GetFreeMemorySize() < minAllocationSize)
 		{
 			auto pDeletePtr = allocatedList.pop_back();
-			IHeap::Delete(pDeletePtr);
+            circularHeap->Free(pDeletePtr);
 		}
 		else
 		{
-			auto pNewPtr = new(*circularHeap.get()) int[randVal % 10];
+            auto pNewPtr = reinterpret_cast<int*>(circularHeap->Alloc(sizeof(int) * (randVal % 10)));
 			allocatedList.push_back(pNewPtr);
 		}
 
@@ -97,7 +93,7 @@ TEST_F(MemoryTest, CircularHeap)
 
 	for (auto itPtr : allocatedList)
 	{
-		IHeap::Delete(itPtr);
+        circularHeap->Free(itPtr);
 	}
 }
 
@@ -105,7 +101,7 @@ TEST_F(MemoryTest, CircularHeap_RandomDelete)
 {
 	Heap heapForStack("heapForStack", GetHeap());
 	Heap heapForSortedSet("heapForSortedSet", GetHeap());
-	SharedPointerT<CircularHeapT<1024 * 512>> circularHeap = new(heapForStack) CircularHeapT<1024 * 512>(heapForStack);
+	SharedPointerT<CircularHeapT<1024 * 512>> circularHeap = new CircularHeapT<1024 * 512>(heapForStack);
 	SortedSet<int*> allocatedList(heapForSortedSet);
 
 	DynamicArray<void*> testList(GetHeap());
@@ -140,7 +136,7 @@ TEST_F(MemoryTest, CircularHeap_RandomDelete)
 			Assert(refCount >= 2);
 			unused(refCount);
 			auto pPtr = allocatedList.GetKeyAt(randVal);
-			IHeap::Delete(pPtr);
+            circularHeap->Free(pPtr);
 			allocatedList.Remove(pPtr);
 			auto refCount2 = circularHeap->GetReferenceCount();
 			if (allocatedList.size() > 0)
@@ -159,7 +155,7 @@ TEST_F(MemoryTest, CircularHeap_RandomDelete)
 			auto refCount = circularHeap->GetReferenceCount();
 			EXPECT_GE(refCount, 1);
 			//Assert(refCount >= 1);
-			auto pPtr = new(*circularHeap.get()) int[randVal % 10];
+            auto pPtr = reinterpret_cast<int*>(circularHeap->Alloc(sizeof(int) * (randVal % 10)));
 			auto refCount2 = circularHeap->GetReferenceCount();
 			EXPECT_GE(refCount2, 2);
 			//Assert(refCount2 >= 2);
@@ -172,8 +168,7 @@ TEST_F(MemoryTest, CircularHeap_RandomDelete)
 
 	for (auto itPtr : allocatedList)
 	{
-		IHeap::Delete(itPtr);
+		circularHeap->Free(itPtr);
 	}
 	allocatedList.Clear();
 }
-

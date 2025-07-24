@@ -62,8 +62,8 @@ namespace SF {
 				return messageEndpoint.MessageServer.IsNullOrEmpty();
 
 			auto& netAddress = pConnection->GetRemoteInfo().PeerAddress;
-			char portString[64];
-			StrUtil::Format(portString, "{0}", netAddress.Port);
+            String portString;
+            portString.Format("{0}", netAddress.Port);
 			return messageEndpoint.Channel == portString && messageEndpoint.MessageServer == netAddress.Address;
 		}
 
@@ -90,8 +90,6 @@ namespace SF {
 			, m_CID(0)
 			, m_ConnectionState(ConnectionState::DISCONNECTED)
 			, m_tConnectionTime(DurationMS(0))
-			, m_ConnectionEventDelegates(GetHeap())
-			, m_RecvMessageDelegates(GetHeap())
 			, m_IOHandler(ioHandler)
 			, m_ulConnectingTimeOut(Const::CONNECTION_TIMEOUT)
 			, m_usSeqNone(0)
@@ -410,7 +408,7 @@ namespace SF {
 			if (m_MessageEndpoint == nullptr)
 			{
 				// create endpoint adapter
-				m_MessageEndpoint = new(GetHeap()) MessageEndpointConnection(const_cast<Connection*>(this));
+				m_MessageEndpoint = new MessageEndpointConnection(const_cast<Connection*>(this));
 			}
 
 			return m_MessageEndpoint;
@@ -439,7 +437,7 @@ namespace SF {
 
 			// create endpoint adapter
 			if (m_MessageEndpoint == nullptr)
-				m_MessageEndpoint = new(GetHeap()) MessageEndpointConnection(this);
+				m_MessageEndpoint = new MessageEndpointConnection(this);
 
 			m_EventQueue.Reset();
 
@@ -526,7 +524,7 @@ namespace SF {
 		{
 			SetTickGroup(EngineTaskTick::None);
 			// This guy should not belong to connection heap
-			SharedPointerT<EngineTask> pTask = new(GetSystemHeap()) ConnectionTask_DisconnectNClose(this, reason);
+			SharedPointerT<EngineTask> pTask = new ConnectionTask_DisconnectNClose(this, reason);
 			pTask->Request();
 		}
 

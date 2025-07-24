@@ -52,9 +52,9 @@ namespace SF
 		return new((void*)buffer.data()) VariableBool(m_Value);
 	}
 
-	Variable* VariableBool::Clone(IHeap& heap) const
+	Variable* VariableBool::Clone() const
 	{
-		return new(heap) VariableBool(m_Value);
+		return new VariableBool(m_Value);
 	}
 
 
@@ -82,9 +82,9 @@ namespace SF
 		return new((void*)buffer.data()) VariableVoidP(m_Value);
 	}
 
-	Variable* VariableVoidP::Clone(IHeap& heap) const
+	Variable* VariableVoidP::Clone() const
 	{
-		return new(heap) VariableVoidP(m_Value);
+		return new VariableVoidP(m_Value);
 	}
 
 
@@ -201,9 +201,9 @@ namespace SF
 		return new((void*)buffer.data()) VariableInt(m_Value);
 	}
 
-	Variable* VariableInt::Clone(IHeap& heap) const
+	Variable* VariableInt::Clone() const
 	{
-		return new(heap) VariableInt(m_Value);
+		return new VariableInt(m_Value);
 	}
 
 	Result VariableInt::Serialize(IOutputStream& output) const
@@ -284,9 +284,9 @@ namespace SF
 		return new((void*)buffer.data()) VariableUInt(m_Value);
 	}
 
-	Variable* VariableUInt::Clone(IHeap& heap) const
+	Variable* VariableUInt::Clone() const
 	{
-		return new(heap) VariableUInt(m_Value);
+		return new VariableUInt(m_Value);
 	}
 
 	Result VariableUInt::Serialize(IOutputStream& output) const
@@ -318,9 +318,9 @@ namespace SF
 		return new((void*)buffer.data()) VariableResult(m_Value);
 	}
 
-	Variable* VariableResult::Clone(IHeap& heap) const
+	Variable* VariableResult::Clone() const
 	{
-		return new(heap) VariableResult(m_Value);
+		return new VariableResult(m_Value);
 	}
 
 	Result VariableResult::Serialize(IOutputStream& output) const
@@ -415,9 +415,9 @@ namespace SF
 		return new((void*)buffer.data()) VariableInt64(m_Value);
 	}
 
-	Variable* VariableInt64::Clone(IHeap& heap) const
+	Variable* VariableInt64::Clone() const
 	{
-		return new(heap) VariableInt64(m_Value);
+		return new VariableInt64(m_Value);
 	}
 
 	Result VariableInt64::Serialize(IOutputStream& output) const
@@ -499,9 +499,9 @@ namespace SF
 		return new((void*)buffer.data()) VariableUInt64(m_Value);
 	}
 
-	Variable* VariableUInt64::Clone(IHeap& heap) const
+	Variable* VariableUInt64::Clone() const
 	{
-		return new(heap) VariableUInt64(m_Value);
+		return new VariableUInt64(m_Value);
 	}
 
 	Result VariableUInt64::Serialize(IOutputStream& output) const
@@ -583,9 +583,9 @@ namespace SF
 		return new((void*)buffer.data()) VariableFloat(m_Value);
 	}
 
-	Variable* VariableFloat::Clone(IHeap& heap) const
+	Variable* VariableFloat::Clone() const
 	{
-		return new(heap) VariableFloat(m_Value);
+		return new VariableFloat(m_Value);
 	}
 
 	Result VariableFloat::Serialize(IOutputStream& output) const
@@ -672,9 +672,9 @@ namespace SF
 		return new((void*)buffer.data()) VariableDouble(m_Value);
 	}
 
-	Variable* VariableDouble::Clone(IHeap& heap) const
+	Variable* VariableDouble::Clone() const
 	{
-		return new(heap) VariableDouble(m_Value);
+		return new VariableDouble(m_Value);
 	}
 
 	Result VariableDouble::Serialize(IOutputStream& output) const
@@ -734,9 +734,9 @@ namespace SF
 		return new((void*)buffer.data()) VariableHex32(GetValueUInt32());
 	}
 
-	Variable* VariableHex32::Clone(IHeap& heap) const
+	Variable* VariableHex32::Clone() const
 	{
-		return new(heap) VariableHex32(GetValueUInt32());
+		return new VariableHex32(GetValueUInt32());
 	}
 
 
@@ -780,9 +780,9 @@ namespace SF
 		return new((void*)buffer.data()) VariableHex64(GetValueUInt64());
 	}
 
-	Variable* VariableHex64::Clone(IHeap& heap) const
+	Variable* VariableHex64::Clone() const
 	{
-		return new(heap) VariableHex64(GetValueUInt64());
+		return new VariableHex64(GetValueUInt64());
 	}
 
 
@@ -808,9 +808,9 @@ namespace SF
 		return new((void*)buffer.data()) VariableCharString(m_Value);
 	}
 
-	Variable* VariableCharString::Clone(IHeap& heap) const
+	Variable* VariableCharString::Clone() const
 	{
-		return new(heap) VariableCharString(m_Value);
+		return new VariableCharString(m_Value);
 	}
 
 	bool VariableCharString::operator == (const Variable& op) const
@@ -848,9 +848,9 @@ namespace SF
 		return new((void*)buffer.data()) VariableWCharString(m_Value);
 	}
 
-	Variable* VariableWCharString::Clone(IHeap& heap) const
+	Variable* VariableWCharString::Clone() const
 	{
-		return new(heap) VariableWCharString(m_Value);
+		return new VariableWCharString(m_Value);
 	}
 
 	bool VariableWCharString::operator == (const Variable& op) const
@@ -1032,9 +1032,9 @@ namespace SF
 		return new((void*)buffer.data()) VariableString(m_Value);
 	}
 
-	Variable* VariableString::Clone(IHeap& heap) const
+	Variable* VariableString::Clone() const
 	{
-		return new(heap) VariableString(m_Value);
+		return new VariableString(m_Value);
 	}
 
 	Result VariableString::Serialize(IOutputStream& output) const
@@ -1120,7 +1120,7 @@ namespace SF
 
 	void VariableWString::SetValue(const char* value)
 	{
-		m_Value.Format(L"{0}", value);
+        StrUtil::UTF8ToWCS(value, m_Value);
 	}
 
 	void VariableWString::SetValue(const String& value)
@@ -1133,7 +1133,7 @@ namespace SF
 
 	void VariableWString::SetValue(StringCrc64 value)
 	{
-		m_Value.Format(L"{0}", value);
+        StrUtil::UTF8ToWCS(value.ToString(), m_Value);
 	}
 
 	bool VariableWString::GetValueBool() const
@@ -1250,9 +1250,9 @@ namespace SF
 		return new((void*)buffer.data()) VariableWString(m_Value);
 	}
 
-	Variable* VariableWString::Clone(IHeap& heap) const
+	Variable* VariableWString::Clone() const
 	{
-		return new(heap) VariableWString(m_Value);
+		return new VariableWString(m_Value);
 	}
 
 	Result VariableWString::Serialize(IOutputStream& output) const
@@ -1301,9 +1301,9 @@ namespace SF
 		return new((void*)buffer.data()) VariableStringCrc32(m_Value);
 	}
 
-	Variable* VariableStringCrc32::Clone(IHeap& heap) const
+	Variable* VariableStringCrc32::Clone() const
 	{
-		return new(heap) VariableStringCrc32(m_Value);
+		return new VariableStringCrc32(m_Value);
 	}
 
 	Result VariableStringCrc32::Serialize(IOutputStream& output) const
@@ -1354,9 +1354,9 @@ namespace SF
 		return new((void*)buffer.data()) VariableStringCrc64(m_Value);
 	}
 
-	Variable* VariableStringCrc64::Clone(IHeap& heap) const
+	Variable* VariableStringCrc64::Clone() const
 	{
-		return new(heap) VariableStringCrc64(m_Value);
+		return new VariableStringCrc64(m_Value);
 	}
 
 	Result VariableStringCrc64::Serialize(IOutputStream& output) const
@@ -1400,9 +1400,9 @@ namespace SF
 		return new((void*)buffer.data()) VariableBLOB(m_Value);
 	}
 
-	Variable* VariableBLOB::Clone(IHeap& heap) const
+	Variable* VariableBLOB::Clone() const
 	{
-		return new(heap) VariableBLOB(heap, m_Value);
+		return new VariableBLOB(m_Value);
 	}
 
 	Result VariableBLOB::Serialize(IOutputStream& output) const

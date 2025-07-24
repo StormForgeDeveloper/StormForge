@@ -70,7 +70,7 @@ namespace SF {
 		m_FreeIDs.for_each( [](StackPool::Item *pItem) 
 		{
 			Item* pMyItem = (Item*)pItem;
-			IHeap::Delete(pMyItem);
+			delete (pMyItem);
 		});
 		m_FreeIDs.Clear();
 

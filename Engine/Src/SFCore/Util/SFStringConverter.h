@@ -58,7 +58,7 @@ namespace SF {
     SF_FORCEINLINE const TString<char>& StringConverter<char, wchar_t>::Convert(const TString<wchar_t>& srcString)
     {
         size_t maxStringSize = (srcString.length() + 1) * 5;
-        ConvertedString.Reserve(maxStringSize);
+        ConvertedString.Resize(maxStringSize);
 
         size_t convertedSize = StrUtil::WCSToUTF8(srcString, ConvertedString.data(), (int)maxStringSize);
         ConvertedString.Resize(convertedSize);
@@ -70,7 +70,7 @@ namespace SF {
     SF_FORCEINLINE const TString<wchar_t>& StringConverter<wchar_t, char>::Convert(const TString<char>& srcString)
     {
         size_t maxStringSize = (srcString.length() + 1);
-        ConvertedString.Reserve(maxStringSize);
+        ConvertedString.Resize(maxStringSize);
 
         size_t convertedSize = StrUtil::UTF8ToWCS(srcString, ConvertedString.data(), (int)maxStringSize);
         ConvertedString.Resize(convertedSize);
@@ -80,3 +80,21 @@ namespace SF {
 
 } // namespace SF
 
+
+template <>
+struct std::formatter<const wchar_t*>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const wchar_t* value, FormatContext& ctx) const
+    {
+        SF::StringConverter<char, wchar_t> converted(value);
+
+        return std::format_to(ctx.out(), "{}", (const SF::String&)converted);
+    }
+};

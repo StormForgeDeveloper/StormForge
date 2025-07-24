@@ -58,9 +58,6 @@ namespace SF {
 	// Constructor/Destructor
 	EngineObjectManager::EngineObjectManager()
 		: LibraryComponent("EngineObjectManager")
-		, m_DetainedReleaseQueue0(GetEngineHeap())
-		, m_DetainedReleaseQueue1(GetEngineHeap())
-		, m_DetainedReleaseQueue2(GetEngineHeap())
 	{
 		Service::EngineObjectManager = this;
 	}
@@ -76,7 +73,7 @@ namespace SF {
 	{
 		LibraryComponent::InitializeComponent();
 
-		m_TickTask = new(GetEngineHeap()) EngineObjectManagerTask();
+		m_TickTask = new EngineObjectManagerTask();
 
 		Service::EngineTaskManager->AddTask(*m_TickTask);
 

@@ -36,7 +36,7 @@ namespace SF
 		uint8_t* m_Data = nullptr;
 
 	public:
-		RawBinary(IHeap& heap, const CallTrack& callTrack = CallTrack());
+		RawBinary(const CallTrack& callTrack = CallTrack());
 		virtual ~RawBinary();
 
 		virtual void Dispose() override;

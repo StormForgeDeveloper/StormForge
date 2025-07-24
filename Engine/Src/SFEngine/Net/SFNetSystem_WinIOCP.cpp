@@ -396,7 +396,7 @@ namespace Net {
 			m_pWorkers.resize( uiNumIOCPThread );
 			for( uint iThread = 0; iThread < uiNumIOCPThread; iThread++ )
 			{
-				m_pWorkers[iThread] = new(GetHeap()) IOCPWorker;
+				m_pWorkers[iThread] = new IOCPWorker;
 				m_pWorkers[iThread]->SetIOCPHandle(nativeIOHandle);
 				m_pWorkers[iThread]->Start();
 			}
@@ -444,7 +444,7 @@ namespace Net {
 				for (auto itThread : m_pWorkers)
 				{
 					itThread->Stop( true );
-					IHeap::Delete(itThread);
+					delete (itThread);
 				}
 
 				m_pWorkers.clear();

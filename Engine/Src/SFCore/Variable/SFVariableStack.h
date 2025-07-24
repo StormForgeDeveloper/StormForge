@@ -60,7 +60,7 @@ namespace SF {
 		template<class ValueType>
 		Result PushValue(ValueType value)
 		{
-			auto boxedValue = Boxing(GetHeap(), value);
+			auto boxedValue = Boxing(value);
 			if (boxedValue.GetVariable() == nullptr)
 				return ResultCode::NOT_SUPPORTED;
 

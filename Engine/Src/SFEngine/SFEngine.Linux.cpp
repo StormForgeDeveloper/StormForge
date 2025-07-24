@@ -25,9 +25,9 @@
 #include "Util/SFTimeUtil.h"
 #include "Service/SFEngineService.h"
 
-#include "Graphics/SFGraphicDeviceVulkan.h"
-#include "Graphics/SFRenderCommand.h"
-#include "Resource/SFResourceManager.h"
+//#include "Graphics/SFGraphicDeviceVulkan.h"
+//#include "Graphics/SFRenderCommand.h"
+//#include "Resource/SFResourceManager.h"
 
 #include "EngineObject/SFEngineObjectManager.h"
 #include "EngineObject/SFEngineTaskManager.h"
@@ -36,8 +36,8 @@
 #include "Net/SFNetConst.h"
 #include "Net/SFNetSystem.h"
 
-#include "Asset/Importer/SFAssetImporterFactory.h"
-#include "Asset/Serializer/SFAssetSerializerFactory.h"
+//#include "Asset/Importer/SFAssetImporterFactory.h"
+//#include "Asset/Serializer/SFAssetSerializerFactory.h"
 
 
 
@@ -97,7 +97,7 @@ namespace SF
 			return Engine::GetInstance();
 
 
-		auto pEngine = new(GetSystemHeap()) SF::Engine;
+		auto pEngine = new SF::Engine;
 		pEngine->m_InitParameter = initParam;
 		pEngine->RegisterBasicComponents();
 
@@ -128,14 +128,15 @@ namespace SF
 
 		auto pApp = Engine::GetEngineComponent<LinuxApp>();
 
-		EngineTaskPtr pTerminateTask = new(GetSystemHeap()) EngineTask_Terminate(1);
+		EngineTaskPtr pTerminateTask = new EngineTask_Terminate(1);
 		pTerminateTask->Request();
 
 		pTerminateTask->Wait();
 
 		Engine::GetInstance()->DeinitializeComponents();
 		Engine::GetInstance()->ClearComponents();
-		GetSystemHeap().Delete(Engine::GetInstance());
+        // Engine destructor will clear the variable
+        delete Engine::GetInstance();
 	}
 
 }

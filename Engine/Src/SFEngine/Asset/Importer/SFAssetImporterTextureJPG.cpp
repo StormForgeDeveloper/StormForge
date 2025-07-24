@@ -209,7 +209,7 @@ namespace SF
 		if (formatDesc == nullptr)
 			return ResultCode::NOT_SUPPORTED_FORMAT;
 
-		auto newRes = new(context.GetHeap()) Texture(context.GetHeap(), (const char*)context.GetSource());
+		auto newRes = new Texture((const char*)context.GetSource());
 		if (newRes == nullptr)
 		{
 			jpeg_destroy_decompress(&cinfo);
@@ -281,10 +281,10 @@ namespace SF
 		* think that jpeg_destroy can do an error exit, but why assume anything...)
 		*/
 		if (pMemStream == nullptr)
-			IHeap::Delete(pBuffer);
+			delete (pBuffer);
 
 
-		//IHeap::Delete(readBuffer);
+		//delete (readBuffer);
 
 		/* At this point you may want to check to see whether any corrupt-data
 		* warnings occurred (test whether jerr.pub.num_warnings is nonzero).

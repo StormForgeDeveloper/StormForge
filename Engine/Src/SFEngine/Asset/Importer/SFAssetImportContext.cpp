@@ -24,11 +24,9 @@ namespace SF
 	//
 
 
-	AssetImportContext::AssetImportContext(IHeap& heap, IInputStream& inputStream, const String& source)
-		: m_Heap(heap)
-		, m_InputStream(inputStream)
+	AssetImportContext::AssetImportContext(IInputStream& inputStream, const String& source)
+		: m_InputStream(inputStream)
 		, m_Source(source)
-		, m_Variables(heap)
 	{
 	}
 

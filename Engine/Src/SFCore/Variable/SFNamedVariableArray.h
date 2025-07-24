@@ -47,22 +47,14 @@ namespace SF {
 
 	private:
 
-		// TODO: memory optimization, use heap
-
-		// heap for variables
-		IHeap& m_Heap;
-
 		// Variable 
 		DynamicArray<Item> m_VariableArray;
 
 	public:
 
-		NamedVariableArray(IHeap& heap = GetEngineHeap());
-		NamedVariableArray(IHeap& heap, const NamedVariableArray& src);
+		NamedVariableArray();
 		NamedVariableArray(const NamedVariableArray& src);
 		virtual ~NamedVariableArray();
-
-		IHeap& GetHeap() { return m_Heap; }
 
 		void Clear();
 		void Reset() { Clear(); }
@@ -94,7 +86,7 @@ namespace SF {
 		{
 			if (iVar >= 0)
 			{
-				IHeap::Delete(m_VariableArray[iVar].Value);
+				delete (m_VariableArray[iVar].Value);
 				m_VariableArray.RemoveAt(iVar);
 			}
 		}
@@ -151,7 +143,7 @@ namespace SF {
 		template<class ValueType>
 		SF_FORCEINLINE Result SetValue(KeyType name, const ValueType& value)
 		{
-			auto boxedValue = BoxingByValue(GetHeap(), value);
+			auto boxedValue = BoxingByValue(value);
 			if (boxedValue.GetVariable() == nullptr)
 				return ResultCode::NOT_SUPPORTED;
 

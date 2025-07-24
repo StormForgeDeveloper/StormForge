@@ -155,7 +155,7 @@ namespace Net {
 
 	NetUDP::~NetUDP()
 	{
-		IHeap::Delete(m_pRecvBuffers);
+		delete (m_pRecvBuffers);
 	}
 
 	Result NetUDP::InitializeNet(const NetAddress& localAddress, MessageHandlerFunc &&Handler)
@@ -241,7 +241,7 @@ namespace Net {
 		if (NetSystem::IsProactorSystem())
 		{
 			if (m_pRecvBuffers) GetHeap().Delete(m_pRecvBuffers);
-			netCheckPtr(m_pRecvBuffers = new(GetHeap()) IOBUFFER_READ[Const::SVR_NUM_RECV_THREAD]);
+			netCheckPtr(m_pRecvBuffers = new IOBUFFER_READ[Const::SVR_NUM_RECV_THREAD]);
 
 			for (int uiRecv = 0; uiRecv < Const::SVR_NUM_RECV_THREAD; uiRecv++)
 			{
@@ -273,7 +273,7 @@ namespace Net {
 		Result hr = ResultCode::SUCCESS, hrErr = ResultCode::SUCCESS;
 		IOBUFFER_WRITE *pOverlapped = nullptr;
 
-		netMem(pOverlapped = new(GetSystemHeap()) IOBUFFER_WRITE);
+		netMem(pOverlapped = new IOBUFFER_WRITE);
 		pOverlapped->SetupSendUDP(m_NetIOAdapter.GetIOSocket(), dest, (uint)sendSize, pBuff);
 
     	netChk(m_NetIOAdapter.WriteBuffer(pOverlapped));
@@ -285,7 +285,7 @@ namespace Net {
 			if (pOverlapped)
 			{
 				pOverlapped->ClearBuffer();
-				IHeap::Delete(pOverlapped);
+				delete (pOverlapped);
 			}
 			else
 			{

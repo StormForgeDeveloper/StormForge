@@ -57,7 +57,7 @@ public:
 	virtual void SetUp()
 	{
 		MyTestBase::SetUp();
-		m_pScriptEngine = new(GetHeap()) SF::Tong::ScriptEngine(GetHeap());
+		m_pScriptEngine = new SF::Tong::ScriptEngine(GetHeap());
 
 	}
 
@@ -65,7 +65,7 @@ public:
 	virtual void TearDown()
 	{
 		if (m_pScriptEngine != nullptr)
-			SF::IHeap::Delete(m_pScriptEngine);
+			delete (m_pScriptEngine);
 		m_pScriptEngine = nullptr;
 		MyTestBase::TearDown();
 

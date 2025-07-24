@@ -39,7 +39,6 @@ namespace SF
     //
 
     MessageDelegateMap2::MessageDelegateMap2()
-        : m_RecvMessageDelegatesByMsgId(GetSystemHeap())
     {
     }
 
@@ -48,7 +47,7 @@ namespace SF
         m_RecvMessageDelegatesByMsgId.CommitChanges();
         m_RecvMessageDelegatesByMsgId.ForeachOrder(0, (uint32_t)m_RecvMessageDelegatesByMsgId.size(), [](uint32_t, RecvMessageDelegates* pDelegate)
             {
-                IHeap::Delete(pDelegate);
+                delete (pDelegate);
                 return true;
             });
         m_RecvMessageDelegatesByMsgId.clear();

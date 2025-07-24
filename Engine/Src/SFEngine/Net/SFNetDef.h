@@ -236,3 +236,97 @@ namespace Net {
 #define netErr(e)			SFErrJmp(Net,e)
 
 
+template <>
+struct std::formatter<SF::Net::ConnectionState>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::Net::ConnectionState& value, FormatContext& ctx) const
+    {
+        static const char* Names[] = {
+            "NONE",			// None just created
+            "WAITRW",			// Waiting RW enabled state
+            "UDP_WAITING",	// UDP incoming Waiting
+            "CONNECTING",		// Connecting sequence
+            "CHECKVERSION",	// Checking protocol version
+            "CONNECTED",		// Connected 
+            "DISCONNECTING",	// Disconnecting
+            "DISCONNECTED",	// Disconnected
+            "SLEEP",			// For Mobile connection
+            "Max"
+        };
+
+        constexpr int MaxNames = sizeof(Names) / sizeof(Names[0]);
+
+        return std::format_to(ctx.out(), "{}", Names[std::clamp<int>((int)value, 0, MaxNames)]);
+    }
+};
+
+template <>
+struct std::formatter<SF::Net::ConnectionEvent::EventTypes>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::Net::ConnectionEvent::EventTypes& value, FormatContext& ctx) const
+    {
+        static const char* Names[] = {
+            "EVT_NONE",
+            "EVT_CONNECTION_RESULT",
+            "EVT_DISCONNECTED",
+            "EVT_STATE_CHANGE",
+            "EVT_ADDRESS_REMAPPED",
+            "EVT_TIMESYNC_RESULT",
+            "MAX"
+        };
+
+        constexpr int MaxNames = sizeof(Names) / sizeof(Names[0]);
+
+        return std::format_to(ctx.out(), "{}", Names[std::clamp<int>((int)value, 0, MaxNames)]);
+    }
+};
+
+template <>
+struct std::formatter<SF::Net::PeerInfo>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::Net::PeerInfo& value, FormatContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "({},{},{})", value.PeerID, value.PeerClass, value.PeerAddress);
+    }
+};
+
+
+template <>
+struct std::formatter<::sockaddr_storage>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const ::sockaddr_storage& value, FormatContext& ctx) const
+    {
+        SF::NetAddress netAddress(value);
+
+        return std::format_to(ctx.out(), "{}", netAddress);
+    }
+};
+

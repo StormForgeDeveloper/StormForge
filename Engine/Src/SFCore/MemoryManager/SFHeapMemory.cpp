@@ -368,7 +368,7 @@ namespace SF
 		{
 			auto pMemBlock = static_cast<MemoryBlock*>(itBlock);
 			if (pMemBlock->IsOwner)
-				IHeap::Delete((uint8_t*)itBlock);
+				delete ((uint8_t*)itBlock);
 
 			itBlock = m_MemoryBlockList.pop_front();
 		}

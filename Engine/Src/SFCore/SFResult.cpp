@@ -17,6 +17,17 @@
 
 namespace SF
 {
+    const char* Result::GetNameString() const
+    {
+        auto& stringMap = ResultTable::GetFacility(m_Value.ByBits.Facility);
+        auto pStr = stringMap.find(m_Value.HResultCode);
+        if (pStr.CodeName != nullptr)
+        {
+            return pStr.CodeName;
+        }
+
+        return nullptr;
+    }
 
 	const char* Result::ToString() const
 	{
@@ -29,7 +40,7 @@ namespace SF
 		else
 		{
             static char buffer[4096];
-            StrUtil::Format(buffer, "0x{0:8x}", m_Value.HResultCode);
+            StrUtil::Format(buffer, "{0:#08x}", m_Value.HResultCode);
 			return buffer;
 		}
 	}

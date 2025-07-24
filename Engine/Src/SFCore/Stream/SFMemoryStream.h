@@ -83,7 +83,7 @@ namespace SF
 
 	public:
 
-		OutputMemoryStream(IHeap& memoryManager);
+		OutputMemoryStream();
 		OutputMemoryStream(Array<uint8_t>& memorySource, bool bAllowResize = false);
 		virtual ~OutputMemoryStream();
 

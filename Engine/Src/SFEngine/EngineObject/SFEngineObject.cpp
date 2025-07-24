@@ -176,14 +176,14 @@ namespace SF {
 	SharedPointerT<EngineObjectAsyncEngineTask>& EngineObject::GetEngineAsyncTickTask()
 	{
 		if (m_Disposed) return m_EngineAsyncTickTask;
-		if (m_EngineAsyncTickTask == nullptr) m_EngineAsyncTickTask = new(GetHeap()) EngineObjectAsyncEngineTask(this, EngineTaskTick::AsyncTick);
+		if (m_EngineAsyncTickTask == nullptr) m_EngineAsyncTickTask = new EngineObjectAsyncEngineTask(this, EngineTaskTick::AsyncTick);
 		return m_EngineAsyncTickTask;
 	}
 
 	SharedPointerT<EngineObjectAsyncEngineTask>& EngineObject::GetRenderAsyncTickTask()
 	{
 		if (m_Disposed) return m_RenderAsyncTickTask;
-		if (m_RenderAsyncTickTask == nullptr) m_RenderAsyncTickTask = new(GetHeap()) EngineObjectAsyncEngineTask(this, EngineTaskTick::AsyncRender);
+		if (m_RenderAsyncTickTask == nullptr) m_RenderAsyncTickTask = new EngineObjectAsyncEngineTask(this, EngineTaskTick::AsyncRender);
 		return m_RenderAsyncTickTask;
 	}
 
@@ -193,7 +193,7 @@ namespace SF {
 	void EngineObject::SetTimer(DurationMS startDelay, DurationMS interval)
 	{
 		if (m_TimerAction == nullptr)
-			m_TimerAction = new(GetHeap()) EngineObjectTimerAction(this);
+			m_TimerAction = new EngineObjectTimerAction(this);
 	}
 
 	Result EngineObject::OnTick(EngineTaskTick tick)

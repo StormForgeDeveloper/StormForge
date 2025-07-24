@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -84,12 +84,10 @@ namespace SF {
 			bool bPending = false;
 
 
-			IO_BUFFER(IHeap& memoryManager, NativeHandle& fileHandle, OpenMode& fileOpenMode)
+			IO_BUFFER(NativeHandle& fileHandle, OpenMode& fileOpenMode)
 				: FileHandle(fileHandle)
 				, FileOpenMode(fileOpenMode)
-				, Buffer(memoryManager)
 				, OutputStream(Buffer)
-				//, InputStream(ArrayView<const uint8_t>(Buffer.capacity(), Buffer.data()))
 			{
 				memset(&AIOBuffer, 0, sizeof(AIOBuffer));
 				InitAIO();

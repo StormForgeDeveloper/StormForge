@@ -38,7 +38,7 @@ namespace SF
 		m_AssetSerializerByType.Clear();
 		for (auto itAssetSerializer : m_AssetSerializers)
 		{
-			IHeap::Delete(itAssetSerializer);
+			delete (itAssetSerializer);
 		}
 		m_AssetSerializers.Clear();
 	}

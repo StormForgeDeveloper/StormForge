@@ -34,15 +34,15 @@ using namespace ::SF;
 
 TEST_F(VariableTest, Table)
 {
-	VariableTable table(GetHeap());
+	VariableTable table;
 
-	auto boxedInt = Boxing(GetHeap(), 10);
+	auto boxedInt = Boxing(10);
 	table.SetVariable("testInt", *boxedInt.GetVariable());
 
-	auto boxedFloat = Boxing(GetHeap(), 10.f);
+	auto boxedFloat = Boxing(10.f);
 	table.SetVariable("testFloat", *boxedFloat.GetVariable());
 
-	auto boxedDouble = Boxing(GetHeap(), 10.);
+	auto boxedDouble = Boxing(10.);
 	table.SetVariable("testDouble", *boxedDouble.GetVariable());
 
 	auto testInt = table.GetValue<int>("testInt");
@@ -57,17 +57,17 @@ TEST_F(VariableTest, Table)
 
 TEST_F(VariableTest, Table2)
 {
-	VariableTable table(GetHeap());
+	VariableTable table;
 
-	auto boxedInt = Boxing(GetHeap(), 10);
+	auto boxedInt = Boxing(10);
 	table.SetVariable("testInt", *boxedInt.GetVariable());
 	table.SetVariable("testInt", *boxedInt.GetVariable());
 
-	auto boxedFloat = Boxing(GetHeap(), 10.f);
+	auto boxedFloat = Boxing(10.f);
 	table.SetVariable("testFloat", *boxedFloat.GetVariable());
 	table.SetVariable("testFloat", *boxedFloat.GetVariable());
 
-	auto boxedDouble = Boxing(GetHeap(), 10.);
+	auto boxedDouble = Boxing(10.);
 	table.SetVariable("testDouble", *boxedDouble.GetVariable());
 	table.SetVariable("testDouble", *boxedDouble.GetVariable());
 
@@ -80,8 +80,8 @@ TEST_F(VariableTest, Table2)
 
 TEST_F(VariableTest, Serialization)
 {
-	VariableTable table1(GetHeap());
-	DynamicArray<uint8_t> table1Bin(GetHeap());
+	VariableTable table1;
+	DynamicArray<uint8_t> table1Bin;
     Guid testGuid = GuidHelper::New();
     EntityID entityUid(12345);
     AccountID testAccountId(GuidHelper::New());
@@ -105,7 +105,7 @@ TEST_F(VariableTest, Serialization)
 
 
 	uint8_t testData[] = {12,114,54,66,234, 235};
-	SFUniquePtr<Variable> blobVar(new(GetEngineHeap()) VariableBLOB(ArrayView<uint8_t>(sizeof(testData), testData)));
+	SFUniquePtr<Variable> blobVar(new VariableBLOB(ArrayView<uint8_t>(sizeof(testData), testData)));
 	table1.SetVariable("BinData", blobVar);
 
 	table1Bin.reserve(2048);

@@ -66,8 +66,8 @@ namespace SF
 
 
 
-	Texture::Texture(IHeap& heap, const CallTrack& callTrack)
-		: Resource(heap, "Texture", callTrack)
+	Texture::Texture(const CallTrack& callTrack)
+		: Resource("Texture", callTrack)
 		, m_Format(TextureFormat::INVALID)
 	{
 	}
@@ -79,7 +79,7 @@ namespace SF
 
 	void Texture::ClearResource()
 	{
-		IHeap::Delete(m_ImageData);
+		delete[] (m_ImageData);
 		m_ImageData = nullptr;
 	}
 
@@ -190,7 +190,7 @@ namespace SF
 		m_ImageFaceSize = imageSize * m_Depth;
 		m_MipmapCount = numMipmap;
 
-		m_ImageData = new(GetHeap()) uint8_t[m_ImageFaceSize * m_FaceCount];
+		m_ImageData = new uint8_t[m_ImageFaceSize * m_FaceCount];
 
 
 		return CreateDeviceTexture(initParameters);

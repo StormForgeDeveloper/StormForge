@@ -62,9 +62,9 @@ namespace SF
         return new((void*)buffer.data()) VariableGuid(m_Value);
     }
 
-    Variable* VariableGuid::Clone(IHeap& heap) const
+    Variable* VariableGuid::Clone() const
     {
-        return new(heap) VariableGuid(m_Value);
+        return new VariableGuid(m_Value);
     }
 
     size_t VariableGuid::GetSerializedSize() const
@@ -84,27 +84,27 @@ namespace SF
 
 
 
-    //VariableBox BoxingByValue(IHeap& heap, Guid src)
+    //VariableBox BoxingByValue(Guid src)
     //{
     //    return VariableBox(VariableGuid(src));
     //}
 
-    //VariableBox BoxingByReference(IHeap& heap, Guid src)
+    //VariableBox BoxingByReference(Guid src)
     //{
     //    return VariableBox(VariableGuid(src));
     //}
 
-    //VariableBox Boxing(IHeap& heap, Guid src)
+    //VariableBox Boxing(Guid src)
     //{
     //    return VariableBox(VariableGuid(src));
     //}
 
-    //VariableBox Boxing(IHeap& heap, Array<Guid>& src)
+    //VariableBox Boxing(Array<Guid>& src)
     //{
     //    return VariableBox(VariableGuid(src));
     //}
 
-    //VariableBox Boxing(IHeap& heap, const Array<Guid>& src)
+    //VariableBox Boxing(const Array<Guid>& src)
     //{
 
     //}

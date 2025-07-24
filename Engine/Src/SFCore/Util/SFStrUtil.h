@@ -51,6 +51,9 @@ namespace SF {
         static constexpr char x = 'x';
         static constexpr char Z = 'Z';
         static constexpr char z = 'z';
+        static constexpr std::string_view Empty = "";
+        static constexpr std::string_view WhiteSpaces = " \t\n\r\f\v";
+        static constexpr std::string_view DefaultFormat = "{}";
     };
 
     template<>
@@ -75,6 +78,9 @@ namespace SF {
         static constexpr wchar_t x = L'x';
         static constexpr wchar_t Z = L'Z';
         static constexpr wchar_t z = L'z';
+        static constexpr std::wstring_view Empty = L"";
+        static constexpr std::wstring_view WhiteSpaces = L" \t\n\r\f\v";
+        static constexpr std::wstring_view DefaultFormat = L"{}";
     };
 
     template<class CharType>
@@ -125,8 +131,8 @@ namespace StrUtil
 	//
 
 	// String duplication, szDest will destroyed if exist, and new memory will be allocated
-	Result StringDup(IHeap& heap, char* &szDest, const char* szSrc );
-	Result StringDup(IHeap& heap, wchar_t* &szDest, const wchar_t* szSrc );
+	Result StringDup(char* &szDest, const char* szSrc );
+	Result StringDup(wchar_t* &szDest, const wchar_t* szSrc );
 
 	// copy string and update dest pointer and length
 	Result StringCopyEx(char* &szDest, int& iBuffLen, const char* szSrc); // copy with modified parameter
@@ -232,6 +238,12 @@ namespace StrUtil
 	template<int iSrcBuffLen>
 	bool StringCompairIgnoreCase( wchar_t (&szSrc)[iSrcBuffLen], const wchar_t* szDest, int iDestBuffLen );
 
+    // Character conversion
+    template <class CharType>
+    CharType ToUpper(CharType c) { return static_cast<CharType>(std::toupper(c)); }
+
+    template <class CharType>
+    CharType ToLower(CharType c) { return static_cast<CharType>(std::tolower(c)); }
 
 	// String convert to lower case 
 	// szSrc(In/Out)		: Source string to convert

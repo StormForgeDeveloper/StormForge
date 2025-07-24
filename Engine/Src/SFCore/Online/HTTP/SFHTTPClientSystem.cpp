@@ -141,7 +141,7 @@ namespace SF
 	{
         Result hr;
 
-        Service::HTTP = new(GetSystemHeap()) HTTPClientSystemCurl;
+        Service::HTTP = new HTTPClientSystemCurl;
 
         static const char* SelfSignedCerts[] = {
 "-----BEGIN CERTIFICATE-----\n\
@@ -224,7 +224,7 @@ f4GDnDxe7GgAKXxxlw==\n\
 
         if (pSystem != *Service::HTTP)
         {
-            IHeap::Delete(pSystem);
+            delete (pSystem);
         }
 
         super::DeinitializeComponent();

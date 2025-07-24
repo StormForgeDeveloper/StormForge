@@ -136,7 +136,7 @@ namespace SF {
         }
 
         // Make a clone of this message
-        MessageHeader* Clone(IHeap& heap);
+        MessageHeader* Clone();
 
         // Update size and write to flat packet builder
         void UpdateNWriteTo(::flatbuffers::FlatBufferBuilder& packetBuilder, Result result);

@@ -39,9 +39,7 @@ const uint TEST_COUNT = 4000000 * TestScale;
 
 GTEST_TEST(Texture, TGASimple)
 {
-	Heap testHeap("test", GetSystemHeap());
-
-	StaticArray<ResourcePtr, 10> resources(testHeap);
+	StaticArray<ResourcePtr, 10> resources;
 	auto dirPath = Util::Path::GetFileDirectory(__FILE__);
 	auto filePath = Util::Path::Combine(dirPath, "../../data/testImage24.tga");
 
@@ -52,7 +50,7 @@ GTEST_TEST(Texture, TGASimple)
 	GTEST_ASSERT_EQ(true, inputStream.CanRead());
 
 
-	AssetImportContext context(testHeap, inputStream, "testImage24.tga");
+	AssetImportContext context(inputStream, "testImage24.tga");
 
 	auto result = imageImporter->Import(context, resources);
 	GTEST_ASSERT_EQ(ResultCode::SUCCESS, result);
@@ -62,13 +60,13 @@ GTEST_TEST(Texture, TGASimple)
 	FileInputStream inputStream32(filePath2);
 	GTEST_ASSERT_EQ(true, inputStream32.CanRead());
 
-	AssetImportContext context32(testHeap, inputStream32, "testImage32.tga");
+	AssetImportContext context32(inputStream32, "testImage32.tga");
 	result = imageImporter->Import(context32, resources);
 	GTEST_ASSERT_EQ(ResultCode::SUCCESS, result);
 
 
 	// Release before return
-	IHeap::Delete(imageImporter);
+	delete (imageImporter);
 
 	for (auto itRes : resources)
 	{

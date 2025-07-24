@@ -9,7 +9,6 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-
 #include "SFCorePCH.h"
 #include "SFTypedefs.h"
 #include "Util/SFLog.h"
@@ -21,32 +20,16 @@
 namespace SF {
 
 
-
-
 	/////////////////////////////////////////////////////////////////////////////////
 	//
 	//	variable table container
 	//
 
-	NamedVariableArray::NamedVariableArray(IHeap& heap)
-		: m_Heap(heap)
-		, m_VariableArray(heap)
+	NamedVariableArray::NamedVariableArray()
 	{
-	}
-
-	NamedVariableArray::NamedVariableArray(IHeap& heap, const NamedVariableArray& src)
-		: m_Heap(heap)
-		, m_VariableArray(m_Heap)
-	{
-		for (auto& itVariable : src)
-		{
-			SetVariable(itVariable.Key, *itVariable.Value);
-		}
 	}
 
 	NamedVariableArray::NamedVariableArray(const NamedVariableArray& src)
-		: m_Heap(GetSystemHeap())
-		, m_VariableArray(m_Heap)
 	{
 		for (auto& itVariable : src)
 		{
@@ -63,7 +46,7 @@ namespace SF {
 	{
 		for (auto& itItem : m_VariableArray)
 		{
-			IHeap::Delete(itItem.Value);
+			delete (itItem.Value);
 		}
 
 		m_VariableArray.Clear();
@@ -82,19 +65,19 @@ namespace SF {
 
 	Result NamedVariableArray::AddVariable(KeyType name, const Variable& variable)
 	{
-		auto newVariable = variable.Clone(GetHeap());
+		auto newVariable = variable.Clone();
 
 		return m_VariableArray.push_back({ name, newVariable });
 	}
 
 	Result NamedVariableArray::SetVariable(KeyType name, const Variable& variable)
 	{
-		auto newVariable = variable.Clone(GetHeap());
+		auto newVariable = variable.Clone();
 
 		int iVar = FindIndex(name);
 		if (iVar >= 0)
 		{
-			IHeap::Delete(m_VariableArray[iVar].Value);
+			delete (m_VariableArray[iVar].Value);
 			m_VariableArray[iVar].Value = newVariable;
 		}
 		else
@@ -122,7 +105,7 @@ namespace SF {
 		int iVar = FindIndex(name);
 		if (iVar >= 0)
 		{
-			IHeap::Delete(m_VariableArray[iVar].Value);
+			delete (m_VariableArray[iVar].Value);
 			m_VariableArray[iVar].Value = variable.release();
 		}
 		else

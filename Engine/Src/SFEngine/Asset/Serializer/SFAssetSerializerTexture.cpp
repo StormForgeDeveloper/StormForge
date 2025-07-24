@@ -30,8 +30,8 @@ namespace SF
 	//
 
 
-	AssetSerializerTexture::AssetSerializerTexture(IHeap& heap)
-		: AssetSerializer(heap, "Texture")
+	AssetSerializerTexture::AssetSerializerTexture()
+		: AssetSerializer("Texture")
 	{
 		AddHandlingAssetType("Texture");
 	}
@@ -82,9 +82,9 @@ namespace SF
 
 
 	// Desterialize stream
-	Result AssetSerializerTexture::Deserialize(IHeap& heap, IInputStream& stream, ResourcePtr& res)
+	Result AssetSerializerTexture::Deserialize(IInputStream& stream, ResourcePtr& res)
 	{
-		TexturePtr resource = new(heap) Texture(heap);
+		TexturePtr resource = new Texture;
 
 		TextureHeader header;
 		Result result = stream >> header;

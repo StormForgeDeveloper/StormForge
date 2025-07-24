@@ -156,7 +156,11 @@ namespace SF {
 			auto pHeap = GetAloocationHeap((void*)(pPtr));
 			assert(pHeap);
 			pPtr->~ClassType();
-			operator delete((void*)(pPtr), *pHeap);
+            #if SF_USE_IHEAP_NEW
+                operator delete((void*)(pPtr), *pHeap);
+            #else
+                pHeap->Free(pPtr);
+            #endif
 		}
 
 		//template<
@@ -173,19 +177,8 @@ namespace SF {
 	};
 
 
-	// SF deleter
-	template <class DataType>
-	struct Deleter {
-		constexpr Deleter() noexcept = default;
-
-		void operator()(DataType* _Ptr) const noexcept {
-			static_assert(0 < sizeof(DataType), "can't delete an incomplete type");
-			IHeap::Delete(_Ptr);
-		}
-	};
-
-	template<typename DataType, typename D = Deleter<DataType>>
-	using SFUniquePtr = std::unique_ptr<DataType, D>;
+	template<typename DataType>
+	using SFUniquePtr = std::unique_ptr<DataType>;
 
 
 	/////////////////////////////////////////////////////////////

@@ -30,7 +30,6 @@ namespace SF
 
 
     AudioService::AudioService()
-        : OnPlaybackDeviceChanged(GetSystemHeap())
     {
     }
 

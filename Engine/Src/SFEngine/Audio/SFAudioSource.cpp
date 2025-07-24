@@ -40,7 +40,7 @@ namespace SF
 
     const AudioBufferPtr& AudioSource::CreateAudioBuffer(size_t bufferSize)
     {
-        m_AudioBufferPtr = new(GetSystemHeap()) AudioBuffer(GetNumChannels(), GetAudioFormat(), GetSamplesPerSec(), bufferSize);
+        m_AudioBufferPtr = new AudioBuffer(GetNumChannels(), GetAudioFormat(), GetSamplesPerSec(), bufferSize);
         return m_AudioBufferPtr;
     }
 }

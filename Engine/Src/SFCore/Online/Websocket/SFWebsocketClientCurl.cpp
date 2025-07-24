@@ -31,8 +31,6 @@ namespace SF
 
     WebsocketClientCurl::WebsocketClientCurl(const String& name)
         : m_Name(name)
-        , m_ReceiveBuffer(GetSystemHeap())
-        , m_RecvDeletates(GetSystemHeap())
     {
         assert(m_Name.length() > 0);
     }
@@ -387,7 +385,7 @@ namespace SF
 
     void WebsocketClientCurl::StartThread()
     {
-        auto pThread = new(GetSystemHeap()) FunctorTickThread(
+        auto pThread = new FunctorTickThread(
             [this](Thread* pThread)
             {
                 SFLog(Websocket, Info, "WebsocketClientCurl thread started, {0}");

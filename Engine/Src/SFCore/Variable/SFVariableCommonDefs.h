@@ -107,7 +107,7 @@ namespace SF {
 		virtual Result ToString(ToStringContext& context) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone(IHeap& heap) const override;
+		virtual Variable* Clone() const override;
 
 		virtual size_t GetSerializedSize() const override { return sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const override
@@ -164,7 +164,7 @@ namespace SF {
 		virtual Result ToString(ToStringContext& context) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone(IHeap& heap) const override;
+		virtual Variable* Clone() const override;
 	};
 
 
@@ -230,7 +230,7 @@ namespace SF {
 		virtual Result ToString(ToStringContext& context) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone(IHeap& heap) const override;
+		virtual Variable* Clone() const override;
 
 		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const override;
@@ -298,7 +298,7 @@ namespace SF {
 		virtual Result ToString(ToStringContext& context) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone(IHeap& heap) const override;
+		virtual Variable* Clone() const override;
 
 		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const override;
@@ -362,7 +362,7 @@ namespace SF {
 		virtual Result ToString(ToStringContext& context) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone(IHeap& heap) const override;
+		virtual Variable* Clone() const override;
 
 		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const override;
@@ -433,7 +433,7 @@ namespace SF {
 		virtual Result ToString(ToStringContext& context) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone(IHeap& heap) const override;
+		virtual Variable* Clone() const override;
 
 		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const override;
@@ -501,7 +501,7 @@ namespace SF {
 		virtual Result ToString(ToStringContext& context) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone(IHeap& heap) const override;
+		virtual Variable* Clone() const override;
 
 		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const override;
@@ -570,7 +570,7 @@ namespace SF {
 		virtual Result ToString(ToStringContext& context) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone(IHeap& heap) const override;
+		virtual Variable* Clone() const override;
 
 		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const override;
@@ -639,7 +639,7 @@ namespace SF {
 		virtual Result ToString(ToStringContext& context) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone(IHeap& heap) const override;
+		virtual Variable* Clone() const override;
 
 		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const override;
@@ -681,7 +681,7 @@ namespace SF {
 		virtual Result ToString(ToStringContext& context) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone(IHeap& heap) const override;
+		virtual Variable* Clone() const override;
 	};
 
 
@@ -716,7 +716,7 @@ namespace SF {
 		virtual Result ToString(ToStringContext& context) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone(IHeap& heap) const override;
+		virtual Variable* Clone() const override;
 	};
 
 
@@ -766,7 +766,7 @@ namespace SF {
 		virtual Result ToString(ToStringContext& context) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone(IHeap& heap) const override;
+		virtual Variable* Clone() const override;
 
 		virtual bool operator == (const Variable& op) const override;
 	};
@@ -810,7 +810,7 @@ namespace SF {
 		virtual Result ToString(ToStringContext& context) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone(IHeap& heap) const override;
+		virtual Variable* Clone() const override;
 
 		virtual bool operator == (const Variable& op) const override;
 	};
@@ -879,7 +879,7 @@ namespace SF {
 		virtual Result ToString(ToStringContext& context) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone(IHeap& heap) const override;
+		virtual Variable* Clone() const override;
 
 		virtual size_t GetSerializedSize() const  override { return sizeof(uint16_t) + (m_Value.GetLength() + 1) * sizeof(char); }
 		virtual Result Serialize(IOutputStream& output) const override;
@@ -947,7 +947,7 @@ namespace SF {
 		virtual Result ToString(ToStringContext& context) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone(IHeap& heap) const override;
+		virtual Variable* Clone() const override;
 
 		virtual size_t GetSerializedSize() const  override { return sizeof(uint16_t) + (m_Value.GetLength() + 1) * sizeof(wchar_t); }
 		virtual Result Serialize(IOutputStream& output) const override;
@@ -1011,7 +1011,7 @@ namespace SF {
 		virtual Result ToString(ToStringContext& context) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone(IHeap& heap) const override;
+		virtual Variable* Clone() const override;
 
 		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const override;
@@ -1071,7 +1071,7 @@ namespace SF {
 		virtual Result ToString(ToStringContext& context) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone(IHeap& heap) const override;
+		virtual Variable* Clone() const override;
 
 
 		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
@@ -1154,7 +1154,7 @@ namespace SF {
 		virtual Result ToString(ToStringContext& context) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone(IHeap& heap) const override;
+		virtual Variable* Clone() const override;
 
 
 		virtual size_t GetSerializedSize() const  override { return sizeof(uint16_t) + m_Value.size(); }

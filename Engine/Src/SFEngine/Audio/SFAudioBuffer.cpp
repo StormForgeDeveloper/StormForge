@@ -31,7 +31,7 @@ namespace SF
         , m_SamplesPerSec(samplesPerSec)
         , m_DataQueue(8)
     {
-        m_HeapPtr = new(GetSystemHeap()) CircularHeap(GetSystemHeap(), streamingBufferSize);
+        m_HeapPtr = new CircularHeap(GetSystemHeap(), streamingBufferSize);
     }
 
     AudioBuffer::~AudioBuffer()
@@ -56,7 +56,7 @@ namespace SF
             }
             else
             {
-                IHeap::Delete(block);
+                delete (block);
             }
         }
     }

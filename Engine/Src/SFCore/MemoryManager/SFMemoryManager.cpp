@@ -34,6 +34,11 @@ namespace SF {
 	//	Memory manager interfaces
 	//
 
+    SharedPointerT<IHeap> Heap::Create(const char* name, IHeap& parent)
+    {
+        return new IHeap(name, &parent);
+    }
+
 	// System memory manager
 	IHeap& GetSystemHeap()
 	{
@@ -67,7 +72,7 @@ namespace SF {
 	//
 
 	//Heap::Heap(const char* name, IHeap& parent)
-	//	: m_pHeap(new(GetSystemHeap()) IHeap(name, &parent))
+	//	: m_pHeap(new IHeap(name, &parent))
 	//{
 	//}
 
@@ -253,7 +258,7 @@ namespace SF {
 		if (stm_Instance == nullptr) // Need to check again after lock
 		{
 			// Using malloc to avoid recursive memory allocation
-			stm_Instance = new(GetSystemHeap()) EngineMemoryManager;
+			stm_Instance = new EngineMemoryManager;
 		}
 
 		return stm_Instance;

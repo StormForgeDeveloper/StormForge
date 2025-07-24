@@ -945,7 +945,7 @@ namespace Net {
 	//	m_WriteBufferQueues.SetSize(numQueue);
 	//	for (uint iQueue = 0; iQueue < m_WriteBufferQueues.GetSize(); iQueue++)
 	//	{
-	//		m_WriteBufferQueues[iQueue] = new(GetHeap()) WriteBufferQueue(uiNumElePerPage);
+	//		m_WriteBufferQueues[iQueue] = new WriteBufferQueue(uiNumElePerPage);
 	//	}
 	//}
 

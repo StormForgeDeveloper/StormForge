@@ -338,7 +338,7 @@ void Container_CircularBufferQueue_ThreadTest(size_t testDataCount, int allocSiz
 
 	for (int iThread = 0; iThread < WriteThreadCount; iThread++)
 	{
-		auto pNewThread = new(testHeap) FunctorThread([&circularBuffer, allocSizeStart, allocSizeEnd, &enqueuedCount, TestDataCount](Thread* pThread)
+		auto pNewThread = new FunctorThread([&circularBuffer, allocSizeStart, allocSizeEnd, &enqueuedCount, TestDataCount](Thread* pThread)
 		{
 			unused(pThread);
 			while (enqueuedCount.load(std::memory_order_relaxed) < TestDataCount)
@@ -371,7 +371,7 @@ void Container_CircularBufferQueue_ThreadTest(size_t testDataCount, int allocSiz
 
 	for (int iThread = 0; iThread < ReadThreadCount; iThread++)
 	{
-		auto pNewThread = new(testHeap) FunctorThread([&circularBuffer, &enqueuedCount, &processedCount, TestDataCount](Thread* pThread)
+		auto pNewThread = new FunctorThread([&circularBuffer, &enqueuedCount, &processedCount, TestDataCount](Thread* pThread)
 		{
 
 			while (processedCount.load(std::memory_order_relaxed) < TestDataCount)
@@ -416,13 +416,13 @@ void Container_CircularBufferQueue_ThreadTest(size_t testDataCount, int allocSiz
 	for (auto itThread : writeThreads)
 	{
 		itThread->Stop();
-		IHeap::Delete(itThread);
+		delete (itThread);
 	}
 
 	for (auto itThread : readThreads)
 	{
 		itThread->Stop();
-		IHeap::Delete(itThread);
+		delete (itThread);
 	}
 
 }
@@ -794,7 +794,7 @@ void Container_CircularBuffer_ThreadTest(std::vector<SF::Thread*>& threadArray, 
 
 	for (int iThread = 0; iThread < ThreadCount; iThread++)
 	{
-		auto pNewThread = new(testHeap) FunctorThread([&circularBuffer, allocSizeStart, allocSizeEnd, &testedCount, &finishedCount, TestDataCount]([[maybe_unused]] Thread* pThread)
+		auto pNewThread = new FunctorThread([&circularBuffer, allocSizeStart, allocSizeEnd, &testedCount, &finishedCount, TestDataCount]([[maybe_unused]] Thread* pThread)
 		{
 			while (testedCount.load(std::memory_order_relaxed) < TestDataCount)
 			{

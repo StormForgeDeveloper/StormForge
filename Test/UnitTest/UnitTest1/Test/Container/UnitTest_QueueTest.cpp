@@ -34,7 +34,7 @@ using namespace ::SF;
 TEST_F(QueueTest, PageQueueSimple)
 {
 	{
-		PageQueue<int> testQueue(GetHeap(), 4);
+		PageQueue<int> testQueue(4);
 
 		for (int iValue = 0; iValue < 513; iValue++)
 		{
@@ -51,7 +51,7 @@ TEST_F(QueueTest, PageQueueSimple)
 	}
 
 	{
-		PageQueue<int> testQueue(GetHeap(), 16);
+		PageQueue<int> testQueue(16);
 
 		for (int iValue = 0; iValue < 513; iValue++)
 		{
@@ -68,7 +68,7 @@ TEST_F(QueueTest, PageQueueSimple)
 	}
 
 	{
-		PageQueue<int> testQueue(GetHeap(), 32);
+		PageQueue<int> testQueue(32);
 
 		for (int iValue = 0; iValue < 513; iValue++)
 		{
@@ -85,7 +85,7 @@ TEST_F(QueueTest, PageQueueSimple)
 	}
 
 	{
-		PageQueue<int> testQueue(GetHeap(), 60);
+		PageQueue<int> testQueue(60);
 
 		for (int iValue = 0; iValue < 513; iValue++)
 		{
@@ -102,7 +102,7 @@ TEST_F(QueueTest, PageQueueSimple)
 	}
 
 	{
-		PageQueue<int> testQueue(GetHeap());
+		PageQueue<int> testQueue;
 
 		for (int iValue = 0; iValue < 513; iValue++)
 		{
@@ -121,7 +121,7 @@ TEST_F(QueueTest, PageQueueSimple)
 
 TEST_F(QueueTest, PageQueueRandom)
 {
-	PageQueue<int> testQueue(GetHeap(), 40);
+	PageQueue<int> testQueue(40);
 
 	int PrevDequeueValue{};
 	for (int iValue = 1; iValue < 9999; iValue++)

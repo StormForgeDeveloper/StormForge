@@ -58,7 +58,7 @@ namespace Net {
 	{
 		m_bufRecvTem.resize(Const::PACKET_SIZE_MAX * 2);
 
-		//m_NetIOAdapter.SetWriteQueue(new(GetHeap()) WriteBufferQueue(GetHeap()));
+		//m_NetIOAdapter.SetWriteQueue(new WriteBufferQueue(GetHeap()));
 
 		//SetNetCtrlAction(NetCtrlCode_Ack, &m_HandleAck);
 		//SetNetCtrlAction(NetCtrlCode_Nack, &m_HandleNack);

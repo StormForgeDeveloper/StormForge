@@ -38,10 +38,12 @@ namespace SF {
 	public:
 
 		Heap(const char* name, IHeap& parent) 
-			: SharedPointerT<IHeap>(new(parent) IHeap(name, &parent))
+			: SharedPointerT<IHeap>(Create(name, parent))
 		{}
 
 		operator IHeap& () { return *get(); }
+
+        static SharedPointerT<IHeap> Create(const char* name, IHeap& parent);
 	};
 
 

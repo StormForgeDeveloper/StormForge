@@ -32,7 +32,6 @@ namespace SF
 		uint8_t m_StreamStructBuffer[1024];
 		uint8_t m_DecompressBuffer[4096];
 
-		IHeap& m_Heap;
 		IInputStream& m_Stream;
 
 		z_stream* m_CompressionInfo = nullptr;
@@ -49,7 +48,7 @@ namespace SF
 
 	public:
 
-		CompressedInputStream(IHeap& heap, IInputStream& inputStream, size_t sourceSize, size_t decompressedSize);
+		CompressedInputStream(IInputStream& inputStream, size_t sourceSize, size_t decompressedSize);
 		virtual ~CompressedInputStream();
 		
 		size_t GetCompressedSize() const { return m_Stream.GetSize(); }
@@ -80,7 +79,6 @@ namespace SF
 		uint8_t m_StreamStructBuffer[1024];
 		uint8_t m_CompressBuffer[4096];
 
-		IHeap& m_Heap;
 		IOutputStream& m_Stream;
 
 		z_stream* m_CompressionInfo = nullptr;
@@ -90,7 +88,7 @@ namespace SF
 
 	public:
 
-		CompressedOutputStream(IHeap& heap, IOutputStream& stream);
+		CompressedOutputStream(IOutputStream& stream);
 		virtual ~CompressedOutputStream();
 
 		// close compression stream

@@ -237,7 +237,7 @@ namespace Net {
 			for (int uiRecv = 0; uiRecv < Const::SVR_NUM_RECV_THREAD; uiRecv++)
 			{
                 IOBUFFER_READ* pRecvBuffer{};
-                netCheckPtr(pRecvBuffer = new(GetHeap()) IOBUFFER_READ);
+                netCheckPtr(pRecvBuffer = new IOBUFFER_READ);
 				m_NetIOAdapter.PendingRecv(pRecvBuffer);
 			}
 		}
@@ -269,7 +269,7 @@ namespace Net {
 	// Send message to connection with network device
 	Result RawUDP::SendMsg(const sockaddr_storage& dest, size_t sendSize, uint8_t* pBuff)
 	{
-        SFUniquePtr<PacketData> pSendBuffer(new(GetSystemHeap()) PacketData);
+        SFUniquePtr<PacketData> pSendBuffer(new PacketData);
         ScopeContext hr(
             [this, &pSendBuffer](Result hr)
             {

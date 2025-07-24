@@ -110,7 +110,7 @@ namespace SF {
 		//  @buffer: It uses external buffer for new instance allocation. Use ExternalBufferArray if you want to use manually allocated buffer.
 		//  @return: nullptr if fails to create a copy
 		virtual Variable* Clone(Array<uint8_t>& buffer) const = 0;
-		virtual Variable* Clone(IHeap& heap) const = 0;
+		virtual Variable* Clone() const = 0;
 
 		// To string implementation
 		virtual Result ToString(ToStringContext& context) const { return ResultCode::NOT_IMPLEMENTED; }
@@ -199,9 +199,9 @@ namespace SF {
 			return new((void*)pData) VariableByBinaryValue<ValueType>(m_Value);
 		}
 
-		virtual Variable* Clone(IHeap& heap) const override
+		virtual Variable* Clone() const override
 		{
-			return new(heap) VariableByBinaryValue<ValueType>(m_Value);
+			return new VariableByBinaryValue<ValueType>(m_Value);
 		}
 
 		virtual bool operator == (const Variable& op) const override
@@ -314,9 +314,9 @@ namespace SF {
 			return new((void*)buffer.data()) VariableValueReference<ValueType>(*m_Value);
 		}
 
-		virtual Variable* Clone(IHeap& heap) const override
+		virtual Variable* Clone() const override
 		{
-			return new(heap) VariableValueReference<ValueType>(*m_Value);
+			return new VariableValueReference<ValueType>(*m_Value);
 		}
 
 		virtual bool operator == (const Variable& op) const override

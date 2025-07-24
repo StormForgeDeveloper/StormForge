@@ -83,8 +83,6 @@ namespace SF
 
 	StringCrcDB::StringCrcDB()
 		: m_Heap("StringCrcDB", GetSystemHeap())
-		, m_StringMap32(GetHeap())
-		, m_StringMap64(GetHeap())
 	{
 		// default strings
 		ArrayView<const char*> DefaultStrings(g_DefaultStrings);

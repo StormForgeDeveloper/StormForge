@@ -25,7 +25,7 @@ using namespace ::SF;
 
 TEST_F(AVLTreeTest, DualSortedMapPerfTestSimple)
 {
-	DualSortedMap<uint,uint> sortedMap(GetHeap());
+	DualSortedMap<uint,uint> sortedMap;
 	TimeStampMS start, end;
 
 	start = Util::Time.GetRawTimeMs();
@@ -73,7 +73,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTestSimple)
 
 TEST_F(AVLTreeTest, DualSortedMapPerfTestRead)
 {
-	DualSortedMap<uint,uint> sortedMap(GetHeap());
+	DualSortedMap<uint,uint> sortedMap;
 	TimeStampMS start, end;
 
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
@@ -115,7 +115,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTestRead)
 
 TEST_F(AVLTreeTest, DualSortedMapPerfTest1000)
 {
-	DualSortedMap<uint,uint> sortedMap(GetHeap());
+	DualSortedMap<uint,uint> sortedMap;
 	TimeStampMS start, end;
 
 	int iTest = 0;
@@ -166,7 +166,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfWithReadThreads)
 {
 	const int numReadThread = 10;
 	const int testItemCount = 10000;
-	DualSortedMap<uint, uint> sortedMap(GetHeap());
+	DualSortedMap<uint, uint> sortedMap;
 	TimeStampMS start, end;
 
 	int iTest = 0;
@@ -183,7 +183,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfWithReadThreads)
 	// Start read threads
 	for (int iThread = 0; iThread < numReadThread; iThread++)
 	{
-		auto newThread = new(GetHeap()) FunctorThread([this, &sortedMap](Thread* pThread)
+		auto newThread = new FunctorThread([this, &sortedMap](Thread* pThread)
 		{
 			while (!pThread->CheckKillEvent(DurationMS(1)))
 			{

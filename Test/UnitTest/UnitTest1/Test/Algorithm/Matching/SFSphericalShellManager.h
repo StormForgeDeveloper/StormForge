@@ -262,7 +262,7 @@ namespace SF
 	public:
 
 		// Constructor
-		SphericalShell(IHeap& heap, uint shellID, uint preferenceDimension);
+		SphericalShell(uint shellID, uint preferenceDimension);
 		~SphericalShell();
 
 		// Get method for shell ID

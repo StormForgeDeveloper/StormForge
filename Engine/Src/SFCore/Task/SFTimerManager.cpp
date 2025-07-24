@@ -29,10 +29,9 @@ namespace SF {
 	//	
 	//
 
-	TimerManager::TimerManager(IHeap& heap, uint failSafeTimerTickInterval)
+	TimerManager::TimerManager(uint failSafeTimerTickInterval)
 		: m_FailSafeTimerTickInterval(failSafeTimerTickInterval)
 		, m_AssertOnInvalidTickTime(false)
-		, m_TimerMap(heap)
 	{
 	}
 

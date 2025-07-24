@@ -82,18 +82,8 @@ namespace SF
 
     enum EEntityFaculty
     {
-        None,				// Faculty undefined
+        Generic,			// Faculty generic
 		Server,				// Faculty Server
-		Service,			// Faculty Service
-		User,				// Faculty User
-		Game,				// Faculty Game
-		GameInstance,		// Faculty Game Instance
-		Party,				// Faculty Party
-		MatchInstance,		// Faculty Match Instance
-		Manager,			// Faculty Manager Instance
-		ChatChannel,
-		ServiceInstance,		// Faculty generic service Instance
-		Max,
 	};
 
     public struct EntityUID : IFormattable
@@ -109,7 +99,7 @@ namespace SF
 
         public EntityUID GetServerEntityUID()
         {
-            return new EntityUID((UID & 0xFFF00000) | (((uint)EEntityFaculty.Server) << 16));
+            return new EntityUID((UID & 0xFFFE0000) | (((uint)EEntityFaculty.Server) << 16));
         }
 
         public bool IsValid => UID != 0;

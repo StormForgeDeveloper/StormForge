@@ -60,8 +60,7 @@ namespace SF {
 	{
 		for(int iComponent = int(m_Components.size()) - 1; iComponent >= 0; iComponent--)
 		{
-            LibraryComponent* pComponent = m_Components[iComponent];
-			GetSystemHeap().Delete(pComponent);
+            delete m_Components[iComponent];
 		}
 
         m_Components.Reset();

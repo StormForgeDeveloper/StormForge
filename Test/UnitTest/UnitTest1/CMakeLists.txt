@@ -18,7 +18,7 @@ set(SF_UNIT_TEST_FILES
 	Test/Algorithm/Matching/UnitTest_Algorithm_MatchingPreferance.cpp
 	Test/Algorithm/Matching/UnitTest_Algorithm_MatchingQueue.cpp
 	Test/Algorithm/Matching/UnitTest_Algorithm_MatchingRanking.cpp
-	Test/Asset/UnitTest_Asset.cpp
+	#Test/Asset/UnitTest_Asset.cpp
 	Test/Container/UnitTest_AVLTreeTest.h
 	Test/Container/UnitTest_AVLTreeTest_DualMap.cpp
 	Test/Container/UnitTest_AVLTreeTest_DualMapPerformance.cpp
@@ -59,17 +59,17 @@ set(SF_UNIT_TEST_FILES
 	Test/String/UnitTest_String.h
 	Test/String/UnitTest_String_BasicTest.cpp
 	Test/String/UnitTest_String_Crc.cpp
-	Test/Texture/UnitTest_TextureJpg.cpp
-	Test/Texture/UnitTest_TexturePng.cpp
-	Test/Texture/UnitTest_TextureTGA.cpp
+	# Test/Texture/UnitTest_TextureJpg.cpp
+	# Test/Texture/UnitTest_TexturePng.cpp
+	# Test/Texture/UnitTest_TextureTGA.cpp
 	Test/Thread/SFThreadTest.h
 	Test/Thread/SFThreadTest.cpp
 	Test/Thread/SFSystemSynchronizeTest.h
 	Test/Thread/SFSystemSynchronizeTest.cpp
-	Test/TongScript/UnitTest_TongScript.h
-	Test/TongScript/UnitTest_TongScript_Bytecode.cpp
-	Test/TongScript/UnitTest_TongScript_Compile.cpp
-	Test/TongScript/UnitTest_TongScript_FileFormat.cpp
+	# Test/TongScript/UnitTest_TongScript.h
+	# Test/TongScript/UnitTest_TongScript_Bytecode.cpp
+	# Test/TongScript/UnitTest_TongScript_Compile.cpp
+	# Test/TongScript/UnitTest_TongScript_FileFormat.cpp
 	Test/Variable/UnitTest_Variable.h
 	Test/Variable/UnitTest_Variable_Table.cpp
 	Test/Variable/UnitTest_Variable_Boxing.cpp

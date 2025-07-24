@@ -77,18 +77,8 @@ namespace SF {
     // We might not need this anymore, just leaving as ph for legacy code
 	enum class EntityFaculty : uint8_t
 	{
-		None,				// Faculty undefined
+		Generic,			// Faculty Generic
 		Server,				// Faculty Server
-		Service,			// Faculty Service
-		User,				// Faculty User
-		Game,				// Faculty Game
-		GameInstance,		// Faculty Game Instance
-		Party,				// Faculty Party
-		MatchInstance,		// Faculty Match Instance
-		Manager,			// Faculty Manager Instance
-		ChatChannel,
-		ServiceInstance,		// Faculty generic service Instance
-		Max,
 	};
 
     enum class EAccountRole : uint8_t
@@ -147,11 +137,10 @@ namespace SF {
 			MAX_IDBIT = 24,
 		};
 
-
 		struct {
 			uint32_t			EntityLID : 16;	// Local entity ID
-			uint32_t			FacultyID : 4;	// Local faculty ID
-            uint32_t			ServerID : 12;	// Server ID
+			uint32_t			FacultyID : 1;	// Local faculty ID
+            uint32_t			ServerID : 15;	// Server ID
 			uint32_t : 0;
 		} Components;
 		uint32_t ID;
@@ -372,6 +361,7 @@ namespace SF {
         bool TryParse(const char* str);
     };
 #pragma pack(pop)
+
 
     SF_FORCEINLINE bool operator == (const PlayerPlatformID& op1, const PlayerPlatformID& op2)
     {
@@ -686,6 +676,142 @@ public:
         return guid.GetHash();
     }
 };
+
+
+template <>
+struct std::formatter<SF::ClusterID>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::ClusterID& value, FormatContext& ctx) const {
+        return std::format_to(ctx.out(), "{}", ToString(value));
+    }
+};
+
+template <>
+struct std::formatter<SF::Guid>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::Guid& value, FormatContext& ctx) const {
+        char buffer[37];
+        buffer[36] = 0;
+        value.ToString(buffer);
+        return std::format_to(ctx.out(), "{}", buffer);
+    }
+};
+
+template <>
+struct std::formatter<SF::AccountID>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::AccountID& value, FormatContext& ctx) const {
+        char buffer[37];
+        buffer[36] = 0;
+        value.ToString(buffer);
+        return std::format_to(ctx.out(), "{}", buffer);
+    }
+};
+
+template <>
+struct std::formatter<SF::EntityUID>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::EntityUID& value, FormatContext& ctx) const {
+        return std::format_to(ctx.out(), "{0:08X}", value.ID);
+    }
+};
+
+template <>
+struct std::formatter<SF::TransactionID>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::TransactionID& value, FormatContext& ctx) const {
+        return std::format_to(ctx.out(), "{0:016X}", value.ID);
+    }
+};
+
+template <>
+struct std::formatter<SF::EPlatform>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::EPlatform& value, FormatContext& ctx) const {
+        static const char* Names[] =
+        {
+            "BR",         // Braves player Id
+            "Steam",      // Steam player Id
+            "Facebook"   // Facebook
+        };
+        constexpr int MaxNames = sizeof(Names) / sizeof(Names[0]);
+
+        return std::format_to(ctx.out(), "{}", Names[std::clamp<int>((int)value, 0, MaxNames)]);
+    }
+};
+
+template <>
+struct std::formatter<SF::PlayerPlatformID>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::PlayerPlatformID& value, FormatContext& ctx) const {
+        return std::format_to(ctx.out(), "({}, {})", value.Platform, value.PlayerId);
+    }
+};
+
+template <>
+struct std::formatter<SF::PlayerInformation>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::PlayerInformation& value, FormatContext& ctx) const {
+        return std::format_to(ctx.out(), "({}, {}, {}, {})", value.PlayerID, value.PlayerPlatformId, value.NickName, value.LastActiveTime);
+    }
+};
+
 
 
 #include "SFEngineTypedefs.inl"

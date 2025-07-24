@@ -32,7 +32,6 @@ namespace SF
 		ScriptContext::ScriptContext(ScriptEnvironment& env)
 			: SF::ScriptContext(env)
 			, m_VariableStack(env.GetHeap())
-			, m_VairableTable(env.GetHeap())
 			, m_ControlStack(env.GetHeap())
 		{
 		}

@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2017 Kyungkun Ko
 // 
@@ -27,15 +27,13 @@ namespace SF {
 		// 
 		void* alloc_func(voidpf opaque, uInt items, uInt size)
 		{
-			auto pHeap = (IHeap*)opaque;
-			return pHeap->Alloc(items * size);
+			return GetSystemHeap().Alloc(items * size);
 		}
 
 		// 
 		void free_func(voidpf opaque, voidpf address)
 		{
-			auto pHeap = (IHeap*)opaque;
-			pHeap->Free(address);
+            GetSystemHeap().Free(address);
 		}
 
 	}
@@ -45,9 +43,8 @@ namespace SF {
 	//
 	//	CompressedInputStream
 	//
-	CompressedInputStream::CompressedInputStream(IHeap& heap, IInputStream& inputStream, size_t sourceSize, size_t decompressedSize)
-		: m_Heap(heap)
-		, m_Stream(inputStream)
+	CompressedInputStream::CompressedInputStream(IInputStream& inputStream, size_t sourceSize, size_t decompressedSize)
+		: m_Stream(inputStream)
 		, m_CompressedSourceSize(sourceSize)
 		, m_DecompressedSize(decompressedSize)
 	{
@@ -55,7 +52,7 @@ namespace SF {
 		memset(m_CompressionInfo, 0, sizeof(z_stream));
 		m_CompressionInfo->zalloc = ImplCompressedStream::alloc_func;
 		m_CompressionInfo->zfree = ImplCompressedStream::free_func;
-		m_CompressionInfo->opaque = &m_Heap;
+		m_CompressionInfo->opaque = nullptr;
 
 		m_InputStartPosition = inputStream.GetPosition();
 
@@ -161,15 +158,14 @@ namespace SF {
 	//
 
 
-	CompressedOutputStream::CompressedOutputStream(IHeap& heap, IOutputStream& stream)
-		: m_Heap(heap)
-		, m_Stream(stream)
+	CompressedOutputStream::CompressedOutputStream(IOutputStream& stream)
+		: m_Stream(stream)
 	{
 		m_CompressionInfo = (z_stream*)m_StreamStructBuffer;
 		memset(m_CompressionInfo, 0, sizeof(z_stream));
 		m_CompressionInfo->zalloc = ImplCompressedStream::alloc_func;
 		m_CompressionInfo->zfree = ImplCompressedStream::free_func;
-		m_CompressionInfo->opaque = &m_Heap;
+		m_CompressionInfo->opaque = nullptr;
 
 		deflateInit(m_CompressionInfo, Z_DEFAULT_COMPRESSION);
 

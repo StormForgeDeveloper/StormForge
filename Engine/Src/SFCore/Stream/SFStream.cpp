@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2020 Kyungkun Ko
 // 
@@ -119,7 +119,7 @@ namespace SF {
 	Result IInputStream::Read(char*& data)
 	{
 		if (data != nullptr)
-			IHeap::Delete(data);
+			delete (data);
 		data = nullptr;
 
 		uint16_t NumChar = 0;
@@ -140,7 +140,7 @@ namespace SF {
 	Result IInputStream::Read(wchar_t*& data)
 	{
 		if (data != nullptr)
-			IHeap::Delete(data);
+			delete (data);
 		data = nullptr;
 
 		uint16_t NumChar = 0;

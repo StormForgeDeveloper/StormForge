@@ -28,12 +28,7 @@ namespace SF
 
 	Variable* VariableFactoryService::CreateVariable(StringCrc32 TypeName)
 	{
-		return CreateVariable(GetSystemHeap(), TypeName);
-	}
-
-	Variable* VariableFactoryService::CreateVariable(IHeap& heap, StringCrc32 TypeName)
-	{
-#define _CREATE_VARIABLE_TYPE_(TypeName) case TypeName::TYPE_NAME: return new(heap) TypeName();
+#define _CREATE_VARIABLE_TYPE_(TypeName) case TypeName::TYPE_NAME: return new TypeName();
 
 		switch (TypeName)
 		{
@@ -56,15 +51,15 @@ namespace SF
 			_CREATE_VARIABLE_TYPE_(VariableStringCrc64);
 			_CREATE_VARIABLE_TYPE_(VariableBLOB);
             _CREATE_VARIABLE_TYPE_(VariableGuid);
-        case "int32"_crc: return new(heap) VariableInt();
-		case "uint32"_crc: return new(heap) VariableUInt();
-		case "Vector3"_crc: return new(heap) VariableByBinaryValue<Vector3>();
-		case "Vector4"_crc: return new(heap) VariableByBinaryValue<Vector4>();
+        case "int32"_crc: return new VariableInt();
+		case "uint32"_crc: return new VariableUInt();
+		case "Vector3"_crc: return new VariableByBinaryValue<Vector3>();
+		case "Vector4"_crc: return new VariableByBinaryValue<Vector4>();
 
 		default:
 			// TODO: Add dynamic type supports
 			SFLog(System, Error, "VariableFactoryService::CreateVariable, Unknown variable type:{0}, fallback to string", TypeName);
-			return new(heap) VariableString();
+			return new VariableString();
 		}
 
 #undef _CREATE_VARIABLE_TYPE_

@@ -40,13 +40,8 @@ namespace SF
 		// Name of importer
 		StringCrc64 m_Name;
 
-		// heap for importer
-		IHeap& m_Heap;
-
 		// Supporting asset types
 		StaticArray<StringCrc64, 2> m_AssetTypes;
-
-
 
 	protected:
 
@@ -54,11 +49,8 @@ namespace SF
 		Result AddHandlingAssetType(StringCrc64 assetType);
 
 	public:
-		AssetSerializer(IHeap& heap, const StringCrc64& name);
+		AssetSerializer(const StringCrc64& name);
 		virtual ~AssetSerializer();
-
-		// Heap
-		IHeap& GetHeap() { return m_Heap; }
 
 		// Asset type list
 		virtual const Array<StringCrc64>& GetAssetTypes() const { return m_AssetTypes; }
@@ -68,7 +60,7 @@ namespace SF
 		virtual Result Serialize(IOutputStream& stream, ResourcePtr& res);
 
 		// Desterialize stream
-		virtual Result Deserialize(IHeap& heap, IInputStream& stream, ResourcePtr& res);
+		virtual Result Deserialize(IInputStream& stream, ResourcePtr& res);
 	};
 
 

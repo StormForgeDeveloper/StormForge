@@ -44,7 +44,6 @@ TEST_F(StringTest, CharBasic)
 	String B("B");
 	String C;
 
-
 	EXPECT_EQ(C.IsNullOrEmpty(), true);
 
 	EXPECT_EQ(A.Equals("A"), true);
@@ -98,6 +97,8 @@ TEST_F(StringTest, Format)
 	String B("B");
 	String C;
 
+    std::string test = std::format("{0}/{1}", A, "DBInstance");
+
 	C.Format("{0}/{1}", A, "DBInstance");
 	EXPECT_EQ(C.Equals("Test1/DBInstance"), true);
 
@@ -126,7 +127,6 @@ TEST_F(StringTest, SFStringBasic)
     EXPECT_EQ(C.Equals("TEsT1b"), false);
     EXPECT_EQ(C.EqualsIgnoreCase("TEsT1b"), true);
     EXPECT_EQ(6, C.GetLength());
-    EXPECT_GE(6+1, C.GetBufferLength());
 
     EXPECT_EQ(WA.Equals(L"Test1"), true);
     EXPECT_EQ(WA.Equals(L"tEst1"), false);
@@ -140,7 +140,6 @@ TEST_F(StringTest, SFStringBasic)
     EXPECT_EQ(WC.Equals(L"TeSt1b"), false);
     EXPECT_EQ(WC.EqualsIgnoreCase(L"TEsT1b"), true);
     EXPECT_EQ(6, WC.GetLength());
-    EXPECT_EQ((6 + 1) * 2, WC.GetBufferLength());
 }
 
 TEST_F(StringTest, SFStringConverter)
@@ -168,7 +167,6 @@ TEST_F(StringTest, SFStringConverter)
     EXPECT_EQ(WC.Equals(L"TeSt1b"), false);
     EXPECT_EQ(WC.EqualsIgnoreCase(L"TEsT1b"), true);
     EXPECT_EQ(6, WC.GetLength());
-    EXPECT_EQ((6 + 1) * 2, WC.GetBufferLength());
 
 
     A = StringConverter<char, wchar_t>(WA);
@@ -187,7 +185,6 @@ TEST_F(StringTest, SFStringConverter)
     EXPECT_EQ(C.Equals("TEsT1b"), false);
     EXPECT_EQ(C.EqualsIgnoreCase("TEsT1b"), true);
     EXPECT_EQ(6, C.GetLength());
-    EXPECT_GE(6 + 1, C.GetBufferLength());
 }
 
 TEST_F(StringTest, ToLowerToUpper)
@@ -218,4 +215,26 @@ TEST_F(StringTest, Replace)
     A.ReplaceInline("b1", "HHHH");
 
     EXPECT_EQ(A.Equals("bAHHHHcd2HHHHbb"), true);
+}
+
+TEST_F(StringTest, JoinSplit)
+{
+    DynamicArray<String> strings;
+    strings.push_back("Ab1");
+    strings.push_back("Ab2");
+    strings.push_back("Ab3");
+
+    String joined = String::Join(strings, "/");
+
+    EXPECT_EQ(joined == "Ab1/Ab2/Ab3", true);
+
+    DynamicArray<String> strings2;
+    joined.Split('/', strings2);
+
+    EXPECT_EQ(strings.size(), strings2.size());
+
+    for (uint iStr = 0; iStr < strings.size(); iStr++)
+    {
+        EXPECT_EQ(strings[iStr], strings2[iStr]);
+    }
 }

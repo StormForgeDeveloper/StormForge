@@ -41,32 +41,19 @@ namespace SF {
 
 	private:
 
-		// Heap for string operation
-		IHeap* m_pHeap = nullptr;
-
 		// string buffer
 		StaticArray<String,10> m_DecomposedPath;
 
 		// full path string
 		mutable String m_FullPath;
 
-	private:
-
-		void UpdateHeap();
 
 	public:
 		PathString();
 		PathString(const char* strPath);
 		PathString(const String& strPath);
 		PathString(const PathString& path);
-		PathString(IHeap& heap);
-		PathString(IHeap& heap, const char* strPath);
-		PathString(IHeap& heap, const String& strPath);
-		PathString(IHeap& heap, const PathString& path);
 		~PathString();
-
-		IHeap& GetHeap() const { return *m_pHeap; }
-		void SetHeap(IHeap& heap);
 
 		// Set path string
 		Result SetPathString(const char* strPath);

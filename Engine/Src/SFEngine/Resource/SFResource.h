@@ -37,14 +37,11 @@ namespace SF
 		// Resource type
 		StringCrc64 m_ResourceType;
 
-		// heap for resource
-		IHeap& m_Heap;
-
 		// Resource creation call stack track
 		CallTrack m_CallTrack;
 
 	public:
-		Resource(IHeap& heap, StringCrc64 resType, const CallTrack& callTrack);
+		Resource(StringCrc64 resType, const CallTrack& callTrack);
 		virtual ~Resource();
 
 		StringCrc64 GetPackageName() const { return m_AssetPackageName; }
@@ -58,9 +55,6 @@ namespace SF
 		void SetSourceName(StringCrc64 sourceName) { m_SourceName = sourceName; }
 		// Get source name
 		StringCrc64 GetSourceName() const { return m_SourceName; }
-
-		// Get heap
-		IHeap& GetHeap() { return m_Heap; }
 	};
 
 

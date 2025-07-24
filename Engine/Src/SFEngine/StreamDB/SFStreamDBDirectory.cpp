@@ -188,7 +188,7 @@ namespace SF
 			m_FindRequested = false;
 			if (!RequestStreamListInternal())
 			{
-                m_ResultMessage = MessageData::NewMessage(GetHeap(), Message::PlayInstance::MID_GetStreamListRes, 1024);
+                m_ResultMessage = MessageData::NewMessage(Message::PlayInstance::MID_GetStreamListRes, 1024);
                 assert(!"FIXME");
 				//Message::PlayInstance::GetStreamListRes::Create(m_ResultMessage->GetMessageHeader(), 0, ResultCode::NO_DATA_EXIST,
 				//	ArrayView<const char*>());
@@ -199,7 +199,7 @@ namespace SF
 				for (auto& itString : m_TopicList)
 					TopicList.push_back(itString.data());
 
-                m_ResultMessage = MessageData::NewMessage(GetHeap(), Message::PlayInstance::MID_GetStreamListRes, 1024);
+                m_ResultMessage = MessageData::NewMessage(Message::PlayInstance::MID_GetStreamListRes, 1024);
                 assert(!"FIXME");
      //           Message::PlayInstance::GetStreamListRes::Create(m_ResultMessage->GetMessageHeader(), 0, ResultCode::SUCCESS,
 					//TopicList);
@@ -250,7 +250,7 @@ namespace SF
 			m_ConnectionDirectory = nullptr;
 		}
 
-		m_ConnectionDirectory = new(GetHeap()) Net::ConnectionTCPClient();
+		m_ConnectionDirectory = new Net::ConnectionTCPClient();
 
 		Net::PeerInfo local(NetClass::Client, 0);
 		Net::PeerInfo remote(NetClass::Server, NetAddress(serverAddress), 0);
@@ -324,7 +324,7 @@ namespace SF
         {
             // TODO: change PollMessage interface
             const MessageHeader* pHeader = reinterpret_cast<const MessageHeader*>(itemPtr.data());
-            pIMsg = MessageData::NewMessage(GetHeap(), pHeader->MessageId, pHeader->MessageSize, reinterpret_cast<const uint8_t*>(pHeader));
+            pIMsg = MessageData::NewMessage(pHeader->MessageId, pHeader->MessageSize, reinterpret_cast<const uint8_t*>(pHeader));
             return ResultCode::SUCCESS;
         }
         else

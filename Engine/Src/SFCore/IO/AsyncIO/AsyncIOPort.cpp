@@ -47,17 +47,17 @@ namespace SF {
 			, m_Impl(nullptr)
 		{
 #if KQUEUE
-			m_Impl = new(GetHeap())  KQUEUESystem(GetHeap());
+			m_Impl = new  KQUEUESystem(GetHeap());
 #elif EPOLL
-			m_Impl = new(GetHeap())  EPOLLSystem(GetHeap());
+			m_Impl = new  EPOLLSystem(GetHeap());
 #else
-			m_Impl = new(GetHeap())  IOCPSystem(GetHeap());
+			m_Impl = new  IOCPSystem(GetHeap());
 #endif
 		}
 
 		AsyncIOPortSystem::~AsyncIOPortSystem()
 		{
-			if (m_Impl != nullptr) IHeap::Delete(m_Impl);
+			if (m_Impl != nullptr) delete (m_Impl);
 			m_Impl = nullptr;
 		}
 

@@ -30,14 +30,14 @@ namespace SF
 	CircularBuffer::~CircularBuffer()
 	{
 		if (!m_ExternalBuffer && m_Buffer != nullptr)
-			IHeap::Delete(m_Buffer);
+            m_Heap.Free(m_Buffer);
 		m_Buffer = nullptr;
 	}
 
 	void CircularBuffer::Initialize(size_t bufferSize, uint8_t* externalBuffer)
 	{
 		if (!m_ExternalBuffer && m_Buffer != nullptr)
-			IHeap::Delete(m_Buffer);
+            m_Heap.Free(m_Buffer);
 
 		m_BufferSize = bufferSize;
 		m_Buffer = externalBuffer;
@@ -45,7 +45,7 @@ namespace SF
 		m_ExternalBuffer = externalBuffer != nullptr;
 		if (!m_ExternalBuffer)
 		{
-			m_Buffer = new(m_Heap) uint8_t[m_BufferSize];
+			m_Buffer = reinterpret_cast<uint8_t*>(m_Heap.Alloc(m_BufferSize));
 		}
 
 		m_TailPos = (reinterpret_cast<BufferItem*>(m_Buffer));

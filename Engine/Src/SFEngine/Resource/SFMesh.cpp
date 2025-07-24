@@ -65,7 +65,7 @@ namespace SF
 
 	void Mesh::ClearResource()
 	{
-		IHeap::Delete(m_Data);
+		delete (m_Data);
 		m_Data = nullptr;
 	}
 

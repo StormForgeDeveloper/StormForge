@@ -93,7 +93,7 @@ namespace SF {
 #endif
 		m_ObjectCount.fetch_sub(1, std::memory_order_relaxed);
 
-		IHeap::Delete(pObj);
+		delete pObj;
 	}
 
 	void SharedObjectManager::RegisterSharedObject(SharedObject* pSharedObject)

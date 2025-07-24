@@ -72,7 +72,7 @@ namespace SF {
 	{
 		ObjectItem *pMemItem = nullptr;
 #if SF_OBJECT_POOL_USE_DIRECTALLOCATION
-	pMemItem = new((void*)new(GetHeap()) uint8_t[m_AllocSize]) ObjectItem();
+	pMemItem = new((void*)new uint8_t[m_AllocSize]) ObjectItem();
 #else
 	pMemItem = m_FreeList;
 	if (pMemItem == nullptr)

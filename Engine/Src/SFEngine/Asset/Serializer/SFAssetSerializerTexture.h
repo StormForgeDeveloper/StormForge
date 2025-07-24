@@ -50,7 +50,7 @@ namespace SF
 
 
 	public:
-		AssetSerializerTexture(IHeap& heap);
+		AssetSerializerTexture();
 		virtual ~AssetSerializerTexture();
 
 
@@ -58,7 +58,7 @@ namespace SF
 		virtual Result Serialize(IOutputStream& stream, ResourcePtr& res) override;
 
 		// Desterialize stream
-		virtual Result Deserialize(IHeap& heap, IInputStream& stream, ResourcePtr& res) override;
+		virtual Result Deserialize(IInputStream& stream, ResourcePtr& res) override;
 	};
 
 

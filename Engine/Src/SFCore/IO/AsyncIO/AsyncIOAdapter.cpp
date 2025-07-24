@@ -192,7 +192,7 @@ namespace AsyncIO {
 		}
 
 		if (pReadBuffer != nullptr)
-			IHeap::Delete(pReadBuffer);
+			delete (pReadBuffer);
 
 		return result;
 	}

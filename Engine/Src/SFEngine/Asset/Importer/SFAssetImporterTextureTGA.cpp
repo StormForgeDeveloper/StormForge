@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2018 Kyungkun Ko
 // 
@@ -610,14 +610,14 @@ namespace SF
 		auto pTGAFormatDesc = ImplTGA::GetTGAFormatDescriptor(tga.hdr.imageType, tga.hdr.bitPerPixel);
 		if (pTGAFormatDesc == nullptr)
 		{
-			IHeap::Delete(palette);
+			delete (palette);
 			return ResultCode::NOT_SUPPORTED_FORMAT;
 		}
 
-		auto newRes = new(context.GetHeap()) Texture(context.GetHeap(), (const char*)context.GetSource());
+		auto newRes = new  Texture((const char*)context.GetSource());
 		if (newRes == nullptr)
 		{
-			IHeap::Delete(palette);
+			delete (palette);
 			return ResultCode::OUT_OF_MEMORY;
 		}
 
@@ -642,7 +642,7 @@ namespace SF
 		auto imageDataOffset = TGA_IMG_DATA_OFFSET(tga);
 		if (imageDataOffset < tga.GetCurrentOffset())
 		{
-			IHeap::Delete(palette);
+			delete (palette);
 			Assert(false);
 			return ResultCode::UNEXPECTED;
 		}
@@ -665,7 +665,7 @@ namespace SF
 		uint8_t* pReadBuffer = nullptr;
 		if (rowByteSize > widthSize)
 		{
-			IHeap::Delete(palette);
+			delete (palette);
 			Assert(false);
 			newRes->UnlockImageData();
 			return ResultCode::UNEXPECTED;
@@ -681,7 +681,7 @@ namespace SF
 		}
 
 
-		IHeap::Delete(palette);
+		delete (palette);
 
 		return ResultCode::SUCCESS;
 	}

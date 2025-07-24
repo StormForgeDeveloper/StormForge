@@ -197,7 +197,7 @@ namespace SF
 		if (result != VK_SUCCESS)
 		{
 			ReportVKError(result);
-			IHeap::Delete(pDevice);
+			delete (pDevice);
 			return nullptr;
 		}
 

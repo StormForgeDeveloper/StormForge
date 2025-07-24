@@ -20,6 +20,7 @@
 #include "Platform/SFStackWalker.h"
 #include "Platform/SFStackWalkerComponent.h"
 #include "Service/SFService.h"
+#include "Util/SFStringConverter.h"
 
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
@@ -126,7 +127,8 @@ namespace SF {
 			{
 				if( symbol )
 				{
-					SFLog(System, Info, "{0}:{1}", (const wchar_t*)symbolInfo.Name, (uint32_t)lineInfo.LineNumber );
+                    StringConverter<char, wchar_t> converted((const wchar_t*)symbolInfo.Name);
+					SFLog(System, Info, "{0}:{1}", (const String&)converted, (uint32_t)lineInfo.LineNumber );
 				}
 				else
 				{
@@ -648,14 +650,14 @@ void StackWalkerImpl::CaptureCallStack(CallStackTrace& stackTrace, void** stackB
 	{
 		if (stm_pInstance == nullptr)
 		{
-			stm_pInstance = new(GetSystemHeap()) StackWalkerImpl;
+			stm_pInstance = new StackWalkerImpl;
 			stm_pInstance->Initialize();
 		}
 	}
 
 	StackWalker::~StackWalker()
 	{
-		GetSystemHeap().Delete(stm_pInstance);
+		delete stm_pInstance;
 		stm_pInstance = nullptr;
 	}
 
@@ -672,7 +674,7 @@ void StackWalkerImpl::CaptureCallStack(CallStackTrace& stackTrace, void** stackB
 		if (stm_pInstance == nullptr)
 			return;
 
-		IHeap::Delete(stm_pInstance);
+		delete (stm_pInstance);
 		stm_pInstance = nullptr;
 	}
 

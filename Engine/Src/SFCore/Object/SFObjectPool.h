@@ -121,7 +121,7 @@ namespace SF {
 	class ObjectPoolT : public ObjectPool
 	{
 	public:
-		ObjectPoolT(IHeap& heap)
+		ObjectPoolT(IHeap& heap = GetSystemHeap())
 			:ObjectPool(heap, sizeof(ObjectType))
 		{
 		}
@@ -310,7 +310,7 @@ namespace SF {
 
 	#define SF_OBJECTPOOL_IMPLEMENT(className) \
 		namespace SF {\
-		ObjectPoolMTT<className>* ObjectPoolObjectT<className>::stm_ObjectPool = new(GetEngineHeap()) ObjectPoolMTT<className>(GetSystemHeap()); \
+		ObjectPoolMTT<className>* ObjectPoolObjectT<className>::stm_ObjectPool = new ObjectPoolMTT<className>(GetSystemHeap()); \
 		};\
 
 

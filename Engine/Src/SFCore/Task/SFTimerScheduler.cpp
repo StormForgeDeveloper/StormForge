@@ -28,10 +28,9 @@ namespace SF {
 	//	
 	//
 
-	TimerScheduler::TimerScheduler(IHeap& heap)
+	TimerScheduler::TimerScheduler()
 		: m_FailSafeTimerTickInterval(500)
 		, m_AssertOnInvalidTickTime(false)
-		, m_TimerMap(heap)
 	{
 	}
 

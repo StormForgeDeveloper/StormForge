@@ -88,7 +88,7 @@ namespace SF {
 		template<class ComponentType>
 		ComponentType* AddComponent()
 		{
-			auto newComponent = new(GetHeap()) ComponentType;
+			auto newComponent = new ComponentType;
 			AddComponent(newComponent);
 			return newComponent;
 		}
@@ -96,7 +96,7 @@ namespace SF {
 		template<class ComponentType, class ...ArgTypes>
 		ComponentType* AddComponent(ArgTypes... args)
 		{
-			auto newComponent = new(GetHeap()) ComponentType(args...);
+			auto newComponent = new ComponentType(args...);
 			AddComponent(newComponent);
 			return newComponent;
 		}

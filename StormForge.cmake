@@ -150,19 +150,17 @@ list(APPEND THIRDPARTY_LIBS jansson)
 #find_package(avro-c CONFIG REQUIRED)
 list(APPEND THIRDPARTY_LIBS avro)
 
-find_package(PNG CONFIG REQUIRED)
-list(APPEND THIRDPARTY_LIBS PNG::PNG)
-#list(APPEND THIRDPARTY_LIBS png16)
-#list(APPEND THIRDPARTY_LIBS ${PNG_LIBRARY})
+# find_package(PNG CONFIG REQUIRED)
+# list(APPEND THIRDPARTY_LIBS PNG::PNG)
 
 #find_package(jasper CONFIG REQUIRED)
 list(APPEND THIRDPARTY_LIBS jasper)
 
-find_package(OpenEXR CONFIG REQUIRED)
-list(APPEND THIRDPARTY_LIBS OpenEXR::OpenEXR OpenEXR::Iex OpenEXR::IlmThread OpenEXR::OpenEXR OpenEXR::OpenEXRCore OpenEXR::OpenEXRUtil)
+# find_package(OpenEXR CONFIG REQUIRED)
+# list(APPEND THIRDPARTY_LIBS OpenEXR::OpenEXR OpenEXR::Iex OpenEXR::IlmThread OpenEXR::OpenEXR OpenEXR::OpenEXRCore OpenEXR::OpenEXRUtil)
 
-find_package(libjpeg-turbo CONFIG REQUIRED)
-list(APPEND THIRDPARTY_LIBS jpeg $<IF:$<TARGET_EXISTS:libjpeg-turbo::turbojpeg>,libjpeg-turbo::turbojpeg,libjpeg-turbo::turbojpeg-static>)
+# find_package(libjpeg-turbo CONFIG REQUIRED)
+# list(APPEND THIRDPARTY_LIBS jpeg $<IF:$<TARGET_EXISTS:libjpeg-turbo::turbojpeg>,libjpeg-turbo::turbojpeg,libjpeg-turbo::turbojpeg-static>)
 
 find_package(Freetype CONFIG REQUIRED)
 #unlike usage this doesn't work

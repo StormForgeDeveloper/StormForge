@@ -48,9 +48,8 @@ namespace SF {
 		//
 
 		template<class KeyType, class ValueType>
-		DualSortedMap<KeyType, ValueType>::DualSortedMap(IHeap& memoryManager)
-			: m_Heap(memoryManager)
-			, m_ReadRoot(nullptr)
+		DualSortedMap<KeyType, ValueType>::DualSortedMap()
+			: m_ReadRoot(nullptr)
 			, m_ReadIndex(0)
 			, m_PrevReadRoot(nullptr)
 			, m_WriteRoot(nullptr)
@@ -67,7 +66,7 @@ namespace SF {
 				m_ReadCount[iVal] = 0;
 			}
 
-			m_pNodePool = new(GetHeap()) ObjectPoolT<MapNode>(GetHeap());
+			m_pNodePool = new ObjectPoolT<MapNode>;
 		}
 
 		template<class KeyType, class ValueType>
@@ -77,7 +76,7 @@ namespace SF {
 
 			if (m_pNodePool != nullptr)
 			{
-				IHeap::Delete(m_pNodePool);
+				delete (m_pNodePool);
 			}
 		}
 

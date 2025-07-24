@@ -266,7 +266,7 @@ namespace Net {
 	{
 		m_bufRecvTem.resize(Const::PACKET_SIZE_MAX * 2);
 
-		//m_NetIOAdapter.SetWriteQueue(new(GetHeap()) WriteBufferQueue(GetHeap()));
+		//m_NetIOAdapter.SetWriteQueue(new WriteBufferQueue(GetHeap()));
 
 		SetNetCtrlAction(NetCtrlCode_Ack, &m_HandleAck);
 		SetNetCtrlAction(NetCtrlCode_Nack, &m_HandleNack);
@@ -287,7 +287,7 @@ namespace Net {
 			m_NetIOAdapter.CloseSocket();
 		}
 
-		//if (m_NetIOAdapter.GetWriteQueue()) IHeap::Delete(m_NetIOAdapter.GetWriteQueue());
+		//if (m_NetIOAdapter.GetWriteQueue()) delete (m_NetIOAdapter.GetWriteQueue());
 	}
 
 

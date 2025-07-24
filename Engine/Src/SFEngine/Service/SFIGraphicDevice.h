@@ -84,7 +84,7 @@ namespace SF
 			auto pCmd = new(pBuffer.data()) CommandType();
 			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer.data());
 
-			TaskPtr pTask = new(GetHeap()) CommandNotificationTask;
+			TaskPtr pTask = new CommandNotificationTask;
 			pCmd->SetNotificationTask(pTask);
 
             pBuffer.Reset();
@@ -103,7 +103,7 @@ namespace SF
 			auto pCmd = new(pBuffer.data()) CommandType(args...);
 			assert((uintptr_t)pCmd == (uintptr_t)pBuffer.data());
 
-			TaskPtr pTask = new(GetHeap()) CommandNotificationTask;
+			TaskPtr pTask = new CommandNotificationTask;
 			pCmd->SetNotificationTask(pTask);
 
             pBuffer.Reset();

@@ -29,10 +29,8 @@ namespace SF
 	//
 
 
-	AssetSerializer::AssetSerializer(IHeap& heap, const StringCrc64& name)
+	AssetSerializer::AssetSerializer(const StringCrc64& name)
 		: m_Name(name)
-		, m_Heap(heap)
-		, m_AssetTypes(m_Heap)
 	{
 	}
 
@@ -58,7 +56,7 @@ namespace SF
 
 
 	// Desterialize stream
-	Result AssetSerializer::Deserialize(IHeap& heap, IInputStream& stream, ResourcePtr& res)
+	Result AssetSerializer::Deserialize(IInputStream& stream, ResourcePtr& res)
 	{
 		StringCrc64 sourceName;
 		Result result = stream >> sourceName;

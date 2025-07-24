@@ -295,7 +295,7 @@ namespace SF
 		}
 
 		// 
-		m_Thread.reset(new(GetHeap()) FunctorTickThread([this](Thread* pThread)
+		m_Thread.reset(new FunctorTickThread([this](Thread* pThread)
 			{
 				if (!m_Client.IsInitialized())
 				{
@@ -412,7 +412,7 @@ namespace SF
 		if (eventId == 0)
 			eventId = m_EventId.fetch_add(1, MemoryOrder::release) + 1;
 
-		auto newEvent = new(GetSystemHeap()) TelemetryEventAvro(GetSystemHeap(), this, eventId, eventName, *itSchema->second);
+		auto newEvent = new TelemetryEventAvro(GetSystemHeap(), this, eventId, eventName, *itSchema->second);
 
         if (newEvent)
         {

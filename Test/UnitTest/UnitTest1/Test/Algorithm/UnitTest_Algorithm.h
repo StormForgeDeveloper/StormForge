@@ -62,7 +62,7 @@ public:
 	void SetupRandomTestValue()
 	{
 		numberOfTest = MAX_TEST_VALUE;
-		TestValues = new(GetHeap()) int[MAX_TEST_VALUE];
+		TestValues = new int[MAX_TEST_VALUE];
 		for (int iTest = 0; iTest < MAX_TEST_VALUE; iTest++)
 		{
 			TestValues[iTest] = rand() % MAX_TEST_VALUE;
@@ -72,7 +72,7 @@ public:
 	void SetupReverseSequencialTestValue()
 	{
 		numberOfTest = MAX_TEST_VALUE;
-		TestValues = new(GetHeap()) int[MAX_TEST_VALUE];
+		TestValues = new int[MAX_TEST_VALUE];
 		for (int iTest = 0; iTest < MAX_TEST_VALUE; iTest++)
 		{
 			TestValues[iTest] = MAX_TEST_VALUE - iTest;
@@ -82,7 +82,7 @@ public:
 	void SetupSequencialTestValue()
 	{
 		numberOfTest = MAX_TEST_VALUE;
-		TestValues = new(GetHeap()) int[MAX_TEST_VALUE];
+		TestValues = new int[MAX_TEST_VALUE];
 		for (int iTest = 0; iTest < MAX_TEST_VALUE; iTest++)
 		{
 			TestValues[iTest] = iTest+1;
@@ -95,7 +95,7 @@ public:
 		std::for_each( m_Threads.begin(), m_Threads.end(), []( SF::Thread* pThread )
 		{
 			if( pThread ) pThread->Stop( true );
-			SF::IHeap::Delete(pThread);
+			delete (pThread);
 		});
 		m_Threads.clear();
 	}
@@ -114,7 +114,7 @@ public:
 		MyTestBase::TearDown();
 
 		StopAllThread();
-		SF::IHeap::Delete(TestValues);
+		delete (TestValues);
 		TestValues = nullptr;
 	}
 };

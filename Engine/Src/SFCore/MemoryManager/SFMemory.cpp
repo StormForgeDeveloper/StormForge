@@ -77,6 +77,8 @@ namespace SF {
 //	Overriding of std memory operators
 //
 
+#if SF_USE_IHEAP_NEW
+
 void* operator new(size_t size, SF::IHeap& heap)
 {
 	return heap.Alloc(size);
@@ -96,6 +98,8 @@ void operator delete[](void* pBuff, SF::IHeap& heap) noexcept
 {
 	heap.Free(pBuff);
 }
+
+#endif // SF_USE_IHEAP_NEW
 
 //#define SF_OVERRIDE_NEW
 

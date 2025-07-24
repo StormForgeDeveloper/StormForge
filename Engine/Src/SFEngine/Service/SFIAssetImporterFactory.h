@@ -44,7 +44,7 @@ namespace SF
 		template<class AssetImporterType>
 		Result RegisterImporter()
 		{
-			AssetImporterType *pImporter = new(GetHeap()) AssetImporterType(GetHeap());
+			AssetImporterType *pImporter = new AssetImporterType(GetHeap());
 			return RegisterImporter(pImporter);
 		}
 

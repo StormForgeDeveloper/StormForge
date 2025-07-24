@@ -25,6 +25,7 @@ namespace SF.Net
 		protected SF.IEndpoint? m_Endpoint = null;
 
 		public SF.IEndpoint? Endpoint { get { return m_Endpoint; } set { m_Endpoint = value; } }
+        public SF.EntityUID DestEntityUID { get; set; } = SF.EntityUID.Empty;
 
         public RPCAdapter()
 		{
@@ -62,7 +63,13 @@ namespace SF.Net
             };
 
             // try to returning message to destination target directly
-            if (messageHeader.MessageId.MessageType == EMessageType.Result && messageHeader.TransactionId.EntityUID != 0)
+            if (DestEntityUID.IsValid)
+            {
+                // Service::ServerConfig->ServerEndpointAddress.Channel
+                string destTopic = $"ent_{DestEntityUID.UID:X8}";
+                hr = m_Endpoint.SendMessage(destTopic, ref messageHeader, builder);
+            }
+            else if (messageHeader.MessageId.MessageType == EMessageType.Result && messageHeader.TransactionId.EntityUID != 0)
             {
                 // Service::ServerConfig->ServerEndpointAddress.Channel
                 EntityUID requesterUID = new EntityUID(transactionId.EntityUID);

@@ -50,7 +50,7 @@ namespace Util {
 
 		// Get Filename without extension
 		static String GetFileNameWithoutExt(const String& strFilePath);
-		static String GetFileNameWithoutExt(IHeap& heap, const char* strFilePath);
+		static String GetFileNameWithoutExt(const char* strFilePath);
 
         static String WithoutExt(const char* strFilePath);
 

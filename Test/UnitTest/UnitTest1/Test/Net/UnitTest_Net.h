@@ -41,7 +41,7 @@ public:
 	// Remember that SetUp() is run immediately before a test starts.
 	virtual void SetUp()
 	{
-        m_MemoryEndpoint = new(SF::GetSystemHeap()) SF::MemoryEndpoint();
+        m_MemoryEndpoint = new SF::MemoryEndpoint();
 		MyTestBase::SetUp();
 	}
 

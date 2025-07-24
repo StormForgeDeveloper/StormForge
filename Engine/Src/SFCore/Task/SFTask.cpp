@@ -43,8 +43,6 @@ namespace SF {
 	Task::Task()
 		: m_TaskState(State::Idle)
 		, m_FinishedEventFired(true)
-		, m_TaskFinishedHandlers(GetSystemHeap())
-		, m_TaskTickedHandlers(GetSystemHeap())
 	{
 	}
 
@@ -52,8 +50,6 @@ namespace SF {
 	Task::Task(TaskFinishedEventDelegate&& pEventHandler)
 		: m_TaskState(State::Idle)
 		, m_FinishedEventFired(true)
-		, m_TaskFinishedHandlers(GetSystemHeap())
-		, m_TaskTickedHandlers(GetSystemHeap())
 	{
 		m_TaskFinishedHandlers.AddDelegate(Forward<TaskFinishedEventDelegate>(pEventHandler));
 	}

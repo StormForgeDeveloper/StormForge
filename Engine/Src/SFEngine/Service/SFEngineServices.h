@@ -20,7 +20,7 @@
 #include "Service/SFNetSystemService.h"
 #include "Service/SFIAssetImporterFactory.h"
 #include "Service/SFIAssetSerializerFactory.h"
-#include "Service/SFResourceManagerService.h"
+//#include "Service/SFResourceManagerService.h"
 #include "Service/SFIGraphicDevice.h"
 
 
@@ -103,7 +103,7 @@ namespace SF {
 			else
 			{
 				// This function can be called in the object destructor, so we need to use some global memory manager
-				EngineTaskPtr pNewTask = new(GetEngineHeap()) SF::EngineTaskT<Func>(tickGroup, func);
+				EngineTaskPtr pNewTask = new SF::EngineTaskT<Func>(tickGroup, func);
 				pNewTask->Request();
 				return std::forward<EngineTaskPtr>(pNewTask);
 			}

@@ -89,7 +89,7 @@ namespace AsyncIO {
 		for (auto& itWorker : m_Workers)
 		{
 			itWorker->Stop();
-			IHeap::Delete(itWorker);
+			delete (itWorker);
 		}
 		m_Workers.Clear();
 

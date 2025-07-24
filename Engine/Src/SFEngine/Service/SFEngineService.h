@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -39,7 +39,7 @@ namespace SF {
 		extern ServiceInstance<NetSystemService> NetSystem;
 		extern ServiceInstance<IAssetImporterFactory> AssetImporterFactory;
 		extern ServiceInstance<IAssetSerializerFactory> AssetSerializerFactory;
-		extern ServiceInstance<IResourceManagerService> ResourceManager;
+		//extern ServiceInstance<IResourceManagerService> ResourceManager;
 
 	};
 

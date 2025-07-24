@@ -182,7 +182,7 @@ namespace Net {
 	// called when send completed
 	Result SocketIO::OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE *pIOBuffer)
 	{
-		IHeap::Delete(pIOBuffer);
+		delete (pIOBuffer);
 		DecPendingSendCount();
 		return ResultCode::SUCCESS;
 	}
@@ -205,7 +205,7 @@ namespace Net {
 		ScopeContext hr([&pRecvBuffer](Result hr)
 			{
 				SFLog(Net, Debug4, "SocketIOUDP::PendingRecv hr:{0}", hr);
-				IHeap::Delete(pRecvBuffer);
+				delete (pRecvBuffer);
 			});
 		Result hrErr = ResultCode::SUCCESS;
 		m_LastPendingRecvResult = ResultCode::SUCCESS;
@@ -235,7 +235,7 @@ namespace Net {
 
 			if (pRecvBuffer == nullptr)
 			{
-				pRecvBuffer = new(GetSystemHeap()) IOBUFFER_READ;
+				pRecvBuffer = new IOBUFFER_READ;
 				hr = pRecvBuffer->SetPendingTrue();
 				if (!hr.IsSuccess())
 				{
@@ -407,7 +407,7 @@ namespace Net {
 		SF_SOCKET sockAccept = INVALID_SOCKET;
 		socklen_t iOptValue = 0;
 
-		pAcceptInfo = new(GetIOHeap()) IOBUFFER_ACCEPT;
+		pAcceptInfo = new IOBUFFER_ACCEPT;
 		netMem(pAcceptInfo);
 
 		memset(pAcceptInfo, 0, sizeof(IOBUFFER_ACCEPT));
@@ -488,7 +488,7 @@ namespace Net {
 		if (GetPendingRecvCount() > 0)
 			return ResultCode::SUCCESS;
 
-		pRecvBuffer = new(GetSystemHeap()) IOBUFFER_READ;
+		pRecvBuffer = new IOBUFFER_READ;
 		hr = pRecvBuffer->SetPendingTrue();
 		if (hr.IsFailure())
 			return ResultCode::SUCCESS;
@@ -503,7 +503,7 @@ namespace Net {
 			// Failed, release pending flag
 			pRecvBuffer->SetPendingFalse();
 			DecPendingRecvCount();
-			IHeap::Delete(pRecvBuffer);
+			delete (pRecvBuffer);
 		}
 		else
 		{

@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2013 StormForge
 // 
@@ -45,8 +45,6 @@ class MyTestBase : public testing::Test
 {
 public:
 	
-	SF::Heap m_Heap;
-
 	SF::String m_DataPath;
 
 	Json::Value m_ConfigJson;
@@ -58,7 +56,6 @@ protected:
 
 public:
 	MyTestBase()
-		: m_Heap("testHeap", SF::GetSystemHeap())
 	{
 	}
 
@@ -75,13 +72,11 @@ public:
 		std::for_each(m_Threads.begin(), m_Threads.end(), [](SF::Thread* pThread)
 		{
 			if (pThread) pThread->Stop(true);
-			SF::IHeap::Delete(pThread);
+			delete (pThread);
 		});
 		m_Threads.clear();
 	}
 
-
-	SF::IHeap& GetHeap() { return *m_Heap.get(); }
 
 	// Remember that SetUp() is run immediately before a test starts.
 	virtual void SetUp();

@@ -264,7 +264,7 @@ namespace SF {
             StringConverter<char, std::filesystem::path::value_type> converter;
 
             String fileExt = converter.Convert(ext.c_str());
-            if (!fileExt.EndsWith("log", true) && !fileExt.EndsWith("dmp", true))
+            if (!fileExt.EndsWith("log") && !fileExt.EndsWith("dmp"))
                 continue;
 
             std::filesystem::file_time_type fileTime = itFile.last_write_time();

@@ -46,8 +46,8 @@ TEST_F(MovementTest, ActorMovementSimple)
 	//uint32_t recvFrame = 0;
 	ActorMovement replicatedMove;
 
-	SharedPointerT<SendingActorMovementManager> sendingMove = new(GetHeap()) SendingActorMovementManager;
-	SharedPointerT <ReceivedActorMovementManager> receivedMove = new(GetHeap()) ReceivedActorMovementManager;
+	SharedPointerT<SendingActorMovementManager> sendingMove = new SendingActorMovementManager;
+	SharedPointerT <ReceivedActorMovementManager> receivedMove = new ReceivedActorMovementManager;
 
 	int iSrcFrame = 0;
 	int iDestFrame = 0;

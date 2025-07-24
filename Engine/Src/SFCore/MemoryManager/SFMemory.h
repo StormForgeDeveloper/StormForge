@@ -112,9 +112,16 @@ namespace SF {
 
 } // namespace SF
 
+#ifndef SF_USE_IHEAP_NEW
+#define SF_USE_IHEAP_NEW 0
+#endif
+
+#if SF_USE_IHEAP_NEW
 
 void* operator new(size_t size, SF::IHeap& heap);
 void operator delete(void* pBuff, SF::IHeap& heap) noexcept;
 
 void* operator new[] (size_t size, SF::IHeap& heap);
 void operator delete[](void* pBuff, SF::IHeap& heap) noexcept;
+
+#endif // SF_USE_IHEAP_NEW

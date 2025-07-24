@@ -200,7 +200,7 @@ namespace SF
 		// How can we delete them?
 		for (auto& itPoolItem : m_MemoryPoolbySize)
 		{
-			IHeap::Delete(itPoolItem.pMemoryPool);
+			delete (itPoolItem.pMemoryPool);
 		}
 	}
 

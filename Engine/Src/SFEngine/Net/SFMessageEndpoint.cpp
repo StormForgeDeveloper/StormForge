@@ -47,7 +47,7 @@ namespace SF {
 		m_EndpointAddress.MessageServer = endpointServer;
 		m_EndpointAddress.Channel = endpointChannel;
 
-		m_TargetEndpoint = new(GetSystemHeap()) StreamDBProducer;
+		m_TargetEndpoint = new StreamDBProducer;
 		hr = m_TargetEndpoint->Initialize(endpointServer, endpointChannel);
 
 		return hr;

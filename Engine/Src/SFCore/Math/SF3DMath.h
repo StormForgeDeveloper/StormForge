@@ -322,3 +322,86 @@ namespace SF {
     using Box2i = Box<Vector2i>;
     using Box3i = Box<Vector3i>;
 }
+
+
+template <>
+struct std::formatter<SF::Vector2i>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::Vector2i& value, FormatContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "({},{})", value.x, value.y);
+    }
+};
+
+template <>
+struct std::formatter<SF::Vector3>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::Vector3& value, FormatContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "({},{},{})", value.x, value.y, value.z);
+    }
+};
+
+template <>
+struct std::formatter<SF::Vector3i>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::Vector3i& value, FormatContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "({},{},{})", value.x, value.y, value.z);
+    }
+};
+
+template <>
+struct std::formatter<SF::Vector4>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::Vector4& value, FormatContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "({},{},{},{})", value.x, value.y, value.z, value.w);
+    }
+};
+
+
+template <>
+struct std::formatter<SF::Quaternion>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::Quaternion& value, FormatContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "({},{},{},{})", value.x, value.y, value.z, value.w);
+    }
+};
+

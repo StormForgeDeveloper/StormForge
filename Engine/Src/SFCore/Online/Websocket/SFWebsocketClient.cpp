@@ -23,10 +23,8 @@ namespace SF
 	//	class WebsocketClient
 	//
 
-	WebsocketClient::WebsocketClient(IHeap& heap)
-		: super(heap, "WSClient")
-        , m_AdditionalHeader(heap)
-        , m_RecvDeletates(heap)
+	WebsocketClient::WebsocketClient()
+		: super("WSClient")
 	{
 		m_ServerPath = "/";
 		m_NumThread = 1;

@@ -26,9 +26,9 @@ using namespace ::SF;
 
 
 
-static void TestSortedMap_PerfTest(IHeap& heap, unsigned numberOfTest, const int *TestValues)
+static void TestSortedMap_PerfTest(unsigned numberOfTest, const int *TestValues)
 {
-	SortedMap<uint,uint> sortedMap(heap);
+	SortedMap<uint,uint> sortedMap;
 	TimeStampMS start, end;
 
 	start = Util::Time.GetRawTimeMs();
@@ -88,7 +88,7 @@ static void TestSortedMap_PerfTest(IHeap& heap, unsigned numberOfTest, const int
 
 TEST_F(AVLTreeTest, SortedMapPerformance)
 {
-	TestSortedMap_PerfTest(GetHeap(), MAX_TEST_VALUE, TestValues.data());
+	TestSortedMap_PerfTest(MAX_TEST_VALUE, TestValues.data());
 }
 
 

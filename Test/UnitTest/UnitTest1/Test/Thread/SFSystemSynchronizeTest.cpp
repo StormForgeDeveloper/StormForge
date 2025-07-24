@@ -53,7 +53,7 @@ TEST_F(SystemSynchronizationTest, Mutex)
 
 	for (uint worker = 0; worker < NUM_THREAD; worker++)
 	{
-		auto pWorker = new(GetHeap()) FunctorThread([&dataLock, &testData, &testIndex, &workerCounter, worker, TEST_LENGTH](Thread* pThread)
+		auto pWorker = new FunctorThread([&dataLock, &testData, &testIndex, &workerCounter, worker, TEST_LENGTH](Thread* pThread)
 		{
 			workerCounter.fetch_add(1, std::memory_order_relaxed);
 			for (uint64_t iTest = 0; iTest < TEST_LENGTH; iTest++)
@@ -95,7 +95,7 @@ TEST_F(SystemSynchronizationTest, CriticalSection)
 
 	for (uint worker = 0; worker < NUM_THREAD; worker++)
 	{
-		auto pWorker = new(GetHeap()) FunctorThread([&dataLock, &testData, &testIndex, &workerCounter, worker, TEST_LENGTH](Thread* pThread)
+		auto pWorker = new FunctorThread([&dataLock, &testData, &testIndex, &workerCounter, worker, TEST_LENGTH](Thread* pThread)
 		{
 			workerCounter.fetch_add(1, std::memory_order_relaxed);
 			for (uint64_t iTest = 0; iTest < TEST_LENGTH; iTest++)
@@ -138,7 +138,7 @@ TEST_F(SystemSynchronizationTest, Event)
 
 	for (uint worker = 0; worker < NUM_THREAD; worker++)
 	{
-		auto pWorker = new(GetHeap()) FunctorThread([&dataEvent, &workDoneEvent, &testData, &testIndex, &workerCounter, worker, TEST_LENGTH](Thread* pThread)
+		auto pWorker = new FunctorThread([&dataEvent, &workDoneEvent, &testData, &testIndex, &workerCounter, worker, TEST_LENGTH](Thread* pThread)
 		{
 			workerCounter.fetch_add(1, std::memory_order_relaxed);
 			for (uint64_t iTest = 0; iTest < TEST_LENGTH; iTest++)

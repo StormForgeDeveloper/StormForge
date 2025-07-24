@@ -25,9 +25,9 @@ namespace SF
     //	Network Message header2
     //
 
-    MessageHeader* MessageHeader::Clone(IHeap& heap)
+    MessageHeader* MessageHeader::Clone()
     {
-        MessageHeader* pNewHeader = reinterpret_cast<MessageHeader*>(heap.Alloc(MessageSize));
+        MessageHeader* pNewHeader = reinterpret_cast<MessageHeader*>(GetSystemHeap().Alloc(MessageSize));
         if (pNewHeader)
         {
             memcpy(pNewHeader, this, MessageSize);

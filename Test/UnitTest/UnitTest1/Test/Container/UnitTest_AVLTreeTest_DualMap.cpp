@@ -30,7 +30,7 @@ TEST_F(AVLTreeTest, DualSortedMapSimple)
 		TestValues[iTest] = MAX_TEST_VALUE - iTest;
 	}
 
-	DualSortedMap<uint,uint> sortedMap(GetHeap());
+	DualSortedMap<uint,uint> sortedMap;
 
 	int64_t order = -1;
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
@@ -171,7 +171,7 @@ TEST_F(AVLTreeTest, DualSortedMapSimple)
 
 TEST_F(AVLTreeTest, DualSortedMapOrderSequential)
 {
-	DualSortedMap<uint,uint> sortedMap(GetHeap());
+	DualSortedMap<uint,uint> sortedMap;
 
 	for (int iTest = 0; iTest < MAX_TEST_VALUE; iTest++)
 	{
@@ -271,7 +271,7 @@ TEST_F(AVLTreeTest, DualSortedMapOrderSequential)
 
 TEST_F(AVLTreeTest, DualSortedMapRandom)
 {
-	DualSortedMap<uint,uint> sortedMap(GetHeap());
+	DualSortedMap<uint,uint> sortedMap;
 
 	// test foreach
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
@@ -351,7 +351,7 @@ TEST_F(AVLTreeTest, DualSortedMapRandom)
 
 TEST_F(AVLTreeTest, DualSortedMapRandomForeach)
 {
-	DualSortedMap<uint,uint> sortedMap(GetHeap());
+	DualSortedMap<uint,uint> sortedMap;
 
 	for (int iTest = numberOfTest - 1; iTest >= 0; iTest--)
 	{
@@ -418,7 +418,7 @@ TEST_F(AVLTreeTest, DualSortedMapRandomForeach)
 
 TEST_F(AVLTreeTest, DualSortedMapThread)
 {
-	DualSortedMap<uint,Atomic<uint>> sortedMap(GetHeap());
+	DualSortedMap<uint,Atomic<uint>> sortedMap;
 	int *Status = new int[numberOfTest];
 
 	memset(Status, 0, sizeof(int)*numberOfTest);
@@ -451,7 +451,7 @@ TEST_F(AVLTreeTest, DualSortedMapThread)
 
 	for (int iThread = 0; iThread < NUM_THREAD; iThread++)
 	{
-		auto thread = new(GetHeap()) FunctorThread(
+		auto thread = new FunctorThread(
 			[&](Thread* pThread)
 			{
 				while (true)

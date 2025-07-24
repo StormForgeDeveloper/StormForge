@@ -23,8 +23,8 @@
 #include "EngineObject/SFEngineObjectManager.h"
 #include "EngineObject/SFEngineTaskManager.h"
 #include "Net/SFNetSystem.h"
-#include "Resource/SFResourceManager.h"
-#include "Graphics/SFGraphicDeviceGLES.h"
+//#include "Resource/SFResourceManager.h"
+//#include "Graphics/SFGraphicDeviceGLES.h"
 #include "Graphics/SFRenderCommand.h"
 
 
@@ -39,7 +39,7 @@ namespace SF {
 		ServiceInstance<NetSystemService> NetSystem;
 		ServiceInstance<IAssetImporterFactory> AssetImporterFactory;
 		ServiceInstance<IAssetSerializerFactory> AssetSerializerFactory;
-		ServiceInstance<IResourceManagerService> ResourceManager;
+		//ServiceInstance<IResourceManagerService> ResourceManager;
 
 		ServiceInstance<VariableFactoryService> VariableFactory;
 	}

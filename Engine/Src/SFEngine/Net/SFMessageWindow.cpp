@@ -43,7 +43,7 @@ namespace Net {
 		, m_uiBaseSequence(0)
 		, m_uiMsgCount(0)
 	{
-		m_pMsgWnd = new(heap) MessageElement[MessageWindow::MESSAGE_QUEUE_SIZE]{};
+		m_pMsgWnd = new MessageElement[MessageWindow::MESSAGE_QUEUE_SIZE]{};
 		for (uint32_t iMsg = 0; iMsg < MessageWindow::MESSAGE_QUEUE_SIZE; iMsg++)
 		{
 			uint32_t expectedSeq = MessageSequence::Normalize(iMsg - MessageWindow::MESSAGE_QUEUE_SIZE); // using 16bit part only
@@ -55,7 +55,7 @@ namespace Net {
 	RecvMsgWindow::~RecvMsgWindow()
 	{
 		ClearWindow();
-		IHeap::Delete(m_pMsgWnd);
+		delete[] (m_pMsgWnd);
 	}
 
 	// Add message

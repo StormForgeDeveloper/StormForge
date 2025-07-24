@@ -39,7 +39,7 @@ using namespace ::SF;
 
 TEST_F(MemoryTest, StackHeap)
 {
-	SharedPointerT<StackHeapT<1024*512>> stackHeap = new(GetHeap()) StackHeapT<1024 * 512>("testStackHeap", GetHeap());
+	SharedPointerT<StackHeapT<1024*512>> stackHeap = new StackHeapT<1024 * 512>("testStackHeap", GetHeap());
 	StaticArray<int*, 512> allocatedList(GetHeap());
 
 	// out of stack allocation
@@ -82,11 +82,11 @@ TEST_F(MemoryTest, StackHeap)
 		if ((allocatedList.size() > 0 && randVal > 50) || stackHeap->GetFreeMemorySize() < minAllocationSize)
 		{
 			auto pDeletePtr = allocatedList.pop_back();
-			IHeap::Delete(pDeletePtr);
+			delete (pDeletePtr);
 		}
 		else
 		{
-			auto pNewPtr = new(*stackHeap.get()) int[randVal % 10];
+            auto pNewPtr = reinterpret_cast<int*>(stackHeap->Alloc(sizeof(int) * randVal % 10));
 			allocatedList.push_back(pNewPtr);
 		}
 
@@ -95,7 +95,7 @@ TEST_F(MemoryTest, StackHeap)
 
 	for (auto itPtr : allocatedList)
 	{
-		IHeap::Delete(itPtr);
+        stackHeap->Free(itPtr);
 	}
 }
 
@@ -103,7 +103,7 @@ TEST_F(MemoryTest, StackHeap_RandomDelete)
 {
 	Heap heapForStack("heapForStack", GetHeap());
 	Heap heapForSortedSet("heapForSortedSet", GetHeap());
-	SharedPointerT<StackHeapT<1024 * 512>> stackHeap = new(heapForStack) StackHeapT<1024 * 512>("testStackHeap", heapForStack);
+	SharedPointerT<StackHeapT<1024 * 512>> stackHeap = new StackHeapT<1024 * 512>("testStackHeap", heapForStack);
 	SortedSet<int*> allocatedList(heapForSortedSet);
 
 	DynamicArray<void*> testList(GetHeap());
@@ -138,7 +138,7 @@ TEST_F(MemoryTest, StackHeap_RandomDelete)
 			Assert(refCount >= 2);
 			unused(refCount);
 			auto pPtr = allocatedList.GetKeyAt(randVal);
-			IHeap::Delete(pPtr);
+			delete (pPtr);
 			allocatedList.Remove(pPtr);
 			auto refCount2 = stackHeap->GetReferenceCount();
 			if (allocatedList.size() > 0)
@@ -157,7 +157,7 @@ TEST_F(MemoryTest, StackHeap_RandomDelete)
 			auto refCount = stackHeap->GetReferenceCount();
 			EXPECT_GE(refCount, 1);
 			//Assert(refCount >= 1);
-			auto pPtr = new(*stackHeap.get()) int[randVal % 10];
+			auto pPtr = reinterpret_cast<int*>(stackHeap->Alloc(sizeof(int) * randVal % 10));
 			auto refCount2 = stackHeap->GetReferenceCount();
 			EXPECT_GE(refCount2, 2);
 			//Assert(refCount2 >= 2);
@@ -170,7 +170,7 @@ TEST_F(MemoryTest, StackHeap_RandomDelete)
 
 	for (auto itPtr : allocatedList)
 	{
-		IHeap::Delete(itPtr);
+        stackHeap->Free(itPtr);
 	}
 	allocatedList.Clear();
 }

@@ -28,6 +28,11 @@ template class SF::SharedPointerT<SF::MessageData>;
 
 namespace SF
 {
+    const char* MessageID::GetNameString() const
+    {
+        // TODO:
+        return nullptr;
+    }
 
     //Result MessageHeader::ValidateChecksum()
     //{
@@ -116,7 +121,7 @@ namespace SF
     //    assert(Crc32 != 0 || payload.size() == 0);
     //}
 
-    //MessageHeader* MessageHeader::Clone(IHeap& heap)
+    //MessageHeader* MessageHeader::Clone()
     //{
     //    MessageHeader* pNewHeader = reinterpret_cast<MessageHeader*>(heap.Alloc(Length));
     //    if (pNewHeader)
@@ -190,13 +195,13 @@ namespace SF
 		GetMessageHeader()->SetSequence(0);
 	}
 
-    MessageData* MessageData::NewMessage(IHeap& heap, const MessageHeader* pHeader)
+    MessageData* MessageData::NewMessage(const MessageHeader* pHeader)
     {
-        return NewMessage(heap, pHeader->GetMessageIDForClone(), pHeader->MessageSize, reinterpret_cast<const uint8_t*>(pHeader));
+        return NewMessage( pHeader->GetMessageIDForClone(), pHeader->MessageSize, reinterpret_cast<const uint8_t*>(pHeader));
     }
 
 	// Initialize message buffer
-	MessageData* MessageData::NewMessage(IHeap& heap, uint32_t uiMsgID, uint uiMsgBufSize, const uint8_t* pData )
+	MessageData* MessageData::NewMessage(uint32_t uiMsgID, uint uiMsgBufSize, const uint8_t* pData )
 	{
 		uint8_t *pBuffer = nullptr;
 		size_t szAllocate = sizeof(PacketHeader) + sizeof(MessageData) + uiMsgBufSize;
@@ -214,7 +219,7 @@ namespace SF
 		}
 
 		void *pPtr = nullptr;
-		pPtr = new(heap) uint8_t[szAllocate];
+		pPtr = new uint8_t[szAllocate];
 		if (pPtr == nullptr)
 			return nullptr;
 
@@ -227,12 +232,12 @@ namespace SF
 		return pMsg;
 	}
 
-	MessageData* MessageData::Clone(IHeap& memoryManager)
+	MessageData* MessageData::Clone()
 	{
 		if( m_pMsgHeader == nullptr || m_pMsgHeader->MessageSize == 0 )
 			return nullptr;
 
-		MessageData* pMessage = NewMessage(memoryManager, m_pMsgHeader->GetMessageID().ID, m_pMsgHeader->MessageSize, (uint8_t*)m_pMsgHeader );
+		MessageData* pMessage = NewMessage(m_pMsgHeader->GetMessageID().ID, m_pMsgHeader->MessageSize, (uint8_t*)m_pMsgHeader );
 		pMessage->GetMessageHeader()->SetSequence(0);
 
 		return pMessage;

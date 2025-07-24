@@ -114,13 +114,11 @@
 #include <mutex>
 
 #include <limits>
-#include <limits.h>
 #include <ctime>
 #include <iomanip>
 #include <fstream>
 #include <algorithm>
 
-#include <time.h>
 #include <memory.h>
 #include <math.h>
 #include <memory>
@@ -140,7 +138,7 @@
 #include <emmintrin.h>
 #include <smmintrin.h>
 #include <immintrin.h>
-
+#include <format>
 
 //////////////////////////////////////////////////
 //
@@ -811,3 +809,86 @@ bool operator == (const sockaddr_in6& op1, const sockaddr_in6& op2);
 template<class DataType> inline bool IsDefaultValue(const DataType& value) { DataType defaultValue{}; return value == defaultValue; }
 
 template<> inline bool IsDefaultValue(const std::function<void()>& value) { return !(bool)value; }
+
+
+template <>
+struct std::formatter<SF::NetClass>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::NetClass& value, FormatContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "{}", (int)value);
+    }
+};
+
+template <>
+struct std::formatter<SF::DurationMS>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::DurationMS& value, FormatContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "{}ms", value.count());
+    }
+};
+
+template <>
+struct std::formatter<SF::DurationSec>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::DurationSec& value, FormatContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "{}sec", value.count());
+    }
+};
+
+template <>
+struct std::formatter<SF::TimeStampMS>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::TimeStampMS& value, FormatContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "{:X}", value.time_since_epoch().count());
+    }
+};
+
+template <>
+struct std::formatter<SF::UTCTimeStampSec>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::UTCTimeStampSec& value, FormatContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "{:X}", value.time_since_epoch().count());
+    }
+};
+
+

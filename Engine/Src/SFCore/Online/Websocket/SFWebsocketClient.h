@@ -70,7 +70,7 @@ namespace SF
 
 	public:
 
-		WebsocketClient(IHeap& heap);
+		WebsocketClient();
 		~WebsocketClient();
 
 		SF_FORCEINLINE bool IsConnected() const { return m_ConnectionState == ConnectionState::Connected; }

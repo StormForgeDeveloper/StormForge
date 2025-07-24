@@ -101,7 +101,7 @@ namespace SF
             return hr;
         }
 
-        m_TelemetryPtr.reset(new(GetSystemHeap()) TelemetryClientAvro());
+        m_TelemetryPtr.reset(new TelemetryClientAvro());
 
         SFLog(Telemetry, Info, "Telemetry initialize: {0}, clientId:{1}", m_Url, m_ClientId);
 

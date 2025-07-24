@@ -85,11 +85,9 @@ namespace SF
 
 	public:
 
-		Websocket(IHeap& heap, const char* name);
+		Websocket(const char* name);
 		Websocket(const Websocket&) = delete;
 		virtual ~Websocket() = default;
-
-		IHeap& GetHeap() const { return m_Heap; }
 
 		SF_FORCEINLINE uint GetNumThread() const { return m_NumThread; }
 		SF_FORCEINLINE void SetNumThread(uint numThread) { m_NumThread = numThread; }
@@ -159,8 +157,6 @@ namespace SF
 		void StartThread();
 
 	protected:
-
-		IHeap& m_Heap;
 
 		String m_Name;
 

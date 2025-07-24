@@ -197,7 +197,7 @@ namespace Net {
     Result ConnectionUDPBase::AllocSendGatherBuffer()
     {
         assert(m_GatheringBuffer == nullptr);
-        m_GatheringBuffer.reset(PacketData::NewPacketData());
+        m_GatheringBuffer.reset(new PacketData);
 
         if (m_bIncludePacketHeader)
         {
@@ -261,7 +261,7 @@ namespace Net {
 			MsgNetCtrlSequenceFrame* pCurrentFrame = nullptr;
 			SharedPointerT<MessageData> pSubframeMessage;
 
-			netCheckPtr(pSubframeMessage = MessageData::NewMessage(GetHeap(), PACKET_NETCTRL_SEQUENCE_FRAME, uint(sizeof(MessageHeader) + sizeof(MsgNetCtrlSequenceFrame) + frameSize)));
+			netCheckPtr(pSubframeMessage = MessageData::NewMessage(PACKET_NETCTRL_SEQUENCE_FRAME, uint(sizeof(MessageHeader) + sizeof(MsgNetCtrlSequenceFrame) + frameSize)));
 
 			// fill up frame header
 			pCurrentFrame = (MsgNetCtrlSequenceFrame*)pSubframeMessage->GetPayloadPtr();
@@ -631,7 +631,7 @@ namespace Net {
                 }
                 else
                 {
-                    MessageDataPtr msgDataPtr = MessageData::NewMessage(GetSystemHeap(), pMsgHeader);
+                    MessageDataPtr msgDataPtr = MessageData::NewMessage(pMsgHeader);
                     // For relay message the message could have sequence which need to be cleared
                     msgDataPtr->GetMessageHeader()->SetSequence(0);
                     msgDataPtr->UpdateChecksumNEncrypt();

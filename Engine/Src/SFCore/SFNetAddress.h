@@ -91,3 +91,66 @@ namespace SF
 #pragma pack(pop)
 
 }
+
+template <>
+struct std::formatter<SF::SockFamily>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::SockFamily& value, FormatContext& ctx) const
+    {
+        static const char* Names[] = {
+            "None",
+            "IPV4",// = AF_INET,
+            "IPV6",// = AF_INET6
+            "Quic",// = Quic
+        };
+
+        constexpr int MaxNames = sizeof(Names)/sizeof(Names[0]);
+
+        return std::format_to(ctx.out(), "{}", Names[std::clamp<int>((int)value, 0, MaxNames)]);
+    }
+};
+
+template <>
+struct std::formatter<SF::SocketType>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::SocketType& value, FormatContext& ctx) const
+    {
+        static const char* Names[] = {
+            "Stream",
+            "DGram"
+        };
+        constexpr int MaxNames = sizeof(Names) / sizeof(Names[0]);
+
+        return std::format_to(ctx.out(), "{}", Names[std::clamp<int>((int)value, 0, MaxNames)]);
+    }
+};
+
+template <>
+struct std::formatter<SF::NetAddress>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::NetAddress& value, FormatContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "({}:{},{})", value.SocketFamily, value.Address, value.Port);
+    }
+};

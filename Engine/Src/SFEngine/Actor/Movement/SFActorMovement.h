@@ -62,3 +62,18 @@ namespace SF
 
 }
 
+template <>
+struct std::formatter<SF::ActorMovement>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::ActorMovement& value, FormatContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "(ActID:{},F:{},LV:{},P:{})", value.ActorId, value.MoveFrame, value.LinearVelocity, value.Position);
+    }
+};

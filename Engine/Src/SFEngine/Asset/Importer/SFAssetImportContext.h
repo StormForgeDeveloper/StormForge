@@ -32,9 +32,6 @@ namespace SF
 	class AssetImportContext
 	{
 	private:
-		// Heap for resource
-		IHeap& m_Heap;
-
 		// input stream
 		IInputStream& m_InputStream;
 
@@ -46,11 +43,8 @@ namespace SF
 
 	public:
 
-		AssetImportContext(IHeap& heap, IInputStream& inputStream, const String& source);
+		AssetImportContext(IInputStream& inputStream, const String& source);
 		virtual ~AssetImportContext();
-
-		// Get heap for resource
-		IHeap& GetHeap() { return m_Heap; }
 
 		// Get input stream
 		IInputStream& GetStream() { return m_InputStream; }

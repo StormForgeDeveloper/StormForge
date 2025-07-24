@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2018 Kyungkun Ko
 // 
@@ -266,7 +266,7 @@ namespace SF
 	{
 		png_structp png = png_create_read_struct_2(PNG_LIBPNG_VER_STRING, 
 			nullptr/*user_error_ptr*/, nullptr/*user_error_fn*/, nullptr/*user_warning_fn*/, 
-			(png_voidp)&context.GetHeap()/*mem_ptr*/, ImplPNG::Func_png_malloc, ImplPNG::Func_png_free);
+			(png_voidp)nullptr/*mem_ptr*/, ImplPNG::Func_png_malloc, ImplPNG::Func_png_free);
 
 		if (png == nullptr)
 			return ResultCode::OUT_OF_MEMORY;
@@ -340,7 +340,7 @@ namespace SF
 		if (pPngFormatDesc == nullptr)
 			return ResultCode::NOT_SUPPORTED_FORMAT;
 
-		auto newRes = new(context.GetHeap()) Texture(context.GetHeap(), (const char*)context.GetSource());
+		auto newRes = new  Texture((const char*)context.GetSource());
 		if (newRes == nullptr)
 		{
 			png_destroy_info_struct(png, &info);
@@ -412,7 +412,7 @@ namespace SF
 					pImage += widthSize; // TODO: this should be same. add check
 				}
 			}
-			IHeap::Delete(pReadBuffer);
+			delete (pReadBuffer);
 		}
 
 		png_destroy_info_struct(png, &info);

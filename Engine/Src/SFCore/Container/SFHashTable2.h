@@ -83,21 +83,17 @@ namespace SF {
 				// Bucket item container
 				ItemContainer	*m_Items;
 
-				IHeap* m_Heap;
-
 				// Constructor
 				Bucket()
-					: m_Heap(nullptr)
 				{
-					m_Items = nullptr;
+                    m_Items = new ItemContainer;
 				}
 
 				// Copy Constructor 
 				Bucket( const Bucket& src )
-					: m_Heap(src.m_Heap)
 				{
-					m_Items = nullptr;
-					(void)(src);
+                    m_Items = new ItemContainer;
+                    (void)(src);
 					// No one use this bucket, while this operation
 					//Assert( !src.m_Lock.IsLocked() );
 					Assert(false);
@@ -107,7 +103,7 @@ namespace SF {
 				// Destructor
 				~Bucket()
 				{
-					if (m_Items != nullptr) IHeap::Delete(m_Items);
+					if (m_Items != nullptr) delete (m_Items);
 				}
 
 				Bucket& operator = ( const Bucket& src )
@@ -130,13 +126,6 @@ namespace SF {
 					//m_Items = src.m_Items;
 					Assert(false);
 					return *this;
-				}
-
-				void SetObjectPool(IHeap& memoryManager)
-				{
-					m_Heap = &memoryManager;
-					if (m_Items) memoryManager.Delete(m_Items);
-					m_Items = new(memoryManager) ItemContainer(memoryManager);
 				}
 
 				// validate bucket id
@@ -394,8 +383,6 @@ namespace SF {
 
 		private:
 
-			IHeap& m_Heap;
-
 			// bucket
 			std::vector<Bucket> m_Buckets;
 
@@ -404,9 +391,8 @@ namespace SF {
 
 		public:
 
-			HashTable2( IHeap& memoryManager, INT iBucketCount = 16)
-				: m_Heap(memoryManager)
-				, m_lItemCount(0)
+			HashTable2(INT iBucketCount = 16)
+				: m_lItemCount(0)
 			{
 				SetBucketCount(iBucketCount);
 			}
@@ -422,10 +408,6 @@ namespace SF {
 			void SetBucketCount( size_t iBucketCount )
 			{
 				m_Buckets.resize( iBucketCount );
-				for (uint iBucket = 0; iBucket < m_Buckets.size(); iBucket++)
-				{
-					m_Buckets[iBucket].SetObjectPool(m_Heap);
-				}
 			}
 
 			// Bucket Count

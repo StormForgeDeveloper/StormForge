@@ -194,7 +194,7 @@ namespace Net {
 
 		while(1)
 		{
-			pOver.reset(new(GetSystemHeap()) IOBUFFER_READ);
+			pOver.reset(new IOBUFFER_READ);
 			hrErr = m_NetIOAdapter.PendingRecv(pOver.get());
 			switch ((uint32_t)hrErr)
 			{

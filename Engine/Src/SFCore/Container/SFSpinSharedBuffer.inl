@@ -43,7 +43,7 @@ namespace SF {
 
 			m_BufferCount = Util::NearPowerOf2(BufferCount);
 
-			m_SpinBuffer = new(GetHeap()) Buffer[m_BufferCount];
+			m_SpinBuffer = new Buffer[m_BufferCount];
 			if (m_SpinBuffer == nullptr)
 				return ResultCode::OUT_OF_MEMORY;
 

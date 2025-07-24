@@ -22,6 +22,7 @@ namespace SF {
 	class StringCrc64;
 	class VariableBox;
 
+#if !SF_USE_STD_STRING
 
 	// Format string
 	template<typename CharType, typename SharedStringBufferType>
@@ -29,7 +30,7 @@ namespace SF {
 	inline typename TString<CharType, SharedStringBufferType>::StringType& TString<CharType, SharedStringBufferType>::Format(const CharType* strFormat, ArgTypes... args)
 	{
 		StaticMemoryAllocatorT<2048> Allocator("TempStatic", GetSystemHeap());
-		VariableBox arguments[sizeof...(args)] = { Boxing((IHeap&)Allocator, args)... };
+		VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
 		Format_Internal(strFormat, sizeof...(args), arguments);
 		return *this;
 	}
@@ -40,7 +41,7 @@ namespace SF {
 	inline typename TString<CharType, SharedStringBufferType>::StringType& TString<CharType, SharedStringBufferType>::AppendFormat(const CharType* strFormat, ArgTypes... args)
 	{
 		StaticMemoryAllocatorT<2048> Allocator("TempStatic", GetSystemHeap());
-		VariableBox arguments[sizeof...(args)] = { Boxing((IHeap&)Allocator, args)... };
+		VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
 		AppendFormat_Internal(strFormat, sizeof...(args), arguments);
 		return *this;
 	}
@@ -50,10 +51,11 @@ namespace SF {
 	inline StringBuilder& StringBuilder::AppendFormat(const CharType* strFormat, ArgTypes... args)
 	{
 		StaticMemoryAllocatorT<2048> Allocator("TempStatic", GetSystemHeap());
-		VariableBox arguments[sizeof...(args)] = { Boxing((IHeap&)Allocator, args)... };
+		VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
 		AppendFormat_Internal(strFormat, sizeof...(args), arguments);
 		return *this;
 	}
+#endif ! SF_USE_STD_STRING
 
 }; // namespace SF
 

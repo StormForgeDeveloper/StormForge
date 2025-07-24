@@ -27,7 +27,7 @@
 #include "EngineObject/SFEngineObject.h"
 #include "EngineObject/SFEngineObjectManager.h"
 #include "EngineObject/SFEngineTaskManager.h"
-#include "Graphics/SFRenderCommands.h"
+//#include "Graphics/SFRenderCommands.h"
 #include "Component/SFUnhandledExceptionHandlerComponent.h"
 #include "Util/SFStringCrcComponent.h"
 
@@ -175,7 +175,7 @@ namespace SF
 
 		if (m_InitParameter.UseEngineThread)
 		{
-			m_EngineThread = new(GetHeap()) FunctorThread([this](Thread* pThread)
+			m_EngineThread = new FunctorThread([this](Thread* pThread)
 			{
 				Service::EngineTaskManager->SetEngineThreadID(ThisThread::GetThreadID());
 
@@ -208,7 +208,7 @@ namespace SF
 		if (m_EngineThread != nullptr)
 		{
 			m_EngineThread->Stop(true);
-			IHeap::Delete(m_EngineThread);
+			delete (m_EngineThread);
 		}
 
 		// Engine and render thread should be stopped at this moment
@@ -249,7 +249,7 @@ namespace SF
 
         Service::EngineObjectManager->Update();
         Service::EngineTaskManager->EngineTickUpdate();
-        Service::GraphicDevice->RequestCommand<RenderCommand_KickFrame>(CallTrack());
+        //Service::GraphicDevice->RequestCommand<RenderCommand_KickFrame>(CallTrack());
     }
 
 	bool Engine::StaticTickUpdate()

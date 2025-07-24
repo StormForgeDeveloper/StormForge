@@ -66,23 +66,15 @@ namespace SF
 
 	private:
 
-		// heap for importer
-		IHeap& m_Heap;
-
-
 	public:
-		AssetPackageSerializer(IHeap& heap);
+		AssetPackageSerializer();
 		virtual ~AssetPackageSerializer();
-
-		// Heap
-		IHeap& GetHeap() { return m_Heap; }
-
 
 		// Serialize stream
 		virtual Result Serialize(IOutputStream& stream, AssetPackage& package);
 
 		// Deserialize stream
-		virtual Result Deserialize(IHeap& heap, IInputStream& stream, AssetPackage& package);
+		virtual Result Deserialize(IInputStream& stream, AssetPackage& package);
 	};
 
 

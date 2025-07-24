@@ -102,7 +102,7 @@ namespace SF {
         virtual Result ToString(ToStringContext& context) const override;
 
         virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-        virtual Variable* Clone(IHeap& heap) const override;
+        virtual Variable* Clone() const override;
 
         virtual size_t GetSerializedSize() const  override;
         virtual Result Serialize(IOutputStream& output) const override;
@@ -119,11 +119,11 @@ namespace SF {
 
 
     DEFINE_BOXING_TEMPLETE(Guid, VariableGuid);
-    //VariableBox BoxingByValue(IHeap& heap, Guid src);
-    //VariableBox BoxingByReference(IHeap& heap, Guid src);
-    //VariableBox Boxing(IHeap& heap, Guid src);
-    //VariableBox Boxing(IHeap& heap, Array<Guid>& src);
-    //VariableBox Boxing(IHeap& heap, const Array<Guid>& src);
+    //VariableBox BoxingByValue(Guid src);
+    //VariableBox BoxingByReference(Guid src);
+    //VariableBox Boxing(Guid src);
+    //VariableBox Boxing(Array<Guid>& src);
+    //VariableBox Boxing(const Array<Guid>& src);
     //IMPLEMENT_BOXING_TEMPLATE_INTERNAL(Guid, VariableGuid);
 
 

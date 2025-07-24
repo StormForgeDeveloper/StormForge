@@ -158,14 +158,14 @@ public:
 		//}
 		//else
 		{
-			return new(GetHeap()) QueueItem(GetHeap());
+			return new QueueItem(GetHeap());
 		}
 	}
 
 	void FreeQueueItem(QueueItem* pItem)
 	{
 		//m_FreeQueueItem.Push(pItem);
-		IHeap::Delete(pItem);
+		delete (pItem);
 	}
 
 	void ClearFreeQueueItem()
@@ -173,7 +173,7 @@ public:
 		auto pItem = m_FreeQueueItem.Pop();
 		while (pItem != nullptr)
 		{
-			IHeap::Delete(pItem);
+			delete (pItem);
 			pItem = m_FreeQueueItem.Pop();
 		}
 	}
@@ -329,7 +329,7 @@ Result QueueMatchMaker::MatchMake(Array<QueuePlayer*>& players)
 					players.push_back(itPlayer);
 				}
 				FreeQueueItem(pItem);
-				//IHeap::Delete(pItem);
+				//delete (pItem);
 				// we need to update queue
 				break;
 			}
@@ -361,7 +361,7 @@ TEST_F(AlgorithmTest, MatchingQueue)
 	std::atomic< uint32_t> successfulMatchCount(0);
 	std::atomic< uint32_t> failedMatchCount(0);
 
-	auto players = new(GetHeap()) QueuePlayer[NUM_PLAYER];
+	auto players = new QueuePlayer[NUM_PLAYER];
 
 	CircularQueue<QueuePlayer*, NUM_PLAYER*2> freePlayers;
 	CriticalSection m_UpdateLock;
@@ -399,7 +399,7 @@ TEST_F(AlgorithmTest, MatchingQueue)
 	for (int iThread = 0; iThread < NUM_UPDATE_THREAD; iThread++)
 	{
 		int threadID = iThread;
-		auto newThread = new(GetHeap()) FunctorTickThread([&, threadID](Thread* pThread)
+		auto newThread = new FunctorTickThread([&, threadID](Thread* pThread)
 		{
 			QueueItem* pQueueItem = nullptr;
 			auto numPlayers = threadID % (QueueMatchMaker::MAX_MATCHING_PLAYER - 1) + 1;// (Util::Random.Rand() % (QueueMatchMaker::MAX_MATCHING_PLAYER - 1)) + 1;
@@ -442,7 +442,7 @@ TEST_F(AlgorithmTest, MatchingQueue)
 	// Start match threads
 	for (int iThread = 0; iThread < NUM_MATCH_THREAD; iThread++)
 	{
-		auto newThread = new(GetHeap()) FunctorTickThread([&](Thread* pThread)
+		auto newThread = new FunctorTickThread([&](Thread* pThread)
 		{
 			//auto iPlayer = Util::Random.Rand() % NUM_PLAYER;
 			//QueuePlayer *pRankingPlayer = nullptr;
@@ -496,6 +496,6 @@ TEST_F(AlgorithmTest, MatchingQueue)
 
 	matchMaker.Clear();
 	freePlayers.ClearQueue();
-	IHeap::Delete(players);
+	delete (players);
 }
 

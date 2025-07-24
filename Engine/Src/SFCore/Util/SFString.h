@@ -20,8 +20,423 @@
 #include "Util/SFToStringBase.h"
 #include "Container/SFArray.h"
 
+#ifndef SF_USE_STD_STRING
+#define SF_USE_STD_STRING 1
+#endif
+
 
 namespace SF {
+
+#if SF_USE_STD_STRING
+
+
+    ////////////////////////////////////////////////////////////////////////////////
+    //
+    //	SFString
+    //     - We are just extending founctionality. don't use virtual and other expensive stuffs
+    //
+
+    template<typename CharType>
+    class TString : public std::basic_string<CharType, std::char_traits<CharType>, std::allocator<CharType>>
+    {
+    public:
+
+        using super = std::basic_string<CharType, std::char_traits<CharType>, std::allocator<CharType>>;
+        using Allocator = std::allocator<CharType>;
+        using StringType = TString<CharType>;
+
+    public:
+        TString() = default;
+        TString(const CharType* src, const Allocator& alloc = Allocator())
+            // Passing null to std::basic_string is a crash. passing Empty string when it is null
+            : super(src ? std::basic_string_view<CharType>(src) : TCharCode<CharType>::Empty) 
+        {
+        }
+
+        TString(const TString& src, const Allocator& alloc = Allocator())
+            : super(src)
+        {
+        }
+
+        TString(TString&& src, const Allocator& alloc = Allocator())
+            : super(std::move(src))
+        {
+        }
+
+        TString(std::basic_string<CharType>&& src, const Allocator& alloc = Allocator())
+            : super(std::move(src))
+        {
+        }
+
+        TString(const Array<const CharType>& src, const Allocator& alloc = Allocator())
+        {
+            Append(src);
+        }
+
+        TString(const CharType* src, int startIndex, int size = -1, const Allocator& alloc = Allocator())
+            : super(src+startIndex, size < 0 ? StrUtil::StringLen(src + startIndex) : size)
+        {
+        }
+
+        ~TString() = default;
+
+        void Reset()
+        {
+            super::clear();
+        }
+
+        SF_FORCEINLINE size_t GetLength() const
+        {
+            return super::length();
+        }
+        SF_FORCEINLINE size_t size() const { return GetLength(); }
+        //SF_FORCEINLINE size_t length() const { return GetLength(); }
+
+        SF_FORCEINLINE void Resize(size_t newStrLen)
+        {
+            super::resize(newStrLen);
+        }
+
+        // Reserver buffer
+        SF_FORCEINLINE void Reserve(size_t newCapacity)
+        {
+            super::reserve(newCapacity);
+        }
+
+        // Check whether it's null or empty string
+        bool IsNullOrEmpty() const { return super::length() == 0; }
+
+        StringType& Append(const Array<const CharType>& src)
+        {
+            super::append(src.data(), src.size());
+
+            return *this;
+        }
+
+        // Append to string
+        StringType& Append(const StringType& src)
+        {
+            super::append(src);
+
+            return *this;
+        }
+
+        StringType& Append(const CharType* src)
+        {
+            super::append(src);
+
+            return *this;
+        }
+
+        StringType& Append(CharType src)
+        {
+            super::append(1, src);
+            return *this;
+        }
+
+
+        StringType& Append(int number)
+        {
+            return Append(std::format(TCharCode<CharType>::DefaultFormat, number).c_str());
+        }
+
+        StringType& Append(unsigned int number)
+        {
+            return Append(std::format(TCharCode<CharType>::DefaultFormat, number).c_str());
+        }
+
+        StringType& Append(float number)
+        {
+            return Append(std::format(TCharCode<CharType>::DefaultFormat, number).c_str());
+        }
+
+        StringType& Append(double number)
+        {
+            return Append(std::format(TCharCode<CharType>::DefaultFormat, number).c_str());
+        }
+
+        // combine string
+        StringType operator + (const StringType& op2) const
+        {
+            return StringType(*this).Append(op2);
+        }
+
+        StringType& ReplaceInline(CharType from, CharType to)
+        {
+            size_t pos = super::find(from);
+            while (pos != std::string::npos)
+            {
+                // Replace the substring
+                super::replace(pos, 1, 1, to);
+                pos = super::find(from, pos + 1);
+            }
+
+            return *this;
+        }
+
+        StringType& ReplaceInline(const CharType* from, const CharType* to)
+        {
+            size_t fromLength = StrUtil::StringLen(from);
+            size_t toLength = StrUtil::StringLen(to);
+            size_t pos = super::find(from);
+            while (pos != std::string::npos)
+            {
+                // Replace the substring
+                super::replace(pos, fromLength, to);
+                pos = super::find(from, pos + toLength);
+            }
+
+            return *this;
+        }
+
+        // Check heading string
+        bool StartsWith(const StringType& op) const
+        {
+            return super::starts_with(std::basic_string_view(op));
+        }
+
+        bool StartsWith(const CharType* op) const
+        {
+            return super::starts_with(std::basic_string_view(op));
+        }
+
+        bool StartsWith(CharType op) const
+        {
+            return super::starts_with(op);
+        }
+
+        // Check tailing string
+        bool EndsWith(const StringType& op) const
+        {
+            return super::ends_with((std::basic_string<CharType>&)(op));
+        }
+
+        bool EndsWith(const CharType* op) const
+        {
+            return super::ends_with(op);
+        }
+
+        bool EndsWith(CharType op) const
+        {
+            return super::ends_with(op);
+        }
+
+        // Find the first index of searchChar.
+        int IndexOf(CharType searchChar) const
+        {
+            return static_cast<int>(super::find(searchChar));
+        }
+
+        // Find the first index of searchString in the string
+        int IndexOf(const CharType* searchString) const
+        {
+            return static_cast<int>(super::find(searchString));
+        }
+
+        // Find the first index of any character in searchChars. The last element of the searchChars should be null
+        int IndexOfAny(const CharType* searchChars) const
+        {
+            return static_cast<int>(super::find_first_of(searchChars));
+        }
+
+        // search from end
+        int IndexOfFromEnd(const CharType* searchString) const
+        {
+            return static_cast<int>(super::rfind(searchString));
+
+        }
+
+        int IndexOfFromEnd(CharType searchChar) const
+        {
+            return static_cast<int>(super::rfind(searchChar));
+        }
+
+        // Join string array
+        static TString Join(const Array<StringType>& strings, const CharType* delimiter)
+        {
+            std::basic_stringstream<CharType> ss;
+
+            bool bFirst = true;
+            for (auto& str : strings)
+            {
+                if (bFirst)
+                {
+                    bFirst = false;
+                }
+                else
+                {
+                    ss << delimiter;
+                }
+                ss << str;
+            }
+
+            return TString(ss.str());
+        }
+
+        // Split string into array with delimiter string 
+        bool Split(const CharType delimiter, Array<TString>& stringsOut) const
+        {
+            std::basic_stringstream<CharType> ss(*this);
+
+            // Temporary object to store 
+            // the splitted string
+            std::basic_string<CharType> t;
+
+            // Splitting the str string 
+            // by delimiter
+            while (std::getline(ss, t, delimiter))
+                stringsOut.push_back(std::move(t));
+
+            return true;
+        }
+
+        // TString case conversion.
+        StringType ToUpper() const
+        {
+            StringType temp;
+            temp.reserve(super::length());
+
+            std::transform(super::begin(), super::end(), temp.begin(), StrUtil::ToUpper<CharType>);
+
+            return temp;
+        }
+
+        StringType& ToUpperInline()
+        {
+            if (IsNullOrEmpty()) return *this;
+
+            StrUtil::StringUpperInline(data(), static_cast<int>(super::length()));
+
+            return *this;
+        }
+
+        StringType ToLower() const
+        {
+            StringType temp = *this;
+
+            std::transform(super::begin(), super::end(), temp.begin(), StrUtil::ToLower<CharType>);
+
+            return temp;
+        }
+
+        StringType& ToLowerInline()
+        {
+            if (IsNullOrEmpty()) return *this;
+
+            StrUtil::StringLowerInline(data(), static_cast<int>(super::length()));
+
+            return *this;
+        }
+
+
+        bool Equals(const StringType& op, bool ignoreCase = false) const
+        {
+            if (ignoreCase)
+                return StrUtil::StringCompairIgnoreCase((const CharType*)*this, (int)GetLength(), (const CharType*)op, (int)op.GetLength());
+            else
+                return StrUtil::StringCompair((const CharType*)*this, (int)GetLength(), (const CharType*)op, (int)op.GetLength());
+        }
+
+        bool Equals(const CharType* op, bool ignoreCase = false) const
+        {
+            auto opLen = op != nullptr ? StrUtil::StringLen(op) : 0;
+            if (ignoreCase)
+                return StrUtil::StringCompairIgnoreCase((const CharType*)*this, (int)GetLength(), (const CharType*)op, (int)opLen);
+            else
+                return StrUtil::StringCompair((const CharType*)*this, (int)GetLength(), (const CharType*)op, (int)opLen);
+        }
+
+        bool EqualsIgnoreCase(const StringType& op) const
+        {
+            return Equals(op, true);
+        }
+        bool EqualsIgnoreCase(const CharType* op) const
+        {
+            return Equals(op, true);
+        }
+
+        // Removes all leading and trailing white-space characters from the current TString object.
+        StringType Trim() const
+        {
+            return TrimStart(TCharCode<CharType>::WhiteSpaces.data()).TrimEnd(TCharCode<CharType>::WhiteSpaces.data());
+        }
+
+        StringType TrimStart(const CharType* chars) const
+        {
+            size_t start = super::find_first_not_of(chars);
+            return StringType((start == std::string::npos) ? std::basic_string<CharType>() : super::substr(start));
+        }
+
+        StringType TrimEnd(const CharType* chars) const
+        {
+            size_t end = super::find_last_not_of(chars);
+            return (end == std::string::npos) ? std::basic_string<CharType>() : super::substr(0, end + 1);
+        }
+
+        // Make a copy of sub string
+        StringType SubString(int starIndex, int count = -1) const
+        {
+            return super::substr(starIndex, count);
+        }
+
+        using FormatContext = std::basic_format_context<std::_Basic_fmt_it<CharType>, CharType>;
+
+        // Format string
+        template< class ...ArgTypes >
+        StringType& Format(const CharType* strFormat, ArgTypes... args)
+        {
+            super::clear();
+
+            *this = std::move(std::vformat(std::basic_string_view<CharType>(strFormat), std::make_format_args<FormatContext>(args...)));
+
+            return *this;
+        }
+
+        // Format string
+        template< class ...ArgTypes >
+        StringType& AppendFormat(const CharType* strFormat, ArgTypes... args)
+        {
+            super::append(std::move(std::vformat(std::basic_string_view<CharType>(strFormat), std::make_format_args<FormatContext>(args...))));
+            return *this;
+        }
+
+        SF_FORCEINLINE CharType* data() { return super::data(); }
+        SF_FORCEINLINE const CharType* data() const { return super::data(); }
+        SF_FORCEINLINE operator const CharType* () const { return super::c_str(); }
+        SF_FORCEINLINE const CharType* c_str() const { return super::c_str(); }
+
+        //bool operator == (const CharType* src) const
+        //{
+        //    return super::compare(src) == 0;
+        //}
+
+        //bool operator != (const CharType* src) const
+        //{
+        //    return super::compare(src) != 0;
+        //}
+
+        StringType& operator = (const StringType& src)
+        {
+            super::operator=(src);
+
+            return *this;
+        }
+
+        StringType& operator = (const CharType* src)
+        {
+            super::operator=(src ? std::basic_string_view<CharType>(src) : TCharCode<CharType>::Empty);
+
+            return *this;
+        }
+
+        StringType& operator = (const Array<const CharType>& src)
+        {
+            Reset();
+            return Append(src);
+        }
+    };
+
+#else // SF_USE_STD_STRING
 
 	class StringCrc64;
 	class VariableBox;
@@ -207,7 +622,7 @@ namespace SF {
 		TString(const CharType* src)
 			: m_pHeap(&GetSystemHeap())
 		{
-			m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), src);
+			m_Buffer = new SharedStringBufferType(GetHeap(), src);
 			m_StringView = m_Buffer->GetBufferPointer();
 		}
 
@@ -233,7 +648,7 @@ namespace SF {
 		TString(IHeap& heap, const CharType* src)
 			: m_pHeap(&heap)
 		{
-			m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), src);
+			m_Buffer = new SharedStringBufferType(GetHeap(), src);
 			m_StringView = m_Buffer->GetBufferPointer();
 		}
 
@@ -266,7 +681,7 @@ namespace SF {
 				if (size <= 0)
 					return;
 
-				m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), size + 1);
+				m_Buffer = new SharedStringBufferType(GetHeap(), size + 1);
 				m_Buffer->Append(src + startIndex, size);
 				m_StringView = m_Buffer->GetBufferPointer();
 			}
@@ -275,7 +690,7 @@ namespace SF {
 		TString(IHeap& heap, const StringCrc64& src)
 			: m_pHeap(&heap)
 		{
-			m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), src.ToString());
+			m_Buffer = new SharedStringBufferType(GetHeap(), src.ToString());
 			m_StringView = m_Buffer->GetBufferPointer();
 		}
 
@@ -329,7 +744,7 @@ namespace SF {
 		SF_FORCEINLINE void Resize(size_t newStrLen)
 		{
 			if (m_Buffer == nullptr)
-				m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap());
+				m_Buffer = new SharedStringBufferType(GetHeap());
 
 			m_Buffer->Resize(newStrLen);
 		}
@@ -338,7 +753,7 @@ namespace SF {
 		SF_FORCEINLINE void Reserve(size_t newStrLen)
 		{
 			if (m_Buffer == nullptr)
-				m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), newStrLen);
+				m_Buffer = new SharedStringBufferType(GetHeap(), newStrLen);
 			else
 				m_Buffer->Reserve(newStrLen);
 		}
@@ -358,7 +773,7 @@ namespace SF {
                 }
                 else
                 {
-                    SharedStringBufferType* newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), m_Buffer->GetStringLength() + src.size() + 1);
+                    SharedStringBufferType* newBuffer = new SharedStringBufferType(GetHeap(), m_Buffer->GetStringLength() + src.size() + 1);
                     newBuffer->Append(m_Buffer->GetBufferPointer(), m_Buffer->GetStringLength());
                     newBuffer->Append(pSrc, src.size());
 
@@ -367,7 +782,7 @@ namespace SF {
             }
             else
             {
-                SharedStringBufferType* newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), src.size() + 1);
+                SharedStringBufferType* newBuffer = new SharedStringBufferType(GetHeap(), src.size() + 1);
                 newBuffer->Append(pSrc, src.size());
 
                 m_Buffer = newBuffer;
@@ -401,7 +816,7 @@ namespace SF {
 			}
 			else
 			{
-                SharedStringBufferType* newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), m_Buffer->GetStringLength() + src.m_Buffer->GetStringLength() + 1);
+                SharedStringBufferType* newBuffer = new SharedStringBufferType(GetHeap(), m_Buffer->GetStringLength() + src.m_Buffer->GetStringLength() + 1);
 				newBuffer->Append(m_Buffer->GetBufferPointer(), m_Buffer->GetStringLength());
 				newBuffer->Append(src.m_Buffer->GetBufferPointer(), src.m_Buffer->GetStringLength());
 
@@ -420,7 +835,7 @@ namespace SF {
 			size_t addLen = StrUtil::StringLen(src);
 			if (IsNullOrEmpty())
 			{
-                SharedStringBufferType* newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), addLen + 1);
+                SharedStringBufferType* newBuffer = new SharedStringBufferType(GetHeap(), addLen + 1);
 				newBuffer->Append(src, addLen);
 				m_Buffer = newBuffer;
 				m_StringView = m_Buffer->GetBufferPointer();
@@ -433,7 +848,7 @@ namespace SF {
 			}
 			else
 			{
-                SharedStringBufferType* newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), m_Buffer->GetStringLength() + addLen + 1);
+                SharedStringBufferType* newBuffer = new SharedStringBufferType(GetHeap(), m_Buffer->GetStringLength() + addLen + 1);
 				newBuffer->Append(m_Buffer->GetBufferPointer(), m_Buffer->GetStringLength());
 				newBuffer->Append(src, addLen);
 
@@ -453,7 +868,7 @@ namespace SF {
 			size_t addLen = StrUtil::StringLen(src);
 			if (IsNullOrEmpty())
 			{
-				auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), addLen + 1);
+				auto newBuffer = new SharedStringBufferType(GetHeap(), addLen + 1);
 				newBuffer->Append(src, addLen);
 				m_Buffer = newBuffer;
 				m_StringView = m_Buffer->GetBufferPointer();
@@ -466,7 +881,7 @@ namespace SF {
 			}
 			else
 			{
-				auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), m_Buffer->GetStringLength() + addLen + 1);
+				auto newBuffer = new SharedStringBufferType(GetHeap(), m_Buffer->GetStringLength() + addLen + 1);
 				newBuffer->Append(m_Buffer->GetBufferPointer(), m_Buffer->GetStringLength());
 				newBuffer->Append(src, addLen);
 
@@ -550,7 +965,7 @@ namespace SF {
 			unused(pStr, addLen);
 			assert(pStr != nullptr && addLen > 0);
 
-            SharedStringBufferType* newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), m_Buffer->GetStringLength() + op2.m_Buffer->GetStringLength() + 1);
+            SharedStringBufferType* newBuffer = new SharedStringBufferType(GetHeap(), m_Buffer->GetStringLength() + op2.m_Buffer->GetStringLength() + 1);
 			newBuffer->Append(m_Buffer->GetBufferPointer(), m_Buffer->GetStringLength());
 			newBuffer->Append(op2.m_Buffer->GetBufferPointer(), op2.m_Buffer->GetStringLength());
 
@@ -564,7 +979,7 @@ namespace SF {
 
             if (!m_Buffer.IsUnique())
             {
-                SharedStringBufferType* newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), m_Buffer->GetStringLength() + 1);
+                SharedStringBufferType* newBuffer = new SharedStringBufferType(GetHeap(), m_Buffer->GetStringLength() + 1);
                 newBuffer->Append(m_Buffer->GetBufferPointer(), m_Buffer->GetStringLength());
 
                 m_Buffer = newBuffer;
@@ -596,7 +1011,7 @@ namespace SF {
             // just rough guess
             size_t expectedBufferSize = (m_Buffer->GetStringLength() + toLen) * 2;
 
-            SharedStringBufferType* newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), expectedBufferSize);
+            SharedStringBufferType* newBuffer = new SharedStringBufferType(GetHeap(), expectedBufferSize);
 
             CharType* pCur = m_Buffer->GetBufferPointer();
             int iIndex = StrUtil::Indexof(pCur, from[0]);
@@ -862,7 +1277,7 @@ namespace SF {
 			}
 
 			IHeap& heap = strings[0].GetHeap();
-            SharedStringBufferType* newBuffer = new(heap) SharedStringBufferType(heap, totalSize + strings.size() * delimiterSize + 1);
+            SharedStringBufferType* newBuffer = new SharedStringBufferType(heap, totalSize + strings.size() * delimiterSize + 1);
 			for (size_t iItem = 0; iItem < strings.size(); iItem++)
 			{
 				if (iItem != 0)
@@ -979,7 +1394,7 @@ namespace SF {
 		{
 			if (IsNullOrEmpty()) return *this;
 
-			auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), GetBufferLength() + 1);
+			auto newBuffer = new SharedStringBufferType(GetHeap(), GetBufferLength() + 1);
             CharType* bufferPointer = newBuffer->GetBufferPointer();
 			int bufferSize = (int)newBuffer->GetAllocatedSize();
 			StrUtil::StringUpper(bufferPointer, bufferSize, m_Buffer->GetBufferPointer());
@@ -997,7 +1412,7 @@ namespace SF {
             }
             else
             {
-                SharedStringBufferType* newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), GetBufferLength() + 1);
+                SharedStringBufferType* newBuffer = new SharedStringBufferType(GetHeap(), GetBufferLength() + 1);
                 CharType* bufferPointer = newBuffer->GetBufferPointer();
                 int bufferSize = (int)newBuffer->GetAllocatedSize();
                 StrUtil::StringUpper(bufferPointer, bufferSize, m_Buffer->GetBufferPointer());
@@ -1013,7 +1428,7 @@ namespace SF {
 		{
 			if (IsNullOrEmpty()) return *this;
 
-			auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), GetBufferLength() + 1);
+			auto newBuffer = new SharedStringBufferType(GetHeap(), GetBufferLength() + 1);
 			auto bufferPointer = newBuffer->GetBufferPointer();
 			int bufferSize = (int)newBuffer->GetAllocatedSize();
 			StrUtil::StringLower(bufferPointer, bufferSize, m_Buffer->GetBufferPointer());
@@ -1031,7 +1446,7 @@ namespace SF {
             }
             else
             {
-                SharedStringBufferType* newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), GetBufferLength() + 1);
+                SharedStringBufferType* newBuffer = new SharedStringBufferType(GetHeap(), GetBufferLength() + 1);
                 CharType* bufferPointer = newBuffer->GetBufferPointer();
                 int bufferSize = (int)newBuffer->GetAllocatedSize();
                 StrUtil::StringLower(bufferPointer, bufferSize, m_Buffer->GetBufferPointer());
@@ -1242,7 +1657,7 @@ namespace SF {
 			auto length = (int)GetBufferLength();
 			if (starIndex >= length) return TString(GetHeap());
 
-			auto newBuffer = new(GetEngineHeap()) SharedStringBufferType(GetHeap(), count + 1);
+			auto newBuffer = new SharedStringBufferType(GetHeap(), count + 1);
 
 			auto pSrc = m_Buffer->GetBufferPointer() + starIndex;
 
@@ -1322,7 +1737,7 @@ namespace SF {
             }
             else
             {
-                m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), StrUtil::StringLen(src) + 1);
+                m_Buffer = new SharedStringBufferType(GetHeap(), StrUtil::StringLen(src) + 1);
             }
 
             if (src)
@@ -1347,7 +1762,7 @@ namespace SF {
 			CharType* szBuffer = nullptr;
 			int buffLen = -1;
 			size_t requiredSize = StrUtil::Format_Internal(szBuffer, buffLen, szFormating, iNumArg, Args) + 1;
-			m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), requiredSize);
+			m_Buffer = new SharedStringBufferType(GetHeap(), requiredSize);
 			if (m_Buffer->GetAllocatedSize() < requiredSize)
 			{
 				m_StringView = m_Buffer->GetBufferPointer();
@@ -1382,7 +1797,7 @@ namespace SF {
 			}
 			else
 			{
-				auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), newTotalSize);
+				auto newBuffer = new SharedStringBufferType(GetHeap(), newTotalSize);
 				newBuffer->Append(m_Buffer->GetBufferPointer(), currentStringLen);
 				m_Buffer = newBuffer;
 			}
@@ -1405,8 +1820,11 @@ namespace SF {
 	extern template class TString<wchar_t>;
 
 
+
+#endif // SF_USE_STD_STRING
     using String = TString<char>;
     using WString = TString<wchar_t>;
+
 
 	extern const String String_Empty;
 	extern const String String_True;
@@ -1422,52 +1840,86 @@ namespace SF {
 
 
 
-	class StringBuilder
-	{
-	public:
+    class StringBuilder
+    {
+    public:
 
-		using CharType = char;
-		using StringType = TString<char>;
-		using SharedStringBufferType = TSharedStringBuffer<CharType>;
+        using CharType = char;
+        using StringType = TString<char>;
 
-	private:
+    private:
 
-		size_t m_GrowSize;
+        std::basic_stringstream<CharType> m_Stream;
 
-		// string buffer
-		SharedPointerT<SharedStringBufferType> m_Buffer;
+    public:
 
-	public:
+        StringBuilder() = default;
 
-		StringBuilder(IHeap& heap = GetSystemHeap(), size_t growSize = 1024);
+        void Reset()
+        {
+            m_Stream.str("");
+            m_Stream.clear();
+        }
 
-		IHeap& GetHeap() { return m_Buffer->GetHeap(); }
+        // Append to string
+        StringBuilder& Append(const StringType& src)
+        {
+            m_Stream << src;
+            return *this;
+        }
 
-		void Reset();
+        StringBuilder& Append(const CharType* src)
+        {
+            m_Stream << src;
+            return *this;
+        }
 
-		// Append to string
-		StringBuilder& Append(const StringType& src);
-		StringBuilder& Append(const CharType* src);
-		StringBuilder& Append(CharType src);
-
-		StringBuilder& Append(int number);
-		StringBuilder& Append(unsigned int number);
-		StringBuilder& Append(float number);
-		StringBuilder& Append(double number);
-
-
-		// Format string
-		template< class ...ArgTypes >
-		StringBuilder& AppendFormat(const CharType* strFormat, ArgTypes... args);
+        StringBuilder& Append(CharType src)
+        {
+            m_Stream << src;
+            return *this;
+        }
 
 
-		// Convert to string object
-		TString<CharType> ToString();
+        StringBuilder& Append(int number)
+        {
+            m_Stream << number;
+            return *this;
+        }
 
-	protected:
+        StringBuilder& Append(unsigned int number)
+        {
+            m_Stream << number;
+            return *this;
+        }
 
-		size_t AppendFormat_Internal(const CharType* szFormating, int iNumArg, VariableBox* Args);
-	};
+        StringBuilder& Append(float number)
+        {
+            m_Stream << number;
+            return *this;
+        }
+
+        StringBuilder& Append(double number)
+        {
+            m_Stream << number;
+            return *this;
+        }
+
+        // Format string
+        template< class ...ArgTypes >
+        StringBuilder& AppendFormat(const CharType* strFormat, ArgTypes... args)
+        {
+            m_Stream << std::vformat(std::string_view(strFormat), std::make_format_args(args...));
+            return *this;
+        }
+
+
+        // Convert to string object
+        TString<CharType> ToString() const
+        {
+            return TString<CharType>(std::move(m_Stream.str()));
+        }
+    };
 
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1509,4 +1961,23 @@ namespace SF {
 } // namespace SF
 
 
+template <>
+struct std::formatter<SF::String>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::String& value, FormatContext& ctx) const
+    {
+#if SF_USE_STD_STRING
+        return std::format_to(ctx.out(), "{}", (std::string&)value);
+#else
+        return std::format_to(ctx.out(), "{}", value.c_str());
+#endif
+    }
+};
 

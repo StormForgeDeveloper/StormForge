@@ -13,7 +13,7 @@
 #pragma once
 
 #include <stdint.h>
-
+#include <format>
 
 namespace SF
 {
@@ -26,10 +26,10 @@ namespace SF
 
 	// Intended to replace goto Proc_End style with c++ way
 	// Function Result handling. If error Func has assigned, it will run the error function on failure when the function scope is finished.
-	template<typename ExitFunc = std::function<void(Result result)>>
 	class ScopeContext
 	{
 	public:
+        using ExitFunc = std::function<void(Result result)>;
 
 		ScopeContext()
 			: m_ExitFunc([](Result hr) { return hr; })
@@ -73,3 +73,19 @@ namespace SF
 	};
 
 }
+
+template <>
+struct std::formatter<SF::ScopeContext>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::ScopeContext& value, FormatContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "{}", (SF::Result)value);
+    }
+};

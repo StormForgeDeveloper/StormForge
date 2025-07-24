@@ -42,7 +42,7 @@ using namespace SF;
 
 SFDLL_EXPORT Tong::ScriptBytecode* SFTongScriptByteCode_NativeCreate()
 {
-	Tong::ScriptBytecode* pByteCode = new(GetSystemHeap()) Tong::ScriptBytecode(GetSystemHeap());
+	Tong::ScriptBytecode* pByteCode = new Tong::ScriptBytecode(GetSystemHeap());
 	return pByteCode;
 }
 
@@ -53,7 +53,7 @@ SFDLL_EXPORT void SFTongScriptByteCode_NativeDelete(uintptr_t nativeHandler)
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	IHeap::Delete(pScriptByteCode);
+	delete (pScriptByteCode);
 }
 
 

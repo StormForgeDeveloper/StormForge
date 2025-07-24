@@ -33,22 +33,22 @@ namespace SF
 
 	void Websocket::WSSessionData::Initialize(size_t RecvBufferSize, size_t SendBufferSize)
 	{
-        SendBufferLock = new(GetSystemHeap()) CriticalSection;
-		SendBuffer = new(GetSystemHeap()) CircularBufferQueue(GetSystemHeap(), SendBufferSize);
-		ReceiveBuffer = new(GetSystemHeap()) DynamicArray<uint8_t>(GetSystemHeap());
+        SendBufferLock = new CriticalSection;
+		SendBuffer = new CircularBufferQueue(GetSystemHeap(), SendBufferSize);
+		ReceiveBuffer = new DynamicArray<uint8_t>(GetSystemHeap());
         ReceiveBuffer->reserve(RecvBufferSize);
 		UserObjectPtr.reset();
 	}
 
 	void Websocket::WSSessionData::Clear()
 	{
-        IHeap::Delete(SendBufferLock);
+        delete (SendBufferLock);
         SendBufferLock = nullptr;
 
-		IHeap::Delete(SendBuffer);
+		delete (SendBuffer);
 		SendBuffer = nullptr;
 
-		IHeap::Delete(ReceiveBuffer);
+		delete (ReceiveBuffer);
 		ReceiveBuffer = nullptr;
 
 		UserObjectPtr.reset();
@@ -60,13 +60,8 @@ namespace SF
 	//
 
 
-	Websocket::Websocket(IHeap& heap, const char* name)
-		: m_Heap(heap)
-		, m_Name(name)
-		, m_Protocols(GetHeap())
-		, m_Mounts(GetHeap())
-		, m_PVOOptions(GetHeap())
-		, m_Extensions(GetHeap())
+	Websocket::Websocket(const char* name)
+		: m_Name(name)
 	{
 //		// Websocket doesn't work well with libevent on Windows
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
@@ -131,7 +126,7 @@ namespace SF
 	{
 		for (uint iThread = 0; iThread < m_NumThread; iThread++)
 		{
-            auto pThread = new(GetHeap()) FunctorTickThread(
+            auto pThread = new FunctorTickThread(
                 [this, iThread](Thread* pThread)
                 {
                     m_RunningThreadCount++;
@@ -192,7 +187,7 @@ namespace SF
 		for (auto itThread : m_Threads)
 		{
 			itThread->Stop(false);
-			IHeap::Delete(itThread);
+			delete (itThread);
 		}
 		m_Threads.Reset();
 
@@ -421,16 +416,7 @@ namespace SF
 			auto pInstance = reinterpret_cast<Websocket*>(userData);
 			if (pInstance)
 			{
-#if defined(DEBUG)
-				auto org = pInstance->GetName().GetDebugStringPtr();
-
-				pInstance->OnWSCallback(wsi, reason, user, in, len);
-
-				auto after = pInstance->GetName().GetDebugStringPtr();
-				assert(org == after);
-#else
                 pInstance->OnWSCallback(wsi, reason, user, in, len);
-#endif
 			}
 
 			SFLog(Websocket, Debug4, "{0} WSCallback {1}, size:{2}", pInstance ? pInstance->GetName().c_str() : "", (int)reason, len);

@@ -33,7 +33,7 @@ public:
 
 	}
 
-
+    SF::IHeap& GetHeap() { return SF::GetSystemHeap(); }
 
 	// Remember that SetUp() is run immediately before a test starts.
 	virtual void SetUp()

@@ -30,7 +30,6 @@ namespace SF {
         struct PacketData : public Net::IOBUFFER_WRITE
         {
             static const SharedPointerT<MemoryPool>& GetAllocationPool();
-            static PacketData* NewPacketData();
 
             ArrayView<uint8_t> Payload;
             uint8_t PayloadBuffer[Net::Const::PACKET_SIZE_MAX];
@@ -44,6 +43,16 @@ namespace SF {
             ~PacketData()
             {
             }
+
+            void* operator new(size_t size) {
+                return GetAllocationPool()->Alloc(size);
+            }
+
+            // Override operator delete
+            void operator delete(void* ptr) {
+                GetAllocationPool()->Free(ptr);
+            }
+
 
             SF_FORCEINLINE bool CanAdd(size_t length) const {
                 return (Payload.GetAllocatedSize() - Payload.size()) >= length;

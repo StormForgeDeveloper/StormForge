@@ -48,7 +48,7 @@ namespace SF {
 
 	public:
 
-		TimerManager(IHeap& heap = GetSystemHeap(), uint failSafeTimerTickInterval = 30 * 1000);
+		TimerManager(uint failSafeTimerTickInterval = 30 * 1000);
 
 		void Clear();
 

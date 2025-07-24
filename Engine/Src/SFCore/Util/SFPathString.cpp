@@ -31,62 +31,24 @@ namespace SF
 	//
 
 	PathString::PathString()
-		: m_pHeap(&GetSystemHeap())
-		, m_DecomposedPath(GetHeap())
 	{
 	}
 
 	PathString::PathString(const char* strPath)
-		: m_pHeap(&GetSystemHeap())
-		, m_DecomposedPath(GetHeap())
 	{
 		SetPathString(strPath);
 	}
 
 	PathString::PathString(const String& strPath)
-		: m_pHeap(&GetSystemHeap())
-		, m_DecomposedPath(GetHeap())
 	{
 		SetPathString(strPath);
 	}
 
 	PathString::PathString(const PathString& path)
-		: m_pHeap(&GetSystemHeap())
-		, m_DecomposedPath(GetHeap())
 	{
 		for (auto& itChunk : path.m_DecomposedPath)
 		{
-			m_DecomposedPath.push_back(String(GetHeap(), itChunk));
-		}
-	}
-
-	PathString::PathString(IHeap& heap)
-		: m_pHeap(&heap)
-		, m_DecomposedPath(GetHeap())
-	{
-	}
-
-	PathString::PathString(IHeap& heap, const char* strPath)
-		: m_pHeap(&heap)
-		, m_DecomposedPath(GetHeap())
-	{
-		SetPathString(strPath);
-	}
-
-	PathString::PathString(IHeap& heap, const String& strPath)
-		: m_pHeap(&heap)
-		, m_DecomposedPath(GetHeap())
-	{
-		SetPathString(strPath);
-	}
-
-	PathString::PathString(IHeap& heap, const PathString& path)
-		: m_pHeap(&heap)
-		, m_DecomposedPath(GetHeap())
-	{
-		for (auto& itChunk : path.m_DecomposedPath)
-		{
-			m_DecomposedPath.push_back(String(GetHeap(), itChunk));
+			m_DecomposedPath.push_back(itChunk);
 		}
 	}
 
@@ -94,28 +56,16 @@ namespace SF
 	{
 	}
 
-	void PathString::SetHeap(IHeap& heap)
-	{
-		m_pHeap = &heap;
-		UpdateHeap();
-	}
-
 	// Set path string
 	Result PathString::SetPathString(const char* strPath)
 	{
 		m_DecomposedPath.Clear();
-		if (!String(GetHeap(), strPath).SplitAny("/\\", m_DecomposedPath))
+        String path(strPath);
+        path.ReplaceInline('\\', '/');
+		if (!path.Split('/', m_DecomposedPath))
 			return ResultCode::FAIL;
 
 		return ResultCode::SUCCESS;
-	}
-
-	void PathString::UpdateHeap()
-	{
-		for (auto& itChunk : m_DecomposedPath)
-		{
-			itChunk.SetHeap(GetHeap());
-		}
 	}
 
 	const char* PathString::GetExt() const
@@ -138,11 +88,14 @@ namespace SF
 	// Append path
 	Result PathString::Combine(const String& pathString)
 	{
-		StaticArray<String, 10> inputPath(GetHeap());
-		if (!String(GetHeap(), pathString).SplitAny(Util::Path::DirectorySeparatorChars, inputPath))
+		StaticArray<String, 10> inputPaths;
+        String path(pathString);
+        path.ReplaceInline('\\', '/');
+
+		if (!path.Split('/', inputPaths))
 			return ResultCode::FAIL;
 
-		for (auto& itIter : inputPath)
+		for (auto& itIter : inputPaths)
 		{
 			m_DecomposedPath.push_back(itIter);
 		}
@@ -152,8 +105,11 @@ namespace SF
 
 	Result PathString::Combine(const char* pathString)
 	{
-		StaticArray<String, 10> inputPath(GetHeap());
-		if (!String(GetHeap(), pathString).SplitAny(Util::Path::DirectorySeparatorChars, inputPath))
+		StaticArray<String, 10> inputPath;
+        String path(pathString);
+        path.ReplaceInline('\\', '/');
+
+		if (!path.Split('/', inputPath))
 			return ResultCode::FAIL;
 
 		for (auto& itIter : inputPath)
@@ -258,11 +214,6 @@ namespace SF
 		for (auto& itChunk : src.m_DecomposedPath)
 		{
 			m_DecomposedPath.push_back(itChunk);
-		}
-
-		for (auto& itChunk : m_DecomposedPath)
-		{
-			itChunk.SetHeap(GetHeap());
 		}
 
 		return *this;

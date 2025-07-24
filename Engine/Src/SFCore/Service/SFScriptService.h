@@ -281,14 +281,14 @@ namespace SF
 		template<class ValueType>
 		Result SetValue(const PathString& variablePath, const ValueType& value)
 		{
-			VariableBox boxed = Boxing(GetHeap(), value);
+			VariableBox boxed = Boxing( value);
 			return SetVariable(variablePath, *boxed.GetVariable());
 		}
 
 		template<class ValueType>
 		Result SetValue(StringCrc64 variableName, const ValueType& value)
 		{
-			VariableBox boxed = Boxing(GetHeap(), value);
+			VariableBox boxed = Boxing( value);
 			return SetVariable(variableName, *boxed.GetVariable());
 		}
 

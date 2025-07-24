@@ -49,7 +49,7 @@ MessageDataPtr NetTest::NewMessage(IHeap& memoryManager, uint32_t sequenceID)
     MessageHeader* pResult = (MessageHeader*)m_MemoryEndpoint->GetLastMessage();
     pResult->SetSequence(sequenceID);
 
-    return MessageData::NewMessage(GetSystemHeap(), pResult);
+    return MessageData::NewMessage(pResult);
 }
 
 MessageDataPtr NetTest::NewMessage(IHeap& memoryManager)
@@ -57,7 +57,7 @@ MessageDataPtr NetTest::NewMessage(IHeap& memoryManager)
     SF::PlayInstanceSvrRPCSendAdapter(m_MemoryEndpoint.get()).ZoneChatS2CEvt(0, m_GuidGen.NewGuid(), 2, SF::VariableTable(), "11");
     MessageHeader* pResult = (MessageHeader*)m_MemoryEndpoint->GetLastMessage();
 
-    return MessageData::NewMessage(GetSystemHeap(), pResult);
+    return MessageData::NewMessage(pResult);
 }
 
 
@@ -125,7 +125,7 @@ TEST_F(NetTest, MessageCollection)
     MessageCollectionArray collectionArray;
     UniquePtr<MessageCollection> pBuffer(new MessageCollection);
 
-    SharedPointerT<TestInMemoryEndpoint> testEndPoint = new(GetSystemHeap()) TestInMemoryEndpoint();
+    SharedPointerT<TestInMemoryEndpoint> testEndPoint = new TestInMemoryEndpoint();
 
     GuidGenerator guidGen;
     AccountID testAccountId(guidGen.NewGuid());
@@ -234,7 +234,7 @@ TEST_F(NetTest, MessageCollection)
 //		SF::Message::Login::LoginCmd *pMsg = nullptr;
 //			EXPECT_HRESULT_SUCCEEDED(HandleMessage<SF::Message::Login::LoginCmd>(pMsgData, pMsg));
 //			if( pMsg ) 
-//				IHeap::Delete(pMsg);
+//				delete (pMsg);
 //			return S_OK;
 //	});
 //	messageHandlers.Register<SF::Message::Login::LoginRes>(__FILE__, __LINE__,
@@ -243,7 +243,7 @@ TEST_F(NetTest, MessageCollection)
 //		EXPECT_HRESULT_SUCCEEDED(HandleMessage<SF::Message::Login::LoginRes>(pMsgData, pMsg));
 //			SF::CheckCtrMemory();
 //			if( pMsg ) 
-//				IHeap::Delete(pMsg);
+//				delete (pMsg);
 //			SF::CheckCtrMemory();
 //			return S_OK;
 //	});
@@ -252,7 +252,7 @@ TEST_F(NetTest, MessageCollection)
 //			SF::Message::Game::JoinGameCmd *pMsg = nullptr;
 //			EXPECT_HRESULT_SUCCEEDED( HandleMessage<SF::Message::Game::JoinGameCmd>( pMsgData, pMsg ) );
 //			if( pMsg ) 
-//				IHeap::Delete(pMsg);
+//				delete (pMsg);
 //			return S_OK;
 //	});
 //	messageHandlers.Register<SF::Message::Game::JoinGameRes>( __FILE__, __LINE__,
@@ -260,7 +260,7 @@ TEST_F(NetTest, MessageCollection)
 //			SF::Message::Game::JoinGameRes *pMsg = nullptr;
 //			EXPECT_HRESULT_SUCCEEDED( HandleMessage<SF::Message::Game::JoinGameRes>( pMsgData, pMsg ) );
 //			if( pMsg ) 
-//				IHeap::Delete(pMsg);
+//				delete (pMsg);
 //			return S_OK;
 //	});
 //
