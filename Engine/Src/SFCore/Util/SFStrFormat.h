@@ -22,7 +22,6 @@ namespace StrUtil {
 
 #if SF_USE_STD_STRING
 
-    using FormatContext = std::basic_format_context<std::_Basic_fmt_it<char>, char>;
 
     inline size_t Format(char* szBuffer, INT& BuffLen, const char* strFormat)
     {
@@ -37,7 +36,8 @@ namespace StrUtil {
     inline size_t Format(char(&szBuffer)[BuffLen], const char* strFormat, const ArgTypes&... args)
     {
         std::string ss;
-        std::vformat_to(std::back_inserter(ss), std::basic_string_view<char>(strFormat), std::make_format_args<FormatContext>(args...));
+
+        std::vformat_to(std::back_inserter(ss), std::basic_string_view<char>(strFormat), std::make_format_args(args...));
 
         if (ss.length() > 0)
         {
@@ -51,7 +51,8 @@ namespace StrUtil {
     inline size_t Format(char* szBuffer, INT& BuffLen, const char* strFormat, const ArgTypes&... args)
     {
         std::string ss;
-        std::vformat_to(std::back_inserter(ss), std::basic_string_view<char>(strFormat), std::make_format_args<FormatContext>(args...));
+
+        std::vformat_to(std::back_inserter(ss), std::basic_string_view<char>(strFormat), std::make_format_args(args...));
 
         if (ss.length() > 0)
         {

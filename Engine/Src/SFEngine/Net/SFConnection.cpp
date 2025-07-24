@@ -156,11 +156,6 @@ namespace SF {
 			m_tConnectionTime = Util::Time.GetTimeMs();
 		}
 
-		IHeap& Connection::GetIOHeap()
-		{
-			return m_IOHandler != nullptr ? m_IOHandler->GetIOHeap() : Service::NetSystem->GetHeap();
-		}
-
 		Result Connection::ClearQueues()
 		{
             m_RecvMessageQueue.Reset();

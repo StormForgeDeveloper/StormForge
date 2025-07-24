@@ -40,10 +40,8 @@ namespace Net {
 	// SocketIO interface
 	//
 
-	SocketIO::SocketIO(IHeap& heap)
-		: m_Heap(heap)
-		, m_IOStatus(IOStatus::None)
-		//, m_pWriteQueues(nullptr)
+	SocketIO::SocketIO()
+		: m_IOStatus(IOStatus::None)
 		, m_PendingRecvCount(0)
 		, m_PendingSendCount(0)
 	{
@@ -194,8 +192,7 @@ namespace Net {
 	//	 - For UDP socket IO
 	//
 
-	SocketIOUDP::SocketIOUDP(IHeap& heap)
-		: SocketIO(heap)
+	SocketIOUDP::SocketIOUDP()
 	{
 	}
 
@@ -396,7 +393,6 @@ namespace Net {
 	//
 
 	SocketIOTCP::SocketIOTCP(IHeap& heap)
-		: SocketIO(heap)
 	{
 	}
 

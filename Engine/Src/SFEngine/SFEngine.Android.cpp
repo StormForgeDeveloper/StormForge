@@ -25,9 +25,14 @@
 #include "Util/SFTimeUtil.h"
 #include "Service/SFEngineService.h"
 
-//#include "Graphics/SFGraphicDeviceVulkan.h"
-//#include "Graphics/SFRenderCommand.h"
-//#include "Resource/SFResourceManager.h"
+#if SF_USE_GRAPHIC_SUBSYSTEM
+#include "Graphics/SFGraphicDeviceVulkan.h"
+#include "Graphics/SFRenderCommand.h"
+#include "Resource/SFResourceManager.h"
+
+//#include "Asset/Importer/SFAssetImporterFactory.h"
+//#include "Asset/Serializer/SFAssetSerializerFactory.h"
+#endif // SF_USE_GRAPHIC_SUBSYSTEM
 
 #include "EngineObject/SFEngineObjectManager.h"
 #include "EngineObject/SFEngineTaskManager.h"
@@ -36,15 +41,8 @@
 #include "Net/SFNetConst.h"
 #include "Net/SFNetSystem.h"
 
-//#include "Asset/Importer/SFAssetImporterFactory.h"
-//#include "Asset/Serializer/SFAssetSerializerFactory.h"
-
-
-
 namespace SF
 {
-
-
 
 	static void AppOnStart(ANativeActivity* activity) {
 		SFLog(System, Debug, "Start: {0}", activity);
@@ -204,6 +202,7 @@ namespace SF
 		pEngine->m_InitParameter = initParam;
 		pEngine->RegisterBasicComponents();
 
+#if SF_USE_GRAPHIC_SUBSYSTEM
 		if (initParam.GraphicSystem != nullptr)
 		{
 			pEngine->AddComponent<SF::ResourceManagerComponent>();
@@ -212,6 +211,7 @@ namespace SF
 			pEngine->AddComponent<SF::GraphicDeviceComponent<SF::GraphicDeviceVulkan>>();
 #endif
 		}
+#endif // #if SF_USE_GRAPHIC_SUBSYSTEM
 
 		pEngine->AddComponent<SF::AndroidApp>(assetManager);
 

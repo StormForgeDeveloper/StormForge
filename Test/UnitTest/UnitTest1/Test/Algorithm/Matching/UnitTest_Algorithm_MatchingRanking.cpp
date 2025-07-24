@@ -10,7 +10,6 @@
 #include "Util/SFRandom.h"
 #include "../UnitTest_Algorithm.h"
 
-
 using ::testing::EmptyTestEventListener;
 using ::testing::InitGoogleTest;
 using ::testing::Test;
@@ -22,8 +21,6 @@ using ::testing::UnitTest;
 using namespace ::SF;
 
 
-
-
 // ranking key type
 union RankingKey
 {
@@ -33,7 +30,6 @@ union RankingKey
 	};
 	uint64_t RankingKeyValue;
 };
-
 
 // ranking player
 class RankingPlayer
@@ -76,8 +72,6 @@ public:
 
 constexpr int RankingPlayer::MAX_SCORE;
 
-
-
 TEST_F(AlgorithmTest, MatchingRanking)
 {
 	constexpr int NUM_MATCH_THREAD = 4;
@@ -98,7 +92,7 @@ TEST_F(AlgorithmTest, MatchingRanking)
 	std::atomic< uint32_t> successfulMatchCount(0);
 	std::atomic< uint32_t> failedMatchCount(0);
 
-	auto players = new RankingPlayer[NUM_PLAYER];
+    std::vector<RankingPlayer> players(NUM_PLAYER, RankingPlayer{});
 
 	DualSortedMap<uint64_t, RankingPlayer*> rankingMap;
 	CriticalSection m_UpdateLock;
@@ -193,13 +187,10 @@ TEST_F(AlgorithmTest, MatchingRanking)
 		m_Threads.push_back(newThread);
 	}
 
-
-
 	while (Util::TimeSinceRaw(startTime) < testTime)
 	{
 		ThisThread::SleepFor(DurationMS(500));
 	}
-
 
 	auto testDuration = Util::TimeSinceRaw(startTime);
 	SFLog(Game, Info, "PlayerUpdated:{0}, Match success/fail:{1}/{2}, duration:{3} min", playerUpdated.load(), successfulMatchCount.load(), failedMatchCount.load(), (float)testDuration.count() / (60000.f));
@@ -210,7 +201,5 @@ TEST_F(AlgorithmTest, MatchingRanking)
 	StopAllThread();
 
 	rankingMap.clear();
-
-	delete (players);
 }
 

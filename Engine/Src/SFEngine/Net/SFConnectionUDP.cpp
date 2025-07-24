@@ -52,8 +52,7 @@ namespace Net {
 
 
 	ConnectionUDPClient::MyNetSocketIOAdapter::MyNetSocketIOAdapter(ConnectionUDPClient &owner)
-		: SocketIOUDP(owner.GetHeap())
-		, m_Owner(owner)
+		: m_Owner(owner)
 	{
 		SetUserSocketID(m_Owner.GetCID());
 

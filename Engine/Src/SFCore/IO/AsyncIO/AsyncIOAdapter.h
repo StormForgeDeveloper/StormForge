@@ -91,8 +91,6 @@ namespace SF {
 
 			virtual ~AsyncIOAdapter();
 
-			IHeap& GetIOHeap() { return m_Heap; }
-
 			int GetAssignedIOWorker() const { return m_AssignedIOWorker; }
 			void SetAssignedIOWorker(int assignedIOWorker);
 

@@ -213,7 +213,6 @@ namespace Net {
 		const SocketType GetSocketType() const { return GetNetIOHandler() != nullptr ? GetNetIOHandler()->GetIOSockType() : SocketType::Stream; }
 
 		SocketIO* GetNetIOHandler() const { return m_IOHandler; }
-		IHeap& GetIOHeap();
 
 		// Get remote address
         const sockaddr_storage& GetRemoteSockAddr() const { return m_sockAddrRemote; }

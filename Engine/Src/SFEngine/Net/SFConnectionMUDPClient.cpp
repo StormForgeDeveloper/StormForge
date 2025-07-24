@@ -40,8 +40,7 @@ namespace Net {
 	std::atomic<uint64_t> ConnectionMUDPClient::stm_CIDGen(0);
 
 	ConnectionMUDPClient::MyNetSocketIOAdapter::MyNetSocketIOAdapter(ConnectionMUDPClient &owner)
-		: SocketIOUDP(owner.GetHeap())
-		, m_Owner(owner)
+		: m_Owner(owner)
 	{
 		SetUserSocketID(m_Owner.GetCID());
 	}

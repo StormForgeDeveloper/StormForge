@@ -195,13 +195,9 @@ namespace Net {
 			SyncCounter m_NumReadWait;
 			SyncCounter m_NumWriteWait;
 
-			IHeap& m_Heap;
-
 		public:
-			IOCPSystem(IHeap& memoryManager);
+			IOCPSystem();
 			~IOCPSystem();
-
-			IHeap& GetHeap() { return m_Heap; }
 
 			virtual Result Initialize(uint netThreadCount) override;
 			virtual void Terminate() override;

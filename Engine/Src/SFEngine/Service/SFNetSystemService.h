@@ -86,8 +86,6 @@ namespace SF {
 
 	public:
 
-		virtual IHeap& GetHeap() { return GetSystemHeap(); }
-
 		virtual NetIOSystem& GetNetIOSystem() { return m_DefaultNetIOSystem; }
 
 		virtual Net::WriteBufferQueue* GetWriteBufferQueue() { return nullptr; }

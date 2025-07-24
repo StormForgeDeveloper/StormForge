@@ -105,7 +105,7 @@ namespace Net {
 	{
 	private:
 
-		EPOLLWorker* m_ListenWorker;
+		UniquePtr<EPOLLWorker> m_ListenWorker;
 		// workers for TCP
 		std::atomic<int> m_iTCPAssignIndex;
 		DynamicArray<EPOLLWorker*> m_WorkerTCP;

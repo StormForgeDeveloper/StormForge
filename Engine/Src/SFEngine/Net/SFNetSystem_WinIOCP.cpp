@@ -344,8 +344,7 @@ namespace Net {
 	
 
 
-		IOCPSystem::IOCPSystem(IHeap& memoryManager)
-			: m_Heap(memoryManager)
+		IOCPSystem::IOCPSystem()
 		{
 		}
 

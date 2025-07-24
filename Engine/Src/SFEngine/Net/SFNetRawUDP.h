@@ -58,8 +58,6 @@ namespace Net {
 
 	private:
 
-		Heap m_Heap;
-
 		MyNetSocketIOAdapter m_NetIOAdapter;
 
 		NetAddress m_LocalAddress;
@@ -73,10 +71,7 @@ namespace Net {
 	public:
 
 		RawUDP();
-		RawUDP(IHeap& heap);
 		virtual ~RawUDP();
-
-		IHeap& GetHeap() { return *m_Heap.get(); }
 
 		bool CanDelete() { return m_NetIOAdapter.CanDelete(); }
 

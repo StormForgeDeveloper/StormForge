@@ -51,7 +51,6 @@ namespace Net {
 		, m_GatheringBufferSize(gatheringBufferSize)
 		, m_RecvBufferSize(recvBufferSize)
 		, m_SendBufferSize(sendBufferSize)
-		, m_Heap("Net", GetSystemHeap())
 		, m_NetIOSystem(nullptr)
 	{
 #if KQUEUE
@@ -59,7 +58,7 @@ namespace Net {
 #elif EPOLL
 		m_NetIOSystem = new  EPOLLSystem;
 #else
-		m_NetIOSystem = new  IOCPSystem::IOCPSystem(GetHeap());
+		m_NetIOSystem = new  IOCPSystem::IOCPSystem;
 #endif
 	}
 

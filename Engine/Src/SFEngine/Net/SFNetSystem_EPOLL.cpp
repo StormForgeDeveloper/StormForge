@@ -386,9 +386,6 @@ namespace Net {
 	EPOLLSystem::EPOLLSystem()
 		: m_ListenWorker(nullptr)
 		, m_iTCPAssignIndex(0)
-		, m_WorkerTCP(Service::NetSystem->GetHeap())
-//		, m_UDPSendWorker(nullptr)
-		, m_WorkerUDP(Service::NetSystem->GetHeap())
 	{
 	}
 
@@ -400,10 +397,10 @@ namespace Net {
 
 		int hEPollUDP = epoll_create(1);
 
-		m_ListenWorker = new(Service::NetSystem->GetHeap()) EPOLLWorker(false);
+		m_ListenWorker.reset(new EPOLLWorker(false));
 		m_ListenWorker->Start();
 
-		//m_UDPSendWorker = new(Service::NetSystem->GetHeap()) EPOLLSendWorker;
+		//m_UDPSendWorker = new EPOLLSendWorker;
 		//m_UDPSendWorker->Start();
 
 		m_iTCPAssignIndex = 0;
@@ -417,7 +414,7 @@ namespace Net {
 
 			for (uint iThread = 0; iThread < netThreadCount; iThread++)
 			{
-				auto pNewWorker = new(Service::NetSystem->GetHeap()) EPOLLWorker(true);
+				auto pNewWorker = new EPOLLWorker(true);
 				m_WorkerTCP.push_back(pNewWorker);
 
 				pNewWorker->Start();
@@ -426,7 +423,7 @@ namespace Net {
 			// 
 			for (uint iThread = 0; iThread < netThreadCount; iThread++)
 			{
-				auto pNewWorker = new(Service::NetSystem->GetHeap()) EPOLLWorker(false, hEPollUDP);
+				auto pNewWorker = new EPOLLWorker(false, hEPollUDP);
 				m_WorkerUDP.push_back(pNewWorker);
 
 				pNewWorker->Start();
@@ -442,15 +439,14 @@ namespace Net {
 		if (m_ListenWorker)
 		{
 			m_ListenWorker->Stop(true);
-			Service::NetSystem->GetHeap().Delete(m_ListenWorker);
 		}
-		m_ListenWorker = nullptr;
+		m_ListenWorker.reset();
 
 		// 
 		for (uint iThread = 0; iThread < m_WorkerTCP.size(); iThread++)
 		{
 			m_WorkerTCP[iThread]->Stop(true);
-			Service::NetSystem->GetHeap().Delete(m_WorkerTCP[iThread]);
+            delete m_WorkerTCP[iThread];
 		}
 		m_WorkerTCP.Clear();
 
@@ -458,7 +454,7 @@ namespace Net {
 		//if (m_UDPSendWorker)
 		//{
 		//	m_UDPSendWorker->Stop(true);
-		//	Service::NetSystem->GetHeap().Delete(m_UDPSendWorker);
+		//	delete m_UDPSendWorker;
 		//}
 		//m_UDPSendWorker = nullptr;
 
@@ -469,7 +465,7 @@ namespace Net {
 			auto pThread = m_WorkerUDP[iThread];
 			hEpoll = pThread->GetEpollHandle();
 			pThread->Stop(true);
-			Service::NetSystem->GetHeap().Delete(pThread);
+            delete pThread;
 		}
 		m_WorkerUDP.Clear();
 

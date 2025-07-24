@@ -78,8 +78,6 @@ namespace Net {
 
 	private:
 
-		IHeap& m_Heap;
-
 		CBFlags m_CBFlags;
 
 		SocketType m_IOSockType = SocketType::DataGram;
@@ -110,10 +108,9 @@ namespace Net {
 
 	public:
 
-		SocketIO(IHeap& heap);
+		SocketIO();
 		virtual ~SocketIO();
 
-		IHeap& GetIOHeap() { return m_Heap; }
 
 		// Get latest pending recv result
 		Result GetLastPendingRecvResult() { return m_LastPendingRecvResult; }
@@ -202,7 +199,7 @@ namespace Net {
 	public:
         using super = SocketIO;
 
-		SocketIOUDP(IHeap& heap);
+		SocketIOUDP();
 
 		virtual Result WriteBuffer(IOBUFFER_WRITE *pSendBuffer) override;
 

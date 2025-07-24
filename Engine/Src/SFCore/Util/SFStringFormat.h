@@ -55,7 +55,7 @@ namespace SF {
 		AppendFormat_Internal(strFormat, sizeof...(args), arguments);
 		return *this;
 	}
-#endif ! SF_USE_STD_STRING
+#endif // !SF_USE_STD_STRING
 
 }; // namespace SF
 

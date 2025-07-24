@@ -57,7 +57,7 @@ extern "C"
 
 	JNIEXPORT jlong JNICALL Java_com_SF_SFConnection_NativeCreateConnection(JNIEnv* env)
 	{
-		auto pConnection = new(Service::NetSystem->GetHeap()) Net::ConnectionMUDPClient(Service::NetSystem->GetHeap());
+		auto pConnection = new Net::ConnectionMUDPClient();
 		return (jlong)(Net::Connection*)pConnection;
 	}
 

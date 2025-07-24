@@ -192,7 +192,7 @@ namespace SF {
         // Check heading string
         bool StartsWith(const StringType& op) const
         {
-            return super::starts_with(std::basic_string_view(op));
+            return super::starts_with(static_cast<const std::basic_string<CharType>&>(op));
         }
 
         bool StartsWith(const CharType* op) const
@@ -208,7 +208,7 @@ namespace SF {
         // Check tailing string
         bool EndsWith(const StringType& op) const
         {
-            return super::ends_with((std::basic_string<CharType>&)(op));
+            return super::ends_with(static_cast<const std::basic_string<CharType>&>(op));
         }
 
         bool EndsWith(const CharType* op) const
@@ -380,42 +380,35 @@ namespace SF {
         }
 
         // Format string
-        template<class ...ArgTypes,
-            typename = std::enable_if_t<std::is_same_v<CharType, char>>>
-        StringType& Format(const std::string_view& strFormat, ArgTypes... args)
+        template<class ...ArgTypes>
+        StringType& Format(const std::basic_string_view<CharType>& strFormat, ArgTypes... args)
         {
             super::clear();
 
-            *this = std::move(std::vformat(strFormat, std::make_format_args(args...)));
-
-            return *this;
-        }
-
-        template< class ...ArgTypes,
-            typename = std::enable_if_t<std::is_same_v<CharType, wchar_t>>>
-        StringType& Format(const std::wstring_view& strFormat, ArgTypes... args)
-        {
-            super::clear();
-
-            *this = std::move(std::vformat(strFormat, std::make_format_args<std::wformat_context>(args...)));
+            if constexpr (std::is_same_v<CharType, char>)
+            {
+                *this = std::move(std::vformat(strFormat, std::make_format_args(args...)));
+            }
+            else
+            {
+                *this = std::move(std::vformat(strFormat, std::make_format_args<std::wformat_context>(args...)));
+            }
 
             return *this;
         }
 
         // Format string
-        template< class ...ArgTypes,
-            typename = std::enable_if_t<std::is_same_v<CharType, char>>>
-        StringType& AppendFormat(const std::string_view& strFormat, ArgTypes... args)
+        template< class ...ArgTypes>
+        StringType& AppendFormat(const std::basic_string_view<CharType>& strFormat, ArgTypes... args)
         {
-            super::append(std::move(std::vformat(strFormat, std::make_format_args(args...))));
-            return *this;
-        }
-
-        template< class ...ArgTypes,
-            typename = std::enable_if_t<std::is_same_v<CharType, wchar_t>>>
-        StringType& AppendFormat(const std::wstring_view& strFormat, ArgTypes... args)
-        {
-            super::append(std::move(std::vformat(strFormat, std::make_format_args<std::wformat_context>(args...))));
+            if constexpr (std::is_same_v<CharType, char>)
+            {
+                super::append(std::move(std::vformat(strFormat, std::make_format_args(args...))));
+            }
+            else
+            {
+                super::append(std::move(std::vformat(strFormat, std::make_format_args<std::wformat_context>(args...))));
+            }
             return *this;
         }
 

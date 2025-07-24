@@ -22,7 +22,9 @@
 #endif
 
 
-
+#ifndef SF_USE_GRAPHIC_SUBSYSTEM
+#define SF_USE_GRAPHIC_SUBSYSTEM 0
+#endif
 
 #define SF_PLATFORM_WINDOWS		1
 #define SF_PLATFORM_LINUX		2

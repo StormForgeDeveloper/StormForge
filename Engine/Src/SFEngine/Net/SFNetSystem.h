@@ -79,9 +79,6 @@ namespace Net {
 
 		SharedPointerT<MemoryPool> m_pGatheringBufferPool;
 
-		// Network memory manager
-		Heap m_Heap;
-
 		NetIOSystem* m_NetIOSystem;
 
 
@@ -111,8 +108,7 @@ namespace Net {
 		///////////////////////////////////////////////////////////////////////////////
 		// 
 
-		virtual IHeap& GetHeap() override { return *m_Heap.get(); }
-		
+	
 		virtual NetIOSystem& GetNetIOSystem() override { return m_NetIOSystem == nullptr ? NetSystemService::GetNetIOSystem() : *m_NetIOSystem; }
 		
 		//virtual WriteBufferQueue* GetWriteBufferQueue() override;

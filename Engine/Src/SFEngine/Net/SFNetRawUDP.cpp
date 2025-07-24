@@ -43,8 +43,7 @@ namespace Net {
 
 
 	RawUDP::MyNetSocketIOAdapter::MyNetSocketIOAdapter(RawUDP &owner)
-		: SocketIOUDP(owner.GetHeap())
-		, m_Owner(owner)
+		: m_Owner(owner)
 	{
 	}
 
@@ -138,14 +137,7 @@ namespace Net {
 	//
 
 	RawUDP::RawUDP()
-		: m_Heap("NetRawUDP", Service::NetSystem->GetHeap())
-		, m_NetIOAdapter(*this)
-	{
-	}
-
-	RawUDP::RawUDP(IHeap& heap)
-		: m_Heap("NetRawUDP", heap)
-		, m_NetIOAdapter(*this)
+		: m_NetIOAdapter(*this)
 	{
 	}
 

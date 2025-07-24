@@ -41,8 +41,7 @@ namespace Net {
 
 
 	NetUDP::MyNetSocketIOAdapter::MyNetSocketIOAdapter(NetUDP &owner)
-		: SocketIOUDP(owner.GetHeap())
-		, m_Owner(owner)
+		: m_Owner(owner)
 	{
 	}
 
@@ -142,20 +141,13 @@ namespace Net {
 	//
 
 	NetUDP::NetUDP()
-		: m_Heap("NetNetUDP", Service::NetSystem->GetHeap())
-		, m_NetIOAdapter(*this)
-	{
-	}
-
-	NetUDP::NetUDP(IHeap& heap)
-		: m_Heap("NetNetUDP", heap)
-		, m_NetIOAdapter(*this)
+		: m_NetIOAdapter(*this)
 	{
 	}
 
 	NetUDP::~NetUDP()
 	{
-		delete (m_pRecvBuffers);
+		delete[] m_pRecvBuffers;
 	}
 
 	Result NetUDP::InitializeNet(const NetAddress& localAddress, MessageHandlerFunc &&Handler)
@@ -240,7 +232,7 @@ namespace Net {
 		// Ready recv
 		if (NetSystem::IsProactorSystem())
 		{
-			if (m_pRecvBuffers) GetHeap().Delete(m_pRecvBuffers);
+			if (m_pRecvBuffers) delete[] m_pRecvBuffers;
 			netCheckPtr(m_pRecvBuffers = new IOBUFFER_READ[Const::SVR_NUM_RECV_THREAD]);
 
 			for (int uiRecv = 0; uiRecv < Const::SVR_NUM_RECV_THREAD; uiRecv++)
