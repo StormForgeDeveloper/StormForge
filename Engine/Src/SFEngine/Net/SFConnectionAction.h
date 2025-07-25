@@ -26,7 +26,6 @@ namespace Net {
 
 	class Connection;
 	class ConnectionUDPBase;
-	class ConnectionUDP;
 	class ConnectionMUDP;
 
 
