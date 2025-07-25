@@ -389,7 +389,7 @@ namespace SF
 
         packetBuilder.Finish(payloadOffset);
 
-        MessageHeader packetHeader;
+        MessageHeaderWithBuffer packetHeader;
         packetHeader.TransactionId = TransactionID(eventId);
         packetHeader.MessageId = Message::Telemetry::MID_PostEventCmd;
         Result resultPH;

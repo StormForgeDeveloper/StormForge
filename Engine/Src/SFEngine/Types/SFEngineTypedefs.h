@@ -776,7 +776,7 @@ struct std::formatter<SF::EPlatform>
             "Steam",      // Steam player Id
             "Facebook"   // Facebook
         };
-        constexpr int MaxNames = sizeof(Names) / sizeof(Names[0]);
+        constexpr int MaxNames = sizeof(Names) / sizeof(Names[0]) - 1;
 
         return std::format_to(ctx.out(), "{}", Names[std::clamp<int>((int)value, 0, MaxNames)]);
     }

@@ -131,7 +131,7 @@ namespace SF {
 
         m_Builder.Finish(payloadOffset);
 
-        MessageHeader packetHeader;
+        MessageHeaderWithBuffer packetHeader;
         packetHeader.TransactionId = TransactionID();
         packetHeader.MessageId = Message::Generic::MID_PostLogDataCmd;
         Result resultPH;

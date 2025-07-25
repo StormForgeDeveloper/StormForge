@@ -66,6 +66,7 @@ namespace SF
 			InGameConnectingGameInstance,
 			InGameGameInstanceJoining,
 			InGameInGameInstance,
+            Max
 		};
 
 		struct OnlineStateChangedEventArgs
@@ -288,4 +289,47 @@ namespace SF
 }
 
 template<> inline bool IsDefaultValue(const SF::OnlineClient::OnlineStateChangedEventArgs& value) { return value.PrevState == SF::OnlineClient::OnlineState::None && value.NewState == SF::OnlineClient::OnlineState::None; }
+
+
+template <>
+struct std::formatter<SF::OnlineClient::OnlineState>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::OnlineClient::OnlineState& value, FormatContext& ctx) const
+    {
+        static const char* Names[] =
+        {
+            "None",
+
+            // Disconnected
+            "Disconnected",
+
+            // Login operations
+            "ConnectingToLogin",
+            "LogingIn",
+            "LoggedIn",
+
+            // In game state
+            "ConnectingToGameServer",
+            "JoiningToGameServer",
+            "InGameServer",
+
+            // In game instance state. the player still in game as well
+            "InGameJoiningGameInstance",
+            "InGameConnectingGameInstance",
+            "InGameGameInstanceJoining",
+            "InGameInGameInstance",
+        };
+        constexpr int MaxNames = sizeof(Names) / sizeof(Names[0]);
+        static_assert(MaxNames == static_cast<int>(SF::OnlineClient::OnlineState::Max));
+
+        return std::format_to(ctx.out(), "{}", Names[std::clamp<int>((int)value, 0, MaxNames)]);
+    }
+};
 

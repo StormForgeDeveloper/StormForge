@@ -50,7 +50,7 @@ namespace SF
     {
         Result hr;
 
-        MessageHeader messageHeader;
+        MessageHeaderWithBuffer messageHeader;
         messageHeader.MessageId = messageId;
         messageHeader.TransactionId = transactionId;
 

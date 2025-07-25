@@ -143,6 +143,13 @@ namespace SF {
 
     };
 
+    // structure can hold maximum MessageHeader item
+    struct MessageHeaderWithBuffer : public MessageHeader
+    {
+        EntityUID EntityUID;
+        Result Hr;
+    };
+
     static_assert((sizeof(uint16_t) * 7) == sizeof(MessageHeader), "MessageHeader should fit");
 
 #pragma pack(pop)

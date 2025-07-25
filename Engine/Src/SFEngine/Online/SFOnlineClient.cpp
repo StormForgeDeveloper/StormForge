@@ -744,7 +744,7 @@ namespace SF
                 m_Owner.m_CustomZoneDataVersion = 0;
             }
 			
-			SFLog(Net, Info, "Game instance joined: {0}, game:{1}, {2}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress);
+			SFLog(Net, Info, "Game instance joined: {0}, game:{1}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress);
 
 			SetOnlineState(OnlineState::InGameConnectingGameInstance);
 
@@ -1011,13 +1011,13 @@ namespace SF
 		if (GetOnlineState() != OnlineState::None
 			&& GetOnlineState() != OnlineState::Disconnected)
 		{
-			SFLog(Net, Error, "OnlineClient::StartConnection, Busy, invalid state:{0}", (uint32_t)GetOnlineState());
+			SFLog(Net, Error, "OnlineClient::StartConnection, Busy, invalid state:{0}", GetOnlineState());
 			return ResultCode::INVALID_STATE;
 		}
 
 		if (m_PendingTasks.size() > 0)
 		{
-			SFLog(Net, Error, "OnlineClient::StartConnection, Busy, we have running task, state:{0}", (uint32_t)GetOnlineState());
+			SFLog(Net, Error, "OnlineClient::StartConnection, Busy, we have running task, state:{0}", GetOnlineState());
 			return ResultCode::BUSY;
 		}
 
@@ -1034,7 +1034,7 @@ namespace SF
             m_Password = password;
         }
 
-        SFLog(Net, Info, "OnlineClient::StartConnection, titleUID:{0}, login:{1}, steamUserId:{2}, {3}", Util::GetTitleUID(), loginAddress, steamUserId, steamUserName);
+        SFLog(Net, Info, "OnlineClient::StartConnection, titleUID:{0}, login:{1}, steamUserId:{2}, {3}", Util::GetTitleUID(), m_LoginAddresses, m_SteamUserId, m_SteamUserName);
 
         if (m_SteamUserId != 0)
         {
