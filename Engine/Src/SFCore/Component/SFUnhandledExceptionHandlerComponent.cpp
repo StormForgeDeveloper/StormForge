@@ -77,33 +77,35 @@ namespace SF {
         /* skip first stack frame (points here) */
         for (int i = 1; i < capturedSize && messages != NULL; ++i)
         {
+            const char* message = messages[i] ? messages[i] : "";
             Dl_info& dlInfo = dlInfos[i];
             if (dladdr(callStackArray[i], &dlInfo) && dlInfo.dli_fname && dlInfo.dli_fbase)
             {
                 void* pOffset = reinterpret_cast<void*>(uintptr_t(callStackArray[i]) - uintptr_t(dlInfo.dli_fbase));
-                fprintf(stderr, "[bt]: (%d) %s, %s, %p\n", i, messages[i], dlInfo.dli_fname, pOffset);
+                fprintf(stderr, "[bt]: (%d) %s, %s, %p\n", i, message, dlInfo.dli_fname, pOffset);
             }
             else
             {
-                fprintf(stderr, "[bt]: (%d) %s\n", i, messages[i]);
+                fprintf(stderr, "[bt]: (%d) %s\n", i, message);
             }
         }
 
         // send to log as well
-        SFLog(System, Error, "signal {0} ({1}), address is 0x{2:X} from 0x{3:X}",
+        SFLog(System, Error, "signal {0} ({1}), address is {2} from {3}",
             signal, strsignal(signal), info->si_addr, (void*)caller_address);
 
         for (int i = 1; i < capturedSize && messages != NULL; ++i)
         {
+            const char* message = messages[i] ? messages[i] : "";
             Dl_info& dlInfo = dlInfos[i];
             if (dlInfo.dli_fname && dlInfo.dli_fbase)
             {
                 void* pOffset = reinterpret_cast<void*>(uintptr_t(callStackArray[i]) - uintptr_t(dlInfo.dli_fbase));
-                SFLog(System, Error, "[bt]: ({0}) {1}, {2}, offset:{3:X}\n", i, messages[i], dlInfo.dli_fname, pOffset);
+                SFLog(System, Error, "[bt]: ({0}) {1}, {2}, offset:{3}\n", i, message, dlInfo.dli_fname, pOffset);
             }
             else
             {
-                SFLog(System, Error, "[bt]: ({0}) {1}", i, messages[i]);
+                SFLog(System, Error, "[bt]: ({0}) {1}", i, message);
             }
         }
 
