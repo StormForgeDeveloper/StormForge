@@ -800,23 +800,6 @@ namespace Net {
 	}
 
 	
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	UDP connection class
-	//
-
-	// Update net control, process connection heartbeat, ... etc
-	Result ConnectionUDP::TickUpdate()
-	{
-		ScopeContext hr([this](Result hr) 
-			{
-				SendFlush();
-			});
-
-		netCheck(super::TickUpdate());
-
-		return hr;
-	}
 	
 } // namespace Net
 } // namespace SF

@@ -105,6 +105,16 @@ namespace Net {
 		return hr;
 	}
 
+    Result ConnectionUDPClient::MyNetSocketIOAdapter::OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE* pIOBuffer)
+    {
+        Result hr;
+
+        delete static_cast<PacketData*>(pIOBuffer);
+        DecPendingSendCount();
+
+        return hr;
+    }
+
 	Result ConnectionUDPClient::MyNetSocketIOAdapter::OnWriteReady()
 	{
         m_Owner.SendFlush();

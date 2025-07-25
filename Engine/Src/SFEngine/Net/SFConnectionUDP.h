@@ -32,22 +32,7 @@ namespace Net {
 	//	Server UDP Network connection class
 	//
 
-	class ConnectionUDP : public ConnectionUDPBase
-	{
-	public:
-
-		using super = ConnectionUDPBase;
-
-	public:
-		
-		ConnectionUDP(SocketIO* ioHandler)
-			: ConnectionUDPBase(ioHandler)
-		{}
-
-
-		// Update net control, process connection heartbeat, ... etc
-		virtual Result TickUpdate() override;
-	};
+    using ConnectionUDP = ConnectionUDPBase;
 
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +62,7 @@ namespace Net {
 
             // called on packet recv
             virtual Result OnIORecvCompleted(Result hrRes, IOBUFFER_READ*& pIOBuffer) override;
-            //virtual Result OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE* pIOBuffer) override;
+            virtual Result OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE* pIOBuffer) override;
         };
 
 	private:
