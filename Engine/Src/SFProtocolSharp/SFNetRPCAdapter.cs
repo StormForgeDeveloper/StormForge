@@ -63,23 +63,7 @@ namespace SF.Net
             };
 
             // try to returning message to destination target directly
-            if (DestEntityUID.IsValid)
-            {
-                // Service::ServerConfig->ServerEndpointAddress.Channel
-                string destTopic = $"ent_{DestEntityUID.UID:X8}";
-                hr = m_Endpoint.SendMessage(destTopic, ref messageHeader, builder);
-            }
-            else if (messageHeader.MessageId.MessageType == EMessageType.Result && messageHeader.TransactionId.EntityUID != 0)
-            {
-                // Service::ServerConfig->ServerEndpointAddress.Channel
-                EntityUID requesterUID = new EntityUID(transactionId.EntityUID);
-                string destTopic = $"ent_{requesterUID.GetServerEntityUID().UID:X8}";
-                hr = m_Endpoint.SendMessage(destTopic, ref messageHeader, builder);
-            }
-            else
-            {
-                hr = m_Endpoint.SendMessage(ref messageHeader, builder);
-            }
+            hr = m_Endpoint.SendMessageWithRouting(ref messageHeader, builder);
 
             m_Endpoint.HandleSentMessage(hr, transactionId, messageId, callback);
 

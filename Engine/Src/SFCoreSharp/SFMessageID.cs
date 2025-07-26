@@ -78,6 +78,17 @@ namespace SF
         public uint CodeIndex => ((MessageIdRaw & NET_CODE_MASK) >> (int)NET_CODE_SHIFT);
         public EMessageType MessageType => (EMessageType)((MessageIdRaw & NET_TYPE_MASK) >> (int)NET_TYPE_SHIFT);
         public bool InterServer => ((MessageIdRaw & NET_INTERSERVER_MASK) >> (int)NET_INTERSERVER_SHIFT) != 0;
+        public void SetInterServer(bool interServer)
+        {
+            if (interServer)
+            {
+                MessageIdRaw |= NET_INTERSERVER_MASK;
+            }
+            else
+            {
+                MessageIdRaw &= ~NET_INTERSERVER_MASK;
+            }
+        }
         public UInt32 IDOnly => MessageIdRaw & (~NET_SEQUENCE_MASK);
         public UInt32 Sequence => MessageIdRaw & NET_SEQUENCE_MASK;
 
