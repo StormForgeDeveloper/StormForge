@@ -54,6 +54,14 @@ namespace SF {
 		 public const int _ENGINE_INVALID_ONLINE_SESSION = (unchecked((int)0xE7020009)); 
 		public static readonly Result ENGINE_INVALID_ONLINE_SESSION = new Result(_ENGINE_INVALID_ONLINE_SESSION); 
 
+		// Invalid title guid 
+		 public const int _ENGINE_INVALIDD_TITLE_GUID = (unchecked((int)0xE702000A)); 
+		public static readonly Result ENGINE_INVALIDD_TITLE_GUID = new Result(_ENGINE_INVALIDD_TITLE_GUID); 
+
+		// Invalid titile env 
+		 public const int _ENGINE_INVALIDD_TITLE_ENV = (unchecked((int)0xE702000B)); 
+		public static readonly Result ENGINE_INVALIDD_TITLE_ENV = new Result(_ENGINE_INVALIDD_TITLE_ENV); 
+
 	}
 }
 

@@ -30,6 +30,8 @@ namespace ResultCode {
 		codeMap.Insert((uint32_t)			ENGINE_ALREADY_USED_ITEM        , {"			ENGINE_ALREADY_USED_ITEM        ", "Already Used Item"});
 		codeMap.Insert((uint32_t)			ENGINE_ALREADY_USED_KEY        , {"			ENGINE_ALREADY_USED_KEY        ", "Already Used Key"});
 		codeMap.Insert((uint32_t)			ENGINE_INVALID_ONLINE_SESSION        , {"			ENGINE_INVALID_ONLINE_SESSION        ", "Invalid online session. probably kicked"});
+		codeMap.Insert((uint32_t)			ENGINE_INVALIDD_TITLE_GUID        , {"			ENGINE_INVALIDD_TITLE_GUID        ", "Invalid title guid"});
+		codeMap.Insert((uint32_t)			ENGINE_INVALIDD_TITLE_ENV        , {"			ENGINE_INVALIDD_TITLE_ENV        ", "Invalid titile env"});
 
 	}//InitializeResultCode 
 }//namespace ResultCode 

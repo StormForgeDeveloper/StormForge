@@ -231,7 +231,7 @@ namespace SF
 
             base64Password.push_back('\0');
 
-            SFLog(Game, Info, "RequestingLogin: {0}, User:{1}/{2}", m_Owner.GetLoginAddresses(), m_Owner.GetUserId(), (const char*)base64Password.data());
+            SFLog(Game, Info, "RequestingLogin: {}, env:{} User:{}/{}", m_Owner.GetLoginAddresses(), Util::GetTitleEnv(), m_Owner.GetUserId(), (const char*)base64Password.data());
 
             String url;
             url.Format("{0}/v1/idpw?Title={1}&Env={2}&userId={3}&password={4}",
@@ -272,7 +272,7 @@ namespace SF
             defCheck(Util::Base64Encode(m_Owner.GetSteamUserName().GetLength(), reinterpret_cast<const uint8_t*>(m_Owner.GetSteamUserName().data()), base64PlatformName));
             base64PlatformName.push_back('\0');
 
-            SFLog(Game, Info, "RequestingSteamLogin: {0}, {1}", m_Owner.GetSteamUserId(), (const char*)base64PlatformName.data());
+            SFLog(Game, Info, "RequestingSteamLogin: env:{}, {}/{}", Util::GetTitleEnv(), m_Owner.GetSteamUserId(), (const char*)base64PlatformName.data());
 
             String url;
             url.Format("{0}/v1/steam?Title={1}&Env={2}&steamAccountId={3}&steamUserName={4}&steamUserToken={5}",

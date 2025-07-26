@@ -20,6 +20,9 @@
 
     <ResultCodeItem Severity="Error" CodeName="INVALID_ONLINE_SESSION" Desc="Invalid online session. probably kicked"/>
 
+    <ResultCodeItem Severity="Error" CodeName="INVALIDD_TITLE_GUID" Desc="Invalid title guid"/>
+    <ResultCodeItem Severity="Error" CodeName="INVALIDD_TITLE_ENV" Desc="Invalid titile env"/>
+
 
 </ResultCodes>
 

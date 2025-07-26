@@ -48,6 +48,12 @@ namespace SF {
 			// Invalid online session. probably kicked 
 			constexpr Result 			ENGINE_INVALID_ONLINE_SESSION                                      ((int32_t)0xE7020009L);
 
+			// Invalid title guid 
+			constexpr Result 			ENGINE_INVALIDD_TITLE_GUID                                         ((int32_t)0xE702000AL);
+
+			// Invalid titile env 
+			constexpr Result 			ENGINE_INVALIDD_TITLE_ENV                                          ((int32_t)0xE702000BL);
+
 	void InitializeResultCodeEngine();
 
 	}//namespace ResultCode 
