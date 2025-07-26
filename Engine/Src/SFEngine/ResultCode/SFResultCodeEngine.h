@@ -45,14 +45,20 @@ namespace SF {
 			// Already Used Key 
 			constexpr Result 			ENGINE_ALREADY_USED_KEY                                            ((int32_t)0xE7020008L);
 
-			// Invalid online session. probably kicked 
+			// Invalid online session. probably kicked/expired 
 			constexpr Result 			ENGINE_INVALID_ONLINE_SESSION                                      ((int32_t)0xE7020009L);
 
+			// Invalid session token. probably dupe login 
+			constexpr Result 			ENGINE_INVALID_SESSION_TOKEN                                       ((int32_t)0xE702000AL);
+
+			// Invalid session GameUID. probably dupe login 
+			constexpr Result 			ENGINE_INVALID_GAME_SESSION                                        ((int32_t)0xE702000BL);
+
 			// Invalid title guid 
-			constexpr Result 			ENGINE_INVALIDD_TITLE_GUID                                         ((int32_t)0xE702000AL);
+			constexpr Result 			ENGINE_INVALIDD_TITLE_GUID                                         ((int32_t)0xE702000CL);
 
 			// Invalid titile env 
-			constexpr Result 			ENGINE_INVALIDD_TITLE_ENV                                          ((int32_t)0xE702000BL);
+			constexpr Result 			ENGINE_INVALIDD_TITLE_ENV                                          ((int32_t)0xE702000DL);
 
 	void InitializeResultCodeEngine();
 

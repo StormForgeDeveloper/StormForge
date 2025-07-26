@@ -18,7 +18,9 @@
     <ResultCodeItem Severity="Error" CodeName="ALREADY_USED_ITEM" Desc="Already Used Item"/>
     <ResultCodeItem Severity="Error" CodeName="ALREADY_USED_KEY" Desc="Already Used Key"/>
 
-    <ResultCodeItem Severity="Error" CodeName="INVALID_ONLINE_SESSION" Desc="Invalid online session. probably kicked"/>
+    <ResultCodeItem Severity="Error" CodeName="INVALID_ONLINE_SESSION" Desc="Invalid online session. probably kicked/expired"/>
+    <ResultCodeItem Severity="Error" CodeName="INVALID_SESSION_TOKEN" Desc="Invalid session token. probably dupe login"/>
+    <ResultCodeItem Severity="Error" CodeName="INVALID_GAME_SESSION" Desc="Invalid session GameUID. probably dupe login"/>
 
     <ResultCodeItem Severity="Error" CodeName="INVALIDD_TITLE_GUID" Desc="Invalid title guid"/>
     <ResultCodeItem Severity="Error" CodeName="INVALIDD_TITLE_ENV" Desc="Invalid titile env"/>

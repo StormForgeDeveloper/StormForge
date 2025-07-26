@@ -50,16 +50,24 @@ namespace SF {
 		 public const int _ENGINE_ALREADY_USED_KEY = (unchecked((int)0xE7020008)); 
 		public static readonly Result ENGINE_ALREADY_USED_KEY = new Result(_ENGINE_ALREADY_USED_KEY); 
 
-		// Invalid online session. probably kicked 
+		// Invalid online session. probably kicked/expired 
 		 public const int _ENGINE_INVALID_ONLINE_SESSION = (unchecked((int)0xE7020009)); 
 		public static readonly Result ENGINE_INVALID_ONLINE_SESSION = new Result(_ENGINE_INVALID_ONLINE_SESSION); 
 
+		// Invalid session token. probably dupe login 
+		 public const int _ENGINE_INVALID_SESSION_TOKEN = (unchecked((int)0xE702000A)); 
+		public static readonly Result ENGINE_INVALID_SESSION_TOKEN = new Result(_ENGINE_INVALID_SESSION_TOKEN); 
+
+		// Invalid session GameUID. probably dupe login 
+		 public const int _ENGINE_INVALID_GAME_SESSION = (unchecked((int)0xE702000B)); 
+		public static readonly Result ENGINE_INVALID_GAME_SESSION = new Result(_ENGINE_INVALID_GAME_SESSION); 
+
 		// Invalid title guid 
-		 public const int _ENGINE_INVALIDD_TITLE_GUID = (unchecked((int)0xE702000A)); 
+		 public const int _ENGINE_INVALIDD_TITLE_GUID = (unchecked((int)0xE702000C)); 
 		public static readonly Result ENGINE_INVALIDD_TITLE_GUID = new Result(_ENGINE_INVALIDD_TITLE_GUID); 
 
 		// Invalid titile env 
-		 public const int _ENGINE_INVALIDD_TITLE_ENV = (unchecked((int)0xE702000B)); 
+		 public const int _ENGINE_INVALIDD_TITLE_ENV = (unchecked((int)0xE702000D)); 
 		public static readonly Result ENGINE_INVALIDD_TITLE_ENV = new Result(_ENGINE_INVALIDD_TITLE_ENV); 
 
 	}

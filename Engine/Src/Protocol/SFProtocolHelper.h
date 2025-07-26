@@ -272,6 +272,14 @@ namespace SF {
                 return (SF::EAccountRole)(value);
             }
 
+            inline SF::Result ParseResult(const SF::Flat::Result* value)
+            {
+                if (value == nullptr)
+                    return {};
+                else
+                    return SF::Result(value->value());
+            }
+
             inline SF::AccountID ParseAccountID(const SF::Flat::AccountID* value)
             {
                 if (value == nullptr)
