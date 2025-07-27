@@ -107,11 +107,11 @@ namespace SF
 	VariableBox Boxing(const Array<const char*>& src) { VariableValueReference<Array<const char*>> variable(src); return VariableBox(variable); }
 
 	//IMPLEMENT_BOXING_TEMPLETE_BYVALUE(const wchar_t*);
-	VariableBox BoxingByValue(const wchar_t* src) { return VariableBox(VariableWString(src)); }
-	VariableBox BoxingByReference(const wchar_t* src) { return VariableBox(VariableWCharString(src)); }
-	VariableBox Boxing(const wchar_t* src) { return VariableBox(VariableWCharString(src)); }
-	VariableBox Boxing(Array<const wchar_t*>& src) { VariableValueReference<Array<const wchar_t*>> variable(src); return VariableBox(variable); }
-	VariableBox Boxing(const Array<const wchar_t*>& src) { VariableValueReference<Array<const wchar_t*>> variable(src); return VariableBox(variable); }
+	//VariableBox BoxingByValue(const wchar_t* src) { return VariableBox(VariableWString(src)); }
+	//VariableBox BoxingByReference(const wchar_t* src) { return VariableBox(VariableWCharString(src)); }
+	//VariableBox Boxing(const wchar_t* src) { return VariableBox(VariableWCharString(src)); }
+	//VariableBox Boxing(Array<const wchar_t*>& src) { VariableValueReference<Array<const wchar_t*>> variable(src); return VariableBox(variable); }
+	//VariableBox Boxing(const Array<const wchar_t*>& src) { VariableValueReference<Array<const wchar_t*>> variable(src); return VariableBox(variable); }
 
 	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(NetAddress);
 	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(TimeStampMS);

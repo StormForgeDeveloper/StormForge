@@ -1993,3 +1993,21 @@ struct std::formatter<SF::String>
     }
 };
 
+template <>
+struct std::formatter<const wchar_t*>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const wchar_t* value, FormatContext& ctx) const
+    {
+        int convertedSize = static_cast<int>(SF::StrUtil::StringConvert((wchar_t*)nullptr, -1, value));
+        char* buffer = reinterpret_cast<char* >(calloc(convertedSize + 1, 1));
+        SF::StrUtil::StringConvert(buffer, convertedSize+1, value);
+        return std::format_to(ctx.out(), "{}", buffer);
+    }
+};

@@ -20,6 +20,7 @@
 #include "Stream/SFStream.h"
 #include "Util/SFStringSerialization.h"
 #include "Util/SFGuid.h"
+#include "Net/SFNetDef.h"
 
 namespace SF {
 
@@ -85,7 +86,14 @@ namespace SF {
 		virtual uint64_t GetValueUInt64() const { assert(false); return 0; }
 		virtual float GetValueFloat() const { assert(false); return 0; }
 		virtual double GetValueDouble() const { assert(false); return 0; }
-		virtual String GetValueString() const { return String_Empty; }
+		virtual String GetValueString() const
+        {
+            std::stringstream ss;
+
+            ToString(ss);
+
+            return ss.str();
+        }
 		virtual const char* GetValueCharString() const { return nullptr; }
 		virtual const wchar_t* GetValueWCharString() const { return nullptr; }
 		virtual StringCrc32 GetValueStringCrc32() const { return StringCrc32(); }
@@ -113,7 +121,7 @@ namespace SF {
 		virtual Variable* Clone() const = 0;
 
 		// To string implementation
-		virtual Result ToString(ToStringContext& context) const { return ResultCode::NOT_IMPLEMENTED; }
+		virtual Result ToString(std::stringstream& ss) const { return ResultCode::NOT_IMPLEMENTED; }
 		virtual String ToString() const;
 
 		virtual bool IsEqualTypeNValue (const Variable& op) const;
@@ -183,9 +191,11 @@ namespace SF {
 
 
 		// Need to be overridden case by case
-		virtual Result ToString(ToStringContext& context) const override
+		virtual Result ToString(std::stringstream& ss) const override
 		{
-			return _ToString(context, m_Value);
+            std::format_to(std::ostreambuf_iterator<char>(ss), "{}", m_Value);
+
+            return ResultCode::SUCCESS;
 		}
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override
@@ -298,15 +308,18 @@ namespace SF {
 
 
 		// Need to be overridden case by case
-		virtual Result ToString(ToStringContext& context) const override
+		virtual Result ToString(std::stringstream& ss) const override
 		{
 			if (m_Value == nullptr)
 			{
-				StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(Null)");
-				return ResultCode::SUCCESS_FALSE;
+                ss << "nullptr";
 			}
+            else
+            {
+                ss << m_Value;
+            }
 
-			return _ToString(context, *m_Value);
+			return ResultCode::SUCCESS;
 		}
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override

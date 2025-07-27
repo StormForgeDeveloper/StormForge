@@ -80,21 +80,3 @@ namespace SF {
 
 } // namespace SF
 
-
-template <>
-struct std::formatter<const wchar_t*>
-{
-    // Specify the default format (e.g., "{}")
-    constexpr auto parse(std::format_parse_context& ctx) {
-        return ctx.begin();
-    }
-
-    // Define how the object is formatted
-    template <typename FormatContext>
-    auto format(const wchar_t* value, FormatContext& ctx) const
-    {
-        SF::StringConverter<char, wchar_t> converted(value);
-
-        return std::format_to(ctx.out(), "{}", (const SF::String&)converted);
-    }
-};

@@ -812,6 +812,51 @@ struct std::formatter<SF::PlayerInformation>
     }
 };
 
+template <>
+struct std::formatter<SF::RankingPlayerInformation>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::RankingPlayerInformation& value, FormatContext& ctx) const {
+        return std::format_to(ctx.out(), "({}, {}, {}, {}, WL:{}, WW:{})", value.PlayerID, value.PlayerPlatformId, value.NickName, value.LastActiveTime, value.WeeklyLose, value.WeeklyWin);
+    }
+};
+
+template <>
+struct std::formatter<SF::FriendInformation>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::FriendInformation& value, FormatContext& ctx) const {
+        return std::format_to(ctx.out(), "({}, {})", (SF::RankingPlayerInformation&)value, value.LastStaminaSent);
+    }
+};
+
+template <>
+struct std::formatter<SF::AchievementStat>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::AchievementStat& value, FormatContext& ctx) const {
+        return std::format_to(ctx.out(), "({}, {})", value.AchievementStatId, value.StatValue);
+    }
+};
+
 
 
 #include "SFEngineTypedefs.inl"

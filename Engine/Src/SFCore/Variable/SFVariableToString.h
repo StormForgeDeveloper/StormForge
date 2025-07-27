@@ -23,11 +23,11 @@ namespace SF
 {
 
 
-	Result _ToString(ToStringContext& context, const NamedVariableBox& value);
-	Result _ToString(ToStringContext& context, const VariableTable& value);
+	//Result _ToString(ToStringContext& context, const NamedVariableBox& value);
+	//Result _ToString(ToStringContext& context, const VariableTable& value);
 
 
-	DECLARE_BOXING_TEMPLETE_BYVALUE(NamedVariableBox);
+	//DECLARE_BOXING_TEMPLETE_BYVALUE(NamedVariableBox);
 	DECLARE_BOXING_TEMPLETE_BYREFERENCE(VariableTable);
 
 } // namespace SF

@@ -219,14 +219,10 @@ struct std::formatter<SF::VariableTable>
 
         for (auto itValue : value)
         {
-            char temp[128]="";
-            SF::ToStringContext context;
-            context.OutStream.pBuffer = temp;
-            context.OutStream.BuffLen = sizeof(temp);
-
-            itValue.GetValue()->ToString(context);
-
-            ss << std::format("{}={},", itValue.GetKey(), temp);
+            ss << itValue.GetKey();
+            ss << "=";
+            itValue.GetValue()->ToString(ss);
+            ss << ",";
         }
 
         ss << ")";

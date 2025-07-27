@@ -41,10 +41,11 @@ namespace SF
 
 	constexpr StringCrc32 VariableBool::TYPE_NAME;
  
-	Result VariableBool::ToString(ToStringContext& context) const
+	Result VariableBool::ToString(std::stringstream& ss) const
 	{
-		const String& valueString = m_Value ? String_True : String_False;;
-		return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, (const char*)valueString);
+		const String& valueString = m_Value ? String_True : String_False;
+        ss << valueString;
+		return ResultCode::SUCCESS;
 	}
 
 	Variable* VariableBool::Clone(Array<uint8_t>& buffer) const
@@ -72,9 +73,10 @@ namespace SF
 
 	constexpr StringCrc32 VariableVoidP::TYPE_NAME;
 
-	Result VariableVoidP::ToString(ToStringContext& context) const
+	Result VariableVoidP::ToString(std::stringstream& ss) const
 	{
-		return SF::_IToA(context, (uint64_t)m_Value);
+        std::format_to(std::ostreambuf_iterator(ss), "{:p}", m_Value);
+		return ResultCode::SUCCESS;
 	}
 
 	Variable* VariableVoidP::Clone(Array<uint8_t>& buffer) const
@@ -95,20 +97,11 @@ namespace SF
 
 	String Variable::ToString() const
 	{
-		constexpr size_t bufferSize = 2048;
+        std::stringstream ss;
 
-		String result;
-		result.Reserve(bufferSize);
-		ToStringContext context{};
-		context.OutStream.pBuffer = result.data();
-		context.OutStream.BuffLen = bufferSize;
-		context.MaxDigit = 0;
+		ToString(ss);
 
-		ToString(context);
-
-		result.Resize(bufferSize - context.OutStream.BuffLen);
-
-		return result;
+		return ss.str();
 	}
 
 
@@ -179,21 +172,10 @@ namespace SF
 		return StringCrc64(uint64_t(m_Value));
 	}
 
-	String VariableInt::GetValueString() const
+	Result VariableInt::ToString(std::stringstream& ss) const
 	{
-		char renderBuffer[128] = "";
-		ToStringContext context;
-		context.OutStream.pBuffer = renderBuffer;
-		context.OutStream.BuffLen = sizeof(renderBuffer);
-
-		ToString(context);
-
-		return String(renderBuffer);
-	}
-
-	Result VariableInt::ToString(ToStringContext& context) const
-	{
-		return SF::_IToA(context, m_Value);
+        ss << m_Value;
+		return ResultCode::SUCCESS;
 	}
 
 	Variable* VariableInt::Clone(Array<uint8_t>& buffer) const
@@ -262,21 +244,11 @@ namespace SF
         return StringCrc64(uint64_t(m_Value));
     }
 
-	String VariableUInt::GetValueString() const
-	{
-		char renderBuffer[128] = "";
-		ToStringContext context;
-		context.MaxDigit = -1;
-		context.OutStream.pBuffer = renderBuffer;
-		context.OutStream.BuffLen = sizeof(renderBuffer);
 
-		ToString(context);
-		return String(renderBuffer);
-	}
-
-	Result VariableUInt::ToString(ToStringContext& context) const
+	Result VariableUInt::ToString(std::stringstream& ss) const
 	{
-		return SF::_IToA(context, m_Value);
+        ss << m_Value;
+        return ResultCode::SUCCESS;
 	}
 
 	Variable* VariableUInt::Clone(Array<uint8_t>& buffer) const
@@ -307,10 +279,11 @@ namespace SF
 
 	constexpr StringCrc32 VariableResult::TYPE_NAME;
 
-	Result VariableResult::ToString(ToStringContext& context) const
+	Result VariableResult::ToString(std::stringstream& ss) const
 	{
 		auto pStr = m_Value.ToString();
-		return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, pStr);
+        ss << pStr;
+		return ResultCode::SUCCESS;
 	}
 
 	Variable* VariableResult::Clone(Array<uint8_t>& buffer) const
@@ -393,22 +366,11 @@ namespace SF
         return StringCrc64(uint64_t(m_Value));
     }
 
-	String VariableInt64::GetValueString() const
-	{
-		char renderBuffer[128] = "";
-		ToStringContext context;
-		context.OutStream.pBuffer = renderBuffer;
-		context.OutStream.BuffLen = sizeof(renderBuffer);
-
-		ToString(context);
-
-		return String(renderBuffer);
-	}
-
-	Result VariableInt64::ToString(ToStringContext& context) const
-	{
-		return SF::_IToA(context, m_Value);
-	}
+    Result VariableInt64::ToString(std::stringstream& ss) const
+    {
+        ss << m_Value;
+        return ResultCode::SUCCESS;
+    }
 
 	Variable* VariableInt64::Clone(Array<uint8_t>& buffer) const
 	{
@@ -478,21 +440,13 @@ namespace SF
         return StringCrc64(uint64_t(m_Value));
     }
 
-	String VariableUInt64::GetValueString() const
-	{
-		char renderBuffer[128] = "";
-		ToStringContext context;
-		context.OutStream.pBuffer = renderBuffer;
-		context.OutStream.BuffLen = sizeof(renderBuffer);
 
-		ToString(context);
-		return String(renderBuffer);
-	}
+    Result VariableUInt64::ToString(std::stringstream& ss) const
+    {
+        ss << m_Value;
+        return ResultCode::SUCCESS;
+    }
 
-	Result VariableUInt64::ToString(ToStringContext& context) const
-	{
-		return SF::_IToA(context, m_Value);
-	}
 
 	Variable* VariableUInt64::Clone(Array<uint8_t>& buffer) const
 	{
@@ -553,30 +507,15 @@ namespace SF
 
 	StringCrc64 VariableFloat::GetValueStringCrc64() const
 	{
-		char renderBuffer[128] = "";
-		ToStringContext context;
-		context.OutStream.pBuffer = renderBuffer;
-		context.OutStream.BuffLen = sizeof(renderBuffer);
-
-		ToString(context);
-		return StringCrc64(renderBuffer);
+		return StringCrc64();
 	}
 
-	String VariableFloat::GetValueString() const
-	{
-		char renderBuffer[128] = "";
-		ToStringContext context;
-		context.OutStream.pBuffer = renderBuffer;
-		context.OutStream.BuffLen = sizeof(renderBuffer);
+    Result VariableFloat::ToString(std::stringstream& ss) const
+    {
+        ss << m_Value;
+        return ResultCode::SUCCESS;
+    }
 
-		ToString(context);
-		return String(renderBuffer);
-	}
-
-	Result VariableFloat::ToString(ToStringContext& context) const
-	{
-		return SF::_FToA(context, m_Value);
-	}
 
 	Variable* VariableFloat::Clone(Array<uint8_t>& buffer) const
 	{
@@ -642,30 +581,15 @@ namespace SF
 
 	StringCrc64 VariableDouble::GetValueStringCrc64() const
 	{
-		char renderBuffer[128] = "";
-		ToStringContext context;
-		context.OutStream.pBuffer = renderBuffer;
-		context.OutStream.BuffLen = sizeof(renderBuffer);
-
-		ToString(context);
-		return StringCrc64(renderBuffer);
+		return StringCrc64();
 	}
 
-	String VariableDouble::GetValueString() const
-	{
-		char renderBuffer[128] = "";
-		ToStringContext context;
-		context.OutStream.pBuffer = renderBuffer;
-		context.OutStream.BuffLen = sizeof(renderBuffer);
+    Result VariableDouble::ToString(std::stringstream& ss) const
+    {
+        ss << m_Value;
+        return ResultCode::SUCCESS;
+    }
 
-		ToString(context);
-		return String(renderBuffer);
-	}
-
-	Result VariableDouble::ToString(ToStringContext& context) const
-	{
-		return SF::_FToA(context, m_Value);
-	}
 
 	Variable* VariableDouble::Clone(Array<uint8_t>& buffer) const
 	{
@@ -695,96 +619,6 @@ namespace SF
 
 
 
-	//////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Variable 32 bit base 16 integer
-	//
-
-	constexpr StringCrc32 VariableHex32::TYPE_NAME;
-
-	void VariableHex32::SetValue(const char* value)
-	{
-		if (value == nullptr)
-		{
-			SetValue(0);
-			return;
-		}
-		super::SetValue((uint32_t)strtol(value, nullptr, 16));
-	}
-
-	void VariableHex32::SetValue(const String& value)
-	{
-		if (value == nullptr)
-		{
-			SetValue(0);
-			return;
-		}
-
-		super::SetValue((uint32_t)strtol(value, nullptr, 16));
-	}
-
-	Result VariableHex32::ToString(ToStringContext& context) const
-	{
-		context.Radix = 16;
-		return SF::_IToA(context, GetValueUInt32());
-	}
-
-	Variable* VariableHex32::Clone(Array<uint8_t>& buffer) const
-	{
-		return new((void*)buffer.data()) VariableHex32(GetValueUInt32());
-	}
-
-	Variable* VariableHex32::Clone() const
-	{
-		return new VariableHex32(GetValueUInt32());
-	}
-
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Variable 64 bit base 16 integer
-	//
-
-	constexpr StringCrc32 VariableHex64::TYPE_NAME;
-
-	void VariableHex64::SetValue(const char* value)
-	{
-		if (value == nullptr)
-		{
-			SetValue(0);
-			return;
-		}
-		super::SetValue((uint64_t)strtol(value, nullptr, 16));
-	}
-
-	void VariableHex64::SetValue(const String& value)
-	{
-		if (value == nullptr)
-		{
-			SetValue(0);
-			return;
-		}
-
-		super::SetValue((uint64_t)strtol(value, nullptr, 16));
-	}
-
-	Result VariableHex64::ToString(ToStringContext& context) const
-	{
-		context.Radix = 16;
-		return SF::_IToA(context, GetValueUInt64());
-	}
-
-	Variable* VariableHex64::Clone(Array<uint8_t>& buffer) const
-	{
-		return new((void*)buffer.data()) VariableHex64(GetValueUInt64());
-	}
-
-	Variable* VariableHex64::Clone() const
-	{
-		return new VariableHex64(GetValueUInt64());
-	}
-
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -795,12 +629,14 @@ namespace SF
 
 	constexpr StringCrc32 VariableCharString::TYPE_NAME;
 
-	Result VariableCharString::ToString(ToStringContext& context) const
+	Result VariableCharString::ToString(std::stringstream& ss) const
 	{
 		if(m_Value != nullptr)
-			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, m_Value);
-		else
-			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(null)");
+            ss << m_Value;
+        else
+            ss << "(Null)";
+
+        return ResultCode::SUCCESS;
 	}
 
 	Variable* VariableCharString::Clone(Array<uint8_t>& buffer) const
@@ -827,7 +663,7 @@ namespace SF
 
 	constexpr StringCrc32 VariableWCharString::TYPE_NAME;
 
-	Result VariableWCharString::ToString(ToStringContext& context) const
+	Result VariableWCharString::ToString(std::stringstream& ss) const
 	{
 		char destBuff[1024];
 
@@ -836,11 +672,11 @@ namespace SF
 		{
 			if (!StrUtil::WCSToUTF8(m_Value, destBuff))
 				return ResultCode::FAIL;
-
-			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, destBuff);
 		}
-		else
-			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(null)");
+
+        ss << destBuff;
+
+        return ResultCode::SUCCESS;
 	}
 
 	Variable* VariableWCharString::Clone(Array<uint8_t>& buffer) const
@@ -1015,12 +851,14 @@ namespace SF
 	}
 
 
-	Result VariableString::ToString(ToStringContext& context) const
+	Result VariableString::ToString(std::stringstream& ss) const
 	{
 		if (m_Value.GetLength() != 0)
-			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, (const char*)m_Value);
+            ss << m_Value;
 		else
-			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(null)");
+            ss << "(null)";
+
+        return ResultCode::SUCCESS;
 	}
 
 
@@ -1228,17 +1066,17 @@ namespace SF
 	}
 
 
-	Result VariableWString::ToString(ToStringContext& context) const
+	Result VariableWString::ToString(std::stringstream& ss) const
 	{
 		char ConvertBuffer[1024];
 
-		if (m_Value.GetLength() != 0)
-		{
-			StrUtil::WCSToUTF8(m_Value.data(), ConvertBuffer);
-			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ConvertBuffer);
-		}
-		else
-			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(null)");
+        if (m_Value.GetLength() != 0)
+        {
+            StrUtil::WCSToUTF8(m_Value.data(), ConvertBuffer);
+            ss << ConvertBuffer;
+        }
+
+        return ResultCode::SUCCESS;
 	}
 
 
@@ -1288,9 +1126,10 @@ namespace SF
 	}
 
 
-	Result VariableStringCrc32::ToString(ToStringContext& context) const
+	Result VariableStringCrc32::ToString(std::stringstream& ss) const
 	{
-		return _ToString(context, m_Value);
+        ss << Service::StringDB->GetString(m_Value);
+        return ResultCode::SUCCESS;
 	}
 
 	Variable* VariableStringCrc32::Clone(Array<uint8_t>& buffer) const
@@ -1330,20 +1169,10 @@ namespace SF
 		return Service::StringDB->GetString(m_Value);
 	}
 
-	Result VariableStringCrc64::ToString(ToStringContext& context) const
+	Result VariableStringCrc64::ToString(std::stringstream& ss) const
 	{
-		return _ToString(context, m_Value);
-		//auto pStr = Service::StringDB->GetString(m_Value);
-		//if (pStr != nullptr)
-		//	return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, pStr);
-		//else
-		//{
-		//	auto oldRadix = context.Radix;
-		//	context.Radix = 16;
-		//	auto result = _IToA(context, (uint64_t)m_Value);
-		//	context.Radix = oldRadix;
-		//	return result;
-		//}
+        ss << Service::StringDB->GetString(m_Value);
+        return ResultCode::SUCCESS;
 	}
 
 	Variable* VariableStringCrc64::Clone(Array<uint8_t>& buffer) const
@@ -1375,19 +1204,14 @@ namespace SF
 
 	constexpr StringCrc32 VariableBLOB::TYPE_NAME;
 
-	Result VariableBLOB::ToString(ToStringContext& context) const
+	Result VariableBLOB::ToString(std::stringstream& ss) const
 	{
-		StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(");
-		_ToString(context, m_Value.size());
-
-		StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":");
-
 		StaticArray<uint8_t, 64> outputData;
 		Util::HEXEncode(Math::Min<size_t>(m_Value.size(), 8), m_Value.data(), outputData, '-');
 		outputData.push_back(')');
 		outputData.push_back('\0');
 
-		StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, (const char*)outputData.data());
+        std::format_to(std::ostreambuf_iterator(ss), "(sz:{0})", m_Value.size(), (const char*)outputData.data());
 
 		return ResultCode::SUCCESS;
 	}

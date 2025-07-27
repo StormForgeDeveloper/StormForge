@@ -104,7 +104,7 @@ namespace SF {
 		virtual StringCrc32 GetValueStringCrc32() const override { return m_Value ? "true" : "false"; }
 		virtual StringCrc64 GetValueStringCrc64() const override { return m_Value ? "true" : "false"; }
 
-		virtual Result ToString(ToStringContext& context) const override;
+		virtual Result ToString(std::stringstream& ss) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone() const override;
@@ -161,7 +161,7 @@ namespace SF {
 		virtual int64_t GetValueInt64() const override { return (int64_t)m_Value; }
 		virtual uint64_t GetValueUInt64() const override { return (uint64_t)m_Value; }
 
-		virtual Result ToString(ToStringContext& context) const override;
+		virtual Result ToString(std::stringstream& ss) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone() const override;
@@ -225,9 +225,8 @@ namespace SF {
 		virtual double GetValueDouble() const override { return (double)m_Value; }
         virtual StringCrc32 GetValueStringCrc32() const override;
         virtual StringCrc64 GetValueStringCrc64() const override;
-		virtual String GetValueString() const override;
 
-		virtual Result ToString(ToStringContext& context) const override;
+		virtual Result ToString(std::stringstream& ss) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone() const override;
@@ -293,9 +292,8 @@ namespace SF {
 		virtual double GetValueDouble() const override { return (double)m_Value; }
         virtual StringCrc32 GetValueStringCrc32() const override;
 		virtual StringCrc64 GetValueStringCrc64() const override;
-		virtual String GetValueString() const override;
 
-		virtual Result ToString(ToStringContext& context) const override;
+		virtual Result ToString(std::stringstream& ss) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone() const override;
@@ -359,7 +357,7 @@ namespace SF {
 		virtual StringCrc64 GetValueStringCrc64() const override { return m_Value.ToString(); }
 		virtual String GetValueString() const override { return m_Value.ToString(); }
 
-		virtual Result ToString(ToStringContext& context) const override;
+		virtual Result ToString(std::stringstream& ss) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone() const override;
@@ -428,9 +426,8 @@ namespace SF {
 		virtual double GetValueDouble() const override { return (double)m_Value; }
         virtual StringCrc32 GetValueStringCrc32() const override;
         virtual StringCrc64 GetValueStringCrc64() const override;
-		virtual String GetValueString() const override;
 
-		virtual Result ToString(ToStringContext& context) const override;
+		virtual Result ToString(std::stringstream& ss) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone() const override;
@@ -496,9 +493,8 @@ namespace SF {
 		virtual double GetValueDouble() const override { return (double)m_Value; }
         virtual StringCrc32 GetValueStringCrc32() const override;
         virtual StringCrc64 GetValueStringCrc64() const override;
-		virtual String GetValueString() const override;
 
-		virtual Result ToString(ToStringContext& context) const override;
+		virtual Result ToString(std::stringstream& ss) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone() const override;
@@ -565,9 +561,8 @@ namespace SF {
 		virtual float GetValueFloat() const override { return (float)m_Value; }
 		virtual double GetValueDouble() const override { return (double)m_Value; }
 		virtual StringCrc64 GetValueStringCrc64() const override;
-		virtual String GetValueString() const override;
 
-		virtual Result ToString(ToStringContext& context) const override;
+		virtual Result ToString(std::stringstream& ss) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone() const override;
@@ -634,9 +629,8 @@ namespace SF {
 		virtual float GetValueFloat() const override { return (float)m_Value; }
 		virtual double GetValueDouble() const override { return (double)m_Value; }
 		virtual StringCrc64 GetValueStringCrc64() const override;
-		virtual String GetValueString() const override;
 
-		virtual Result ToString(ToStringContext& context) const override;
+		virtual Result ToString(std::stringstream& ss) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone() const override;
@@ -648,76 +642,6 @@ namespace SF {
 		virtual bool operator == (const Variable& op) const override;
 	};
 
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Variable 32 bit base 16 integer
-	//
-
-	class VariableHex32 : public VariableUInt
-	{
-	public:
-		typedef VariableUInt super;
-
-		static constexpr StringCrc32 TYPE_NAME = "hex32"_crc32c;
-
-	public:
-		VariableHex32()
-		{
-		}
-
-		VariableHex32(uint32_t value)
-			: VariableUInt(value)
-		{
-		}
-
-		virtual StringCrc32 GetTypeName() const override { return TYPE_NAME; }
-
-		virtual void SetValue(const char* value) override;
-		virtual void SetValue(const String& value) override;
-
-
-		virtual Result ToString(ToStringContext& context) const override;
-
-		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone() const override;
-	};
-
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Variable 64 bit base 16 integer
-	//
-
-	class VariableHex64 : public VariableUInt64
-	{
-	public:
-
-		typedef VariableUInt64 super;
-
-		static constexpr StringCrc32 TYPE_NAME = "hex64"_crc32c;
-
-	public:
-		VariableHex64()
-		{
-		}
-		VariableHex64(uint64_t value)
-			: VariableUInt64(value)
-		{
-		}
-
-		virtual StringCrc32 GetTypeName() const override { return TYPE_NAME; }
-
-		virtual void SetValue(const char* value) override;
-		virtual void SetValue(const String& value) override;
-
-
-		virtual Result ToString(ToStringContext& context) const override;
-
-		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
-		virtual Variable* Clone() const override;
-	};
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -763,7 +687,7 @@ namespace SF {
 		virtual StringCrc64 GetValueStringCrc64() const override { return StringCrc64(m_Value); }
 		virtual String GetValueString() const override { return String(m_Value); }
 
-		virtual Result ToString(ToStringContext& context) const override;
+		virtual Result ToString(std::stringstream& ss) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone() const override;
@@ -807,7 +731,7 @@ namespace SF {
 		//virtual StringCrc64 GetValueStringCrc64() const override { return StringCrc64(m_Value); }
 		//virtual String GetValueString() const override { return String(m_Value); }
 
-		virtual Result ToString(ToStringContext& context) const override;
+		virtual Result ToString(std::stringstream& ss) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone() const override;
@@ -876,7 +800,7 @@ namespace SF {
 		virtual StringCrc64 GetValueStringCrc64() const override;
 		virtual String GetValueString() const override;
 
-		virtual Result ToString(ToStringContext& context) const override;
+		virtual Result ToString(std::stringstream& ss) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone() const override;
@@ -943,8 +867,7 @@ namespace SF {
 		virtual StringCrc64 GetValueStringCrc64() const override;
 		virtual String GetValueString() const override;
 
-
-		virtual Result ToString(ToStringContext& context) const override;
+		virtual Result ToString(std::stringstream& ss) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone() const override;
@@ -1008,7 +931,7 @@ namespace SF {
 		virtual String GetValueString() const override;
 		virtual const char* GetValueCharString() const override;
 
-		virtual Result ToString(ToStringContext& context) const override;
+		virtual Result ToString(std::stringstream& ss) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone() const override;
@@ -1068,7 +991,7 @@ namespace SF {
 		virtual String GetValueString() const override;
 		virtual const char* GetValueCharString() const override;
 
-		virtual Result ToString(ToStringContext& context) const override;
+		virtual Result ToString(std::stringstream& ss) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone() const override;
@@ -1151,7 +1074,7 @@ namespace SF {
 		virtual bool GetValueBool() const override { return m_Value.size() != 0; }
 		virtual const Array<uint8_t>& GetValueBLOB() const override { return m_Value; }
 
-		virtual Result ToString(ToStringContext& context) const override;
+		virtual Result ToString(std::stringstream& ss) const override;
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone() const override;

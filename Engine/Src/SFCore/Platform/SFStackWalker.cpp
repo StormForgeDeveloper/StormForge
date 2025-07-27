@@ -21,6 +21,7 @@
 #include "Platform/SFStackWalkerComponent.h"
 #include "Service/SFService.h"
 #include "Util/SFStringConverter.h"
+#include "Util/SFString.h"
 
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS

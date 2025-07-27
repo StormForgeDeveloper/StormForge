@@ -99,7 +99,7 @@ namespace SF {
         virtual String GetValueString() const override { return m_Value.ToString().c_str(); }
         virtual Guid GetValueGuid() const override { return m_Value; }
 
-        virtual Result ToString(ToStringContext& context) const override;
+        virtual Result ToString(std::stringstream& ss) const override;
 
         virtual Variable* Clone(Array<uint8_t>& buffer) const override;
         virtual Variable* Clone() const override;

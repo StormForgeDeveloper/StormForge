@@ -17,6 +17,7 @@
 #include "Util/SFToStringBase.h"
 #include "Variable/SFVariableCommonDefs.h"
 #include "Stream/SFStream.h"
+#include "Net/SFNetDef.h"
 
 
 namespace SF {
@@ -104,16 +105,16 @@ namespace SF {
 	template<> inline StringCrc32 VariableByBinaryValue<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
 	template<> inline StringCrc32 VariableValueReference<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
 	template<> inline StringCrc32 VariableValueReference<Array<std::decay_t<varType>>>::GetTypeName() const { return "Array<"#varType">"; }\
-	template<> inline Result VariableValueReference<Array<std::decay_t<varType>>>::ToString(ToStringContext& context) const\
+	template<> inline Result VariableValueReference<Array<std::decay_t<varType>>>::ToString(std::stringstream& ss) const\
 	{\
 		if (m_Value == nullptr) return ResultCode::FAIL;\
 		int iNumEle = 0;\
 		for (auto& itValue : *m_Value)\
 		{\
 			varClassType eleRef(itValue);\
-			auto result = eleRef.ToString(context);\
+			auto result = eleRef.ToString(ss);\
 			if (!result) return result;\
-			iNumEle++; if (iNumEle >= context.MaxArraySize) break;\
+			iNumEle++;\
 		}\
 		return ResultCode::SUCCESS;\
 	}\
@@ -125,16 +126,16 @@ namespace SF {
 	template<> inline StringCrc32 VariableByBinaryValue<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
 	template<> inline StringCrc32 VariableValueReference<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
 	template<> inline StringCrc32 VariableValueReference<Array<std::decay_t<varType>>>::GetTypeName() const { return "Array<"#varType">"; }\
-	template<> inline Result VariableValueReference<Array<varType>>::ToString(ToStringContext& context) const\
+	template<> inline Result VariableValueReference<Array<varType>>::ToString(std::stringstream& ss) const\
 	{\
 		if (m_Value == nullptr) return ResultCode::FAIL; \
 			int iNumEle = 0; \
 			for (auto& itValue : *m_Value)\
 			{\
 				DefaultVariableValueType eleRef(itValue); \
-				auto result = eleRef.ToString(context); \
+				auto result = eleRef.ToString(ss); \
 				if (!result) return result; \
-					iNumEle++; if (iNumEle >= context.MaxArraySize) break; \
+				iNumEle++; \
 			}\
 				return ResultCode::SUCCESS; \
 	}\
@@ -330,13 +331,12 @@ namespace SF {
 	VariableBox Boxing(const Array<const char*>& src);
 	IMPLEMENT_BOXING_TEMPLATE_INTERNAL(const char*, VariableString);
 
-	//DECLARE_BOXING_TEMPLETE_BYVALUE(const wchar_t*);
-	VariableBox BoxingByValue(const wchar_t* src);
-	VariableBox BoxingByReference(const wchar_t* src);
-	VariableBox Boxing(const wchar_t* src);
-	VariableBox Boxing(Array<const wchar_t*>& src);
-	VariableBox Boxing(const Array<const wchar_t*>& src);
-	IMPLEMENT_BOXING_TEMPLATE_INTERNAL(const wchar_t*, VariableWString);
+	//VariableBox BoxingByValue(const wchar_t* src);
+	//VariableBox BoxingByReference(const wchar_t* src);
+	//VariableBox Boxing(const wchar_t* src);
+	//VariableBox Boxing(Array<const wchar_t*>& src);
+	//VariableBox Boxing(const Array<const wchar_t*>& src);
+	//IMPLEMENT_BOXING_TEMPLATE_INTERNAL(const wchar_t*, VariableWString);
 
 	// They comes from OS system types, but not referenced by std types on windows(VC compiler)
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS

@@ -330,3 +330,41 @@ struct std::formatter<::sockaddr_storage>
     }
 };
 
+
+template <>
+struct std::formatter<::sockaddr_in>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const ::sockaddr_in& value, FormatContext& ctx) const
+    {
+        SF::NetAddress netAddress(value);
+
+        return std::format_to(ctx.out(), "{}", netAddress);
+    }
+};
+
+
+template <>
+struct std::formatter<::sockaddr_in6>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const ::sockaddr_in6& value, FormatContext& ctx) const
+    {
+        SF::NetAddress netAddress(value);
+
+        return std::format_to(ctx.out(), "{}", netAddress);
+    }
+};
+

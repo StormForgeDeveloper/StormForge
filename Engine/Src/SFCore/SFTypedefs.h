@@ -869,7 +869,39 @@ struct std::formatter<SF::TimeStampMS>
     template <typename FormatContext>
     auto format(const SF::TimeStampMS& value, FormatContext& ctx) const
     {
-        return std::format_to(ctx.out(), "{:X}", value.time_since_epoch().count());
+        return std::format_to(ctx.out(), "{:X}ms", value.time_since_epoch().count());
+    }
+};
+
+template <>
+struct std::formatter<SF::TimeStampSec>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::TimeStampSec& value, FormatContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "{:X}s", value.time_since_epoch().count());
+    }
+};
+
+template <>
+struct std::formatter<SF::UTCTimeStampMS>
+{
+    // Specify the default format (e.g., "{}")
+    constexpr auto parse(std::format_parse_context& ctx) {
+        return ctx.begin();
+    }
+
+    // Define how the object is formatted
+    template <typename FormatContext>
+    auto format(const SF::UTCTimeStampMS& value, FormatContext& ctx) const
+    {
+        return std::format_to(ctx.out(), "{:X}ms", value.time_since_epoch().count());
     }
 };
 
@@ -885,7 +917,7 @@ struct std::formatter<SF::UTCTimeStampSec>
     template <typename FormatContext>
     auto format(const SF::UTCTimeStampSec& value, FormatContext& ctx) const
     {
-        return std::format_to(ctx.out(), "{:X}", value.time_since_epoch().count());
+        return std::format_to(ctx.out(), "{:X}s", value.time_since_epoch().count());
     }
 };
 

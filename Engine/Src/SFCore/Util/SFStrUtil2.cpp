@@ -99,214 +99,58 @@ namespace StrUtil {
 	}
 
 
-    template<class CharType>
-	static inline void SkipSpace(TFormatInputStream<CharType>& itFormat)
-	{
-		for (; itFormat.IsValid() && (itFormat.CurChar == TCharCode<CharType>::Space && itFormat.CurChar != TCharCode<CharType>::Tab); ++itFormat);
-	}
+ //   template<class CharType>
+	//static inline void SkipSpace(TFormatInputStream<CharType>& itFormat)
+	//{
+	//	for (; itFormat.IsValid() && (itFormat.CurChar == TCharCode<CharType>::Space && itFormat.CurChar != TCharCode<CharType>::Tab); ++itFormat);
+	//}
 
-    template<class CharType>
-    static inline double ReadNumber(TFormatInputStream<CharType>& itFormat)
-	{
-		double fNumber = 0;
-		for (; itFormat.IsValid()
-                && itFormat.CurChar != TCharCode<CharType>::RightCurlyBrace
-                && itFormat.CurChar != TCharCode<CharType>::Colon
-                && itFormat.CurChar != TCharCode<CharType>::Comma;
-            ++itFormat)
-		{
-			if (itFormat.CurChar == TCharCode<CharType>::Dot)
-				break;
+ //   template<class CharType>
+ //   static inline double ReadNumber(TFormatInputStream<CharType>& itFormat)
+	//{
+	//	double fNumber = 0;
+	//	for (; itFormat.IsValid()
+ //               && itFormat.CurChar != TCharCode<CharType>::RightCurlyBrace
+ //               && itFormat.CurChar != TCharCode<CharType>::Colon
+ //               && itFormat.CurChar != TCharCode<CharType>::Comma;
+ //           ++itFormat)
+	//	{
+	//		if (itFormat.CurChar == TCharCode<CharType>::Dot)
+	//			break;
 
-			if (itFormat.CurChar == TCharCode<CharType>::NullTerminate)
-				return fNumber;
+	//		if (itFormat.CurChar == TCharCode<CharType>::NullTerminate)
+	//			return fNumber;
 
-			if (itFormat.CurChar < TCharCode<CharType>::NUM_0 || itFormat.CurChar > TCharCode<CharType>::NUM_9)
-				continue;
+	//		if (itFormat.CurChar < TCharCode<CharType>::NUM_0 || itFormat.CurChar > TCharCode<CharType>::NUM_9)
+	//			continue;
 
-			int iArgTem = ChToInt(itFormat.CurChar);
-			if (iArgTem >= 0)
-				fNumber = fNumber * 10 + iArgTem;
-		}
+	//		int iArgTem = ChToInt(itFormat.CurChar);
+	//		if (iArgTem >= 0)
+	//			fNumber = fNumber * 10 + iArgTem;
+	//	}
 
-		if (itFormat.CurChar != TCharCode<CharType>::Dot) return fNumber;
+	//	if (itFormat.CurChar != TCharCode<CharType>::Dot) return fNumber;
 
-		double fExponent = 0.1;
-		for (; itFormat.IsValid()
-                && itFormat.CurChar != TCharCode<CharType>::RightCurlyBrace
-                && itFormat.CurChar != TCharCode<CharType>::Colon
-                && itFormat.CurChar != TCharCode<CharType>::Comma;
-            ++itFormat)
-		{
-			if (itFormat.CurChar < TCharCode<CharType>::NUM_0 || itFormat.CurChar > TCharCode<CharType>::NUM_9)
-				continue;
+	//	double fExponent = 0.1;
+	//	for (; itFormat.IsValid()
+ //               && itFormat.CurChar != TCharCode<CharType>::RightCurlyBrace
+ //               && itFormat.CurChar != TCharCode<CharType>::Colon
+ //               && itFormat.CurChar != TCharCode<CharType>::Comma;
+ //           ++itFormat)
+	//	{
+	//		if (itFormat.CurChar < TCharCode<CharType>::NUM_0 || itFormat.CurChar > TCharCode<CharType>::NUM_9)
+	//			continue;
 
-			if (itFormat.CurChar == TCharCode<CharType>::NullTerminate)
-				return fNumber;
+	//		if (itFormat.CurChar == TCharCode<CharType>::NullTerminate)
+	//			return fNumber;
 
-			int iArgTem = ChToInt(itFormat.CurChar);
-			if (iArgTem >= 0)
-				fNumber += (double)iArgTem * fExponent;
-		}
+	//		int iArgTem = ChToInt(itFormat.CurChar);
+	//		if (iArgTem >= 0)
+	//			fNumber += (double)iArgTem * fExponent;
+	//	}
 
-		return fNumber;
-	}
-
-	// Internal format routine
-    template<class CharType>
-	size_t Format_InternalT(CharType*& pOutBuffer, int& iBuffLen, const CharType* szFormating, int iNumArg, VariableBox* Args )
-	{
-		const size_t tempBufferSize = 512;
-        char* tempBuffer = nullptr;
-
-		if(pOutBuffer != nullptr && iBuffLen <= 0)
-			return 0;
-
-        if (pOutBuffer == nullptr || sizeof(char) != sizeof(CharType))
-        {
-            tempBuffer = reinterpret_cast<char*>(alloca(tempBufferSize));
-        }
-
-		// we are going to calculate size only
-		if (pOutBuffer == nullptr)
-		{
-			iBuffLen = std::numeric_limits<int>::max();
-		}
-
-        TToStringOutputStream<CharType> outStream(iBuffLen, pOutBuffer);
-
-        TFormatInputStream<CharType> itFormat(szFormating);
-		for(; itFormat.IsValid() && outStream.IsValid(); ++itFormat)
-		{
-			if(itFormat.CurChar == TCharCode<CharType>::LeftCurlyBrace)
-			{
-                if (itFormat.NextChar == TCharCode<CharType>::LeftCurlyBrace)
-                {
-                    outStream.Append(itFormat.CurChar);
-                    ++itFormat;
-                }
-                else
-                {
-                    SkipSpace(itFormat);
-
-                    // read argument index
-                    int iArg = (int)(ReadNumber(itFormat) + 0.1);
-
-                    // read option
-                    CharType option = TCharCode<CharType>::NullTerminate;
-                    double digits = -1;
-                    if (itFormat.CurChar == TCharCode < CharType>::Colon)
-                    {
-                        SkipSpace(itFormat);
-
-                        if (itFormat.CurChar == TCharCode<CharType>::NullTerminate)
-                            return 0;
-
-                        ++itFormat;
-
-                        if (itFormat.CurChar == TCharCode<CharType>::NullTerminate)
-                            return 0;
-
-                        option = itFormat.CurChar;
-
-                        digits = ReadNumber(itFormat);
-                    }
-
-                    // Read max length
-                    if (itFormat.CurChar == TCharCode<CharType>::Comma)
-                    {
-                        SkipSpace(itFormat);
-
-                        if (itFormat.CurChar == TCharCode<CharType>::NullTerminate)
-                            return 0;
-
-                        option = (CharType)ReadNumber(itFormat);
-                    }
-
-                    if (itFormat.CurChar == TCharCode<CharType>::NullTerminate)
-                        return 0;
-
-                    if (iArg < iNumArg && Args[iArg].GetVariable() != nullptr)
-                    {
-                        ToStringContext context;
-                        context.MaxDigit = (int)digits;
-                        if (option == TCharCode<CharType>::x || option == TCharCode<CharType>::X)
-                            context.Radix = 16;
-
-                        auto pArg = Args[iArg].GetVariable();
-
-                        if constexpr (std::is_same_v<char, CharType>)
-                        {
-                            if (outStream.pBuffer != nullptr)
-                            {
-                                context.OutStream = outStream;
-
-                                pArg->ToString(context);
-
-                                outStream = context.OutStream;
-                            }
-                            else
-                            {
-                                context.OutStream = TToStringOutputStream<char>((int)tempBufferSize, tempBuffer);
-
-                                pArg->ToString(context);
-
-                                context.OutStream.NullTerminate();
-
-                                outStream.Append(context.OutStream);
-                            }
-                        }
-                        else
-                        {
-                            context.OutStream = TToStringOutputStream<char>((int)tempBufferSize, tempBuffer);
-
-                            pArg->ToString(context);
-
-                            context.OutStream.NullTerminate();
-
-                            outStream.Append(context.OutStream);
-                        }
-                    }
-                    else
-                    {
-                        outStream.Append(TDefinedString<CharType>::Null);
-                    }
-                }
-			}
-			else if (itFormat.CurChar == TCharCode<CharType>::RightCurlyBrace)
-			{
-                if (itFormat.NextChar == TCharCode<CharType>::RightCurlyBrace)
-                {
-                    // Move to next char
-                    outStream.Append(itFormat.CurChar);
-                    ++itFormat;// Skip the first closing brace
-                }
-                else
-                {
-                    // Skip the first closing brace
-                }
-			}
-			else
-			{
-                outStream.Append(itFormat.CurChar);
-			}
-		}
-
-        outStream.NullTerminate();
-
-		return outStream.UsedSize();
-	}
-
-    size_t Format_Internal(char*& pBuffer, int& iBuffLen, const char* szFormating, int iNumArg, VariableBox* Args)
-    {
-        return Format_InternalT<char>(pBuffer, iBuffLen, szFormating, iNumArg, Args);
-    }
-
-	size_t Format_Internal(wchar_t*& pBuffer, int& iBuffLen, const wchar_t* szFormating, int iNumArg, VariableBox* Args)
-	{
-        return Format_InternalT<wchar_t>(pBuffer, iBuffLen, szFormating, iNumArg, Args);
-	}
-
+	//	return fNumber;
+	//}
 
 
 	size_t StringLen(const char* StringValue)

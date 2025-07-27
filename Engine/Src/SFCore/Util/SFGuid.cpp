@@ -45,14 +45,9 @@ namespace SF
     // GuidVariable
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
-    Result VariableGuid::ToString(ToStringContext& context) const
+    Result VariableGuid::ToString(std::stringstream& ss) const
     {
-        size_t used = m_Value.ToString(context.OutStream.pBuffer, context.OutStream.BuffLen);
-        if (used < 0)
-            return ResultCode::OUT_OF_MEMORY;
-
-        context.OutStream.pBuffer += used;
-        context.OutStream.BuffLen -= (int)used;
+        ss << m_Value.ToString();
         return ResultCode::SUCCESS;
     }
 
