@@ -169,7 +169,7 @@ namespace SF
                 }
                 else
                 {
-                    SFLog(System, Error, "Login result no data:{0}", hr);
+                    SFLog(System, Error, "Login result no data, httpResult:{0}", m_HttpClient->GetResultCode());
                     hr = ResultCode::NO_DATA_EXIST;
                 }
 
