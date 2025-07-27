@@ -34,7 +34,8 @@ namespace SF
     {
         Player,
         Tester,
-        Dev
+        Dev,
+        Admin
     };
 
     [Struct]
