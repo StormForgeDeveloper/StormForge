@@ -138,6 +138,8 @@ namespace SF
 	// Load string table file
 	Result StringCrcDB::LoadStringTable(IInputStream& stream)
 	{
+        SFLog(System, Info, "Loading string table size:{}", stream.size());
+
 		// load header
 		StringFileHeader header{};
 		stream.Read(&header, sizeof(StringFileHeader));
@@ -181,6 +183,8 @@ namespace SF
 
 		m_StringMap32.CommitChanges();
 		m_StringMap64.CommitChanges();
+
+        SFLog(System, Info, "Loaded string table with {0} items", numStringItem);
 
 		return ResultCode::SUCCESS;
 	}
