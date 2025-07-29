@@ -142,9 +142,9 @@ namespace Log {
 					block->Data.Channel = &channel;\
 					block->Data.OutputType = outputType;\
 					block->Data.OutputMask = outputMask & channelMask; \
-					size_t __logMessageSize = pLogService->WriteTimeTag(&block->Data); if(__logMessageSize > 0) __logMessageSize--; \
+					size_t __logMessageSize = pLogService->WriteTimeTag(&block->Data); \
 					int remainBuffSize = static_cast<int>(sizeof(block->Data.LogBuff) - __logMessageSize);\
-					__logMessageSize += SF::StrUtil::Format(block->Data.LogBuff + __logMessageSize, remainBuffSize, __VA_ARGS__) - 1; \
+					__logMessageSize += SF::StrUtil::Format(block->Data.LogBuff + __logMessageSize, remainBuffSize, __VA_ARGS__); \
 					pLogService->ReleaseWriteBuffer(block, __logMessageSize); \
 				}\
 			}\

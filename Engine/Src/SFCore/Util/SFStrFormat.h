@@ -35,31 +35,21 @@ namespace StrUtil {
     template<int BuffLen, class ...ArgTypes>
     inline size_t Format(char(&szBuffer)[BuffLen], const char* strFormat, const ArgTypes&... args)
     {
-        std::string ss;
+        ArrayView<char> bufferView(BuffLen, 0, szBuffer);
 
-        std::vformat_to(std::back_inserter(ss), std::basic_string_view<char>(strFormat), std::make_format_args(args...));
+        std::vformat_to(std::back_inserter(bufferView), std::basic_string_view<char>(strFormat), std::make_format_args(args...));
 
-        if (ss.length() > 0)
-        {
-            StrUtil::StringCopy(szBuffer, ss.c_str());
-        }
-
-        return ss.length();
+        return bufferView.size();
     }
 
     template< class ...ArgTypes >
-    inline size_t Format(char* szBuffer, INT& BuffLen, const char* strFormat, const ArgTypes&... args)
+    inline size_t Format(char* szBuffer, const int BuffLen, const char* strFormat, const ArgTypes&... args)
     {
-        std::string ss;
+        ArrayView<char> bufferView(BuffLen, 0, szBuffer);
 
-        std::vformat_to(std::back_inserter(ss), std::basic_string_view<char>(strFormat), std::make_format_args(args...));
+        std::vformat_to(std::back_inserter(bufferView), std::basic_string_view<char>(strFormat), std::make_format_args(args...));
 
-        if (ss.length() > 0)
-        {
-            StrUtil::StringCopyEx(szBuffer, BuffLen, ss.c_str());
-        }
-
-        return ss.length();
+        return bufferView.size();
     }
 
 #else // SF_USE_STD_STRING

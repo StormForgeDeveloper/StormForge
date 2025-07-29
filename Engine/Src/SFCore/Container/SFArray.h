@@ -96,6 +96,9 @@ namespace SF {
 		template< class DataType >
 		class ArrayView : public Array<DataType>
 		{
+        public:
+            typedef DataType value_type;
+
 		public:
 			ArrayView();
             template<class SrcDataType>
