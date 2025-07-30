@@ -116,6 +116,25 @@ namespace SF {
 	std::this_thread::sleep_for(std::chrono::seconds(5));
 	exit(0);
     }
+
+    void CustomTerminate()
+    {
+        std::cerr << "Terminate called after throwing an uncaught exception\n";
+
+        // Print stack trace
+        void* array[20];
+        int size = backtrace(array, 20);
+        char** strings = backtrace_symbols(array, size);
+
+        std::cerr << "Stack trace:\n";
+        for (int i = 0; i < size; ++i) {
+            std::cerr << strings[i] << "\n";
+        }
+        free(strings);
+
+        std::abort(); // Force abnormal termination
+    }
+
 #endif // SF_PLATFORM != SF_PLATFORM_LINUX
 
 
@@ -217,7 +236,8 @@ namespace SF {
         sigaction(SIGBUS, &action, nullptr);
         sigaction(SIGSEGV, &action, nullptr);
         sigaction(SIGSYS, &action, nullptr);
-        //sigaction(SIGTRAP, &action, nullptr);
+        sigaction(SIGTRAP, &action, nullptr);
+        std::set_terminate(CustomTerminate);
 #endif
 
 		return result;
