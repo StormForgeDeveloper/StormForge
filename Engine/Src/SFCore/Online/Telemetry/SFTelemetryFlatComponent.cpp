@@ -53,6 +53,7 @@ namespace SF
         }
 
         m_Url.ReplaceInline("{TitleUID}", Util::GetTitleUID().ToString().c_str());
+        m_Url.ReplaceInline("{TitleEnv}", Util::GetTitleEnv());
 
         m_TelemetryPtr.reset(new TelemetryClientFlat());
 
