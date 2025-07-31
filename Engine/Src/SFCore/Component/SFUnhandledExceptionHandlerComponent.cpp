@@ -47,11 +47,11 @@ namespace SF {
 #if SF_PLATFORM == SF_PLATFORM_LINUX
     void CrashHandlerLinux(int signal, siginfo_t* info, void* context)
     {
-	static bool bHandled = false;
-	if (bHandled)
-		return;
+	    static bool bHandled = false;
+	    if (bHandled)
+		    return;
 
-	bHandled = true;
+	    bHandled = true;
         void* caller_address{};
         ucontext_t* uc = reinterpret_cast<ucontext_t*>(context);
 
@@ -113,8 +113,8 @@ namespace SF {
 
         Service::LogModule->Flush();
 
-	std::this_thread::sleep_for(std::chrono::seconds(5));
-	exit(0);
+	    std::this_thread::sleep_for(std::chrono::seconds(5));
+	    exit(0);
     }
 
     void CustomTerminate()
@@ -183,7 +183,10 @@ namespace SF {
             auto unknown = std::current_exception();
             if (unknown) {
 
-#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+                std::cerr << "OnTerminate" << std::endl;
+
+                // Only on windows at the moment
+#if 1 || SF_PLATFORM == SF_PLATFORM_WINDOWS
                 std::stacktrace trace = std::stacktrace::current();
 
                 std::cerr << trace;
@@ -237,7 +240,6 @@ namespace SF {
         sigaction(SIGSEGV, &action, nullptr);
         sigaction(SIGSYS, &action, nullptr);
         sigaction(SIGTRAP, &action, nullptr);
-        std::set_terminate(CustomTerminate);
 #endif
 
 		return result;
