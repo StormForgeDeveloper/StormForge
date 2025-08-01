@@ -36,7 +36,7 @@ namespace SF
         {
             string strMarshal.PtrToStringAnsi(NativeGetString(StringHash));
 
-            return string.IsNullOrEmpty(str) ? StringHash.ToString() : str;
+            return string.IsNullOrEmpty(str) ? $"0x{StringHash.ToString("X16")}" : str;
         }
 
         public static UInt64 HashString(string strValue)

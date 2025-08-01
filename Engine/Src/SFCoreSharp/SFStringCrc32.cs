@@ -43,7 +43,7 @@ namespace SF
         {
 			string strMarshal.PtrToStringAnsi(NativeGetString32(StringHash));
 
-			return string.IsNullOrEmpty(str) ? StringHash.ToString() : str;
+			return string.IsNullOrEmpty(str) ? $"0x{StringHash.ToString("X8")}" : str;
         }
 
         public static UInt32 HashString(string strValue)
