@@ -147,6 +147,9 @@ namespace SF {
 			// The player needs ownership to access the content 
 			constexpr Result 			GAME_NO_OWNERSHIP                                                  ((int32_t)0xE704002AL);
 
+			// Invalid content data 
+			constexpr Result 			GAME_INVALID_CONTENT                                               ((int32_t)0xE704002BL);
+
 	void InitializeResultCodeGame();
 
 	}//namespace ResultCode 

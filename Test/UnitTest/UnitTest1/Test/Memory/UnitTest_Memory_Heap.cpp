@@ -108,7 +108,7 @@ TEST_F(MemoryTest, HeapMemory)
 {
 	struct TestItem
 	{
-		uint32_t InvenCategory : 8;
+		uint32_t EInvenCategory : 8;
 		uint32_t ItemEquipType : 2;
 		uint32_t Count : 16;
 		uint32_t : 0;
@@ -145,7 +145,7 @@ TEST_F(MemoryTest, HeapMemoryRandom)
 {
 	struct TestItem
 	{
-		uint32_t InvenCategory : 8;
+		uint32_t EInvenCategory : 8;
 		uint32_t ItemEquipType : 2;
 		uint32_t Count : 16;
 		uint32_t : 0;

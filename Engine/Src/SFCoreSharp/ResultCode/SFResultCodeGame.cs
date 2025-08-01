@@ -186,6 +186,10 @@ namespace SF {
 		 public const int _GAME_NO_OWNERSHIP = (unchecked((int)0xE704002A)); 
 		public static readonly Result GAME_NO_OWNERSHIP = new Result(_GAME_NO_OWNERSHIP); 
 
+		// Invalid content data 
+		 public const int _GAME_INVALID_CONTENT = (unchecked((int)0xE704002B)); 
+		public static readonly Result GAME_INVALID_CONTENT = new Result(_GAME_INVALID_CONTENT); 
+
 	}
 }
 

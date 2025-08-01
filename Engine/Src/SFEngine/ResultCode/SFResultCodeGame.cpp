@@ -63,6 +63,7 @@ namespace ResultCode {
 		codeMap.Insert((uint32_t)			GAME_GROUP_OBJECT_NOT_FOUND        , {"			GAME_GROUP_OBJECT_NOT_FOUND        ", "Group object not found"});
 		codeMap.Insert((uint32_t)			GAME_LOW_PLAYER_LEVEL        , {"			GAME_LOW_PLAYER_LEVEL        ", "The player's level is too low"});
 		codeMap.Insert((uint32_t)			GAME_NO_OWNERSHIP        , {"			GAME_NO_OWNERSHIP        ", "The player needs ownership to access the content"});
+		codeMap.Insert((uint32_t)			GAME_INVALID_CONTENT        , {"			GAME_INVALID_CONTENT        ", "Invalid content data"});
 
 	}//InitializeResultCode 
 }//namespace ResultCode 
