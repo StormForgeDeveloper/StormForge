@@ -186,7 +186,7 @@ namespace SF {
                 std::cerr << "OnTerminate" << std::endl;
 
                 // Only on windows at the moment
-#if 1 || SF_PLATFORM == SF_PLATFORM_WINDOWS
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
                 std::stacktrace trace = std::stacktrace::current();
 
                 std::cerr << trace;
