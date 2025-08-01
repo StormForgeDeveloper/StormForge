@@ -34,7 +34,9 @@ namespace SF
 
         public override string ToString()
         {
-            return Marshal.PtrToStringAnsi(NativeGetString(StringHash))?? StringHash.ToString();
+            string strMarshal.PtrToStringAnsi(NativeGetString(StringHash));
+
+            return string.IsNullOrEmpty(str) ? StringHash.ToString() : str;
         }
 
         public static UInt64 HashString(string strValue)
