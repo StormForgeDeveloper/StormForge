@@ -147,7 +147,7 @@ namespace Net {
 	class ConnectionStateAction_SendConnect : public ConnectionAction
 	{
     private:
-        bool m_bSent = false;
+        int m_SendCount = 0;
         TimeStampMS m_RetryTime{};
 
 	public:

@@ -489,7 +489,7 @@ namespace Net {
 	{
 		Result hr;
 
-		if (!m_bSent && Util::TimeSince(m_RetryTime) > Const::CONNECTION_RETRY_TIME) // retry
+		if (m_SendCount < 3 && Util::TimeSince(m_RetryTime) > Const::CONNECTION_RETRY_TIME) // retry
 		{
             m_RetryTime = Util::Time.GetTimeMs();
 			SFLog(Net, Debug2, "Send Connecting CID({0}) : C:{1}, V:{2})", GetCID(), GetLocalInfo().PeerClass, (uint32_t)SF_PROTOCOL_VERSION);
@@ -499,7 +499,7 @@ namespace Net {
             // TODO: Socket reuse?
             if (GetConnection()->GetSocketType() == SocketType::Stream)
             {
-                m_bSent = true;
+                m_SendCount++;
             }
 		}
 
