@@ -489,17 +489,18 @@ namespace Net {
 	{
 		Result hr;
 
-		if (m_SendCount < 3 && Util::TimeSince(m_RetryTime) > Const::CONNECTION_RETRY_TIME) // retry
+		if (m_SendCount < 2 && Util::TimeSince(m_RetryTime) > Const::CONNECTION_RETRY_TIME) // retry
 		{
             m_RetryTime = Util::Time.GetTimeMs();
-			SFLog(Net, Debug2, "Send Connecting CID({0}) : C:{1}, V:{2})", GetCID(), GetLocalInfo().PeerClass, (uint32_t)SF_PROTOCOL_VERSION);
-            netCheck(GetConnection()->SendNetCtrl(PACKET_NETCTRL_CONNECT, 0, {}));
-
-            // With reliable stream socket we don't need to send multiple times
-            // TODO: Socket reuse?
-            if (GetConnection()->GetSocketType() == SocketType::Stream)
+            SFLog(Net, Debug2, "Send Connecting CID({0}) : C:{1}, V:{2})", GetCID(), GetLocalInfo().PeerClass, (uint32_t)SF_PROTOCOL_VERSION);
+            if (GetConnection()->SendNetCtrl(PACKET_NETCTRL_CONNECT, 0, {}))
             {
-                m_SendCount++;
+                // With reliable stream socket we don't need to send multiple times
+                // TODO: Socket reuse?
+                if (GetConnection()->GetSocketType() == SocketType::Stream)
+                {
+                    m_SendCount++;
+                }
             }
 		}
 

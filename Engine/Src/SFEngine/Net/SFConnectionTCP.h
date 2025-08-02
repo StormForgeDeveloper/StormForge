@@ -102,7 +102,8 @@ namespace SF {
 			// Flag indicating whether TCP socket layer connection has been established.
 			bool m_IsTCPSocketConnectionEstablished;
 
-            Atomic<bool> m_bWriteIsReady;
+            // Was trying to implement edge trigger writting
+            //Atomic<bool> m_bWriteIsReady;
 
 			ConnectionMessageAction_HandleAck m_HandleAck;
 			ConnectionMessageAction_HandleNack m_HandleNack;

@@ -570,7 +570,6 @@ namespace Net {
             hr = ResultCode::SUCCESS;
             break;
 		case (uint32_t)ResultCode::IO_WOULDBLOCK:
-		case (uint32_t)ResultCode::IO_TRY_AGAIN:
             if (NetSystem::IsProactorSystem())
             {
                 // those are success with proactor system. The system will buffer the request and give notification when it is done
@@ -581,14 +580,15 @@ namespace Net {
                 // Partial success. Reactor pattern doesn't have internal buffering. You need to retry whole or partial send again
                 hr = ResultCode::IO_TRY_AGAIN;
             }
-			break;
+            break;
+        case (uint32_t)ResultCode::IO_TRY_AGAIN:
 		case (uint32_t)ResultCode::IO_CONNABORTED:
 		case (uint32_t)ResultCode::IO_CONNRESET:
 		case (uint32_t)ResultCode::IO_NETRESET:
 		case (uint32_t)ResultCode::IO_NOTSOCK:
 		case (uint32_t)ResultCode::IO_SHUTDOWN:
 		case (uint32_t)ResultCode::INVALID_PIPE:
-			// keep those errors for later handling
+			// keep those errors for handling
 			break;
 		default:
 			hr = ResultCode::IO_IO_SEND_FAIL;

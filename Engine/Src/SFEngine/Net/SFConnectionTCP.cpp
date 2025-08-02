@@ -194,7 +194,7 @@ namespace Net {
 	{
 		Result hr;
 
-        m_Owner.m_bWriteIsReady.store(true, std::memory_order_release);
+        //m_Owner.m_bWriteIsReady.store(true, std::memory_order_release);
 
 		return hr;
 	}
@@ -589,8 +589,11 @@ namespace Net {
 
     Result ConnectionTCP::SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0)
     {
-        Result hr = ResultCode::SUCCESS;
+        Result hr;
         Result hrTem;
+
+        if (!IsSocketReadyToSend())
+            return ResultCode::IO_SYSNOTREADY;
 
         MsgNetCtrlBuffer netCtrlBuffer{};
         MessageHeader* pHeader = &netCtrlBuffer.Header;
@@ -655,7 +658,7 @@ namespace Net {
         itemWritePtr.Reset();
 
         // kick send queue processing
-        m_bWriteIsReady.store(true, std::memory_order_release);
+        //m_bWriteIsReady.store(true, std::memory_order_release);
 
         return hr;
     }
@@ -760,25 +763,23 @@ namespace Net {
 			m_IsTCPSocketConnectionEstablished = Connect() == ResultCode::SUCCESS;
 		}
 
-		if (m_IsTCPSocketConnectionEstablished
-			&& GetMyNetIOAdapter().GetPendingRecvCount() == 0
-			&& GetNetIOHandler() != nullptr)
-		{
-			hr = GetNetIOHandler()->PendingRecv();
-			if (hr == ResultCode::IO_NOTCONN)
-			{
-				SFLog(Net, Info, "Connection not connected CID:{0}", GetCID());
-				CloseConnection("Can't recv if not connected");
-			}
-		}
-
-        // tick update send queue
-        bool bWriteIsReady = m_bWriteIsReady.exchange(false, std::memory_order_consume);
-        if (bWriteIsReady) // if write ready is triggered this tick
+        if (m_IsTCPSocketConnectionEstablished)
         {
+
+            if (GetMyNetIOAdapter().GetPendingRecvCount() == 0
+                && GetNetIOHandler() != nullptr)
+            {
+                hr = GetNetIOHandler()->PendingRecv();
+                if (hr == ResultCode::IO_NOTCONN)
+                {
+                    SFLog(Net, Info, "Connection not connected CID:{0}", GetCID());
+                    CloseConnection("Can't recv if not connected");
+                }
+            }
+
             ProcessSendQueue();
-            //m_NetIOAdapter.ProcessSendQueue();
         }
+
 
         return hr;
 	}
@@ -820,7 +821,6 @@ namespace Net {
 
 		return hr;
 	}
-
 
 
 	////////////////////////////////////////////////////////////////////////////////
