@@ -34,7 +34,7 @@ namespace SF
 
         public override string ToString()
         {
-            string str = Marshal.PtrToStringAnsi(NativeGetString(StringHash));
+            string? str = Marshal.PtrToStringAnsi(NativeGetString(StringHash));
 
             return string.IsNullOrEmpty(str) ? $"0x{StringHash.ToString("X16")}" : str;
         }
