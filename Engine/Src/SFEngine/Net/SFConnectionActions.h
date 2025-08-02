@@ -148,6 +148,7 @@ namespace Net {
 	{
     private:
         bool m_bSent = false;
+        TimeStampMS m_RetryTime{};
 
 	public:
 		virtual Result Run() override;
