@@ -190,6 +190,10 @@ namespace SF {
 		 public const int _GAME_INVALID_CONTENT = (unchecked((int)0xE704002B)); 
 		public static readonly Result GAME_INVALID_CONTENT = new Result(_GAME_INVALID_CONTENT); 
 
+		// Trading between player is not allowed 
+		 public const int _GAME_TRADING_IS_NOT_ALLOWED = (unchecked((int)0xE704002C)); 
+		public static readonly Result GAME_TRADING_IS_NOT_ALLOWED = new Result(_GAME_TRADING_IS_NOT_ALLOWED); 
+
 	}
 }
 

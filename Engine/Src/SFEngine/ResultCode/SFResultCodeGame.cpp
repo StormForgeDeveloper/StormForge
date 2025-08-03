@@ -64,6 +64,7 @@ namespace ResultCode {
 		codeMap.Insert((uint32_t)			GAME_LOW_PLAYER_LEVEL        , {"			GAME_LOW_PLAYER_LEVEL        ", "The player's level is too low"});
 		codeMap.Insert((uint32_t)			GAME_NO_OWNERSHIP        , {"			GAME_NO_OWNERSHIP        ", "The player needs ownership to access the content"});
 		codeMap.Insert((uint32_t)			GAME_INVALID_CONTENT        , {"			GAME_INVALID_CONTENT        ", "Invalid content data"});
+		codeMap.Insert((uint32_t)			GAME_TRADING_IS_NOT_ALLOWED        , {"			GAME_TRADING_IS_NOT_ALLOWED        ", "Trading between player is not allowed"});
 
 	}//InitializeResultCode 
 }//namespace ResultCode 

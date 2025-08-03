@@ -150,6 +150,9 @@ namespace SF {
 			// Invalid content data 
 			constexpr Result 			GAME_INVALID_CONTENT                                               ((int32_t)0xE704002BL);
 
+			// Trading between player is not allowed 
+			constexpr Result 			GAME_TRADING_IS_NOT_ALLOWED                                        ((int32_t)0xE704002CL);
+
 	void InitializeResultCodeGame();
 
 	}//namespace ResultCode 

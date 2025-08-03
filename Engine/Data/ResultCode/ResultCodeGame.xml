@@ -65,6 +65,8 @@
     <ResultCodeItem Severity="Error" CodeName="NO_OWNERSHIP" Desc="The player needs ownership to access the content"/>
 
     <ResultCodeItem Severity="Error" CodeName="INVALID_CONTENT" Desc="Invalid content data"/>
+    
+    <ResultCodeItem Severity="Error" CodeName="TRADING_IS_NOT_ALLOWED" Desc="Trading between player is not allowed"/>
 
 </ResultCodes>
 
