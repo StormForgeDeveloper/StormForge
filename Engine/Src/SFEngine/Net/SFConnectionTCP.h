@@ -103,7 +103,7 @@ namespace SF {
 			bool m_IsTCPSocketConnectionEstablished;
 
             // Was trying to implement edge trigger writting
-            //Atomic<bool> m_bWriteIsReady;
+            Atomic<bool> m_bWriteIsReady;
 
 			ConnectionMessageAction_HandleAck m_HandleAck;
 			ConnectionMessageAction_HandleNack m_HandleNack;

@@ -194,7 +194,7 @@ namespace Net {
 	{
 		Result hr;
 
-        //m_Owner.m_bWriteIsReady.store(true, std::memory_order_release);
+        m_Owner.m_bWriteIsReady.store(true, std::memory_order_release);
 
 		return hr;
 	}
@@ -214,6 +214,13 @@ namespace Net {
             // This path shouldn't be taken
             assert(false);
             return super::OnIOSendCompleted(hrRes, pIOBuffer);
+        }
+
+        if (NetSystem::IsProactorSystem())
+        {
+            // Unlike reactor system, we don't have specific write ready event
+            // we wrote a thing, flush next item if exist
+            m_Owner.m_bWriteIsReady.store(true, std::memory_order_release);
         }
     }
 
@@ -658,7 +665,7 @@ namespace Net {
         itemWritePtr.Reset();
 
         // kick send queue processing
-        //m_bWriteIsReady.store(true, std::memory_order_release);
+        m_bWriteIsReady.store(true, std::memory_order_release);
 
         return hr;
     }
@@ -668,6 +675,8 @@ namespace Net {
         Result hr;
 
         MutexScopeLock scopeLock(m_SendBufferQueueDequeueLock);
+
+        SFLog(Net, Debug4, "TCP ProcessSend CID:{}", GetCID());
 
         CircularBufferQueue::ItemIterator itemPtr = m_SendBufferQueue.TailIterator();
         for (; itemPtr; ++itemPtr)
@@ -777,7 +786,15 @@ namespace Net {
                 }
             }
 
-            ProcessSendQueue();
+            bool bWriteIsReady = m_bWriteIsReady.exchange(false, std::memory_order_acquire);
+            if (bWriteIsReady)
+            {
+                Result sendRes = ProcessSendQueue();
+                if (sendRes.IsFailure())
+                {
+                    SFLog(Net, Debug2, "ProcessSend failed with {}", sendRes);
+                }
+            }
         }
 
 
