@@ -201,6 +201,16 @@ namespace Net {
 
     Result ConnectionTCP::MyNetSocketIOAdapter::OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE* pIOBuffer)
     {
+        ScopeContext hr([this, &pIOBuffer](Result hr)
+            {
+                if (NetSystem::IsProactorSystem())
+                {
+                    // Unlike reactor system, we don't have specific write ready event
+                    // we wrote a thing, flush next item if exist
+                    m_Owner.m_bWriteIsReady.store(true, std::memory_order_release);
+                }
+            });
+
         if (m_Owner.m_SendBufferQueue.IsManagedAddress(pIOBuffer))
         {
             MutexScopeLock scopeLock(m_Owner.m_SendBufferQueueDequeueLock);
@@ -214,13 +224,6 @@ namespace Net {
             // This path shouldn't be taken
             assert(false);
             return super::OnIOSendCompleted(hrRes, pIOBuffer);
-        }
-
-        if (NetSystem::IsProactorSystem())
-        {
-            // Unlike reactor system, we don't have specific write ready event
-            // we wrote a thing, flush next item if exist
-            m_Owner.m_bWriteIsReady.store(true, std::memory_order_release);
         }
     }
 

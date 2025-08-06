@@ -92,7 +92,6 @@ namespace SF {
 
 			inline NetClass GetNetClass()	 const { return m_LocalClass; }
 
-
 			// Get Socket
 			const SF_SOCKET GetSocket() const { return GetSocketIO() != nullptr ? GetSocketIO()->GetIOSocket() : INVALID_SOCKET; }
 
