@@ -22,6 +22,8 @@
 #include "Util/SFToString.h"
 #include "SFProtocol.h"
 
+#include "Online/Quic/SFQuicService.h"
+
 #include "Net/SFNetToString.h"
 #include "Net/SFConnection.h"
 #include "Net/SFConnectionQuic.h"
@@ -30,7 +32,7 @@
 #include "Net/SFNetCtrl.h"
 #include "Net/SFNetConst.h"
 
-#include "msquic.h"
+#include <msquic.h>
 
 namespace SF {
 namespace Net {
@@ -52,21 +54,7 @@ namespace Net {
 	// Constructor
 	ConnectionQuic::ConnectionQuic()
 		: Connection(nullptr)
-        , m_SendBufferQueue(/*Const::TCP_CONNECTION_SENDBUFFER_SIZE*/)
-		, m_ReceivedDataSize(0)
-		, m_IsClientConnection(false)
 	{
-		m_bufRecvTem.resize(Const::PACKET_SIZE_MAX * 2);
-
-		//m_NetIOAdapter.SetWriteQueue(new WriteBufferQueue(GetHeap()));
-
-		//SetNetCtrlAction(NetCtrlCode_Ack, &m_HandleAck);
-		//SetNetCtrlAction(NetCtrlCode_Nack, &m_HandleNack);
-		//SetNetCtrlAction(NetCtrlCode_Heartbeat, &m_HandleHeartbeat);
-		//SetNetCtrlAction(NetCtrlCode_TimeSync, &m_HandleTimeSync);
-		//SetNetCtrlAction(NetCtrlCode_Connect, &m_HandleConnect);
-		//SetNetCtrlAction(NetCtrlCode_Disconnect, &m_HandleDisconnect);
-
 	}
 
 	ConnectionQuic::~ConnectionQuic()
@@ -82,6 +70,14 @@ namespace Net {
 	void ConnectionQuic::Dispose()
 	{
 		ClearQueues();
+
+        if (m_Connection)
+        {
+            auto msQuic = Service::Quic->GetQuic();
+            if (msQuic)
+                msQuic->ConnectionClose(m_Connection);
+            m_Connection = nullptr;
+        }
 
 		super::Dispose();
 	}
@@ -112,10 +108,6 @@ namespace Net {
 	Result ConnectionQuic::InitConnection(const PeerInfo &local, const PeerInfo &remote)
 	{
         Result hr;
-
-		m_ReceivedDataSize = 0;
-
-		m_IsClientConnection = false;
 
 		Assert(local.PeerClass != NetClass::Unknown);
 
@@ -173,7 +165,6 @@ namespace Net {
 		Result hr = ResultCode::SUCCESS;
 
 		//socket
-		m_ReceivedDataSize = 0;
 		ResetZeroRecvCount();
 
 		netCheck(Connection::CloseConnection(reason));
@@ -216,107 +207,6 @@ namespace Net {
 		return hr;
 	}
 
-    Result ConnectionQuic::SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0)
-    {
-        Result hr = ResultCode::SUCCESS;
-        Result hrTem;
-
-        MsgNetCtrlBuffer netCtrlBuffer{};
-        MessageHeader* pHeader = &netCtrlBuffer.Header;
-
-        netCheck(MakeNetCtrl(pHeader, uiCtrlCode, uiSequence, returnMsgID, parameter0));
-
-        hrTem = SendRaw(pHeader);
-        if (!hrTem.IsSuccess())
-        {
-            SFLog(Net, Debug4, "NetCtrl Send failed : CID:{0}, msg:{1}, seq:{2}, hr={3}",
-                GetCID(),
-                returnMsgID.ID,
-                uiSequence,
-                hrTem);
-
-            // ignore IO send fail except connection closed
-            if (hrTem == ((Result)ResultCode::IO_CONNECTION_CLOSED))
-            {
-                return hr;
-            }
-        }
-
-        return hr;
-    }
-
-    Result ConnectionQuic::SendRaw(const MessageHeader* pMsgHeader)
-    {
-        Result hr;
-
-        netCheckMem(pMsgHeader);
-        MessageID msgID = pMsgHeader->MessageId;
-
-        uint uiPolicy = msgID.IDs.Protocol;
-        if ((uiPolicy == 0 && msgID.IDs.Type != 0)
-            || uiPolicy >= MessageProtocol::Max) // invalid policy
-        {
-            netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
-        }
-
-        CircularBufferQueue::ItemWritePtr itemWritePtr = m_SendBufferQueue.AllocateWrite(sizeof(IOBUFFER_WRITE) + pMsgHeader->MessageSize);
-        if (!itemWritePtr)
-        {
-            if (pMsgHeader->MessageId.IDs.Reliability)
-            {
-                SFLog(Net, Warning, "ConnectionQuic::SendRaw, Send buffer overflow");
-            }
-            return hr = ResultCode::IO_SEND_FAIL;
-        }
-
-        IOBUFFER_WRITE* pSendBuffer = new(itemWritePtr.data()) IOBUFFER_WRITE;
-
-        assert(pSendBuffer == itemWritePtr.data());
-
-        MessageHeader* pNewHeader = reinterpret_cast<MessageHeader*>(pSendBuffer + 1);
-        memcpy(pNewHeader, pMsgHeader, pMsgHeader->MessageSize);
-        pSendBuffer->SetupSendTCP(pMsgHeader->MessageSize, reinterpret_cast<uint8_t*>(pNewHeader));
-
-        // Release before handover to buffer send
-        itemWritePtr.Reset();
-
-        // kick send queue processing
-        m_bWriteIsReady.store(true, std::memory_order_release);
-
-        return hr;
-    }
-
-    Result ConnectionQuic::ProcessSendQueue()
-    {
-        Result hr;
-
-        MutexScopeLock scopeLock(m_SendBufferQueueDequeueLock);
-
-        CircularBufferQueue::ItemIterator itemPtr = m_SendBufferQueue.TailIterator();
-        for (; itemPtr; ++itemPtr)
-        {
-            if (!itemPtr.StartRead())
-                break;
-
-            //IOBUFFER_WRITE* pSendBuffer = reinterpret_cast<IOBUFFER_WRITE*>(itemPtr.data());
-
-            //// WriteBuffer will trigger OnIOSendCompleted if transfer is completed, and the item will be released
-            //hr = m_NetIOAdapter.WriteBuffer(pSendBuffer);
-            //if (!hr.IsSuccess())
-            //{
-            //    // need to try again
-            //    itemPtr.CancelRead();
-            //    break;
-            //}
-
-            // The read mode will be cleared in OnIOSendCompleted
-
-            //m_NetIOAdapter.IncPendingSendCount();
-        }
-
-        return hr;
-    }
-
 
     Result ConnectionQuic::SendMsg(const MessageHeader* pMsgHeader)
     {
@@ -357,7 +247,7 @@ namespace Net {
 
         Protocol::PrintDebugMessage("Send", pMsgHeader);
 
-        netCheck(SendRaw(pMsgHeader));
+        //netCheck(SendRaw(pMsgHeader));
 
         return hr;
     }
@@ -373,14 +263,6 @@ namespace Net {
             return hr;
 
 
-        // tick update send queue
-        bool bWriteIsReady = m_bWriteIsReady.exchange(false, std::memory_order_consume);
-        if (bWriteIsReady) // if write ready is triggered this tick
-        {
-            ProcessSendQueue();
-            //m_NetIOAdapter.ProcessSendQueue();
-        }
-
         return hr;
 	}
 
@@ -391,20 +273,89 @@ namespace Net {
 	//	TCP Network client connection class
 	//
 
+    _IRQL_requires_max_(DISPATCH_LEVEL)
+        _Function_class_(QUIC_CONNECTION_CALLBACK)
+        QUIC_STATUS
+        QUIC_API
+        QuicClientConnectionCallback(
+            _In_ HQUIC QuicConnection,
+            _In_opt_ void* Context,
+            _Inout_ QUIC_CONNECTION_EVENT* Event
+        )
+    {
+        auto* Connection = reinterpret_cast<ConnectionQuicClient*>(Context);
+
+        //if (Event->Type == QUIC_CONNECTION_EVENT_CONNECTED) {
+            //const char* SslKeyLogFile = getenv(SslKeyLogEnvVar);
+            //if (SslKeyLogFile != NULL) {
+            //    WriteSslKeyLogFile(SslKeyLogFile, &ClientSecrets);
+            //}
+        //}
+
+        switch (Event->Type) {
+        case QUIC_CONNECTION_EVENT_CONNECTED:
+            Connection->OnConnectionResult(ResultCode::SUCCESS);
+            break;
+        case QUIC_CONNECTION_EVENT_SHUTDOWN_INITIATED_BY_TRANSPORT:
+            //
+            // The connection has been shut down by the transport. Generally, this
+            // is the expected way for the connection to shut down with this
+            // protocol, since we let idle timeout kill the connection.
+            //
+            if (Event->SHUTDOWN_INITIATED_BY_TRANSPORT.Status == QUIC_STATUS_CONNECTION_IDLE) {
+                printf("[conn][%p] Successfully shut down on idle.\n", Connection);
+            }
+            else {
+                printf("[conn][%p] Shut down by transport, 0x%x\n", Connection, Event->SHUTDOWN_INITIATED_BY_TRANSPORT.Status);
+            }
+            break;
+        case QUIC_CONNECTION_EVENT_SHUTDOWN_INITIATED_BY_PEER:
+            //
+            // The connection was explicitly shut down by the peer.
+            //
+            printf("[conn][%p] Shut down by peer, 0x%llu\n", Connection, (unsigned long long)Event->SHUTDOWN_INITIATED_BY_PEER.ErrorCode);
+            break;
+        case QUIC_CONNECTION_EVENT_SHUTDOWN_COMPLETE:
+            //
+            // The connection has completed the shutdown process and is ready to be
+            // safely cleaned up.
+            //
+            printf("[conn][%p] All done\n", Connection);
+            if (!Event->SHUTDOWN_COMPLETE.AppCloseInProgress) {
+                Connection->CloseConnection("Shutdown has been requested by either peer or system.");
+            }
+            break;
+        case QUIC_CONNECTION_EVENT_RESUMPTION_TICKET_RECEIVED:
+            //
+            // A resumption ticket (also called New Session Ticket or NST) was
+            // received from the server.
+            //
+            printf("[conn][%p] Resumption ticket received (%u bytes):\n", Connection, Event->RESUMPTION_TICKET_RECEIVED.ResumptionTicketLength);
+            for (uint32_t i = 0; i < Event->RESUMPTION_TICKET_RECEIVED.ResumptionTicketLength; i++) {
+                printf("%.2X", (uint8_t)Event->RESUMPTION_TICKET_RECEIVED.ResumptionTicket[i]);
+            }
+            printf("\n");
+            break;
+        case QUIC_CONNECTION_EVENT_IDEAL_PROCESSOR_CHANGED:
+            printf(
+                "[conn][%p] Ideal Processor is: %u, Partition Index %u\n",
+                Connection,
+                Event->IDEAL_PROCESSOR_CHANGED.IdealProcessor,
+                Event->IDEAL_PROCESSOR_CHANGED.PartitionIndex);
+            break;
+        default:
+            break;
+        }
+        return QUIC_STATUS_SUCCESS;
+    }
+
+
 	// Constructor
 	ConnectionQuicClient::ConnectionQuicClient()
 		: ConnectionQuic()
 	{
 		// We can't set tick here. There is a small chance that tick update finished before this object's reference count got increased
 		//SetTickGroup(EngineTaskTick::AsyncTick);
-
-		//SetNetCtrlAction(NetCtrlCode_TimeSyncRtn, &m_HandleTimeSyncRtn);
-
-  //      AddStateAction(ConnectionState::WAITRW, &m_WaitRW);
-		//AddStateAction(ConnectionState::CONNECTING, &m_TimeoutConnecting);
-		//AddStateAction(ConnectionState::CONNECTING, &m_SendConnect);
-		//AddStateAction(ConnectionState::DISCONNECTING, &m_TimeoutDisconnecting);
-		//AddStateAction(ConnectionState::DISCONNECTING, &m_SendDisconnect);
 	}
 
 	ConnectionQuicClient::~ConnectionQuicClient()
@@ -419,30 +370,37 @@ namespace Net {
 
 		Result hr = ConnectionQuic::InitConnection(local, remote );
 
+        auto msQuic = Service::Quic->GetQuic();
+        SFCheckPtr(Quic, msQuic);
+
+        auto configuration = Service::Quic->GetConfiguration("client");
+        SFCheckPtr(Quic, configuration);
+
+        HQUIC connection{};
+        m_Status = msQuic->ConnectionOpen(Service::Quic->GetRegistration(), QuicClientConnectionCallback, this, &connection);
+        if (QUIC_FAILED(m_Status))
+        {
+            SFCheck(Quic, Service::Quic->QuicStatusToResult(m_Status));
+        }
+
+        // Start the connection
+        QUIC_ADDRESS_FAMILY Family = remote.PeerAddress.SocketFamily == SockFamily::IPV4 ? QUIC_ADDRESS_FAMILY_INET : QUIC_ADDRESS_FAMILY_INET6;
+        uint16_t ServerPort = 443;
+        m_Status = msQuic->ConnectionStart(connection, configuration, Family, remote.PeerAddress.Address, ServerPort);
+        if (QUIC_FAILED(m_Status))
+        {
+            msQuic->ConnectionClose(connection);
+            SFCheck(Quic, Service::Quic->QuicStatusToResult(m_Status));
+        }
+
+        m_Configuration = configuration;
+
+        SetQuicConnection(connection);
+
 		return hr;
 	}
 
 
-
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	TCP Network client connection class
-	//
-
-	// Constructor
-	ConnectionQuicServer::ConnectionQuicServer()
-		: ConnectionQuic()
-	{
-		//Assert(GetMyNetIOAdapter().GetWriteQueue() != nullptr);
-
-		//AddStateAction(ConnectionState::CONNECTING, &m_TimeoutConnecting);
-		//AddStateAction(ConnectionState::DISCONNECTING, &m_TimeoutDisconnecting);
-		//AddStateAction(ConnectionState::DISCONNECTING, &m_SendDisconnect);
-	}
-
-	ConnectionQuicServer::~ConnectionQuicServer()
-	{
-	}
 
 } // namespace Net
 } // namespace SF

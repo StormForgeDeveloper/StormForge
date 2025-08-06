@@ -681,6 +681,39 @@ namespace SF {
 			// Canceled  
 			constexpr Result 			HTTP_CANCELED                                                      ((int32_t)0xE70100DCL);
 
+			// net protocol pending  
+			constexpr Result 			NET_PENDING                                                        ((int32_t)0xE70100DDL);
+
+			// net protocol continue  
+			constexpr Result 			NET_CONTINUE                                                       ((int32_t)0xE70100DEL);
+
+			// buffer overflow 
+			constexpr Result 			BUFFER_OVERFLOW                                                    ((int32_t)0xE70100DFL);
+
+			// hand shake has been failed 
+			constexpr Result 			NET_HANDSHAKE_FAILURE                                              ((int32_t)0xE70100E0L);
+
+			// hand shake has been failed 
+			constexpr Result 			NET_ABORTED                                                        ((int32_t)0xE70100E1L);
+
+			// Too long inactivity 
+			constexpr Result 			NET_TOO_LONG_IDLE                                                  ((int32_t)0xE70100E2L);
+
+			// Generic internal error 
+			constexpr Result 			INTERNAL_ERROR                                                     ((int32_t)0xE70100E3L);
+
+			// Generic protocol error 
+			constexpr Result 			NET_PROTOCOL_ERROR                                                 ((int32_t)0xE70100E4L);
+
+			// Version negotiation has been failed 
+			constexpr Result 			NET_VERSION_NEGOTIATION_FAILURE                                    ((int32_t)0xE70100E5L);
+
+			// The connection handshake failed to negotiate a common ALPN. 
+			constexpr Result 			HTTP_ALPN_NEG_FAILURE                                              ((int32_t)0xE70100E6L);
+
+			// A stream failed to start because the peer doesn't allow any more to be open at this time. 
+			constexpr Result 			NET_STREAM_LIMIT_REACHED                                           ((int32_t)0xE70100E7L);
+
 	void InitializeResultCodeSF();
 
 	}//namespace ResultCode 

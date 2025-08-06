@@ -111,7 +111,6 @@ namespace SF {
 
 		};
 
-
 	} // namespace Net
 } // namespace SF
 

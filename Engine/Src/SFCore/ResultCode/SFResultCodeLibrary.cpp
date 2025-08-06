@@ -241,6 +241,17 @@ namespace ResultCode {
 		codeMap.Insert((uint32_t)			HTTP_ABORTED_BY_CALLBACK        , {"			HTTP_ABORTED_BY_CALLBACK        ", "?"});
 		codeMap.Insert((uint32_t)			HTTP_UNRECOVERABLE_POLL        , {"			HTTP_UNRECOVERABLE_POLL        ", "?"});
 		codeMap.Insert((uint32_t)			HTTP_CANCELED        , {"			HTTP_CANCELED        ", "Canceled "});
+		codeMap.Insert((uint32_t)			NET_PENDING        , {"			NET_PENDING        ", "net protocol pending "});
+		codeMap.Insert((uint32_t)			NET_CONTINUE        , {"			NET_CONTINUE        ", "net protocol continue "});
+		codeMap.Insert((uint32_t)			BUFFER_OVERFLOW        , {"			BUFFER_OVERFLOW        ", "buffer overflow"});
+		codeMap.Insert((uint32_t)			NET_HANDSHAKE_FAILURE        , {"			NET_HANDSHAKE_FAILURE        ", "hand shake has been failed"});
+		codeMap.Insert((uint32_t)			NET_ABORTED        , {"			NET_ABORTED        ", "hand shake has been failed"});
+		codeMap.Insert((uint32_t)			NET_TOO_LONG_IDLE        , {"			NET_TOO_LONG_IDLE        ", "Too long inactivity"});
+		codeMap.Insert((uint32_t)			INTERNAL_ERROR        , {"			INTERNAL_ERROR        ", "Generic internal error"});
+		codeMap.Insert((uint32_t)			NET_PROTOCOL_ERROR        , {"			NET_PROTOCOL_ERROR        ", "Generic protocol error"});
+		codeMap.Insert((uint32_t)			NET_VERSION_NEGOTIATION_FAILURE        , {"			NET_VERSION_NEGOTIATION_FAILURE        ", "Version negotiation has been failed"});
+		codeMap.Insert((uint32_t)			HTTP_ALPN_NEG_FAILURE        , {"			HTTP_ALPN_NEG_FAILURE        ", "The connection handshake failed to negotiate a common ALPN."});
+		codeMap.Insert((uint32_t)			NET_STREAM_LIMIT_REACHED        , {"			NET_STREAM_LIMIT_REACHED        ", "A stream failed to start because the peer doesn't allow any more to be open at this time."});
 
 	}//InitializeResultCode 
 }//namespace ResultCode 

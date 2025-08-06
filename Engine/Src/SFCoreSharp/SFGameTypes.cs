@@ -697,7 +697,7 @@ namespace SF
             set => PlatformData = (byte)value;
         }
 
-        bool Parse(string playformIdString)
+        public bool Parse(string playformIdString)
         {
             if (string.IsNullOrEmpty(playformIdString))
                 return false;

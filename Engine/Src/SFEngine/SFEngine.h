@@ -57,7 +57,7 @@ namespace SF {
 		// If you set this false, you should call Engine::TickUpdate by yourself
 		bool UseEngineThread = true; 
 
-		// Saving crash dump, Only windows platform is supported for now
+		// Saving crash dump, on windows platform. other platform just print out callstack
 		bool EnableCrashDump = true;
 
 		// Async task thread count. If you put higher number it will takes more CPU cores

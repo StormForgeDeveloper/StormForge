@@ -247,6 +247,18 @@
     <ResultCodeItem Severity="Error" CodeName="HTTP_UNRECOVERABLE_POLL" Desc="?"/>
     
     <ResultCodeItem Severity="Error" CodeName="HTTP_CANCELED" Desc="Canceled "/>
+	
+	<ResultCodeItem Severity="Error" CodeName="NET_PENDING" Desc="net protocol pending "/>
+	<ResultCodeItem Severity="Error" CodeName="NET_CONTINUE" Desc="net protocol continue "/>
+	<ResultCodeItem Severity="Error" CodeName="BUFFER_OVERFLOW" Desc="buffer overflow"/>
+	<ResultCodeItem Severity="Error" CodeName="NET_HANDSHAKE_FAILURE" Desc="hand shake has been failed"/>
+	<ResultCodeItem Severity="Error" CodeName="NET_ABORTED" Desc="hand shake has been failed"/>
+	<ResultCodeItem Severity="Error" CodeName="NET_TOO_LONG_IDLE" Desc="Too long inactivity"/>
+	<ResultCodeItem Severity="Error" CodeName="INTERNAL_ERROR" Desc="Generic internal error"/>
+	<ResultCodeItem Severity="Error" CodeName="NET_PROTOCOL_ERROR" Desc="Generic protocol error"/>
+	<ResultCodeItem Severity="Error" CodeName="NET_VERSION_NEGOTIATION_FAILURE" Desc="Version negotiation has been failed"/>
+	<ResultCodeItem Severity="Error" CodeName="HTTP_ALPN_NEG_FAILURE" Desc="The connection handshake failed to negotiate a common ALPN."/>
+	<ResultCodeItem Severity="Error" CodeName="NET_STREAM_LIMIT_REACHED" Desc="A stream failed to start because the peer doesn't allow any more to be open at this time."/>
 
 </ResultCodes>
 

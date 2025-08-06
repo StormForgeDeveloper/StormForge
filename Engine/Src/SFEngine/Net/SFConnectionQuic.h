@@ -18,6 +18,7 @@
 #include "ResultCode/SFResultCodeEngine.h"
 #include "Net/SFConnection.h"
 
+#include <msquic.h>
 
 
 namespace SF {
@@ -36,41 +37,24 @@ namespace SF {
 
 			typedef Connection super;
 
+        private:
 
-		private:
+            HQUIC m_Connection{};
 
-            // send buffer queue size
-            CriticalSection m_SendBufferQueueDequeueLock;
-            CircularBufferQueue m_SendBufferQueue;
+        protected:
+            // latest quic status
+            QUIC_STATUS m_Status;
 
-			// Temporary incoming buffer for fragmented incoming packet buffer
-			uint	m_ReceivedDataSize;
-			std::vector<uint8_t>	m_bufRecvTem;
-
-		protected:
-
-			// True, if this is client side connection
-			bool m_IsClientConnection;
-
-            Atomic<bool> m_bWriteIsReady;
-
-			//ConnectionMessageAction_HandleAck m_HandleAck;
-			//ConnectionMessageAction_HandleNack m_HandleNack;
-			//ConnectionMessageAction_HandleHeartbeat m_HandleHeartbeat;
-			//ConnectionMessageAction_HandleTimeSync m_HandleTimeSync;
-			//ConnectionMessageAction_HandleConnect m_HandleConnect;
-			//ConnectionMessageAction_HandleDisconnect m_HandleDisconnect;
-
-		protected:
-
-			Result SendRaw(const MessageHeader* pMsgHeader);
-            Result ProcessSendQueue();
+            void SetQuicConnection(HQUIC connection) { m_Connection = connection; }
+            HQUIC GetQuicConnection() const { return m_Connection; }
 
 		public:
 			// Constructor
 			ConnectionQuic();
 			virtual ~ConnectionQuic();
 
+            // Get quic configuration. client and server may act differently
+            virtual HQUIC GetConfiguration() const = 0;
 
 			virtual bool CanDelete() override;
 			virtual void Dispose() override;
@@ -106,12 +90,6 @@ namespace SF {
 			// Send message to connected entity
             virtual Result SendMsg(const MessageHeader* pMsg) override;
 
-            virtual Result SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0) override;
-            virtual Result SendPending(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0) override { return SendNetCtrl(uiCtrlCode, uiSequence, returnMsgID, parameter0); }
-
-			// Update Send buffer Queue, TCP and UDP client connection
-			//virtual Result UpdateSendBufferQueue() override;
-
 			// Update net control, process connection heartbeat, ... etc
 			virtual Result TickUpdate() override;
 
@@ -131,12 +109,16 @@ namespace SF {
 
 		private:
 
-			ConnectionMessageAction_HandleTimeSyncRtn m_HandleTimeSyncRtn;
-            ConnectionStateAction_WaitRW m_WaitRW;
-            ConnectionStateAction_TimeoutConnecting m_TimeoutConnecting;
-			ConnectionStateAction_SendConnect m_SendConnect;
-			ConnectionStateAction_TimeoutDisconnecting m_TimeoutDisconnecting;
-			ConnectionStateAction_SendDisconnect m_SendDisconnect;
+            // quic configuration handle
+            HQUIC m_Configuration{};
+
+
+			//ConnectionMessageAction_HandleTimeSyncRtn m_HandleTimeSyncRtn;
+   //         ConnectionStateAction_WaitRW m_WaitRW;
+   //         ConnectionStateAction_TimeoutConnecting m_TimeoutConnecting;
+			//ConnectionStateAction_SendConnect m_SendConnect;
+			//ConnectionStateAction_TimeoutDisconnecting m_TimeoutDisconnecting;
+			//ConnectionStateAction_SendDisconnect m_SendDisconnect;
 
 
 		public:
@@ -144,33 +126,12 @@ namespace SF {
 			ConnectionQuicClient();
 			~ConnectionQuicClient();
 
+            virtual HQUIC GetConfiguration() const override {
+                return m_Configuration;
+            }
+
 			// Initialize connection
 			virtual Result InitConnection(const PeerInfo& local, const PeerInfo& remote) override;
-
-		};
-
-
-		////////////////////////////////////////////////////////////////////////////////
-		//
-		//	TCP Network server connection class
-		//
-
-		class ConnectionQuicServer : public ConnectionQuic
-		{
-		public:
-
-			using super = ConnectionQuic;
-
-		private:
-			ConnectionStateAction_TimeoutConnecting m_TimeoutConnecting;
-			ConnectionStateAction_TimeoutDisconnecting m_TimeoutDisconnecting;
-			ConnectionStateAction_SendDisconnect m_SendDisconnect;
-
-		public:
-			// Constructor
-			ConnectionQuicServer();
-			~ConnectionQuicServer();
-
 		};
 
 

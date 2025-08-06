@@ -362,6 +362,10 @@ set(SUBOnline_FILES
 	Online/HTTP/SFHTTPClientCurl.cpp
 	Online/HTTP/SFHTTPClientSystemCurl.h
 	Online/HTTP/SFHTTPClientSystemCurl.cpp
+	Online/Quic/SFEngineComponentQuic.h
+	Online/Quic/SFEngineComponentQuic.cpp
+	Online/Quic/SFQuicService.h
+	Online/Quic/SFQuicService.cpp
 	MessageBus/SFMessageHeader.h
 	MessageBus/SFMessageHeader.cpp
 	MessageBus/SFMessageDelegateMap.h

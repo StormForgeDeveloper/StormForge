@@ -898,6 +898,50 @@ namespace SF {
 		 public const int _HTTP_CANCELED = (unchecked((int)0xE70100DC)); 
 		public static readonly Result HTTP_CANCELED = new Result(_HTTP_CANCELED); 
 
+		// net protocol pending  
+		 public const int _NET_PENDING = (unchecked((int)0xE70100DD)); 
+		public static readonly Result NET_PENDING = new Result(_NET_PENDING); 
+
+		// net protocol continue  
+		 public const int _NET_CONTINUE = (unchecked((int)0xE70100DE)); 
+		public static readonly Result NET_CONTINUE = new Result(_NET_CONTINUE); 
+
+		// buffer overflow 
+		 public const int _BUFFER_OVERFLOW = (unchecked((int)0xE70100DF)); 
+		public static readonly Result BUFFER_OVERFLOW = new Result(_BUFFER_OVERFLOW); 
+
+		// hand shake has been failed 
+		 public const int _NET_HANDSHAKE_FAILURE = (unchecked((int)0xE70100E0)); 
+		public static readonly Result NET_HANDSHAKE_FAILURE = new Result(_NET_HANDSHAKE_FAILURE); 
+
+		// hand shake has been failed 
+		 public const int _NET_ABORTED = (unchecked((int)0xE70100E1)); 
+		public static readonly Result NET_ABORTED = new Result(_NET_ABORTED); 
+
+		// Too long inactivity 
+		 public const int _NET_TOO_LONG_IDLE = (unchecked((int)0xE70100E2)); 
+		public static readonly Result NET_TOO_LONG_IDLE = new Result(_NET_TOO_LONG_IDLE); 
+
+		// Generic internal error 
+		 public const int _INTERNAL_ERROR = (unchecked((int)0xE70100E3)); 
+		public static readonly Result INTERNAL_ERROR = new Result(_INTERNAL_ERROR); 
+
+		// Generic protocol error 
+		 public const int _NET_PROTOCOL_ERROR = (unchecked((int)0xE70100E4)); 
+		public static readonly Result NET_PROTOCOL_ERROR = new Result(_NET_PROTOCOL_ERROR); 
+
+		// Version negotiation has been failed 
+		 public const int _NET_VERSION_NEGOTIATION_FAILURE = (unchecked((int)0xE70100E5)); 
+		public static readonly Result NET_VERSION_NEGOTIATION_FAILURE = new Result(_NET_VERSION_NEGOTIATION_FAILURE); 
+
+		// The connection handshake failed to negotiate a common ALPN. 
+		 public const int _HTTP_ALPN_NEG_FAILURE = (unchecked((int)0xE70100E6)); 
+		public static readonly Result HTTP_ALPN_NEG_FAILURE = new Result(_HTTP_ALPN_NEG_FAILURE); 
+
+		// A stream failed to start because the peer doesn't allow any more to be open at this time. 
+		 public const int _NET_STREAM_LIMIT_REACHED = (unchecked((int)0xE70100E7)); 
+		public static readonly Result NET_STREAM_LIMIT_REACHED = new Result(_NET_STREAM_LIMIT_REACHED); 
+
 	}
 }
 
