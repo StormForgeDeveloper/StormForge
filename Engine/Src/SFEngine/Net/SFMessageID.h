@@ -94,6 +94,12 @@ namespace SF {
         {
         }
 
+        constexpr bool IsValid() const
+        {
+            // Valid if protocol is not 0 and type is valid
+            return ID != 0;
+        }
+
         uint32_t SetMessageID(EMessageType type, uint uiReliability, uint uiInterServer, uint uiProtocol, uint uiCode)
         {
             IDs.MsgCode = uiCode;
