@@ -43,6 +43,7 @@
 #if defined(SF_USE_WSAPI)
 #include "Audio/WSAPI/SFAudioEngineComponentWSAPI.h"
 #endif
+#include "Online/Quic/SFEngineComponentQuic.h"
 
 
 namespace SF
@@ -148,6 +149,8 @@ namespace SF
 		{
 			AddComponent<SF::Net::NetSystem>(m_InitParameter.NetRecvBufferSize, m_InitParameter.NetSendBufferSize, m_InitParameter.NetworkThreadCount, 1024);
 		}
+
+        AddComponent<SF::EngineComponentQuic>();
 
 		AddComponent<SF::HTTPClientComponent>();
         AddComponent<SF::WebsocketComponent>();

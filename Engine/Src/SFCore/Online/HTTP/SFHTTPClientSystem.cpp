@@ -144,6 +144,7 @@ namespace SF
         Service::HTTP = new HTTPClientSystemCurl;
 
         static const char* SelfSignedCerts[] = {
+
 // root CA
 "-----BEGIN CERTIFICATE-----\n\
 MIIGmTCCBQGgAwIBAgIQWDnie1UiZJ1RTQ2id4/4cTANBgkqhkiG9w0BAQwFADBg\
@@ -207,6 +208,7 @@ SDW4+0WuG91CHGarCFFuSxni0Afqc8iRZqFr6fFneF1y4LCyVPkei6zQClt3zBfw\
 wTnDpv4r3wuSH/KdArkkWBMmXo1gFRwO7yp9NzV2CW9zYa3AptJafGh8c4hbGfK1\
 OyGU210KPqc=\n\
 -----END CERTIFICATE-----"
+
         };
 
         for (const char* SelfSignedCert : SelfSignedCerts)

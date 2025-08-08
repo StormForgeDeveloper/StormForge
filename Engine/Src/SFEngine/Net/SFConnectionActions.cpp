@@ -493,7 +493,7 @@ namespace Net {
 		{
             m_RetryTime = Util::Time.GetTimeMs();
             SFLog(Net, Debug2, "Send Connecting CID({0}) : C:{1}, V:{2})", GetCID(), GetLocalInfo().PeerClass, (uint32_t)SF_PROTOCOL_VERSION);
-            if (GetConnection()->SendNetCtrl(PACKET_NETCTRL_CONNECT, 0, {}))
+            if (GetConnection()->SendNetCtrl(PACKET_NETCTRL_CONNECT, 0, {}, SF_PROTOCOL_VERSION))
             {
                 // With reliable stream socket we don't need to send multiple times
                 // TODO: Socket reuse?

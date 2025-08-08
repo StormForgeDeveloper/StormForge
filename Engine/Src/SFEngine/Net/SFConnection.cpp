@@ -493,7 +493,7 @@ namespace SF {
 		Result Connection::CloseConnection(const char* reason)
 		{
 			Result hr = ResultCode::SUCCESS;
-			auto orgState = GetConnectionState();
+			Net::ConnectionState orgState = GetConnectionState();
 
 			if (orgState == ConnectionState::DISCONNECTED)
 				return hr;
@@ -518,6 +518,7 @@ namespace SF {
 		void Connection::DisconnectNRelease(const char* reason)
 		{
 			SetTickGroup(EngineTaskTick::None);
+
 			// This guy should not belong to connection heap
 			SharedPointerT<EngineTask> pTask = new ConnectionTask_DisconnectNClose(this, reason);
 			pTask->Request();
@@ -532,7 +533,6 @@ namespace SF {
 
 			MessageID msgID = pMsgHeader->GetMessageID();
 
-			// 
 			Protocol::PrintDebugMessage("Recv", pMsgHeader);
 
             // rough size check

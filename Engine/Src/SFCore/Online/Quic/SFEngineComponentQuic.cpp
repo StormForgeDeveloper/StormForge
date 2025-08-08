@@ -14,6 +14,8 @@
 #include "Online/Quic/SFEngineComponentQuic.h"
 #include <msquic.h>
 #include <openssl/x509.h>
+#include <openssl/evp.h>
+#include <openssl/pem.h>
 #include <openssl/err.h>
 #include "Online/HTTP/SFHTTPClientSystem.h"
 #include "Online/Quic/SFQuicService.h"
@@ -58,6 +60,11 @@ namespace SF
             }
             return nullptr;
         }
+        virtual const QUIC_BUFFER* GetAlpnBuffers(size_t& outNumAlpn) const override
+        {
+            outNumAlpn = 1;
+            return (QUIC_BUFFER*)&QuicAlpn;
+        }
 
         Result Initialize()
         {
@@ -69,7 +76,7 @@ namespace SF
             m_Status = MsQuicOpen2(&m_MsQuic);
             if (QUIC_FAILED(m_Status))
             {
-                printf("MsQuicOpen2 failed: %d\n", m_Status);
+                SFLog(Quic, Error, "MsQuicOpen2 failed: {}", m_Status);
                 return QuicStatusToResult(m_Status);
             }
 
@@ -78,7 +85,7 @@ namespace SF
             m_Status = m_MsQuic->RegistrationOpen(&RegConfig, &m_Registration);
             if (QUIC_FAILED(m_Status))
             {
-                printf("RegistrationOpen failed: %d\n", m_Status);
+                SFLog(Quic, Error, "RegistrationOpen failed: {}", m_Status);
                 MsQuicClose(m_MsQuic);
                 m_MsQuic = nullptr;
                 return QuicStatusToResult(m_Status);
@@ -111,7 +118,30 @@ namespace SF
             }
         }
 
-        Result SetupCertConfig(QUIC_CREDENTIAL_CONFIG& CredConfig)
+        struct QuicCertConfig
+        {
+            QUIC_CREDENTIAL_CONFIG QuicConfig{};
+            QUIC_CERTIFICATE_PKCS12 Pk12{};
+            QUIC_CERTIFICATE_HASH CertHash{};
+
+            QuicCertConfig()
+            {
+                QuicConfig.Type = QUIC_CREDENTIAL_TYPE_NONE;
+                QuicConfig.Flags = QUIC_CREDENTIAL_FLAG_CLIENT; // default client
+            }
+
+            void SetPk12(int asn1BlobLen, unsigned char* pAsn1Blob)
+            {
+                Pk12.Asn1Blob = pAsn1Blob;
+                Pk12.Asn1BlobLength = asn1BlobLen;
+
+                QuicConfig.Type = QUIC_CREDENTIAL_TYPE_CERTIFICATE_PKCS12;
+                QuicConfig.CertificatePkcs12 = &Pk12;
+
+            }
+        };
+
+        Result SetupCertConfigPK12(QuicCertConfig& CredConfig)
         {
             Result hr;
 
@@ -144,14 +174,41 @@ namespace SF
 
             if (pAsn1 && asn1Len > 0)
             {
-                //Pk12.Asn1Blob
-                QUIC_CERTIFICATE_PKCS12 Pk12{};
-                Pk12.Asn1Blob = pAsn1;
-                Pk12.Asn1BlobLength = asn1Len;
-
-                CredConfig.Type = QUIC_CREDENTIAL_TYPE_CERTIFICATE_PKCS12;
-                CredConfig.CertificatePkcs12 = &Pk12;
+                CredConfig.SetPk12(asn1Len, pAsn1);
             }
+
+            return hr;
+        }
+
+
+        Result SetupCertConfigHash(QuicCertConfig& CredConfig)
+        {
+            Result hr;
+
+            X509* x509{};
+            if (Service::HTTP->GetTrustedCerts().size() > 0)
+            {
+                STACK_OF(X509_INFO)* x509Stack = Service::HTTP->GetTrustedCerts()[0];
+                if (sk_X509_INFO_num(x509Stack) > 0)
+                {
+                    // we just need one
+                    X509_INFO* info = sk_X509_INFO_value(x509Stack, 0);
+                    if (info->x509)
+                    {
+                        x509 = info->x509;
+                    }
+                }
+            }
+
+            uint CertHashLen = sizeof(CredConfig.CertHash.ShaHash); // SHA-1 is 20 bytes
+            if (X509_digest(x509, EVP_sha1(), CredConfig.CertHash.ShaHash, &CertHashLen) != 1)
+            {
+                return ResultCode::UNEXPECTED;
+            }
+
+            // The certificate should be in system cert list. otherwise it will fail anyway
+            CredConfig.QuicConfig.Type = QUIC_CREDENTIAL_TYPE_CERTIFICATE_HASH;
+            CredConfig.QuicConfig.CertificateHash = &CredConfig.CertHash;
 
             return hr;
         }
@@ -179,14 +236,16 @@ namespace SF
             Settings.ServerResumptionLevel = QUIC_SERVER_RESUME_AND_ZERORTT;
             Settings.IsSet.ServerResumptionLevel = TRUE;
 
+            // Enable Datagram receive
+            Settings.IsSet.DatagramReceiveEnabled = 1;
 
-            QUIC_CREDENTIAL_CONFIG CredConfig{};
-            CredConfig.Flags = QUIC_CREDENTIAL_FLAG_CLIENT;
 
-            SFCheck(Quic, SetupCertConfig(CredConfig));
+            QuicCertConfig CredConfigHelper{};
+
+            //SFCheck(Quic, SetupCertConfigHash(CredConfigHelper));
             // TODO: probably better with separated flag?
-            if (CredConfig.Type == QUIC_CREDENTIAL_TYPE_NONE) {
-                CredConfig.Flags |= QUIC_CREDENTIAL_FLAG_NO_CERTIFICATE_VALIDATION;
+            if (CredConfigHelper.QuicConfig.Type == QUIC_CREDENTIAL_TYPE_NONE) {
+                CredConfigHelper.QuicConfig.Flags |= QUIC_CREDENTIAL_FLAG_NO_CERTIFICATE_VALIDATION;
             }
 
             HQUIC configuration{};
@@ -197,7 +256,7 @@ namespace SF
             }
 
             // Load ALPN for HTTP/3
-            m_Status = m_MsQuic->ConfigurationLoadCredential(configuration, &CredConfig);
+            m_Status = m_MsQuic->ConfigurationLoadCredential(configuration, &CredConfigHelper.QuicConfig);
             if (QUIC_FAILED(m_Status)) {
                 SFLog(Quic, Error, "ConfigurationLoadCredential failed: {0}", m_Status);
                 m_MsQuic->ConfigurationClose(configuration);
@@ -234,9 +293,13 @@ namespace SF
             Settings.ServerResumptionLevel = QUIC_SERVER_RESUME_AND_ZERORTT;
             Settings.IsSet.ServerResumptionLevel = TRUE;
 
-            QUIC_CREDENTIAL_CONFIG CredConfig{};
-            SFCheck(Quic, SetupCertConfig(CredConfig));
-            CredConfig.Flags = QUIC_CREDENTIAL_FLAG_NONE; // QUIC_CREDENTIAL_FLAG_NONE, server default
+            // Enable Datagram receive
+            Settings.IsSet.DatagramReceiveEnabled = 1;
+
+            QuicCertConfig CredConfigHelper;
+
+            SFCheck(Quic, SetupCertConfigPK12(CredConfigHelper));
+            CredConfigHelper.QuicConfig.Flags = QUIC_CREDENTIAL_FLAG_NONE; // QUIC_CREDENTIAL_FLAG_NONE, server default
 
             HQUIC configuration{};
             m_Status = m_MsQuic->ConfigurationOpen(m_Registration, &QuicAlpn, 1, &Settings, sizeof(Settings), nullptr, &configuration);
@@ -246,7 +309,7 @@ namespace SF
             }
 
             // Load ALPN for HTTP/3
-            m_Status = m_MsQuic->ConfigurationLoadCredential(configuration, &CredConfig);
+            m_Status = m_MsQuic->ConfigurationLoadCredential(configuration, &CredConfigHelper.QuicConfig);
             if (QUIC_FAILED(m_Status)) {
                 SFLog(Quic, Error, "ConfigurationLoadCredential failed: {0}", m_Status);
                 m_MsQuic->ConfigurationClose(configuration);
@@ -282,9 +345,12 @@ namespace SF
         if (!hr.IsSuccess()) return hr;
 
         m_QuicService.reset(new QuicService);
+        SFCheckPtr(Quic, m_QuicService);
+        SFCheck(Quic, m_QuicService->Initialize());
+
         Service::Quic = m_QuicService.get();
 
-        return ResultCode::SUCCESS;
+        return hr;
     }
 
     // Terminate server component
