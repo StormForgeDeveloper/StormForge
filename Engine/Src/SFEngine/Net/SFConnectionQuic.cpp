@@ -688,7 +688,7 @@ namespace Net {
         auto msQuic = Service::Quic->GetQuic();
         if (msQuic && Stream)
         {
-            msQuic->SetCallbackHandler(Stream, StreamCallback, GetQuicConnection());
+            msQuic->SetCallbackHandler(Stream, (void*)&ConnectionQuic::StreamCallback, GetQuicConnection());
         }
 
         return hr;
