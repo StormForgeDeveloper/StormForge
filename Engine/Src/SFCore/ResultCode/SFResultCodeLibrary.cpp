@@ -252,6 +252,7 @@ namespace ResultCode {
 		codeMap.Insert((uint32_t)			NET_VERSION_NEGOTIATION_FAILURE        , {"			NET_VERSION_NEGOTIATION_FAILURE        ", "Version negotiation has been failed"});
 		codeMap.Insert((uint32_t)			HTTP_ALPN_NEG_FAILURE        , {"			HTTP_ALPN_NEG_FAILURE        ", "The connection handshake failed to negotiate a common ALPN."});
 		codeMap.Insert((uint32_t)			NET_STREAM_LIMIT_REACHED        , {"			NET_STREAM_LIMIT_REACHED        ", "A stream failed to start because the peer doesn't allow any more to be open at this time."});
+		codeMap.Insert((uint32_t)			INVALID_REQUEST_DATA        , {"			INVALID_REQUEST_DATA        ", "The request has invalid data."});
 
 	}//InitializeResultCode 
 }//namespace ResultCode 

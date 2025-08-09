@@ -259,6 +259,8 @@
 	<ResultCodeItem Severity="Error" CodeName="NET_VERSION_NEGOTIATION_FAILURE" Desc="Version negotiation has been failed"/>
 	<ResultCodeItem Severity="Error" CodeName="HTTP_ALPN_NEG_FAILURE" Desc="The connection handshake failed to negotiate a common ALPN."/>
 	<ResultCodeItem Severity="Error" CodeName="NET_STREAM_LIMIT_REACHED" Desc="A stream failed to start because the peer doesn't allow any more to be open at this time."/>
+    
+	<ResultCodeItem Severity="Error" CodeName="INVALID_REQUEST_DATA" Desc="The request has invalid data."/>
 
 </ResultCodes>
 

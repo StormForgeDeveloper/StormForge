@@ -942,6 +942,10 @@ namespace SF {
 		 public const int _NET_STREAM_LIMIT_REACHED = (unchecked((int)0xE70100E7)); 
 		public static readonly Result NET_STREAM_LIMIT_REACHED = new Result(_NET_STREAM_LIMIT_REACHED); 
 
+		// The request has invalid data. 
+		 public const int _INVALID_REQUEST_DATA = (unchecked((int)0xE70100E8)); 
+		public static readonly Result INVALID_REQUEST_DATA = new Result(_INVALID_REQUEST_DATA); 
+
 	}
 }
 

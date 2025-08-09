@@ -714,6 +714,9 @@ namespace SF {
 			// A stream failed to start because the peer doesn't allow any more to be open at this time. 
 			constexpr Result 			NET_STREAM_LIMIT_REACHED                                           ((int32_t)0xE70100E7L);
 
+			// The request has invalid data. 
+			constexpr Result 			INVALID_REQUEST_DATA                                               ((int32_t)0xE70100E8L);
+
 	void InitializeResultCodeSF();
 
 	}//namespace ResultCode 
