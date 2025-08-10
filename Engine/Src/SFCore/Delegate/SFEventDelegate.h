@@ -68,23 +68,27 @@ namespace SF
 
 		void AddDelegateUnique(uintptr_t Context, const CallableType& func)
 		{
+            assert(func);
 			RemoveDelegateAll(Context);
 			AddDelegate(Context, func);
 		}
 
 		void AddDelegateUnique(uintptr_t Context, CallableType&& func)
 		{
+            assert(func);
 			RemoveDelegateAll(Context);
 			AddDelegate(Context, Forward<CallableType>(func));
 		}
 
 		void AddDelegate(uintptr_t Context, const CallableType& func)
 		{
+            assert(func);
 			m_DelegateArray.push_back(EventDelegate{ Context, func, m_CallSerial });
 		}
 
 		void AddDelegate(uintptr_t Context, CallableType&& func)
 		{
+            assert(func);
 			m_DelegateArray.push_back(EventDelegate{ Context, Forward<CallableType>(func), m_CallSerial });
 		}
 
