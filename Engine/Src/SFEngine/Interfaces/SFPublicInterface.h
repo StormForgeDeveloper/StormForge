@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2019 Kyungkun Ko
 // 
@@ -15,6 +15,7 @@
 
 #if defined(__GNUC__) || defined(__clang__) || SF_PLATFORM == SF_PLATFORM_IOS
 
+#define SF_NOINLINE [[gnu::noinline]] 
 #define SF_FORCEINLINE inline __attribute__((always_inline))
 //#define SF_STDCALL __attribute__((stdcall))
 #define SF_STDCALL 
@@ -30,6 +31,7 @@
 
 #else
 
+#define SF_NOINLINE __declspec(noinline)
 #define SF_FORCEINLINE __forceinline
 #define SF_STDCALL __stdcall
 #define SF_FASTCALL __fastcall
