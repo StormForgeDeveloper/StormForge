@@ -220,7 +220,9 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle,
 	pOnlineClient->SetStateChangeCallback(stateChangedCallback);
 	pOnlineClient->SetTaskFinishedCallback(onTaskFinished);
 
+    pOnlineClient->UpdateRoutedMessageQueue(messageHandler);
 	pOnlineClient->UpdateGameTick();
+
 
 	if (pOnlineClient->GetConnectionGame() != nullptr)
 	{

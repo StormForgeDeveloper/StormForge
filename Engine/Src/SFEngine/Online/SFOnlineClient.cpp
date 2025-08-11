@@ -106,6 +106,11 @@ namespace SF
                 defCheck(ResultCode::INVALID_FORMAT);
             }
 
+            {
+                MessageDataPtr messageData = MessageData::NewMessage(messageHeader);
+                m_Owner.QueueRoutedMessage(std::move(messageData));
+            }
+
             const Flat::Login::LoginRes* response = ::flatbuffers::GetRoot<Flat::Login::LoginRes>(messageHeader->GetPayloadPtr());
             defCheckPtr(response);
             defCheckPtr(response->game_server_address());
@@ -1443,4 +1448,24 @@ namespace SF
 			SetOnlineState(OnlineState::LoggedIn);
 		}
 	}
+
+    Result OnlineClient::QueueRoutedMessage(MessageDataPtr&& messageData)
+    {
+        if (m_RoutedMessageQueue.IsFull())
+        {
+            MessageDataPtr removed;
+            m_RoutedMessageQueue.Dequeue(removed);
+        }
+
+        return m_RoutedMessageQueue.Enqueue(std::move(messageData));
+    }
+
+    void OnlineClient::UpdateRoutedMessageQueue(const std::function<void(Net::Connection*, const MessageHeader*)>& messageDelegate)
+    {
+        MessageDataPtr messageData;
+        while (m_RoutedMessageQueue.Dequeue(messageData))
+        {
+            messageDelegate(nullptr, messageData->GetMessageHeader());
+        }
+    }
 }

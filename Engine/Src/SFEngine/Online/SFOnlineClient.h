@@ -206,6 +206,17 @@ namespace SF
 
 		void UpdateOnlineStateByConnectionState();
 
+    private:
+        // Routed message queue from HTTP transactions
+        CircularQueue<MessageDataPtr, 32> m_RoutedMessageQueue;
+
+    public:
+
+        // Queue a message
+        Result QueueRoutedMessage(MessageDataPtr&& messageData);
+
+        // populate messages from the queue
+        void UpdateRoutedMessageQueue(const std::function<void(Net::Connection*, const MessageHeader*)>& messageDelegate);
 
 	private:
 
@@ -250,6 +261,9 @@ namespace SF
 
 		SharedPointerT<ClientTask> m_CurrentTask;
 		DynamicArray<SharedPointerT<ClientTask>> m_PendingTasks;
+
+        
+
         struct FinishedTaskInfo
         {
             uint64_t TransactionId = 0;
