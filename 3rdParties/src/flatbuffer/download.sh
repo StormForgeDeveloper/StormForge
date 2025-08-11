@@ -4,8 +4,8 @@
 
 if [ ! -d "flatbuffers" ]; then
 	git clone --depth 1 --branch v24.3.7 https://github.com/google/flatbuffers.git
-	git apply --check ../MSVCStatic.patch
-	git am --keep-cr --signoff < ../MSVCStatic.patch 
+	git apply --check MSVCStatic.patch
+	git am --keep-cr --signoff < MSVCStatic.patch 
 else
 	pushd flatbuffers
 	git pull
